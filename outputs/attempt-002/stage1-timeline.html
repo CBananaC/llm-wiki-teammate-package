@@ -172,6 +172,25 @@
     .sl-sec-h{font-weight:600;color:#37634f;margin-bottom:4px;}
     .sl-done{color:#2e7d4f;font-size:12px;margin-left:6px;}
     .sl-resps{margin-top:6px;}
+    .dp-card .cx-head{align-items:center;}
+    .dp-badge{font-size:calc(11px*var(--fs,1));border-radius:8px;padding:1px 9px;margin-right:auto;margin-left:8px;}
+    .dp-high{background:#d8f0e0;color:#1f6b3f;} .dp-partial{background:#f0e2c4;color:#8a5b12;} .dp-weak{background:#ececec;color:#666;}
+    .dp-flow{position:relative;padding-left:24px;margin:16px 0 8px;}
+    .dp-line{position:absolute;left:6px;top:8px;bottom:34px;width:2px;background:#c9bd9c;}
+    .dp-node{position:relative;margin-bottom:22px;}
+    .dp-node:last-child{margin-bottom:0;}
+    .dp-dot{position:absolute;left:-24px;top:4px;width:12px;height:12px;border-radius:50%;border:2px solid var(--paper,#efe7d4);}
+    .dp-dot-yu{background:#5a86c4;} .dp-dot-rp{background:#5a9e6f;}
+    .dp-label{font-weight:500;font-size:calc(14.5px*var(--fs,1));color:var(--ink,#3a3428);margin-bottom:2px;}
+    .dp-sub{color:var(--muted,#8a8262);font-weight:400;}
+    .dp-card .dp-q{background:#f6f0e0 !important;border:1px solid #e0d4b6 !important;border-left:1px solid #e0d4b6 !important;border-radius:8px !important;padding:10px 12px !important;margin:8px 0 0 !important;font-size:calc(15px*var(--fs,1)) !important;line-height:1.9 !important;font-style:normal !important;color:var(--ink,#3a3428) !important;}
+    .dp-card .dp-q-empty{color:var(--muted,#8a8262) !important;}
+    .dp-conn{font-size:calc(13.5px*var(--fs,1));color:#8f876f;margin:0 0 16px;}
+    .dp-note{font-size:calc(14px*var(--fs,1));color:#7a7360;margin-top:14px;line-height:1.8;}
+    .dp-acts{margin-top:18px;}
+    .sl-note{font-size:11px;color:#8a8f8b;margin-top:3px;}
+    .sl-hint{font-size:11px;color:#a06a2f;margin-left:6px;}
+    .sl-resp-item{margin-top:6px;padding-top:6px;border-top:1px dotted #e3e3e3;}
 </style>
 </head>
 <body>
@@ -946,6 +965,7 @@
   .elink.siblingline { stroke-width:1.4; opacity:.75; stroke-dasharray:2 2; }
   /* response event -> the emperor-action (硃批/諭/action) event it replies to -- a direct
      event<->event link, distinct from .elink (event -> its own source document's dot). */
+  .pairlink { stroke:#c07a1e; stroke-width:1.6; stroke-dasharray:2 3; opacity:.8; }
   .resplink { stroke:#6a3fb0; stroke-width:1.1; stroke-dasharray:5 3; opacity:.55; }
   .resplink.dim { opacity:.08; }
   .resplink.hotline { stroke-width:2.2; opacity:.95; stroke-dasharray:none; }
@@ -2173,6 +2193,18 @@
       });
     });
     s+=resplinks;
+    // 上諭—回應配對 (confirmed doc pairs): draw a line between the 上諭 dot and the
+    // replying official document's dot for every pair the researcher has added.
+    let pairlinks='';
+    (EDITS.__docPairs||[]).forEach(pp=>{
+      const yrec=recByDocId[String(pp.yu_doc_id)], rrec=recByDocId[String(pp.reply_doc_id)];
+      if(!yrec||!rrec) return;
+      const yc=coord[yrec._rid+'R']||coord[yrec._rid+'L'];
+      const rc=coord[rrec._rid+'L']||coord[rrec._rid+'R'];
+      if(!yc||!rc) return;
+      pairlinks+=`<line class="pairlink" data-pair-yu="${esc(pp.yu_doc_id)}" data-pair-rp="${esc(pp.reply_doc_id)}" x1="${yc.x.toFixed(1)}" y1="${yc.y.toFixed(1)}" x2="${rc.x.toFixed(1)}" y2="${rc.y.toFixed(1)}"/>`;
+    });
+    s+=pairlinks;
     // info-source citation lines: when an emperor-action event is highlighted,
     // draw lines from it to each official document dot cited in its infoSources
     let isrclinks='';
@@ -5052,6 +5084,15 @@
     return item;
   }
   let __activeSkillBundleRunId='';
+  function pushGlobalChatTurn(turn){
+    // Push to the shared "no card selected" store so a doc-to-doc pairing card
+    // (which belongs to two documents, not one) shows in the empty AI panel.
+    const store=groupStore([]);
+    const pushed=Object.assign({at:nowStr(), model:'local skill output'}, turn);
+    if(__activeSkillBundleRunId) pushed.__skillRunId=__activeSkillBundleRunId;
+    chatArr(store).push(pushed);
+    return pushed;
+  }
   function pushSkillChatTurn(docId, turn){
     const r=recByAnyDocId(docId); if(!r) return false;
     const pushed=Object.assign({at:nowStr(), model:'local skill output'}, turn);
@@ -5088,13 +5129,20 @@
   }
   function applySkillChatOutput(rel, data, collector){
     const lname=rel.toLowerCase(); let n=0;
-    // The saved 上諭 review-loop prompt returns ONE structured JSON result: reported
-    // 林方/清方 actions (each with the direct report that told the emperor, and his
-    // comment), imperial commands (each with any later official responses), and a
-    // time-effectiveness window. We keep it as ONE grouped review turn (kind
-    // 'shangyuloop') rendered by shangyuLoopHtml as ordered A(action)/B(report)/
-    // C(comment) sub-cards per event, so every field lands on a reviewable card
-    // with its own add button instead of a raw JSON blob.
+    // 上諭—回應配對 (doc pairing) results: one pair -> one review card in the
+    // no-selection panel. Nothing is written back until 加入配對 is clicked.
+    if(/yu.?pairing|上諭.*配對|doc.?pair|配對/.test(lname)){
+      arrify(data).forEach(p=>{
+        if(!p || !(p.reply_doc_id||p.yu_doc_id)) return;
+        if(pushGlobalChatTurn({kind:'docpair', pair:Object.assign({}, p), prompt:'上諭—回應配對'})) n++;
+      });
+      return n;
+    }
+    // The saved 上諭 review-loop JSON becomes SEPARATE per-stage cards (prompt by
+    // prompt): one 擷取事件 card (each event keeps its reveal-source + emperor
+    // comment), one 皇帝諭令 card (orders + official responses), and one 上諭時效
+    // card. All three are kind 'shangyuloop' with a `section`, rendered by
+    // shangyuLoopHtml; adds reuse proven commit paths so line-4/response dots land.
     if(/shangyu-review-loop|上諭.*(?:loop|迴圈)/.test(lname)){
       const notMing=v=>{ v=String(v==null?'':v).trim(); return (v && v!=='未明')?v:''; };
       arrify(data).forEach(o=>{
@@ -5110,50 +5158,60 @@
           if(pushSkillChatTurn(id,{prompt:o.prompt||'上諭審閱迴圈', response, model:o.model||'saved prompt output'})) n++;
           return;
         }
-        // edict date = window end; look it up from the loaded record.
         const edRec=(typeof recByDocId2==='function')?recByDocId2(id):null;
         const edictDate=(edRec&&(edRec.annAr||edRec.sendAr))||notMing(parsed.edict_date)||'';
         const events=(Array.isArray(parsed.reported_events)?parsed.reported_events:[]).map(ev=>{
           const actor=/qing|清/.test(String(ev.side||''))?'qing':'lin';
           const dr=ev.direct_report||{};
-          // send date: prefer model field, else look up the source record.
+          const memId=notMing(dr.source_doc_id), memQuote=notMing(dr.source_quote), memOff=notMing(dr.source_official);
           let sendAr=notMing(dr.source_send_date);
-          const srcRec=dr.source_doc_id&&(typeof recByDocId2==='function')?recByDocId2(notMing(dr.source_doc_id)):null;
-          if(!sendAr && srcRec) sendAr=srcRec.sendAr||'';
+          const memRec=memId&&(typeof recByDocId2==='function')?recByDocId2(memId):null;
+          if(!sendAr && memRec) sendAr=memRec.sendAr||'';
+          const edQuote=notMing(ev.edict_quote);
+          const sources=[];
+          if(memId||memQuote) sources.push({doc_id:memId, quote:memQuote, howKnown:memOff?('據'+memOff+'奏報'):'奏報', whenKnown:sendAr});
+          if(edQuote) sources.push({doc_id:id, quote:edQuote, howKnown:'上諭得知', whenKnown:edictDate});
           const evItem=normalizeSkillEventItem({
             actor, subtitle:ev.subtitle||ev.title||'事件', description:notMing(ev.description),
-            where:ev.where||'', who:ev.who||[], whenCh:ev.whenCh||'', whenAr:notMing(ev.whenAr),
-            quote:notMing(ev.edict_quote), doc_id:id
+            where:notMing(ev.where), who:Array.isArray(ev.who)?ev.who:[], whenCh:notMing(ev.whenCh), whenAr:notMing(ev.whenAr),
+            sources: sources.length?sources:[{doc_id:id, quote:edQuote, howKnown:'上諭得知'}]
           }, actor);
           return {
-            actor,
-            subtitle:ev.subtitle||ev.title||'事件', description:notMing(ev.description),
+            actor, subtitle:ev.subtitle||ev.title||'事件', description:notMing(ev.description),
             where:notMing(ev.where), who:Array.isArray(ev.who)?ev.who:[], whenCh:notMing(ev.whenCh),
-            edictQuote:notMing(ev.edict_quote),
-            report:{ doc_id:notMing(dr.source_doc_id), official:notMing(dr.source_official),
-                     sendAr, recvAr:notMing(dr.source_receive_date),
-                     title:(srcRec&&srcRec.title)||'', quote:notMing(dr.source_quote) },
-            comment:{ text:notMing(ev.emperor_comment), quote:notMing(ev.comment_quote) },
-            __evItem:evItem, __added:false, __evId:null, __infoAdded:false, __commentAdded:false
+            edictQuote:edQuote,
+            report:{ doc_id:memId, official:memOff, sendAr, recvAr:notMing(dr.source_receive_date),
+                     title:(memRec&&memRec.title)||'', quote:memQuote },
+            comment:{ subtitle:notMing(ev.comment_subtitle), text:notMing(ev.emperor_comment), quote:notMing(ev.comment_quote) },
+            __evItem:evItem, __added:false, __evId:null, __revealB:false, __revealC:false, __commentAdded:false, __cmtEvId:null
           };
         });
         const commands=(Array.isArray(parsed.commands)?parsed.commands:[]).map(c=>{
+          const summ=notMing(c.summary)||notMing(c.title); const q=notMing(c.quote);
+          if(!summ && !q) return null;
           const target=Array.isArray(c.target)?c.target.filter(Boolean):(notMing(c.target)?[notMing(c.target)]:[]);
           const responses=(Array.isArray(c.responses)?c.responses:[]).map(r=>({
-            doc_id:notMing(r.resp_doc_id), official:notMing(r.resp_official),
-            sendAr:notMing(r.resp_send_date), quote:notMing(r.resp_quote)
+            doc_id:notMing(r.resp_doc_id), official:notMing(r.resp_official), sendAr:notMing(r.resp_send_date),
+            subtitle:notMing(r.resp_subtitle), desc:notMing(r.resp_desc), quote:notMing(r.resp_quote), __added:false
           })).filter(r=>r.doc_id||r.quote);
-          return { title:notMing(c.title), target, summary:notMing(c.summary), quote:notMing(c.quote),
-                   responses, __added:false, __eaEvId:null };
-        });
-        // time-effectiveness window: start = earliest report send date, end = edict date.
+          return { title:notMing(c.title)||summ.slice(0,28), summary:summ, quote:q, target, responses,
+                   __added:false, __eaEvId:null };
+        }).filter(Boolean);
         const te=parsed.timeliness_evidence||parsed.timeliness||{};
         const sends=events.map(e=>e.report.sendAr).filter(Boolean).sort();
         const winStart=notMing(te.window_start)||(sends[0]||'');
         const winEnd=notMing(te.window_end)||edictDate;
         const timeliness={ status:notMing(te.status), note:notMing(te.note), winStart, winEnd };
-        if(pushSkillChatTurn(id,{kind:'shangyuloop', edictId:id, edictDate, events, commands, timeliness,
-          prompt:o.prompt||'上諭審閱迴圈', model:o.model||'saved prompt output', at:nowStr()})) n++;
+        const base={ edictId:id, edictDate, model:o.model||'saved prompt output', at:nowStr() };
+        if(events.length){
+          if(pushSkillChatTurn(id, Object.assign({}, base, {kind:'shangyuloop', section:'events', events, prompt:'擷取事件（含直接奏報來源與皇帝評論）'}))) n++;
+        }
+        if(commands.length){
+          if(pushSkillChatTurn(id, Object.assign({}, base, {kind:'shangyuloop', section:'commands', commands, prompt:'皇帝諭令與官員回應'}))) n++;
+        }
+        if(timeliness.note||timeliness.status||timeliness.winStart||timeliness.winEnd){
+          if(pushSkillChatTurn(id, Object.assign({}, base, {kind:'shangyuloop', section:'timeliness', timeliness, prompt:'上諭時效'}))) n++;
+        }
       });
       return n;
     }
@@ -5988,84 +6046,159 @@
           : `此事件先前已由 ${esc(mr.reporter||'（未標明官員）')} 於 ${earlierRef} 回報過此事件`;
         return `<div class="cx-matchnote cx-jumpreport" data-doc="${esc(mr.doc_id||'')}" data-evid="${esc(mr.evId||'')}" data-title="${esc(mr.title||'')}" title="游標移上：在事件線上置中並標示該回報事件的圓點；點擊：開啟該事件的資訊面板">⚠ <b>${note}</b></div>`;
       }
+      function docPairHtml(m,i){
+        const p=m.pair||{}, ev=p.evidence||{};
+        const yuId=String(p.yu_doc_id||''), rpId=String(p.reply_doc_id||'');
+        const yr=(typeof recByDocId2==='function')?recByDocId2(yuId):null;
+        const rr=(typeof recByDocId2==='function')?recByDocId2(rpId):null;
+        const yuDate=(yr&&(yr.annAr||yr.sendAr))||'';
+        const rpAuthor=(rr&&rr.author_name)||'';
+        const rpDate=(rr&&rr.sendAr)||'';
+        const lvl=p.match_level||'weak';
+        const lvlLbl={high:'高度符合',partial:'部分符合',weak:'待查'}[lvl]||lvl;
+        // connector: 收到日 (in Arabic) + interval from the 上諭 date, computed.
+        const recvCh=(ev.receive_date&&ev.receive_date!=='未明')?ev.receive_date:'';
+        let connector='↩︎ 回應';
+        if(recvCh){
+          let recvAr='', interval=null;
+          try{ const rd=(typeof convertWhenCh==='function')?convertWhenCh(recvCh, yuDate):null;
+               if(rd){ recvAr=fmt(rd); if(yuDate&&typeof daysAfter==='function') interval=daysAfter(yuDate, recvAr); } }catch(e){}
+          const dshown=recvAr||recvCh;
+          connector='收到日 '+esc(dshown)+((interval!=null&&interval>=0)?('（間隔 '+interval+' 日）'):'');
+        }
+        const yuQuote = ev.matched_yu_span
+          ? '<div class="dp-q cx-q" data-doc="'+esc(yuId)+'" title="在原文中顯示">「'+esc(ev.matched_yu_span)+'」</div>'
+          : '<div class="dp-q dp-q-empty">此上諭無可對應文字 — 非本摺主要答覆對象</div>';
+        const added=!!p.__added;
+        const addBtn = added
+          ? '<span class="cx-done">✓ 已標記配對</span>'
+          : '<button class="sl-btn dp-add" data-i="'+i+'" type="button">加入配對</button>';
+        return '<div class="chat-extract dp-card" data-logi="'+i+'">'
+          +'<div class="cx-head">上諭—回應配對<span class="dp-badge dp-'+esc(lvl)+'">'+esc(lvlLbl)+'</span>'
+            +'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button>'
+            +'<button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div>'
+          +'<div class="dp-flow">'
+            +'<div class="dp-line"></div>'
+            +'<div class="dp-node dp-node-yu">'
+              +'<span class="dp-dot dp-dot-yu"></span>'
+              +'<div class="dp-label">上諭 '+esc(yuId)+(yuDate?'<span class="dp-sub"> · '+esc(yuDate)+' 發布</span>':'')+'</div>'
+              +yuQuote
+            +'</div>'
+            +'<div class="dp-conn">'+connector+'</div>'
+            +'<div class="dp-node dp-node-rp">'
+              +'<span class="dp-dot dp-dot-rp"></span>'
+              +'<div class="dp-label">'+esc(rpId)+(rpAuthor?'・'+esc(rpAuthor):'')+(rpDate?'<span class="dp-sub"> · '+esc(rpDate)+' 回覆</span>':'')+'</div>'
+              +(ev.quote_in_reply?'<div class="dp-q cx-q" data-doc="'+esc(rpId)+'" title="在原文中顯示">「'+esc(ev.quote_in_reply)+'」</div>':'')
+            +'</div>'
+          +'</div>'
+          +(ev.date_note?'<div class="dp-note">'+esc(ev.date_note)+'</div>':'')
+          +'<div class="dp-acts">'+addBtn+'</div>'
+        +'</div>';
+      }
       function shangyuLoopHtml(m,i){
+        const section=m.section||'events';
         const events=m.events||[], commands=m.commands||[], tl=m.timeliness||{};
         const edId=esc(m.edictId||'');
         const sideLbl=a=>a==='qing'?'清方':'林方';
-        function doneChip(t){ return '<span class="sl-done">✓ '+esc(t)+'</span>'; }
-        function reportBlock(r){
-          if(!(r.doc_id||r.official||r.quote)) return '<div class="record-empty">未找到可核對的奏摺／硃批。</div>';
-          return '<dl class="em-srcinfo">'
-            +(r.official?('<dt>👤 具奏</dt><dd>'+esc(r.official)+'</dd>'):'')
-            +(r.doc_id?('<dt>📜 文書</dt><dd>'+esc(r.doc_id)+(r.title?('〈'+esc(r.title)+'〉'):'')+'</dd>'):'')
-            +(r.sendAr?('<dt>📅 上奏日</dt><dd>'+esc(r.sendAr)+'</dd>'):'')
-            +(r.recvAr?('<dt>🖌 硃批／收受</dt><dd>'+esc(r.recvAr)+'</dd>'):'')
-            +'</dl>'
-            +(r.quote?('<div class="cx-q" data-doc="'+esc(r.doc_id||'')+'" title="點按在原文中顯示">「'+esc(r.quote)+'」</div>'):'');
-        }
-        const groups=events.map((ev,j)=>{
+        function done(t){ return '<span class="sl-done">✓ '+esc(t)+'</span>'; }
+        const headMap={ events:'AI 擷取事件', commands:'AI 皇帝諭令', timeliness:'AI 上諭時效' };
+        const countStr = section==='events'?('（'+events.length+'）') : section==='commands'?('（'+commands.length+'）') : '';
+        // ---- events: A action (+quote) -> reveal B source -> reveal C comment ----
+        const groups=(section!=='events')?'':events.map((ev,j)=>{
           const whoLine=[ev.where, (ev.who||[]).join('、'), ev.whenCh].filter(Boolean).join('　');
-          const aBtn = ev.__added ? doneChip('已加入事件') : '<button class="sl-btn sl-add-ev" data-i="'+i+'" data-j="'+j+'" type="button">加入為事件</button>';
-          const bMore = ev.__revealB ? '' : '<button class="sl-btn sl-more" data-i="'+i+'" data-j="'+j+'" data-step="b" type="button" title="顯示直接奏報">▾ 直接奏報</button>';
-          const cMore = ev.__revealC ? '' : '<button class="sl-btn sl-more" data-i="'+i+'" data-j="'+j+'" data-step="c" type="button" title="顯示皇帝評論">▾ 皇帝評論</button>';
-          const infoBtn = ev.__infoAdded ? doneChip('已加入皇帝得知') : '<button class="sl-btn sl-add-info" data-i="'+i+'" data-j="'+j+'" type="button">加入「皇帝得知」資訊</button>';
-          const cmtBtn = ev.__commentAdded ? doneChip('已加入皇帝行動') : '<button class="sl-btn sl-add-cmt" data-i="'+i+'" data-j="'+j+'" type="button">加入皇帝行動</button>';
-          const cmtBody = (ev.comment&&(ev.comment.text||ev.comment.quote))
-            ? ((ev.comment.text?('<div class="sf-desc">'+esc(ev.comment.text)+'</div>'):'')+(ev.comment.quote?('<div class="cx-q" data-doc="'+edId+'" title="點按在原文中顯示">「'+esc(ev.comment.quote)+'」</div>'):''))
+          const r=ev.report||{};
+          const aBtn = ev.__added ? done('已加入事件') : '<button class="sl-btn sl-add-ev" data-i="'+i+'" data-j="'+j+'" type="button">加入為事件</button>';
+          const bMore = ev.__revealB ? '' : '<button class="sl-btn sl-more" data-i="'+i+'" data-j="'+j+'" data-step="b" type="button" title="查看直接奏報來源">▾ 查看來源</button>';
+          const cMore = ev.__revealC ? '' : '<button class="sl-btn sl-more" data-i="'+i+'" data-j="'+j+'" data-step="c" type="button" title="查看皇帝評論">▾ 皇帝評論</button>';
+          const bSubtitle = (r.official?(r.official+'奏報'):'直接奏報')+(ev.subtitle?('：'+ev.subtitle):'');
+          const bBody = (r.doc_id||r.quote)
+            ? ('<div class="cx-sub">'+esc(bSubtitle)+'</div>'
+               +'<dl class="em-srcinfo">'
+                 +(r.official?('<dt>👤 具奏</dt><dd>'+esc(r.official)+'</dd>'):'')
+                 +(r.doc_id?('<dt>📜 文書</dt><dd>'+esc(r.doc_id)+(r.title?('〈'+esc(r.title)+'〉'):'')+'</dd>'):'')
+                 +(r.sendAr?('<dt>📅 上奏日</dt><dd>'+esc(r.sendAr)+'</dd>'):'')
+                 +(r.recvAr?('<dt>🖌 硃批／收受</dt><dd>'+esc(r.recvAr)+'</dd>'):'')
+               +'</dl>'
+               +(r.quote?('<div class="cx-q" data-doc="'+esc(r.doc_id||'')+'" title="點按在原文中顯示">「'+esc(r.quote)+'」</div>'):'')
+               +'<div class="sl-note">此來源已隨事件一併加入。</div>')
+            : '<div class="record-empty">未找到可核對的奏摺／硃批。</div>';
+          const cmt=ev.comment||{};
+          const cSub=cmt.subtitle||(cmt.text?String(cmt.text).slice(0,24):'');
+          const cBtn = ev.__commentAdded ? done('已加入皇帝行動') : '<button class="sl-btn sl-add-cmt" data-i="'+i+'" data-j="'+j+'" type="button">加入為皇帝行動</button>';
+          const cBody = (cmt.text||cmt.quote)
+            ? ((cSub?('<div class="cx-sub">'+esc(cSub)+'</div>'):'')
+               +(cmt.text?('<div class="sf-desc">'+esc(cmt.text)+'</div>'):'')
+               +(cmt.quote?('<div class="cx-q" data-doc="'+edId+'" title="點按在原文中顯示">「'+esc(cmt.quote)+'」</div>'):'')
+               +'<div class="cx-acts">'+cBtn+'</div>')
             : '<div class="record-empty">此事件無皇帝評論。</div>';
           return '<div class="sl-group" data-i="'+i+'" data-j="'+j+'">'
-            +'<div class="sl-side sl-'+ev.actor+'">'+sideLbl(ev.actor)+'行動</div>'
+            +'<div class="sl-side sl-'+ev.actor+'">'+(j+1)+'. 報告的'+sideLbl(ev.actor)+'行動</div>'
             +'<div class="cx-ev sl-a">'
-              +'<div class="cx-sub">A · 報告的行動：'+esc(ev.subtitle||'事件')+'</div>'
+              +'<div class="cx-sub">'+esc(ev.subtitle||'事件')+'</div>'
               +(ev.description?('<div class="sf-desc">'+esc(ev.description)+'</div>'):'')
               +(whoLine?('<div class="sl-meta">'+esc(whoLine)+'</div>'):'')
               +(ev.edictQuote?('<div class="cx-q" data-doc="'+edId+'" title="點按在原文中顯示">「'+esc(ev.edictQuote)+'」</div>'):'')
               +'<div class="cx-acts">'+aBtn+bMore+'</div>'
             +'</div>'
             +'<div class="cx-ev sl-b'+(ev.__revealB?'':' sl-hidden')+'">'
-              +'<div class="cx-sub">B · 直接奏報（皇帝得知）</div>'
-              +reportBlock(ev.report||{})
-              +'<div class="cx-acts">'+infoBtn+cMore+'</div>'
+              +bBody
+              +'<div class="cx-acts">'+cMore+'</div>'
             +'</div>'
             +'<div class="cx-ev sl-c'+(ev.__revealC?'':' sl-hidden')+'">'
-              +'<div class="cx-sub">C · 皇帝評論</div>'
-              +cmtBody
-              +'<div class="cx-acts">'+cmtBtn+'</div>'
+              +'<div class="cx-sub">皇帝評論</div>'
+              +cBody
             +'</div>'
           +'</div>';
         }).join('');
-        const cmdSec = commands.length ? ('<div class="sl-sec"><div class="sl-sec-h">諭令（'+commands.length+'）</div>'
-          + commands.map((c,k)=>{
+        // ---- commands: each order + its official responses (each addable) ----
+        const cmdSec=(section!=='commands')?'':commands.map((c,k)=>{
               const tgt=(c.target||[]).join('、');
-              const addBtn=c.__added?doneChip('已加入皇帝行動'):'<button class="sl-btn sl-add-cmd" data-i="'+i+'" data-k="'+k+'" type="button">加入皇帝行動</button>';
-              const respBtn='<button class="sl-btn sl-resp" data-i="'+i+'" data-k="'+k+'" type="button">搜尋官員回應</button>';
-              const respList=(c.responses&&c.responses.length)?('<div class="sl-resps"><span class="evv-l">已知回應（'+c.responses.length+'）</span>'
-                + c.responses.map(r=>'<div class="cs-mem"><dl class="em-srcinfo">'+(r.official?('<dt>👤</dt><dd>'+esc(r.official)+'</dd>'):'')+(r.doc_id?('<dt>📜</dt><dd>'+esc(r.doc_id)+'</dd>'):'')+(r.sendAr?('<dt>📅</dt><dd>'+esc(r.sendAr)+'</dd>'):'')+'</dl>'+(r.quote?('<div class="cx-q" data-doc="'+esc(r.doc_id||'')+'">「'+esc(r.quote)+'」</div>'):'')+'</div>').join('')
-                +'</div>'):'';
+              const addBtn=c.__added?done('已加入皇帝行動'):'<button class="sl-btn sl-add-cmd" data-i="'+i+'" data-k="'+k+'" type="button">加入為皇帝行動</button>';
+              const resps=(c.responses||[]);
+              const respHtml=resps.length?('<div class="sl-resps"><span class="evv-l">官員回應（'+resps.length+'）</span>'
+                + resps.map((r,ri)=>{
+                    let rsub=r.subtitle||('回應：'+String(r.quote||'').slice(0,16));
+                    if(r.official && rsub.indexOf(r.official)!==0) rsub=r.official+rsub;
+                    const rAdd = r.__added ? done('已加入官員回應')
+                      : (c.__eaEvId ? '<button class="sl-btn sl-resp-add" data-i="'+i+'" data-k="'+k+'" data-ri="'+ri+'" type="button">加入為官員回應</button>'
+                                    : '<span class="sl-hint">先加入此諭令後可加入回應</span>');
+                    return '<div class="cs-mem sl-resp-item">'
+                      +'<div class="cx-sub">'+esc(rsub)+'</div>'
+                      +(r.desc?('<div class="sf-desc">'+esc(r.desc)+'</div>'):'')
+                      +'<dl class="em-srcinfo">'
+                        +(r.official?('<dt>👤 具奏</dt><dd>'+esc(r.official)+'</dd>'):'')
+                        +(r.doc_id?('<dt>📜 文書</dt><dd>'+esc(r.doc_id)+'</dd>'):'')
+                        +(r.sendAr?('<dt>📅 上奏日</dt><dd>'+esc(r.sendAr)+'</dd>'):'')
+                      +'</dl>'
+                      +(r.quote?('<div class="cx-q" data-doc="'+esc(r.doc_id||'')+'" title="點按在原文中顯示">「'+esc(r.quote)+'」</div>'):'')
+                      +'<div class="cx-acts">'+rAdd+'</div>'
+                    +'</div>';
+                  }).join('')
+                +'</div>'):'<div class="record-empty sl-resps">未找到官員回應。</div>';
               return '<div class="cx-ev sl-cmd">'
-                +'<div class="cx-sub">'+esc(c.title||c.summary||'諭令')+'</div>'
+                +'<div class="cx-sub">'+(k+1)+'. '+esc(c.title||c.summary||'諭令')+'</div>'
                 +(c.summary?('<div class="sf-desc">'+esc(c.summary)+'</div>'):'')
                 +(tgt?('<div class="sl-meta">對象：'+esc(tgt)+'</div>'):'')
                 +(c.quote?('<div class="cx-q" data-doc="'+edId+'" title="點按在原文中顯示">「'+esc(c.quote)+'」</div>'):'')
-                +'<div class="cx-acts">'+addBtn+respBtn+'</div>'
-                +respList
+                +'<div class="cx-acts">'+addBtn+'</div>'
+                +respHtml
               +'</div>';
-            }).join('')
-          +'</div>') : '';
-        const win=(tl.winStart||tl.winEnd)?('（'+esc(tl.winStart||'未明')+' → '+esc(tl.winEnd||'未明')+'）'):'';
+            }).join('');
+        // ---- timeliness: relabelled window ----
         const stLbl=tl.status==='sufficient'?'資料充分':(tl.status==='insufficient'?'資料不足':(tl.status||''));
-        const tlSec=(tl.note||tl.status||win)?('<div class="sl-sec"><div class="sl-sec-h">上諭時效 '+win+'</div>'
+        const tlSec=(section!=='timeliness')?'':('<dl class="em-srcinfo">'
+            +(tl.winStart?('<dt>📤 最早奏報</dt><dd>'+esc(tl.winStart)+'</dd>'):'')
+            +(tl.winEnd?('<dt>📜 上諭日</dt><dd>'+esc(tl.winEnd)+'</dd>'):'')
+          +'</dl>'
           +(stLbl?('<div class="sl-meta">判定：'+esc(stLbl)+'</div>'):'')
-          +(tl.note?('<div class="sf-desc">'+esc(tl.note)+'</div>'):'')
-          +'</div>'):'';
+          +(tl.note?('<div class="sf-desc">'+esc(tl.note)+'</div>'):''));
         return '<div class="chat-extract sl-turn" data-logi="'+i+'">'
-          +'<div class="cx-head">AI 上諭審閱迴圈：'+edId+'　（事件 '+events.length+'・諭令 '+commands.length+'）<button class="reply-msg" data-i="'+i+'" type="button">回覆</button><button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div>'
+          +'<div class="cx-head">'+esc(headMap[section]||'AI 上諭審閱')+'：'+edId+countStr+'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button><button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div>'
           +(m.prompt?('<div class="bub user">'+esc(m.prompt)+'</div>'):'')
           +groups+cmdSec+tlSec
         +'</div>';
       }
-      
-function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>!it.__added&&!it.__skip).length;
+      function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>!it.__added&&!it.__skip).length;
         function srcSendDate(it){ const s=(it.sources||[])[0]||{}; const r=recByDocId2&&recByDocId2(s.doc_id); return r&&(r.sendAr||r.recvAr||r.annAr)||''; }
         function sendDateBtn(it,j){ const ar=srcSendDate(it); return ar?`<button class="cx-senddate" data-i="${i}" data-j="${j}" type="button">用文書發送日 ${esc(ar)}</button>`:''; }
         // A candidate's source chain(s) were already fetched up front (see runExtract's eager,
@@ -6082,7 +6215,7 @@ function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>
         // verbatim (not re-derived), and its "加入" button (.cx-add / .cx-addmention, wired below)
         // either extends the already-committed event's sources or, if the earlier candidate was
         // never committed, commits BOTH mentions together as one event (see commitMatchedCandidate).
-        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI 擷取：${esc(EVENT_LABEL[m.actor]||'事件')}（${items.length}）${(pend&&items.length>1)?`<button class="cx-addall" data-i="${i}" type="button">全部加入</button>`:''}<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
+        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${esc(m.__loopHeader||('擷取：'+(EVENT_LABEL[m.actor]||'事件')))}（${items.length}）${(pend&&items.length>1)?`<button class="cx-addall" data-i="${i}" type="button">全部加入</button>`:''}<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(items.length? items.map((it,j)=> it.__skip?'':`<div class="cx-ev${it.__added?' added':''}">
               <div class="cx-sub ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="subtitle">${esc(it.__matchReg?it.__matchReg.title:(it.subtitle||''))}</div>
@@ -6349,7 +6482,7 @@ function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>
         return h+'</dl>';
       }
       function emperorActionHtml(m,i){ const items=m.items||[];
-        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI 皇帝行動${m.docLabel?'：'+esc(m.docLabel):''}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
+        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${esc(m.__loopHeader||'皇帝行動')}${m.docLabel?'：'+esc(m.docLabel):''}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(items.length? items.map((it,j)=>{ const doc=esc(it.doc_id||'');
               const addBtn=it.__added?emperorActionDoneBtn(it.__evId,{kind:'emperoraction',i,j}):`<button class="cx-add eact-add" data-i="${i}" data-j="${j}" type="button">加入為皇帝行動</button>`;
               const infoBtn=it.__added&&it.__evId?infoSourceFollowupHtml(it.__evId):'';
@@ -6359,6 +6492,7 @@ function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>
                 <div class="em-detail"><span class="l">${esc(it.source||'御筆')}</span><div class="cx-q" data-doc="${doc}" title="點按在原文中顯示">「${esc(it.quote||'')}」</div></div>
                 ${it.description?`<div class="em-how">${esc(it.description)}</div>`:''}
                 ${emperorActionDocInfo(it)}
+                ${(it.__responses&&it.__responses.length)?('<div class="sl-resps"><span class="evv-l">已知回應（'+it.__responses.length+'）</span>'+it.__responses.map(r=>'<div class="cs-mem"><dl class="em-srcinfo">'+(r.official?('<dt>👤</dt><dd>'+esc(r.official)+'</dd>'):'')+(r.doc_id?('<dt>📜</dt><dd>'+esc(r.doc_id)+'</dd>'):'')+(r.sendAr?('<dt>📅</dt><dd>'+esc(r.sendAr)+'</dd>'):'')+'</dl>'+(r.quote?('<div class="cx-q" data-doc="'+esc(r.doc_id||'')+'">「'+esc(r.quote)+'」</div>'):'')+'</div>').join('')+'</div>'):''}
                 <div class="cx-acts">${addBtn}${infoBtn}</div>
               </div>`; }).join('') : '<div class="record-empty">未擷取到皇帝行動。</div>')+`</div>`; }
       function repairEmperorActionEvent(evId, opts){
@@ -6745,7 +6879,7 @@ function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>
           }
         });
         if(repairedEmperor){ saveEdits(); render(); }
-        log.innerHTML=c.length?c.map((m,i)=> m.kind==='shangyuloop'?shangyuLoopHtml(m,i):(m.kind==='extract'?extractHtml(m,i):(m.kind==='trace'?traceHtml(m,i):(m.kind==='officialresponse'?officialResponseHtml(m,i):(m.kind==='zhupi'?zhupiHtml(m,i):(m.kind==='edictmatch'?edictHtml(m,i):(m.kind==='infosource'?infoSourceHtml(m,i):(m.kind==='dedupe'?dedupeHtml(m,i):(m.kind==='daysum'?daySumHtml(m,i):(m.kind==='consolidate'?consolidateHtml(m,i):(m.kind==='situfit'?situFitHtml(m,i):(m.kind==='emperoraction'?emperorActionHtml(m,i):turnHtml(m,i))))))))))))).join(''):'<div class="record-empty">尚無對話。在下方輸入即可開始。</div>';
+        log.innerHTML=c.length?c.map((m,i)=> m.kind==='docpair'?docPairHtml(m,i):(m.kind==='shangyuloop'?shangyuLoopHtml(m,i):(m.kind==='extract'?extractHtml(m,i):(m.kind==='trace'?traceHtml(m,i):(m.kind==='officialresponse'?officialResponseHtml(m,i):(m.kind==='zhupi'?zhupiHtml(m,i):(m.kind==='edictmatch'?edictHtml(m,i):(m.kind==='infosource'?infoSourceHtml(m,i):(m.kind==='dedupe'?dedupeHtml(m,i):(m.kind==='daysum'?daySumHtml(m,i):(m.kind==='consolidate'?consolidateHtml(m,i):(m.kind==='situfit'?situFitHtml(m,i):(m.kind==='emperoraction'?emperorActionHtml(m,i):turnHtml(m,i)))))))))))))).join(''):'<div class="record-empty">尚無對話。在下方輸入即可開始。</div>';
         c.forEach((m,idx)=>{ if(!m||!m.at) return; const el=log.querySelector('[data-logi="'+idx+'"]'); if(el) el.setAttribute('data-at', m.at); });
         log.querySelectorAll('.bub.ed').forEach(el=>el.addEventListener('blur',()=>{ const m=chatArr(curStore())[+el.dataset.i]; if(m&&!m.kind){ m[el.dataset.f]=el.textContent; saveEdits(); } }));
         log.querySelectorAll('.situfit-ed').forEach(el=>el.addEventListener('blur',()=>{ const m=chatArr(curStore())[+el.dataset.i]; if(!m||m.kind!=='situfit') return; m[el.dataset.f]=el.textContent.trim(); saveEdits(); }));
@@ -6892,16 +7026,24 @@ function extractHtml(m,i){ const items=m.items||[]; const pend=items.filter(it=>
         // ev.__suggestedChains (still a pending suggestion, not yet real provenance; see
         // suggestedChainsHtml/commitSuggestedChain) and cleared off the raw item either way, since
         // its job was just to travel with the candidate until this moment.
+        log.querySelectorAll('.dp-add').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; if(!m||!m.pair) return;
+          const p=m.pair; const store=EDITS.__docPairs||(EDITS.__docPairs=[]);
+          const key=x=>String(x.yu_doc_id)+'|'+String(x.reply_doc_id);
+          const idx=store.findIndex(x=>key(x)===key(p));
+          if(idx>=0){ store.splice(idx,1); p.__added=false; st2.textContent='已取消配對，連線已移除。'; }
+          else { store.push({yu_doc_id:p.yu_doc_id, reply_doc_id:p.reply_doc_id, match_level:p.match_level||'', evidence:p.evidence||{}, at:nowStr()}); p.__added=true; st2.textContent='已加入配對，已於圖上連線。'; }
+          // mirror onto the reply record so the pairing travels with the data (for export/other views)
+          const rr=(typeof recByAnyDocId==='function')?recByAnyDocId(p.reply_doc_id):null;
+          if(rr){ rr.responds_to=(rr.responds_to||[]).filter(x=>String(x.doc_id)!==String(p.yu_doc_id));
+            if(p.__added){ const e=p.evidence||{}; rr.responds_to.push({doc_id:p.yu_doc_id, type:'上諭', issue_date:e.issue_date||'', receive_date:e.receive_date||'', quote:e.quote_in_reply||'', match_level:p.match_level||''}); } }
+          saveEdits(); if(typeof render==='function') render(); renderLog({preserve:true}); });
         // ---- 上諭審閱迴圈 (shangyuloop) card handlers ----
         function slTurn(i){ const c=chatArr(curStore()); const m=c&&c[+i]; return (m&&m.kind==='shangyuloop')?m:null; }
-        function slAddEvent(ev){ if(ev.__evId) return eventById(ev.__evId); const e=commitProposal(ev.__evItem); ev.__added=true; ev.__evId=e.id; return e; }
         log.querySelectorAll('.sl-more').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev) return; if(b.dataset.step==='c') ev.__revealC=true; else ev.__revealB=true; saveEdits(); renderLog({preserve:true}); });
-        log.querySelectorAll('.sl-add-ev').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__added) return; slAddEvent(ev); saveEdits(); renderLog({preserve:true}); st2.textContent='已加入「'+(ev.subtitle||'事件')+'」為事件。'; });
-        log.querySelectorAll('.sl-add-info').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__infoAdded) return; const t=slAddEvent(ev); if(!t) return; const r=ev.report||{}; const obj={ info:'直接奏報', quote:r.quote||'', doc_id:r.doc_id||'', srcTitle:r.title||'', srcAuthor:r.official||'', srcSentAr:r.sendAr||'', emperor_quote:ev.edictQuote||'', emperorDocId:m.edictId||'' }; const te=eventById(ev.__evId); if(te){ te.__suggestedInfoSources=[obj]; commitSuggestedInfoSources(ev.__evId); } ev.__infoAdded=true; saveEdits(); renderLog({preserve:true}); st2.textContent='已將直接奏報加入「皇帝得知」資訊。'; });
-        log.querySelectorAll('.sl-add-cmt').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__commentAdded) return; const cm=ev.comment||{}; if(!(cm.text||cm.quote)) return; const it={ aspect:'評論', source:'上諭', doc_id:m.edictId, subtitle:'皇帝評論：'+(ev.subtitle||''), description:cm.text||'', quote:cm.quote||cm.text||'' }; const res=buildEmperorActionCommit(it); ev.__commentAdded=true; ev.__cmtEvId=res.ev&&res.ev.id; saveEdits(); renderLog({preserve:true}); st2.textContent='已將皇帝評論加入為皇帝行動。'; });
-        function slCommitCommand(m,c){ if(c.__eaEvId) return c.__eaEvId; const tgt=(c.target||[]).join('、'); const it={ aspect:'諭令', source:'上諭', doc_id:m.edictId, subtitle:c.title||c.summary||'諭令', description:[c.summary, tgt?('對象：'+tgt):''].filter(Boolean).join('\n'), quote:c.quote||'' }; const res=buildEmperorActionCommit(it); c.__added=true; c.__eaEvId=res.ev&&res.ev.id; return c.__eaEvId; }
-        log.querySelectorAll('.sl-add-cmd').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||c.__added) return; slCommitCommand(m,c); saveEdits(); renderLog({preserve:true}); st2.textContent='已加入諭令為皇帝行動。'; });
-        log.querySelectorAll('.sl-resp').forEach(b=>b.onclick=async()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c) return; const evId=slCommitCommand(m,c); saveEdits(); renderLog({preserve:true}); if(evId && typeof runOfficialResponseSearch==='function') await runOfficialResponseSearch(evId); });
+        log.querySelectorAll('.sl-add-ev').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__added) return; const e=commitProposal(ev.__evItem); ev.__added=true; ev.__evId=e.id; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入「'+(ev.subtitle||'事件')+'」為事件。'; });
+        log.querySelectorAll('.sl-add-cmt').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__commentAdded) return; const cm=ev.comment||{}; if(!(cm.text||cm.quote)) return; const subtitle='皇帝評論：'+String(ev.subtitle||'').slice(0,20); const e=commitEmperorAction(subtitle, cm.text||'', {whenAr:m.edictDate||'', whenCh:''}, m.edictId, cm.quote||cm.text||'', '上諭', null, {}); ev.__commentAdded=true; ev.__cmtEvId=e&&e.id; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已將皇帝評論加入為皇帝行動（第四線）。'; });
+        log.querySelectorAll('.sl-add-cmd').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||c.__added) return; const tgt=(c.target||[]).join('、'); const desc=[c.summary, tgt?('對象：'+tgt):''].filter(Boolean).join('\n'); const e=commitEmperorAction(c.title||c.summary||'諭令', desc, {whenAr:m.edictDate||'', whenCh:''}, m.edictId, c.quote||'', '上諭', null, {}); c.__added=true; c.__eaEvId=e&&e.id; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入諭令為皇帝行動（第四線）。'; });
+        log.querySelectorAll('.sl-resp-add').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||!c.__eaEvId) return; const r=(c.responses||[])[+b.dataset.ri]; if(!r||r.__added) return; const targetEv=eventById(c.__eaEvId); const refAr=(targetEv||{}).dateAr||''; const it={ subtitle:r.subtitle||((r.official||'官員')+'回應'), how:r.desc||'', doc_id:r.doc_id||'', response_quote:r.quote||'', receive_date:r.sendAr||'' }; const rp=(typeof relPayloadFromItem==='function')?relPayloadFromItem(it):{where:'',who:[],whoLoc:{},relations:[]}; const respSub=it.subtitle.slice(0,24); addEvent({ actor:'qing', subtitle:respSub, what:respSub, description:it.how, where:rp.where, who:rp.who, whoLoc:rp.whoLoc, relations:rp.relations, whenCh:'', dateAr:(typeof officialResponseDateAr==='function'?officialResponseDateAr(it, refAr):(r.sendAr||null)), sources:[{doc_id:it.doc_id, quote:it.response_quote, label:'回應', howKnown:''}], respondsToEventId:c.__eaEvId, respondsToQuote:'', receiveDate:it.receive_date }); r.__added=true; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入官員回應「'+respSub+'」，並連到諭令皇帝行動點。'; });
         log.querySelectorAll('.cx-add:not(.zp-addact):not(.em-addact):not(.eact-add):not(.ea-retry):not(.cx-addall)').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:it.__traceChains}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已加入「'+(it.subtitle||'事件')+'」，並於原文標註。'; });
         // Re-reported candidate (carries __matchReg, see runExtract/matchNoteHtml): "加入" here never
         // creates an independent second dot -- see commitMatchedCandidate for the two paths (extend
@@ -9754,13 +9896,7 @@ body .chat-log .src-ev .src-open{
     if(muts.every(function(m){ return m.target.closest&&m.target.closest('.sess-div'); })) return;
     clearTimeout(mo.__t); mo.__t=setTimeout(function(){ enhanceTurns(); enhanceHeads(); enhanceSeparators(); },120);
   });
-  function init(){
-    initToolbar(); enhanceTurns(); enhanceHeads(); enhanceSeparators();
-    // The review workspace still works without this nonessential enhancement
-    // observer. Guard it so an embedded or unusual browser context cannot
-    // prevent the rest of the UI from finishing its startup sequence.
-    try { mo.observe(document.body,{childList:true,subtree:true}); } catch(e) {}
-  }
+  function init(){ initToolbar(); enhanceTurns(); enhanceHeads(); enhanceSeparators(); mo.observe(document.body,{childList:true,subtree:true}); }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
 })();
 </script>

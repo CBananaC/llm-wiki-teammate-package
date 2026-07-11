@@ -1,9 +1,11 @@
 # Package Contents
 
-This folder was assembled from the active `llm-wiki` workspace on 2026-07-10.
+This folder was assembled from the active `llm-wiki` workspace on 2026-07-11.
 
 - The app uses the four files in `outputs/attempt-002/` at runtime.
-- The 24 saved prompt files are directly available in `skills/`.
+- The 25 saved prompt files are directly available in `skills/`, including the
+  `上諭` review loop (`shangyu-review-loop.md`) and the new `上諭`—response
+  pairing skill (`yu-response-pairing.md`).
 - The review-bundle archive is extracted automatically by `run-local.py` so the
   Bundles drawer works immediately after the first launch.
 - The archival workspace is intentionally compressed to keep the GitHub handoff
