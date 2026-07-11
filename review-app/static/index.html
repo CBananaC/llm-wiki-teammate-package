@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>LLM Wiki Review Bridge</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="bridge-bar">
+    <div>
+      <strong>LLM Wiki Bridge</strong>
+      <span>Previous timeline UI preserved. Local skills and review bundles are connected behind it.</span>
+    </div>
+    <div class="bridge-actions">
+      <button id="open-app" type="button">Open Full UI</button>
+      <button id="toggle-skills" type="button">Skills</button>
+      <button id="toggle-bundles" type="button">Bundles</button>
+    </div>
+  </div>
+
+  <aside class="bridge-drawer" id="bridge-drawer" aria-hidden="true">
+    <div class="drawer-head">
+      <strong id="drawer-title">Skills</strong>
+      <button id="drawer-close" type="button">×</button>
+    </div>
+    <div id="drawer-body"></div>
+  </aside>
+
+  <iframe id="timeline-frame" title="Stage 1 Timeline" src="/app"></iframe>
+
+  <script src="app.js"></script>
+</body>
+</html>
