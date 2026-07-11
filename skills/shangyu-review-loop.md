@@ -18,22 +18,17 @@ selected edict, any optional `【候選奏摺／硃批】` prior records, and an
    `source_receive_date` (硃批／收受日), and `source_quote`; otherwise `未明`.
    Do not reconstruct earlier relay chains and do not invent sources.
 3. For each event, extract the emperor's event-specific comment, if any, as
-   `comment_subtitle` (a short label) and `emperor_comment` (a fuller one-to-two
-   sentence description of what the emperor judged), with an exact
-   `comment_quote`. Do not confuse an order with a comment.
+   `emperor_comment` with an exact `comment_quote`. Do not confuse an order
+   with a comment.
 4. Separately extract every concrete imperial command, including its target
-   official(s), as `commands`. Give each a short `title` and a fuller one-to-two
-   sentence `summary` describing what is ordered and why. Preserve commands,
-   criticism, and awards as separate points whenever they have different targets
-   or functions.
+   official(s), as `commands`. Preserve commands, criticism, and awards as
+   separate points whenever they have different targets or functions.
 5. For each command, search the `【候選回應】` later documents. A candidate is a
    response only when it is authored by one of that command's target officials,
    its 上奏日 is after the `上諭` date, and its text reports carrying out or
    answering that command. Return matches under the command's `responses` as
-   `resp_doc_id`, `resp_official`, `resp_send_date`, `resp_subtitle` (a short
-   summary of how the official responded), `resp_desc` (one fuller sentence),
-   and `resp_quote`; otherwise return an empty `responses` array. Do not invent
-   responses.
+   `resp_doc_id`, `resp_official`, `resp_send_date`, `resp_quote`; otherwise
+   return an empty `responses` array. Do not invent responses.
 6. Assess `上諭` time-effectiveness over a WINDOW, not a single reply latency:
    `window_start` = the earliest `source_send_date` (上奏日) among the direct
    reports found in step 2, and `window_end` = the `上諭` date. State whether
@@ -62,7 +57,6 @@ Use Traditional Chinese. Preserve quotations exactly. Mark uncertainty as
         "source_receive_date": "未明",
         "source_quote": "未明"
       },
-      "comment_subtitle": "未明",
       "emperor_comment": "未明",
       "comment_quote": "未明"
     }
@@ -71,7 +65,7 @@ Use Traditional Chinese. Preserve quotations exactly. Mark uncertainty as
     {
       "title": "", "target": [], "summary": "", "quote": "",
       "responses": [
-        {"resp_doc_id": "", "resp_official": "", "resp_send_date": "", "resp_subtitle": "", "resp_desc": "", "resp_quote": ""}
+        {"resp_doc_id": "", "resp_official": "", "resp_send_date": "", "resp_quote": ""}
       ]
     }
   ],

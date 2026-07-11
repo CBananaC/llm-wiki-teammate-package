@@ -6,7 +6,15 @@ It is deliberately separate from the full research workspace.
 ## Start the site
 
 Requires Python 3.10 or newer; no packages need to be installed for the core
-website.
+website. The AI service has its own dependencies; install them once in a local
+virtual environment:
+
+```bash
+python -m venv .venv
+.venv/Scripts/python -m pip install -r gemini-proxy/requirements.txt
+```
+
+On macOS/Linux, use `.venv/bin/python` for the second command.
 
 ```bash
 python3 run-local.py
@@ -36,7 +44,7 @@ skills/                     Saved prompts / task specifications
 archives/review-bundles.zip All previous review bundles and large generated outputs
 archives/research-workspace.zip
                             Original/OCR/cleaned source materials, scripts, and docs
-gemini-proxy/               Optional source for Gemini and historical-place tools
+gemini-proxy/               Optional multi-provider AI proxy and historical-place tools
 ```
 
 The full timeline, including the original documents used by the active site, is
@@ -46,10 +54,20 @@ files preserve the editable timeline data and source metadata.
 ## Optional AI tools
 
 The review, edit, export, skills, and saved-bundle functions work locally. AI
-chat, AI extraction, and place lookup additionally require a Gemini proxy URL
-configured in the timeline's Settings panel. Use an approved shared service or
-deploy the included `gemini-proxy/` with your own authorized Google Cloud
-credentials. Never commit credentials, API keys, or `.env` files.
+chat and extraction use the included AI proxy (the folder keeps its old
+`gemini-proxy/` name for compatibility). `run-local.py` starts it automatically
+and exposes it through the same local origin, so the normal setup does not need
+a separate proxy URL. The Settings panel supports Gemini,
+OpenAI GPT, Anthropic Claude, DeepSeek, and third-party OpenAI-compatible APIs.
+Choose a provider, then enter that provider's model, API base URL, and API key.
+An advanced proxy URL override remains available for deployed setups. Model choices are kept separately for each provider and
+can be refreshed from the provider when its model-list endpoint is available.
+
+API keys entered in the page are held in browser session storage and sent only
+to the configured proxy. Deploy and trust your own HTTPS proxy; never use an
+unknown shared proxy for personal credentials. Keys can instead be configured
+as proxy environment variables so they never enter the browser. Never commit
+credentials, API keys, or `.env` files.
 
 Map and relationship-graph panels also load public JavaScript libraries and map
 tiles when opened, so they need an internet connection.

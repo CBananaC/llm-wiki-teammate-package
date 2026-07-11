@@ -1,10 +1,10 @@
 #!/usr/bin/env bash
-# Deploy the Gemini proxy to Cloud Run. Run from this folder: bash deploy.sh
+# Deploy the multi-provider AI proxy to Cloud Run. Run from this folder: bash deploy.sh
 set -euo pipefail
 
 PROJECT="${PROJECT:-delta-entry-496910-e7}"
 REGION="${REGION:-asia-east1}"
-SERVICE="${SERVICE:-gemini-proxy}"
+SERVICE="${SERVICE:-timeline-ai-proxy}"
 MODEL="${MODEL:-gemini-2.5-flash}"
 # Vertex location for the model. "global" matches the existing summarization script.
 VERTEX_LOCATION="${VERTEX_LOCATION:-global}"
@@ -32,4 +32,4 @@ gcloud run deploy "$SERVICE" \
 echo
 echo "Done. Service URL:"
 gcloud run services describe "$SERVICE" --project "$PROJECT" --region "$REGION" --format='value(status.url)'
-echo "Paste that URL (it ends without a slash) into the timeline panel's Gemini settings."
+echo "Paste that URL (it ends without a slash) into the timeline panel's AI settings."

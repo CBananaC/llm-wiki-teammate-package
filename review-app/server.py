@@ -15,7 +15,9 @@ import re
 import subprocess
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlparse
+from urllib.request import Request, urlopen
 
 
 APP_DIR = Path(__file__).resolve().parent
@@ -32,6 +34,7 @@ ATTEMPT_DIR = WIKI_DIR / "outputs" / "attempt-002"
 # localStorage is kept only as a fast local cache/fallback for when this server isn't running
 # (e.g. the page opened directly as file://).
 EDITS_PATH = ATTEMPT_DIR / "timeline-edits.local.json"
+AI_PROXY_URL = os.environ.get("LLM_WIKI_AI_URL", "http://127.0.0.1:8767").rstrip("/")
 
 # Section heading a skill file can use to mark the short, single-string
 # version of itself that the browser sends as-is to the Gemini proxy for
@@ -120,6 +123,8 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            if path.startswith("/api/ai/"):
+                return self.ai_proxy("GET", path.removeprefix("/api/ai"), parsed.query)
             if path == "/api/health":
                 return self.json({"ok": True})
             if path == "/api/edits":
@@ -149,6 +154,8 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            if path.startswith("/api/ai/"):
+                return self.ai_proxy("POST", path.removeprefix("/api/ai"), parsed.query)
             data = self.body_json()
             if path == "/api/edits":
                 # No git_auto_commit here on purpose: this saves on essentially every click
@@ -292,6 +299,39 @@ class Handler(BaseHTTPRequestHandler):
         length = int(self.headers.get("Content-Length", "0") or "0")
         raw = self.rfile.read(length).decode("utf-8")
         return json.loads(raw) if raw else {}
+
+    def ai_proxy(self, method: str, path: str, query: str = ""):
+        target = AI_PROXY_URL + path + (("?" + query) if query else "")
+        body = None
+        if method == "POST":
+            length = int(self.headers.get("Content-Length", "0") or "0")
+            body = self.rfile.read(length)
+        upstream = Request(
+            target,
+            data=body,
+            method=method,
+            headers={"Content-Type": self.headers.get("Content-Type", "application/json")},
+        )
+        try:
+            with urlopen(upstream, timeout=150) as response:
+                payload = response.read()
+                status = response.status
+                content_type = response.headers.get("Content-Type", "application/json; charset=utf-8")
+        except HTTPError as exc:
+            payload = exc.read()
+            status = exc.code
+            content_type = exc.headers.get("Content-Type", "application/json; charset=utf-8")
+        except (URLError, TimeoutError) as exc:
+            return self.json({
+                "error": "本機 AI 服務未啟動。請重新執行 run-local.py，並確認已安裝 gemini-proxy/requirements.txt。",
+                "detail": str(exc),
+            }, 503)
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(payload)
 
     def static(self, path: str):
         rel = "index.html" if path in {"/", ""} else path.lstrip("/")
