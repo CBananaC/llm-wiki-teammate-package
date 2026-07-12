@@ -4807,6 +4807,37 @@
     if(myDate){ const ed=parseD(e.whenAr); if(ed && ed>myDate) return false; }
     return true;
   }
+  function parseAIJsonText(text){
+    const raw=stripFences(String(text||'')).trim(); if(!raw) return null;
+    try{ return JSON.parse(raw); }catch(e){}
+    const starts=[raw.indexOf('{'),raw.indexOf('[')].filter(i=>i>=0).sort((a,b)=>a-b);
+    if(!starts.length) return null;
+    const start=starts[0], end=Math.max(raw.lastIndexOf('}'),raw.lastIndexOf(']'));
+    if(end<=start) return null;
+    try{ return JSON.parse(raw.slice(start,end+1)); }catch(e){ return null; }
+  }
+  function eventListFromResponse(data){
+    const direct=[data&&data.events,data&&data.items,data&&data.results,data&&data.data&&data.data.events,
+      data&&data.data&&data.data.items,data&&data.result&&data.result.events,data&&data.output&&data.output.events];
+    for(const list of direct) if(Array.isArray(list)) return list;
+    for(const field of ['text','answer','content','output']){
+      const parsed=parseAIJsonText(data&&data[field]); if(!parsed) continue;
+      if(Array.isArray(parsed)) return parsed;
+      for(const key of ['events','items','results','事件','事件列表']) if(Array.isArray(parsed[key])) return parsed[key];
+      if(parsed.data){ for(const key of ['events','items','results']) if(Array.isArray(parsed.data[key])) return parsed.data[key]; }
+    }
+    return null;
+  }
+  function normalizeLiveEvent(raw, actor, docId){
+    if(!raw || typeof raw!=='object') return null;
+    const item=normalizeSkillEventItem(Object.assign({},raw,{doc_id:raw.doc_id||docId}),actor);
+    item.side=raw.side||raw.actor_side||'';
+    item.action=raw.action||''; item.result=raw.result||'';
+    item.whoLoc=raw.whoLoc||raw.who_loc||{};
+    item.relations=raw.relations||raw.relationships||[];
+    normalizeRelLoc(item);
+    return item;
+  }
   function mergeCandidates(cands, actor){
     const groups=new Map();
     cands.forEach(c=>{ const sub=c.subtitle||c.what||''; const k=actor+'|'+normWhere(sub)+'|'+normWhere(c.where)+'|'+candDateKey(c);
@@ -4851,23 +4882,33 @@
       actorInstruction=(skillPromptFor('extract-lin-actions')||'Extract only actions actually performed by the 林爽文 side / rebels / anti-Qing forces. Do not extract Qing suppression, defence, troop dispatch, reporting, or official communication actions.')+dateRule;
     // Always ask for relationship edges + per-actor locations so events can feed a character-relationship graph and GIS map.
     actorInstruction += ' For EACH event ALSO return two extra fields. (1) "who_loc": an object mapping each person in "who" to the single place name where that person physically is during the event (their own location, which may differ from the event location "where"). Use only place names stated or clearly implied in the text; omit a person or use "" if their location is unknown. Return place NAMES only — never invent latitude/longitude. (2) "relations": an array of directed relationship edges. A relation\'s "source" is always a person from "who". Its "target" is USUALLY another person, BUT when the action is directed at a PLACE rather than a person (e.g. attacking/besieging/occupying/defending/capturing a city, fort, camp, or other location, with no specific person on the receiving end), the "target" MUST be that place name instead (the same place-name string you would use in "where"/"who_loc") — do not force such actions into a person-to-person edge or omit them just because there is no named recipient. Each edge is {"source": person name, "target": person name OR place name, "relation": the original Chinese verb/relationship word (e.g. 派遣、委令、稟報、協同、攻打、擒拿、隸屬、攻陷、進犯、圍攻、佔據、防守), "relation_type": one of "command"|"report"|"ally"|"conflict"|"kinship"|"attack"|"occupy"|"defend"|"other" (use "attack"/"occupy"/"defend" specifically for actor-to-PLACE edges), "evidence": the short source clause that supports the edge}. Include only edges actually stated in the text; return [] if none.';
-    const cands=[]; let done=0; let lastErr=null;
+    const cands=[], failures=[]; let done=0, returned=0;
     for(const r of docs){
       try{
         const focusBlock=(ctx.question||ctx.chat_context) ? `【使用者要求 / focus】\n${ctx.question||''}\n\n【最近 AI 對話脈絡】\n${ctx.chat_context||''}\n\n【原文】\n` : '';
-        const data=await (window.__aiCallProxy||callProxy)({mode:'events', actor, category:cat, actor_instruction:actorInstruction+(ctx.question||ctx.chat_context?' Extract only event proposals directly relevant to the user focus and recent chat context. If the requested event is described in the chat context, use the original document as evidence and do not return unrelated events from the same document.':''), question:ctx.question||'', chat_context:ctx.chat_context||'', doc_id:(r._baseId||r.id), doc_type:r.doc_type, title:r.title, body:focusBlock+recordBody(r), rescript:r.rescript||'', summary:getSummary(r)});
-        let evs=data.events; if(!evs && data.text){ try{ evs=(JSON.parse(stripFences(data.text))||{}).events; }catch(e){} }
-        (evs||[]).forEach(ev=>{ const c=Object.assign({}, ev, {actor, doc_id:(r._baseId||r.id)});
-          normalizeRelLoc(c);
+        const requestOnce=async retry=>{
+          const instruction=retry?'':actorInstruction+(ctx.question||ctx.chat_context?' Extract only event proposals directly relevant to the user focus and recent chat context. If the requested event is described in the chat context, use the original document as evidence and do not return unrelated events from the same document.':'');
+          const payload={mode:'events', actor, category:cat, actor_instruction:instruction, question:ctx.question||'', chat_context:ctx.chat_context||'', doc_id:(r._baseId||r.id), doc_type:r.doc_type, title:r.title, body:focusBlock+recordBody(r), rescript:r.rescript||'', summary:getSummary(r)};
+          if(retry) payload.retry_empty=true;
+          const data=await (window.__aiCallProxy||callProxy)(payload);
+          const list=eventListFromResponse(data);
+          if(list===null) throw new Error(data.warning||'AI 回應缺少 events 陣列');
+          return list;
+        };
+        let evs=await requestOnce(false);
+        if(!evs.length&&!focused) evs=await requestOnce(true);
+        returned+=evs.length;
+        evs.forEach(ev=>{ const c=normalizeLiveEvent(ev,actor,(r._baseId||r.id)); if(!c) return;
           normalizeProposalDate(c, r.sendAr||r.recvAr||r.annAr);
           // when the user gave a focus (reply / @command), trust the proxy's focused result; otherwise apply the actor+keyword filters
           if(focused) cands.push(c);
           else if(wantedEvent(c, actor)) cands.push(c); });
-      }catch(e){ lastErr=e; }
+      }catch(e){ failures.push({doc_id:(r._baseId||r.id),message:e.message||String(e)}); }
       done++; if(onProgress) onProgress(done, docs.length);
     }
-    if(!cands.length && lastErr) throw lastErr;
-    return mergeCandidates(cands, actor);
+    const merged=mergeCandidates(cands,actor);
+    merged.__failures=failures; merged.__returned=returned;
+    return merged;
   }
   // commit one in-chat proposal → event (dot + highlight projection + panel)
   function proposalRefAr(p){ const s=(p.sources||[])[0]||{}; const r=recByDocId2&&recByDocId2(s.doc_id); return r&&(r.sendAr||r.recvAr||r.annAr)||null; }
@@ -5094,6 +5135,36 @@
       doAddAt(d, ux < (Lx+Rx)/2);                               // edit-mode convenience add
     });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if(armDate) disarmDate(); if(armAdd){ disarmAdd(); if(addBtn) addBtn.classList.remove('on'); } if(armDotLink) disarmDotLink(); if(armEvDateId||armLinkEventId||armAddEvt){ clearEvArms(); if(evtBtn) evtBtn.classList.remove('on'); } } });
+  })();
+  // Right-click access to dot/event editing and common timeline actions.
+  (function(){
+    let menu=null;
+    function closeMenu(){ if(menu){ menu.remove(); menu=null; } }
+    function addButton(parent,label,fn,opts){ const b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem'); b.textContent=label; if(opts&&opts.disabled){ b.disabled=true; b.title=opts.title||''; } if(opts&&opts.danger)b.classList.add('tcm-danger'); b.onclick=e=>{e.preventDefault();e.stopPropagation();fn();}; parent.appendChild(b); return b; }
+    function clickControl(id){ const b=document.getElementById(id); if(b){ closeMenu(); b.click(); } }
+    function labelOf(id,fallback){ const b=document.getElementById(id); return b&&b.tagName!=='INPUT'?(b.textContent||'').trim()||fallback:fallback; }
+    function openDoc(rid){ const rec=recByRid(rid); if(!rec)return; const key=/^\d+$/.test(String(rid))?Number(rid):String(rid); selRid=key; hlDocRid=key; hlEventId=null; render(); openCard(rec,1); requestAnimationFrame(()=>{if(window.__focusDot)window.__focusDot(rid);}); }
+    function openMenu(e){
+      e.preventDefault(); e.stopPropagation(); closeMenu(); closeDotPop();
+      const dot=e.target.closest&&e.target.closest('.ddot,.edot'), rid=dot&&dot.dataset.rid, eid=dot&&dot.dataset.evid;
+      const ref=dot?normalizeDotRef(dotRefFromEl(dot)):null, pos={clientX:e.clientX,clientY:e.clientY};
+      const sr=svg.getBoundingClientRect(), date=dateFromY((e.clientY-sr.top)/scale), left=((e.clientX-sr.left)/scale)<(Lx+Rx)/2;
+      menu=document.createElement('div'); menu.className='timeline-context-menu'; menu.setAttribute('role','menu'); menu.setAttribute('aria-label','時間軸功能');
+      if(!eid) addButton(menu,rid?'查看圓點資訊':(editMode?'結束編輯圓點':'編輯圓點'),()=>{closeMenu();if(rid)openDoc(rid);else clickControl('d-editdots');});
+      if(rid){ addButton(menu,'隱藏圓點',()=>{closeMenu();const r=recByRid(rid);if(r)hideDot(r);}); addButton(menu,'刪除圓點',()=>{closeMenu();const r=recByRid(rid);if(r&&confirm('永久刪除此圓點？此動作不會出現在隱藏清單。'))removeDot(r);},{danger:true}); }
+      else if(eid){ addButton(menu,'隱藏事件',()=>{closeMenu();if(eventById(eid))hideEvent(eid);}); addButton(menu,'刪除事件',()=>{closeMenu();if(eventById(eid)&&confirm('永久刪除此事件？'))removeEvent(eid);},{danger:true}); }
+      const divider=()=>{const d=document.createElement('div');d.className='tcm-divider';d.setAttribute('role','separator');menu.appendChild(d);}; divider();
+      addButton(menu,'＋圓點（此日期）',()=>{closeMenu();doAddAt(date,left);});
+      addButton(menu,ref?(eid?'從此事件連線':'從此圓點連線'):'連線圓點',()=>{closeMenu();armDotLinkMode();const b=document.getElementById('d-linkdots');if(b)b.classList.add('on');if(ref)applyDotLinkPick(ref);});
+      const hasLinks=customDotLinks().length>0; addButton(menu,'清除自訂連線',()=>clickControl('d-clearlot'),{disabled:!hasLinks,title:hasLinks?'':'目前沒有自訂連線'});
+      addButton(menu,'＋事件（此日期）',()=>{closeMenu();const ev=addEvent({dateAr:fmt(date)});if(ev)openEventPopover(ev,pos);});
+      addButton(menu,'隱藏清單',()=>{closeMenu();openHiddenList();}); divider();
+      addButton(menu,labelOf('d-togglechart','隱藏圖'),()=>clickControl('d-togglechart'));
+      const more=document.createElement('div');more.className='tcm-more';const mb=document.createElement('button');mb.type='button';mb.setAttribute('role','menuitem');mb.innerHTML='<span>更多</span><span aria-hidden="true">›</span>';more.appendChild(mb);
+      const sub=document.createElement('div');sub.className='tcm-submenu';sub.setAttribute('role','menu');[['ed-export-all','匯出'],['ed-export-split','分項匯出'],['ed-import-all','匯入'],['ed-load-skills','載入技能輸出'],['ed-clear-cache','清快取'],['theme-toggle','切換主題']].forEach(([id,f])=>{if(document.getElementById(id))addButton(sub,labelOf(id,f),()=>clickControl(id));});more.appendChild(sub);menu.appendChild(more);document.body.appendChild(menu);
+      const r=menu.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(e.clientX,innerWidth-r.width-8))+'px';menu.style.top=Math.max(8,Math.min(e.clientY,innerHeight-r.height-8))+'px';if(e.clientX+r.width+220>innerWidth)menu.classList.add('open-left');if(more.getBoundingClientRect().top+215>innerHeight)more.classList.add('submenu-up');const first=menu.querySelector('button');if(first)first.focus({preventScroll:true});
+    }
+    wsChart.addEventListener('contextmenu',openMenu);document.addEventListener('pointerdown',e=>{if(menu&&!menu.contains(e.target))closeMenu();},true);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});window.addEventListener('blur',closeMenu);window.addEventListener('resize',closeMenu);scroll.addEventListener('scroll',closeMenu,{passive:true});
   })();
   rebuildRecs();
   function setByPath(obj, path, val){
@@ -5655,9 +5726,15 @@
     document.body.appendChild(tools);
     let scope='single', selectedKeys=new Set();
     function clamp(n,min,max){ return Math.max(min, Math.min(max, n)); }
-    function placeTools(){ let p=getFloatPos(); if(!p) p={x:window.innerWidth-78, y:96};
-      p.x=clamp(p.x,6,window.innerWidth-64); p.y=clamp(p.y,6,window.innerHeight-130);
-      tools.style.left=p.x+'px'; tools.style.top=p.y+'px'; }
+    function placeTools(){
+      let p=getFloatPos();
+      const w=Math.max(1,tools.offsetWidth||140), h=Math.max(1,tools.offsetHeight||72);
+      if(!p) p={x:window.innerWidth-w-18, y:96};
+      p.x=clamp(p.x,6,Math.max(6,window.innerWidth-w-6));
+      p.y=clamp(p.y,6,Math.max(6,window.innerHeight-h-6));
+      tools.style.left=p.x+'px'; tools.style.top=p.y+'px';
+      setFloatPos(p);
+    }
     function openBoxes(){ return [...document.querySelectorAll('.tool-box')]; }
     function boxOf(kind){ return document.querySelector('.tool-box[data-kind="'+kind+'"]'); }
     function setBtnActive(){ tools.querySelectorAll('button').forEach(b=>b.classList.toggle('active', !!boxOf(b.dataset.tool))); }
@@ -5992,7 +6069,20 @@
       // .cb-pop-toc lives inside the relocated .chat-toprow (now in tb-head, outside `body`), so
       // this must search `root` (body's tool-box ancestor), not `body` alone, or the 目錄 popover
       // would never be found/closed.
-      function closePops(){ root.querySelectorAll('.cb-pop').forEach(p=>p.style.display='none'); }
+      function closePops(){ root.querySelectorAll('.cb-pop').forEach(p=>{ p.style.display='none'; p.classList.remove('is-viewport'); ['top','right','bottom','left','width'].forEach(k=>p.style.removeProperty(k)); }); }
+      function placePop(ch,pop){
+        pop.classList.add('is-viewport'); pop.style.display='block';
+        const margin=8, cr=ch.getBoundingClientRect();
+        const wanted=pop.classList.contains('cb-pop-cfg')?Math.min(380,innerWidth-margin*2):Math.min(340,innerWidth-margin*2);
+        pop.style.setProperty('width',wanted+'px','important');
+        pop.style.setProperty('right','auto','important'); pop.style.setProperty('bottom','auto','important');
+        const pr=pop.getBoundingClientRect();
+        let left=Math.min(Math.max(margin,cr.left),innerWidth-pr.width-margin);
+        let top=cr.top-pr.height-6;
+        if(top<margin) top=Math.min(cr.bottom+6,innerHeight-pr.height-margin);
+        pop.style.setProperty('left',Math.max(margin,left)+'px','important');
+        pop.style.setProperty('top',Math.max(margin,top)+'px','important');
+      }
       function updateScopeChip(){ const lbl=body.querySelector('.cb-chip[data-pop="scope"] .ci-lbl'); if(!lbl) return; const apis=selectedApis();
         lbl.textContent='套用：'+(scope==='all'?'全部':(apis.length?(apis.length>1?apis.length+' 張卡片':apis[0].rec.id):(scope==='some'?'未選卡片':'目前卡片'))); }
       function insertAtToken(label){
@@ -6172,7 +6262,7 @@
       // Must bind from `root`, not `body` -- the 目錄/收合輸入 chips now live in the relocated
       // .chat-toprow inside tb-head, outside body's own subtree, so a body-scoped querySelectorAll
       // would silently skip them and leave those two buttons doing nothing when clicked.
-      root.querySelectorAll('.cb-chip[data-pop]').forEach(ch=>ch.onclick=(e)=>{ e.stopPropagation(); const pop=root.querySelector('.cb-pop[data-for="'+ch.dataset.pop+'"]'); if(!pop) return; const open=pop.style.display!=='none'; closePops(); if(!open){ if(ch.dataset.pop==='act') buildActMenu(false); else if(ch.dataset.pop==='toc') buildTocMenu(); pop.style.display='block'; } });
+      root.querySelectorAll('.cb-chip[data-pop]').forEach(ch=>ch.onclick=(e)=>{ e.stopPropagation(); const pop=root.querySelector('.cb-pop[data-for="'+ch.dataset.pop+'"]'); if(!pop) return; const open=pop.style.display!=='none'; closePops(); if(!open){ if(ch.dataset.pop==='act') buildActMenu(false); else if(ch.dataset.pop==='toc') buildTocMenu(); placePop(ch,pop); } });
       if(window.__aiPopClose) document.removeEventListener('click', window.__aiPopClose);
       window.__aiPopClose=(e)=>{ if(!e.target.closest('.cb-chiprow') && !e.target.closest('.chat-toprow')) closePops(); };
       document.addEventListener('click', window.__aiPopClose);
@@ -6350,6 +6440,7 @@
           const whoLine=[ev.where, (ev.who||[]).join('、'), ev.whenCh].filter(Boolean).join('　');
           const r=ev.report||{};
           const aBtn = ev.__added ? done('已加入事件') : '<button class="sl-btn sl-add-ev" data-i="'+i+'" data-j="'+j+'" type="button">加入為事件</button>';
+          const infoBtn = ev.__infoAdded ? done('已加入皇帝得知') : '<button class="sl-btn sl-add-info" data-i="'+i+'" data-j="'+j+'" type="button">加入「皇帝得知」資訊</button>';
           const bMore = ev.__revealB ? '' : '<button class="sl-btn sl-more" data-i="'+i+'" data-j="'+j+'" data-step="b" type="button" title="查看直接奏報來源">▾ 查看來源</button>';
           const cMore = ev.__revealC ? '' : '<button class="sl-btn sl-more" data-i="'+i+'" data-j="'+j+'" data-step="c" type="button" title="查看皇帝評論">▾ 皇帝評論</button>';
           const bSubtitle = (r.official?(r.official+'奏報'):'直接奏報')+(ev.subtitle?('：'+ev.subtitle):'');
@@ -6384,7 +6475,7 @@
             +'</div>'
             +'<div class="cx-ev sl-b'+(ev.__revealB?'':' sl-hidden')+'">'
               +bBody
-              +'<div class="cx-acts">'+cMore+'</div>'
+              +'<div class="cx-acts">'+infoBtn+cMore+'</div>'
             +'</div>'
             +'<div class="cx-ev sl-c'+(ev.__revealC?'':' sl-hidden')+'">'
               +'<div class="cx-sub">皇帝評論</div>'
@@ -6396,6 +6487,7 @@
         const cmdSec=(section!=='commands')?'':commands.map((c,k)=>{
               const tgt=(c.target||[]).join('、');
               const addBtn=c.__added?done('已加入皇帝行動'):'<button class="sl-btn sl-add-cmd" data-i="'+i+'" data-k="'+k+'" type="button">加入為皇帝行動</button>';
+              const respBtn='<button class="sl-btn sl-resp" data-i="'+i+'" data-k="'+k+'" type="button">搜尋官員回應</button>';
               const resps=(c.responses||[]);
               const respHtml=resps.length?('<div class="sl-resps"><span class="evv-l">官員回應（'+resps.length+'）</span>'
                 + resps.map((r,ri)=>{
@@ -6422,7 +6514,7 @@
                 +(c.summary?('<div class="sf-desc">'+esc(c.summary)+'</div>'):'')
                 +(tgt?('<div class="sl-meta">對象：'+esc(tgt)+'</div>'):'')
                 +(c.quote?('<div class="cx-q" data-doc="'+edId+'" title="點按在原文中顯示">「'+esc(c.quote)+'」</div>'):'')
-                +'<div class="cx-acts">'+addBtn+'</div>'
+                +'<div class="cx-acts">'+addBtn+respBtn+'</div>'
                 +respHtml
               +'</div>';
             }).join('');
@@ -7285,10 +7377,14 @@
           saveEdits(); if(typeof render==='function') render(); renderLog(p.__added?{focusAfterMarked:true}:{preserve:true}); });
         // ---- 上諭審閱迴圈 (shangyuloop) card handlers ----
         function slTurn(i){ const c=chatArr(curStore()); const m=c&&c[+i]; return (m&&m.kind==='shangyuloop')?m:null; }
+        function slAddEvent(ev){ if(ev.__evId) return eventById(ev.__evId); const e=commitProposal(ev.__evItem); ev.__added=true; ev.__evId=e&&e.id; return e; }
+        function slCommitCommand(m,c){ if(c.__eaEvId) return c.__eaEvId; const tgt=(c.target||[]).join('、'); const desc=[c.summary,tgt?('對象：'+tgt):''].filter(Boolean).join('\n'); const e=commitEmperorAction(c.title||c.summary||'諭令',desc,{whenAr:m.edictDate||'',whenCh:''},m.edictId,c.quote||'','上諭',null,{}); c.__added=true; c.__eaEvId=e&&e.id; return c.__eaEvId; }
         log.querySelectorAll('.sl-more').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev) return; if(b.dataset.step==='c') ev.__revealC=true; else ev.__revealB=true; saveEdits(); renderLog({preserve:true}); });
-        log.querySelectorAll('.sl-add-ev').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__added) return; const e=commitProposal(ev.__evItem); ev.__added=true; ev.__evId=e.id; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入「'+(ev.subtitle||'事件')+'」為事件。'; });
+        log.querySelectorAll('.sl-add-ev').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__added) return; slAddEvent(ev); saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入「'+(ev.subtitle||'事件')+'」為事件。'; });
+        log.querySelectorAll('.sl-add-info').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__infoAdded) return; const target=slAddEvent(ev); if(!target) return; const r=ev.report||{}; const obj={info:'直接奏報',quote:r.quote||'',doc_id:r.doc_id||'',srcTitle:r.title||'',srcAuthor:r.official||'',srcSentAr:r.sendAr||'',emperor_quote:ev.edictQuote||'',emperorDocId:m.edictId||''}; target.__suggestedInfoSources=[obj]; if(typeof commitSuggestedInfoSources==='function') commitSuggestedInfoSources(target.id); ev.__infoAdded=true; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已將直接奏報加入「皇帝得知」資訊。'; });
         log.querySelectorAll('.sl-add-cmt').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__commentAdded) return; const cm=ev.comment||{}; if(!(cm.text||cm.quote)) return; const subtitle='皇帝評論：'+String(ev.subtitle||'').slice(0,20); const e=commitEmperorAction(subtitle, cm.text||'', {whenAr:m.edictDate||'', whenCh:''}, m.edictId, cm.quote||cm.text||'', '上諭', null, {}); ev.__commentAdded=true; ev.__cmtEvId=e&&e.id; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已將皇帝評論加入為皇帝行動（第四線）。'; });
-        log.querySelectorAll('.sl-add-cmd').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||c.__added) return; const tgt=(c.target||[]).join('、'); const desc=[c.summary, tgt?('對象：'+tgt):''].filter(Boolean).join('\n'); const e=commitEmperorAction(c.title||c.summary||'諭令', desc, {whenAr:m.edictDate||'', whenCh:''}, m.edictId, c.quote||'', '上諭', null, {}); c.__added=true; c.__eaEvId=e&&e.id; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入諭令為皇帝行動（第四線）。'; });
+        log.querySelectorAll('.sl-add-cmd').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||c.__added) return; slCommitCommand(m,c); saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入諭令為皇帝行動（第四線）。'; });
+        log.querySelectorAll('.sl-resp').forEach(b=>b.onclick=async()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c) return; const evId=slCommitCommand(m,c); saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); if(evId&&typeof runOfficialResponseSearch==='function') await runOfficialResponseSearch(evId); });
         log.querySelectorAll('.sl-resp-add').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||!c.__eaEvId) return; const r=(c.responses||[])[+b.dataset.ri]; if(!r||r.__added) return; const targetEv=eventById(c.__eaEvId); const refAr=(targetEv||{}).dateAr||''; const it={ subtitle:r.subtitle||((r.official||'官員')+'回應'), how:r.desc||'', doc_id:r.doc_id||'', response_quote:r.quote||'', receive_date:r.sendAr||'' }; const rp=(typeof relPayloadFromItem==='function')?relPayloadFromItem(it):{where:'',who:[],whoLoc:{},relations:[]}; const respSub=it.subtitle.slice(0,24); addEvent({ actor:'qing', subtitle:respSub, what:respSub, description:it.how, where:rp.where, who:rp.who, whoLoc:rp.whoLoc, relations:rp.relations, whenCh:'', dateAr:(typeof officialResponseDateAr==='function'?officialResponseDateAr(it, refAr):(r.sendAr||null)), sources:[{doc_id:it.doc_id, quote:it.response_quote, label:'回應', howKnown:''}], respondsToEventId:c.__eaEvId, respondsToQuote:'', receiveDate:it.receive_date }); r.__added=true; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入官員回應「'+respSub+'」，並連到諭令皇帝行動點。'; });
         log.querySelectorAll('.cx-add:not(.zp-addact):not(.em-addact):not(.eact-add):not(.ea-retry):not(.cx-addall)').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:it.__traceChains}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已加入「'+(it.subtitle||'事件')+'」，並於原文標註。'; });
         // Re-reported candidate (carries __matchReg, see runExtract/matchNoteHtml): "加入" here never
@@ -7580,6 +7676,8 @@
         if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 擷取中…（0/'+apis.length+'）';
         try{ const props=await extractEventProposals(actor, apis.map(a=>a.rec), (dn,n)=>{ st2.textContent='AI 擷取中…（'+dn+'/'+n+'）'; }, ctx);
+          const failures=props.__failures||[];
+          if(!props.length && failures.length===apis.length) throw new Error(failures.map(x=>x.doc_id+'：'+x.message).join('；'));
           // Eagerly trace sources for the WHOLE batch right now, before the user has decided which
           // candidates to keep -- ONE whole-document scan per source document, not one call per
           // event. An event-focused trace call re-scans its source document from scratch, so if a
@@ -7635,7 +7733,11 @@
           props.forEach(p=>{ const hit=matchCandidateInRegistry(p, registry.filter(e=>registryEntryAllowedForCandidate(p, e, parseD(p.whenAr)))); if(hit) p.__matchReg={bucketKey:hit.bucketKey, turnIndex:hit.turnIndex, itemIndex:hit.itemIndex, title:hit.title, reporter:hit.reporter, doc_id:hit.doc_id, whenAr:hit.whenAr, whenCh:hit.whenCh, committed:hit.committed, evId:hit.evId}; });
           const c=chatArr(curStore()); c.push({kind:'extract', actor, prompt:ctx.question||'', items:props, leftoverChains, at:nowStr(), model:getGeminiModel()}); saveEdits();
           markAIReview('extract', apis);
-          st2.textContent='完成：擷取 '+props.length+' 個事件，請於下方逐一「加入」（來源鏈已預先找好，加入後會自動顯示）。'; renderLog({focusIndex:c.length-1});
+          const warning=failures.length?'；另有 '+failures.length+' 份文書失敗（'+failures.map(x=>x.doc_id).join('、')+'）':'';
+          st2.textContent=props.length
+            ? '完成：擷取 '+props.length+' 個事件'+warning+'，請於下方逐一「加入」（來源鏈已預先找好，加入後會自動顯示）。'
+            : '完成：AI 逐句重試後仍未找到符合此分類的事件。可改選其他事件分類交叉檢查。';
+          renderLog({focusIndex:c.length-1});
         }catch(e){ st2.textContent='擷取失敗：'+e.message; }
       }
       // extract every vermilion rescript (硃批) from the selected docs: interlinear + end, with what each responds to + the emperor's view
@@ -10096,6 +10198,27 @@ body .chat-log .src-ev .src-open{
 .ai-advanced .gx-url{ flex:1 1 auto; min-width:0; }
 .ai-proxy-reset{ flex:0 0 auto; white-space:nowrap; }
 .ai-provider-state{ min-height:18px; color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
+/* Timeline right-click menu. */
+.timeline-context-menu{position:fixed;z-index:12000;min-width:calc(210px * var(--fs,1));padding:calc(5px * var(--fs,1));background:var(--panel);border:1px solid var(--line-strong);border-radius:var(--r2);box-shadow:var(--sh-3);color:var(--ink);}
+.timeline-context-menu button{display:flex;align-items:center;justify-content:space-between;gap:calc(16px * var(--fs,1));width:100%;min-height:calc(32px * var(--fs,1));padding:calc(6px * var(--fs,1)) calc(10px * var(--fs,1));border:0;border-radius:var(--r1);background:transparent;color:inherit;font:inherit;font-size:calc(12.5px * var(--fs,1));text-align:left;cursor:pointer;}
+.timeline-context-menu button:hover,.timeline-context-menu button:focus-visible{background:var(--surface);outline:none;}
+.timeline-context-menu button:disabled{color:var(--faint);cursor:default;opacity:.58;}.timeline-context-menu button:disabled:hover{background:transparent;}
+.timeline-context-menu button.tcm-danger{color:var(--danger);}.timeline-context-menu button.tcm-danger:hover,.timeline-context-menu button.tcm-danger:focus-visible{background:var(--danger-soft);}
+.timeline-context-menu .tcm-divider{height:1px;margin:calc(4px * var(--fs,1)) calc(3px * var(--fs,1));background:var(--line);}.timeline-context-menu .tcm-more{position:relative;}
+.timeline-context-menu .tcm-submenu{display:none;position:absolute;top:calc(-5px * var(--fs,1));left:calc(100% + calc(5px * var(--fs,1)));min-width:calc(205px * var(--fs,1));max-height:min(60vh,calc(420px * var(--fs,1)));overflow:auto;padding:calc(5px * var(--fs,1));background:var(--panel);border:1px solid var(--line-strong);border-radius:var(--r2);box-shadow:var(--sh-3);}
+.timeline-context-menu .tcm-more:hover>.tcm-submenu,.timeline-context-menu .tcm-more:focus-within>.tcm-submenu{display:block;}.timeline-context-menu.open-left .tcm-submenu{left:auto;right:calc(100% + calc(5px * var(--fs,1)));}.timeline-context-menu .tcm-more.submenu-up .tcm-submenu{top:auto;bottom:calc(-5px * var(--fs,1));}
+/* Teammate API branch: keep AI conversations readable and menus inside the viewport. */
+.tool-box[data-kind="ai"] .tb-body{ overflow:hidden !important; min-width:0; }
+.tool-box[data-kind="ai"] .chat-log{ width:100%; min-width:0; }
+.tool-box[data-kind="ai"] .chat-box{ position:relative; width:100%; min-width:0; }
+.tool-box[data-kind="ai"] .chat-turn,
+.tool-box[data-kind="ai"] .turn-blk,
+.tool-box[data-kind="ai"] .bub{ min-width:0; max-width:100%; overflow-wrap:anywhere; }
+body .cb-pop.is-viewport{
+  position:fixed !important; z-index:10020 !important;
+  max-width:calc(100vw - 16px) !important; max-height:calc(100vh - 16px) !important;
+  overflow:auto !important; box-sizing:border-box !important;
+}
 /* Keep the former 「更多」 controls in Tools, while enlarging the actual top toolbar. */
 .dual-toolbar, .dual-toolbar .pill, .dual-toolbar label, .dual-toolbar select,
 .dual-toolbar input[type=text], .dual-toolbar button, .count-readout{
