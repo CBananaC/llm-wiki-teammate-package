@@ -3847,6 +3847,26 @@
     b2.querySelector('.evc-del').onclick=()=>{ if(confirm('刪除此事件？')){ removeEvent(id); closeEventCard(id); } };
   }
   function refreshEventCard(id){ const c=evCards.get(id); if(c) buildEventBody(c.el, id); }
+  function revealEventCard(id){
+    const c=evCards.get(id); if(!c || !c.el || !document.body.contains(c.el)) return false;
+    const el=c.el;
+    hlEventId=id; hlDocRid=null;
+    if(el.classList.contains('float-win')){
+      const r=el.getBoundingClientRect(), pad=8;
+      const left=Math.max(pad, Math.min(r.left, window.innerWidth-Math.min(r.width,window.innerWidth-pad*2)-pad));
+      const top=Math.max(pad, Math.min(r.top, window.innerHeight-Math.min(r.height,window.innerHeight-pad*2)-pad));
+      el.style.left=left+'px'; el.style.top=top+'px';
+      floats=floats.filter(x=>x!==el); floats.push(el); el.style.zIndex=150+floats.length;
+    } else {
+      const list=el.closest('.ws-list');
+      if(list){ activeList=list; refreshColumn(list); }
+    }
+    render();
+    requestAnimationFrame(()=>{
+      if(el.scrollIntoView) el.scrollIntoView({block:'start', inline:'nearest'});
+    });
+    return true;
+  }
   // auto-collapse any spread-open group whose members are unrelated to the newly-opened event: for
   // each group id currently in __spreadGroups, if the just-opened event is neither that group's own
   // dot NOR one of its original members (groupedFrom), stop showing its fanned-out member dots again.
@@ -3869,12 +3889,12 @@
     const el=document.createElement('div'); el.className='card ev-card';
     el.innerHTML=`<div class="ip-head"><button class="ip-move" type="button" title="拖曳移動">✥</button><div class="ip-titles"></div><div class="ip-btns"><button class="ip-close" type="button" title="關閉">×</button></div></div><div class="ip-body ev-body"></div>`;
     list.appendChild(el);
+    activeList=list; refreshColumn(list);
     el.querySelector('.ip-close').onclick=()=>closeEventCard(ev.id);
     if(typeof attachPanelDrag==='function') attachPanelDrag(el, {el, list, isEvent:true, eid:ev.id});
     evCards.set(ev.id, {el});
     buildEventBody(el, ev.id);
-    render();
-    if(el.scrollIntoView) el.scrollIntoView({block:'nearest'});
+    revealEventCard(ev.id);
   }
   // ===== day / period AI summaries (built ONLY from the 林方/清方 field-events line, Ex) =====
   // These are saved separately from events -- {id, start, end, periodDays, summary, eventIds, at, model}.
@@ -5010,6 +5030,112 @@
       doAddAt(d, ux < (Lx+Rx)/2);                               // edit-mode convenience add
     });
     document.addEventListener('keydown', e=>{ if(e.key==='Escape'){ if(armDate) disarmDate(); if(armAdd){ disarmAdd(); if(addBtn) addBtn.classList.remove('on'); } if(armDotLink) disarmDotLink(); if(armEvDateId||armLinkEventId||armAddEvt){ clearEvArms(); if(evtBtn) evtBtn.classList.remove('on'); } } });
+  })();
+
+  // Right-click access to the complete dot-edit toolset. The clicked chart position supplies
+  // the date for new dots/events, and a clicked node can become the first link endpoint.
+  (function(){
+    let menu=null;
+    function closeMenu(){ if(menu){ menu.remove(); menu=null; } }
+    function addMenuButton(parent, label, onClick, opts){
+      const btn=document.createElement('button'); btn.type='button'; btn.setAttribute('role','menuitem');
+      if(opts&&opts.disabled){ btn.disabled=true; if(opts.title) btn.title=opts.title; }
+      if(opts&&opts.danger) btn.classList.add('tcm-danger');
+      btn.textContent=label; btn.addEventListener('click', e=>{ e.preventDefault(); e.stopPropagation(); onClick(); });
+      parent.appendChild(btn); return btn;
+    }
+    function clickToolbarControl(id){
+      const control=document.getElementById(id); if(!control) return;
+      closeMenu(); control.click();
+    }
+    function toolbarLabel(id, fallback){
+      const control=document.getElementById(id); if(!control) return fallback;
+      if(control.tagName==='INPUT') return fallback;
+      return (control.textContent||'').trim()||fallback;
+    }
+    function openDocInfo(rid){
+      const rec=recByRid(rid); if(!rec) return;
+      const key=/^\d+$/.test(String(rid)) ? Number(rid) : String(rid);
+      selRid=key; hlDocRid=key; hlEventId=null;
+      render(); openCard(rec,1);
+      requestAnimationFrame(()=>{ if(window.__focusDot) window.__focusDot(rid); });
+    }
+    function openMenu(e){
+      e.preventDefault(); e.stopPropagation(); closeMenu(); closeDotPop();
+      const dot=e.target.closest && e.target.closest('.ddot,.edot');
+      const docRid=dot&&dot.dataset.rid; const eventId=dot&&dot.dataset.evid;
+      const dotRef=dot ? normalizeDotRef(dotRefFromEl(dot)) : null;
+      const pos={clientX:e.clientX, clientY:e.clientY};
+      const svgR=svg.getBoundingClientRect();
+      const chartDate=dateFromY((e.clientY-svgR.top)/scale);
+      const leftSide=((e.clientX-svgR.left)/scale)<(Lx+Rx)/2;
+      menu=document.createElement('div'); menu.className='timeline-context-menu'; menu.setAttribute('role','menu');
+      menu.setAttribute('aria-label','時間軸功能');
+      if(!eventId){
+        const primaryLabel=docRid?'查看圓點資訊':(editMode?'結束編輯圓點':'編輯圓點');
+        addMenuButton(menu, primaryLabel, ()=>{
+          closeMenu();
+          if(docRid){ openDocInfo(docRid); return; }
+          const editBtn=document.getElementById('d-editdots'); if(editBtn) editBtn.click();
+        });
+      }
+      if(docRid){
+        addMenuButton(menu, '隱藏圓點', ()=>{ closeMenu(); const rec=recByRid(docRid); if(rec) hideDot(rec); });
+        addMenuButton(menu, '刪除圓點', ()=>{
+          closeMenu(); const rec=recByRid(docRid);
+          if(rec&&confirm('永久刪除此圓點？此動作不會出現在隱藏清單。')) removeDot(rec);
+        }, {danger:true});
+      } else if(eventId){
+        addMenuButton(menu, '隱藏事件', ()=>{ closeMenu(); if(eventById(eventId)) hideEvent(eventId); });
+        addMenuButton(menu, '刪除事件', ()=>{
+          closeMenu(); if(eventById(eventId)&&confirm('永久刪除此事件？')) removeEvent(eventId);
+        }, {danger:true});
+      }
+      const divider=document.createElement('div'); divider.className='tcm-divider'; divider.setAttribute('role','separator'); menu.appendChild(divider);
+
+      addMenuButton(menu, '＋圓點（此日期）', ()=>{
+        closeMenu(); doAddAt(chartDate,leftSide);
+      });
+      addMenuButton(menu, dotRef?(eventId?'從此事件連線':'從此圓點連線'):'連線圓點', ()=>{
+        closeMenu(); armDotLinkMode();
+        const linkBtn=document.getElementById('d-linkdots'); if(linkBtn) linkBtn.classList.add('on');
+        if(dotRef) applyDotLinkPick(dotRef);
+      });
+      const hasLinks=customDotLinks().length>0;
+      addMenuButton(menu, '清除自訂連線', ()=>clickToolbarControl('d-clearlot'),
+        {disabled:!hasLinks, title:hasLinks?'':'目前沒有自訂連線'});
+      addMenuButton(menu, '＋事件（此日期）', ()=>{
+        closeMenu(); const ev=addEvent({dateAr:fmt(chartDate)}); if(ev) openEventPopover(ev,pos);
+      });
+      addMenuButton(menu, '隱藏清單', ()=>{ closeMenu(); openHiddenList(); });
+
+      const divider2=document.createElement('div'); divider2.className='tcm-divider'; divider2.setAttribute('role','separator'); menu.appendChild(divider2);
+      addMenuButton(menu, toolbarLabel('d-togglechart','隱藏圖'), ()=>clickToolbarControl('d-togglechart'));
+
+      const more=document.createElement('div'); more.className='tcm-more';
+      const moreBtn=document.createElement('button'); moreBtn.type='button'; moreBtn.setAttribute('role','menuitem');
+      moreBtn.innerHTML='<span>更多</span><span aria-hidden="true">›</span>'; more.appendChild(moreBtn);
+      const sub=document.createElement('div'); sub.className='tcm-submenu'; sub.setAttribute('role','menu');
+      [
+        ['ed-export-all','匯出'], ['ed-export-split','分項匯出'], ['ed-import-all','匯入'],
+        ['ed-load-skills','載入技能輸出'], ['ed-clear-cache','清快取'], ['theme-toggle','切換主題']
+      ].forEach(([id,fallback])=>{
+        if(document.getElementById(id)) addMenuButton(sub, toolbarLabel(id,fallback), ()=>clickToolbarControl(id));
+      });
+      more.appendChild(sub); menu.appendChild(more); document.body.appendChild(menu);
+
+      const rect=menu.getBoundingClientRect();
+      menu.style.left=Math.max(8,Math.min(e.clientX,window.innerWidth-rect.width-8))+'px';
+      menu.style.top=Math.max(8,Math.min(e.clientY,window.innerHeight-rect.height-8))+'px';
+      if(e.clientX+rect.width+220>window.innerWidth) menu.classList.add('open-left');
+      if(more.getBoundingClientRect().top+215>window.innerHeight) more.classList.add('submenu-up');
+      const first=menu.querySelector('button'); if(first) first.focus({preventScroll:true});
+    }
+    wsChart.addEventListener('contextmenu', openMenu);
+    document.addEventListener('pointerdown', e=>{ if(menu&&!menu.contains(e.target)) closeMenu(); }, true);
+    document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeMenu(); });
+    window.addEventListener('blur', closeMenu); window.addEventListener('resize', closeMenu);
+    scroll.addEventListener('scroll', closeMenu, {passive:true});
   })();
   rebuildRecs();
   function setByPath(obj, path, val){
@@ -8886,6 +9012,37 @@ body .dual-toolbar, body.dark-mode .dual-toolbar {
 .tb-more-pop .tb-sec { font-size:10.5px; font-weight:700; letter-spacing:.06em;
   color:var(--faint); padding:6px 8px 2px; text-transform:uppercase; }
 .tb-more-pop .tb-div { height:1px; background:var(--line); margin:4px 2px; }
+/* timeline right-click menu */
+.timeline-context-menu {
+  position:fixed; z-index:5200; min-width:210px; padding:5px;
+  background:var(--panel); border:1px solid var(--line-strong);
+  border-radius:var(--r2); box-shadow:var(--sh-3); color:var(--ink);
+}
+.timeline-context-menu button {
+  display:flex; align-items:center; justify-content:space-between; gap:16px;
+  width:100%; min-height:32px; padding:6px 10px; border:0;
+  border-radius:var(--r1); background:transparent; color:inherit;
+  font:inherit; font-size:12.5px; text-align:left; cursor:pointer;
+}
+.timeline-context-menu button:hover,
+.timeline-context-menu button:focus-visible { background:var(--surface); outline:none; }
+.timeline-context-menu button:disabled { color:var(--faint); cursor:default; opacity:.58; }
+.timeline-context-menu button:disabled:hover { background:transparent; }
+.timeline-context-menu button.tcm-danger { color:var(--danger); }
+.timeline-context-menu button.tcm-danger:hover,
+.timeline-context-menu button.tcm-danger:focus-visible { background:var(--danger-soft); }
+.timeline-context-menu .tcm-divider { height:1px; margin:4px 3px; background:var(--line); }
+.timeline-context-menu .tcm-more { position:relative; }
+.timeline-context-menu .tcm-submenu {
+  display:none; position:absolute; top:-5px; left:calc(100% + 5px);
+  min-width:205px; max-height:min(60vh,420px); overflow:auto; padding:5px;
+  background:var(--panel); border:1px solid var(--line-strong);
+  border-radius:var(--r2); box-shadow:var(--sh-3);
+}
+.timeline-context-menu .tcm-more:hover > .tcm-submenu,
+.timeline-context-menu .tcm-more:focus-within > .tcm-submenu { display:block; }
+.timeline-context-menu.open-left .tcm-submenu { left:auto; right:calc(100% + 5px); }
+.timeline-context-menu .tcm-more.submenu-up .tcm-submenu { top:auto; bottom:-5px; }
 /* pills become flat labeled control groups */
 body .pill, body .dual-toolbar .pill, body.dark-mode .pill {
   background:var(--surface); border:1px solid var(--line);
