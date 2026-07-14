@@ -1,7 +1,7 @@
 {
   "kind": "confirmed-pairs",
-  "exported_at": "2026-07-14T10:47:32",
-  "count": 104,
+  "exported_at": "2026-07-14T15:36:14",
+  "count": 124,
   "pairs": [
     {
       "yu_doc_id": "諭116",
@@ -4426,6 +4426,973 @@
         "issue_date": null,
         "send_date": "1787/03/13",
         "receive_date": "1787/04/04"
+      }
+    },
+    {
+      "yu_doc_id": "諭113",
+      "reply_doc_id": "硃301",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 03:02",
+      "evidence": {
+        "marker": "又於二月十九日奉到諭旨",
+        "quote_in_reply": "又於二月十九日奉到諭旨：「此次與賊打仗，文武官弁及兵民義勇人等，保護郡城，著常青查明，如係務農經商者，酌免賦稅；若係紳衿，奏明酌予職銜，以示優異。至臺灣府知府已另降諭旨，即以楊廷樺補授，常青即帶楊廷樺渡臺灣，令其接印任事。」等因。欽此",
+        "matched_yu_span": "至臺灣府知府已另降諭旨，即以楊廷樺補授，常青即帶楊廷樺渡臺灣，令其接印任事。",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年二月十九日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "又於二月十九日奉到諭旨"
+        },
+        "date_note": "此為節次奉到諭旨之覆奏。常青於二月十九日奉到之諭旨中，提及「常青即帶楊廷樺渡臺灣，令其接印任事」，與本上諭（乾隆五十二年二月十一日）「諭閩浙總督李侍堯等著常青接旨即速行渡臺」之旨意與內容完全相合。因摺內僅載收受日期「二月十九日」而未明寫上諭之發布日期，故依據內容判定為 high。"
+      },
+      "yu": {
+        "id": "諭113",
+        "title": "諭閩浙總督李侍堯等著常青接旨即速行渡臺",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "李侍堯"
+        ],
+        "issue_date": "1787/02/11",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃301",
+        "title": "為節次奉旨覆奏官兵遲誤事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "常青",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/03/13",
+        "receive_date": "1787/04/04"
+      }
+    },
+    {
+      "yu_doc_id": "諭59",
+      "reply_doc_id": "硃106",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:48",
+      "evidence": {
+        "marker": "欽奉上諭",
+        "quote_in_reply": "正月二十一日接奉上諭：「據常青奏，拿獲臺灣從賊逆犯高文麟等四名，現在委員解京審辦。等語。著傳諭沿途各督、撫，於該犯等到境時，遴員小心防範，迅速解京。」等因。欽此",
+        "matched_yu_span": "據常青奏，拿獲臺灣從賊逆犯高文麟等四名，現在委員解京審辦。等語。著傳諭沿途各督、撫，於該犯等到境時，遴員小心防範，迅速解京。",
+        "issue_date": "乾隆五十二年正月二十一日",
+        "receive_date": "乾隆五十二年正月二十一日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月二十一日接奉上諭："
+        },
+        "date_note": "奏摺中「正月二十一日接奉上諭」之「正月二十一日」為接奉日期，而本上諭之發布日亦為乾隆五十二年正月二十一日，兩者相合。"
+      },
+      "yu": {
+        "id": "諭59",
+        "title": "諭浙江江南山東直隸各督撫小心防範務將高文麟等迅速解京",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "",
+        "recipients": [],
+        "issue_date": "1787/01/21",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃106",
+        "title": "為遵旨委員護解高文麟等人入京事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "劉峨",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/22",
+        "receive_date": "1787/01/25"
+      }
+    },
+    {
+      "yu_doc_id": "諭20",
+      "reply_doc_id": "硃110",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:48",
+      "evidence": {
+        "marker": "奉上諭",
+        "quote_in_reply": "正月十二日戌刻，拜發前摺後，旋又奉到十二月十三、十五等日兩摺硃批，並奉到上諭：「據常青、黃仕簡奏，接臺灣鎮道稟報彰化匪徒林爽文等糾眾滋事。等由。看來伊等辦理此事，但不免張皇失措。地方遇此等案件，總應權其輕重，鎮靜妥辦，不當各存預佔地步之見。常青、黃仕簡、任承恩，俱著傳旨申飭。」等因。欽此",
+        "matched_yu_span": "據常青、黃仕簡奏，接臺灣鎮道稟報，彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。……看來伊等辦理此事，俱不免張皇失措。……地方遇此等案件，總應權其輕重，鎮靜妥辦，不當各存預佔地步之見。……常青、黃仕簡、任承恩，俱著傳旨申飭。",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年正月十二日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月十二日戌刻，拜發前摺後，旋又奉到十二月十三、十五等日兩摺硃批，並奉到上諭："
+        },
+        "date_note": "奏摺中未寫明該上諭的發布日期（issue_date），僅寫於「正月十二日戌刻」奉到（receive_date）。其引述內容與乾隆五十一年十二月二十九日上諭高度相符。"
+      },
+      "yu": {
+        "id": "諭20",
+        "title": "諭閩浙總督常青等鎮定妥辦不必紛紛赴臺",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "常青",
+        "recipients": [
+          "任承恩",
+          "常青",
+          "徐嗣曾",
+          "黃仕簡"
+        ],
+        "issue_date": "1786/12/29",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃110",
+        "title": "為遵旨仍駐蚶江廈門一帶調度等事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "常青",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/13",
+        "receive_date": "1787/01/27"
+      }
+    },
+    {
+      "yu_doc_id": "諭47",
+      "reply_doc_id": "硃147",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:48",
+      "evidence": {
+        "marker": "奉到諭旨",
+        "quote_in_reply": "正月二十六日，臣奉到諭旨：「黃仕簡、任承恩俱已前後渡臺，何以尚未據奏報剿賊消息。」等因。欽此",
+        "matched_yu_span": "至黃仕簡、任承恩俱已前後臺，何以尚未據報剿賊消息？",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年正月二十六日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月二十六日，臣奉到諭旨"
+        },
+        "date_note": "奏摺中僅提及「正月二十六日，臣奉到諭旨」，此為收受日期。因未明寫上諭發布之「正月十四日」日期，故 issue_date 填寫「未明」，但因引文內容與上諭高度吻合，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭47",
+        "title": "諭閩浙總督常青等痛剿抗拒者並著水陸提督速奏抵臺各情",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "常青",
+        "recipients": [
+          "任承恩",
+          "常青",
+          "徐嗣曾",
+          "黃仕簡"
+        ],
+        "issue_date": "1787/01/14",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃147",
+        "title": "為接據黃仕簡咨報戰況酌調鄰省官兵情形事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "常青",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/28",
+        "receive_date": "1787/02/11"
+      }
+    },
+    {
+      "yu_doc_id": "諭59",
+      "reply_doc_id": "硃157",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:48",
+      "evidence": {
+        "marker": "承准廷寄欽奉諭旨",
+        "quote_in_reply": "承准廷寄欽奉諭旨：「據常青奏，拿獲臺灣從賊逆犯高文麟等四名，現在委員解京審辦著傳諭沿途各督、撫，於該犯等到境時，務須遴委妥員，多派兵役小心防範，迅速解京，毋致中途稍有疏虞，致干咎戾。」等因。欽此",
+        "matched_yu_span": "據常青奏，拿獲臺灣從賊逆犯高文麟等四名，現在委員解京審辦著傳諭沿途各督、撫，於該犯等到境時，務須遴委妥員，多派兵役小心防範，迅速解京，毋致中途稍有疏虞，致干咎戾。",
+        "issue_date": "未明",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "court_letter",
+          "via": "大學士",
+          "quote": "承准廷寄欽奉諭旨"
+        },
+        "date_note": "奏摺中僅提及「承准廷寄欽奉諭旨」，未載明該廷寄之具體發布日期（正月二十一日）或收受日期。"
+      },
+      "yu": {
+        "id": "諭59",
+        "title": "諭浙江江南山東直隸各督撫小心防範務將高文麟等迅速解京",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "",
+        "recipients": [],
+        "issue_date": "1787/01/21",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃157",
+        "title": "為奏臺灣從賊逆犯楊軒於押解途中病重身亡故事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "覺羅琅玕",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/04",
+        "receive_date": "1787/02/13"
+      }
+    },
+    {
+      "yu_doc_id": "諭59",
+      "reply_doc_id": "硃196",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:50",
+      "evidence": {
+        "marker": "奉上諭",
+        "quote_in_reply": "前撫臣明興接准廷寄奉上諭：「高文麟等係臺匪案內領受偽職要犯，必須解京嚴行究訊，盡法懲治。著傳諭各督、撫於該犯到境時，遴委妥員，小心防範，迅速解京。」等因。欽此",
+        "matched_yu_span": "高文麟等係臺匪案內領受偽職要犯，必須解京嚴行究訊，盡法懲治。著傳諭各督、撫於該犯到境時，遴委妥員，小心防範，迅速解京。",
+        "issue_date": "未明",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "court_letter",
+          "via": "明興",
+          "quote": "前撫臣明興接准廷寄奉上諭"
+        },
+        "date_note": "摺內僅敘及「前撫臣明興接准廷寄奉上諭」，未載明該上諭之具體頒發日期（issue_date）或接奉日期（receive_date）。因引文內容與乾隆五十二年一月二十一日上諭高度吻合，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭59",
+        "title": "諭浙江江南山東直隸各督撫小心防範務將高文麟等迅速解京",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "",
+        "recipients": [],
+        "issue_date": "1787/01/21",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃196",
+        "title": "為奏押解高文麟等三人入境事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "覺羅長麟",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/20",
+        "receive_date": "1787/02/25"
+      }
+    },
+    {
+      "yu_doc_id": "諭84",
+      "reply_doc_id": "硃211",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:51",
+      "evidence": {
+        "marker": "接奉上諭",
+        "quote_in_reply": "又於十二日接奉上諭：「前因徐嗣曾輕離省城，恐致人心疑駭，曾降旨飭諭。此時大局已定，非同前比，徐嗣曾不妨視其地方緊要，間一親往搜查，如有竄回餘匪，即行拿獲審辦，毋使一名漏網。」欽此",
+        "matched_yu_span": "前因徐嗣曾輕離省城，恐致人心疑駭，曾降旨飭諭。此時人心大定，且大兵抵臺，三路圍攻，賊匪自必四散潰竄。恐有逃至原籍及內地者，尤應於濱海各縣口岸汊港，嚴密截拿，最爲緊要。現在大局已定，非同前比。徐嗣曾不妨視其地方緊要，間一親往各處搜查。如有回餘匪，即行拿獲審辦，毋使一名漏網。",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年二月十二日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "又於十二日接奉上諭"
+        },
+        "date_note": "奏摺中僅提及「十二日接奉上諭」（即收受日期為二月十二日），未明寫該上諭之發布日期（五十二年二月初一日）。因引文內容與本上諭高度吻合，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭84",
+        "title": "諭欽差湖廣總督李侍堯等於濱海口岸嚴拿回返內地天地會人衆",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "常青",
+          "徐嗣曾",
+          "李侍堯"
+        ],
+        "issue_date": "1787/02/01",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃211",
+        "title": "為覆奏節次諭旨酌量親往各海口搜拿並曉諭生番縛獻等緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "徐嗣曾",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/29",
+        "receive_date": "1787/02/29"
+      }
+    },
+    {
+      "yu_doc_id": "諭87",
+      "reply_doc_id": "硃211",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:51",
+      "evidence": {
+        "marker": "接奉上諭",
+        "quote_in_reply": "又於十三日接奉上諭：「徐嗣曾覆奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛散，定于十三日會剿。等語。看來大局已定，現在剋期會剿，自必立時撲滅，惟恐竄入内山，與生番勾結，務須上緊搜捕。」欽此",
+        "matched_yu_span": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。……看來大局已定，此等麼磨賊匪，原不過一時烏合。現在水陸二提督厚集兵〔力〕，剋期會剿，自必立時撲滅。……恐四出竄逸，逃入內山，與生番勾結……務須督率員，乘此兵力，上緊搜捕",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年二月十三日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "又於十三日接奉上諭"
+        },
+        "date_note": "奏摺中「又於十三日接奉上諭」之「十三日」指乾隆五十二年二月十三日（承前文二月初九日而來）。此處僅提及收受日期，未明示上諭之發布日期，但引文內容與乾隆五十二年二月二日之諭旨高度吻合，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭87",
+        "title": "諭欽差湖廣總督李侍堯預防起事人衆逃入內山並務獲林爽文等",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "常青",
+          "徐嗣曾",
+          "李侍堯",
+          "藍元枚"
+        ],
+        "issue_date": "1787/02/02",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃211",
+        "title": "為覆奏節次諭旨酌量親往各海口搜拿並曉諭生番縛獻等緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "徐嗣曾",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/29",
+        "receive_date": "1787/02/29"
+      }
+    },
+    {
+      "yu_doc_id": "諭75",
+      "reply_doc_id": "硃211",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:51",
+      "evidence": {
+        "marker": "接奉上諭",
+        "quote_in_reply": "竊臣於本年二月初九日接奉上諭：「本日常青、徐嗣曾俱有六百里馳奏之摺，朕意自係奏報臺灣剿賊情形。及披覽各摺，乃係接奉諭旨覆奏事件，又何必用六百驛遞，徒亂人意，該督、撫何不知輕重，如此張皇耶。」欽此",
+        "matched_yu_span": "本日常青、徐嗣曾有六百里之折，朕意自系奏報臺灣捕賊匪情形，及披覽各折，乃系接奉諭旨復奏事件，又何必俱用六百裏驛遞，徒亂人意。該督撫何不知事體輕重緩急，尚如此張皇耶！",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年二月初九日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "竊臣於本年二月初九日接奉上諭"
+        },
+        "date_note": "奏摺中僅提及「本年二月初九日接奉上諭」，此為收受日期（receive_date），未直接寫明上諭之發布日期（issue_date）。因引文內容與乾隆五十二年一月二十七日上諭高度吻合，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭75",
+        "title": "諭欽差湖廣總督李侍堯等嚴飭各屬慎密查拿防範毋任探聽官兵消息",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "常青",
+          "徐嗣曾",
+          "李侍堯"
+        ],
+        "issue_date": "1787/01/27",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃211",
+        "title": "為覆奏節次諭旨酌量親往各海口搜拿並曉諭生番縛獻等緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "徐嗣曾",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/29",
+        "receive_date": "1787/02/29"
+      }
+    },
+    {
+      "yu_doc_id": "諭99",
+      "reply_doc_id": "硃236",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:52",
+      "evidence": {
+        "marker": "奉上諭",
+        "quote_in_reply": "二月初六日奉上諭：「孫士毅奏：獲匪犯許阿恊等，係在漳州地方被賴阿邊引誘入天地會。」等因。欽此",
+        "matched_yu_span": "孫士毅奏：獲匪犯許阿恊等，係在漳州地方被賴阿邊引誘入天地會。",
+        "issue_date": "乾隆五十二年二月初六日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "二月初六日奉上諭"
+        },
+        "date_note": "奏摺中明確記載「二月初六日奉上諭」，與本電文（諭99）發布日期1787年2月6日（乾隆五十二年二月初六日）完全吻合。"
+      },
+      "yu": {
+        "id": "諭99",
+        "title": "諭閩浙總督李侍堯等通飭各屬嚴切究辦天地會",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "李侍堯"
+        ],
+        "issue_date": "1787/02/06",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃236",
+        "title": "為查奏臺灣官員將楊光勳案内天地會改寫添弟會緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/27",
+        "receive_date": "1787/03/11"
+      }
+    },
+    {
+      "yu_doc_id": "諭100",
+      "reply_doc_id": "硃236",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:52",
+      "evidence": {
+        "marker": "奉上諭",
+        "quote_in_reply": "二月初六日奉上諭：「孫士毅奏：獲匪犯許阿恊等，係在漳州地方被賴阿邊引誘入天地會。」等因。欽此。又奉上諭：「閩省天地會邪教，已閱二十年之久，豈無搶奪被控之案。」等欽此",
+        "matched_yu_span": "閩省天地會邪教，已閱二十年之久，豈無搶奪被控之案。",
+        "issue_date": "乾隆五十二年二月初六日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "二月初六日奉上諭"
+        },
+        "date_note": "奏摺中引用的「二月初六日奉上諭」即為乾隆五十二年二月初六日（1787年2月23日）發布之諭旨，與本上諭「諭閩浙總督李侍堯等於事竣後徹底究查天地會」之內容（即追查天地會起於何時、有無地方官耽擱之案）完全相合。因清代公文郵遞時差，此處「二月初六日」為北京發布之諭旨日期（即 issue_date），與本上諭標註之2月7日（初七日）極為接近，且內容完全對應，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭100",
+        "title": "諭閩浙總督李侍堯等於事竣後徹底究查天地會",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "李侍堯"
+        ],
+        "issue_date": "1787/02/07",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃236",
+        "title": "為查奏臺灣官員將楊光勳案内天地會改寫添弟會緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/27",
+        "receive_date": "1787/03/11"
+      }
+    },
+    {
+      "yu_doc_id": "諭140",
+      "reply_doc_id": "硃247",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:52",
+      "evidence": {
+        "marker": "接奉上諭",
+        "quote_in_reply": "乾隆五十二年二月二十九日接奉上諭：「據常青、柴大紀〔奏〕擒獲偽護駕大將軍廖東偽軍師侯辰。等語。廖東、侯辰俱受林爽文偽封大將軍、軍師名號，看來林爽文竟有自稱為王，及僭立年號之事。常青抵臺灣後，務須嚴切訊究，確實具奏，不必諱飾。所有廖東、侯辰二犯，著即派員解京。」等因。欽此",
+        "matched_yu_span": "據常青、柴大紀〔奏〕擒獲偽護駕大將軍廖東偽軍師侯辰。等語。廖東、侯辰俱受林爽文偽封大將軍、軍師名號，看來林爽文竟有自稱為王，及僭立年號之事。常青抵臺灣後，務須嚴切訊究，確實具奏，不必諱飾。所有廖東、侯辰二犯，著即派員解京。",
+        "issue_date": "未明",
+        "receive_date": "乾隆五十二年二月二十九日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "乾隆五十二年二月二十九日接奉上諭："
+        },
+        "date_note": "奏摺中僅提及「二月二十九日接奉上諭」，未明示該上諭之具體發布日期（issue_date）。因引文內容與乾隆五十二年二月十七日上諭（諭140）高度相符，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭140",
+        "title": "諭閩浙總督李侍堯等確查林爽文是否私立年號並將廖東等解京審辦",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "李侍堯",
+        "recipients": [
+          "李侍堯"
+        ],
+        "issue_date": "1787/02/17",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃247",
+        "title": "為奏已提廖東等解京並查出林爽文告示摺事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/29",
+        "receive_date": "1787/03/13"
+      }
+    },
+    {
+      "yu_doc_id": "諭188",
+      "reply_doc_id": "硃314",
+      "relation": "reply_to_yu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 06:52",
+      "evidence": {
+        "marker": "奉上諭",
+        "quote_in_reply": "三月二十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十二年三月十一日奉上諭：「據李侍堯奏，搜出賊匪書稿內，有廣東鳳花亭、高溪庵、馬溪廟、洪姓結盟之語，是即係從前常青究出之廣東洪二房和尚及朱姓人犯。曾諭令孫士毅密速查拿，曾否拿獲，未據續行奏報。此係案内倡會結盟要犯，著傳諭孫士毅務須嚴飭所屬，設法踩緝，務需弋獲，速行解京審辦，毋任遠颺漏網。將此由六百里加緊各諭令知之。」等因。欽此",
+        "matched_yu_span": "據李侍堯奏，搜出賊匪書稿內，有廣東鳳花亭、高溪庵、馬溪廟、洪姓結盟之語，是即係從前常青究出之廣東洪二房和尚及朱姓人犯。曾諭令孫士毅密速查拿，曾否拿獲，未據續行奏報。此係案内倡會結盟要犯，著傳諭孫士毅務須嚴飭所屬，設法踩緝，務需弋獲，速行解京審辦，毋任遠颺漏網。將此由六百里加緊各諭令知之。",
+        "issue_date": "乾隆五十二年三月十一日",
+        "receive_date": "乾隆五十二年三月二十一日",
+        "receipt": {
+          "type": "court_letter",
+          "via": "阿桂、和珅",
+          "quote": "三月二十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十二年三月十一日奉上諭"
+        },
+        "date_note": "奏摺上奏日期為「乾隆五十二年二月二十二日」，與內文提及「三月二十一日承准」在時間順序上不合，此為檔案文獻常見之「倒裝摺」或謄抄日期有誤之現象。然其引用的上諭發布日期「乾隆五十二年三月十一日」與本電完全一致，故判定為 high。"
+      },
+      "yu": {
+        "id": "諭188",
+        "title": "諭欽差湖廣總督常青仍遵旨查參二提督並緝拿洪二和尚",
+        "type": "shangyu",
+        "doc_type": "上諭",
+        "author": "常青",
+        "recipients": [
+          "孫士毅",
+          "常青",
+          "李侍堯"
+        ],
+        "issue_date": "1787/03/11",
+        "send_date": null,
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃314",
+        "title": "為恭摺覆奏並無洪二和尚及朱姓等緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/22",
+        "receive_date": "1787/04/09"
+      }
+    },
+    {
+      "yu_doc_id": "奏19",
+      "reply_doc_id": "奏108",
+      "relation": "reply_to_zhu",
+      "match_level": "partial",
+      "confirmed_at": "2026-07-14 07:22",
+      "evidence": {
+        "marker": "敬奉硃批",
+        "quote_in_reply": "正月二十四日敬奉硃批：「另有旨諭。」",
+        "matched_zhu_span": "另有旨諭",
+        "own_memorial_ref": "未明",
+        "original_memorial_date": "未明",
+        "receive_date": "1787/01/24（乾隆五十二年正月二十四日）",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月二十四日敬奉"
+        },
+        "date_note": "候選文書「奏19」之硃批原文亦為「另有旨諭」，與引文相符，但因其硃批日期未明且缺乏摺名對照，故列為 partial。"
+      },
+      "yu": {
+        "id": "奏19",
+        "title": "為奏聞臺灣彰化縣被賊匪糾眾攻城並調撥戰兵辦理事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1786/12/24",
+        "receive_date": null
+      },
+      "reply": {
+        "id": "奏108",
+        "title": "為遵旨起程回省恭摺奏覆",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/26",
+        "receive_date": null
+      },
+      "zhu_doc_id": "奏19",
+      "zhu": {
+        "id": "奏19",
+        "title": "為奏聞臺灣彰化縣被賊匪糾眾攻城並調撥戰兵辦理事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1786/12/24",
+        "receive_date": null
+      }
+    },
+    {
+      "yu_doc_id": "硃225",
+      "reply_doc_id": "奏262",
+      "relation": "reply_to_zhu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 07:25",
+      "evidence": {
+        "marker": "恭奉硃批",
+        "quote_in_reply": "二月十九日具奏到任後籌辦事宜一摺，由驛遞迴，內常青到臺灣察看情形句旁恭奉硃批：「汝所聞輿論若何，速由六百里奏來。」",
+        "matched_zhu_span": "汝所聞輿論若何，速由六百里奏來。",
+        "own_memorial_ref": "到任後籌辦事宜一摺",
+        "original_memorial_date": "二月十九日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "二月十九日具奏到任後籌辦事宜一摺，由驛遞迴，內常青到臺灣察看情形句旁恭奉硃批"
+        },
+        "date_note": "本回應所稱「二月十九日具奏到任後籌辦事宜一摺」即為硃225「為奏臺匪軍事不另復奏以省馬力事（附片）」（上奏日為乾隆五十二年二月十九日）。"
+      },
+      "yu": {
+        "id": "硃225",
+        "title": "為奏臺匪軍事不另復奏以省馬力事（附片）",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/19",
+        "receive_date": "1787/03/04"
+      },
+      "reply": {
+        "id": "奏262",
+        "title": "為遵旨查奏並陳稽查口岸事（一）",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/03/19",
+        "receive_date": null
+      },
+      "zhu_doc_id": "硃225",
+      "zhu": {
+        "id": "硃225",
+        "title": "為奏臺匪軍事不另復奏以省馬力事（附片）",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/19",
+        "receive_date": "1787/03/04"
+      }
+    },
+    {
+      "yu_doc_id": "奏15",
+      "reply_doc_id": "硃120",
+      "relation": "reply_to_zhu",
+      "match_level": "partial",
+      "confirmed_at": "2026-07-14 07:25",
+      "evidence": {
+        "quote_type": "label_only",
+        "marker": "奉到硃批",
+        "quote_in_reply": "嗣臣十二月十七日一摺，旋亦奉到硃批",
+        "matched_zhu_span": "",
+        "own_memorial_ref": "十二月十七日一摺",
+        "original_memorial_date": "乾隆五十一年十二月十七日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "嗣臣十二月十七日一摺，旋亦奉到硃批"
+        },
+        "date_note": "本摺上奏於乾隆五十二年一月十五日，文中提及「十二月十七日一摺，旋亦奉到硃批」，與候選文書「奏15」（上奏日為乾隆五十一年十二月十七日，標題為派委福州府海防同知楊紹裘署理臺灣府並正佐雜職等員到臺備差事）之日期相符。"
+      },
+      "yu": {
+        "id": "奏15",
+        "title": "為派委福州府海防同知楊紹裘署理臺灣府並正佐雜職等員到臺備差事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "常青",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1786/12/17",
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃120",
+        "title": "為覆奏水六提臣到臺日期及催提陳樵簡鳩等緣由事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "常青",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/15",
+        "receive_date": "1787/01/28"
+      },
+      "zhu_doc_id": "奏15",
+      "zhu": {
+        "id": "奏15",
+        "title": "為派委福州府海防同知楊紹裘署理臺灣府並正佐雜職等員到臺備差事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "常青",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1786/12/17",
+        "receive_date": null
+      }
+    },
+    {
+      "yu_doc_id": "奏19",
+      "reply_doc_id": "硃160",
+      "relation": "reply_to_zhu",
+      "match_level": "partial",
+      "confirmed_at": "2026-07-14 07:26",
+      "evidence": {
+        "marker": "敬奉硃批",
+        "quote_in_reply": "正月二十四日敬奉硃批：「另有旨諭。」",
+        "matched_zhu_span": "另有旨諭",
+        "own_memorial_ref": "未明",
+        "original_memorial_date": "未明",
+        "receive_date": "乾隆五十二年一月二十四日",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月二十四日敬奉硃批"
+        },
+        "date_note": "奏19之硃批亦為「另有旨諭」，但因本摺未明言原摺標題，且硃71與奏19為同日上奏之摺，故列為 partial。"
+      },
+      "yu": {
+        "id": "奏19",
+        "title": "為奏聞臺灣彰化縣被賊匪糾眾攻城並調撥戰兵辦理事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1786/12/24",
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃160",
+        "title": "為奏料理撤兵及回省日期事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/26",
+        "receive_date": "1787/02/14"
+      },
+      "zhu_doc_id": "奏19",
+      "zhu": {
+        "id": "奏19",
+        "title": "為奏聞臺灣彰化縣被賊匪糾眾攻城並調撥戰兵辦理事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "孫士毅",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1786/12/24",
+        "receive_date": null
+      }
+    },
+    {
+      "yu_doc_id": "硃225",
+      "reply_doc_id": "硃295",
+      "relation": "reply_to_zhu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 07:26",
+      "evidence": {
+        "marker": "恭奉硃批",
+        "quote_in_reply": "二月十九日具奏到任後籌辦事宜一摺，由驛遞回，内常青到臺灣察看情形句旁恭奉硃批：「汝所聞輿論若何。速由六百里奏來。」",
+        "matched_zhu_span": "汝所聞輿論若何。速由六百里奏來。",
+        "own_memorial_ref": "到任後籌辦事宜一摺",
+        "original_memorial_date": "二月十九日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "二月十九日具奏到任後籌辦事宜一摺，由驛遞回"
+        },
+        "date_note": "本摺所引「二月十九日」即為硃225之上奏日（1787/02/19）。硃225原文為附片，其正摺即為到任後籌辦事宜摺。此處引用之硃批為該摺夾條或字旁之硃批。"
+      },
+      "yu": {
+        "id": "硃225",
+        "title": "為奏臺匪軍事不另復奏以省馬力事（附片）",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/19",
+        "receive_date": "1787/03/04"
+      },
+      "reply": {
+        "id": "硃295",
+        "title": "為遵旨查奏並陳稽查口岸事（二）",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/03/19",
+        "receive_date": "1787/04/03"
+      },
+      "zhu_doc_id": "硃225",
+      "zhu": {
+        "id": "硃225",
+        "title": "為奏臺匪軍事不另復奏以省馬力事（附片）",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "李侍堯",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/02/19",
+        "receive_date": "1787/03/04"
+      }
+    },
+    {
+      "yu_doc_id": "奏51",
+      "reply_doc_id": "硃297",
+      "relation": "reply_to_zhu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 07:26",
+      "evidence": {
+        "marker": "奉硃批",
+        "quote_in_reply": "正月初五日，奴才具奏報到臺灣查辦情形一摺，奉硃批：「所奏已遲，早有旨諭。」",
+        "matched_zhu_span": "所奏已遲，早有旨諭",
+        "own_memorial_ref": "報到臺灣查辦情形一摺",
+        "original_memorial_date": "正月初五日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月初五日，奴才具奏報到臺灣查辦情形一摺，奉硃批"
+        },
+        "date_note": "正月初五日為上奏日，與奏51的上奏日1787/01/05（正月初五日）相合。"
+      },
+      "yu": {
+        "id": "奏51",
+        "title": "為奏聞渡海到臺日期並臺灣各城情形事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "黃仕簡",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/05",
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃297",
+        "title": "為屢接上諭覆奏現在攻戰情形事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "黃仕簡",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/03/07",
+        "receive_date": "1787/04/03"
+      },
+      "zhu_doc_id": "奏51",
+      "zhu": {
+        "id": "奏51",
+        "title": "為奏聞渡海到臺日期並臺灣各城情形事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "黃仕簡",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/05",
+        "receive_date": null
+      }
+    },
+    {
+      "yu_doc_id": "奏76",
+      "reply_doc_id": "硃297",
+      "relation": "reply_to_zhu",
+      "match_level": "high",
+      "confirmed_at": "2026-07-14 07:26",
+      "evidence": {
+        "marker": "奉硃批",
+        "quote_in_reply": "正月十三日奴才具奏分遣官兵進剿一摺，奉硃批：「所奏既遲，又不詳悉，已有旨了。」",
+        "matched_zhu_span": "所奏既遲又不詳悉，已有旨了。",
+        "own_memorial_ref": "分遣官兵進剿一摺",
+        "original_memorial_date": "正月十三日",
+        "receive_date": "未明",
+        "receipt": {
+          "type": "direct",
+          "via": "未明",
+          "quote": "正月十三日奴才具奏分遣官兵進剿一摺，奉硃批"
+        },
+        "date_note": "正月十三日為上奏日，與奏76的上奏日1787/01/13（正月十三日）相合。"
+      },
+      "yu": {
+        "id": "奏76",
+        "title": "為奏報進剿臺灣南北二路逆賊情形仰祈睿鑒事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "黃仕簡",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/13",
+        "receive_date": null
+      },
+      "reply": {
+        "id": "硃297",
+        "title": "為屢接上諭覆奏現在攻戰情形事",
+        "type": "zhupi",
+        "doc_type": "硃批",
+        "author": "黃仕簡",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/03/07",
+        "receive_date": "1787/04/03"
+      },
+      "zhu_doc_id": "奏76",
+      "zhu": {
+        "id": "奏76",
+        "title": "為奏報進剿臺灣南北二路逆賊情形仰祈睿鑒事",
+        "type": "shangzou",
+        "doc_type": "上奏",
+        "author": "黃仕簡",
+        "recipients": [],
+        "issue_date": null,
+        "send_date": "1787/01/13",
+        "receive_date": null
       }
     }
   ]
