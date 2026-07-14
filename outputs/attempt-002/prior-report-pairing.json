@@ -137,8 +137,8 @@
       }
     },
     {
-      "previous_doc_id": "天56",
-      "yu_doc_id": "天56",
+      "previous_doc_id": "硃56",
+      "yu_doc_id": "硃56",
       "reply_doc_id": "奏18",
       "relation": "prior_report",
       "match_level": "partial",
@@ -173,7 +173,7 @@
     {
       "previous_doc_id": "奏16",
       "yu_doc_id": "奏16",
-      "reply_doc_id": "天20",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -188,9 +188,9 @@
       }
     },
     {
-      "previous_doc_id": "天56",
-      "yu_doc_id": "天56",
-      "reply_doc_id": "天20",
+      "previous_doc_id": "硃56",
+      "yu_doc_id": "硃56",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -207,7 +207,7 @@
     {
       "previous_doc_id": "奏14",
       "yu_doc_id": "奏14",
-      "reply_doc_id": "天20",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -224,7 +224,7 @@
     {
       "previous_doc_id": "硃41",
       "yu_doc_id": "硃41",
-      "reply_doc_id": "天20",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -241,7 +241,7 @@
     {
       "previous_doc_id": "奏18",
       "yu_doc_id": "奏18",
-      "reply_doc_id": "天20",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -256,9 +256,9 @@
       }
     },
     {
-      "previous_doc_id": "天59",
-      "yu_doc_id": "天59",
-      "reply_doc_id": "天20",
+      "previous_doc_id": "硃59",
+      "yu_doc_id": "硃59",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -275,7 +275,7 @@
     {
       "previous_doc_id": "奏11",
       "yu_doc_id": "奏11",
-      "reply_doc_id": "天20",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -292,7 +292,7 @@
     {
       "previous_doc_id": "硃33",
       "yu_doc_id": "硃33",
-      "reply_doc_id": "天20",
+      "reply_doc_id": "奏20",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -309,7 +309,7 @@
     {
       "previous_doc_id": "奏19",
       "yu_doc_id": "奏19",
-      "reply_doc_id": "天28",
+      "reply_doc_id": "奏28",
       "relation": "prior_report",
       "match_level": "high",
       "evidence": {
@@ -326,7 +326,7 @@
     {
       "previous_doc_id": "硃71",
       "yu_doc_id": "硃71",
-      "reply_doc_id": "天28",
+      "reply_doc_id": "奏28",
       "relation": "prior_report",
       "match_level": "high",
       "evidence": {
@@ -341,8 +341,8 @@
       }
     },
     {
-      "previous_doc_id": "天28",
-      "yu_doc_id": "天28",
+      "previous_doc_id": "奏28",
+      "yu_doc_id": "奏28",
       "reply_doc_id": "奏45",
       "relation": "prior_report",
       "match_level": "high",
@@ -358,9 +358,9 @@
       }
     },
     {
-      "previous_doc_id": "天82",
-      "yu_doc_id": "天82",
-      "reply_doc_id": "天52",
+      "previous_doc_id": "硃82",
+      "yu_doc_id": "硃82",
+      "reply_doc_id": "奏52",
       "relation": "prior_report",
       "match_level": "high",
       "evidence": {
@@ -377,7 +377,7 @@
     {
       "previous_doc_id": "奏29",
       "yu_doc_id": "奏29",
-      "reply_doc_id": "天52",
+      "reply_doc_id": "奏52",
       "relation": "prior_report",
       "match_level": "high",
       "evidence": {
@@ -394,7 +394,7 @@
     {
       "previous_doc_id": "奏45",
       "yu_doc_id": "奏45",
-      "reply_doc_id": "天62",
+      "reply_doc_id": "奏62",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -409,8 +409,8 @@
       }
     },
     {
-      "previous_doc_id": "天59",
-      "yu_doc_id": "天59",
+      "previous_doc_id": "硃59",
+      "yu_doc_id": "硃59",
       "reply_doc_id": "奏66",
       "relation": "prior_report",
       "match_level": "partial",
@@ -443,8 +443,8 @@
       }
     },
     {
-      "previous_doc_id": "天51",
-      "yu_doc_id": "天51",
+      "previous_doc_id": "奏51",
+      "yu_doc_id": "奏51",
       "reply_doc_id": "奏76",
       "relation": "prior_report",
       "match_level": "partial",
@@ -479,7 +479,7 @@
     {
       "previous_doc_id": "奏68",
       "yu_doc_id": "奏68",
-      "reply_doc_id": "天84",
+      "reply_doc_id": "奏84",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -496,7 +496,7 @@
     {
       "previous_doc_id": "硃64",
       "yu_doc_id": "硃64",
-      "reply_doc_id": "天84",
+      "reply_doc_id": "奏84",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -513,7 +513,7 @@
     {
       "previous_doc_id": "奏74",
       "yu_doc_id": "奏74",
-      "reply_doc_id": "天84",
+      "reply_doc_id": "奏84",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -564,7 +564,7 @@
     {
       "previous_doc_id": "硃97",
       "yu_doc_id": "硃97",
-      "reply_doc_id": "天96",
+      "reply_doc_id": "奏96",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -581,7 +581,7 @@
     {
       "previous_doc_id": "奏55",
       "yu_doc_id": "奏55",
-      "reply_doc_id": "天96",
+      "reply_doc_id": "奏96",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -698,8 +698,8 @@
       }
     },
     {
-      "previous_doc_id": "天51",
-      "yu_doc_id": "天51",
+      "previous_doc_id": "奏51",
+      "yu_doc_id": "奏51",
       "reply_doc_id": "奏102",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1091,7 +1091,7 @@
     {
       "previous_doc_id": "硃44",
       "yu_doc_id": "硃44",
-      "reply_doc_id": "天40",
+      "reply_doc_id": "硃40",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1108,7 +1108,7 @@
     {
       "previous_doc_id": "奏14",
       "yu_doc_id": "奏14",
-      "reply_doc_id": "天56",
+      "reply_doc_id": "硃56",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1125,7 +1125,7 @@
     {
       "previous_doc_id": "硃41",
       "yu_doc_id": "硃41",
-      "reply_doc_id": "天56",
+      "reply_doc_id": "硃56",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1140,9 +1140,9 @@
       }
     },
     {
-      "previous_doc_id": "天56",
-      "yu_doc_id": "天56",
-      "reply_doc_id": "天59",
+      "previous_doc_id": "硃56",
+      "yu_doc_id": "硃56",
+      "reply_doc_id": "硃59",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1159,7 +1159,7 @@
     {
       "previous_doc_id": "奏16",
       "yu_doc_id": "奏16",
-      "reply_doc_id": "天59",
+      "reply_doc_id": "硃59",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1191,8 +1191,8 @@
       }
     },
     {
-      "previous_doc_id": "天56",
-      "yu_doc_id": "天56",
+      "previous_doc_id": "硃56",
+      "yu_doc_id": "硃56",
       "reply_doc_id": "硃64",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1259,8 +1259,8 @@
       }
     },
     {
-      "previous_doc_id": "天59",
-      "yu_doc_id": "天59",
+      "previous_doc_id": "硃59",
+      "yu_doc_id": "硃59",
       "reply_doc_id": "硃64",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1310,8 +1310,8 @@
       }
     },
     {
-      "previous_doc_id": "天40",
-      "yu_doc_id": "天40",
+      "previous_doc_id": "硃40",
+      "yu_doc_id": "硃40",
       "reply_doc_id": "硃78",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1378,8 +1378,8 @@
       }
     },
     {
-      "previous_doc_id": "天82",
-      "yu_doc_id": "天82",
+      "previous_doc_id": "硃82",
+      "yu_doc_id": "硃82",
       "reply_doc_id": "硃83",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1395,8 +1395,8 @@
       }
     },
     {
-      "previous_doc_id": "天82",
-      "yu_doc_id": "天82",
+      "previous_doc_id": "硃82",
+      "yu_doc_id": "硃82",
       "reply_doc_id": "硃88",
       "relation": "prior_report",
       "match_level": "high",
@@ -1431,7 +1431,7 @@
     {
       "previous_doc_id": "奏45",
       "yu_doc_id": "奏45",
-      "reply_doc_id": "天99",
+      "reply_doc_id": "硃99",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1446,9 +1446,9 @@
       }
     },
     {
-      "previous_doc_id": "天59",
-      "yu_doc_id": "天59",
-      "reply_doc_id": "天104",
+      "previous_doc_id": "硃59",
+      "yu_doc_id": "硃59",
+      "reply_doc_id": "硃104",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1465,7 +1465,7 @@
     {
       "previous_doc_id": "奏18",
       "yu_doc_id": "奏18",
-      "reply_doc_id": "天104",
+      "reply_doc_id": "硃104",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1482,7 +1482,7 @@
     {
       "previous_doc_id": "奏68",
       "yu_doc_id": "奏68",
-      "reply_doc_id": "天119",
+      "reply_doc_id": "硃119",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1499,7 +1499,7 @@
     {
       "previous_doc_id": "硃64",
       "yu_doc_id": "硃64",
-      "reply_doc_id": "天119",
+      "reply_doc_id": "硃119",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1601,7 +1601,7 @@
     {
       "previous_doc_id": "奏67",
       "yu_doc_id": "奏67",
-      "reply_doc_id": "天148",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1618,7 +1618,7 @@
     {
       "previous_doc_id": "奏29",
       "yu_doc_id": "奏29",
-      "reply_doc_id": "天148",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1633,9 +1633,9 @@
       }
     },
     {
-      "previous_doc_id": "天82",
-      "yu_doc_id": "天82",
-      "reply_doc_id": "天148",
+      "previous_doc_id": "硃82",
+      "yu_doc_id": "硃82",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1652,7 +1652,7 @@
     {
       "previous_doc_id": "硃105",
       "yu_doc_id": "硃105",
-      "reply_doc_id": "天148",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1667,9 +1667,9 @@
       }
     },
     {
-      "previous_doc_id": "天20",
-      "yu_doc_id": "天20",
-      "reply_doc_id": "天148",
+      "previous_doc_id": "奏20",
+      "yu_doc_id": "奏20",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1686,7 +1686,7 @@
     {
       "previous_doc_id": "硃64",
       "yu_doc_id": "硃64",
-      "reply_doc_id": "天148",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1703,7 +1703,7 @@
     {
       "previous_doc_id": "硃138",
       "yu_doc_id": "硃138",
-      "reply_doc_id": "天148",
+      "reply_doc_id": "硃148",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1718,9 +1718,9 @@
       }
     },
     {
-      "previous_doc_id": "天52",
-      "yu_doc_id": "天52",
-      "reply_doc_id": "天146",
+      "previous_doc_id": "奏52",
+      "yu_doc_id": "奏52",
+      "reply_doc_id": "硃146",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1737,7 +1737,7 @@
     {
       "previous_doc_id": "硃88",
       "yu_doc_id": "硃88",
-      "reply_doc_id": "天146",
+      "reply_doc_id": "硃146",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -1752,8 +1752,8 @@
       }
     },
     {
-      "previous_doc_id": "天52",
-      "yu_doc_id": "天52",
+      "previous_doc_id": "奏52",
+      "yu_doc_id": "奏52",
       "reply_doc_id": "硃149",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1786,8 +1786,8 @@
       }
     },
     {
-      "previous_doc_id": "天82",
-      "yu_doc_id": "天82",
+      "previous_doc_id": "硃82",
+      "yu_doc_id": "硃82",
       "reply_doc_id": "硃149",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1837,8 +1837,8 @@
       }
     },
     {
-      "previous_doc_id": "天51",
-      "yu_doc_id": "天51",
+      "previous_doc_id": "奏51",
+      "yu_doc_id": "奏51",
       "reply_doc_id": "硃151",
       "relation": "prior_report",
       "match_level": "partial",
@@ -1888,8 +1888,8 @@
       }
     },
     {
-      "previous_doc_id": "天82",
-      "yu_doc_id": "天82",
+      "previous_doc_id": "硃82",
+      "yu_doc_id": "硃82",
       "reply_doc_id": "硃158",
       "relation": "prior_report",
       "match_level": "partial",
@@ -2024,8 +2024,8 @@
       }
     },
     {
-      "previous_doc_id": "天20",
-      "yu_doc_id": "天20",
+      "previous_doc_id": "奏20",
+      "yu_doc_id": "奏20",
       "reply_doc_id": "硃158",
       "relation": "prior_report",
       "match_level": "partial",
@@ -2211,8 +2211,8 @@
       }
     },
     {
-      "previous_doc_id": "天51",
-      "yu_doc_id": "天51",
+      "previous_doc_id": "奏51",
+      "yu_doc_id": "奏51",
       "reply_doc_id": "硃169",
       "relation": "prior_report",
       "match_level": "partial",
@@ -2349,7 +2349,7 @@
     {
       "previous_doc_id": "硃166",
       "yu_doc_id": "硃166",
-      "reply_doc_id": "天218",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2366,7 +2366,7 @@
     {
       "previous_doc_id": "奏98",
       "yu_doc_id": "奏98",
-      "reply_doc_id": "天218",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2381,9 +2381,9 @@
       }
     },
     {
-      "previous_doc_id": "天116",
-      "yu_doc_id": "天116",
-      "reply_doc_id": "天218",
+      "previous_doc_id": "奏116",
+      "yu_doc_id": "奏116",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2400,7 +2400,7 @@
     {
       "previous_doc_id": "奏80",
       "yu_doc_id": "奏80",
-      "reply_doc_id": "天218",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2417,7 +2417,7 @@
     {
       "previous_doc_id": "硃153",
       "yu_doc_id": "硃153",
-      "reply_doc_id": "天218",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2434,7 +2434,7 @@
     {
       "previous_doc_id": "奏2",
       "yu_doc_id": "奏2",
-      "reply_doc_id": "天218",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2451,7 +2451,7 @@
     {
       "previous_doc_id": "奏9",
       "yu_doc_id": "奏9",
-      "reply_doc_id": "天218",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2466,9 +2466,9 @@
       }
     },
     {
-      "previous_doc_id": "天31",
-      "yu_doc_id": "天31",
-      "reply_doc_id": "天218",
+      "previous_doc_id": "硃31",
+      "yu_doc_id": "硃31",
+      "reply_doc_id": "硃218",
       "relation": "prior_report",
       "match_level": "partial",
       "evidence": {
@@ -2483,8 +2483,8 @@
       }
     },
     {
-      "previous_doc_id": "天117",
-      "yu_doc_id": "天117",
+      "previous_doc_id": "奏117",
+      "yu_doc_id": "奏117",
       "reply_doc_id": "硃217",
       "relation": "prior_report",
       "match_level": "partial",
@@ -2551,8 +2551,8 @@
       }
     },
     {
-      "previous_doc_id": "天218",
-      "yu_doc_id": "天218",
+      "previous_doc_id": "硃218",
+      "yu_doc_id": "硃218",
       "reply_doc_id": "硃229",
       "relation": "prior_report",
       "match_level": "partial",
@@ -2840,8 +2840,8 @@
       }
     },
     {
-      "previous_doc_id": "天56",
-      "yu_doc_id": "天56",
+      "previous_doc_id": "硃56",
+      "yu_doc_id": "硃56",
       "reply_doc_id": "硃300",
       "relation": "prior_report",
       "match_level": "partial",
@@ -2857,8 +2857,8 @@
       }
     },
     {
-      "previous_doc_id": "天117",
-      "yu_doc_id": "天117",
+      "previous_doc_id": "奏117",
+      "yu_doc_id": "奏117",
       "reply_doc_id": "硃302",
       "relation": "prior_report",
       "match_level": "partial",

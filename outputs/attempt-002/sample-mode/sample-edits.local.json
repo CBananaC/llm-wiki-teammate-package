@@ -1768,7 +1768,7 @@
                 "__pendingResponses": [
                   {
                     "action_quote": "黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。並著於辦理搜捕諸務外，仍加意調攝，勿勞。",
-                    "doc_id": "天51",
+                    "doc_id": "奏51",
                     "how": "黃仕簡在接獲臺灣賊匪攻城殺官的消息後，不顧病體，親自率領官兵船隻渡海東征。他於正月初三夜抵達鹿耳門，初四早登岸進城，並立即將抵臺官兵分派堵截、保固府城，同時相機發兵進剿。他預計陸路提督任承恩也將率兵抵臺，屆時可南北夾攻，迅速剿滅逆賊。",
                     "receive_date": "",
                     "relations": [
@@ -2277,7 +2277,7 @@
                 "__pendingResponses": [
                   {
                     "action_quote": "仍以調養為要，勿過勞",
-                    "doc_id": "天51",
+                    "doc_id": "奏51",
                     "how": "黃仕簡奏報他儘管帶病，仍親自率領官兵船隻渡海進剿臺灣匪徒，並於正月初三夜抵達鹿耳門，初四早登岸進城。他詳細報告了臺灣各縣城被攻陷、官員被害以及匪徒猖獗的情形，並說明他已分派官兵堵截、保固府城，等待陸路提臣任承恩到臺後南北夾攻。此舉雖未直接提及皇帝的諭旨，但其「力疾帶領」的行動，直接回應了皇帝對其「帶病親征應以調養為要勿過勞」的關切。",
                     "receive_date": "",
                     "relations": [
@@ -2600,7 +2600,7 @@
                 "__pendingResponses": [
                   {
                     "action_quote": "此時總以鎮靜內地爲要。",
-                    "doc_id": "天53",
+                    "doc_id": "奏53",
                     "how": "常青在審訊逆犯楊振國（楊詠）等人後，密奏天地會的根源，並在奏摺中強調，雖然賊人本籍多在漳屬，但目前民情尚屬寧靜，若稍有張皇，恐會引起驚疑。他表示會密飭下屬訪察嚴防，待臺匪蕩平後再查辦，並飛咨提臣追究嚴烟下落，同時派員密查廣東的洪二房和尚及朱姓人士。",
                     "receive_date": "",
                     "relations": [
@@ -3807,7 +3807,7 @@
   "pairs": [
     {
       "reply_doc_id": "奏92",
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3825,8 +3825,8 @@
       }
     },
     {
-      "reply_doc_id": "天108",
-      "yu_doc_id": "天43",
+      "reply_doc_id": "奏108",
+      "yu_doc_id": "諭43",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3844,8 +3844,8 @@
       }
     },
     {
-      "reply_doc_id": "天116",
-      "yu_doc_id": "天24",
+      "reply_doc_id": "奏116",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3863,8 +3863,8 @@
       }
     },
     {
-      "reply_doc_id": "天116",
-      "yu_doc_id": "天47",
+      "reply_doc_id": "奏116",
+      "yu_doc_id": "諭47",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3882,8 +3882,8 @@
       }
     },
     {
-      "reply_doc_id": "天116",
-      "yu_doc_id": "天31",
+      "reply_doc_id": "奏116",
+      "yu_doc_id": "諭31",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3901,8 +3901,8 @@
       }
     },
     {
-      "reply_doc_id": "天116",
-      "yu_doc_id": "天20",
+      "reply_doc_id": "奏116",
+      "yu_doc_id": "諭20",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3920,8 +3920,8 @@
       }
     },
     {
-      "reply_doc_id": "天117",
-      "yu_doc_id": "天24",
+      "reply_doc_id": "奏117",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3939,8 +3939,8 @@
       }
     },
     {
-      "reply_doc_id": "天117",
-      "yu_doc_id": "天31",
+      "reply_doc_id": "奏117",
+      "yu_doc_id": "諭31",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3959,7 +3959,7 @@
     },
     {
       "reply_doc_id": "奏124",
-      "yu_doc_id": "天20",
+      "yu_doc_id": "諭20",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3978,7 +3978,7 @@
     },
     {
       "reply_doc_id": "奏124",
-      "yu_doc_id": "天28",
+      "yu_doc_id": "諭28",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -3997,7 +3997,7 @@
     },
     {
       "reply_doc_id": "奏124",
-      "yu_doc_id": "天31",
+      "yu_doc_id": "諭31",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4016,7 +4016,7 @@
     },
     {
       "reply_doc_id": "奏124",
-      "yu_doc_id": "天13",
+      "yu_doc_id": "諭13",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4035,7 +4035,7 @@
     },
     {
       "reply_doc_id": "奏124",
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4054,7 +4054,7 @@
     },
     {
       "reply_doc_id": "奏190",
-      "yu_doc_id": "天99",
+      "yu_doc_id": "諭99",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4073,7 +4073,7 @@
     },
     {
       "reply_doc_id": "奏204",
-      "yu_doc_id": "天100",
+      "yu_doc_id": "諭100",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4092,7 +4092,7 @@
     },
     {
       "reply_doc_id": "奏204",
-      "yu_doc_id": "天99",
+      "yu_doc_id": "諭99",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4111,7 +4111,7 @@
     },
     {
       "reply_doc_id": "奏208",
-      "yu_doc_id": "天140",
+      "yu_doc_id": "諭140",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4130,7 +4130,7 @@
     },
     {
       "reply_doc_id": "奏253",
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4149,7 +4149,7 @@
     },
     {
       "reply_doc_id": "奏266",
-      "yu_doc_id": "天104",
+      "yu_doc_id": "諭104",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4168,7 +4168,7 @@
     },
     {
       "reply_doc_id": "奏266",
-      "yu_doc_id": "天154",
+      "yu_doc_id": "諭154",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4187,7 +4187,7 @@
     },
     {
       "reply_doc_id": "奏266",
-      "yu_doc_id": "天117",
+      "yu_doc_id": "諭117",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4206,7 +4206,7 @@
     },
     {
       "reply_doc_id": "奏266",
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4224,8 +4224,8 @@
       }
     },
     {
-      "reply_doc_id": "天113",
-      "yu_doc_id": "天20",
+      "reply_doc_id": "硃113",
+      "yu_doc_id": "諭20",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4243,8 +4243,8 @@
       }
     },
     {
-      "reply_doc_id": "天113",
-      "yu_doc_id": "天28",
+      "reply_doc_id": "硃113",
+      "yu_doc_id": "諭28",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4262,8 +4262,8 @@
       }
     },
     {
-      "reply_doc_id": "天113",
-      "yu_doc_id": "天24",
+      "reply_doc_id": "硃113",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4281,8 +4281,8 @@
       }
     },
     {
-      "reply_doc_id": "天137",
-      "yu_doc_id": "天24",
+      "reply_doc_id": "硃137",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4301,7 +4301,7 @@
     },
     {
       "reply_doc_id": "硃160",
-      "yu_doc_id": "天43",
+      "yu_doc_id": "諭43",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4320,7 +4320,7 @@
     },
     {
       "reply_doc_id": "硃187",
-      "yu_doc_id": "天62",
+      "yu_doc_id": "諭62",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4339,7 +4339,7 @@
     },
     {
       "reply_doc_id": "硃187",
-      "yu_doc_id": "天84",
+      "yu_doc_id": "諭84",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4358,7 +4358,7 @@
     },
     {
       "reply_doc_id": "硃185",
-      "yu_doc_id": "天53",
+      "yu_doc_id": "諭53",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4377,7 +4377,7 @@
     },
     {
       "reply_doc_id": "硃183",
-      "yu_doc_id": "天57",
+      "yu_doc_id": "諭57",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4396,7 +4396,7 @@
     },
     {
       "reply_doc_id": "硃186",
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4415,7 +4415,7 @@
     },
     {
       "reply_doc_id": "硃186",
-      "yu_doc_id": "天31",
+      "yu_doc_id": "諭31",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4434,7 +4434,7 @@
     },
     {
       "reply_doc_id": "硃217",
-      "yu_doc_id": "天51",
+      "yu_doc_id": "諭51",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4453,7 +4453,7 @@
     },
     {
       "reply_doc_id": "硃217",
-      "yu_doc_id": "天47",
+      "yu_doc_id": "諭47",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4472,7 +4472,7 @@
     },
     {
       "reply_doc_id": "硃226",
-      "yu_doc_id": "天82",
+      "yu_doc_id": "諭82",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4491,7 +4491,7 @@
     },
     {
       "reply_doc_id": "硃226",
-      "yu_doc_id": "天84",
+      "yu_doc_id": "諭84",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4510,7 +4510,7 @@
     },
     {
       "reply_doc_id": "硃226",
-      "yu_doc_id": "天79",
+      "yu_doc_id": "諭79",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4529,7 +4529,7 @@
     },
     {
       "reply_doc_id": "硃226",
-      "yu_doc_id": "天108",
+      "yu_doc_id": "諭108",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4548,7 +4548,7 @@
     },
     {
       "reply_doc_id": "硃226",
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4567,7 +4567,7 @@
     },
     {
       "reply_doc_id": "硃226",
-      "yu_doc_id": "天129",
+      "yu_doc_id": "諭129",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4586,7 +4586,7 @@
     },
     {
       "reply_doc_id": "硃282",
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4605,7 +4605,7 @@
     },
     {
       "reply_doc_id": "硃282",
-      "yu_doc_id": "天167",
+      "yu_doc_id": "諭167",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4624,7 +4624,7 @@
     },
     {
       "reply_doc_id": "硃297",
-      "yu_doc_id": "天117",
+      "yu_doc_id": "諭117",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4643,7 +4643,7 @@
     },
     {
       "reply_doc_id": "硃297",
-      "yu_doc_id": "天122",
+      "yu_doc_id": "諭122",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4662,7 +4662,7 @@
     },
     {
       "reply_doc_id": "硃297",
-      "yu_doc_id": "天116",
+      "yu_doc_id": "諭116",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4681,7 +4681,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天104",
+      "yu_doc_id": "諭104",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4700,7 +4700,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天140",
+      "yu_doc_id": "諭140",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4719,7 +4719,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天137",
+      "yu_doc_id": "諭137",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4738,7 +4738,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天122",
+      "yu_doc_id": "諭122",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4757,7 +4757,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天94",
+      "yu_doc_id": "諭94",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4776,7 +4776,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天108",
+      "yu_doc_id": "諭108",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4795,7 +4795,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天87",
+      "yu_doc_id": "諭87",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4814,7 +4814,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天157",
+      "yu_doc_id": "諭157",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4833,7 +4833,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天129",
+      "yu_doc_id": "諭129",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4852,7 +4852,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4871,7 +4871,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天99",
+      "yu_doc_id": "諭99",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4890,7 +4890,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天100",
+      "yu_doc_id": "諭100",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4909,7 +4909,7 @@
     },
     {
       "reply_doc_id": "硃301",
-      "yu_doc_id": "天57",
+      "yu_doc_id": "諭57",
       "relation": "reply_to_yu",
       "match_level": "partial",
       "evidence": {
@@ -4928,7 +4928,7 @@
     },
     {
       "reply_doc_id": "硃302",
-      "yu_doc_id": "天116",
+      "yu_doc_id": "諭116",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {
@@ -4947,7 +4947,7 @@
     },
     {
       "reply_doc_id": "硃302",
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "evidence": {

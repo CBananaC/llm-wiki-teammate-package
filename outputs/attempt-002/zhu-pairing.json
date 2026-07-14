@@ -61,7 +61,7 @@
       }
     },
     {
-      "reply_doc_id": "天108",
+      "reply_doc_id": "奏108",
       "zhu_doc_id": "硃71",
       "yu_doc_id": "硃71",
       "relation": "reply_to_zhu",
@@ -194,9 +194,9 @@
       }
     },
     {
-      "reply_doc_id": "天146",
-      "zhu_doc_id": "天82",
-      "yu_doc_id": "天82",
+      "reply_doc_id": "硃146",
+      "zhu_doc_id": "硃82",
+      "yu_doc_id": "硃82",
       "relation": "reply_to_zhu",
       "match_level": "partial",
       "evidence": {

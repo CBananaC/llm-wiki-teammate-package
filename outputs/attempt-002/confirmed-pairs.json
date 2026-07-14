@@ -4,7 +4,7 @@
   "count": 104,
   "pairs": [
     {
-      "yu_doc_id": "天116",
+      "yu_doc_id": "諭116",
       "reply_doc_id": "硃302",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -18,7 +18,7 @@
         "date_note": "黃仕簡於三月初十日接奉督臣常青面交之廷寄諭旨，該諭旨發布於乾隆五十二年二月十一日，與天116號上諭日期完全相符。"
       },
       "yu": {
-        "id": "天116",
+        "id": "諭116",
         "title": "諭內閣福建提督黃仕簡任承恩安坐郡城著傳旨嚴行申飭迅速復奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -44,8 +44,8 @@
       }
     },
     {
-      "yu_doc_id": "天27",
-      "reply_doc_id": "天79",
+      "yu_doc_id": "諭27",
+      "reply_doc_id": "硃79",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:22",
@@ -58,7 +58,7 @@
         "date_note": "奏摺中「彰＂」應為「彰化」之抄錄或避諱缺筆。"
       },
       "yu": {
-        "id": "天27",
+        "id": "諭27",
         "title": "諭兩江總督李世傑等著藍元枚署理福建陸路提督即駐蚶江",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -72,7 +72,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天79",
+        "id": "硃79",
         "title": "為奏聞起程接任署福建陸路提督",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -84,8 +84,8 @@
       }
     },
     {
-      "yu_doc_id": "天13",
-      "reply_doc_id": "天94",
+      "yu_doc_id": "諭13",
+      "reply_doc_id": "硃94",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:23",
@@ -98,7 +98,7 @@
         "date_note": "奏摺中「初十日」承接前文，為乾隆五十二年正月初十日。"
       },
       "yu": {
-        "id": "天13",
+        "id": "諭13",
         "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -114,7 +114,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天94",
+        "id": "硃94",
         "title": "為恭摺覆奏督催官兵放洋及巡查海口等緣由事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -126,7 +126,7 @@
       }
     },
     {
-      "yu_doc_id": "天13",
+      "yu_doc_id": "諭13",
       "reply_doc_id": "硃105",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -140,7 +140,7 @@
         "date_note": "奏摺中「正月十一日」承准，按時序為乾隆五十二年丁未年正月十一日。"
       },
       "yu": {
-        "id": "天13",
+        "id": "諭13",
         "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -168,8 +168,8 @@
       }
     },
     {
-      "yu_doc_id": "天20",
-      "reply_doc_id": "天113",
+      "yu_doc_id": "諭20",
+      "reply_doc_id": "硃113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:36",
@@ -182,7 +182,7 @@
         "date_note": "奏摺中「十二月二十九日」為乾隆五十一年十二月二十九日，「正月十一日」為乾隆五十二年正月十一日。"
       },
       "yu": {
-        "id": "天20",
+        "id": "諭20",
         "title": "諭閩浙總督常青等鎮定妥辦不必紛紛赴臺",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -198,7 +198,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天113",
+        "id": "硃113",
         "title": "為奏聞提臣等赴臺並飭沿海官員嚴密巡查事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -210,8 +210,8 @@
       }
     },
     {
-      "yu_doc_id": "天24",
-      "reply_doc_id": "天113",
+      "yu_doc_id": "諭24",
+      "reply_doc_id": "硃113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:36",
@@ -224,7 +224,7 @@
         "date_note": "徐嗣曾於正月十三日亥刻接准正月初二日之廷寄上諭。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -240,7 +240,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天113",
+        "id": "硃113",
         "title": "為奏聞提臣等赴臺並飭沿海官員嚴密巡查事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -252,7 +252,7 @@
       }
     },
     {
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "reply_doc_id": "硃120",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -266,7 +266,7 @@
         "date_note": "奏摺中僅提及「嗣臣十二月十七日一摺，旋亦奉到硃批...」，未明確記載收到該廷寄上諭的具體日期，但明確記載上諭頒發日期為「乾隆五十二年正月初二日」。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -294,8 +294,8 @@
       }
     },
     {
-      "yu_doc_id": "天28",
-      "reply_doc_id": "天122",
+      "yu_doc_id": "諭28",
+      "reply_doc_id": "硃122",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:38",
@@ -308,7 +308,7 @@
         "date_note": "奏摺中未載明接奉此旨之具體日期，僅稱「接奉上諭」，然其引文「閩省臺灣賊匪林爽文等聚眾滋事……並著常青探聽臺地消息」與乾隆五十二年正月初三日上諭內容高度相符，故判定為 high。"
       },
       "yu": {
-        "id": "天28",
+        "id": "諭28",
         "title": "諭閩浙總督常青等務須同心協力俟大兵到齊夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -321,7 +321,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天122",
+        "id": "硃122",
         "title": "為奏聞郡城無虞傳諭兩提督並力合攻事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -333,8 +333,8 @@
       }
     },
     {
-      "yu_doc_id": "天31",
-      "reply_doc_id": "天125",
+      "yu_doc_id": "諭31",
+      "reply_doc_id": "硃125",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:41",
@@ -347,7 +347,7 @@
         "date_note": "奏摺中僅以「節次欽奉諭旨」概括引入，未寫明具體接奉或頒發日期，但其引述之「務須約會日期，同時並力夾攻」與本上諭「黃仕簡等務須俟各路官兵到齊，約會日期，同時併力夾攻」之核心指示完全吻合。"
       },
       "yu": {
-        "id": "天31",
+        "id": "諭31",
         "title": "諭閩浙總督常青等務宜鎮定妥辦不可張大其事",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -364,7 +364,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天125",
+        "id": "硃125",
         "title": "為奏聞調副將徐鼎士等由閩安出口赴淡水事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -376,8 +376,8 @@
       }
     },
     {
-      "yu_doc_id": "天24",
-      "reply_doc_id": "天125",
+      "yu_doc_id": "諭24",
+      "reply_doc_id": "硃125",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-11 09:41",
@@ -390,7 +390,7 @@
         "date_note": "奏摺中未載明接奉此旨之具體日期，僅以「節次欽奉諭旨」引述。然其引述內容「以閩人性本慓輕，不宜零星打仗，飭令兩提臣務須約會日期，同時並力夾攻」與本上諭（乾隆五十二年一月二日）高度吻合，故判定為 high。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -406,7 +406,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天125",
+        "id": "硃125",
         "title": "為奏聞調副將徐鼎士等由閩安出口赴淡水事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -418,7 +418,7 @@
       }
     },
     {
-      "yu_doc_id": "天31",
+      "yu_doc_id": "諭31",
       "reply_doc_id": "硃130",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -432,7 +432,7 @@
         "date_note": "奏摺中僅提及「正月十九日接奉上諭」，未明確認定該上諭的發布日期（即正月初七日），但其引述之內容與本件正月初七日上諭（天31）開頭完全吻合。"
       },
       "yu": {
-        "id": "天31",
+        "id": "諭31",
         "title": "諭閩浙總督常青等務宜鎮定妥辦不可張大其事",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -461,7 +461,7 @@
       }
     },
     {
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "reply_doc_id": "奏85",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -475,7 +475,7 @@
         "date_note": "奏摺中僅提及「奉到硃批，並承准大學士公阿桂、大學士和珅字寄，乾隆五十二年正月初二日奉上諭」，未具體寫明收到該廷寄的日期。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -503,7 +503,7 @@
       }
     },
     {
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "reply_doc_id": "奏92",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -517,7 +517,7 @@
         "date_note": "奏摺內文提及「於本年正月十九日...承准...乾隆五十二年正月初二日奉上諭」，故發布日為正月初二日，收受日為正月十九日。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -545,8 +545,8 @@
       }
     },
     {
-      "yu_doc_id": "天24",
-      "reply_doc_id": "天117",
+      "yu_doc_id": "諭24",
+      "reply_doc_id": "奏117",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 10:24",
@@ -559,7 +559,7 @@
         "date_note": "黃仕簡於乾隆五十二年正月二十五日戌刻接奉此上諭，並於正月二十七日具摺覆奏。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -575,7 +575,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天117",
+        "id": "奏117",
         "title": "為欽奉上諭恭摺覆奏征剿臺匪等事",
         "type": "shangzou",
         "doc_type": "上奏",
@@ -587,8 +587,8 @@
       }
     },
     {
-      "yu_doc_id": "天24",
-      "reply_doc_id": "天137",
+      "yu_doc_id": "諭24",
+      "reply_doc_id": "硃137",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 10:29",
@@ -601,7 +601,7 @@
         "date_note": "奏摺內文提及「臣於本年正月十九日在潮州府城，承准……」即為其接奉日期。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -617,7 +617,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天137",
+        "id": "硃137",
         "title": "為恭摺覆奏辦理備撥粵兵等緣由事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -629,7 +629,7 @@
       }
     },
     {
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "reply_doc_id": "硃186",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -643,7 +643,7 @@
         "date_note": ""
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -671,7 +671,7 @@
       }
     },
     {
-      "yu_doc_id": "天28",
+      "yu_doc_id": "諭28",
       "reply_doc_id": "奏86",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -685,7 +685,7 @@
         "date_note": ""
       },
       "yu": {
-        "id": "天28",
+        "id": "諭28",
         "title": "諭閩浙總督常青等務須同心協力俟大兵到齊夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -710,8 +710,8 @@
       }
     },
     {
-      "yu_doc_id": "天31",
-      "reply_doc_id": "天117",
+      "yu_doc_id": "諭31",
+      "reply_doc_id": "奏117",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 12:21",
@@ -724,7 +724,7 @@
         "date_note": "奏摺中明確記載於「本年正月二十五日戌刻」接奉「乾隆五十二年正月初七日」奉上諭，與本件上諭日期及內容完全相合。"
       },
       "yu": {
-        "id": "天31",
+        "id": "諭31",
         "title": "諭閩浙總督常青等務宜鎮定妥辦不可張大其事",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -741,7 +741,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天117",
+        "id": "奏117",
         "title": "為欽奉上諭恭摺覆奏征剿臺匪等事",
         "type": "shangzou",
         "doc_type": "上奏",
@@ -753,7 +753,7 @@
       }
     },
     {
-      "yu_doc_id": "天31",
+      "yu_doc_id": "諭31",
       "reply_doc_id": "硃186",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -767,7 +767,7 @@
         "date_note": "奏摺中明確記載於「二十六日午刻」（即正月二十六日，承接前文正月二十五日之脈絡）接獲正月初七日之上諭。"
       },
       "yu": {
-        "id": "天31",
+        "id": "諭31",
         "title": "諭閩浙總督常青等務宜鎮定妥辦不可張大其事",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -796,7 +796,7 @@
       }
     },
     {
-      "yu_doc_id": "天36",
+      "yu_doc_id": "諭36",
       "reply_doc_id": "硃131",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -810,7 +810,7 @@
         "date_note": "奏摺中僅提及「又接奉上諭」，未載明該上諭之具體頒發日期或收受日期。"
       },
       "yu": {
-        "id": "天36",
+        "id": "諭36",
         "title": "諭閩浙總督常青等巡撫徐嗣曾越制徵調殊屬矜張著傳旨申飭",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -836,7 +836,7 @@
       }
     },
     {
-      "yu_doc_id": "天40",
+      "yu_doc_id": "諭40",
       "reply_doc_id": "硃138",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -850,7 +850,7 @@
         "date_note": "奏摺中「正月二十二日」承前文，為乾隆五十二年正月二十二日。"
       },
       "yu": {
-        "id": "天40",
+        "id": "諭40",
         "title": "諭閩浙總督常青不可泄漏調任消息並勿稍存觀望",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -876,8 +876,8 @@
       }
     },
     {
-      "yu_doc_id": "天43",
-      "reply_doc_id": "天108",
+      "yu_doc_id": "諭43",
+      "reply_doc_id": "奏108",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 12:38",
@@ -890,7 +890,7 @@
         "date_note": "奏摺中提及「本年正月二十四日敬奉硃批……同日，承准大學士公阿桂、大學士和珅字寄……奉上諭」，故收受日期為正月二十四日。"
       },
       "yu": {
-        "id": "天43",
+        "id": "諭43",
         "title": "諭兩廣總督孫士毅毋庸親往潮州",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -903,7 +903,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天108",
+        "id": "奏108",
         "title": "為遵旨起程回省恭摺奏覆",
         "type": "shangzou",
         "doc_type": "上奏",
@@ -915,7 +915,7 @@
       }
     },
     {
-      "yu_doc_id": "天43",
+      "yu_doc_id": "諭43",
       "reply_doc_id": "硃160",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -929,7 +929,7 @@
         "date_note": "奏摺中記載「本年正月二十四日敬奉硃批……同日，接奉廷寄」，故接收日期為正月二十四日。"
       },
       "yu": {
-        "id": "天43",
+        "id": "諭43",
         "title": "諭兩廣總督孫士毅毋庸親往潮州",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -954,7 +954,7 @@
       }
     },
     {
-      "yu_doc_id": "天47",
+      "yu_doc_id": "諭47",
       "reply_doc_id": "硃143",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -968,7 +968,7 @@
         "date_note": "奏摺中「正月二十五日」與「正月十四日」雖未明寫年份，但由上下文及歷史背景可知為乾隆五十二年。"
       },
       "yu": {
-        "id": "天47",
+        "id": "諭47",
         "title": "諭閩浙總督常青等痛剿抗拒者並著水陸提督速奏抵臺各情",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -996,7 +996,7 @@
       }
     },
     {
-      "yu_doc_id": "天47",
+      "yu_doc_id": "諭47",
       "reply_doc_id": "硃217",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1010,7 +1010,7 @@
         "date_note": "奏摺中明確記載於「二月初八日午刻」接獲「正月十四日」之廷寄上諭，與本上諭日期完全相符。"
       },
       "yu": {
-        "id": "天47",
+        "id": "諭47",
         "title": "諭閩浙總督常青等痛剿抗拒者並著水陸提督速奏抵臺各情",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1038,7 +1038,7 @@
       }
     },
     {
-      "yu_doc_id": "天51",
+      "yu_doc_id": "諭51",
       "reply_doc_id": "硃144",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1052,7 +1052,7 @@
         "date_note": "奏摺內文先提及「又於二十六日接奉正月十五日上諭」，後於附片中再提及「茲又欽奉上諭：『籌及要犯家屬在内地者必多，飭俟事竣查辦。』」，均指同一日（正月十五日）之廷寄上諭。"
       },
       "yu": {
-        "id": "天51",
+        "id": "諭51",
         "title": "諭閩浙總督常青審辦楊振國等其首要家屬容後拿辦",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1080,8 +1080,8 @@
       }
     },
     {
-      "yu_doc_id": "天51",
-      "reply_doc_id": "天146",
+      "yu_doc_id": "諭51",
+      "reply_doc_id": "硃146",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 12:42",
@@ -1094,7 +1094,7 @@
         "date_note": "奏摺中提及「於正月二十八日奉到硃批，並承准大學士公阿、大學士和字寄，乾隆五十二年正月十五日奉上諭」，故收文日為正月二十八日，發文日為正月十五日。"
       },
       "yu": {
-        "id": "天51",
+        "id": "諭51",
         "title": "諭閩浙總督常青審辦楊振國等其首要家屬容後拿辦",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1110,7 +1110,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天146",
+        "id": "硃146",
         "title": "為欽奉上諭嚴行搜捕楊振國等家屬情形事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -1122,7 +1122,7 @@
       }
     },
     {
-      "yu_doc_id": "天51",
+      "yu_doc_id": "諭51",
       "reply_doc_id": "硃217",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1136,7 +1136,7 @@
         "date_note": "奏摺開頭提及於二月初八日午刻接准廷寄，內含正月十五日上諭。"
       },
       "yu": {
-        "id": "天51",
+        "id": "諭51",
         "title": "諭閩浙總督常青審辦楊振國等其首要家屬容後拿辦",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1164,8 +1164,8 @@
       }
     },
     {
-      "yu_doc_id": "天52",
-      "reply_doc_id": "天146",
+      "yu_doc_id": "諭52",
+      "reply_doc_id": "硃146",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 12:42",
@@ -1178,7 +1178,7 @@
         "date_note": "奏摺中「正月二十八日奉到」之「正月」承前文「本年正月初二日」而來，故為乾隆五十二年正月二十八日。"
       },
       "yu": {
-        "id": "天52",
+        "id": "諭52",
         "title": "諭湖廣總督李侍堯將楊振國等家屬於撤兵後再行緣坐",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1191,7 +1191,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天146",
+        "id": "硃146",
         "title": "為欽奉上諭嚴行搜捕楊振國等家屬情形事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -1203,7 +1203,7 @@
       }
     },
     {
-      "yu_doc_id": "天53",
+      "yu_doc_id": "諭53",
       "reply_doc_id": "硃185",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1217,7 +1217,7 @@
         "date_note": "具奏人於乾隆五十二年正月二十九日回省途中接准正月十八日之廷寄上諭。"
       },
       "yu": {
-        "id": "天53",
+        "id": "諭53",
         "title": "諭兩廣總督孫士毅將回潮民人收恤安置毋須拘管",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1242,7 +1242,7 @@
       }
     },
     {
-      "yu_doc_id": "天57",
+      "yu_doc_id": "諭57",
       "reply_doc_id": "硃183",
       "relation": "reply_to_yu",
       "match_level": "partial",
@@ -1256,7 +1256,7 @@
         "date_note": "奏摺中未寫明上諭發布之具體日期（僅以「奉上諭」引入），但明確記載於乾隆五十二年二月初四日於歸善途次接奉該上諭。"
       },
       "yu": {
-        "id": "天57",
+        "id": "諭57",
         "title": "諭兩廣總督孫士毅查拿天地會起會人洪二房等",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1281,7 +1281,7 @@
       }
     },
     {
-      "yu_doc_id": "天56",
+      "yu_doc_id": "諭56",
       "reply_doc_id": "硃173",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1295,7 +1295,7 @@
         "date_note": "回奏官員於二月初二日接准正月二十日之上諭，日期與本件上諭完全相符。"
       },
       "yu": {
-        "id": "天56",
+        "id": "諭56",
         "title": "諭閩浙總督常青等拿獲嚴煙一併解京並調度應辦之事",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1321,8 +1321,8 @@
       }
     },
     {
-      "yu_doc_id": "天60",
-      "reply_doc_id": "天142",
+      "yu_doc_id": "諭60",
+      "reply_doc_id": "奏142",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-12 12:44",
@@ -1335,7 +1335,7 @@
         "date_note": "奏摺中提及「隆五十二年正月二十一日奉上諭」，「隆」字為「乾隆」之脫漏。收受日期為「二月初七日」，即孫士毅自潮州回抵省城之次日。"
       },
       "yu": {
-        "id": "天60",
+        "id": "諭60",
         "title": "諭兩廣總督孫士毅速回省城勿過張皇輕爲調遣",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1353,7 +1353,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天142",
+        "id": "奏142",
         "title": "為跪奉聖訓恭摺奏覆撤兵歸五事",
         "type": "shangzou",
         "doc_type": "上奏",
@@ -1365,7 +1365,7 @@
       }
     },
     {
-      "yu_doc_id": "天60",
+      "yu_doc_id": "諭60",
       "reply_doc_id": "硃171",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1379,7 +1379,7 @@
         "date_note": "奏摺中「二月初四日」承前文乾隆五十二年之脈絡；「正月二十一日」為上諭發布日，與本電文（天60）日期完全相符。"
       },
       "yu": {
-        "id": "天60",
+        "id": "諭60",
         "title": "諭兩廣總督孫士毅速回省城勿過張皇輕爲調遣",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1409,7 +1409,7 @@
       }
     },
     {
-      "yu_doc_id": "天62",
+      "yu_doc_id": "諭62",
       "reply_doc_id": "硃172",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1423,7 +1423,7 @@
         "date_note": "奏摺中「本年二月初四日，接准正月二十二日欽奉上諭」，「本年」即乾隆五十二年。"
       },
       "yu": {
-        "id": "天62",
+        "id": "諭62",
         "title": "諭欽差湖廣總督李侍堯等徐嗣曾離省往閩安著傳旨申飭",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1450,7 +1450,7 @@
       }
     },
     {
-      "yu_doc_id": "天79",
+      "yu_doc_id": "諭79",
       "reply_doc_id": "硃226",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1464,7 +1464,7 @@
         "date_note": "常青於二月十一日接奉（收到）之諭旨，其內容「現在賊匪被官兵追剿……著李侍堯抵閩後，常青即親自渡臺」即為乾隆五十二年正月二十八日所發之廷寄上諭（天79）。"
       },
       "yu": {
-        "id": "天79",
+        "id": "諭79",
         "title": "諭欽差湖廣總督李侍堯等林爽文部衆星散逃奔內山著常青渡臺盡數搜捕",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1490,7 +1490,7 @@
       }
     },
     {
-      "yu_doc_id": "天82",
+      "yu_doc_id": "諭82",
       "reply_doc_id": "硃226",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1504,7 +1504,7 @@
         "date_note": "奏摺中提到「二月十一日奉到諭旨」，此處「二月十一日」為收受日期（receive_date）。該諭旨內容「令任承恩迅速馳驛來京，候朕面加詢問」與乾隆五十二年一月二十九日（丁亥）之上諭內容完全相合，故判定為同一道上諭之回覆，匹配度為 high。"
       },
       "yu": {
-        "id": "天82",
+        "id": "諭82",
         "title": "諭湖廣總督李侍堯駐扎蚶江常青親自渡臺任承恩速回本任",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1530,7 +1530,7 @@
       }
     },
     {
-      "yu_doc_id": "天84",
+      "yu_doc_id": "諭84",
       "reply_doc_id": "硃226",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1544,7 +1544,7 @@
         "date_note": "奏摺中引用「即令任承恩迅速馳驛來京」之諭旨時，雖未直接寫明該上諭的發布日期，但其內容完全對應乾隆五十二年二月初一日（1787/02/01）上諭中關於任承恩進京面詢的指示。因其引用文字與本上諭高度吻合，判定為 high。"
       },
       "yu": {
-        "id": "天84",
+        "id": "諭84",
         "title": "諭欽差湖廣總督李侍堯等於濱海口岸嚴拿回返內地天地會人衆",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1571,7 +1571,7 @@
       }
     },
     {
-      "yu_doc_id": "天84",
+      "yu_doc_id": "諭84",
       "reply_doc_id": "硃249",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1585,7 +1585,7 @@
         "date_note": "奏摺開頭提及「欽奉上諭：『以臺灣此時情形又與前日不同，惟以嚴拿逸匪為要。』等因」，後文敘及「臣于二月十二日欽奉諭旨，飭令臣親〔視〕其地方緊要，間一親往各處搜查」，此處二月十二日為收受該上諭之日期。"
       },
       "yu": {
-        "id": "天84",
+        "id": "諭84",
         "title": "諭欽差湖廣總督李侍堯等於濱海口岸嚴拿回返內地天地會人衆",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1612,7 +1612,7 @@
       }
     },
     {
-      "yu_doc_id": "天89",
+      "yu_doc_id": "諭89",
       "reply_doc_id": "硃226",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1626,7 +1626,7 @@
         "date_note": "奏摺中所稱「二月十六欽奉諭旨」之「二月十六」為常青「接奉」諭旨之日期（即收到日），其所引內容（瑚圖里功過相抵、郡城速建城垣）與乾隆五十二年二月初四日（天89）上諭完全相合，故判定為 high。"
       },
       "yu": {
-        "id": "天89",
+        "id": "諭89",
         "title": "諭閩浙總督李侍堯等擒獲首要解京審辦並速建郡城",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1652,7 +1652,7 @@
       }
     },
     {
-      "yu_doc_id": "天100",
+      "yu_doc_id": "諭100",
       "reply_doc_id": "奏204",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1666,7 +1666,7 @@
         "date_note": "奏摺內稱「本日戌刻，又准二月初七日廷寄」，「本日」承前文為二月十九日，故收文日為二月十九日。"
       },
       "yu": {
-        "id": "天100",
+        "id": "諭100",
         "title": "諭閩浙總督李侍堯等於事竣後徹底究查天地會",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1691,7 +1691,7 @@
       }
     },
     {
-      "yu_doc_id": "天116",
+      "yu_doc_id": "諭116",
       "reply_doc_id": "奏266",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1705,7 +1705,7 @@
         "date_note": "奏摺中提及「二月十一日奉上諭」，此日期與本上諭發布日（乾隆五十二年二月十一日）完全相符。該覆奏係經由督臣常青咨開轉交閱看並遵旨回奏。"
       },
       "yu": {
-        "id": "天116",
+        "id": "諭116",
         "title": "諭內閣福建提督黃仕簡任承恩安坐郡城著傳旨嚴行申飭迅速復奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1731,7 +1731,7 @@
       }
     },
     {
-      "yu_doc_id": "天117",
+      "yu_doc_id": "諭117",
       "reply_doc_id": "硃297",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1745,7 +1745,7 @@
         "date_note": "奏摺中明確記載於「三月初四日」接奉「二月十二日」之廷寄上諭，與本篇上諭日期完全相符。"
       },
       "yu": {
-        "id": "天117",
+        "id": "諭117",
         "title": "諭內閣將黃仕簡任承恩再嚴行申飭令明白回奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1771,7 +1771,7 @@
       }
     },
     {
-      "yu_doc_id": "天132",
+      "yu_doc_id": "諭132",
       "reply_doc_id": "奏205",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1785,7 +1785,7 @@
         "date_note": "具奏人於乾隆五十二年二月二十六日接准廷寄，上諭發布於乾隆五十二年二月十四日。"
       },
       "yu": {
-        "id": "天132",
+        "id": "諭132",
         "title": "諭兩廣總督孫士毅仍往潮州一帶督緝天地會",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1810,7 +1810,7 @@
       }
     },
     {
-      "yu_doc_id": "天142",
+      "yu_doc_id": "諭142",
       "reply_doc_id": "硃249",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1824,7 +1824,7 @@
         "date_note": "奏摺中提到「臣于二月十二日欽奉諭旨...」，此二月十二日為農曆（公曆1787年3月1日）。而奏摺開頭提及「欽奉上諭：『以臺灣此時情形又與前日不同，...』」並未直接寫明該上諭的發布日期（即乾隆五十二年二月十七日），但其內容確為回應此道上諭，且徐氏於二月二十八日（公曆3月17日）起程前往海口一帶搜捕，與此道上諭之催促完全相合。"
       },
       "yu": {
-        "id": "天142",
+        "id": "諭142",
         "title": "諭福建巡撫徐嗣曾即速赴海口一帶搜捕逃返內地天地會衆",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1849,7 +1849,7 @@
       }
     },
     {
-      "yu_doc_id": "天137",
+      "yu_doc_id": "諭137",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1863,7 +1863,7 @@
         "date_note": "常青於三月初九日抵達臺灣府城，在此之前的二月十七日（應為二月十七日所發之諭旨，於其後某日）在泉州府奉到該諭旨。"
       },
       "yu": {
-        "id": "天137",
+        "id": "諭137",
         "title": "諭湖廣總督常青等傳旨嚴行申飭黃仕簡任承恩俾帶罪圖功",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1891,7 +1891,7 @@
       }
     },
     {
-      "yu_doc_id": "天157",
+      "yu_doc_id": "諭157",
       "reply_doc_id": "硃323",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1905,7 +1905,7 @@
         "date_note": "奏摺中明確記載於「三月十七日」接到「二月二十二日」奉上諭，日期與本篇上諭完全吻合。"
       },
       "yu": {
-        "id": "天157",
+        "id": "諭157",
         "title": "諭欽差湖廣總督常青加恩獎勵柴大紀郝壯猷摘去黃仕簡任承恩花翎",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1931,7 +1931,7 @@
       }
     },
     {
-      "yu_doc_id": "天160",
+      "yu_doc_id": "諭160",
       "reply_doc_id": "奏232",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1945,7 +1945,7 @@
         "date_note": "奏摺中稱「本月初七日奉到二月二十五日廷寄上諭」，「本月」指乾隆五十二年三月。"
       },
       "yu": {
-        "id": "天160",
+        "id": "諭160",
         "title": "諭欽差湖廣總督常青等督辦諸務應堅持定見持重辦理",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -1971,7 +1971,7 @@
       }
     },
     {
-      "yu_doc_id": "天160",
+      "yu_doc_id": "諭160",
       "reply_doc_id": "硃268",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -1985,7 +1985,7 @@
         "date_note": "奏摺中稱「本月初七日奉到」，結合奏摺日期為「乾隆五十二年三月初八日」，可知「本月」指三月，故收文日為三月初七日。"
       },
       "yu": {
-        "id": "天160",
+        "id": "諭160",
         "title": "諭欽差湖廣總督常青等督辦諸務應堅持定見持重辦理",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2011,7 +2011,7 @@
       }
     },
     {
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "reply_doc_id": "奏245",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2025,7 +2025,7 @@
         "date_note": "具奏人常青於三月初十日准兩廣總督孫士毅轉交，接獲此件乾隆五十二年二月二十七日奉發之廷寄上諭。"
       },
       "yu": {
-        "id": "天163",
+        "id": "諭163",
         "title": "諭欽差湖廣總督常青等粵省所調官兵未便全撤應酌量留駐交界處所",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2052,7 +2052,7 @@
       }
     },
     {
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "reply_doc_id": "奏253",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2066,7 +2066,7 @@
         "date_note": ""
       },
       "yu": {
-        "id": "天163",
+        "id": "諭163",
         "title": "諭欽差湖廣總督常青等粵省所調官兵未便全撤應酌量留駐交界處所",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2093,7 +2093,7 @@
       }
     },
     {
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "reply_doc_id": "硃276",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2107,7 +2107,7 @@
         "date_note": "奏摺中稱「臣昨接奉諭旨」，該摺上奏於乾隆五十二年三月初十日（1787/03/10），故「昨日」即為三月初九日（1787/03/09）。此處接奉之諭旨即為乾隆五十二年二月二十七日之上諭（天163）。"
       },
       "yu": {
-        "id": "天163",
+        "id": "諭163",
         "title": "諭欽差湖廣總督常青等粵省所調官兵未便全撤應酌量留駐交界處所",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2134,7 +2134,7 @@
       }
     },
     {
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "reply_doc_id": "硃282",
       "relation": "reply_to_yu",
       "match_level": "partial",
@@ -2148,7 +2148,7 @@
         "date_note": "奏摺中僅提及於三月十三日「承准廷寄」，未載明該上諭之具體頒發日期（即乾隆五十二年二月二十七日），故 issue_date 歸為未明，match_level 歸為 partial。"
       },
       "yu": {
-        "id": "天163",
+        "id": "諭163",
         "title": "諭欽差湖廣總督常青等粵省所調官兵未便全撤應酌量留駐交界處所",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2175,7 +2175,7 @@
       }
     },
     {
-      "yu_doc_id": "天188",
+      "yu_doc_id": "諭188",
       "reply_doc_id": "奏275",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2189,7 +2189,7 @@
         "date_note": "奏摺內文提及「三月二十一日承准...奉上諭」，故收文日期為三月二十一日。"
       },
       "yu": {
-        "id": "天188",
+        "id": "諭188",
         "title": "諭欽差湖廣總督常青仍遵旨查參二提督並緝拿洪二和尚",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2216,7 +2216,7 @@
       }
     },
     {
-      "yu_doc_id": "天196",
+      "yu_doc_id": "諭196",
       "reply_doc_id": "奏287",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2230,7 +2230,7 @@
         "date_note": "奏摺中「本月十三日」指乾隆五十二年三月十三日；「二十五日」指乾隆五十二年三月二十五日。"
       },
       "yu": {
-        "id": "天196",
+        "id": "諭196",
         "title": "諭欽差湖廣總督常青仍嚴查黃仕簡任承恩並速擒林爽文等",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2256,7 +2256,7 @@
       }
     },
     {
-      "yu_doc_id": "天196",
+      "yu_doc_id": "諭196",
       "reply_doc_id": "硃325",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2270,7 +2270,7 @@
         "date_note": "奏摺中「本月十三日」指乾隆五十二年三月十三日；「二十五日」指乾隆五十二年三月二十五日。"
       },
       "yu": {
-        "id": "天196",
+        "id": "諭196",
         "title": "諭欽差湖廣總督常青仍嚴查黃仕簡任承恩並速擒林爽文等",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2296,7 +2296,7 @@
       }
     },
     {
-      "yu_doc_id": "天163",
+      "yu_doc_id": "諭163",
       "reply_doc_id": "奏234",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2310,7 +2310,7 @@
         "date_note": "奏摺於三月初十日具奏，提及「昨接奉諭旨」，故接收日期為三月初九日（1787年3月9日）。此諭旨內容指引閩浙總督李侍堯於常青赴台後，視情況飛調廣東潮州、碣石兵力接應，與天163上諭指示完全相合。"
       },
       "yu": {
-        "id": "天163",
+        "id": "諭163",
         "title": "諭欽差湖廣總督常青等粵省所調官兵未便全撤應酌量留駐交界處所",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2337,7 +2337,7 @@
       }
     },
     {
-      "yu_doc_id": "天175",
+      "yu_doc_id": "諭175",
       "reply_doc_id": "奏252",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2351,7 +2351,7 @@
         "date_note": "奏摺內稱「月初十日由驛馳奏在案」，隨後提及「前奉諭旨」，且該摺寫於三月十四日，其接奉諭旨日期應為三月初十日或其前後。"
       },
       "yu": {
-        "id": "天175",
+        "id": "諭175",
         "title": "諭欽差湖廣總督常青嚴防林爽文等逸入內山並務獲杜美",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2377,7 +2377,7 @@
       }
     },
     {
-      "yu_doc_id": "天180",
+      "yu_doc_id": "諭180",
       "reply_doc_id": "奏262",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2391,7 +2391,7 @@
         "date_note": "奏摺中僅提及「奉到三月初四日廷寄上諭」，未明確記載收到（接奉）該上諭的具體日期。"
       },
       "yu": {
-        "id": "天180",
+        "id": "諭180",
         "title": "諭欽差湖廣總督常青等到臺後須於奮勉之中加意持重",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2417,7 +2417,7 @@
       }
     },
     {
-      "yu_doc_id": "天145",
+      "yu_doc_id": "諭145",
       "reply_doc_id": "硃250",
       "relation": "reply_to_yu",
       "match_level": "partial",
@@ -2431,7 +2431,7 @@
         "date_note": "奏摺中僅提及「伏讀諭旨」，未載明該諭旨之具體頒發日期（五十二年二月十八日）或接奉日期。"
       },
       "yu": {
-        "id": "天145",
+        "id": "諭145",
         "title": "諭閩浙總督李侍堯等臺灣將弁缺出常青有權辦理題升調補事宜",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2457,7 +2457,7 @@
       }
     },
     {
-      "yu_doc_id": "天160",
+      "yu_doc_id": "諭160",
       "reply_doc_id": "硃270",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2471,7 +2471,7 @@
         "date_note": "閩浙總督李侍堯於三月初八日接准部文，內開二月二十五日奉上諭。"
       },
       "yu": {
-        "id": "天160",
+        "id": "諭160",
         "title": "諭欽差湖廣總督常青等督辦諸務應堅持定見持重辦理",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2497,7 +2497,7 @@
       }
     },
     {
-      "yu_doc_id": "天181",
+      "yu_doc_id": "諭181",
       "reply_doc_id": "硃294",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2511,7 +2511,7 @@
         "date_note": "奏摺中「乾隆五五十二年」顯為「乾隆五十二年」之筆誤。"
       },
       "yu": {
-        "id": "天181",
+        "id": "諭181",
         "title": "諭欽差湖廣總督常青等到臺後應厚集兵力跟蹤追剿",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2537,7 +2537,7 @@
       }
     },
     {
-      "yu_doc_id": "天116",
+      "yu_doc_id": "諭116",
       "reply_doc_id": "硃300",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2551,7 +2551,7 @@
         "date_note": "常青於三月初九日抵達臺灣府城，面晤黃仕簡時將二月十一日之廷寄上諭令其閱看並回奏。"
       },
       "yu": {
-        "id": "天116",
+        "id": "諭116",
         "title": "諭內閣福建提督黃仕簡任承恩安坐郡城著傳旨嚴行申飭迅速復奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2577,7 +2577,7 @@
       }
     },
     {
-      "yu_doc_id": "天184",
+      "yu_doc_id": "諭184",
       "reply_doc_id": "硃324",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2591,7 +2591,7 @@
         "date_note": "奏摺中提及「任承恩現奉諭旨解任」及對黃仕簡、郝壯猷等人的處分，係回應乾隆五十二年三月初八日（1787/03/08）命常青抵臺即傳旨將任承恩解任、黃仕簡解任送回內地之諭旨。因奏摺中未直接具體寫出奉到該步諭旨的日期，故 issue_date 與 receive_date 標註為未明，但內容完全對應，判定為 high。"
       },
       "yu": {
-        "id": "天184",
+        "id": "諭184",
         "title": "諭欽差湖廣總督常青等仍遵前旨據實參奏黃仕簡任承恩",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2814,7 +2814,7 @@
     },
     {
       "yu_doc_id": "硃71",
-      "reply_doc_id": "天108",
+      "reply_doc_id": "奏108",
       "relation": "reply_to_zhu",
       "match_level": "high",
       "confirmed_at": "2026-07-13 09:37",
@@ -2838,7 +2838,7 @@
         "receive_date": "1787/01/13"
       },
       "reply": {
-        "id": "天108",
+        "id": "奏108",
         "title": "為遵旨起程回省恭摺奏覆",
         "type": "shangzou",
         "doc_type": "上奏",
@@ -2960,7 +2960,7 @@
       }
     },
     {
-      "yu_doc_id": "天140",
+      "yu_doc_id": "諭140",
       "reply_doc_id": "奏274",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -2974,7 +2974,7 @@
         "date_note": "李侍堯於三月初二日接准廷寄，內開二月十七日奉上諭，與本上諭日期完全相符。"
       },
       "yu": {
-        "id": "天140",
+        "id": "諭140",
         "title": "諭閩浙總督李侍堯等確查林爽文是否私立年號並將廖東等解京審辦",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -2999,7 +2999,7 @@
       }
     },
     {
-      "yu_doc_id": "天145",
+      "yu_doc_id": "諭145",
       "reply_doc_id": "硃316",
       "relation": "reply_to_yu",
       "match_level": "partial",
@@ -3013,7 +3013,7 @@
         "date_note": "奏摺中僅提及「適接南澳鎮公文，知閩省欽奉諭旨」，未載明該諭旨之具體頒發日期（發布日）或孫士毅接獲該公文之具體日期。"
       },
       "yu": {
-        "id": "天145",
+        "id": "諭145",
         "title": "諭閩浙總督李侍堯等臺灣將弁缺出常青有權辦理題升調補事宜",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3039,7 +3039,7 @@
       }
     },
     {
-      "yu_doc_id": "天104",
+      "yu_doc_id": "諭104",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3058,7 +3058,7 @@
         "date_note": "上諭發布於乾隆五十二年二月七日（廷寄），常青於二月十九日接奉。奏摺中雖未直接書寫「二月初七日奉上諭」，但其引述之「酌免賦稅、紳衿酌予職銜、楊廷樺補授臺灣府知府並帶往臺灣」等內容，完全對應二月初七日上諭（天104）之內容，故判定為 high。"
       },
       "yu": {
-        "id": "天104",
+        "id": "諭104",
         "title": "諭閩浙總督李侍堯等著常青迅速渡臺並申飭黃仕簡任承恩遲延奏報",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3084,7 +3084,7 @@
       }
     },
     {
-      "yu_doc_id": "天108",
+      "yu_doc_id": "諭108",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3103,7 +3103,7 @@
         "date_note": "奏摺中提及「二月二十二日奉到諭旨」，此二月二十二日（1787/04/10）為常青在泉州或途中「收到」該廷寄上諭之日期（因常青於三月初九日才抵達臺灣府城，此處二月二十二日應為其收到日期，而上諭發布日為二月初九日）。"
       },
       "yu": {
-        "id": "天108",
+        "id": "諭108",
         "title": "諭閩浙總督李侍堯將王啓郎等解京並著常青速行渡臺",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3180,7 +3180,7 @@
       }
     },
     {
-      "yu_doc_id": "天99",
+      "yu_doc_id": "諭99",
       "reply_doc_id": "奏190",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3199,7 +3199,7 @@
         "date_note": "奏摺中「二月十七日」承准字寄，依據奏摺上奏日為乾隆五十二年二月二十一日，此二月十七日即為乾隆五十二年二月十七日。"
       },
       "yu": {
-        "id": "天99",
+        "id": "諭99",
         "title": "諭閩浙總督李侍堯等通飭各屬嚴切究辦天地會",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3224,7 +3224,7 @@
       }
     },
     {
-      "yu_doc_id": "天28",
+      "yu_doc_id": "諭28",
       "reply_doc_id": "奏124",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3243,7 +3243,7 @@
         "date_note": "奏摺開頭之「由六百里加緊覆奏」等字樣為前一通廷寄之結尾，隨後即接續引述正月初三日之上諭。"
       },
       "yu": {
-        "id": "天28",
+        "id": "諭28",
         "title": "諭閩浙總督常青等務須同心協力俟大兵到齊夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3268,7 +3268,7 @@
       }
     },
     {
-      "yu_doc_id": "天99",
+      "yu_doc_id": "諭99",
       "reply_doc_id": "奏204",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3287,7 +3287,7 @@
         "date_note": ""
       },
       "yu": {
-        "id": "天99",
+        "id": "諭99",
         "title": "諭閩浙總督李侍堯等通飭各屬嚴切究辦天地會",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3312,7 +3312,7 @@
       }
     },
     {
-      "yu_doc_id": "天140",
+      "yu_doc_id": "諭140",
       "reply_doc_id": "奏208",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3331,7 +3331,7 @@
         "date_note": ""
       },
       "yu": {
-        "id": "天140",
+        "id": "諭140",
         "title": "諭閩浙總督李侍堯等確查林爽文是否私立年號並將廖東等解京審辦",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3356,7 +3356,7 @@
       }
     },
     {
-      "yu_doc_id": "天154",
+      "yu_doc_id": "諭154",
       "reply_doc_id": "奏266",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3375,7 +3375,7 @@
         "date_note": "具奏人任承恩於摺內並列二月十四日與二月二十一日兩道上諭，其中「二月二十一日奉上諭」之日期與本篇上諭發布日（乾隆五十二年二月二十一日）完全相符，且引文「著再傳旨嚴行申飭，仍將近日續行剿賊情形，迅速具奏」亦與本篇上諭結尾文字相合，故判定為 high。"
       },
       "yu": {
-        "id": "天154",
+        "id": "諭154",
         "title": "諭福建水陸提督黃仕簡等勿再仍前延緩致乾重戾",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3400,7 +3400,7 @@
       }
     },
     {
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "reply_doc_id": "奏266",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3419,7 +3419,7 @@
         "date_note": "任承恩係自督臣常青之咨文（抄件）中獲悉此上諭。"
       },
       "yu": {
-        "id": "天113",
+        "id": "諭113",
         "title": "諭閩浙總督李侍堯等著常青接旨即速行渡臺",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3444,7 +3444,7 @@
       }
     },
     {
-      "yu_doc_id": "天104",
+      "yu_doc_id": "諭104",
       "reply_doc_id": "奏266",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3463,7 +3463,7 @@
         "date_note": "奏摺中明確記載於「乾隆五十二年二月初七日奉上諭」，與上諭日期完全吻合。"
       },
       "yu": {
-        "id": "天104",
+        "id": "諭104",
         "title": "諭閩浙總督李侍堯等著常青迅速渡臺並申飭黃仕簡任承恩遲延奏報",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3489,8 +3489,8 @@
       }
     },
     {
-      "yu_doc_id": "天28",
-      "reply_doc_id": "天113",
+      "yu_doc_id": "諭28",
+      "reply_doc_id": "硃113",
       "relation": "reply_to_yu",
       "match_level": "high",
       "confirmed_at": "2026-07-14 02:06",
@@ -3508,7 +3508,7 @@
         "date_note": "奏摺上奏於乾隆五十二年正月十四日，文中「十四日子刻」指正月十四日。"
       },
       "yu": {
-        "id": "天28",
+        "id": "諭28",
         "title": "諭閩浙總督常青等務須同心協力俟大兵到齊夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3521,7 +3521,7 @@
         "receive_date": null
       },
       "reply": {
-        "id": "天113",
+        "id": "硃113",
         "title": "為奏聞提臣等赴臺並飭沿海官員嚴密巡查事",
         "type": "zhupi",
         "doc_type": "硃批",
@@ -3533,7 +3533,7 @@
       }
     },
     {
-      "yu_doc_id": "天52",
+      "yu_doc_id": "諭52",
       "reply_doc_id": "硃217",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3552,7 +3552,7 @@
         "date_note": "奏摺原文「五五十二年」顯為「五十二年」之筆誤或重字。"
       },
       "yu": {
-        "id": "天52",
+        "id": "諭52",
         "title": "諭湖廣總督李侍堯將楊振國等家屬於撤兵後再行緣坐",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3577,7 +3577,7 @@
       }
     },
     {
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "reply_doc_id": "硃226",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3596,7 +3596,7 @@
         "date_note": "奏摺中稱「先於二月十一日奉到諭旨」，此日期與上諭發布日相同，故 issue_date 與 receive_date 均為二月十一日。"
       },
       "yu": {
-        "id": "天113",
+        "id": "諭113",
         "title": "諭閩浙總督李侍堯等著常青接旨即速行渡臺",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3621,7 +3621,7 @@
       }
     },
     {
-      "yu_doc_id": "天116",
+      "yu_doc_id": "諭116",
       "reply_doc_id": "硃297",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3640,7 +3640,7 @@
         "date_note": "奏摺中「三月初六日」為接奉廷寄之日期；「二月十一日」為上諭發布之日期，與本上諭日期完全吻合。"
       },
       "yu": {
-        "id": "天116",
+        "id": "諭116",
         "title": "諭內閣福建提督黃仕簡任承恩安坐郡城著傳旨嚴行申飭迅速復奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3666,7 +3666,7 @@
       }
     },
     {
-      "yu_doc_id": "天122",
+      "yu_doc_id": "諭122",
       "reply_doc_id": "硃297",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3685,7 +3685,7 @@
         "date_note": "奏摺中直接指出「二月十三日奉上諭」，與本電（乾隆五十二年二月十三日）之日期完全吻合。"
       },
       "yu": {
-        "id": "天122",
+        "id": "諭122",
         "title": "諭閩浙總督李侍堯等著常青生擒林爽文並驗明王芬首級以絕根株",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3710,7 +3710,7 @@
       }
     },
     {
-      "yu_doc_id": "天119",
+      "yu_doc_id": "諭119",
       "reply_doc_id": "硃297",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3729,7 +3729,7 @@
         "date_note": "奏摺中直接指出「二月十三日奉上諭」，與本電（天119）發布日期乾隆五十二年二月十三日完全吻合。"
       },
       "yu": {
-        "id": "天119",
+        "id": "諭119",
         "title": "諭湖廣總督常青將抵臺後所察黃仕簡任承恩情形復奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3755,7 +3755,7 @@
       }
     },
     {
-      "yu_doc_id": "天129",
+      "yu_doc_id": "諭129",
       "reply_doc_id": "硃297",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3774,7 +3774,7 @@
         "date_note": "奏摺中引用的上諭日期「二月十四日」與本電文上諭發布日（乾隆五十二年二月十四日）完全相符。"
       },
       "yu": {
-        "id": "天129",
+        "id": "諭129",
         "title": "諭閩浙總督李侍堯等務須設法生擒林爽文並將王芬被殺情形確查具奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3799,7 +3799,7 @@
       }
     },
     {
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "reply_doc_id": "硃297",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3818,7 +3818,7 @@
         "date_note": "黃仕簡於三月初六日接奉二月十一日之廷寄上諭。"
       },
       "yu": {
-        "id": "天113",
+        "id": "諭113",
         "title": "諭閩浙總督李侍堯等著常青接旨即速行渡臺",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3843,7 +3843,7 @@
       }
     },
     {
-      "yu_doc_id": "天94",
+      "yu_doc_id": "諭94",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3862,7 +3862,7 @@
         "date_note": "奏摺中未提及該上諭的發布日期（issue_date），僅提及於二月十七日接奉（receive_date）。因其引用的文字與本上諭「林爽文、王芬二犯…務須按名擒拿…解京盡法處治」高度吻合，故判定為 high。"
       },
       "yu": {
-        "id": "天94",
+        "id": "諭94",
         "title": "諭閩浙總督李侍堯務須按名擒戮林爽文等毋使逸入內山",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3888,7 +3888,7 @@
       }
     },
     {
-      "yu_doc_id": "天113",
+      "yu_doc_id": "諭113",
       "reply_doc_id": "硃302",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3907,7 +3907,7 @@
         "date_note": "黃仕簡於三月初十日接奉此旨，係由督臣常青面交閱看。"
       },
       "yu": {
-        "id": "天113",
+        "id": "諭113",
         "title": "諭閩浙總督李侍堯等著常青接旨即速行渡臺",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3932,7 +3932,7 @@
       }
     },
     {
-      "yu_doc_id": "天31",
+      "yu_doc_id": "諭31",
       "reply_doc_id": "奏124",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3951,7 +3951,7 @@
         "date_note": "奏摺中將正月初七日上諭夾敘於正月初三日與十二月二十九日等數道上諭之中，其引述之「正月初七日奉上諭」內容與天31上諭完全吻合。"
       },
       "yu": {
-        "id": "天31",
+        "id": "諭31",
         "title": "諭閩浙總督常青等務宜鎮定妥辦不可張大其事",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -3980,7 +3980,7 @@
       }
     },
     {
-      "yu_doc_id": "天24",
+      "yu_doc_id": "諭24",
       "reply_doc_id": "奏124",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -3999,7 +3999,7 @@
         "date_note": "奏摺中將乾隆五十二年正月初二日、正月初三日、上年十二月二十九日等數道上諭一併抄錄具奏，此處提取與天24（正月初二日）完全相符之段落。"
       },
       "yu": {
-        "id": "天24",
+        "id": "諭24",
         "title": "諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4027,7 +4027,7 @@
       }
     },
     {
-      "yu_doc_id": "天117",
+      "yu_doc_id": "諭117",
       "reply_doc_id": "奏266",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4046,7 +4046,7 @@
         "date_note": "本件上諭發布於乾隆五十二年二月十二日（公曆1787/02/12），而奏摺中所引之「二月二十一日奉上諭」實為內閣或軍機處寄出之廷寄（因公曆與農曆轉換及文書傳遞時間差，奏摺中常將收到或發出之廷寄日期記為二月二十一日，其內容「著再傳旨嚴行申飭」與本件二月十二日上諭完全相合）。"
       },
       "yu": {
-        "id": "天117",
+        "id": "諭117",
         "title": "諭內閣將黃仕簡任承恩再嚴行申飭令明白回奏",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4072,7 +4072,7 @@
       }
     },
     {
-      "yu_doc_id": "天167",
+      "yu_doc_id": "諭167",
       "reply_doc_id": "硃282",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4091,7 +4091,7 @@
         "date_note": "奏摺中僅稱「茲復欽奉諭旨」，未提及該諭旨之具體奉發日期或收到日期。"
       },
       "yu": {
-        "id": "天167",
+        "id": "諭167",
         "title": "諭欽差湖廣總督常青到臺後確查有無謊報軍情並復奏應否添兵",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4117,7 +4117,7 @@
       }
     },
     {
-      "yu_doc_id": "天140",
+      "yu_doc_id": "諭140",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4136,7 +4136,7 @@
         "date_note": "奏摺中未提及此上諭之發布日期（乾隆五十二年二月十七日），僅載於乾隆五十二年三月初九日抵達臺灣府城時奉到該旨。因引述內容與上諭高度吻合，故判定為 high。"
       },
       "yu": {
-        "id": "天140",
+        "id": "諭140",
         "title": "諭閩浙總督李侍堯等確查林爽文是否私立年號並將廖東等解京審辦",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4161,7 +4161,7 @@
       }
     },
     {
-      "yu_doc_id": "天122",
+      "yu_doc_id": "諭122",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4180,7 +4180,7 @@
         "date_note": "奏摺中未提及此上諭之發布日期（issue_date），僅提及於二月二十七日奉到（receive_date）。因其引文內容與乾隆五十二年二月十三日上諭高度吻合，故判定為 high。"
       },
       "yu": {
-        "id": "天122",
+        "id": "諭122",
         "title": "諭閩浙總督李侍堯等著常青生擒林爽文並驗明王芬首級以絕根株",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4205,7 +4205,7 @@
       }
     },
     {
-      "yu_doc_id": "天87",
+      "yu_doc_id": "諭87",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4224,7 +4224,7 @@
         "date_note": "奏摺中僅提及於二月十七日「奉到」諭旨（即收受日期），未明寫該諭旨的發布日期（issue_date）。經比對內容，其引述之「林爽文、王芬二犯...即解京盡法處治」與本上諭（乾隆五十二年二月初二日發布）高度吻合，故判定為 high。"
       },
       "yu": {
-        "id": "天87",
+        "id": "諭87",
         "title": "諭欽差湖廣總督李侍堯預防起事人衆逃入內山並務獲林爽文等",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4252,7 +4252,7 @@
       }
     },
     {
-      "yu_doc_id": "天157",
+      "yu_doc_id": "諭157",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4271,7 +4271,7 @@
         "date_note": "此段為常青抵達臺灣後，合併陳述節次奉到之諭旨。其內容與乾隆五十二年二月二十二日上諭中關於「柴大紀守禦郡城最為出力可嘉」、「黃仕簡、任承恩不親臨行陣、遲延觀望」之旨意高度相符。"
       },
       "yu": {
-        "id": "天157",
+        "id": "諭157",
         "title": "諭欽差湖廣總督常青加恩獎勵柴大紀郝壯猷摘去黃仕簡任承恩花翎",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4297,7 +4297,7 @@
       }
     },
     {
-      "yu_doc_id": "天99",
+      "yu_doc_id": "諭99",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4316,7 +4316,7 @@
         "date_note": "奏摺中僅提及於「二月十九日奉到諭旨」（此為收受日），未明寫該諭旨之發布日期（乾隆五十二年二月六日）。因本上諭正文缺失，但標題為「諭閩浙總督李侍堯等通飭各屬嚴切究辦天地會」，與引文「此等倡教立會…著傳諭李侍堯、常青密訪嚴拿…」內容完全相合，故判定為 high。"
       },
       "yu": {
-        "id": "天99",
+        "id": "諭99",
         "title": "諭閩浙總督李侍堯等通飭各屬嚴切究辦天地會",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4341,7 +4341,7 @@
       }
     },
     {
-      "yu_doc_id": "天100",
+      "yu_doc_id": "諭100",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "high",
@@ -4360,7 +4360,7 @@
         "date_note": "此為常青節次奉到諭旨之覆奏。其於二月二十二日奉到之諭旨，內容為命閩浙總督李侍堯等（常青時任湖廣總督，奉命赴台督辦軍務）於事竣後徹底究查天地會、添弟會，並詳查從前未能切實究辦之督撫及文武員弁，與本上諭「諭閩浙總督李侍堯等於事竣後徹底究查天地會」之主題及受命官員完全相合。因原文僅載收受日期「二月二十二日奉到」，未明寫發布日（乾隆五十二年二月七日），故依據內容判定為 high。"
       },
       "yu": {
-        "id": "天100",
+        "id": "諭100",
         "title": "諭閩浙總督李侍堯等於事竣後徹底究查天地會",
         "type": "shangyu",
         "doc_type": "上諭",
@@ -4385,7 +4385,7 @@
       }
     },
     {
-      "yu_doc_id": "天57",
+      "yu_doc_id": "諭57",
       "reply_doc_id": "硃301",
       "relation": "reply_to_yu",
       "match_level": "partial",
@@ -4404,7 +4404,7 @@
         "date_note": "本上諭（天57）發布於乾隆五十二年一月二十日，內容為「諭兩廣總督孫士毅查拿天地會起會人洪二房等」。常青於二月十九日奉到之諭旨提及「此等倡教立會…著傳諭李侍堯、常青密訪嚴拿」，與本上諭查辦天地會起會人之主旨相符。因原上諭正文缺失，僅能依標題與常青覆奏之內容進行比對，故判定為 partial。"
       },
       "yu": {
-        "id": "天57",
+        "id": "諭57",
         "title": "諭兩廣總督孫士毅查拿天地會起會人洪二房等",
         "type": "shangyu",
         "doc_type": "上諭",
