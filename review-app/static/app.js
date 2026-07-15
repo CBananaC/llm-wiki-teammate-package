@@ -72,6 +72,9 @@ function escapeHtml(value) {
 document.querySelector("#open-app").onclick = () => {
   window.open("/app", "_blank", "noopener");
 };
+document.querySelector("#open-workflow").onclick = () => {
+  window.open("/workflow/", "_blank", "noopener");
+};
 document.querySelector("#toggle-skills").onclick = () => showSkills().catch(err => alert(err.message));
 document.querySelector("#toggle-bundles").onclick = () => showBundles().catch(err => alert(err.message));
 document.querySelector("#drawer-close").onclick = closeDrawer;

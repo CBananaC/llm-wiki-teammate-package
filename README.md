@@ -36,7 +36,8 @@ skills/                     Saved prompts / task specifications
 archives/review-bundles.zip All previous review bundles and large generated outputs
 archives/research-workspace.zip
                             Original/OCR/cleaned source materials, scripts, and docs
-gemini-proxy/               Optional source for Gemini and historical-place tools
+gemini-proxy/               Optional multi-provider AI proxy and historical-place tools
+chatgpt-proxy/              Standalone TokenRouter ChatGPT proxy for Cloud Run
 ```
 
 The full timeline, including the original documents used by the active site, is
@@ -46,10 +47,18 @@ files preserve the editable timeline data and source metadata.
 ## Optional AI tools
 
 The review, edit, export, skills, and saved-bundle functions work locally. AI
-chat, AI extraction, and place lookup additionally require a Gemini proxy URL
-configured in the timeline's Settings panel. Use an approved shared service or
-deploy the included `gemini-proxy/` with your own authorized Google Cloud
-credentials. Never commit credentials, API keys, or `.env` files.
+chat, AI extraction, and place lookup use the included AI proxy. `run-local.py`
+starts it automatically and exposes it through the same local origin, so the
+normal setup does not need a separate proxy URL. The Settings panel supports
+Gemini/Google Cloud, OpenAI GPT, ChatGPT via TokenRouter (`gpt-5.4`),
+Anthropic Claude, DeepSeek, and third-party OpenAI-compatible APIs. Choose a
+provider, then enter that provider's model, API base URL, and API key when
+needed.
+
+API keys entered in the page are held in browser session storage and sent only
+to the configured proxy. Deploy and trust your own HTTPS proxy for shared use,
+or configure keys as proxy environment variables so they never enter the
+browser. Never commit credentials, API keys, or `.env` files.
 
 Map and relationship-graph panels also load public JavaScript libraries and map
 tiles when opened, so they need an internet connection.

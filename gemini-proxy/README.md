@@ -1,8 +1,27 @@
-# Gemini proxy (Cloud Run)
+# Multi-provider AI proxy
 
-A tiny server that lets the timeline's info panel ask Gemini about a document
-**without putting any API key in the browser**. It calls Vertex AI with the
-Cloud Run service account's own credentials.
+This folder keeps its historical `gemini-proxy` name, but the service supports:
+
+- Gemini through the public Gemini API or Vertex AI
+- OpenAI GPT
+- ChatGPT through TokenRouter (`gpt-5.4` by default)
+- Anthropic Claude
+- DeepSeek
+- Third-party OpenAI-compatible APIs
+
+For the existing `deepseek-v3.2-maas` website option, DeepSeek runs through
+Google Cloud's managed global MaaS endpoint using the Cloud Run service
+account. It therefore needs no DeepSeek API key and remains billed through the
+Google Cloud project. The separate `deepseek` provider is retained for users
+who explicitly want to supply a direct DeepSeek API key.
+
+The timeline sends every AI task to the same proxy URL with a `provider` and
+provider-specific `model`. API base URLs and keys can be supplied by the
+browser settings or configured as environment variables on the proxy.
+
+TokenRouter uses the OpenAI-compatible chat-completions route. The included
+defaults target `https://www.tokenrouter.tech/v1`, model `gpt-5.4`, and the
+`max_tokens` request field.
 
 ## Deploy
 
@@ -11,33 +30,72 @@ cd gemini-proxy
 bash deploy.sh
 ```
 
-This uses project `delta-entry-496910-e7`, region `asia-east1`, model
-`gemini-2.5-flash` (the same model as the summarization script). Override with
-env vars, e.g. `MODEL=gemini-2.5-pro REGION=asia-east1 bash deploy.sh`.
+The deploy script configures Vertex AI as the default Gemini backend. Paste the
+printed HTTPS URL into the timeline's AI settings. The other providers do not
+need extra deployment flags when users enter their own key in the page.
 
-The script grants the runtime service account `roles/aiplatform.user` and
-deploys with `--allow-unauthenticated` so the static page can reach it. If you
-prefer authenticated access, remove that flag and front it differently.
+For server-managed credentials, set any of these Cloud Run environment
+variables after deployment:
 
-When it finishes it prints the service URL. Copy that URL into the timeline:
-open a document, in the **互動標註** tab click **⚙ 設定**, paste the URL, save.
-It is remembered in this browser only.
+```text
+GEMINI_API_KEY
+GEMINI_API_BASE_URL
+OPENAI_API_KEY
+OPENAI_BASE_URL
+OPENAI_DEFAULT_MODEL
+TOKENROUTER_API_KEY
+TOKENROUTER_BASE_URL
+TOKENROUTER_DEFAULT_MODEL
+TOKENROUTER_ALLOWED_MODELS
+TOKENROUTER_TOKEN_FIELD
+TOKENROUTER_JSON_MODE
+ANTHROPIC_API_KEY
+ANTHROPIC_BASE_URL
+ANTHROPIC_DEFAULT_MODEL
+DEEPSEEK_API_KEY
+DEEPSEEK_BASE_URL
+DEEPSEEK_DEFAULT_MODEL
+CUSTOM_API_KEY
+CUSTOM_BASE_URL
+CUSTOM_DEFAULT_MODEL
+```
 
-## Endpoint
+Comma-separated `*_ALLOWED_MODELS` variables can provide a model catalog for
+each provider. Set `ENFORCE_MODEL_ALLOWLIST=1` only when requests must be
+limited to that catalog.
 
-`POST /chat` with JSON `{mode, doc_id, doc_type, title, body, rescript, summary, highlight, question}`.
+## Endpoints
 
-- `mode: "summary"` → `{mode, text}` a tighter prose summary.
-- `mode: "divide"`  → `{mode, parts:[{label, summary, excerpt}]}` segmented text.
-- `mode: "ask"`     → `{mode, text}` free-text answer (uses `question`/`highlight`).
+- `GET /` returns health and provider configuration.
+- `GET /providers` returns provider labels, defaults, and fallback models.
+- `POST /models` accepts `{provider, api_base, api_key}` and discovers models
+  when the upstream service exposes a model-list endpoint.
+- `POST /chat` accepts the document task plus `{provider, model, api_base,
+  api_key}`.
 
-`GET /` is a health check returning the active model/project/location.
+The existing task modes such as `summary`, `divide`, `ask`, event extraction,
+and source tracing all use the selected provider through this common route.
 
-## Security notes
+## Security
 
-- No key is exposed to the browser; auth is the Cloud Run service account.
-- `ALLOW_ORIGIN` defaults to `*`. A local `file://` page sends `Origin: null`,
-  so `*` is the simplest. Set it to a specific origin if you host the page.
-- Cost: each click is one Gemini call. `gemini-2.5-flash` is inexpensive, but
-  the endpoint is public when `--allow-unauthenticated`; delete the service when
-  not in use, or add auth, if cost/abuse is a concern.
+- Use an HTTPS proxy you control. A proxy operator can see any key sent from
+  browser settings.
+- Browser-entered keys are kept in session storage, so they are cleared when
+  the tab session ends. Environment-configured keys never enter the browser.
+- For a server-managed TokenRouter key, export `TOKENROUTER_API_KEY` before
+  running `bash deploy.sh`; the deploy script passes it to Cloud Run without
+  storing it in the repository. For a local-only setup, export the same
+  variable before `python3 run-local.py`, or enter the key in the TokenRouter
+  settings panel.
+- API base URLs are restricted to public HTTPS endpoints by default. Set
+  `ALLOW_PRIVATE_API_BASES=1` only for a trusted private deployment.
+- `ALLOW_ORIGIN` defaults to `*`. Set it to the review site's origin when the
+  site is hosted at a stable URL.
+- An unauthenticated Cloud Run service using Vertex AI can incur cost. Add
+  authentication or restrict access before sharing the proxy publicly.
+
+## Local verification
+
+```bash
+python -m unittest discover -s tests -v
+```

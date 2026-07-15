@@ -1,8 +1,10 @@
-"""Cloud Run proxy: lets the local timeline page ask Gemini (Vertex AI) about a
-document, without exposing any API key to the browser.
+"""Provider-neutral AI proxy for the local timeline review page.
 
-It authenticates to Vertex AI using the Cloud Run service account (Application
-Default Credentials) and exposes one POST endpoint, /chat, with CORS enabled.
+The browser sends provider/model identifiers to one POST /chat endpoint. API
+keys and custom endpoint URLs can come from the request or server environment.
+Gemini can use either its public API or Vertex AI with Application Default
+Credentials. GPT, Claude, DeepSeek, and third-party OpenAI-compatible services
+use their native or compatible HTTP APIs.
 
 Request JSON:
   {
@@ -12,9 +14,11 @@ Request JSON:
     "title": "...",
     "body": "<original memorial text>",
     "rescript": "<硃批 text, optional>",
-    "summary": { ...Gemini structured summary... },   # optional context
+    "summary": { ...existing structured summary... }, # optional context
     "highlight": "currently highlighted quotation",     # optional
-    "question": "free-text question"                    # for mode=ask
+    "question": "free-text question",                   # for mode=ask
+    "provider": "gemini" | "openai" | "anthropic" | "custom",
+    "model": "provider model identifier"
   }
 
 Response JSON:
@@ -23,6 +27,9 @@ Response JSON:
 """
 import json
 import os
+import ipaddress
+import socket
+from urllib.parse import urlparse
 
 import google.auth
 import google.auth.transport.requests
@@ -30,24 +37,37 @@ import requests
 from flask import Flask, jsonify, request
 
 app = Flask(__name__)
+app.config["MAX_CONTENT_LENGTH"] = int(os.environ.get("MAX_REQUEST_BYTES", "8388608"))
 
 LOCATION = os.environ.get("VERTEX_LOCATION", "global")
-MODEL = os.environ.get("GEMINI_MODEL", "gemini-2.5-flash")
+# MODEL is provider-neutral; keep GEMINI_MODEL as a compatibility fallback.
+MODEL = os.environ.get("MODEL") or os.environ.get("GEMINI_MODEL", "deepseek-v3.2-maas")
+DEFAULT_PROVIDER = os.environ.get("AI_DEFAULT_PROVIDER", "gemini").strip().lower()
 ALLOW_ORIGIN = os.environ.get("ALLOW_ORIGIN", "*")
+REQUEST_TIMEOUT = int(os.environ.get("REQUEST_TIMEOUT_SECONDS", "120"))
 # Default to each model's true max output so dense event/provenance JSON is never truncated.
 MAX_TOKENS = int(os.environ.get("MAX_OUTPUT_TOKENS", "65536"))
 # Per-model output ceilings (Vertex rejects requests above these).
 MODEL_MAX_OUT = {
+    "deepseek-v3.2-maas": 65536,
     "gemini-1.5-flash-002": 8192, "gemini-1.5-pro-002": 8192,
     "gemini-2.0-flash-001": 8192,
     "gemini-2.5-flash": 65536, "gemini-2.5-pro": 65536,
     "gemini-3.5-flash": 65536, "gemini-3.1-pro-preview": 65536,
+    "gpt-4.1": 32768, "gpt-4.1-mini": 32768,
+    "gpt-4o": 16384, "gpt-4o-mini": 16384,
+    "deepseek-chat": 8192, "deepseek-reasoner": 8192,
 }
 
-_CREDS, _ADC_PROJECT = google.auth.default(
-    scopes=["https://www.googleapis.com/auth/cloud-platform"]
-)
-PROJECT = os.environ.get("GCP_PROJECT") or _ADC_PROJECT
+PROVIDER_DEFAULT_MAX_OUT = {
+    "openai": 32768,
+    "anthropic": 64000,
+    "deepseek": 8192,
+    "custom": 16384,
+}
+
+PROJECT = os.environ.get("GCP_PROJECT") or ""
+_CREDS = None
 
 SYSTEM = (
     "You are assisting historical research on the Lin Shuangwen (林爽文) war of "
@@ -57,21 +77,169 @@ SYSTEM = (
 )
 
 
-def _token() -> str:
-    _CREDS.refresh(google.auth.transport.requests.Request())
-    return _CREDS.token
-
-
-ALLOWED_MODELS = {
+DEFAULT_GEMINI_MODELS = {
+    # DeepSeek V3.2 is also available through Google Cloud's managed MaaS
+    # endpoint and uses the same ADC/service-account authentication.
+    "deepseek-v3.2-maas", "deepseek-ai/deepseek-v3.2-maas",
     "gemini-3.1-pro-preview", "gemini-3.5-flash",
     "gemini-2.5-flash", "gemini-2.5-pro",
     "gemini-2.0-flash-001", "gemini-1.5-flash-002", "gemini-1.5-pro-002",
 }
 
+DEFAULT_OPENAI_MODELS = [
+    "gpt-4.1", "gpt-4.1-mini", "gpt-4o", "gpt-4o-mini",
+]
+
+DEFAULT_ANTHROPIC_MODELS = [
+    "claude-sonnet-4-20250514", "claude-opus-4-20250514",
+    "claude-3-7-sonnet-20250219", "claude-3-5-haiku-20241022",
+]
+
+
+def _env_models(name: str, defaults=()) -> list[str]:
+    raw = os.environ.get(name)
+    values = raw.split(",") if raw is not None else list(defaults)
+    return [value.strip() for value in values if value and value.strip()]
+
+
+PROVIDER_CONFIG = {
+    "gemini": {
+        "label": "Google Cloud (Gemini / DeepSeek)",
+        "default_model": MODEL,
+        "models": _env_models("GEMINI_ALLOWED_MODELS", sorted(DEFAULT_GEMINI_MODELS)),
+    },
+    "openai": {
+        "label": "OpenAI GPT",
+        "default_model": os.environ.get("OPENAI_DEFAULT_MODEL", "gpt-4.1"),
+        "models": _env_models("OPENAI_ALLOWED_MODELS", DEFAULT_OPENAI_MODELS),
+    },
+    "anthropic": {
+        "label": "Anthropic Claude",
+        "default_model": os.environ.get("ANTHROPIC_DEFAULT_MODEL", "claude-sonnet-4-20250514"),
+        "models": _env_models("ANTHROPIC_ALLOWED_MODELS", DEFAULT_ANTHROPIC_MODELS),
+    },
+    "deepseek": {
+        "label": "DeepSeek",
+        "default_model": os.environ.get("DEEPSEEK_DEFAULT_MODEL", "deepseek-chat"),
+        "models": _env_models("DEEPSEEK_ALLOWED_MODELS", ["deepseek-chat", "deepseek-reasoner"]),
+    },
+    "custom": {
+        "label": os.environ.get("CUSTOM_PROVIDER_LABEL", "Third-party (OpenAI compatible)"),
+        "default_model": os.environ.get("CUSTOM_DEFAULT_MODEL", ""),
+        "models": _env_models("CUSTOM_ALLOWED_MODELS"),
+    },
+}
+
+
+def _google_credentials():
+    global _CREDS, PROJECT
+    if _CREDS is None:
+        _CREDS, adc_project = google.auth.default(
+            scopes=["https://www.googleapis.com/auth/cloud-platform"]
+        )
+        if not PROJECT:
+            PROJECT = adc_project or ""
+    if not PROJECT:
+        raise RuntimeError("Gemini is not configured: set GCP_PROJECT or provide ADC with a project")
+    return _CREDS
+
+
+def _token() -> str:
+    creds = _google_credentials()
+    creds.refresh(google.auth.transport.requests.Request())
+    return creds.token
+
+
+def _provider_enabled(provider: str) -> bool:
+    if provider == "gemini":
+        return True
+    if provider == "openai":
+        return bool(os.environ.get("OPENAI_API_KEY"))
+    if provider == "anthropic":
+        return bool(os.environ.get("ANTHROPIC_API_KEY"))
+    if provider == "deepseek":
+        return bool(os.environ.get("DEEPSEEK_API_KEY"))
+    if provider == "custom":
+        return bool(os.environ.get("CUSTOM_BASE_URL"))
+    return False
+
+
+def _provider_model(provider: str, requested: str | None) -> str:
+    cfg = PROVIDER_CONFIG.get(provider)
+    if not cfg:
+        raise ValueError(f"Unsupported AI provider: {provider}")
+    model = (requested or cfg["default_model"] or "").strip()
+    if not model:
+        raise ValueError(f"No model configured for provider: {provider}")
+    if len(model) > 160 or any(ch in model for ch in "\r\n\0"):
+        raise ValueError("Invalid model identifier")
+    allowed = cfg["models"]
+    if os.environ.get("ENFORCE_MODEL_ALLOWLIST", "0") == "1" and allowed and model not in allowed:
+        raise ValueError(f"Model is not allowed for {provider}: {model}")
+    return model
+
+
+def _provider_max_tokens(provider: str, model: str, requested: int | None) -> int:
+    ceiling = MODEL_MAX_OUT.get(
+        model,
+        PROVIDER_DEFAULT_MAX_OUT.get(provider, MAX_TOKENS),
+    )
+    return min(requested or MAX_TOKENS, ceiling)
+
+
+def _client_value(payload: dict, key: str, limit: int) -> str:
+    value = str(payload.get(key) or "").strip()
+    if len(value) > limit or "\0" in value:
+        raise ValueError(f"Invalid {key}")
+    return value
+
+
+def _validated_base_url(value: str) -> str:
+    value = value.strip().rstrip("/")
+    parsed = urlparse(value)
+    if parsed.scheme not in {"https", "http"} or not parsed.hostname:
+        raise ValueError("API base URL must be an absolute HTTP(S) URL")
+    if parsed.username or parsed.password:
+        raise ValueError("API base URL must not contain credentials")
+    if parsed.scheme != "https" and os.environ.get("ALLOW_INSECURE_API_BASES", "0") != "1":
+        raise ValueError("API base URL must use HTTPS")
+    if os.environ.get("ALLOW_PRIVATE_API_BASES", "0") != "1":
+        host = parsed.hostname.lower()
+        if host in {"localhost", "metadata.google.internal"} or host.endswith(".local"):
+            raise ValueError("Private API base URLs are disabled")
+        try:
+            addresses = {item[4][0] for item in socket.getaddrinfo(host, parsed.port or 443, type=socket.SOCK_STREAM)}
+        except socket.gaierror as exc:
+            raise ValueError("API base hostname could not be resolved") from exc
+        for address in addresses:
+            ip = ipaddress.ip_address(address)
+            if any((ip.is_private, ip.is_loopback, ip.is_link_local, ip.is_multicast,
+                    ip.is_reserved, ip.is_unspecified)):
+                raise ValueError("Private API base URLs are disabled")
+    return value
+
+
+def _provider_access(payload: dict, provider: str) -> tuple[str, str]:
+    client_base = _client_value(payload, "api_base", 2048)
+    client_key = _client_value(payload, "api_key", 4096)
+    defaults = {
+        "gemini": (os.environ.get("GEMINI_API_BASE_URL", "https://generativelanguage.googleapis.com/v1beta"), os.environ.get("GEMINI_API_KEY", "")),
+        "openai": (os.environ.get("OPENAI_BASE_URL", "https://api.openai.com/v1"), os.environ.get("OPENAI_API_KEY", "")),
+        "anthropic": (os.environ.get("ANTHROPIC_BASE_URL", "https://api.anthropic.com/v1"), os.environ.get("ANTHROPIC_API_KEY", "")),
+        "deepseek": (os.environ.get("DEEPSEEK_BASE_URL", "https://api.deepseek.com"), os.environ.get("DEEPSEEK_API_KEY", "")),
+        "custom": (os.environ.get("CUSTOM_BASE_URL", ""), os.environ.get("CUSTOM_API_KEY", "")),
+    }
+    base, api_key = defaults[provider]
+    base = client_base or base
+    api_key = client_key or api_key
+    if not base:
+        raise RuntimeError(f"{provider} API base URL is not configured")
+    return _validated_base_url(base), api_key
+
 
 def _vertex(user_text: str, json_out: bool, model: str | None = None,
             max_tokens: int | None = None) -> str:
-    use_model = model if (model in ALLOWED_MODELS) else MODEL
+    use_model = model or MODEL
     if LOCATION == "global":
         host = "aiplatform.googleapis.com"
         loc = "global"
@@ -99,11 +267,235 @@ def _vertex(user_text: str, json_out: bool, model: str | None = None,
             "Content-Type": "application/json; charset=utf-8",
         },
         data=json.dumps(body).encode("utf-8"),
-        timeout=120,
+        timeout=REQUEST_TIMEOUT,
     )
     r.raise_for_status()
     data = r.json()
     return data["candidates"][0]["content"]["parts"][0]["text"]
+
+
+def _vertex_deepseek(user_text: str, json_out: bool, model: str,
+                     max_tokens: int | None = None) -> str:
+    """Call managed DeepSeek V3.2 through Google Cloud using ADC billing."""
+    canonical = model.removeprefix("deepseek-ai/")
+    if canonical != "deepseek-v3.2-maas":
+        raise ValueError(f"Unsupported Google Cloud DeepSeek model: {model}")
+    url = (
+        f"https://aiplatform.googleapis.com/v1/projects/{PROJECT}/locations/global"
+        "/endpoints/openapi/chat/completions"
+    )
+    body = {
+        "model": f"deepseek-ai/{canonical}",
+        "messages": [
+            {"role": "system", "content": SYSTEM},
+            {"role": "user", "content": user_text},
+        ],
+        "temperature": 0.2,
+        "top_p": 0.9,
+        "max_tokens": min(max_tokens or MAX_TOKENS, MODEL_MAX_OUT[canonical]),
+        # Bulk document work does not need hidden chain-of-thought tokens.
+        "chat_template_kwargs": {"thinking": False},
+    }
+    if json_out:
+        body["response_format"] = {"type": "json_object"}
+    r = requests.post(
+        url,
+        headers={
+            "Authorization": f"Bearer {_token()}",
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        data=json.dumps(body).encode("utf-8"),
+        timeout=REQUEST_TIMEOUT,
+    )
+    r.raise_for_status()
+    data = r.json()
+    choices = data.get("choices") or []
+    if not choices:
+        raise RuntimeError("Google Cloud DeepSeek returned no completion choices")
+    text = _message_text((choices[0].get("message") or {}).get("content"))
+    if not text:
+        raise RuntimeError("Google Cloud DeepSeek returned an empty completion")
+    return text
+
+
+def _message_text(content) -> str:
+    if isinstance(content, str):
+        return content
+    if isinstance(content, list):
+        parts = []
+        for item in content:
+            if isinstance(item, str):
+                parts.append(item)
+            elif isinstance(item, dict) and isinstance(item.get("text"), str):
+                parts.append(item["text"])
+        return "".join(parts)
+    return ""
+
+
+def _gemini_api(user_text: str, json_out: bool, *, base_url: str,
+                api_key: str, model: str, max_tokens: int | None) -> str:
+    if not api_key:
+        raise RuntimeError("Gemini API key is not configured")
+    url = f"{base_url.rstrip('/')}/models/{model}:generateContent"
+    generation = {
+        "temperature": 0.2,
+        "topP": 0.9,
+        "maxOutputTokens": max_tokens or MODEL_MAX_OUT.get(model, MAX_TOKENS),
+    }
+    if json_out:
+        generation["responseMimeType"] = "application/json"
+    body = {
+        "systemInstruction": {"parts": [{"text": SYSTEM}]},
+        "contents": [{"role": "user", "parts": [{"text": user_text}]}],
+        "generationConfig": generation,
+    }
+    r = requests.post(
+        url,
+        headers={
+            "x-goog-api-key": api_key,
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        data=json.dumps(body).encode("utf-8"),
+        timeout=REQUEST_TIMEOUT,
+    )
+    r.raise_for_status()
+    data = r.json()
+    return data["candidates"][0]["content"]["parts"][0]["text"]
+
+
+def _chat_completions(user_text: str, json_out: bool, *, base_url: str,
+                      api_key: str, model: str, max_tokens: int | None,
+                      json_mode: bool, token_field: str = "max_tokens") -> str:
+    base = base_url.rstrip("/")
+    url = base if base.endswith("/chat/completions") else base + "/chat/completions"
+    headers = {"Content-Type": "application/json; charset=utf-8"}
+    if api_key:
+        headers["Authorization"] = f"Bearer {api_key}"
+    body = {
+        "model": model,
+        "messages": [
+            {"role": "system", "content": SYSTEM},
+            {"role": "user", "content": user_text},
+        ],
+    }
+    if max_tokens or MAX_TOKENS:
+        body[token_field] = max_tokens or MAX_TOKENS
+    if json_out and json_mode:
+        body["response_format"] = {"type": "json_object"}
+    r = requests.post(
+        url,
+        headers=headers,
+        data=json.dumps(body).encode("utf-8"),
+        timeout=REQUEST_TIMEOUT,
+    )
+    r.raise_for_status()
+    data = r.json()
+    choices = data.get("choices") or []
+    if not choices:
+        raise RuntimeError("Provider returned no completion choices")
+    message = choices[0].get("message") or {}
+    text = _message_text(message.get("content"))
+    # Reasoning models (DeepSeek-R1 style, some third-party aggregators) return an
+    # empty `content` and put the answer in `reasoning_content` / `reasoning`.
+    if not text:
+        text = _message_text(message.get("reasoning_content")) or _message_text(message.get("reasoning"))
+    if not text:
+        raise RuntimeError("Provider returned an empty completion")
+    return text
+
+
+def _anthropic(user_text: str, model: str, max_tokens: int | None = None,
+               *, base_url: str, api_key: str) -> str:
+    base = base_url.rstrip("/")
+    url = base if base.endswith("/messages") else base + "/messages"
+    if not api_key:
+        raise RuntimeError("Anthropic is not configured: set ANTHROPIC_API_KEY")
+    body = {
+        "model": model,
+        "system": SYSTEM,
+        "messages": [{"role": "user", "content": user_text}],
+        "max_tokens": max_tokens or min(MAX_TOKENS, 64000),
+        "temperature": 0.2,
+    }
+    r = requests.post(
+        url,
+        headers={
+            "x-api-key": api_key,
+            "anthropic-version": os.environ.get("ANTHROPIC_API_VERSION", "2023-06-01"),
+            "Content-Type": "application/json; charset=utf-8",
+        },
+        data=json.dumps(body).encode("utf-8"),
+        timeout=REQUEST_TIMEOUT,
+    )
+    r.raise_for_status()
+    text = _message_text(r.json().get("content"))
+    if not text:
+        raise RuntimeError("Anthropic returned an empty message")
+    return text
+
+
+def _generate(user_text: str, json_out: bool, payload: dict,
+              max_tokens: int | None = None) -> str:
+    provider = (payload.get("provider") or DEFAULT_PROVIDER or "gemini").strip().lower()
+    model = _provider_model(provider, payload.get("model"))
+    if provider == "gemini":
+        if model.removeprefix("deepseek-ai/") == "deepseek-v3.2-maas":
+            return _vertex_deepseek(user_text, json_out, model, max_tokens)
+        if payload.get("api_key") or payload.get("api_base") or os.environ.get("GEMINI_API_KEY"):
+            base_url, api_key = _provider_access(payload, provider)
+            return _gemini_api(user_text, json_out, base_url=base_url, api_key=api_key,
+                               model=model, max_tokens=max_tokens)
+        return _vertex(user_text, json_out, model, max_tokens)
+    if provider == "openai":
+        base_url, api_key = _provider_access(payload, provider)
+        if not api_key:
+            raise RuntimeError("OpenAI is not configured: set OPENAI_API_KEY")
+        return _chat_completions(
+            user_text,
+            json_out,
+            base_url=base_url,
+            api_key=api_key,
+            model=model,
+            max_tokens=_provider_max_tokens(provider, model, max_tokens),
+            json_mode=True,
+            token_field=os.environ.get("OPENAI_TOKEN_FIELD", "max_completion_tokens"),
+        )
+    if provider == "anthropic":
+        base_url, api_key = _provider_access(payload, provider)
+        return _anthropic(
+            user_text,
+            model,
+            _provider_max_tokens(provider, model, max_tokens),
+            base_url=base_url,
+            api_key=api_key,
+        )
+    if provider == "deepseek":
+        base_url, api_key = _provider_access(payload, provider)
+        if not api_key:
+            raise RuntimeError("DeepSeek API key is not configured")
+        return _chat_completions(
+            user_text,
+            json_out,
+            base_url=base_url,
+            api_key=api_key,
+            model=model,
+            max_tokens=_provider_max_tokens(provider, model, max_tokens),
+            json_mode=os.environ.get("DEEPSEEK_JSON_MODE", "json_object").lower() == "json_object",
+            token_field=os.environ.get("DEEPSEEK_TOKEN_FIELD", "max_tokens"),
+        )
+    if provider == "custom":
+        base_url, api_key = _provider_access(payload, provider)
+        return _chat_completions(
+            user_text,
+            json_out,
+            base_url=base_url,
+            api_key=api_key,
+            model=model,
+            max_tokens=_provider_max_tokens(provider, model, max_tokens),
+            json_mode=os.environ.get("CUSTOM_JSON_MODE", "prompt").lower() == "json_object",
+            token_field=os.environ.get("CUSTOM_TOKEN_FIELD", "max_tokens"),
+        )
+    raise ValueError(f"Unsupported AI provider: {provider}")
 
 
 def _context(p: dict) -> str:
@@ -118,7 +510,7 @@ def _context(p: dict) -> str:
         parts.append("硃批：\n" + p["rescript"])
     if p.get("summary"):
         parts.append(
-            "既有結構化摘要（Gemini）：\n"
+            "既有結構化摘要（AI）：\n"
             + json.dumps(p["summary"], ensure_ascii=False)
         )
     return "\n\n".join(parts)
@@ -180,34 +572,161 @@ def _salvage_objects(text: str, key: str) -> list:
     return out
 
 
+def _find_list(value, key: str) -> list | None:
+    aliases = {
+        key.lower().replace("_", ""),
+        key.rstrip("s").lower().replace("_", ""),
+    }
+    if key == "events":
+        aliases.update({"items", "results", "eventlist", "事件", "事件列表"})
+    if isinstance(value, list):
+        return value
+    if not isinstance(value, dict):
+        return None
+    for name, item in value.items():
+        normalized = str(name).lower().replace("_", "").replace("-", "")
+        if normalized in aliases:
+            if isinstance(item, list):
+                return item
+            found = _find_list(item, key)
+            if found is not None:
+                return found
+    for name in ("data", "result", "output", "response", "content"):
+        nested = value.get(name)
+        found = _find_list(nested, key)
+        if found is not None:
+            return found
+    return None
+
+
 def _json_list(raw: str, key: str) -> list:
-    """Parse a {key: [...]} response robustly: clean parse first, then salvage."""
+    """Parse common compatible-API JSON shapes, then salvage complete objects."""
     t = _defence(raw)
-    try:
-        d = json.loads(t)
-        if isinstance(d, dict) and isinstance(d.get(key), list):
-            return d[key]
-        if isinstance(d, list):
-            return d
-    except json.JSONDecodeError:
-        pass
-    return _salvage_objects(t, key)
+    candidates = [t]
+    for opening, closing in (("{", "}"), ("[", "]")):
+        start, end = t.find(opening), t.rfind(closing)
+        if start >= 0 and end > start:
+            candidates.append(t[start:end + 1])
+    for candidate in candidates:
+        try:
+            found = _find_list(json.loads(candidate), key)
+            if found is not None:
+                return found
+        except json.JSONDecodeError:
+            continue
+    for alias in (key, "events", "items", "results", "事件", "事件列表"):
+        found = _salvage_objects(t, alias)
+        if found:
+            return found
+    return []
 
 
 def _cors(resp):
     resp.headers["Access-Control-Allow-Origin"] = ALLOW_ORIGIN
     resp.headers["Access-Control-Allow-Headers"] = "Content-Type"
-    resp.headers["Access-Control-Allow-Methods"] = "POST, OPTIONS"
+    resp.headers["Access-Control-Allow-Methods"] = "GET, POST, OPTIONS"
+    resp.headers["Cache-Control"] = "no-store"
     return resp
 
 
 def _mt(p: dict):
-    """Optional per-request output-token override; clamped to the model ceiling in _vertex."""
+    """Optional per-request output-token override, clamped by the selected provider."""
     try:
         v = int(p.get("max_output_tokens") or 0)
         return v if v > 0 else None
     except (TypeError, ValueError):
         return None
+
+
+def _public_providers() -> list[dict]:
+    providers = []
+    for provider, cfg in PROVIDER_CONFIG.items():
+        models = list(cfg["models"])
+        if cfg["default_model"] and cfg["default_model"] not in models:
+            models.insert(0, cfg["default_model"])
+        providers.append({
+            "id": provider,
+            "label": cfg["label"],
+            "enabled": _provider_enabled(provider),
+            "default_model": cfg["default_model"],
+            "models": models,
+        })
+    return providers
+
+
+def _fallback_models(provider: str) -> list[str]:
+    cfg = PROVIDER_CONFIG[provider]
+    models = list(cfg["models"])
+    if cfg["default_model"] and cfg["default_model"] not in models:
+        models.insert(0, cfg["default_model"])
+    return models
+
+
+def _list_provider_models(payload: dict) -> list[str]:
+    provider = (payload.get("provider") or DEFAULT_PROVIDER or "gemini").strip().lower()
+    if provider not in PROVIDER_CONFIG:
+        raise ValueError(f"Unsupported AI provider: {provider}")
+    base_url, api_key = _provider_access(payload, provider)
+    if not api_key:
+        return _fallback_models(provider)
+    if provider == "gemini":
+        url = base_url.rstrip("/") + "/models"
+        headers = {"x-goog-api-key": api_key}
+    else:
+        url = base_url.rstrip("/")
+        url = url if url.endswith("/models") else url + "/models"
+        if provider == "anthropic":
+            headers = {
+                "x-api-key": api_key,
+                "anthropic-version": os.environ.get("ANTHROPIC_API_VERSION", "2023-06-01"),
+            }
+        else:
+            headers = {"Authorization": f"Bearer {api_key}"}
+    r = requests.get(url, headers=headers, timeout=min(REQUEST_TIMEOUT, 30))
+    r.raise_for_status()
+    data = r.json()
+    rows = data.get("models") if provider == "gemini" else data.get("data")
+    models = []
+    for row in rows or []:
+        if not isinstance(row, dict):
+            continue
+        model = str(row.get("name") if provider == "gemini" else row.get("id") or "")
+        if model.startswith("models/"):
+            model = model.removeprefix("models/")
+        if model and len(model) <= 160:
+            models.append(model)
+    return list(dict.fromkeys(models))[:200] or _fallback_models(provider)
+
+
+@app.route("/providers", methods=["GET", "OPTIONS"])
+def providers():
+    if request.method == "OPTIONS":
+        return _cors(app.make_response(("", 204)))
+    return _cors(jsonify({
+        "default_provider": DEFAULT_PROVIDER,
+        "providers": _public_providers(),
+    }))
+
+
+@app.route("/models", methods=["POST", "OPTIONS"])
+def models():
+    if request.method == "OPTIONS":
+        return _cors(app.make_response(("", 204)))
+    payload = request.get_json(force=True, silent=True) or {}
+    provider = (payload.get("provider") or DEFAULT_PROVIDER or "gemini").strip().lower()
+    try:
+        return _cors(jsonify({
+            "provider": provider,
+            "models": _list_provider_models(payload),
+            "default_model": PROVIDER_CONFIG.get(provider, {}).get("default_model", ""),
+        }))
+    except ValueError as e:
+        return _cors(jsonify({"error": str(e)})), 400
+    except requests.HTTPError as e:
+        status = e.response.status_code if e.response is not None else "unknown"
+        return _cors(jsonify({"error": f"{provider} model-list error ({status})"})), 502
+    except Exception as e:  # noqa: BLE001
+        return _cors(jsonify({"error": str(e) or e.__class__.__name__})), 500
 
 
 @app.route("/chat", methods=["POST", "OPTIONS"])
@@ -228,7 +747,7 @@ def chat():
                 "突出最關鍵的人、事、時、地，避免逐句翻譯。"
             )
             prompt = ctx + "\n\n任務：" + instruction + "只輸出摘要文字。"
-            return _cors(jsonify({"mode": "summary", "text": _vertex(prompt, False, p.get("model"))}))
+            return _cors(jsonify({"mode": "summary", "text": _generate(prompt, False, p)}))
 
         if mode == "daysummary":
             # Summarize a fixed-length window of the timeline using ONLY the already-extracted
@@ -248,7 +767,7 @@ def chat():
                 "並在合理時指出因果或呼應關係（例如清方的部署是否針對林方某一行動）。"
                 "只根據上述事件列表内容，不得杜撰列表之外的事實。只輸出摘要文字，不要加標題或項目符號。"
             )
-            return _cors(jsonify({"mode": "daysummary", "summary": _vertex(prompt, False, p.get("model"))}))
+            return _cors(jsonify({"mode": "daysummary", "summary": _generate(prompt, False, p)}))
 
         if mode == "divide":
             # same pattern: `instruction` is skill-sourced; the required JSON
@@ -264,7 +783,7 @@ def chat():
                 + "\n\n任務：" + instruction
                 + '請只輸出 JSON，格式：{"parts":[{"label":"...","summary":"...","excerpt":"..."}]}'
             )
-            parts = _json_list(_vertex(prompt, True, p.get("model"), _mt(p)), "parts")
+            parts = _json_list(_generate(prompt, True, p, _mt(p)), "parts")
             return _cors(jsonify({"mode": "divide", "parts": parts}))
 
         if mode == "events":
@@ -322,6 +841,12 @@ def chat():
                         "以本類奏摺為例，理想的切分大致是：攻陷彰化、佔據諸羅、分路進攻府城（北門陸路與西門海路）、鹽埕海路進攻、陸路萬人連日激戰、牛車棉被陣攻營、三面合圍、中伏潰敗——各為一條，而非把每次進退、每個時辰各拆一條。"
                         "【排除】背景或成因說明（例如為何能聚集數萬、漳民附從、羅漢腳加入、衙役多係賊黨等兵源分析）不是一次具體行動，不要輸出為事件；也勿納入僅屬計畫而尚未執行者。"
                         "重點是被奏報的實地行動本身，而非奏報這個動作。對每個事件給出：")
+            if p.get("retry_empty"):
+                task += (
+                    "\n【重新檢查】前一次擷取得到空結果。請逐句重讀原文，特別檢查攻打、進兵、退守、"
+                    "調兵、渡海、堵禦、追擊、攻陷、潰散、擒獲、派遣等已發生或本分類要求的具體行動。"
+                    "只在全文確實沒有任何符合事件時才回傳空陣列。"
+                )
             prompt = (
                 ctx
                 + (("\n\n【分類規則】" + actor_instruction) if actor_instruction else "")
@@ -347,7 +872,7 @@ def chat():
                 '只輸出 JSON：{"events":[{"subtitle":"","description":"","side":"","where":"","who":[],"who_loc":{},"relations":[{"source":"","target":"","relation":"","relation_type":"","evidence":""}],"whenCh":"","whenAr":"","quote":"","howKnown":"","whenKnownCh":""}]}。'
                 '若無相關事件，輸出 {"events":[]}。'
             )
-            evs = _json_list(_vertex(prompt, True, p.get("model"), _mt(p)), "events")
+            evs = _json_list(_generate(prompt, True, p, _mt(p)), "events")
             return _cors(jsonify({"mode": "events", "events": evs}))
 
         if mode == "zhupi":
@@ -380,7 +905,7 @@ def chat():
             )
             extra = (p.get("question") or "").strip()
             prompt = ctx + (("\n\n【使用者額外聚焦／要求（最高優先）】\n" + extra) if extra else "") + task
-            items = _json_list(_vertex(prompt, True, p.get("model"), _mt(p)), "zhupi")
+            items = _json_list(_generate(prompt, True, p, _mt(p)), "zhupi")
             return _cors(jsonify({"mode": "zhupi", "zhupi": items}))
 
         if mode == "edict_match":
@@ -426,7 +951,7 @@ def chat():
             )
             extra = (p.get("question") or "").strip()
             prompt = mem_block + ed_block + (("\n\n【使用者額外要求】" + extra) if extra else "") + task
-            matches = _json_list(_vertex(prompt, True, p.get("model"), _mt(p)), "matches")
+            matches = _json_list(_generate(prompt, True, p, _mt(p)), "matches")
             return _cors(jsonify({"mode": "edict_match", "matches": matches}))
 
         if mode == "official_response":
@@ -480,7 +1005,7 @@ def chat():
                 '若皆無回應，輸出 {"addressee":"","items":[]}，但仍請填寫你判斷出的 addressee。'
             )
             prompt = act_block + addr_block + cand_block + (("\n\n【使用者額外要求】" + extra) if extra else "") + task
-            data = _strip_json(_vertex(prompt, True, p.get("model"), _mt(p)))
+            data = _strip_json(_generate(prompt, True, p, _mt(p)))
             items = data.get("items", []) if isinstance(data, dict) else []
             guessed_addressee = (data.get("addressee", "") if isinstance(data, dict) else "") or addressee
             return _cors(jsonify({"mode": "official_response", "addressee": guessed_addressee, "items": items}))
@@ -499,7 +1024,7 @@ def chat():
                 "quote：若上述原文包含支持此事件的句子，填入逐字引文並於 doc_id 標明該文書編號；若無可用原文則留空。"
             )
             try:
-                data = _strip_json(_vertex(prompt, True, p.get("model"), _mt(p)))
+                data = _strip_json(_generate(prompt, True, p, _mt(p)))
                 ev = data.get("event", data if isinstance(data, dict) else {})
             except json.JSONDecodeError:
                 ev = {}
@@ -545,6 +1070,28 @@ def chat():
                 "嚴禁為了補足第一手而虛構一個籠統、未具名的來源（例如沒有根據地填入『地方百姓』『探子』『難民』並標為『訪聞』）。"
                 "若原文並未說明最初的第一手來源是誰，就讓該鏈『從原文點名的最早一位傳遞者開始』，不要再往下杜撰一層。"
                 "寧可鏈短而可靠，也不要加入無原文依據的人物。"
+                "\n\n【連結成單一條鏈】務必把整條情報路徑連成『一條不中斷的鏈』：A→B→C→…→本文書作者。"
+                "每一位中繼者都必須同時有『收到』與『傳出』兩個方向（最初來源只有傳出；作者只有收到）。"
+                "若甲轉乙、乙再轉丙，必須同時輸出 甲→乙 與 乙→丙 兩個 hop，不可略去中間任何一段，"
+                "以致某人憑空成為無來源的『第一手』或無下家的『結尾』。最後一個 hop 的 to_person 必須是撰寫本文書的官員（作者）本人。"
+                "\n\n【傳遞方向判定】依原文動詞判定 from→to，切勿弄反："
+                "「甲字寄乙」「甲咨乙」「甲移會乙」「甲行乙／行據乙」＝甲（發送方）→乙（接收方）；"
+                "「據X稟／據X稱」「准X咨」「奉X諭／奉X行」「接據X」＝X（發送方）→引述此句者（接收方）。"
+                "巢狀引述請逐層拆解，例如「據A稟稱：准B咨，奉C行據D稟報：……。」方向為 D→C→B→A→作者。"
+                "又如「二十九日彰邑大肚社番字寄淡屬大甲社通事，據稱……」＝彰邑大肚社番→淡屬大甲社通事→（再由大甲社通事轉報）淡水同知。"
+                "\n\n【親歷限制】除非原文明確指出某人『親見／目擊／親歷／在場』，否則不要臆斷任何人為親歷者；"
+                "對只知其為最初具名來源、卻未載其如何得知者，how 一律填其實際的傳遞動詞（如稟報、字寄、轉述），不要填『親歷』。"
+                "特別注意：字寄、稟報、轉述、咨會、行文等皆為『傳遞動作』，不等於親歷；最初來源亦然。"
+                "\n\n【完整保留具名者】若一次稟報／咨文由多人聯銜具名（如「淡水同知程峻、北路竹塹營守備董得魁稟報」），"
+                "該 hop 的 from_person 必須完整列出所有具名者，不可只取其一或遺漏任何人。"
+                "\n\n【人名限用原文所載】from_person／to_person 只能使用原文出現的職銜或姓名；原文只寫職銜（如「福建巡撫」）"
+                "而未載姓名時一律照錄該職銜，嚴禁補入原文所無的姓名（即使你知道當時任職者是誰，例如不可自行寫成「福建巡撫徐嗣曾」）。"
+                "\n\n【地點限原文】place／who_loc 只填原文明示或可明確推得的地名，不得依你對某人任職地的認識自行補填"
+                "（例如身在福建的巡撫不可標到臺灣；大甲社通事在大甲社，不可標到大肚社）；地點不明則留空字串。"
+                "\n\n【inferred 僅指推斷的傳遞連結】inferred=true 只用於『傳遞關係由文意推斷』的 hop；"
+                "只要該 hop 兩端人物與傳遞事實均為原文明載（即使日期不明），即應 inferred=false，切勿因人物身分或缺日期而標為推斷。"
+                "\n\n【中間日期勿臆造】whenCh 只填原文明載於該次傳遞的日期；原文未載者留空字串，不可套用鄰近 hop 的日期或自行推定。"
+                "\n\n【模糊時間照錄】遇「十一月初間」「月底」等模糊時間，whenCh 照原文填入，不要轉為單一具體日期。"
                 + "\n\n每個 hop 請給：from_person、to_person、place（傳遞動作發生的地點）、whenCh（中曆時間）、"
                 "whenAr（西曆 yyyy/mm/dd，能合理推得才填，否則空字串）、how（傳遞方式：親見／目擊／口述／探報／訪聞／稟報／移會／咨會／轉述／傳聞 等）、"
                 "quote（原文明載此次傳遞的逐字片段，否則空字串）、"
@@ -579,7 +1126,7 @@ def chat():
                 '"events":[{"subtitle":"","reporter":"","whenCh":"","where":"","quote":""}]}]}。'
                 '若文書中完全無從判斷來源，輸出 {"chains":[]}。'
             )
-            chains = _json_list(_vertex(prompt, True, p.get("model"), _mt(p)), "chains")
+            chains = _json_list(_generate(prompt, True, p, _mt(p)), "chains")
             return _cors(jsonify({"mode": "trace", "chains": chains}))
 
         # ask
@@ -589,12 +1136,17 @@ def chat():
         if hl:
             prompt += f"\n\n使用者目前標示的引文：「{hl}」"
         prompt += f"\n\n使用者問題：{q}\n請用繁體中文回答，必要時引用原文。"
-        return _cors(jsonify({"mode": "ask", "text": _vertex(prompt, False, p.get("model"))}))
+        return _cors(jsonify({"mode": "ask", "text": _generate(prompt, False, p)}))
 
+    except ValueError as e:
+        return _cors(jsonify({"error": str(e)})), 400
     except requests.HTTPError as e:
-        return _cors(jsonify({"error": f"Vertex error: {e.response.text[:500]}"})), 502
+        provider = (p.get("provider") or DEFAULT_PROVIDER or "gemini").strip().lower()
+        status = e.response.status_code if e.response is not None else "unknown"
+        detail = (e.response.text if e.response is not None else str(e))[:500]
+        return _cors(jsonify({"error": f"{provider} upstream error ({status}): {detail}"})), 502
     except Exception as e:  # noqa: BLE001
-        return _cors(jsonify({"error": repr(e)})), 500
+        return _cors(jsonify({"error": str(e) or e.__class__.__name__})), 500
 
 
 @app.route("/geocode", methods=["GET", "POST", "OPTIONS"])
@@ -632,7 +1184,13 @@ def geocode():
 
 @app.route("/", methods=["GET"])
 def health():
-    return _cors(jsonify({"ok": True, "model": MODEL, "project": PROJECT, "location": LOCATION}))
+    return _cors(jsonify({
+        "ok": True,
+        "default_provider": DEFAULT_PROVIDER,
+        "providers": _public_providers(),
+        "project": PROJECT or None,
+        "location": LOCATION,
+    }))
 
 
 if __name__ == "__main__":

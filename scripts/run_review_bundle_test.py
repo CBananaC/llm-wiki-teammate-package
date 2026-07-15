@@ -8,6 +8,7 @@ Example:
 from __future__ import annotations
 
 import argparse
+import http.client
 import json
 import os
 import re
@@ -231,14 +232,17 @@ def post_json(url: str, payload: dict[str, Any], timeout: int, retries: int = 3,
             last = exc
             if exc.code not in {429, 500, 502, 503, 504} or attempt >= retries:
                 raise
-            print(f"    retry {attempt}/{retries} after HTTP {exc.code}")
-            time.sleep(retry_sleep * attempt)
-        except (urllib.error.URLError, TimeoutError) as exc:
+            factor = 5 if exc.code == 429 else 1
+            delay = retry_sleep * attempt * factor
+            print(f"    retry {attempt}/{retries} after HTTP {exc.code}; waiting {delay}s")
+            time.sleep(delay)
+        except (urllib.error.URLError, TimeoutError, http.client.RemoteDisconnected, ConnectionError) as exc:
             last = exc
             if attempt >= retries:
                 raise
-            print(f"    retry {attempt}/{retries} after {exc}")
-            time.sleep(retry_sleep * attempt)
+            delay = retry_sleep * attempt * 3
+            print(f"    retry {attempt}/{retries} after {exc}; waiting {delay}s")
+            time.sleep(delay)
     raise last or RuntimeError("request failed")
 
 
@@ -298,6 +302,177 @@ def parse_date(value: str):
         return datetime.strptime(value, "%Y-%m-%d").date()
     except ValueError:
         return None
+
+
+def quote_is_verbatim(source: str, quote: str) -> bool:
+    normalized_source = re.sub(r"\s+", "", str(source or ""))
+    normalized_quote = re.sub(r"\s+", "", str(quote or ""))
+    return bool(normalized_quote) and normalized_quote in normalized_source
+
+
+# --- Chinese reign-date completion (ported from parseChFull / convertWhenCh in
+#     stage1-timeline.html). Keeps the CHINESE date primary and reviewable: it
+#     fills the missing reign year onto an event's whenCh using the parent
+#     document's own date, and derives a SECONDARY Gregorian whenAr with the same
+#     naive calendar mapping the website's event dots use (十二月十八日 -> 1786/12/18).
+_CN_DIGITS = {"\u96f6": 0, "\u3007": 0, "\u4e00": 1, "\u4e8c": 2, "\u5169": 2,
+              "\u4e09": 3, "\u56db": 4, "\u4e94": 5, "\u516d": 6, "\u4e03": 7,
+              "\u516b": 8, "\u4e5d": 9}
+_CN_UNITS = "\u96f6\u4e00\u4e8c\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d"  # 零一二三四五六七八九
+
+
+def _cnum(text):
+    if not text:
+        return None
+    text = str(text).strip()
+    if text.isdigit():
+        return int(text)
+    if text == "\u6b63":            # 正 -> 1
+        return 1
+    if text == "\u5341":            # 十 -> 10
+        return 10
+    if "\u5341" in text:            # X十Y
+        a, _, b = text.partition("\u5341")
+        tens = _CN_DIGITS.get(a, 0) if a else 1
+        ones = _CN_DIGITS.get(b, 0) if b else 0
+        return tens * 10 + ones
+    value = 0
+    for ch in text:
+        if ch in _CN_DIGITS:
+            value = value * 10 + _CN_DIGITS[ch]
+    return value or None
+
+
+def _cday_num(text):
+    if not text:
+        return None
+    text = str(text).replace("\u521d", "").strip()   # strip 初
+    if text.isdigit():
+        return int(text)
+    if text == "\u5eff":            # 廿 -> 20
+        return 20
+    if text == "\u5350":            # 卅 -> 30
+        return 30
+    if "\u5eff" in text:
+        return 20 + (_cnum(text.replace("\u5eff", "")) or 0)
+    if "\u5350" in text:
+        return 30 + (_cnum(text.replace("\u5350", "")) or 0)
+    return _cnum(text)
+
+
+_RY_RE = re.compile(r"\u4e7e(?:\u9686)?\s*([0-9\u96f6\u3007\u4e00\u4e8c\u5169\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341]+)\s*\u5e74")
+_MM_RE = re.compile(r"(?:\u958f)?\s*([0-9\u6b63\u4e00\u4e8c\u5169\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341]+)\s*\u6708")
+_DD_RE = re.compile(r"\u6708\s*([0-9\u521d\u5eff\u5350\u4e00\u4e8c\u5169\u4e09\u56db\u4e94\u516d\u4e03\u516b\u4e5d\u5341]+)\s*\u65e5")
+
+
+def _parse_ch_full(ch):
+    if not ch:
+        return None
+    s = str(ch)
+    ry = _RY_RE.search(s)
+    mm = _MM_RE.search(s)
+    dd = _DD_RE.search(s)
+    lm = (1 if mm and mm.group(1) == "\u6b63" else _cnum(mm.group(1))) if mm else None
+    return {
+        "ry": _cnum(ry.group(1)) if ry else None,
+        "lm": lm,
+        "ld": _cday_num(dd.group(1)) if dd else None,
+        "leap": "\u958f" in s,          # 閏
+    }
+
+
+def _int_to_cn(n):
+    if n is None or n < 0:
+        return "" if n is None else str(n)
+    if n < 10:
+        return "" if n == 0 else _CN_UNITS[n]
+    if n < 20:
+        return "\u5341" + ("" if n == 10 else _CN_UNITS[n - 10])
+    tens, ones = divmod(n, 10)
+    return _CN_UNITS[tens] + "\u5341" + ("" if ones == 0 else _CN_UNITS[ones])
+
+
+def _day_to_cn(d):
+    if not d:
+        return ""
+    if d <= 10:
+        return "\u521d" + _int_to_cn(d)      # 初X
+    if d < 20:
+        return _int_to_cn(d)
+    if d == 20:
+        return "\u4e8c\u5341"               # 二十
+    if d < 30:
+        return "\u4e8c\u5341" + _CN_UNITS[d - 20]
+    if d == 30:
+        return "\u4e09\u5341"               # 三十
+    return _int_to_cn(d)
+
+
+def _doc_ref_ch(record):
+    """The parent document's own Chinese date, used ONLY to supply the reign year
+    an event's date string omits. Send first, then receive/announce/issue."""
+    for key in ("send_date", "receive_date", "announce_date", "issue_date"):
+        value = record.get(key)
+        if isinstance(value, list) and value and value[0]:
+            return str(value[0])
+    return ""
+
+
+def _complete_one(when_ch, ref):
+    """Return (chinese_full, gregorian) for one raw Chinese date string, filling
+    the reign year from `ref` (the doc's parsed date) when the string omits it.
+    Chinese is primary; Gregorian uses the site's naive calendar mapping and is a
+    YYYY/MM month-only value when the day is unknown."""
+    p = _parse_ch_full(when_ch)
+    if not p or not p["lm"]:
+        return "", ""
+    ry = p["ry"]
+    if ry is None and ref:
+        ry = ref.get("ry")
+        if ry is not None and ref.get("lm") and p["lm"] > ref["lm"]:
+            ry -= 1               # event month after the doc's month -> previous reign year
+    if ry is None:
+        return "", ""
+    leap = "\u958f" if p["leap"] else ""    # 閏
+    gy = 1735 + ry
+    if p["ld"]:
+        cn = "\u4e7e\u9686%s\u5e74%s%s\u6708%s\u65e5" % (
+            _int_to_cn(ry), leap, _int_to_cn(p["lm"]), _day_to_cn(p["ld"]))
+        greg = "%d/%02d/%02d" % (gy, p["lm"], p["ld"])
+    else:
+        cn = "\u4e7e\u9686%s\u5e74%s%s\u6708" % (_int_to_cn(ry), leap, _int_to_cn(p["lm"]))
+        greg = "%d/%02d" % (gy, p["lm"])
+    return cn, greg
+
+
+def complete_event_dates(item, record):
+    """Fill the reign year onto an event's Chinese date IN PLACE, keeping the
+    Chinese date primary (whenChFull) and adding a secondary Gregorian whenAr.
+    Events with no parsable date fall back to the document's own send date."""
+    if not isinstance(item, dict):
+        return item
+    ref = _parse_ch_full(_doc_ref_ch(record))
+    cn, greg = _complete_one(item.get("whenCh") or "", ref)
+    if cn:
+        item["whenChFull"] = cn
+        model_ar = (item.get("whenAr") or "").strip()
+        if model_ar and model_ar != greg:
+            item["_whenArModel"] = model_ar     # keep model's own guess for traceability
+        item["whenAr"] = greg
+        raw = _parse_ch_full(item.get("whenCh") or "") or {}
+        item["dateSource"] = "event" if raw.get("ry") else "event-year-inferred"
+    else:
+        item["whenChFull"] = ""
+        item["dateSource"] = "doc-send"          # no event date -> display uses the doc's send date
+        item["whenChFallback"] = _doc_ref_ch(record)
+        item["whenArFallback"] = (
+            date_pair_value(record, "send_date") or date_pair_value(record, "receive_date"))
+    known = item.get("whenKnownCh") or ""
+    if known:
+        kcn, _kgreg = _complete_one(known, ref)
+        if kcn:
+            item["whenKnownChFull"] = kcn
+    return item
 
 
 def within_days(value: str, base: str, days: int) -> bool:
@@ -455,6 +630,7 @@ def main() -> None:
     extra_rows = {step: (read_json(p, []) if args.skip_done else []) for step, p in extra_paths.items()}
     extra_done = {step: {str(r.get("doc_id")) for r in rows if r.get("doc_id")} for step, rows in extra_rows.items()}
     all_edicts = [r for r in records if r.get("doc_type") == "上諭"]
+    edicts_by_id = {str(r.get("doc_id") or r.get("id")): r for r in all_edicts}
 
     def done_docs(rows: list[dict[str, Any]]) -> set[str]:
         return {str(r.get("doc_id")) for r in rows if r.get("doc_id")}
@@ -532,6 +708,7 @@ def main() -> None:
                 e = post_json(args.proxy, ev_payload, args.timeout, args.retries, args.retry_sleep)
                 for item in e.get("events", []):
                     item.setdefault("doc_id", doc_id)
+                    complete_event_dates(item, doc)
                     doc_events.append(item)
                     if "lin-events" in steps:
                         lin_events.append(item)
@@ -543,44 +720,44 @@ def main() -> None:
         if "source-chain" in steps:
             if args.skip_done and is_done(doc_id, "source-chain"):
                 print("  - 林方來源鏈 (skip done)")
-                continue
-            for j, item in enumerate(doc_events, 1):
-                title = item.get("subtitle") or ""
-                if args.skip_done and (str(doc_id), str(title)) in chain_done:
-                    print(f"  - 林方來源鏈 {j}/{len(doc_events)} (skip done): {title}")
-                    continue
-                print(f"  - 林方來源鏈 {j}/{len(doc_events)}: {title}")
-                quote = item.get("quote") or ""
-                tr_payload = record_payload(doc, "trace", args.model)
-                tr_extra = skill_prompt("source-chain")
-                tr_payload.update({
-                    "side": "lin",
-                    "single": True,
-                    **({"question": tr_extra} if tr_extra else {}),
-                    "event": {
-                        "actor": "lin",
-                        "subtitle": item.get("subtitle") or "",
-                        "description": item.get("description") or "",
-                        "where": item.get("where") or "",
-                        "whenCh": item.get("whenCh") or item.get("whenAr") or "",
-                        "quote": quote,
-                    },
-                })
-                try:
-                    tr = post_json(args.proxy, tr_payload, args.timeout, args.retries, args.retry_sleep)
-                except Exception as exc:
-                    print(f"    source-chain failed, saved error and continuing: {exc}")
-                    tr = {"mode": "trace", "chains": [], "error": str(exc)}
-                source_chains.append({
-                    "doc_id": doc_id,
-                    "evTitle": title,
-                    "event": item,
-                    "chains": tr.get("chains", []),
-                    "_raw": tr,
-                })
-                chain_done.add((str(doc_id), str(title)))
-                write_json(source_chains_path, source_chains)
-            mark_done(doc_id, "source-chain")
+            else:
+                for j, item in enumerate(doc_events, 1):
+                    title = item.get("subtitle") or ""
+                    if args.skip_done and (str(doc_id), str(title)) in chain_done:
+                        print(f"  - 林方來源鏈 {j}/{len(doc_events)} (skip done): {title}")
+                        continue
+                    print(f"  - 林方來源鏈 {j}/{len(doc_events)}: {title}")
+                    quote = item.get("quote") or ""
+                    tr_payload = record_payload(doc, "trace", args.model)
+                    tr_extra = skill_prompt("source-chain")
+                    tr_payload.update({
+                        "side": "lin",
+                        "single": True,
+                        **({"question": tr_extra} if tr_extra else {}),
+                        "event": {
+                            "actor": "lin",
+                            "subtitle": item.get("subtitle") or "",
+                            "description": item.get("description") or "",
+                            "where": item.get("where") or "",
+                            "whenCh": item.get("whenCh") or item.get("whenAr") or "",
+                            "quote": quote,
+                        },
+                    })
+                    try:
+                        tr = post_json(args.proxy, tr_payload, args.timeout, args.retries, args.retry_sleep)
+                    except Exception as exc:
+                        print(f"    source-chain failed, saved error and continuing: {exc}")
+                        tr = {"mode": "trace", "chains": [], "error": str(exc)}
+                    source_chains.append({
+                        "doc_id": doc_id,
+                        "evTitle": title,
+                        "event": item,
+                        "chains": tr.get("chains", []),
+                        "_raw": tr,
+                    })
+                    chain_done.add((str(doc_id), str(title)))
+                    write_json(source_chains_path, source_chains)
+                mark_done(doc_id, "source-chain")
 
         for step, category in QING_EVENT_CATEGORY.items():
             if step not in steps:
@@ -598,6 +775,7 @@ def main() -> None:
             qe = post_json(args.proxy, qe_payload, args.timeout, args.retries, args.retry_sleep)
             for item in qe.get("events", []):
                 item.setdefault("doc_id", doc_id)
+                complete_event_dates(item, doc)
                 extra_rows[step].append(item)
             extra_done[step].add(str(doc_id))
             write_json(extra_paths[step], extra_rows[step])
@@ -626,7 +804,28 @@ def main() -> None:
                 print("  - edict-match (skip 上諭 source)")
                 mark_done(doc_id, "edict-match")
                 continue
-            if args.skip_done and (str(doc_id) in extra_done["edict-match"] or is_done(doc_id, "edict-match")):
+            existing_edict_rows = [
+                row for row in extra_rows["edict-match"]
+                if str(row.get("doc_id") or row.get("memDoc") or "") == str(doc_id)
+            ]
+            invalid_existing = any(
+                not (row.get("points") or [])
+                or any(
+                    not isinstance(point, dict)
+                    or not quote_is_verbatim(doc.get("body") or "", point.get("memorial_quote") or "")
+                    or not quote_is_verbatim(
+                        (edicts_by_id.get(str(row.get("edict_id") or "")) or {}).get("body") or "",
+                        point.get("edict_quote") or "",
+                    )
+                    for point in (row.get("points") or [])
+                )
+                for row in existing_edict_rows
+            )
+            if (
+                args.skip_done
+                and (str(doc_id) in extra_done["edict-match"] or is_done(doc_id, "edict-match"))
+                and not invalid_existing
+            ):
                 print("  - edict-match (skip done)")
                 continue
             base = primary_date(doc)
@@ -664,7 +863,15 @@ def main() -> None:
                 except Exception as exc:
                     print(f"      edict-match failed, saved error and continuing: {exc}")
                     data = {"mode": "edict_match", "matches": [], "error": str(exc)}
+                candidate_points = []
+                candidate_summaries = []
+                seen_points = set()
                 for match in data.get("matches", []):
+                    if not isinstance(match, dict):
+                        continue
+                    returned_id = str(match.get("edict_id") or ed_id)
+                    if returned_id != str(ed_id):
+                        continue
                     points = match.get("points") if isinstance(match.get("points"), list) else []
                     if not points and (match.get("memorial_quote") or match.get("edict_quote") or match.get("how")):
                         points = [{
@@ -673,16 +880,38 @@ def main() -> None:
                             "edict_quote": match.get("edict_quote") or "",
                             "how": match.get("how") or "",
                         }]
+                    for point in points:
+                        if not isinstance(point, dict):
+                            continue
+                        memorial_quote = str(point.get("memorial_quote") or "").strip()
+                        edict_quote = str(point.get("edict_quote") or "").strip()
+                        if not quote_is_verbatim(doc.get("body") or "", memorial_quote):
+                            continue
+                        if not quote_is_verbatim(ed.get("body") or "", edict_quote):
+                            continue
+                        key = (memorial_quote, edict_quote, str(point.get("title") or point.get("aspect") or ""))
+                        if key in seen_points:
+                            continue
+                        seen_points.add(key)
+                        candidate_points.append(point)
+                    summary = str(match.get("summary") or "").strip()
+                    if summary and summary not in candidate_summaries:
+                        candidate_summaries.append(summary)
+                if candidate_points:
                     matches_for_doc.append({
                         "doc_id": doc_id,
                         "memDoc": doc_id,
                         "memTitle": doc.get("title") or "",
-                        "edict_id": str(match.get("edict_id") or ed_id),
+                        "edict_id": str(ed_id),
                         "title": ed.get("title") or "",
                         "date": primary_date(ed),
-                        "summary": match.get("summary") or "",
-                        "points": points,
+                        "summary": " ".join(candidate_summaries),
+                        "points": candidate_points,
                     })
+            extra_rows["edict-match"] = [
+                row for row in extra_rows["edict-match"]
+                if str(row.get("doc_id") or row.get("memDoc") or "") != str(doc_id)
+            ]
             extra_rows["edict-match"].extend(matches_for_doc)
             extra_done["edict-match"].add(str(doc_id))
             write_json(extra_paths["edict-match"], extra_rows["edict-match"])

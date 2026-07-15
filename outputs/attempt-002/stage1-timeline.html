@@ -1715,7 +1715,7 @@
   // kind gets an auto-generated button instead, via runSkillGeneric().
   const CURATED_SKILL_SLUGS = new Set(['quick-summary','divide-into-parts','extract-lin-actions',
     'extract-qing-actions-done','extract-qing-actions-planned','extract-qing-nonmilitary-actions',
-    'extract-zhupi','edict-match','trace-source-chain']);
+    'extract-zhupi','edict-match','trace-source-chain','response-timeliness']);
   async function reloadSkillPrompts(){
     try{
       const resp = await fetch('/api/skills');
@@ -3380,8 +3380,8 @@
     }
 
     // ---- AI (model + custom prompts) ----
-    function getUrl(){ return getProxyUrl(); }
-    function setUrl(u){ setProxyUrl(u); try{ localStorage.setItem('geminiProxyUrl',u); }catch(e){ window.__gpu=u; } }
+    function getUrl(provider){ return getAIProxyUrl(provider||getProvider()); }
+    function setUrl(u,provider){ setAIProxyUrl(u,provider||getProvider()); }
     function getModel(){ return getAIModel(); }
     function setModel(m){ setAIModel(m); }
     function getProvider(){ return getAIProvider(); }
@@ -3405,14 +3405,15 @@
           <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><input class="gx-model" list="${modelListId}" value="${esc(getModel())}" placeholder="${esc(aiModelPlaceholder(providerNow))}"><datalist id="${modelListId}">${aiModelListHtml(providerNow).map(m=>`<option value="${esc(m)}"></option>`).join('')}</datalist><button class="ai-model-refresh" type="button" title="重新載入模型">↻</button></div></div>
           <div class="gx-cfgrow"><span>API Base</span><input class="ai-base" value="${esc(getAIBaseUrl())}" placeholder="https://api.example.com/v1"></div>
           <div class="gx-cfgrow"><span>API Key</span><input class="ai-key" type="password" value="${esc(getAIApiKey())}" autocomplete="off" placeholder="API key（此分頁）"></div>
-          <div class="gx-cfgrow"><span>代理</span><input class="gx-url" type="text" placeholder="AI 代理網址"></div>
+          <div class="gx-cfgrow"><span>代理網址</span><input class="gx-url" type="text" placeholder="https://your-proxy.example/v1"></div>
           <div class="ai-provider-state"></div>
           <div class="gx-prompts"></div>
           <div class="gx-cfgrow"><button class="gx-addp" type="button">🔄 重新載入技能</button><button data-act="save" type="button">儲存設定</button></div>
         </div>
         <div class="gx-out"></div><div class="gx-saved"></div></div>`;
       const out=ftBody.querySelector('.gx-out'), cfgBox=ftBody.querySelector('.gx-cfgbox'), urlInput=ftBody.querySelector('.gx-url'), qInput=ftBody.querySelector('.gx-q'), providerSel=ftBody.querySelector('.ai-provider'), modelSel=ftBody.querySelector('.gx-model'), modelList=ftBody.querySelector('#'+modelListId), baseInput=ftBody.querySelector('.ai-base'), keyInput=ftBody.querySelector('.ai-key'), refreshModels=ftBody.querySelector('.ai-model-refresh'), providerState=ftBody.querySelector('.ai-provider-state');
-      urlInput.value=getUrl();
+      urlInput.value=getUrl(providerNow);
+      urlInput.onchange=()=>setUrl(urlInput.value.trim(),providerSel.value);
       function renderPrompts(){ const pl=ftBody.querySelector('.gx-prompts'); const ps=getPrompts();
         pl.innerHTML=ps.length?ps.map(p=>`<div class="gx-prow gx-prow-ro" title="${esc(p.text)}"><span class="gp-name-ro">${esc(p.name)}</span></div>`).join(''):'<div class="gx-prow-empty">尚無技能提示（來自 llm-wiki/skills/*.md）</div>';
       }
@@ -3436,14 +3437,14 @@
         saved.innerHTML='<div class="sec-title" style="margin:8px 0 4px">已儲存的回應</div>'+arr.map((a,i)=>`<details class="gx-saveditem sv2"><summary class="sh"><span class="sv-caret">▸</span><span class="sv-mode">${esc(a.mode)}</span><span class="sv-at">${esc(a.at||'')}</span><span class="sv-prev"></span><button class="gx-del" data-i="${i}" type="button" title="刪除">✕</button></summary><div class="gx-answer ed sv-ans" contenteditable="true" data-i="${i}"></div></details>`).join('');
         saved.querySelectorAll('.sv-ans').forEach(el=>{ el.textContent=arr[+el.dataset.i].text; el.addEventListener('blur',()=>{ docEdits(r.id).answers[+el.dataset.i].text=el.textContent; saveEdits(); }); });
         saved.querySelectorAll('.gx-del').forEach(b=>b.onclick=()=>{ docEdits(r.id).answers.splice(+b.dataset.i,1); if(!docEditsRead(r.id).answers.length) delete docEditsRead(r.id).answers; saveEdits(); renderSaved(); }); }
-      async function ask(mode,q){ const url=getUrl(); if(!url){ cfgBox.classList.add('open'); out.innerHTML='<div class="gx-status">請先設定代理網址。</div>'; return; }
+      async function ask(mode,q){ const url=getUrl(providerSel.value); if(!url){ cfgBox.classList.add('open'); out.innerHTML='<div class="gx-status">請先設定代理網址。</div>'; return; }
         const atCmd=mode==='ask'?legacyAtEventCommand(q):null;
         if(atCmd && window.__scopeAIto){ const api=(typeof cards!=='undefined')&&cards.find(c=>c.rec===r || (c.rec&&String(c.rec.id)===String(r.id))); out.innerHTML='<div class="gx-status">已轉到浮動 AI 建立事件，請在事件卡中選擇「加入」。</div>'; window.__scopeAIto([api].filter(Boolean)); setTimeout(()=>{ const box=document.querySelector('.tool-box[data-kind="ai"]'); const inp=box&&box.querySelector('.chat-input'); if(inp){ inp.value=q; inp.dispatchEvent(new Event('input'));
             // the visible send button is gone -- Enter now sends (see renderAI's keydown handler), so
             // simulate that same keystroke here instead of a button click that no longer exists.
             inp.dispatchEvent(new KeyboardEvent('keydown', {key:'Enter', bubbles:true, cancelable:true})); } },60); return; }
         out.innerHTML='<div class="gx-status">AI 思考中…</div>';
-        try{ const resp=await fetch(aiProxyEndpoint('/chat'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload(mode,q))}); const data=await resp.json();
+        try{ const resp=await fetch(aiProxyEndpoint('/chat',providerSel.value),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload(mode,q))}); const data=await resp.json();
           if(data.error){ out.innerHTML=`<div class="gx-status">錯誤：${esc(data.error)}</div>`; return; }
           if(data.mode==='divide'){ const n=setDivisions(data.parts||[]); saveDivisions(); renderChips(); renderText();
             out.innerHTML=n?`<div class="gx-status">已分為 ${n} 段。<button class="gx-cleardiv" type="button">清除分段</button></div>`:'<div class="gx-status">無法對應回原文。</div>';
@@ -3453,11 +3454,11 @@
       ftBody.querySelector('.gx-bar').onclick=e=>{ const b=e.target.closest('button'); if(!b) return; const a=b.dataset.act;
         if(b.dataset.pi!==undefined){ const p=getPrompts()[+b.dataset.pi]; if(p) ask('ask', p.text); return; }
         if(a==='cfg') cfgBox.classList.toggle('open'); else if(a==='summary') ask('summary'); else if(a==='divide') ask('divide'); else if(a==='ask') ask('ask',qInput.value.trim()); };
-      async function loadModels(){ setUrl(urlInput.value.trim()); setAIBaseUrl(baseInput.value.trim(),providerSel.value); setAIApiKey(keyInput.value.trim(),providerSel.value); providerState.textContent='讀取模型中…'; refreshModels.disabled=true;
+      async function loadModels(){ setUrl(urlInput.value.trim(),providerSel.value); setAIBaseUrl(baseInput.value.trim(),providerSel.value); setAIApiKey(keyInput.value.trim(),providerSel.value); providerState.textContent='讀取模型中…'; refreshModels.disabled=true;
         try{ const models=await refreshAIModels(providerSel.value); modelList.innerHTML=models.map(m=>`<option value="${esc(m)}"></option>`).join(''); providerState.textContent=models.length?('已載入 '+models.length+' 個模型'):'未取得模型清單'; }
         catch(e){ providerState.textContent=e.message; } finally{ refreshModels.disabled=false; } }
-      cfgBox.onclick=e=>{ if(e.target.dataset.act==='save'){ setUrl(urlInput.value.trim()); setProvider(providerSel.value); setAIBaseUrl(baseInput.value.trim(),providerSel.value); setAIApiKey(keyInput.value.trim(),providerSel.value); setAIModel(modelSel.value,providerSel.value); cfgBox.classList.remove('open'); out.innerHTML='<div class="gx-status">已儲存設定。</div>'; renderAI(); } };
-      providerSel.onchange=()=>{ setProvider(providerSel.value); modelSel.value=getAIModel(providerSel.value); modelSel.placeholder=aiModelPlaceholder(providerSel.value); baseInput.value=getAIBaseUrl(providerSel.value); keyInput.value=getAIApiKey(providerSel.value); modelList.innerHTML=aiModelListHtml(providerSel.value).map(m=>`<option value="${esc(m)}"></option>`).join(''); providerState.textContent=''; };
+      cfgBox.onclick=e=>{ if(e.target.dataset.act==='save'){ setProvider(providerSel.value); setUrl(urlInput.value.trim(),providerSel.value); setAIBaseUrl(baseInput.value.trim(),providerSel.value); setAIApiKey(keyInput.value.trim(),providerSel.value); setAIModel(modelSel.value,providerSel.value); cfgBox.classList.remove('open'); out.innerHTML='<div class="gx-status">已儲存設定。</div>'; renderAI(); } };
+      providerSel.onchange=()=>{ setProvider(providerSel.value); modelSel.value=getAIModel(providerSel.value); modelSel.placeholder=aiModelPlaceholder(providerSel.value); baseInput.value=getAIBaseUrl(providerSel.value); keyInput.value=getAIApiKey(providerSel.value); urlInput.value=getUrl(providerSel.value); modelList.innerHTML=aiModelListHtml(providerSel.value).map(m=>`<option value="${esc(m)}"></option>`).join(''); providerState.textContent=''; };
       modelSel.onchange=()=>setAIModel(modelSel.value,providerSel.value);
       baseInput.onchange=()=>setAIBaseUrl(baseInput.value.trim(),providerSel.value);
       keyInput.addEventListener('input',()=>setAIApiKey(keyInput.value.trim(),providerSel.value));
@@ -5082,7 +5083,7 @@
   }
   // run the proxy over the given docs and return de-duplicated event proposals (no UI; the AI panel shows them in-chat)
   async function extractEventProposals(actor, docs, onProgress, ctx){
-    const url=getProxyUrl(); if(!url) throw new Error('未設定代理網址');
+    const url=getAIProxyUrl(); if(!url) throw new Error('未設定代理網址');
     ctx=ctx||{};
     const focused=!!(ctx.question||ctx.chat_context);
     const cat=ctx.category||'';
@@ -5407,21 +5408,36 @@
     custom:{label:'第三方 API', defaultModel:'', defaultBase:'', models:[]}
   };
   const AI_MODEL_CACHE={};
+  // GPT, Gemini, and DeepSeek may each use a different OpenAI-compatible proxy.
+  // Keep the older shared proxy setting as the fallback so existing deployments
+  // continue to work without re-entering their URL.
+  const AI_PROXY_PROVIDERS=new Set(['openai','gemini','deepseek']);
   function lsGet(k,d){ try{ return localStorage.getItem(k)||d; }catch(e){ return d; } }
   function lsSet(k,v){ try{ localStorage.setItem(k,v); }catch(e){} }
   function defaultProxyUrl(){ return location.origin+'/api/ai'; }
-  function getProxyUrl(){
+  function getProxyUrl(provider){
     const saved=lsGet('aiProxyUrl',lsGet('geminiProxyUrl',''));
     if(!saved) return defaultProxyUrl();
-    const upstream=getAIBaseUrl();
+    const upstream=getAIBaseUrl(provider||getAIProvider());
     if(upstream && saved.replace(/\/$/,'')===upstream.replace(/\/$/,'')){
       setProxyUrl(defaultProxyUrl());
       return defaultProxyUrl();
     }
     return saved;
   }
-  function setProxyUrl(u){ lsSet('aiProxyUrl',u); }
-  function aiProxyEndpoint(path){ const raw=getProxyUrl(); if(!raw) throw new Error('AI 連線網址未設定'); let u;
+  function setProxyUrl(u){ lsSet('aiProxyUrl',String(u||'').trim()); }
+  function getAIProxyUrl(provider){
+    provider=provider||getAIProvider();
+    const own=AI_PROXY_PROVIDERS.has(provider)?lsGet('aiProxyUrl:'+provider,''):'';
+    return own||getProxyUrl(provider);
+  }
+  function setAIProxyUrl(u,provider){
+    provider=provider||getAIProvider();
+    const value=String(u||'').trim();
+    if(AI_PROXY_PROVIDERS.has(provider)) lsSet('aiProxyUrl:'+provider,value);
+    else setProxyUrl(value);
+  }
+  function aiProxyEndpoint(path,provider){ const raw=getAIProxyUrl(provider); if(!raw) throw new Error('AI 連線網址未設定'); let u;
     try{ u=new URL(raw); }catch(e){ throw new Error('AI 代理網址格式不正確'); }
     const local=['127.0.0.1','localhost','[::1]'].includes(u.hostname);
     if(u.protocol!=='https:' && !(u.protocol==='http:'&&local)) throw new Error('傳送 API key 時，遠端代理網址必須使用 HTTPS');
@@ -5444,7 +5460,7 @@
   async function refreshAIModels(provider){
     const payload={provider,api_base:getAIBaseUrl(provider),api_key:getAIApiKey(provider)};
     if(provider==='gemini'&&!payload.api_key) delete payload.api_base;
-    const resp=await fetch(aiProxyEndpoint('/models'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+    const resp=await fetch(aiProxyEndpoint('/models',provider),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
     let data={}; try{ data=await resp.json(); }catch(e){} if(!resp.ok||data.error) throw new Error(data.error||('模型查詢失敗 '+resp.status));
     AI_MODEL_CACHE[provider]=Array.isArray(data.models)?data.models:[];
     if(!getAIModel(provider)&&data.default_model) setAIModel(data.default_model,provider);
@@ -6075,8 +6091,8 @@
     // ---- shared store + proxy helpers ----
     function curStore(){ const apis=selectedApis(); return apis.length===1 ? docEdits(apis[0].rec.id) : groupStore(apis); }
     async function callProxy(p){
-      const payload=Object.assign({},p,aiRequestConfig()); if(!payload.model) delete payload.model;
-      const resp=await fetch(aiProxyEndpoint('/chat'),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
+      const cfg=aiRequestConfig(), payload=Object.assign({},p,cfg); if(!payload.model) delete payload.model;
+      const resp=await fetch(aiProxyEndpoint('/chat',cfg.provider),{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});
       let data={}; try{ data=await resp.json(); }catch(e){}
       if(!resp.ok) throw new Error(data.error||('AI 代理錯誤 '+resp.status)); return data; }
       try{ window.__aiCallProxy=callProxy; }catch(_e){}
@@ -6213,7 +6229,7 @@
         const head=(prefix||custom||'').trim(); if(!head){ st2.textContent='請輸入提示。'; return; }
         const promptText=head+'\n\n【筆記內容】\n'+(note.body||'（空白）');
         const shown=prefix?prefix.replace(/[。:：]\s*$/,''):custom;
-        if(!getProxyUrl()){ st2.textContent='請先於 AI 面板設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先於 AI 面板設定代理網址。'; return; }
         st2.textContent='AI 思考中…';
         const mem=body.querySelector('.ne-mem').checked; const hist=mem?(note.exchanges||[]):[];
         try{ const data=await callProxy(buildPayload('ask', withHistory(promptText, hist))); if(data.error){ st2.textContent='錯誤：'+data.error; return; }
@@ -6265,8 +6281,8 @@
               <div class="gx-cfgrow"><span>API Base（上游）</span><input class="ai-base" value="${esc(getAIBaseUrl())}" placeholder="https://api.example.com/v1"></div>
               <div class="gx-cfgrow"><span>API Key</span><div class="ai-key-wrap"><input class="ai-key" type="password" value="${esc(getAIApiKey())}" autocomplete="off" placeholder="API key（只保留至此分頁關閉）"><button class="ai-key-toggle" type="button" title="顯示或隱藏 API key">◉</button></div></div>
               <div class="gx-cfgrow"><label class="cb-mem2"><input type="checkbox" class="ai-mem"> 記憶對話（跨訊息記住脈絡）</label></div>
-              <div class="ai-bridge-note">由本機服務安全轉送 API 請求，不需另填代理網址。</div>
-              <details class="ai-advanced"><summary>進階代理設定</summary><div class="gx-cfgrow"><input class="gx-url" value="${esc(getProxyUrl())}" placeholder="AI 代理網址"><button class="ai-proxy-reset" type="button">使用本機</button></div></details>
+              <div class="ai-bridge-note">可為 GPT、Gemini、DeepSeek 分別設定代理網址；未設定時使用共用的本機服務。</div>
+              <div class="gx-cfgrow ai-proxy-row"><span>代理網址</span><div class="ai-proxy-wrap"><input class="gx-url" value="${esc(getAIProxyUrl(providerNow))}" placeholder="https://your-proxy.example/v1"><button class="ai-proxy-reset" type="button">使用本機</button></div></div>
               <div class="ai-provider-state"></div>
             </div>
           </div>
@@ -6318,12 +6334,12 @@
       function setReplyRef(ref){ if(ref) setComposerFolded(false); replyRef=ref; replyBox.classList.toggle('on', !!ref); replyTxt.textContent=ref?('回覆：'+ref.text.slice(0,140)+(ref.text.length>140?'…':'')):''; input.focus(); }
       body.querySelector('.rr-x').onclick=()=>setReplyRef(null);
       const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), modelList=body.querySelector('#'+modelListId), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), refreshModels=body.querySelector('.ai-model-refresh'), resetProxy=body.querySelector('.ai-proxy-reset'), providerState=body.querySelector('.ai-provider-state');
-      url.onchange=()=>setProxyUrl(url.value.trim());
-      resetProxy.onclick=()=>{ url.value=defaultProxyUrl(); setProxyUrl(url.value); providerState.textContent='已使用本機 AI 服務'; };
-      async function loadModels(){ setProxyUrl(url.value.trim()); setAIBaseUrl(base.value.trim(),provider.value); setAIApiKey(key.value.trim(),provider.value); providerState.textContent='讀取模型中…'; refreshModels.disabled=true;
+      url.onchange=()=>setAIProxyUrl(url.value.trim(),provider.value);
+      resetProxy.onclick=()=>{ url.value=defaultProxyUrl(); setAIProxyUrl(url.value,provider.value); providerState.textContent='已使用本機 AI 服務'; };
+      async function loadModels(){ setAIProxyUrl(url.value.trim(),provider.value); setAIBaseUrl(base.value.trim(),provider.value); setAIApiKey(key.value.trim(),provider.value); providerState.textContent='讀取模型中…'; refreshModels.disabled=true;
         try{ const models=await refreshAIModels(provider.value); modelList.innerHTML=models.map(m=>`<option value="${esc(m)}"></option>`).join(''); if(!model.value&&models.length){ model.value=models[0]; setAIModel(model.value,provider.value); } providerState.textContent=models.length?('已載入 '+models.length+' 個模型'):'未取得模型清單，可直接輸入模型 ID'; }
         catch(e){ providerState.textContent=e.message; } finally{ refreshModels.disabled=false; } }
-      provider.onchange=()=>{ setAIProvider(provider.value); model.value=getAIModel(provider.value); model.placeholder=aiModelPlaceholder(provider.value); base.value=getAIBaseUrl(provider.value); key.value=getAIApiKey(provider.value);
+      provider.onchange=()=>{ setAIProvider(provider.value); model.value=getAIModel(provider.value); model.placeholder=aiModelPlaceholder(provider.value); base.value=getAIBaseUrl(provider.value); key.value=getAIApiKey(provider.value); url.value=getAIProxyUrl(provider.value);
         modelList.innerHTML=aiModelListHtml(provider.value).map(m=>`<option value="${esc(m)}"></option>`).join(''); providerState.textContent=''; if(key.value) loadModels(); };
       model.onchange=()=>setAIModel(model.value,provider.value);
       base.onchange=()=>setAIBaseUrl(base.value.trim(),provider.value);
@@ -7909,7 +7925,7 @@
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片（僅用來決定結果存放於哪個對話串）。'; return; }
         const cands=eventCandidatesInRange(startAr, endAr);
         if(cands.length<2){ st2.textContent='此期間（'+startAr+'～'+endAr+'）林方／清方事件線與皇帝行動線上可比對的事件不足兩個。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 分析跨線重複事件中…（'+cands.length+' 個候選）';
         const payload=cands.map(eventForAiPayload);
         const question='以下是時間軸上「'+startAr+'」至「'+endAr+'」期間，林方／清方軍事行動線（actor lin/qing）與皇帝行動線（actor emperor）上的事件點。'
@@ -7996,7 +8012,7 @@
       async function runExtract(actor, ctx){
         ctx=ctx||{};
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片（範圍：單一／部分／全部，或 ⌘點選圓點）。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 擷取中…（0/'+apis.length+'）';
         try{ const props=await extractEventProposals(actor, apis.map(a=>a.rec), (dn,n)=>{ st2.textContent='AI 擷取中…（'+dn+'/'+n+'）'; }, ctx);
           const failures=props.__failures||[];
@@ -8135,7 +8151,7 @@
         } return false; });
       }
       async function runYuPairingForSel(ctx){ ctx=ctx||{};
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const apis=selectedApis(); const mems=apis.map(a=>a.rec).filter(r=>r.type!=='shangyu');
         if(!mems.length){ st2.textContent='請先選擇奏摺／硃批文書（非上諭）。'; return; }
         let added=0, ran=0;
@@ -8171,7 +8187,7 @@
         renderLog({}); st2.textContent='完成：上諭配對，新增 '+added+' 則'+(ran?'':'（所選文書未偵測到上諭引用標記）')+'。';
       }
       async function runZhuPairingForSel(ctx){ ctx=ctx||{};
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const apis=selectedApis(); const mems=apis.map(a=>a.rec).filter(r=>r.type!=='shangyu');
         if(!mems.length){ st2.textContent='請先選擇奏摺／硃批文書（非上諭）。'; return; }
         let added=0, ran=0;
@@ -8208,7 +8224,7 @@
         renderLog({}); st2.textContent='完成：硃批配對，新增 '+added+' 則'+(ran?'':'（所選文書未偵測到硃批引文）')+'。';
       }
       async function runPriorReportPairingForSel(ctx){ ctx=ctx||{};
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const apis=selectedApis(); const mems=apis.map(a=>a.rec).filter(r=>r.type!=='shangyu');
         if(!mems.length){ st2.textContent='請先選擇奏摺／硃批文書（非上諭）。'; return; }
         let added=0,ran=0;
@@ -8238,7 +8254,7 @@
       }
       async function runZhupi(ctx){ ctx=ctx||{};
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 擷取硃批中…（0/'+apis.length+'）';
         const all=[]; let done=0;
         for(const a of apis){ const r=a.rec; try{
@@ -8290,7 +8306,7 @@
       }
       // for a 已有旨/即有諭旨 rescript: find 上諭 within ±3 days that respond to this memorial (AI compares memorial vs candidate edicts)
       async function runEdictMatch(it){
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const mem=recByDocId2(it.doc_id); if(!mem){ st2.textContent='找不到原奏摺文書。'; return; }
         const base=mem.recvAr||mem.sendAr||mem.annAr; if(!base){ st2.textContent='原文書無日期，無法比對。'; return; }
         let cands=recs.filter(r=>r.type==='shangyu' && datesWithinDays(r.annAr||r.sendAr, base, 3));
@@ -8311,7 +8327,7 @@
       // standalone action: for the selected memorial(s), check EACH 上諭 within ±3 days of the memorial's received date,
       // one edict at a time, so none is missed; every responding edict becomes its own card (with the emperor's response quote)
       async function runEdictScan(ctx){ ctx=ctx||{};
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇文書卡片。'; return; }
         const mems=apis.map(a=>a.rec).filter(r=>r.type!=='shangyu');
         if(!mems.length){ st2.textContent='所選皆為上諭，請選擇奏摺／硃批文書。'; return; }
@@ -8449,7 +8465,7 @@
       // onto the event's existing emperorDetail (Object.assign, no delete+recommit) instead of
       // pushing a brand-new floating chat card.
       async function runInfoSourceLookup(ctx){ ctx=ctx||{};
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         let rec=null, evId=ctx.evId||null, srcM=null, srcJ=null;
         if(evId){
           const ev=eventById(evId); if(!ev){ st2.textContent='找不到事件。'; return; }
@@ -8531,7 +8547,7 @@
         }).sort((a,b)=>{ const dda=(a.type==='shangyu'?parseD(a.annAr):parseD(a.recvAr)), ddb=(b.type==='shangyu'?parseD(b.annAr):parseD(b.recvAr)); return (dda?dda.getTime():0)-(ddb?ddb.getTime():0); });
       }
       async function runSituFit(){
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const apis=selectedApis();
         if(apis.length!==1 || apis[0].rec.type!=='zhupi'){ st2.textContent='請先選擇單一硃批圓點。'; return; }
         const mem=apis[0].rec;
@@ -8543,7 +8559,7 @@
         const baseline={ doc_id:(mem._baseId||mem.id), title:mem.title||'', author:mem.author_name||'', sendAr:mem.sendAr||'', recvAr:mem.recvAr||'', lag:mem.lag!=null?mem.lag:null, body:recordBody(mem), rescript:mem.rescript||'', summary:getSummary(mem) };
         const changePayload=changeDocs.map(r=>({ doc_id:(r._baseId||r.id), title:r.title||'', author:r.author_name||'', type:TYPE_LABEL[r.type]||r.type||'', sendAr:r.sendAr||'', recvAr:r.recvAr||'', body:recordBody(r) }));
         const responsePayload=responseDocs.map(r=>({ doc_id:(r._baseId||r.id), title:r.title||'', type:TYPE_LABEL[r.type]||r.type||'', date:(r.type==='shangyu'?(r.annAr||''):(r.recvAr||'')), recipients:r.recipients||[], body:recordBody(r), rescript:r.rescript||'' }));
-        const question='以下是一份奏摺（上奏）與皇帝硃批的基本資料（baseline），以及該奏摺上奏日至硃批受文日之間，其他官員（不限於本奏摺作者）所上呈的其他奏摺／文書（change_docs，已排除本奏摺本身與上諭），'
+        const question=(skillPromptFor('response-timeliness')||'以下是一份奏摺（上奏）與皇帝硃批的基本資料（baseline），以及該奏摺上奏日至硃批受文日之間，其他官員（不限於本奏摺作者）所上呈的其他奏摺／文書（change_docs，已排除本奏摺本身與上諭），'
           +'還有硃批受文日起至其後 3 日內頒布／發出的所有硃批與上諭（response_docs，即皇帝的回應）。'
           +'請判斷：在皇帝寫下硃批／發布上諭回應本奏摺時，實際情勢是否已經與本奏摺原本回報的情況不同（例如戰況已改變、地點已易手、官員已提出新對策等）。'
           +'再判斷皇帝的回應（response_docs）是否切合當時的實際情勢，或只是針對本奏摺已經過時的舊報告作出回應。'
@@ -8551,7 +8567,7 @@
           +'"changes":[{"doc_id":"文書id","subtitle":"此文書內容的簡短標目（一句話，如同事件摘要）","title":"標題","author":"作者","sentAr":"YYYY/M/D","quote":"引文（逐字，來自該文書原文）","how":"此文書顯示情勢如何變化"}],'
           +'"responses":[{"doc_id":"文書id","type":"硃批或上諭","date":"YYYY/M/D","quote":"引文（逐字，來自該文書原文，硃批可用 rescript 欄位文字）","note":"此回應內容概述"}],'
           +'"verdict":"fits/stale-but-harmless/mismatch","reasoning":"詳述理由，並引用 changes／responses 中的 doc_id 與引文"}。'
-          +'verdict 三選一：fits＝回應切合實際情勢；stale-but-harmless＝回應雖基於舊情勢但未造成實質影響；mismatch＝回應與實際情勢明顯不符。'
+          +'verdict 三選一：fits＝回應切合實際情勢；stale-but-harmless＝回應雖基於舊情勢但未造成實質影響；mismatch＝回應與實際情勢明顯不符。')
           +'\n【baseline】\n'+JSON.stringify(baseline)
           +'\n【change_docs】\n'+JSON.stringify(changePayload)
           +'\n【response_docs】\n'+JSON.stringify(responsePayload);
@@ -8575,7 +8591,7 @@
       // trace the information-transmission chain behind ONE event (scans its source docs, falls back to selected docs)
       async function runTrace(evId, ctx){ ctx=ctx||{};
         const e=eventById(evId); if(!e){ st2.textContent='找不到事件。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         let docs=(e.sources||[]).map(s=>recByDocId2(s.doc_id)).filter(Boolean);
         if(!docs.length) docs=selectedApis().map(a=>a.rec);
         if(!docs.length){ st2.textContent='此事件尚無來源文書，請先選擇文書卡片。'; return; }
@@ -8600,7 +8616,7 @@
       async function runOfficialResponseSearch(evId, ctx){ ctx=ctx||{};
         const e=eventById(evId); if(!e){ st2.textContent='找不到事件。'; return; }
         if(e.actor!=='emperor'){ st2.textContent='此功能僅適用於皇帝行動（硃批／諭）事件。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         if(!e.dateAr){ st2.textContent='此皇帝行動缺少日期，無法搜尋回應期限。'; return; }
         const recipients=ctx.addressee?[ctx.addressee]:actionRecipients(e);
         const cands=officialResponseCandidates(e, 30, recipients);
@@ -8650,7 +8666,7 @@
       const chainSig=chainSigOf;
       // trace ALL identified events of a side ('lin'|'qing'|'all'), consolidated into ONE chain-by-chain turn
       async function runTraceBatch(side, ctx){ if(typeof side==='object'){ ctx=side; side='lin'; } ctx=ctx||{}; side=side||'lin';
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         // saved-prompt / act-menu searches are scoped to the SELECTED document(s)
         const selRecs=selectedApis().map(a=>a.rec); const docIds=new Set(selRecs.map(r=>String(r._baseId||r.id)));
         let evs=visibleEvents().filter(e=> side==='all' ? true : e.actor===side );
@@ -8673,7 +8689,7 @@
       // doc-wide: identify ALL transmission chains in the selected docs (no single focus event); events matched to those on the chart
       async function runChainScan(ctx){ ctx=ctx||{};
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 辨識全文來源鏈中…（0/'+apis.length+'）';
         const all=[]; let done=0;
         for(const a of apis){ const r=a.rec; try{
@@ -8695,7 +8711,7 @@
         periodDays=Math.max(1, parseInt(periodDays,10)||1);
         const evs=visibleEvents().filter(e=>(e.actor==='lin'||e.actor==='qing') && e.dateAr && parseD(e.dateAr));
         if(!evs.length){ st2.textContent='目前沒有已標示日期的林方／清方事件可供摘要。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const sorted=evs.slice().sort((a,b)=>parseD(a.dateAr)-parseD(b.dateAr));
         const start0=parseD(sorted[0].dateAr), end0=parseD(sorted[sorted.length-1].dateAr);
         const buckets=[];
@@ -8725,7 +8741,7 @@
       // @command focused source search: trace by a typed description of an event (both sides)
       async function runTraceQuery(question){
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片。'; return; }
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 依描述追溯來源中…';
         const all=[];
         for(const a of apis){ const r=a.rec; try{
@@ -8740,7 +8756,7 @@
       // bottom-of-extract-card button: search source chains for the extracted events
       // (if any were added/clicked, only those; otherwise all extracted), consolidated into one turn
       async function runTraceExtractItems(m){
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const items=(m.items||[]).filter(it=>!it.__skip);
         const added=items.filter(it=>it.__added);
         const targets=added.length?added:items;
@@ -8779,7 +8795,7 @@
       }
       // build ONE event directly from a piece of text (a replied summary), locating a quote in the open docs if possible
       async function createEventFromMessage(text, actor){
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 依訊息建立事件中…';
         const docs=selectedApis().map(a=>a.rec);
         const body=docs.slice(0,5).map(r=>`【${r._baseId||r.id}】\n`+recordBody(r)).join('\n\n———\n\n');
@@ -8808,7 +8824,7 @@
         const resolved=mode==='ask'?resolveAtPrompt(qtext):{mode,text:qtext};
         if(mode==='ask' && resolved.mode!=='ask'){ qtext=resolved.text; mode=resolved.mode; }
         else if(mode==='ask') qtext=resolved.text;
-        if(!getProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         const refText=replyRef?replyRef.text:'';
         const atActor=mode==='ask'?atEventCommand(qtext):null;
         const replyCmd=mode==='ask'?replyEventCommand(qtext, replyRef):null;
@@ -10887,6 +10903,9 @@ body .chat-log .src-ev .src-open{
 .ai-advanced summary{ cursor:pointer; user-select:none; }
 .ai-advanced .gx-cfgrow{ flex-direction:row !important; align-items:center !important; margin-top:8px !important; }
 .ai-advanced .gx-url{ flex:1 1 auto; min-width:0; }
+.ai-proxy-wrap{ display:flex; align-items:center; gap:6px; width:100%; min-width:0; }
+.ai-proxy-wrap .gx-url{ flex:1 1 auto; min-width:0; }
+.cb-pop-cfg .ai-proxy-wrap .gx-url{ width:auto !important; }
 .ai-proxy-reset{ flex:0 0 auto; white-space:nowrap; }
 .ai-provider-state{ min-height:18px; color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
 /* Timeline right-click menu. */

@@ -81,3 +81,13 @@ The preserved timeline UI itself is also available directly:
 ```text
 http://127.0.0.1:8766/app
 ```
+
+The interactive algorithm map for the pre-reading stage and the two AI review
+loops is available at:
+
+```text
+http://127.0.0.1:8766/workflow/
+```
+
+Select any flowchart step to read its algorithm, input/output contract, and the
+full Markdown skill and Python runner used by that step.

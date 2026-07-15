@@ -8,3 +8,6 @@ node_modules/
 *.local.env
 api-keys.*
 secrets/
+# local timeline-data snapshots from sample-mode/backup-/restore-timeline-data.sh
+# (keep the canonical timeline-edits.local.json, but not the large rolling backups)
+outputs/attempt-002/sample-mode/backups/

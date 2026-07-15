@@ -15,6 +15,40 @@ full provenance chain. If no qualifying document exists, return no chain;
 never infer an unnamed report. Also return the selected `上諭` quotation in
 which the emperor comments on this particular event, if present.
 
+## Extraction rules (mirrored in the proxy `trace` task)
+
+These are documented here so the human-readable criteria stay visible; the live
+instructions are enforced in `gemini-proxy/main.py` `mode:"trace"`.
+
+- **Connect into one unbroken chain.** Every hop must link A→B→C→…→document
+  author. Each relay person has both an incoming and an outgoing hop; only the
+  original source lacks an incoming hop, and only the document's author lacks an
+  outgoing hop. If 甲 relays to 乙 who relays to 丙, output *both* 甲→乙 and 乙→丙
+  — never drop the middle link, or a mid-chain person is wrongly rendered as
+  「第一手」/「撰文者」.
+- **Relay-verb direction (do not reverse).** 「甲字寄乙」「甲咨乙」「甲移會乙」
+  「甲行乙／行據乙」 = 甲→乙. 「據X稟」「准X咨」「奉X諭／行」「接據X」 =
+  X→the official quoting that clause. Unwind nested citations layer by layer
+  (e.g. 「據A稟稱：准B咨，奉C行據D稟報」 = D→C→B→A→author; 「彰邑大肚社番字寄淡屬大甲社通事，據稱…」
+  = 彰邑大肚社番→淡屬大甲社通事→淡水同知).
+- **No assumed 親歷.** Only mark 親見／目擊／親歷／在場 when the text explicitly
+  says so; otherwise `how` is the actual transmission verb (稟報／字寄／轉述…).
+- **Keep all co-named reporters.** A joint report (e.g. 「淡水同知程峻、北路竹塹營守備董得魁稟報」)
+  must list every named person in that hop's `from_person` — never drop one.
+- **Names only from the text.** Use only the title/name as written; if the source gives just a
+  title (「福建巡撫」) with no name, keep the title — never supply a name from outside knowledge
+  (no 「福建巡撫徐嗣曾」).
+- **Places only from the text.** `place`/`who_loc` come only from the source; don't place a person
+  by where you know they served (a Fujian 巡撫 is not in 臺灣; 大甲社通事 is at 大甲社, not 大肚社).
+- **`inferred` = an inferred *link* only.** If both people and the transmission are stated, it is
+  `inferred:false` even when the date is missing; don't mark a named person inferred.
+- **Don't invent middle dates.** A hop's `whenCh` is only a date the text states for that hop;
+  otherwise leave it blank — never copy a neighbouring hop's date.
+- **Preserve vague dates.** Keep 「十一月初間」/「月底」 verbatim in `whenCh`; don't collapse to one day.
+- **Quotation display.** The website reconstructs one continuous verbatim passage
+  from the original document body spanning all of a chain's quote fragments, so
+  the whole relay reads as a single paragraph rather than disjoint clauses.
+
 ## Purpose
 
 Reconstructs how an event's information reached the document's author —

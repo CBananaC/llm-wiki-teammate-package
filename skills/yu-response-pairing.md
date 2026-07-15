@@ -35,13 +35,18 @@ Three signals feed the judgement:
 3. **Citation** — the reply cites the edict: a marker (`奉上諭`／`奉廷寄`／
    `欽奉諭旨`) followed by a **loosely matching** quotation of the edict's wording.
 
-The AI rates each proposed pair's strength as **`match_level`**:
+The AI rates each proposed pair's strength as **`match_level`**. The cited date
+disambiguates edicts in a series that otherwise read almost identically:
 
-- **high** — marker present and the quotation clearly, loosely matches this edict.
-- **partial** — a citation is present but the match is partial, or only the date
-  lines up without much quoted wording.
-- **weak** — right official within the window, but the citation is faint or
-  absent (identity + date only).
+- **high** — the reply names **this edict's date** (the date it prints before
+  `奉上諭`) and reproduces matching wording. When both hold, you **must** rate
+  `high` — this is the normal, expected match, not a rare one.
+- **partial** — the quoted wording clearly matches this edict, but no legible
+  date is given to confirm it (the reply doesn't state which edict-date it
+  quotes).
+- **weak** — the reply names a **different** edict date (even one day off → a
+  different edict in the series), or there is no real citation. A different cited
+  date is `weak` however similar the subject matter.
 
 **No pair is ever auto-confirmed.** Every proposed pair is provisional — a
 suggestion for review — regardless of `match_level`. A pair only becomes real
@@ -77,9 +82,45 @@ its recipient(s). For each candidate, decide whether it is genuinely responding
 to THIS `上諭`.
 
 A memorial responds to this `上諭` when it contains a citation marker
-(`奉上諭`／`奉廷寄`／`欽奉諭旨`／`欽奉上諭`) introducing a quotation whose wording
+(`奉上諭`／`奉聖諭`／`聖諭`／`奉廷寄`／`欽奉諭旨`／`諭旨`／`欽奉上諭`) introducing a quotation whose wording
 **loosely** matches this edict — a rewrite, abridgement, or paraphrase counts;
 an exact copy is not required. Do not require verbatim text.
+
+Some catalogue rows have an empty or placeholder `上諭` body (for example,
+`正文見第一部分。`). In that case, use the row's title, cited date context,
+and named officials as a provisional fallback: return `partial` only when the
+title clearly identifies the quoted subject, and do not treat a generic
+same-topic title as proof.
+
+**Capture the receipt lead-in AND the full quoted 上諭 (its 範圍).**
+`quote_in_reply` should begin at the official's **receipt clause** — the phrase
+stating when and how he received the edict (e.g.
+`三月初十日，督臣常青面交廷寄諭旨，付奴才閱看。乾隆五十二年二月十一日奉上諭：`) —
+and continue through the **entire** quoted edict to its close. So a full
+`quote_in_reply` looks like:
+`三月初十日，督臣常青面交廷寄諭旨，付奴才閱看。乾隆五十二年二月十一日奉上諭：「本日據黃仕簡奏…令其回奏。」欽此`.
+Put the edict's own corresponding text (without the reply's lead-in) in
+`matched_yu_span`. The quote's close is normally `欽此`; when there is no `欽此`,
+decide the boundary by reading — the quotation ends where the emperor's reported
+words stop and the official's own narration resumes. Do not cut it at an
+internal `等語`/`等因` that sits inside the emperor's words.
+
+**Use the cited date to rate — but only an ISSUE date.** `issue_date` is the
+edict's own date, printed **directly before `奉上諭`/`奉聖諭`** (the date the
+edict was issued). A date printed before `奉到`/`接奉`/`敬奉`/`准` is a **receipt**
+date, not an issue date — do NOT treat it as `issue_date`. Compare only a true
+issue date to this `上諭`'s date, shown in the `【本上諭】` block:
+- **issue date matches → `high`** (with a matching quotation). The standard
+  successful pairing; do not hedge it down.
+- **issue date differs, even by one day → `weak`** — a different edict in the
+  same series; do not upgrade on content similarity alone.
+- **only a receipt date is given (`X日奉到諭旨：「…」`), no issue date → rate by
+  the QUOTED CONTENT**: if the quotation matches this `上諭`, rate `high` (or
+  `partial` if the overlap is looser). Do **not** rate it `weak` just because the
+  receipt date differs from this edict's issue date. This is the normal shape of
+  a batch acknowledgment (`節次奉到諭旨`), which cites many edicts by the date
+  they were **received**; match each quotation to its edict by content.
+- **no legible date at all → `partial`** if the quoted wording still matches.
 
 For dates, distinguish carefully and do not guess:
 - `issue_date` = the edict's own date as named in the reply (e.g. the date
@@ -96,6 +137,21 @@ For dates, distinguish carefully and do not guess:
 - Prefer the full `乾隆..年..月..日` form. Mark a date `未明` only when it is
   genuinely absent, never when it is expressed relatively.
 
+**Also record HOW the official received this 上諭**, in `evidence.receipt`. The
+receipt clause is normally already part of `quote_in_reply` — just classify it:
+- `type`: one of
+  - `direct` — the edict was addressed to and received by this official himself
+    (`奉上諭`／`欽奉諭旨` with no relaying party named).
+  - `court_letter` — relayed as a court letter (`廷寄`／`字寄`) by the Grand
+    Councillors (e.g. `接奉廷寄…奉上諭`, `承准大學士公阿桂、和珅字寄`).
+  - `handed` — another official physically handed or showed it to him
+    (e.g. `督臣常青面交廷寄諭旨，付奴才閱看`).
+  - `copy` — a transcribed / forwarded copy (`抄錄`／`傳鈔`／`轉行`).
+- `via`: the intermediary's name or title if it reached him through someone else
+  (e.g. `阿桂`、`和珅`、`常青`); `未明` for a `direct` receipt.
+- `quote`: the exact **receipt clause** from the reply (verbatim); the same clause
+  that opens `quote_in_reply`.
+
 Use Traditional Chinese, preserve quotations exactly, and return only this JSON:
 
 ```json
@@ -110,6 +166,7 @@ Use Traditional Chinese, preserve quotations exactly, and return only this JSON:
         "matched_yu_span": "",
         "issue_date": "未明",
         "receive_date": "未明",
+        "receipt": { "type": "direct", "via": "未明", "quote": "" },
         "date_note": ""
       }
     }

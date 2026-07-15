@@ -26,6 +26,8 @@ sys.path.insert(0, str(Path(__file__).resolve().parent))
 from run_review_bundle_test import (  # noqa: E402
     ROOT,
     SOURCE,
+    STEP_SKILL,
+    SKILLS_DIR,
     all_record_dates,
     parse_date,
     primary_date,
@@ -34,7 +36,7 @@ from run_review_bundle_test import (  # noqa: E402
 
 
 DEFAULT_STEPS = (
-    "summary,divide,lin-events,qing-events-done,qing-events-plan,"
+    "summary,divide,lin-events,source-chain,qing-events-done,qing-events-plan,"
     "qing-events-nonmil,zhupi,edict-match"
 )
 
@@ -77,9 +79,9 @@ def main() -> int:
     )
     parser.add_argument("--steps", default=DEFAULT_STEPS, help="Comma-separated subset of the loop stages")
     parser.add_argument("--bundle", default="", help="Review-bundle name; stable by default for this period")
-    parser.add_argument("--timeout", type=int, default=180)
-    parser.add_argument("--retries", type=int, default=4)
-    parser.add_argument("--retry-sleep", type=int, default=15)
+    parser.add_argument("--timeout", type=int, default=300)
+    parser.add_argument("--retries", type=int, default=6)
+    parser.add_argument("--retry-sleep", type=int, default=20)
     parser.add_argument("--skip-done", action="store_true", help="Resume completed stages in the same bundle")
     parser.add_argument("--dry-run", action="store_true", help="List selected 硃批 without calling the proxy")
     args = parser.parse_args()
@@ -99,6 +101,14 @@ def main() -> int:
     unknown = [step for step in steps if step not in allowed]
     if unknown:
         raise SystemExit("Unsupported loop stage(s): " + ", ".join(unknown))
+
+    missing_skills = [
+        f"{step} -> {STEP_SKILL.get(step, '')}"
+        for step in steps
+        if not STEP_SKILL.get(step) or not (SKILLS_DIR / STEP_SKILL[step]).is_file()
+    ]
+    if missing_skills:
+        raise SystemExit("Missing skill file(s): " + ", ".join(missing_skills))
 
     bundle_name = args.bundle or f"zhu-review-loop-{start_text.replace('-', '')}-{end_text.replace('-', '')}"
     print(f"Selected 硃批: {len(docs)} | period: {start_text} to {end_text} | mode: {args.date_mode}")
@@ -152,6 +162,7 @@ def main() -> int:
         "date_mode": args.date_mode,
         "doc_ids": [str(record.get("doc_id") or record.get("id")) for record in docs],
         "chain": ["zhu-review-loop", *steps],
+        "skill_files": {step: STEP_SKILL[step] for step in steps},
     })
     write_json(manifest_path, manifest)
     print(f"\nZhu review loop bundle: {bundle_root}")

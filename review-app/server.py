@@ -15,12 +15,15 @@ import re
 import subprocess
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+from urllib.error import HTTPError, URLError
 from urllib.parse import unquote, urlparse
+from urllib.request import Request, urlopen
 
 
 APP_DIR = Path(__file__).resolve().parent
 WIKI_DIR = APP_DIR.parent
 STATIC_DIR = APP_DIR / "static"
+WORKFLOW_DIR = WIKI_DIR / "ai-loop-workflow"
 SKILLS_DIR = WIKI_DIR / "skills"
 BUNDLES_DIR = WIKI_DIR / "outputs" / "review-bundles"
 ATTEMPT_DIR = WIKI_DIR / "outputs" / "attempt-002"
@@ -32,6 +35,43 @@ ATTEMPT_DIR = WIKI_DIR / "outputs" / "attempt-002"
 # localStorage is kept only as a fast local cache/fallback for when this server isn't running
 # (e.g. the page opened directly as file://).
 EDITS_PATH = ATTEMPT_DIR / "timeline-edits.local.json"
+# Separate, disk-backed working state for the isolated blank SAMPLE page
+# (outputs/attempt-002/sample-mode/stage1-timeline-blank.html). Kept in its own
+# file so sample/presentation data auto-loads and persists across reloads WITHOUT
+# ever touching the real timeline overlay above. Served via /api/edits-blank.
+BLANK_EDITS_PATH = ATTEMPT_DIR / "sample-mode" / "sample-edits.local.json"
+AI_PROXY_URL = os.environ.get("LLM_WIKI_AI_URL", "http://127.0.0.1:8767").rstrip("/")
+
+# Source files shown by the interactive AI-loop map.  Keep this list explicit:
+# the browser can inspect the real workflow implementation without gaining a
+# general-purpose file-reading endpoint.
+WORKFLOW_SOURCE_FILES = (
+    "skills/zhu-response-pairing.md",
+    "scripts/run_zhu_pairing.py",
+    "skills/yu-response-pairing.md",
+    "scripts/run_yu_pairing.py",
+    "skills/quick-summary.md",
+    "skills/divide-into-parts.md",
+    "scripts/summarize_stage1_shangzou_vertex.py",
+    "skills/zhu-review-loop.md",
+    "scripts/run_zhu_review_loop.py",
+    "scripts/run_review_bundle_test.py",
+    "skills/extract-lin-actions.md",
+    "skills/extract-qing-actions-done.md",
+    "skills/extract-qing-actions-planned.md",
+    "skills/extract-qing-nonmilitary-actions.md",
+    "skills/trace-source-chain.md",
+    "skills/extract-zhupi.md",
+    "skills/edict-match.md",
+    "skills/extract-emperor-action.md",
+    "skills/official-response.md",
+    "skills/shangyu-review-loop.md",
+    "skills/response-timeliness.md",
+    "scripts/run_shangyu_loop_prompt.py",
+    "scripts/merge_pairs.py",
+    "review-app/README.md",
+    "review-app/server.py",
+)
 
 # Section heading a skill file can use to mark the short, single-string
 # version of itself that the browser sends as-is to the Gemini proxy for
@@ -120,12 +160,18 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            if path.startswith("/api/ai/"):
+                return self.ai_proxy("GET", path.removeprefix("/api/ai"), parsed.query)
             if path == "/api/health":
                 return self.json({"ok": True})
             if path == "/api/edits":
                 return self.json(read_json(EDITS_PATH, {}))
+            if path == "/api/edits-blank":
+                return self.json(read_json(BLANK_EDITS_PATH, {}))
             if path == "/api/skills":
                 return self.json(self.skills())
+            if path == "/api/workflow-sources":
+                return self.json(self.workflow_sources())
             if path == "/api/bundles":
                 return self.json(self.bundles())
             if path.startswith("/api/bundles/"):
@@ -138,6 +184,11 @@ class Handler(BaseHTTPRequestHandler):
                 })
             if path == "/app" or path == "/app/":
                 return self.attempt_file("stage1-timeline.html")
+            if path in {"/workflow", "/workflow/", "/workflow.html"}:
+                return self.workflow_file("index.html")
+            if path.startswith("/workflow/"):
+                rel = unquote(path.removeprefix("/workflow/"))
+                return self.workflow_file(rel)
             if path.startswith("/attempt-002/"):
                 rel = unquote(path.removeprefix("/attempt-002/"))
                 return self.attempt_file(rel)
@@ -149,6 +200,8 @@ class Handler(BaseHTTPRequestHandler):
         parsed = urlparse(self.path)
         path = parsed.path
         try:
+            if path.startswith("/api/ai/"):
+                return self.ai_proxy("POST", path.removeprefix("/api/ai"), parsed.query)
             data = self.body_json()
             if path == "/api/edits":
                 # No git_auto_commit here on purpose: this saves on essentially every click
@@ -157,6 +210,11 @@ class Handler(BaseHTTPRequestHandler):
                 # (git add/commit outputs/attempt-002/timeline-edits.local.json) when you want
                 # a checkpoint.
                 write_json(EDITS_PATH, data)
+                return self.json({"ok": True})
+            if path == "/api/edits-blank":
+                # isolated sample-page state; never commits, never touches the real overlay
+                BLANK_EDITS_PATH.parent.mkdir(parents=True, exist_ok=True)
+                write_json(BLANK_EDITS_PATH, data)
                 return self.json({"ok": True})
             if path.startswith("/api/skills/"):
                 slug = unquote(path.removeprefix("/api/skills/"))
@@ -186,6 +244,18 @@ class Handler(BaseHTTPRequestHandler):
                 **extract_metadata(text),
             })
         return out
+
+    def workflow_sources(self):
+        files = {}
+        for rel in WORKFLOW_SOURCE_FILES:
+            path = safe_child(WIKI_DIR, rel)
+            if path.is_file():
+                files[rel] = {
+                    "path": rel,
+                    "language": "python" if path.suffix == ".py" else "markdown",
+                    "text": path.read_text(encoding="utf-8"),
+                }
+        return {"files": files}
 
     def save_skill(self, slug: str, data):
         if not slug.endswith(".md"):
@@ -288,10 +358,54 @@ class Handler(BaseHTTPRequestHandler):
         self.end_headers()
         self.wfile.write(target.read_bytes())
 
+    def workflow_file(self, rel: str):
+        target = safe_child(WORKFLOW_DIR, rel)
+        if not target.exists() or not target.is_file():
+            return self.json({"error": "workflow file not found"}, 404)
+        ctype = mimetypes.guess_type(target.name)[0] or "application/octet-stream"
+        self.send_response(200)
+        self.send_header("Content-Type", ctype + "; charset=utf-8")
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(target.read_bytes())
+
     def body_json(self):
         length = int(self.headers.get("Content-Length", "0") or "0")
         raw = self.rfile.read(length).decode("utf-8")
         return json.loads(raw) if raw else {}
+
+    def ai_proxy(self, method: str, path: str, query: str = ""):
+        target = AI_PROXY_URL + path + (("?" + query) if query else "")
+        body = None
+        if method == "POST":
+            length = int(self.headers.get("Content-Length", "0") or "0")
+            body = self.rfile.read(length)
+        upstream = Request(
+            target,
+            data=body,
+            method=method,
+            headers={"Content-Type": self.headers.get("Content-Type", "application/json")},
+        )
+        try:
+            with urlopen(upstream, timeout=150) as response:
+                payload = response.read()
+                status = response.status
+                content_type = response.headers.get("Content-Type", "application/json; charset=utf-8")
+        except HTTPError as exc:
+            payload = exc.read()
+            status = exc.code
+            content_type = exc.headers.get("Content-Type", "application/json; charset=utf-8")
+        except (URLError, TimeoutError) as exc:
+            return self.json({
+                "error": "本機 AI 服務未啟動。請重新執行 run-local.py，並確認已安裝 gemini-proxy/requirements.txt。",
+                "detail": str(exc),
+            }, 503)
+        self.send_response(status)
+        self.send_header("Content-Type", content_type)
+        self.send_header("Content-Length", str(len(payload)))
+        self.send_header("Cache-Control", "no-store")
+        self.end_headers()
+        self.wfile.write(payload)
 
     def static(self, path: str):
         rel = "index.html" if path in {"/", ""} else path.lstrip("/")

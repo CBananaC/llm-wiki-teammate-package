@@ -36,9 +36,12 @@ def main() -> None:
         raise SystemExit("Expected an llm-wiki directory containing outputs/review-bundles")
 
     archive(source, [source / "outputs" / "review-bundles"], PACKAGE / "archives" / "review-bundles.zip")
+    # `scripts` is intentionally NOT archived here: the runners now live as a
+    # loose, git-tracked `scripts/` folder in this package (edited directly), so
+    # zipping them too would duplicate and risk divergence.
     research_targets = [
         source / name
-        for name in ("raw", "ocr", "cleaned", "scripts", "corpora", "background", "research-attempts")
+        for name in ("raw", "ocr", "cleaned", "corpora", "background", "research-attempts")
         if (source / name).exists()
     ]
     research_targets.extend(sorted(source.glob("*.md")))
