@@ -385,6 +385,8 @@
   .ix-cols { position:relative; display:flex; gap:14px; align-items:flex-start; }
   .ix-text { flex:1 1 60%; white-space:pre-wrap; font-size:calc(13.5px * var(--fs,1)); line-height:2.0;
     background:#fbf6ec; padding:14px 16px; border-radius:8px; }
+  .zhuyi-text { color:#b42318 !important; font-weight:650; }
+  body.dark-mode .zhuyi-text { color:#ff8178 !important; }
   .ix-cols.inline { display:block; }
   .ix-cols.inline .ix-text { width:100%; }
   .ix-cols.inline .ix-margin { display:none; }
@@ -987,6 +989,7 @@
   /* response event -> the emperor-action (硃批/諭/action) event it replies to -- a direct
      event<->event link, distinct from .elink (event -> its own source document's dot). */
   .pairlink { stroke:#c07a1e; stroke-width:1.6; stroke-dasharray:2 3; opacity:.8; }
+  .pairlink[data-line-filters="yu-source"] { stroke:#2f8f6b; stroke-dasharray:4 3; }
   .pairlink.hot { stroke-width:3; opacity:1; stroke-dasharray:none; }
   .resplink { stroke:#6a3fb0; stroke-width:1.1; stroke-dasharray:5 3; opacity:.55; }
   .resplink.dim { opacity:.08; }
@@ -1152,6 +1155,8 @@
   .evc-view .evv-src1 .cx-q { margin-top:3px; }
   .evc-prov .pv-table { font-size:calc(11.5px * var(--fs,1)); }
   .cx-q { font-size:calc(12.5px * var(--fs,1)); color:#5c5142; background:#f6efe1; border-left:3px solid #c9b79a; border-radius:0 6px 6px 0; padding:4px 8px; margin:3px 0; line-height:1.6; }
+  .cx-actor { background:var(--actor-bg,#f4cf72); color:var(--actor-fg,#3f2c12); border-radius:3px; padding:0 2px; font-weight:700; border-bottom:2px solid var(--actor-border,#b88a28); }
+  .cx-actor:hover { filter:brightness(.94); }
   .cx-q[data-doc]:hover { background:#efe6d2; border-left-color:#a98f63; }
   ::highlight(quoteflash) { background-color:#ffdf7e; color:#2c2418; }
   ::highlight(quoteflash-approx) { background-color:#ffd9b8; color:#2c2418; }
@@ -1173,6 +1178,10 @@
   .cx-acts button.cx-done { border:1px solid #b9d0c4; background:#eef6f1; border-radius:7px; cursor:pointer; padding:3px 10px; font:inherit; }
   .cx-acts button.cx-done.ea-goto[title] { border-color:#d8a94a; background:#fff6e6; color:#7a5a12; }
   .cx-ev .ed:focus { outline:1px solid #c9b79a; background:#fffcef; }
+  .cx-qcat { display:inline-block; font-size:calc(11px * var(--fs,1)); font-weight:600; padding:1px 8px; border-radius:10px; margin:0 0 4px; }
+  .cx-qcat.qcat-done { background:#eaf3de; color:#3b6d11; }
+  .cx-qcat.qcat-plan { background:#faeeda; color:#854f0b; }
+  .cx-qcat.qcat-nonmil { background:#e6f1fb; color:#185fa5; }
   .em-ed { cursor:text; border-radius:4px; }
   .em-ed:hover { background:rgba(201,183,154,.14); }
   .em-ed:focus { outline:1px solid #c9b79a; background:#fffcef; }
@@ -1615,6 +1624,7 @@
           <div class="tf-name">在案／前奏</div><div class="tf-na">—</div><label class="tf-check" title="顯示在案與前奏文書的配對線"><input type="checkbox" data-filter-line="prior-report" checked></label><div class="tf-count-cell" data-count-line="prior-report">0</div>
           <div class="tf-name">官員回應皇帝</div><div class="tf-na">—</div><label class="tf-check" title="顯示官員回應事件到皇帝行動的線"><input type="checkbox" data-filter-line="response" checked></label><div class="tf-count-cell" data-count-line="response">0</div>
           <div class="tf-name">資訊來源</div><div class="tf-na">—</div><label class="tf-check" title="顯示皇帝行動的資訊來源線"><input type="checkbox" data-filter-line="info-source" checked></label><div class="tf-count-cell" data-count-line="info-source">0</div>
+          <div class="tf-name">上諭來源</div><div class="tf-na">—</div><label class="tf-check" title="顯示上諭與其所據奏摺來源的配對線"><input type="checkbox" data-filter-line="yu-source" checked></label><div class="tf-count-cell" data-count-line="yu-source">0</div>
         </div>
         <div class="tf-actions"><button type="button" data-type-action="all">全部顯示</button><button type="button" data-type-action="none">全部隱藏</button><button type="button" data-type-action="default">回復預設</button></div>
       </div>
@@ -1849,6 +1859,7 @@
   const EVENT_HEX={ lin:'#b5462e', qing:'#3f6f8f', emperor:'#7a5c9e' };
   const EVENT_HL_HEX={ lin:'#efb2aa', qing:'#b4d0e4', emperor:'#d0bee8' };
   const EVENT_LABEL={ lin:'林方行動', qing:'清方行動', emperor:'皇帝行動' };
+  const QCAT_LABEL={ done:'已執行軍事', plan:'待執行軍事', nonmil:'非軍事' };
   const LATEST_REVIEW_KEY='timelineLatestReviewDot.v1';
   function loadLatestReview(){ try{ const v=JSON.parse(localStorage.getItem(LATEST_REVIEW_KEY)||'null'); return v&&v.rid!=null?v:null; }catch(e){ return null; } }
   let latestReview=loadLatestReview();
@@ -2105,7 +2116,7 @@
   function docLineVisible(){ return true; }
   function eventDotVisible(e){ return chartFilterOn('dot', e&&e.actor||'lin'); }
   function eventLineVisible(e){ return chartFilterOn('line', e&&e.actor||'lin'); }
-  function pairLineKey(relation, sourceRec){ if(relation==='prior_report') return 'prior-report'; if(relation==='reply_to_zhu') return 'reply-zhu'; if(relation==='reply_to_yu') return 'reply-yu'; return sourceRec&&sourceRec.type==='zhupi'?'reply-zhu':'reply-yu'; }
+  function pairLineKey(relation, sourceRec){ if(relation==='prior_report') return 'prior-report'; if(relation==='reply_to_zhu') return 'reply-zhu'; if(relation==='reply_to_yu') return 'reply-yu'; if(relation==='yu_source') return 'yu-source'; return sourceRec&&sourceRec.type==='zhupi'?'reply-zhu':'reply-yu'; }
   function updateTypeShownCounts(){
     const dots=[...svg.querySelectorAll('[data-dot-key]')];
     const lines=[...svg.querySelectorAll('[data-line-filters]')];
@@ -2363,7 +2374,7 @@
     // prior_report pair links both official send dots on the second lane.
     let pairlinks='';
     allDocPairs().forEach(pp=>{
-      const yrec=recByDocId[String(pp.yu_doc_id)], rrec=recByDocId[String(pp.reply_doc_id)];
+      const yrec=recByDocId[String(pairSourceDocId(pp))], rrec=recByDocId[String(pp.reply_doc_id)];
       const pairKey=pairLineKey(pp.relation,yrec);
       if(!yrec||!rrec||!docLineVisible(yrec)||!docLineVisible(rrec)||!chartFilterOn('line',pairKey)) return;
       // A 硃批↔上諭 pairing joins the emperor-lane dots: the 硃批's
@@ -2382,7 +2393,7 @@
       const rc=coord[rrec._rid+replySide]||coord[rrec._rid+fallbackSide];
       if(!yc||!rc) return;
       const _phot=(hlRids.has(yrec._rid)||hlRids.has(rrec._rid))?'hot':'';
-      pairlinks+=`<line class="pairlink ${_phot}" data-line-filters="${pairKey}" data-pair-yu="${esc(pp.yu_doc_id)}" data-pair-rp="${esc(pp.reply_doc_id)}" x1="${yc.x.toFixed(1)}" y1="${yc.y.toFixed(1)}" x2="${rc.x.toFixed(1)}" y2="${rc.y.toFixed(1)}"/>`;
+      pairlinks+=`<line class="pairlink ${_phot}" data-line-filters="${pairKey}" data-pair-yu="${esc(pairSourceDocId(pp))}" data-pair-rp="${esc(pp.reply_doc_id)}" x1="${yc.x.toFixed(1)}" y1="${yc.y.toFixed(1)}" x2="${rc.x.toFixed(1)}" y2="${rc.y.toFixed(1)}"/>`;
     });
     s+=pairlinks;
     // info-source citation lines: when an emperor-action event is highlighted,
@@ -3191,6 +3202,29 @@
     }
 
     function blocks(){ const a=[]; const bd=getBody(r); if(bd) a.push({label:'原文 body', text:bd, key:'body', isBody:true}); if(r.rescript) a.push({label:'硃批 rescript', text:r.rescript, key:'rescript'}); return a; }
+    function zhuyiMask(text, blockKey){
+      text=String(text||''); const mask=new Uint8Array(text.length);
+      const add=(s,e)=>{ s=Math.max(0,s|0); e=Math.min(text.length,e|0); for(let i=s;i<e;i++) mask[i]=1; };
+      const addMatches=re=>{ re.lastIndex=0; let m; while((m=re.exec(text))){ add(m.index,m.index+m[0].length); if(!m[0].length) re.lastIndex++; } };
+      if(blockKey==='rescript'){ add(0,text.length); return mask; }
+      const literal=String(r.rescript||'').trim();
+      if(literal&&literal!=='/'){ let at=0; while((at=text.indexOf(literal,at))>=0){ add(at,at+literal.length); at+=Math.max(1,literal.length); } }
+      // Inline imperial comments and labelled rescript blocks can occur many times inside one
+      // memorial. Mark only those spans, never the surrounding document prose.
+      addMatches(/[（(]\s*(?:硃批|朱批)\s*[:：][^）)\n]*[）)]/g);
+      addMatches(/[【\[]\s*(?:硃批|朱批)\s*[】\]](?:[ \t]*\r?\n)?[^\n]*/g);
+      let m; const quoted=/奉(?:到|得)?(?:御)?(?:硃批|朱批)\s*[:：]\s*[「『]([\s\S]*?)[」』]\s*(欽此[。.]?)?/g;
+      while((m=quoted.exec(text))){ const s=m.index+m[0].indexOf(m[1]); add(s,s+m[1].length+(m[2]?m[0].lastIndexOf(m[2])+m[2].length-(m[0].indexOf(m[1])+m[1].length):0)); }
+      const plain=/奉(?:到|得)?(?:御)?(?:硃批|朱批)\s*[:：]\s*([^\n]*?欽此[。.]?)/g;
+      while((m=plain.exec(text))){ const s=m.index+m[0].indexOf(m[1]); add(s,s+m[1].length); }
+      return mask;
+    }
+    function zhuyiChunk(text, from, to, mask){
+      let out='', i=from;
+      while(i<to){ const red=!!mask[i]; let e=i+1; while(e<to&&!!mask[e]===red) e++; const chunk=esc(text.slice(i,e)); out+=red?`<span class="zhuyi-text">${chunk}</span>`:chunk; i=e; }
+      return out;
+    }
+    function zhuyiHtml(text, blockKey){ text=String(text||''); return zhuyiChunk(text,0,text.length,zhuyiMask(text,blockKey)); }
     function fieldsHtml(it){
       const fs=it.fields||[];
       if(fs.length) return fs.map((f,fi)=>`<span class="ifld"><b>${esc(f.name)}</b>：<span class="item-edit ed" contenteditable="true" data-item-key="${esc(it.key)}" data-item-field="field:${fi}">${esc(f.val)}</span></span>`).join('');
@@ -3200,10 +3234,10 @@
       const label=it.label||'';
       return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}" style="border-left-color:${it.color}"><span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${label?`<span class="ilab item-edit ed" contenteditable="true" data-item-key="${esc(it.key)}" data-item-field="label">${esc(label)}</span> `:''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
     }
-    function buildRuns(text, cov, from, to, firstSeen){
+    function buildRuns(text, cov, from, to, firstSeen, zmask){
       let s='', c=from;
       while(c<to){ const id=cov[c]; let e=c; while(e<to && cov[e]===id) e++;
-        const chunk=esc(text.slice(c,e));
+        const chunk=zhuyiChunk(text,c,e,zmask);
         if(id<0) s+=chunk; else { const it=ITEMS[id]; const first=!firstSeen.has(id); let sup=''; if(first){ firstSeen.add(id); sup=`<sup>${it.n}</sup>`; }
           s+=`<mark class="hl" data-i="${id}" style="background:${it.color}">${sup}${chunk}</mark>`;
           if(noteMode==='inline' && first) s+=inlineNote(it); }
@@ -3215,15 +3249,16 @@
       let html='';
       blocks().forEach(b=>{
         const cov=new Array(b.text.length).fill(-1);
+        const zmask=zhuyiMask(b.text,b.key);
         ITEMS.forEach((it,idx)=>{ if(!active.has(it.key)||(it.block||'body')!==b.key) return;
           it.frags.forEach(f=>{ const pos=b.text.indexOf(f); if(pos>=0){ for(let c=pos;c<pos+f.length;c++) cov[c]=idx; } }); });
         const firstSeen=new Set();
         if(b.isBody && divisions && showDiv){
           let seg=`<div class="blk" data-block="body"><span class="blk-label">原文（已分段）</span>`;
-          divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+buildRuns(b.text,cov,dv.start,dv.end,firstSeen)+`</div></div>`; });
+          divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+buildRuns(b.text,cov,dv.start,dv.end,firstSeen,zmask)+`</div></div>`; });
           seg+='</div>'; html+=seg;
         } else {
-          html+=`<div class="blk" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>`+buildRuns(b.text,cov,0,b.text.length,firstSeen)+`</div>`;
+          html+=`<div class="blk" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>`+buildRuns(b.text,cov,0,b.text.length,firstSeen,zmask)+`</div>`;
         }
       });
       textEl.innerHTML=html; placeNotes();
@@ -3343,8 +3378,8 @@
 
     function renderTable(){
       const pane=host.querySelector('.ip-pane.tbl'); let h='';
-      h+=`<div class="sec-title">原文 body（可編輯）<button class="ip-editbody" type="button">編輯原文</button></div><div class="body-text bodyview">${esc(getBody(r))}</div>`;
-      if(r.rescript) h+=`<div class="sec-title">硃批 rescript</div><div class="body-text">${esc(r.rescript)}</div>`;
+      h+=`<div class="sec-title">原文 body（可編輯）<button class="ip-editbody" type="button">編輯原文</button></div><div class="body-text bodyview">${zhuyiHtml(getBody(r),'body')}</div>`;
+      if(r.rescript) h+=`<div class="sec-title">硃批 rescript</div><div class="body-text">${zhuyiHtml(r.rescript,'rescript')}</div>`;
       h+=`<div class="sec-title">摘要分析（可直接編輯）</div>`+summaryTable(getSummary(r));
       pane.innerHTML=h;
       pane.querySelector('.ip-editbody').onclick=()=>{ const ta=document.createElement('textarea'); ta.className='ip-bodyedit'; ta.value=getBody(r); const v=pane.querySelector('.bodyview'); v.replaceWith(ta); ta.focus();
@@ -3489,8 +3524,41 @@
   let EDITS={};
   try{ EDITS=JSON.parse(localStorage.getItem(EDIT_KEY)||'{}')||{}; }catch(e){ EDITS={}; }
   let CONFIRMED_PAIRS=[];
-  function allDocPairs(){ const a=EDITS.__docPairs||[]; const b=CONFIRMED_PAIRS||[]; if(!b.length) return a; const key=x=>String(x.yu_doc_id)+'|'+String(x.reply_doc_id)+'|'+String(x.relation||'reply_to_yu'); const seen=new Set(a.map(key)); return a.concat(b.filter(x=>x&&x.yu_doc_id&&x.reply_doc_id&&!seen.has(key(x)))); }
-  (function loadConfirmedPairs(){ fetch('/attempt-002/confirmed-pairs.json').then(r=>r.ok?r.json():null).then(d=>{ if(!d) return; CONFIRMED_PAIRS=Array.isArray(d)?d:((d&&Array.isArray(d.pairs))?d.pairs:[]); if(typeof render==='function'){ try{ render(); }catch(e){} } }).catch(()=>{}); })();
+  let __editsServerReady=false;
+  let __pendingStaticYuNocite=null;
+  function pairSourceDocId(x){ return x&&(x.yu_doc_id||x.previous_doc_id||x.zhu_doc_id||''); }
+  function pairKey(x){ return String(pairSourceDocId(x))+'|'+String(x&&x.reply_doc_id||'')+'|'+String(x&&x.relation||'reply_to_yu'); }
+  function allDocPairs(){ const a=EDITS.__docPairs||[]; const b=CONFIRMED_PAIRS||[]; if(!b.length) return a; const seen=new Set(a.map(pairKey)); return a.concat(b.filter(x=>x&&pairSourceDocId(x)&&x.reply_doc_id&&!seen.has(pairKey(x)))); }
+  async function fetchFirstJSON(urls){
+    for(const url of urls){
+      try{ const r=await fetch(url,{cache:'no-store'}); if(r.ok) return await r.json(); }catch(e){}
+    }
+    return null;
+  }
+  function applyPendingStaticYuNocite(){
+    if(!__editsServerReady || !__pendingStaticYuNocite || typeof applySkillChatOutput!=='function') return;
+    const raw=__pendingStaticYuNocite; __pendingStaticYuNocite=null;
+    const pairs=Array.isArray(raw)?raw:((raw&&Array.isArray(raw.pairs))?raw.pairs:[]);
+    const alreadyConfirmed=new Set((EDITS.__docPairs||[]).concat(CONFIRMED_PAIRS||[]).map(pairKey));
+    const data=Array.isArray(raw)?pairs.filter(p=>!alreadyConfirmed.has(pairKey(p))):Object.assign({},raw,{pairs:pairs.filter(p=>!alreadyConfirmed.has(pairKey(p)))});
+    applySkillChatOutput('yu-pairing-nocite.json', data);
+    saveEdits();
+    if(typeof render==='function'){ try{ render(); }catch(e){} }
+    if(typeof renderLog==='function'){ try{ renderLog({preserve:true}); }catch(e){} }
+  }
+  (function loadStaticPairingOutputs(){
+    Promise.all([
+      fetchFirstJSON(['/attempt-002/confirmed-pairs.json','confirmed-pairs.json','../confirmed-pairs.json']),
+      fetchFirstJSON(['/attempt-002/yu-pairing-nocite.json','yu-pairing-nocite.json','../yu-pairing-nocite.json'])
+    ]).then(([confirmed,nocite])=>{
+      if(confirmed) CONFIRMED_PAIRS=Array.isArray(confirmed)?confirmed:((confirmed&&Array.isArray(confirmed.pairs))?confirmed.pairs:[]);
+      if(nocite){
+        __pendingStaticYuNocite=nocite;
+      }
+      if(typeof render==='function'){ try{ render(); }catch(e){} }
+      applyPendingStaticYuNocite();
+    }).catch(()=>{});
+  })();
   // __suggestedChains/__suggestedResponses were always meant to be ephemeral, re-fetchable
   // suggestions (see runExtract / commitSuggestedChain / commitSuggestedResponse) -- "for events
   // not considered, don't keep the info of their chain" was an explicit design decision, not just
@@ -3554,15 +3622,17 @@
   // fuller copy, swap it in and re-render once it arrives. No-ops if the server isn't running.
   (function loadEditsFromServer(){
     fetch('/api/edits').then(r=>r.ok?r.json():null).then(server=>{
-      if(!server || typeof server!=='object' || !Object.keys(server).length) return;
-      const serverEvN=(server.__events||[]).length, localEvN=(EDITS.__events||[]).length;
-      // heuristic: prefer the server copy whenever it isn't strictly smaller than the local one
-      // (covers "localStorage went stale after hitting quota" and "first time using this server
-      // with an already-larger disk copy"); if local somehow has MORE events than the server has
-      // ever seen (e.g. very first save before the server sync landed), keep local and let the
-      // next saveEdits() push it to the server instead of overwriting local with less data.
-      if(serverEvN>=localEvN){ EDITS=server; if(typeof render==='function'){ try{ render(); }catch(e){} } if(typeof renderAllTools==='function'){ try{ renderAllTools(); }catch(e){} } }
-    }).catch(()=>{});
+      if(server && typeof server==='object' && Object.keys(server).length){
+        const serverEvN=(server.__events||[]).length, localEvN=(EDITS.__events||[]).length;
+        // heuristic: prefer the server copy whenever it isn't strictly smaller than the local one
+        // (covers "localStorage went stale after hitting quota" and "first time using this server
+        // with an already-larger disk copy"); if local somehow has MORE events than the server has
+        // ever seen (e.g. very first save before the server sync landed), keep local and let the
+        // next saveEdits() push it to the server instead of overwriting local with less data.
+        if(serverEvN>=localEvN){ EDITS=server; if(typeof render==='function'){ try{ render(); }catch(e){} } if(typeof renderAllTools==='function'){ try{ renderAllTools(); }catch(e){} } }
+      }
+      __editsServerReady=true; applyPendingStaticYuNocite();
+    }).catch(()=>{ __editsServerReady=true; applyPendingStaticYuNocite(); });
   })();
   function docEdits(id){ return EDITS[id] || (EDITS[id]={}); }
   function docEditsRead(id){ return EDITS[id] || {}; }
@@ -3714,7 +3784,41 @@
   }
   // ----- event info panel (a docked card, like the document panels) -----
   const evCards=new Map();
-  function recByDocId2(docId){ return recs.find(r=>String(r._baseId||r.id)===String(docId)); }
+  // Skill output and older saved chat turns use several archive-id spellings
+  // (for example 天60 / 諭60 and 台183 / 硃183). Resolve those aliases, but
+  // use the quotation itself to disambiguate when the same number exists in
+  // more than one document series.
+  function docIdAliases(docId){
+    const raw=String(docId==null?'':docId).trim(), key=raw.replace(/\s+/g,''); if(!key) return [];
+    const m=key.match(/^(上諭|諭|天|台|硃|奏)(\d+)$/); if(!m) return [raw,key];
+    const n=m[2], p=m[1], out=[raw,key];
+    if(p==='上諭'||p==='諭') out.push('諭'+n,'天'+n);
+    else if(p==='天') out.push('天'+n,'諭'+n,'硃'+n,'奏'+n);
+    else if(p==='台') out.push('台'+n,'硃'+n,'天'+n,'奏'+n);
+    else if(p==='硃') out.push('硃'+n,'台'+n,'天'+n);
+    else out.push('奏'+n);
+    return [...new Set(out)];
+  }
+  function recordDocIds(r){ return [r&&r._baseId,r&&r.id,r&&r.doc_id,r&&r.orig&&r.orig.doc_id].map(x=>String(x==null?'':x).trim()).filter(Boolean); }
+  function docIdMatchesRecord(r,docId){ const wanted=new Set(docIdAliases(docId)); return recordDocIds(r).some(id=>docIdAliases(id).some(a=>wanted.has(a))); }
+  function isCanonicalDocId(docId){ return /^(?:奏|硃|諭)\d+$/.test(String(docId==null?'':docId).trim()); }
+  function quoteMatchesRecord(r,quote){
+    const q=String(quote||'').trim(); if(q.length<2) return false;
+    const body=[(typeof recordBody==='function'?recordBody(r):r&&r.body),r&&r.rescript].filter(x=>String(x||'').trim()).join('\n');
+    const fragments=(typeof fragsOf==='function'?fragsOf(q):[q]).filter(x=>String(x).trim().length>=3);
+    const compact=s=>String(s||'').replace(/[\s\u3000，。！？；：、,.!?;:「」『』（）()【】\[\]"'“”‘’]/g,'');
+    const cb=compact(body); return fragments.some(f=>body.includes(f)||cb.includes(compact(f)));
+  }
+  function recByDocId2(docId, quote){
+    const direct=recs.find(r=>recordDocIds(r).some(id=>id===String(docId==null?'':docId).trim()));
+    const candidates=recs.filter(r=>docIdMatchesRecord(r,docId));
+    if(quote){
+      if(direct&&quoteMatchesRecord(direct,quote)) return direct;
+      const hit=candidates.find(r=>quoteMatchesRecord(r,quote)); if(hit) return hit;
+      const byQuote=recs.find(r=>quoteMatchesRecord(r,quote)); if(byQuote) return byQuote;
+    }
+    return direct||candidates[0]||null;
+  }
   // open the AI tool (if needed) and run a side-scoped source trace for one event
   function searchEventSource(evId){ if(typeof window.__openAITool==='function') window.__openAITool(); if(typeof window.__aiRunTrace==='function') window.__aiRunTrace(evId,{}); }
   function searchEventOfficialResponse(evId, ctx){ if(typeof window.__openAITool==='function') window.__openAITool(); if(typeof window.__aiRunOfficialResponse==='function') window.__aiRunOfficialResponse(evId, ctx||{}); }
@@ -3757,7 +3861,7 @@
   }
   // locate a quote inside a rendered text element, tolerant of whitespace differences; returns a Range or null
   function findQuoteRange(root, raw){
-    let needle=String(raw||'').replace(/^[「『]+|[」』]+$/g,'').trim(); if(needle.length<2) return null;
+    let needle=String(raw||'').replace(/^[「『]+|[」』]+$/g,'').trim(); if(!needle.length) return null;
     // The segmented .ix-text view injects UI chrome text (segment numbers, segment labels/summaries,
     // block labels) BETWEEN the actual document runs. Concatenating those into the searched text is
     // what breaks a quote-jump on text that IS present verbatim -- a segment number like "3." or a
@@ -3765,7 +3869,7 @@
     const EL_SKIP=/(?:^|\s)(?:seg-num|seg-label|seg-summary|seg-head|blk-label|inote|item-edit)(?:\s|$)/;
     const walker=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, { acceptNode(n){ let p=n.parentElement; while(p && p!==root){ if(p.className && typeof p.className==='string' && EL_SKIP.test(p.className)) return NodeFilter.FILTER_REJECT; p=p.parentElement; } return NodeFilter.FILTER_ACCEPT; } }); const nodes=[]; let full=''; let nd;
     while(nd=walker.nextNode()){ nodes.push({node:nd, start:full.length}); full+=nd.nodeValue; }
-    const tryFind=str=>{ if(str.length<2) return null; const re=new RegExp(str.split('').map(c=>c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s*')); const m=re.exec(full); return m?{start:m.index,end:m.index+m[0].length}:null; };
+    const tryFind=str=>{ if(!str.length) return null; const re=new RegExp(str.split('').map(c=>c.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')).join('\\s*')); const m=re.exec(full); return m?{start:m.index,end:m.index+m[0].length}:null; };
     let approx=false;
     // Prefer the longest available literal fragment. Short prefixes are often generic
     // (for example a date or「據報」) and can otherwise highlight the wrong occurrence.
@@ -3816,7 +3920,16 @@
     if(!el) return '';
     const clone=el.cloneNode(true); clone.querySelectorAll('.cx-src').forEach(x=>x.remove());
     const text=(clone.textContent||'').trim();
-    const quoted=[...text.matchAll(/[「『]([\s\S]*?)[」』]/g)].map(m=>m[1].trim()).filter(x=>x && !/^(?:\.{2,}|…|⋯)+$/.test(x));
+    // Parse nested Chinese quotation marks as balanced spans. A non-greedy
+    // regex stops at the inner closing mark and sends only a truncated quote
+    // to the source matcher.
+    const spans=[], stack=[];
+    for(let i=0;i<text.length;i++){
+      const c=text[i]; if(c==='「'||c==='『') stack.push(i);
+      else if((c==='」'||c==='』')&&stack.length){ const start=stack.pop(); const payload=text.slice(start+1,i).trim(); if(payload) spans.push(payload); }
+    }
+    const leaves=spans.filter(x=>!/[「『」』]/.test(x));
+    const quoted=(leaves.length?leaves:spans).filter(x=>x && !/^(?:\.{2,}|…|⋯)+$/.test(x));
     if(quoted.length) return quoted.join('…');
     return text.replace(/^[^「『]*[「『]/,'').replace(/[」』][^」』]*$/,'').trim();
   }
@@ -3836,15 +3949,22 @@
   // tool, or trimmed/whitespace-differs slightly from how it's stored. Look in the full unfiltered
   // pool (and tolerate surrounding whitespace) before giving up, so a quote-jump doesn't silently
   // fail just because its source happens to be hidden right now.
-  function recByDocIdAny(docId){
+  function recByDocIdAny(docId, quote){
     const id=String(docId||'').trim(); if(!id) return null;
     const pool=DUAL.map((r,i)=>({ ...r, _rid:i, _baseId:r.id })).concat((EDITS.__added||[]).map((r,i)=>({ ...r, _rid:'a'+i, _baseId:r.id })));
-    return pool.find(r=>String(r._baseId||r.id).trim()===id) || pool.find(r=>String(r.id).trim()===id) || null;
+    const direct=pool.find(r=>recordDocIds(r).some(x=>x===id));
+    const candidates=pool.filter(r=>docIdMatchesRecord(r,id));
+    if(quote){
+      if(direct&&quoteMatchesRecord(direct,quote)) return direct;
+      const hit=candidates.find(r=>quoteMatchesRecord(r,quote)); if(hit) return hit;
+      const byQuote=pool.find(r=>quoteMatchesRecord(r,quote)); if(byQuote) return byQuote;
+    }
+    return direct||candidates[0]||null;
   }
-  function ensureQuoteDocCard(docId, originEl){
-    const rec=recByDocId2(docId)||recs.find(r=>String(r.id)===String(docId)||String(r._baseId)===String(docId))||recByDocIdAny(docId); if(!rec) return null;
+  function ensureQuoteDocCard(docId, originEl, quote){
+    const rec=recByDocId2(docId,quote)||recByDocIdAny(docId,quote); if(!rec) return null;
     const originCol=originEl&&originEl.closest&&originEl.closest('.ws-list,.ws-tools');
-    let card=cards.find(c=>c.rec && String(c.rec._baseId||c.rec.id)===String(docId) && c.list!==originCol);
+    let card=cards.find(c=>c.rec && String(c.rec.id)===String(rec.id) && c.list!==originCol);
     if(!card){
       const target=quoteTargetList(originEl); activeList=target;
       card=createCard(rec, target, {});
@@ -3897,11 +4017,17 @@
     if(!docId||!quote) return;
     const aiAnchor=captureAIQuoteAnchor(originEl);
     clearQuoteFlash();
-    const card=ensureQuoteDocCard(docId, originEl); restoreAIQuoteAnchor(aiAnchor);
+    const card=ensureQuoteDocCard(docId, originEl, quote); restoreAIQuoteAnchor(aiAnchor);
     if(!card){ flashQuoteMsg('找不到來源文書（'+docId+'）', originEl); return; }
     if(card.cardApi&&typeof card.cardApi.focusQuote==='function') card.cardApi.focusQuote(quote);
     setTimeout(()=>{
-      const host=card&&card.el; const textEl=host&&host.querySelector('.ix-text'); if(!textEl) return;
+      const host=card&&card.el; if(!host) return;
+      // .ix-text lives inside an .ip-pane that's hidden unless it's the active pane (互動標註 vs 表格
+      // toggle). If the doc opened on the table pane, the highlight would be applied inside a hidden
+      // pane and be invisible -- force the interactive-text pane visible first.
+      const ixPane=[...host.querySelectorAll('.ip-pane')].find(p=>p.classList.contains('ix'));
+      if(ixPane && !ixPane.classList.contains('active')){ const tgl=host.querySelector('.ip-pagetgl'); if(tgl&&tgl.checked){ tgl.checked=false; tgl.dispatchEvent(new Event('change')); } else host.querySelectorAll('.ip-pane').forEach(p=>p.classList.toggle('active', p===ixPane)); }
+      const textEl=(ixPane&&ixPane.querySelector('.ix-text'))||host.querySelector('.ix-text')||host.querySelector('.body-text'); if(!textEl) return;
       const ranges=findQuoteRanges(textEl, quote);
       if(!ranges.length){ if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center',behavior:'smooth'}); restoreAIQuoteAnchor(aiAnchor); flashQuoteMsg('已開啟文書，但找不到相符或相近的原文', originEl); return; }
       const first=ranges[0];
@@ -3912,11 +4038,12 @@
       if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center', behavior:'smooth'});
       if(!aiAnchor&&anchor&&anchor.scrollIntoView) anchor.scrollIntoView({block:'center', behavior:'smooth'});
       // scrollIntoView alone can center the outer card while leaving the matched text below
-      // the inner .ip-body viewport. Re-center the actual range inside every scroll container.
+      // the document's real viewport. .ip-body is only a flex wrapper; .ip-scroll is the
+      // element that actually scrolls in a single-card column.
       const centerRange=()=>{ try{
-        const rr=first.getBoundingClientRect(), body=host.querySelector('.ip-body');
-        if(body){ const br=body.getBoundingClientRect(); body.scrollTop += rr.top-(br.top+br.height/2)+rr.height/2; }
-        const list=host.closest('.ws-list,.ws-tools'); if(list){ const lr=list.getBoundingClientRect(); if(rr.top<lr.top||rr.bottom>lr.bottom) list.scrollTop += rr.top-(lr.top+lr.height/2)+rr.height/2; }
+        const inner=host.querySelector('.ip-scroll')||host.querySelector('.ip-body');
+        if(inner&&inner.scrollHeight>inner.clientHeight+1){ const rr=first.getBoundingClientRect(), ir=inner.getBoundingClientRect(); inner.scrollTop += rr.top-(ir.top+ir.height/2)+rr.height/2; }
+        const list=host.closest('.ws-list,.ws-tools'); if(list){ const rr=first.getBoundingClientRect(), lr=list.getBoundingClientRect(); if(rr.top<lr.top||rr.bottom>lr.bottom) list.scrollTop += rr.top-(lr.top+lr.height/2)+rr.height/2; }
       }catch(e){} };
       requestAnimationFrame(()=>{ centerRange(); restoreAIQuoteAnchor(aiAnchor); });
       setTimeout(()=>{ centerRange(); restoreAIQuoteAnchor(aiAnchor); },180);
@@ -4340,6 +4467,27 @@
   }
   function hopLabel(h){ return (h.from_person||'？')+'→'+(h.to_person||'？')+'（層'+h.layer+'）'; }
   function hopMeta(h){ return [h.how, h.place?('📍'+h.place):'', h.whenCh?('🕓'+h.whenCh):'', h.inferred?'（推斷）':''].filter(Boolean).join('　'); }
+  // Highlight every chain actor that actually occurs in the verbatim quotation. Longer names
+  // are matched first so a co-named reporter remains one highlighted actor rather than being
+  // broken into overlapping fragments. Text not matched to a chain actor stays untouched.
+  function highlightChainActors(text, hops, events){
+    text=String(text||'');
+    const actors=[]; const seen=new Set();
+    (hops||[]).forEach(h=>[h.from_person,h.to_person].forEach(p=>{ p=String(p||'').trim(); if(p&&!seen.has(p)){seen.add(p);actors.push(p);} }));
+    (events||[]).forEach(e=>{ const p=String(e&&e.reporter||'').trim(); if(p&&!seen.has(p)){seen.add(p);actors.push(p);} });
+    actors.sort((a,b)=>b.length-a.length);
+    if(!actors.length) return esc(text);
+    const colors=new Map();
+    actors.forEach(actor=>{ let hash=0; for(const ch of actor) hash=(hash*31+ch.codePointAt(0))%360; const hue=hash; colors.set(actor,{bg:`hsl(${hue} 78% 82%)`,fg:`hsl(${hue} 42% 20%)`,border:`hsl(${hue} 62% 48%)`}); });
+    const hits=[];
+    actors.forEach(actor=>{ let at=0; while(at<text.length){ const i=text.indexOf(actor,at); if(i<0) break; hits.push({start:i,end:i+actor.length,actor}); at=i+actor.length; } });
+    hits.sort((a,b)=>a.start-b.start||(b.end-a.end));
+    const kept=[]; let end=0;
+    hits.forEach(hit=>{ if(hit.start>=end){ kept.push(hit); end=hit.end; } });
+    let out='', pos=0;
+    kept.forEach(hit=>{ const color=colors.get(hit.actor)||{}; out+=esc(text.slice(pos,hit.start))+`<mark class="cx-actor" style="--actor-bg:${color.bg||''};--actor-fg:${color.fg||''};--actor-border:${color.border||''}" title="${esc(hit.actor)}">${esc(text.slice(hit.start,hit.end))}</mark>`; pos=hit.end; });
+    return out+esc(text.slice(pos));
+  }
   // derive one row PER PERSON in the chain, ordered oldest(first-hand)→latest(author); time = received→passed range
   function provRows(hops){
     if(!hops||!hops.length) return [];
@@ -4364,6 +4512,9 @@
   // editable independently. When ec is absent the render is byte-for-byte the old read-only view.
   function provTableHtml(hops, ec){
     const rows=provRows(hops); if(!rows.length) return '<div class="record-empty">尚無來源鏈。</div>';
+    const _did=(hops.find(h=>h&&h.doc_id)||{}).doc_id;
+    const docAuthor=(typeof recByDocId2==='function' && _did)?((recByDocId2(_did)||{}).author_name||''):'';
+    const samePerson=(a,b)=>{ a=String(a||'').trim(); b=String(b||'').trim(); return !!(a&&b&&(a===b||a.indexOf(b)>=0||b.indexOf(a)>=0)); };
     const E=(f,val,hop)=>{ if(!ec) return esc(val==null?'':val); const hi=hop?hops.indexOf(hop):-1;
       return `<span class="ed pv-ed" contenteditable="true" ${ec.a} data-hi="${hi}" data-f="${f}">${esc(val==null?'':val)}</span>`; };
     const P=(name)=>{ if(!ec) return esc(name); return `<span class="ed pv-ed" contenteditable="true" ${ec.a} data-f="person" data-old="${esc(name)}">${esc(name)}</span>`; };
@@ -4381,17 +4532,22 @@
       }
       return convertWhenChMonth(ch, ref)||'';
     };
-    const dateCell=(hop,chVal,arVal,endLabel)=>{ if(endLabel) return esc(endLabel);
-      if(!ec) return esc(arOnly(chVal, arVal, hop)||'？');
+    const witnessRe=/親歷|親見|目擊|目睹|在場|親身|親赴|親往/;
+    const dateCell=(hop,chVal,arVal,endLabel,blankIfEmpty)=>{ if(endLabel) return esc(endLabel);
+      if(!ec) return esc(arOnly(chVal, arVal, hop)||(blankIfEmpty?'':'？'));
       return E('whenAr', arOnly(chVal, arVal, hop)||'', hop); };
     const items=rows.map(r=>{
-      const got=dateCell(r._inHop, r.gotCh, r.gotAr, r.firstHand?'親歷':'');
+      // Only show 親歷/親見 when the source text explicitly supports it.
+      const fhWitness=r.firstHand?(witnessRe.test(r.how||'')?r.how:''):'';
+      const got=dateCell(r._inHop, r.gotCh, r.gotAr, fhWitness, r.firstHand);
       const sent=dateCell(r._outHop, r.sentCh, r.sentAr, r.endpoint?'（撰文）':'');
       const locs=[r.gotWhere,r.sentWhere].filter(Boolean); const loc=locs.length?(locs[0]===locs[locs.length-1]?locs[0]:locs.join(' → ')):'';
       const locHop=r._inHop||r._outHop;
       const locHtml=ec?(locHop?E('place', locHop.place||'', locHop):''):esc(loc);
       let cls='relay', txt='中繼';
-      if(r.firstHand){cls='first';txt='第一手';} else if(r.endpoint){cls='author';txt='撰文者';} else if(r.inferred){cls='infer';txt='推斷';}
+      // 撰文者 only for the topological endpoint that is also the document author.
+      const isAuthor=r.endpoint && (!docAuthor || samePerson(r.person, docAuthor));
+      if(isAuthor){cls='author';txt='撰文者';} else if(r.firstHand){cls='first';txt='第一手';} else if(r.inferred){cls='infer';txt='推斷';}
       const howHtml=ec?E('how', r.how||'', r.hop):esc(r.how||'');
       const sub=[howHtml, `<span class="pv-dt">${got} → ${sent}</span>`, locHtml].filter(Boolean).join('　·　');
       return `<div class="pv-hop"><span class="pv-lbl"><span class="pv-chip ${cls}">${txt}</span></span><div class="pv-rt"><div class="pv-nm">${P(r.person)}</div><div class="pv-sub">${sub}</div></div></div>`;
@@ -4432,13 +4588,48 @@
   function chainQuoteBoxesHtml(hops, events, docId){
     const hh=(hops||[]).filter(h=>!docId||String(h.doc_id)===String(docId));
     const evs=(events||[]).filter(ev=>ev&&(!docId||String(ev.doc_id)===String(docId)));
+    // Prefer ONE continuous passage: locate every hop/event quote fragment inside the original
+    // document body and show the single verbatim span from the earliest to the latest fragment,
+    // so a nested relay reads as one paragraph rather than disjoint clauses.
+    const _qdid=docId||(hh.find(h=>h&&h.doc_id)||{}).doc_id||(evs.find(e=>e&&e.doc_id)||{}).doc_id;
+    const _qrec=(typeof recByDocId2==='function' && _qdid)?recByDocId2(_qdid):null;
+    const _qbody=(_qrec&&_qrec.body)||'';
+    if(_qbody){
+      let lo=Infinity, hi=-1;
+      [].concat(hh.map(h=>h.quote), evs.map(e=>e.quote)).forEach(q=>{ q=(q||'').trim(); if(!q) return; const i=_qbody.indexOf(q); if(i>=0){ if(i<lo) lo=i; if(i+q.length>hi) hi=i+q.length; } });
+      if(hi>lo){
+        // If the first quote begins at a nested 「據供／據稱」 clause, include the immediately
+        // preceding author-written source-identification sentence when it names the informants.
+        // This keeps evidence such as 「茲於本月十六日據防卡官兵拿獲奸細僧人…」 available,
+        // while still leaving the lead-in optional when the text has no such sentence.
+        const prefix=_qbody.slice(0,lo);
+        const boundary=prefix.lastIndexOf('。')+1;
+        const priorStart=_qbody.lastIndexOf('。',Math.max(0,boundary-2))+1;
+        const prior=_qbody.slice(priorStart,boundary);
+        let start=lo;
+        if(prior.length<=220 && /據|拿獲|捕獲|訊問|審訊|供稱|口供|探報|稟報/.test(prior)) start=priorStart;
+        // A short author handling sentence may sit between the source-identification
+        // sentence and 「據供」; include both when they clearly form one evidence lead-in.
+        if(/審訊|訊問|飭發/.test(prior)){
+          const sourceStart=_qbody.lastIndexOf('。',Math.max(0,priorStart-2))+1;
+          const sourceSentence=_qbody.slice(sourceStart,priorStart);
+          if(sourceSentence.length<=220 && /據/.test(sourceSentence) && /拿獲|捕獲|奸細|供/.test(sourceSentence)){
+            const intro=sourceSentence.indexOf('茲');
+            start=intro>=0?sourceStart+intro:sourceStart;
+          }
+        }
+        if(start<lo) lo=start;
+        const span=_qbody.slice(lo,hi);
+        return `<div class="pv-quotes"><div class="pv-qh">原文引文</div><div class="cx-q" data-doc="${esc(_qdid||'')}" title="點按在原文中顯示">「${highlightChainActors(span,hh,evs)}」</div></div>`;
+      }
+    }
     const usedEv=new Set();
     const hopBoxes=hh.filter(h=>h.quote).map(h=>{
       const evq=evs.find(ev=>ev.quote && String(ev.doc_id)===String(h.doc_id) && !usedEv.has(ev));
       if(evq) usedEv.add(evq);
-      return `<div class="cx-q" data-doc="${esc(h.doc_id||'')}" title="點按在原文中顯示">「${esc(h.quote)}」${evq?'　「'+esc(evq.quote)+'」':''}<span class="cx-src">—${esc(h.from_person)}→${esc(h.to_person)}${h.inferred?'／推斷':''}</span></div>`;
+      return `<div class="cx-q" data-doc="${esc(h.doc_id||'')}" title="點按在原文中顯示">「${highlightChainActors(h.quote,hh,evs)}」${evq?'　「'+highlightChainActors(evq.quote,hh,evs)+'」':''}<span class="cx-src">—${esc(h.from_person)}→${esc(h.to_person)}${h.inferred?'／推斷':''}</span></div>`;
     });
-    const leftoverBoxes=evs.filter(ev=>ev.quote && !usedEv.has(ev)).map(ev=>`<div class="cx-q" data-doc="${esc(ev.doc_id||'')}" title="點按在原文中顯示">「${esc(ev.quote)}」<span class="cx-src">—${esc(ev.reporter||'')}${ev.subtitle?'／'+esc(ev.subtitle):''}</span></div>`);
+    const leftoverBoxes=evs.filter(ev=>ev.quote && !usedEv.has(ev)).map(ev=>`<div class="cx-q" data-doc="${esc(ev.doc_id||'')}" title="點按在原文中顯示">「${highlightChainActors(ev.quote,hh,evs)}」<span class="cx-src">—${esc(ev.reporter||'')}${ev.subtitle?'／'+esc(ev.subtitle):''}</span></div>`);
     const boxes=hopBoxes.concat(leftoverBoxes);
     if(!boxes.length) return '';
     return `<div class="pv-quotes"><div class="pv-qh">原文引文</div>${boxes.join('')}</div>`;
@@ -4506,14 +4697,23 @@
   // that click precisely so this stays a review step, not an auto-commit. -----
   function suggestedChainBlockHtml(ch, evId, cix){
     return `<div class="cx-ev sug-chain" style="border-left:3px solid ${PROV_HEX};padding-left:8px">
-        <div class="cx-sub">建議來源鏈：${esc(chainSummary(ch.hops))}　<button class="sug-add" data-evid="${esc(evId)}" data-cix="${cix}" type="button">＋加入此來源鏈</button></div>
         <div class="pv-wrap">${provTableHtml(ch.hops, {a:`data-eck="sug" data-evid="${esc(evId)}" data-cix="${cix}"`})}</div>
+        ${chainQuoteBoxesHtml(ch.hops, ch.events)}
+        <div class="sug-add-row" style="margin-top:6px"><button class="sug-add" data-evid="${esc(evId)}" data-cix="${cix}" type="button">＋加入此來源鏈</button></div>
+      </div>`;
+  }
+  function committedChainBlockHtml(ch){
+    return `<div class="cx-ev sug-chain sug-chain-committed" style="border-left:3px solid ${PROV_HEX};padding-left:8px">
+        <div class="sug-chain-status">✓ 已加入來源鏈</div>
+        <div class="pv-wrap">${provTableHtml(ch.hops)}</div>
         ${chainQuoteBoxesHtml(ch.hops, ch.events)}
       </div>`;
   }
   function suggestedChainsHtml(ev){
-    const list=(ev&&ev.__suggestedChains)||[]; if(!list.length) return '';
-    return `<div class="evv-sec evv-sugwrap"><span class="evv-l">AI 建議來源鏈（${list.length}，尚未加入）</span>${list.map((ch,cix)=>suggestedChainBlockHtml(ch, ev.id, cix)).join('')}</div>`;
+    const list=(ev&&ev.__suggestedChains)||[];
+    const committed=ev?provChainsOf(ev):[];
+    if(!list.length&&!committed.length) return '';
+    return `<div class="evv-sec evv-sugwrap">${list.map((ch,cix)=>suggestedChainBlockHtml(ch, ev.id, cix)).join('')}${committed.map(ch=>committedChainBlockHtml(ch)).join('')}</div>`;
   }
   function commitSuggestedChain(evId, cix){
     const ev=eventById(evId); if(!ev||!Array.isArray(ev.__suggestedChains)) return false;
@@ -4560,10 +4760,12 @@
   // event (with a back-reference to the emperor action it responds to) via commitSuggestedResponse.
   // Kept OFF the event until that click, same discard-on-skip semantics as suggestedChains. -----
   function officialResponseBlockHtml(it, evId, ix){
+    const targetEv=eventById(evId), actionSource=(targetEv&&targetEv.sources||[]).find(s=>s&&it.action_quote&&String(s.quote||'').includes(String(it.action_quote))) || (targetEv&&targetEv.sources||[])[0];
+    const actionDoc=actionSource&&actionSource.doc_id||'';
     return `<div class="cx-ev sug-response" style="border-left:3px solid ${PROV_HEX};padding-left:8px">
         <div class="cx-sub">建議官員回應${it.response_date?'（'+esc(it.response_date)+'）':''}：${esc(it.how||'（無摘要）')}　<button class="sug-resp-add" data-evid="${esc(evId)}" data-rix="${ix}" type="button">＋加入為官員回應事件</button></div>
         ${it.receive_date?`<div class="cx-q">官員提及收到日期：${esc(it.receive_date)}</div>`:''}
-        ${it.action_quote?`<div class="cx-q">行動引文：「${esc(it.action_quote)}」</div>`:''}
+        ${it.action_quote?`<div class="cx-q"${actionDoc?` data-doc="${esc(actionDoc)}" title="點按在原文中顯示"`:''}>行動引文：「${esc(it.action_quote)}」</div>`:''}
         ${it.response_quote?`<div class="cx-q" data-doc="${esc(it.doc_id||'')}" title="點按在原文中顯示">回應引文：「${esc(it.response_quote)}」</div>`:''}
       </div>`;
   }
@@ -5101,6 +5303,14 @@
       actorInstruction=(skillPromptFor('extract-lin-actions')||'Extract only actions actually performed by the 林爽文 side / rebels / anti-Qing forces. Do not extract Qing suppression, defence, troop dispatch, reporting, or official communication actions.')+dateRule;
     // Always ask for relationship edges + per-actor locations so events can feed a character-relationship graph and GIS map.
     actorInstruction += ' For EACH event ALSO return two extra fields. (1) "who_loc": an object mapping each person in "who" to the single place name where that person physically is during the event (their own location, which may differ from the event location "where"). Use only place names stated or clearly implied in the text; omit a person or use "" if their location is unknown. Return place NAMES only — never invent latitude/longitude. (2) "relations": an array of directed relationship edges. A relation\'s "source" is always a person from "who". Its "target" is USUALLY another person, BUT when the action is directed at a PLACE rather than a person (e.g. attacking/besieging/occupying/defending/capturing a city, fort, camp, or other location, with no specific person on the receiving end), the "target" MUST be that place name instead (the same place-name string you would use in "where"/"who_loc") — do not force such actions into a person-to-person edge or omit them just because there is no named recipient. Each edge is {"source": person name, "target": person name OR place name, "relation": the original Chinese verb/relationship word (e.g. 派遣、委令、稟報、協同、攻打、擒拿、隸屬、攻陷、進犯、圍攻、佔據、防守), "relation_type": one of "command"|"report"|"ally"|"conflict"|"kinship"|"attack"|"occupy"|"defend"|"other" (use "attack"/"occupy"/"defend" specifically for actor-to-PLACE edges), "evidence": the short source clause that supports the edge}. Include only edges actually stated in the text; return [] if none.';
+    // Quality rules (apply to every extraction): skip stale re-quoted content, require whole-sentence
+    // subtitles, and never leave who/where blank when the text supplies them.
+    actorInstruction += ' CRITICAL — IGNORE RE-QUOTED OLD INFORMATION: many documents open by quoting a prior 上諭 (imperial edict) or citing an earlier 奏摺/稟報/來文, and then respond to it. Any action described INSIDE such a quoted/cited earlier document is OLD information that was already reported before — it is NOT a new event and MUST NOT be extracted. Only extract actions that THIS document is itself newly reporting (things that happened, are happening, or are planned around this document\'s own date, in the author\'s own narration — not inside a 「奉上諭…欽此」 block or a 「據某奏/稟…等因」 citation of an earlier report).';
+    actorInstruction += ' SUBTITLE must be a COMPLETE sentence: acting subject + action + object/target when there is one (e.g. "署都司易連糾募鄉勇攻殺賊匪並擒斬吳異人等" or "黃仕簡定於正月十二三日會同各路大軍會剿林爽文"), NEVER a fragment that drops the subject or object such as "定期會剿"、"擒拿斬梟吳異人等"、"籌劃合攻". Always keep the acting person in the subtitle.';
+    actorInstruction += ' ALWAYS fill "who" with every person involved INCLUDING the acting subject, and "where" with the place the action happens, whenever they are stated or clearly implied in the text. Do not leave who or where empty if the document gives them.';
+    actorInstruction += ' DATE RULE for quoted/relayed material: if the only date attached to an action is the date a 上諭 was issued or received (e.g. an 「奉到…奉上諭」 or 「正月X日奉上諭」 passage), that is the EDICT\'s date, NOT the action\'s date — the action happened earlier. NEVER put the edict\'s issue/receipt date into whenAr/whenCh. If the action\'s own date is not stated in the text, leave whenAr empty (you may give only the coarse Chinese phrasing such as 「正月初十日以前」 in whenCh); do not borrow the edict or memorial transmission date as the event date.';
+    actorInstruction += ' SUBTITLE must be built from the action itself as a full subject+verb(+object) clause, never a 2–4 character abbreviation. Bad: 「定期會剿」「籌劃合攻」「擒斬吳異人等」. Good: 「水師提督黃仕簡定於正月十二三日會同任承恩合攻賊匪」「署都司易連擒斬借道賊夥吳異人等」.';
+    actorInstruction += ' TITLES: in BOTH the subtitle and description, prefix each named person with their official title / rank / status exactly as the text gives it (署都司易連、水師提督黃仕簡、陸路提督任承恩、貢生吳異人), rather than the bare name — this is especially important for subordinate or minor persons who are being reported about (people who are not themselves the author of the memorial).';
     const cands=[], failures=[]; let done=0, returned=0;
     for(const r of docs){
       try{
@@ -5482,7 +5692,7 @@
   // multiple notes per store; migrate legacy single `notes` string into first card
   function notesArr(s){ if(!s.notesList){ s.notesList = (s.notes&&String(s.notes).trim())? [{id:uid('n'), body:String(s.notes), exchanges:[], at:nowStr(), updated:nowStr()}] : []; } return s.notesList; }
   // chat thread of {prompt,response,at,model,memory}; migrate legacy `answers`
-  function chatArr(s){ if(!s.chat){ s.chat = (s.answers&&s.answers.length)? s.answers.map(a=>({prompt:a.prompt||'', response:a.text||'', at:a.at||'', model:a.model||a.mode||'', memory:false})) : []; } return s.chat; }
+  function chatArr(s){ if(!s || typeof s!=='object') return []; if(!Array.isArray(s.chat)){ s.chat = (Array.isArray(s.answers)&&s.answers.length)? s.answers.map(a=>({prompt:a.prompt||'', response:a.text||'', at:a.at||'', model:a.model||a.mode||'', memory:false})) : []; } return s.chat; }
   function first10(t){ const w=String(t||'').trim().replace(/\s+/g,' ').split(' ').filter(Boolean); const cn=String(t||'').trim(); if(/^[一-鿿]/.test(cn)&&w.length<=1){ const s=cn.replace(/\s+/g,''); return s.slice(0,18)+(s.length>18?'…':''); } return w.slice(0,10).join(' ')+(w.length>10?'…':''); }
   function noteTitle(t){ const line=String(t||'').split(/\r?\n/).map(s=>s.trim()).find(Boolean)||''; return line || '（空白筆記）'; }
   function recordBody(r){ const e=docEditsRead(r.id); return e.body!=null? e.body : (r.body||''); }
@@ -6248,9 +6458,12 @@
       // Keep this panel bound to the store it rendered. When a second tools column is opened,
       // the global selected-card scope can change; pair/action buttons must still read and write
       // the chat store belonging to the panel that was clicked.
-      const panelApis=selectedApis();
-      const panelStore=panelApis.length===1 ? docEdits(panelApis[0].rec.id) : groupStore(panelApis);
-      const curStore=()=>panelStore;
+      // Remember which docs this panel was opened for (so a second tools column changing the global
+      // selection doesn't hijack this panel's chat store), but recompute the store LIVE on each call
+      // rather than freezing the store object -- a frozen/stale panelStore made chatArr(curStore())
+      // read a bad store and throw "undefined is not an object" during extraction.
+      const panelDocIds=selectedApis().map(a=>a&&a.rec&&a.rec.id).filter(Boolean).map(String);
+      const curStore=()=>{ let a=panelDocIds.length&&typeof cards!=='undefined' ? cards.filter(c=>c.rec&&panelDocIds.includes(String(c.rec.id))) : []; if(!a.length) a=selectedApis(); return a.length===1 ? docEdits(a[0].rec.id) : groupStore(a); };
       const composerFolded=aiComposerFolded();
       const providerNow=getAIProvider(), modelListId=uid('aimodel');
       const modelOptions=aiModelListHtml(providerNow).map(m=>`<option value="${esc(m)}"></option>`).join('');
@@ -6511,6 +6724,8 @@
       function buildActMenu(insertMode){ const pop=body.querySelector('.cb-pop[data-for="act"]');
         const sec=()=>'<div class="cb-div"></div>';
         pop.innerHTML='<button class="cb-mi" data-yupair="1" type="button">相關上諭配對</button>'
+          +'<button class="cb-mi" data-yupairnc="1" type="button">相關上諭配對（無引文）</button>'
+          +'<button class="cb-mi" data-yusource="1" type="button">上諭來源（據奏）</button>'
           +'<button class="cb-mi" data-zhupair="1" type="button">相關硃批配對</button>'
           +'<button class="cb-mi" data-priorpair="1" type="button">相關在案前奏配對</button>'
           +'<button class="cb-mi" data-act="summary" type="button">摘要</button>'
@@ -6520,9 +6735,7 @@
           +'<button class="cb-mi" data-trace="lin" type="button">林方來源</button>'
           +'<button class="cb-mi" data-chainscan="1" type="button">全文來源鏈</button>'
           +sec()
-          +'<button class="cb-mi" data-evt="qing" data-cat="done" type="button">清方已行動</button>'
-          +'<button class="cb-mi" data-evt="qing" data-cat="plan" type="button">清方待行動</button>'
-          +'<button class="cb-mi" data-evt="qing" data-cat="nonmil" type="button">清方非軍事</button>'
+          +'<button class="cb-mi" data-evt="qing" data-cat="all" type="button">清方行動（三類合一）</button>'
           +sec()
           +'<button class="cb-mi" data-zhupi="1" type="button">硃批</button>'
           +'<button class="cb-mi" data-edictscan="1" type="button">上諭</button>'
@@ -6538,7 +6751,7 @@
           +sec()
           +'<button class="cb-mi cb-managep" type="button">管理提示</button><div class="cb-pm" style="display:none"></div>';
         pop.querySelectorAll('.cb-mi[data-skill]').forEach(b=>b.onclick=()=>{ closePops(); const s=__allSkills.find(x=>x.slug===b.dataset.skill); if(!s) return; if(insertMode) insertAtToken(s.name); else runSkillGeneric(s); });
-        pop.querySelectorAll('.cb-mi[data-evt]').forEach(b=>b.onclick=()=>{ closePops(); const cat=b.dataset.cat||''; if(insertMode) insertAtToken(b.dataset.evt==='qing'?(cat==='plan'?'清方待行動':cat==='nonmil'?'清方非軍事':'清方已行動'):'林方事件'); else runExtract(b.dataset.evt, {category:cat}); });
+        pop.querySelectorAll('.cb-mi[data-evt]').forEach(b=>b.onclick=()=>{ closePops(); const cat=b.dataset.cat||''; if(insertMode) insertAtToken(b.dataset.evt==='qing'?(cat==='all'?'清方行動':'清方事件'):'林方事件'); else if(b.dataset.evt==='qing' && cat==='all') runExtract('qing', {categories:['done','plan','nonmil']}); else runExtract(b.dataset.evt, {category:cat}); });
         pop.querySelectorAll('.cb-mi[data-trace]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken(b.dataset.trace==='qing'?'清方來源':'林方來源'); else runTraceBatch(b.dataset.trace); });
         pop.querySelectorAll('.cb-mi[data-chainscan]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('全文來源鏈'); else runChainScan({}); });
         pop.querySelectorAll('.cb-mi[data-dedupe-shangzou]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('隱藏重複上奏點'); else runHideDuplicateShangzou(); });
@@ -6553,6 +6766,8 @@
         pop.querySelectorAll('.cb-mi[data-situfit]').forEach(b=>b.onclick=()=>{ if(b.disabled) return; closePops(); if(insertMode) insertAtToken('回應時效'); else runSituFit(); });
         pop.querySelectorAll('.cb-mi[data-edictscan]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭'); else runEdictScan({}); });
         pop.querySelectorAll('.cb-mi[data-yupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關上諭配對'); else runYuPairingForSel({}); });
+        pop.querySelectorAll('.cb-mi[data-yupairnc]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關上諭配對（無引文）'); else runYuPairingNoCiteForSel({}); });
+        pop.querySelectorAll('.cb-mi[data-yusource]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭來源（據奏）'); else runYuSourceForSel({}); });
         pop.querySelectorAll('.cb-mi[data-zhupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關硃批配對'); else runZhuPairingForSel({}); });
         pop.querySelectorAll('.cb-mi[data-priorpair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關在案前奏配對'); else runPriorReportPairingForSel({}); });
         pop.querySelectorAll('.cb-mi[data-emperoraction]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('皇帝行動'); else runEmperorAction({}); });
@@ -6578,7 +6793,7 @@
       // -- just with its own "接上" buttons wired to m.leftoverChains instead of m.items.
       function chainStandaloneHtml(ch, i, k, actor){
         const committed=!!ch.__committed;
-        const quotes=(ch.hops||[]).filter(h=>h.quote).map(h=>`<div class="cx-q" data-doc="${esc(h.doc_id||'')}" title="點按在原文中顯示">「${esc(h.quote)}」<span class="cx-src">—${esc(h.from_person)}→${esc(h.to_person)}${h.inferred?'／推斷':''}</span></div>`).join('');
+        const quoteHtml=chainQuoteBoxesHtml(ch.hops,ch.events);
         const groups={}; (ch.events||[]).forEach((ev,evk)=>{ const rp=ev.reporter||'（未標明報告者）'; (groups[rp]=groups[rp]||[]).push({ev,evk}); });
         const evrow=(ev,evk)=>{ const match=findEventBySubtitle(ev.subtitle); const sd=match?match.actor:'';
           const sdtag=sd?`<span class="evside evside-${sd}">${sd==='qing'?'清':'林'}</span>`:'';
@@ -6587,7 +6802,7 @@
         return `<div class="cx-ev" style="border-left:3px solid ${PROV_HEX};padding-left:8px">
             <div class="cx-sub pv-chainh"><span class="pv-chainl">來源鏈</span></div>
             <div class="pv-wrap">${provTableHtml(ch.hops)}</div>
-            ${quotes?`<div class="pv-quotes">${quotes}</div>`:''}
+            ${quoteHtml}
             <div class="src-head">此來源鏈所報事件（${(ch.events||[]).length}）</div>${evs}
           </div>`;
       }
@@ -6668,14 +6883,22 @@
         if(p.none || (!(p.yu_doc_id||p.previous_doc_id) && !p.reply_doc_id)){ const nd=esc(p.doc_id||''); const nt=p.relation==='prior_report'?'在案—前奏配對':(p.relation==='reply_to_zhu'?'硃批—回應配對':'上諭—回應配對'); return '<div class="chat-extract dp-card" data-logi="'+i+'"><div class="cx-head">'+nt+'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button><button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div><div class="dp-none">此文書 '+nd+' 查無可信的配對結果。</div></div>'; }
         const isZhu=(p.relation==='reply_to_zhu');
         const isPrior=(p.relation==='prior_report');
+        const isSource=(p.relation==='yu_source');
         const empLabel=isPrior?'前奏':(isZhu?'硃批':'上諭');
-        const pairTitle=isPrior?'在案—前奏配對':(isZhu?'硃批—回應配對':'上諭—回應配對');
+        const pairTitle=isSource?'上諭—來源配對':(isPrior?'在案—前奏配對':(isZhu?'硃批—回應配對':'上諭—回應配對'));
         const yuId=String((isPrior?(p.previous_doc_id||p.yu_doc_id):(isZhu?(p.zhu_doc_id||p.yu_doc_id):p.yu_doc_id))||''), rpId=String(p.reply_doc_id||'');
         const yr=(typeof recByDocId2==='function')?recByDocId2(yuId):null;
         const rr=(typeof recByDocId2==='function')?recByDocId2(rpId):null;
         const yuDate=(yr&&(isPrior?yr.sendAr:(isZhu?(yr.recvAr||yr.annAr||yr.sendAr):(yr.annAr||yr.sendAr))))||'';
         const empSpan=isPrior?(ev.matched_previous_span||''):(ev.matched_yu_span||ev.matched_zhu_span||(isZhu&&yr?(yr.rescript||''):''));
         const replySpan=isPrior?(ev.reference_in_later_doc||ev.matched_later_span||''):(ev.quote_in_reply||'');
+        // Keep every displayed quotation clickable when it names a source document.
+        // Do not require an exact pre-render match: AI quotations commonly contain ellipses,
+        // punctuation/OCR variants, or abbreviated spans, and flashQuoteInDoc already performs
+        // fragment and fuzzy matching against the original text. The old gate removed cx-q,
+        // dp-loc and data-doc from those quotes, which also made their typography inconsistent.
+        const empLocatable=!!(empSpan&&yuId);
+        const replyLocatable=!!(replySpan&&rpId);
         const rpAuthor=(rr&&rr.author_name)||'';
         const rpDate=(rr&&rr.sendAr)||'';
         const yuTitle=(yr&&yr.title)||'';
@@ -6690,8 +6913,9 @@
         const lvlLbl={high:'高度符合',partial:'部分符合',weak:'待查'}[lvl]||lvl;
         // connector: 收到日 (in Arabic) + interval from the 上諭 date, computed.
         const recvCh=(ev.receive_date&&ev.receive_date!=='未明')?ev.receive_date:'';
-        let connector=isPrior?'後文以「在案」追述':'↩︎ 回應';
-        if(!isPrior&&recvCh){
+        let connector=isSource?'◀ 據奏來源':(isPrior?'後文以「在案」追述':'↩︎ 回應');
+        if(isSource){ let _sl=null; try{ const _sd=(rr&&(rr.recvAr||rr.sendAr))||''; if(_sd&&yuDate&&typeof daysAfter==='function') _sl=daysAfter(_sd,yuDate); }catch(e){} if(_sl!=null&&_sl>=0) connector='◀ 據奏來源（上諭前 '+_sl+' 日收到）'; }
+        if(!isPrior&&!isSource&&recvCh){
           let recvAr='', interval=null;
           try{ const rd=(typeof convertWhenCh==='function')?convertWhenCh(recvCh, yuDate):null;
                if(rd){ recvAr=fmt(rd); if(yuDate&&typeof daysAfter==='function') interval=daysAfter(yuDate, recvAr); } }catch(e){}
@@ -6714,7 +6938,7 @@
           dpRpInner = all.length ? dpMarkMulti(rq, all) : esc(rq);
         }
         const yuQuote = empSpan
-          ? '<div class="dp-q cx-q dp-loc" data-doc="'+esc(yuId)+'" title="點按在原文中顯示">「'+dpYuInner+'」</div>'
+          ? '<div class="dp-q'+(empLocatable?' cx-q dp-loc':'')+'"'+(empLocatable?' data-doc="'+esc(yuId)+'" title="點按在原文中顯示"':'')+'>「'+dpYuInner+'」</div>'
           : '<div class="dp-q dp-q-empty">'+(isPrior?'前奏中尚無可顯示的對應原文':'此'+empLabel+'無可對應文字 — 非本摺主要答覆對象')+'</div>';
         const added=allDocPairs().some(x=>String(x.yu_doc_id||x.previous_doc_id)===yuId&&String(x.reply_doc_id)===rpId&&String(x.relation||'reply_to_yu')===String(p.relation||'reply_to_yu')) || !!p.__added;
         const addBtn = added
@@ -6722,6 +6946,8 @@
           : '<button class="sl-btn dp-add" data-i="'+i+'" type="button">加入配對</button>';
         return '<div class="chat-extract dp-card" data-logi="'+i+'">'
           +'<div class="cx-head">'+esc(pairTitle)+'<span class="dp-badge dp-'+esc(lvl)+'">'+esc(lvlLbl)+'</span>'
+            +(p.no_citation?'<span class="dp-badge dp-nocite">無引文</span>':'')
+            +(p.reply_status?'<span class="dp-badge dp-rs-'+esc(p.reply_status)+'">'+esc(({done:'完成回覆 ✓',ack:'相關未完覆 ✗',unrelated:'非回應 ✗'})[p.reply_status]||p.reply_status)+'</span>':'')
             +'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button>'
             +'<button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div>'
           +'<div class="dp-flow">'
@@ -6738,12 +6964,13 @@
             +'<div class="dp-node dp-node-rp">'
               +'<span class="dp-dot dp-dot-rp"></span>'
               +'<div class="dp-label">'+'<div class="dp-l1">'+(rpTitle?'〈'+dpFld(rpId,'title',rpTitle)+'〉':esc(rpId))+'</div>'+(rpAuthor?'<div class="dp-l2">'+dpFld(rpId,'author_name',rpAuthor)+'</div>':'')+(rpDate?'<div class="dp-l3">'+dpFld(rpId,'sendAr',rpDate)+(replyLag!=null&&replyLag>=0?'（'+replyLag+'日）':'')+'</div>':'')+'</div>'
-              +(replySpan?'<div class="dp-q cx-q dp-loc" data-doc="'+esc(rpId)+'" title="點按在原文中顯示">「'+dpRpInner+'」</div>':'')
+              +(replySpan?'<div class="dp-q'+(replyLocatable?' cx-q dp-loc':'')+'"'+(replyLocatable?' data-doc="'+esc(rpId)+'" title="點按在原文中顯示"':'')+'>「'+dpRpInner+'」</div>':'')
             +'</div>'
           +'</div>'
           +((isZhu&&ev.own_memorial_ref&&ev.own_memorial_ref!=='未明')?'<div class="dp-note">原奏：'+dpEvFld('own_memorial_ref',ev.own_memorial_ref)+'</div>':'')
           +((isPrior&&ev.previous_report_date&&ev.previous_report_date!=='未明')?'<div class="dp-note">前奏日期：'+dpEvFld('previous_report_date',ev.previous_report_date)+'</div>':'')
           +((isPrior&&ev.previous_report_summary)?'<div class="dp-note">先前所奏：'+dpEvFld('previous_report_summary',ev.previous_report_summary)+'</div>':'')
+          +(ev.relation_note?'<div class="dp-note dp-relnote">關係說明：'+dpEvFld('relation_note',ev.relation_note)+'</div>':'')
           +(ev.date_note?'<div class="dp-note">'+dpEvFld('date_note',ev.date_note)+'</div>':'')
           +'<div class="dp-acts">'+addBtn+'</div>'
         +'</div>';
@@ -6873,6 +7100,7 @@
         return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${esc(m.__loopHeader||('擷取：'+(EVENT_LABEL[m.actor]||'事件')))}（${items.length}）${(pend&&items.length>1)?`<button class="cx-addall" data-i="${i}" type="button">全部加入</button>`:''}<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(items.length? items.map((it,j)=> it.__skip?'':`<div class="cx-ev${it.__added?' added':''}">
+              ${it.__qcat?`<div class="cx-qcat qcat-${esc(it.__qcat)}">${esc(QCAT_LABEL[it.__qcat]||it.__qcat)}</div>`:''}
               <div class="cx-sub ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="subtitle">${esc(it.__matchReg?it.__matchReg.title:(it.subtitle||''))}</div>
               <div class="cx-desc ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="description">${esc(it.description||'')}</div>
               ${matchNoteHtml(it)}
@@ -6888,7 +7116,7 @@
         return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI 追溯來源：${esc(m.evTitle||'事件')}（${chains.length} 條來源鏈）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(chains.length? chains.map((ch,j)=>{ const committed=!!ch.__committed;
-              const quotes=(ch.hops||[]).filter(h=>h.quote).map(h=>`<div class="cx-q" data-doc="${esc(h.doc_id||'')}" title="點按在原文中顯示">「${esc(h.quote)}」<span class="cx-src">—${esc(h.from_person)}→${esc(h.to_person)}${h.inferred?'／推斷':''}</span></div>`).join('');
+              const quotes=chainQuoteBoxesHtml(ch.hops, ch.events);
               const groups={}; (ch.events||[]).forEach((ev,k)=>{ const rp=ev.reporter||'（未標明報告者）'; (groups[rp]=groups[rp]||[]).push({ev,k}); });
               const evrow=(ev,k)=>{ const match=findEventBySubtitle(ev.subtitle); const sd=match?match.actor:'';
                 const sdtag=sd?`<span class="evside evside-${sd}">${sd==='qing'?'清':'林'}</span>`:'';
@@ -6897,7 +7125,7 @@
               return `<div class="cx-ev" style="border-left:3px solid ${PROV_HEX};padding-left:8px">
                 <div class="cx-sub pv-chainh"><span class="pv-chainl">來源鏈 ${j+1}</span>${committed?'<span class="cx-done">✓ 已加入</span>':`<button class="tr-commit" data-i="${i}" data-j="${j}" type="button">加入</button>`}</div>
                 <div class="pv-wrap">${provTableHtml(ch.hops, {a:`data-eck="trace" data-i="${i}" data-j="${j}"`})}</div>
-                ${quotes?`<div class="pv-quotes">${quotes}</div>`:''}
+                ${quotes||''}
                 <div class="src-head">此來源鏈所報事件（${(ch.events||[]).length}）</div>${evs}
               </div>`; }).join('') : '<div class="record-empty">未能從原文追溯來源。可在輸入框補充線索後用 @追溯來源 重試。</div>')+`</div>`; }
       // one turn from runOfficialResponseSearch (or a bundle-loaded equivalent): the addressed
@@ -7693,7 +7921,7 @@
           const key=x=>String(x.yu_doc_id||x.previous_doc_id)+'|'+String(x.reply_doc_id)+'|'+String(x.relation||'reply_to_yu');
           const idx=store.findIndex(x=>key(x)===key(p));
           if(idx>=0){ store.splice(idx,1); p.__added=false; st2.textContent='已取消配對，連線已移除。'; }
-          else { store.push({yu_doc_id:p.yu_doc_id||p.previous_doc_id, reply_doc_id:p.reply_doc_id, relation:p.relation||'reply_to_yu', previous_doc_id:p.previous_doc_id||(p.relation==='prior_report'?p.yu_doc_id:undefined), zhu_doc_id:p.zhu_doc_id||(p.relation==='reply_to_zhu'?p.yu_doc_id:undefined), match_level:p.match_level||'', evidence:p.evidence||{}, at:nowStr()}); p.__added=true; st2.textContent='已加入配對，已於圖上連線。'; }
+          else { store.push({yu_doc_id:p.yu_doc_id||p.previous_doc_id, reply_doc_id:p.reply_doc_id, relation:p.relation||'reply_to_yu', previous_doc_id:p.previous_doc_id||(p.relation==='prior_report'?p.yu_doc_id:undefined), zhu_doc_id:p.zhu_doc_id||(p.relation==='reply_to_zhu'?p.yu_doc_id:undefined), match_level:p.match_level||'', no_citation:p.no_citation||undefined, reply_status:p.reply_status||undefined, evidence:p.evidence||{}, at:nowStr()}); p.__added=true; st2.textContent='已加入配對，已於圖上連線。'; }
           // mirror onto the reply record so the pairing travels with the data (for export/other views)
           const rr=(typeof recByAnyDocId==='function')?recByAnyDocId(p.reply_doc_id):null;
           if(rr){ rr.responds_to=(rr.responds_to||[]).filter(x=>String(x.doc_id)!==String(p.yu_doc_id||p.previous_doc_id));
@@ -7755,13 +7983,24 @@
           st2.textContent='已加入合併圓點「'+(it.title||'')+'」，並隱藏 '+(it.members||[]).filter(mm=>mm.include!==false).length+' 個原始事件（可於「隱藏清單」復原）。';
         });
         log.querySelectorAll('.cs-open').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(it&&it.__evId){ const ev=eventById(it.__evId); if(ev) openEventCard(ev); } });
-        // click a quote in the chat → open its document and temporarily highlight the quote in the original text
-        log.querySelectorAll('.cx-q[data-doc]').forEach(el=>{ if(!el.dataset.doc) return; el.style.cursor='pointer'; el.onclick=()=>{ const q=quoteTextFromElement(el); if(typeof flashQuoteInDoc==='function') flashQuoteInDoc(el.dataset.doc, q, el); }; });
-        // 回應配對 card: the QUOTE is click-to-locate only (not editable); every OTHER text field
-        // (document title / 受命 / author / dates, and the pairing notes) is tap-to-edit in place,
-        // matching the 擷取事件 card. Record-derived fields write back to the document (patchDot);
-        // pairing notes write to the pair's own evidence.
-        log.querySelectorAll('.dp-loc[data-doc]').forEach(el=>{ el.style.cursor='pointer'; el.onclick=e=>{ e.stopPropagation(); if(typeof flashQuoteInDoc==='function') flashQuoteInDoc(el.dataset.doc, quoteTextFromElement(el), el); }; });
+        // One persistent capture-phase handler owns every quotation jump in this AI panel.
+        // Attaching both a per-node onclick and a bubbling log.onclick is unreliable because
+        // opening the source panel may reflow/re-render the chat during the first callback.
+        // Capture also lets nested actor-colour spans and editable quote fields act as one citation.
+        log.querySelectorAll('.cx-q[data-doc], .dp-loc[data-doc]').forEach(el=>{ if(el.dataset.doc) el.style.cursor='pointer'; });
+        if(!log.__quoteLocateBound){
+          log.__quoteLocateBound=true;
+          log.addEventListener('click',e=>{
+            const target=e.target&&e.target.closest?e.target:null;
+            const el=target&&target.closest('.cx-q[data-doc], .dp-loc[data-doc]');
+            if(!el||!log.contains(el)||!String(el.dataset.doc||'').trim()) return;
+            if(target.closest('button,input,textarea,select,a')) return;
+            e.preventDefault(); e.stopPropagation();
+            const q=quoteTextFromElement(el);
+            if(!q){ if(typeof flashQuoteMsg==='function') flashQuoteMsg('此引文沒有可定位的文字',el); return; }
+            if(typeof flashQuoteInDoc==='function') flashQuoteInDoc(String(el.dataset.doc).trim(),q,el);
+          },true);
+        }
         log.querySelectorAll('.dp-fld').forEach(el=>el.addEventListener('blur',()=>{
           const v=el.textContent.trim();
           if(el.dataset.dt==='rec'){ const r=(typeof recByDocId2==='function')?recByDocId2(el.dataset.doc):null; if(!r) return; const f=el.dataset.f;
@@ -8014,9 +8253,26 @@
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片（範圍：單一／部分／全部，或 ⌘點選圓點）。'; return; }
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 擷取中…（0/'+apis.length+'）';
-        try{ const props=await extractEventProposals(actor, apis.map(a=>a.rec), (dn,n)=>{ st2.textContent='AI 擷取中…（'+dn+'/'+n+'）'; }, ctx);
-          const failures=props.__failures||[];
-          if(!props.length && failures.length===apis.length) throw new Error(failures.map(x=>x.doc_id+'：'+x.message).join('；'));
+        try{ let props, failures;
+          if(Array.isArray(ctx.categories) && ctx.categories.length){
+            // combined 清方行動: run each category (已執行軍事 / 待執行軍事 / 非軍事) and merge into one
+            // card, tagging each event with __qcat and de-duplicating events the AI returns in more
+            // than one category (keeping the first, ordered done → plan → nonmil). This removes the
+            // heavy overlap of running the three separately.
+            const merged=[], failAll=[], seen=new Set();
+            for(const cat of ctx.categories){
+              let sub=[];
+              try{ sub=await extractEventProposals(actor, apis.map(a=>a.rec), (dn,n)=>{ st2.textContent='AI 擷取中…（'+(QCAT_LABEL[cat]||cat)+'：'+dn+'/'+n+'）'; }, Object.assign({}, ctx, {category:cat})); }
+              catch(e){ failAll.push({doc_id:(QCAT_LABEL[cat]||cat), message:(e&&e.message)||String(e)}); continue; }
+              ((sub&&sub.__failures)||[]).forEach(f=>failAll.push(f));
+              (sub||[]).forEach(p=>{ if(!p) return; const q=String(((p.sources||[])[0]||{}).quote||'').replace(/\s+/g,''); const key=q?q.slice(0,30):String(p.subtitle||p.what||'').replace(/\s+/g,''); if(!key||seen.has(key)) return; seen.add(key); p.__qcat=cat; merged.push(p); });
+            }
+            props=merged; failures=failAll;
+          } else {
+            props=await extractEventProposals(actor, apis.map(a=>a.rec), (dn,n)=>{ st2.textContent='AI 擷取中…（'+dn+'/'+n+'）'; }, ctx);
+            failures=props.__failures||[];
+          }
+          if(!props.length && apis.length && failures.length>=apis.length) throw new Error(failures.map(x=>x.doc_id+'：'+x.message).join('；'));
           // Eagerly trace sources for the WHOLE batch right now, before the user has decided which
           // candidates to keep -- ONE whole-document scan per source document, not one call per
           // event. An event-focused trace call re-scans its source document from scratch, so if a
@@ -8037,7 +8293,8 @@
             // subtitle match below would fail to connect a chain to its candidate even though both
             // are clearly about the same thing.
             const knownTitles=[...new Set(props.filter(p=>(p.sources||[]).some(s=>String(s.doc_id)===did)).map(p=>p.subtitle||p.what).filter(Boolean))];
-            const hint=knownTitles.length?('已知本文書已擷取出以下事件標題：'+knownTitles.map(t=>'「'+t+'」').join('、')+'。描述每條來源鏈的 events[].subtitle 時，若對應到上述某一事件，請直接沿用該事件標題的原文字（逐字），不要另擬新標題。'):'';
+            const baseTraceRule='若某事件的資訊並沒有更早的文書來源——即出於本文書作者本人親歷（第一手），或僅為一般傳聞／訪聞，而未引用任何更早的奏、諭、稟、咨等文書——請不要為它虛構來源鏈；該事件回傳空的來源鏈（不列任何 hop）即可，作者本人的親歷或傳聞不算一條來源。';
+            const hint=(knownTitles.length?('已知本文書已擷取出以下事件標題：'+knownTitles.map(t=>'「'+t+'」').join('、')+'。描述每條來源鏈的 events[].subtitle 時，若對應到上述某一事件，請直接沿用該事件標題的原文字（逐字），不要另擬新標題。'):'')+baseTraceRule;
             try{
               const data=await callProxy({mode:'trace', model:getGeminiModel(), actor, doc_id:did, doc_type:r.doc_type, title:r.title, body:recordBody(r), rescript:r.rescript||'', summary:getSummary(r), question:hint});
               let cs=data.chains; if(!cs && data.text){ try{ cs=(JSON.parse(stripFences(data.text))||{}).chains; }catch(e2){} }
@@ -8185,6 +8442,97 @@
           if(typeof markAIReview==='function') markAIReview('edict',[mem]);
         }
         renderLog({}); st2.textContent='完成：上諭配對，新增 '+added+' 則'+(ran?'':'（所選文書未偵測到上諭引用標記）')+'。';
+      }
+      // ===== 相關上諭配對（無引文）: no-citation RECALL pass. Anchored on a selected
+      // 上諭; scans later docs whose SEND date is in [issue+SKIP+1, issue+SKIP+SPAN]
+      // days (skip 10 days transit, then search 30 days), ACROSS ALL officials
+      // (no identity filter; citation-bearing memorials are excluded), ranks by
+      // subject-bigram overlap, and asks the AI
+      // to judge two axes: match_level (content relatedness) + reply_status. Same
+      // 上諭—回應配對 card machinery, tagged no_citation. See
+      // skills/yu-response-pairing-nocite.md. =====
+      const YU_PAIR_NOCITE_PROMPT = "You are finding Qing official memorials (奏摺／硃批-bearing) that RESPOND TO or\nCARRY OUT a given `上諭`, WITHOUT relying on any citation marker. Unlike the\ncitation-based pairing, these candidates do NOT quote the edict and may be written\nby an official who is NOT the edict's named recipient. You are given ONE `上諭`\n(`【本上諭】`) and a numbered list of `【候選回應】` later memorials, already\npre-filtered to a plausible reply window and ranked by shared subject matter\n(people, places, events).\n\n**FIRST read the `上諭` in two layers, because you will pair only against the\nsecond layer.** An edict normally mixes:\n- **(A) relayed intelligence** — passages where the emperor is REPEATING what an\n  official already reported to him (`據某奏`／`據某稟報`／`某奏稱…等語`／\n  `具奏前來`…). These are battlefield events the emperor learned FROM a memorial;\n  they are NOT the emperor's own instruction.\n- **(B) the emperor's own response** — his judgement, comment, praise/blame,\n  reward, and above all his COMMAND (`著…`／`諭令…`／`飭…`／`嘉獎`／`申飭`…).\n\nA genuine reply answers or carries out **layer (B)**. A later memorial that merely\nreports the SAME event described in **layer (A)** is NOT a reply — the emperor was\nalready relaying that event from someone else's report, so this memorial is a\nparallel or source report of the same intelligence, not an answer to the edict.\nMark such a candidate `reply_status: unrelated` (it will be dropped) unless it\nalso acts on the emperor's command in (B). Do the pairing against (B), never (A).\n\nFor each candidate decide TWO separate things.\n\n`match_level` — how strongly the memorial's CONTENT is related to this edict's\nmatter (the same reported event, the same operation, the same named\nofficials/places):\n- `high` — the memorial clearly concerns the very matter this edict commands or\n  discusses, and reads as acting on or answering it.\n- `partial` — related to the same affair, but the connection is looser or the\n  memorial only touches part of it.\n- `weak` — only incidental overlap (a shared place name or generic phrase) with\n  no real connection.\n\n`reply_status` — whether the memorial actually answers or executes the edict, as\nopposed to merely being about the same affair:\n- `done` — the memorial carries out, reports compliance with, or directly answers\n  the edict's command.\n- `ack` — clearly related and consistent with the edict, but it does not yet\n  complete or explicitly answer it (e.g. an interim report on the same operation).\n- `unrelated` — despite surface overlap, it is an independent report, not a\n  response. This INCLUDES a memorial that reports the same event the edict was\n  itself relaying in layer (A): reporting the same battlefield fact the emperor\n  already had is not answering his command.\n\nJudge by CONTENT, not by any citation. A memorial that independently reports the\nsame battlefield event WITHOUT responding to the imperial command in layer (B) is\n`reply_status: unrelated` even when `match_level` is `high` on subject overlap —\nsay so plainly; do not force it into a reply.\n\nFor every candidate you keep, provide:\n- `quote_in_reply` — the exact span FROM THE MEMORIAL that shows the relation, in\n  **the official's OWN words**: his report of what he did, his compliance, or his\n  answer. It must NOT be a re-quotation of imperial words embedded in the\n  memorial. Memorials often quote the very edict or a 硃批 before responding\n  (`奉上諭：「…著…勿過勞」欽此`); NEVER put such an imperial span — anything that is\n  the emperor speaking (`著…`／`諭…`／praise, reward, or command language issued BY\n  the emperor, `欽此`) — in `quote_in_reply`. Skip past the quoted edict to the\n  official's own responding text. If the ONLY text overlapping this edict that you\n  can find in the memorial is itself an imperial quotation, the memorial is not\n  replying with its own content → `reply_status: unrelated`.\n- `matched_yu_span` — the span of THIS edict that the memorial answers. It MUST be\n  taken from **layer (B)** — the emperor's comment or command — NOT from the\n  relayed-report layer (A). Preserve it verbatim.\n- `relation_note` — in Traditional Chinese, explain the relation by PAIRING\n  SPECIFICS, not by summarising generically. First name the particular\n  instruction(s) or piece(s) of information IN THIS `上諭` that the memorial\n  addresses — state the concrete point, quoting or closely paraphrasing it (e.g.\n  `諭命任承恩渡臺事竣後速回`、`諭命常青駐蚶江廈門調度策應`、\n  `諭命查參黃仕簡傳牌攻城之失`) — and THEN state how the memorial responds to that\n  point (遵行／回報進度／請俟查明另奏／申辯／請旨…). Pair each edict point with its\n  matching response; when the memorial answers several points, cover each one.\n  Do NOT write a vague catch-all such as `逐一回覆上諭之指示` — always tie the\n  response to the specific edict content it answers.\n- `send_date` — the memorial's send date if stated (`未明` otherwise).\n\nUse Traditional Chinese for notes, preserve quotations exactly, and return ONLY\nthis JSON:\n\n```json\n{\n  \"pairs\": [\n    {\n      \"reply_doc_id\": \"\",\n      \"match_level\": \"high|partial|weak\",\n      \"reply_status\": \"done|ack|unrelated\",\n      \"evidence\": {\n        \"quote_in_reply\": \"\",\n        \"matched_yu_span\": \"\",\n        \"relation_note\": \"\",\n        \"send_date\": \"未明\"\n      }\n    }\n  ]\n}\n```\n\nRules: do NOT require or invent a citation marker; do NOT invent quotations,\ndates, or pairs. Omit a candidate entirely only if it has nothing to do with this\nedict. Keep a candidate you judge `unrelated` only when its subject overlap is\nhigh enough to be worth the researcher's glance; otherwise omit it.";
+      const YU_NOCITE_SKIP=10, YU_NOCITE_SPAN=30, YU_NOCITE_TOPK=8;
+      const YU_NOCITE_CITATION_RE=/(?:欽奉上諭|奉到上諭|接奉上諭|奉上諭|奉聖諭|欽奉諭旨|接奉諭旨|奉到諭旨|奉廷寄|承准廷寄|接准廷寄|承准[^。\n]{0,40}字寄|(?:上諭|諭旨|廷寄)\s*[：:][「『]?)/;
+      function yuNociteHasCitation(r){ const body=stripOwnRescript(recordBody(r)); return YU_NOCITE_CITATION_RE.test(String(r.title||'')+'\n'+body); }
+      function yuNociteNorm(t){ return String(t||'').replace(/[。，、；：！？「」『』（）〈〉【】〔〕\s]/g,''); }
+      function yuNociteOverlap(a,b){ a=yuNociteNorm(a); b=yuNociteNorm(b); if(a.length<2||b.length<2) return 0;
+        const g=new Set(); for(let i=0;i<a.length-1;i++) g.add(a.slice(i,i+2)); if(!g.size) return 0;
+        let hit=0; g.forEach(x=>{ if(b.indexOf(x)>=0) hit++; }); return hit/g.size; }
+      async function runYuPairingNoCiteForSel(ctx){ ctx=ctx||{};
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        const apis=selectedApis(); const edicts=apis.map(a=>a.rec).filter(r=>r.type==='shangyu');
+        if(!edicts.length){ st2.textContent='請先選擇一道上諭圓點。'; return; }
+        const WMIN=YU_NOCITE_SKIP, WMAX=YU_NOCITE_SKIP+YU_NOCITE_SPAN;
+        let added=0, ran=0;
+        for(const ed of edicts){
+          const issue=ed.annAr||ed.sendAr; const edText=(ed.title||'')+recordBody(ed);
+          const scored=recs.map(z=>{ if(z.type==='shangyu') return null; if(String(z.id)===String(ed.id)) return null;
+              if(yuNociteHasCitation(z)) return null; // citation-bearing replies belong to 相關上諭配對
+              const lag=daysAfter(issue, z.sendAr);  // z.send - issue: reply SENT after the edict
+              if(lag==null||lag<=WMIN||lag>WMAX) return null;
+              const sc=yuNociteOverlap(edText, (z.title||'')+recordBody(z)); if(sc<=0) return null;
+              return {z:z, lag:lag, score:sc};
+            }).filter(Boolean).sort((a,b)=>b.score-a.score||a.lag-b.lag).slice(0,YU_NOCITE_TOPK);
+          if(!scored.length) continue;
+          ran++;
+          const cands=scored.map(x=>x.z);
+          st2.textContent='AI 配對相關上諭（無引文）…（'+esc(ed.id)+'）';
+          let block='【本上諭】\ndoc_id：'+(ed._baseId||ed.id)+'\n發布日：'+(issue||'未明')+'（'+(ed.annCh||'')+'）\n受命官員：'+(((ed.recipients||[]).join('、'))||(ed.author_name||''))+'\n標題：'+(ed.title||'')+'\n原文：\n'+recordBody(ed)+'\n\n';
+          scored.forEach((x,i)=>{ const c=x.z; block+='【候選回應 '+(i+1)+'】\ndoc_id：'+(c._baseId||c.id)+'\n具奏官員：'+String(c.author_name||'').trim()+'\n上奏日：'+(c.sendAr||'未明')+'\n距上諭：'+x.lag+' 日\n主題重疊：'+x.score.toFixed(3)+'\n原文：\n'+recordBody(c)+'\n\n'; });
+          const idmap=new Map(); cands.forEach(c=>{ idmap.set(String(c._baseId||c.id),c); idmap.set(String(c.id),c); });
+          try{ const pairs=await callPairProxy(YU_PAIR_NOCITE_PROMPT+'\n\n'+block);
+            pairs.forEach(p=>{ const rid=String(p.reply_doc_id||'').trim(); const c=idmap.get(rid); if(!c) return;
+              if((p.match_level||'weak')==='weak' && !ctx.includeWeak) return;
+              if((p.reply_status||'')==='unrelated' && !ctx.includeUnrelated) return;
+              const ev=Object.assign({}, p.evidence||{}); ev.no_citation=true; if(p.reply_status) ev.reply_status=p.reply_status;
+              added+=pushPairCards({reply_doc_id:c.id, yu_doc_id:(ed._baseId||ed.id), relation:'reply_to_yu', no_citation:true, match_level:p.match_level||'weak', reply_status:p.reply_status||'ack', evidence:ev}, '上諭—回應配對（無引文）');
+            });
+          }catch(e){}
+          if(typeof markAIReview==='function') markAIReview('edict',[ed]);
+        }
+        renderLog({}); st2.textContent='完成：相關上諭配對（無引文），新增 '+added+' 則'+(ran?'':'（所選上諭在 +'+(WMIN+1)+'～+'+WMAX+' 日窗內無主題相符候選）')+'。';
+      }
+      // ===== 上諭來源（據奏）: backward edge. Anchored on a selected 上諭; extracts
+      // 據…奏 fragments, takes 奏摺 RECEIVED in [issue-BACK, issue] whose author is
+      // named in a 據…奏 fragment, and asks the AI which is the source it cites.
+      // Adopts as relation 'yu_source' (distinct 上諭來源 line). See
+      // skills/yu-source-pairing.md. =====
+      const YU_SOURCE_PROMPT = "You are tracing which earlier 奏摺 an 上諭 is drawing on. A 上諭 often relays\nintelligence it received, marked by 據X奏 / 據X…馳奏 / 據X…奏稱 (X = the official who\nsubmitted the memorial to the throne). You are given ONE 上諭 (【本上諭】), the\n據…奏 fragments detected in it, and a numbered list of 【候選來源奏摺】 — earlier\nmemorials the court received shortly before the edict, whose author matches an X\nnamed in a 據…奏 clause. For each candidate, decide whether it IS the source\nmemorial the edict is citing.\n\nA candidate is the source when BOTH hold:\n- its author is the memorialist X named in a 據X奏 clause — the one who 奏 to the\n  throne, NOT a nested relay reporter (接…稟稱 / 據…供), who is usually not a corpus\n  document; and\n- the information the edict attributes to X (the reported event or situation in\n  the 據X奏 clause) is actually reported in THIS memorial's own text.\n\nRate match_level:\n- high — author matches X AND the memorial reports the same event(s) the edict\n  attributes to X (dates, places, actions line up).\n- partial — author matches and the topic clearly overlaps, but the specific\n  reported facts are only loosely confirmed.\n- weak — author matches but the content does not correspond, or the match rests\n  on the receipt-date window alone.\n\nFor every candidate you keep, return evidence with:\n- matched_yu_span — the exact 據X奏 clause in the 上諭 (the relayed report as the\n  emperor states it), verbatim.\n- quote_in_reply — the exact span in the SOURCE memorial that reports that same\n  information, verbatim.\n- memorialist — X, the official whose 奏 the edict cites (e.g. 常青、徐嗣曾).\n- relation_note — one sentence in Traditional Chinese: state what the 上諭 says it\n  learned 據X奏 (the concrete event), and how this memorial is that report. If the\n  citation is a relay (據徐嗣曾…接陳惇稟稱…), pair 徐嗣曾's memorial and note the\n  chain (徐嗣曾←陳惇←黃斌) briefly.\n- send_date — the memorial's send date if stated (未明 otherwise).\n\nUse Traditional Chinese for notes, preserve quotations exactly, and return ONLY\nthis JSON:\n\n```json\n{\n  \"pairs\": [\n    {\n      \"source_doc_id\": \"\",\n      \"match_level\": \"high|partial|weak\",\n      \"evidence\": {\n        \"matched_yu_span\": \"\",\n        \"quote_in_reply\": \"\",\n        \"memorialist\": \"\",\n        \"relation_note\": \"\",\n        \"send_date\": \"未明\"\n      }\n    }\n  ]\n}\n```\n\nRules: pair ONLY the throne-memorialist's 奏摺 (X), never a nested relay reporter;\ndo not invent quotations, dates, or pairs; omit a candidate that is not the source.";
+      const YU_SOURCE_BACK=5;  // days before issue the source 奏摺 was received
+      function yuSourceJuSpans(body){ const t=String(body||''); const out=[]; let i=0;
+        while((i=t.indexOf('據',i))>=0){ const seg=t.slice(i,i+48); const k=seg.indexOf('奏'); if(k>=0) out.push(seg.slice(0,k+1)); i+=1; }
+        return out; }
+      async function runYuSourceForSel(ctx){ ctx=ctx||{};
+        if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
+        const apis=selectedApis(); const edicts=apis.map(a=>a.rec).filter(r=>r.type==='shangyu');
+        if(!edicts.length){ st2.textContent='請先選擇一道上諭圓點。'; return; }
+        let added=0, ran=0;
+        for(const ed of edicts){
+          const issue=ed.annAr||ed.sendAr; const spans=yuSourceJuSpans(recordBody(ed));
+          if(!spans.length) continue;
+          const cands=recs.map(z=>{ if(z.type==='shangyu') return null; if(String(z.id)===String(ed.id)) return null;
+              const rd=z.recvAr||z.sendAr; const lag=daysAfter(rd, issue);  // issue - recv
+              if(lag==null||lag<0||lag>YU_SOURCE_BACK) return null;
+              const au=String(z.author_name||'').trim(); if(!au) return null;
+              if(!spans.some(sp=>sp.indexOf(au)>=0)) return null;
+              return {z:z, lag:lag};
+            }).filter(Boolean).sort((a,b)=>a.lag-b.lag).slice(0,8);
+          if(!cands.length) continue;
+          ran++;
+          st2.textContent='AI 追溯上諭來源…（'+esc(ed.id)+'）';
+          let block='【本上諭】\ndoc_id：'+(ed._baseId||ed.id)+'\n發布日：'+(issue||'未明')+'（'+(ed.annCh||'')+'）\n受命官員：'+(((ed.recipients||[]).join('、'))||(ed.author_name||''))+'\n標題：'+(ed.title||'')+'\n原文：\n'+recordBody(ed)+'\n\n偵測到的據…奏片段：\n'+spans.slice(0,8).map(s=>'・'+s).join('\n')+'\n\n';
+          cands.forEach((x,i)=>{ const c=x.z; block+='【候選來源奏摺 '+(i+1)+'】\ndoc_id：'+(c._baseId||c.id)+'\n具奏官員：'+String(c.author_name||'').trim()+'\n上奏日：'+(c.sendAr||'未明')+'\n收到／硃批日：'+(c.recvAr||'未明')+'\n距上諭：'+x.lag+' 日前收到\n原文：\n'+recordBody(c)+'\n\n'; });
+          const idmap=new Map(); cands.forEach(x=>{ const c=x.z; idmap.set(String(c._baseId||c.id),c); idmap.set(String(c.id),c); });
+          try{ const pairs=await callPairProxy(YU_SOURCE_PROMPT+'\n\n'+block);
+            pairs.forEach(p=>{ const sid=String(p.source_doc_id||p.reply_doc_id||'').trim(); const c=idmap.get(sid); if(!c) return;
+              if((p.match_level||'weak')==='weak' && !ctx.includeWeak) return;
+              added+=pushPairCards({yu_doc_id:(ed._baseId||ed.id), reply_doc_id:c.id, relation:'yu_source', match_level:p.match_level||'weak', evidence:p.evidence||{}}, '上諭—來源配對');
+            });
+          }catch(e){}
+          if(typeof markAIReview==='function') markAIReview('edict',[ed]);
+        }
+        renderLog({}); st2.textContent='完成：上諭來源（據奏），新增 '+added+' 則'+(ran?'':'（所選上諭未偵測到據…奏或窗內無相符奏摺）')+'。';
       }
       async function runZhuPairingForSel(ctx){ ctx=ctx||{};
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
