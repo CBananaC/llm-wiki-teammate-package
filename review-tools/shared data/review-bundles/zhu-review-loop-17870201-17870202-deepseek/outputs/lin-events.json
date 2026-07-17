@@ -1,0 +1,35 @@
+[
+  {
+    "description": "賊匪聚散飄忽不常，雖屢經剿殺，旋散旋聚。",
+    "quote": "賊匪雖屢經剿殺，旋散旋聚。",
+    "side": "林方",
+    "subtitle": "",
+    "whenAr": "1786/12",
+    "whenCh": "乾隆五十一年十二月二十三及二十六、七、八等日",
+    "where": "大姑陷等處",
+    "who": [
+      "賊匪"
+    ],
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月",
+    "_whenArModel": "1787年1月12日及15、16、17日",
+    "dateSource": "event"
+  },
+  {
+    "description": "賊匪知大兵已到，紛紛散去。",
+    "quote": "賊匪知大兵已到，紛紛散去。",
+    "side": "林方",
+    "subtitle": "",
+    "whenAr": "1787年2月20日後",
+    "whenCh": "乾隆五十二年初四日後",
+    "where": "鹿耳門附近",
+    "who": [
+      "賊匪"
+    ],
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  }
+]

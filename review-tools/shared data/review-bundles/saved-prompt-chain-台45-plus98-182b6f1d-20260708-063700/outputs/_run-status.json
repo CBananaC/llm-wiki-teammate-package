@@ -1,0 +1,34 @@
+{
+  "台45": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-events-done": true,
+    "qing-events-plan": true,
+    "qing-events-nonmil": true,
+    "source-chain-qing": true,
+    "zhupi": true,
+    "edict-match": true,
+    "info-source": true,
+    "situfit": true
+  },
+  "台46": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-events-done": true,
+    "qing-events-plan": true,
+    "qing-events-nonmil": true,
+    "source-chain-qing": true,
+    "zhupi": true,
+    "edict-match": true,
+    "info-source": true,
+    "situfit": true
+  },
+  "台48": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-events-done": true
+  }
+}

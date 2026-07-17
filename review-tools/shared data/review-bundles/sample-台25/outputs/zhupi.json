@@ -1,0 +1,54 @@
+[
+  {
+    "marker": "",
+    "opinion": "皇帝關心黃仕簡的身體健康，囑咐他注意調養，不要過度勞累。",
+    "position": "夾批",
+    "relations": [
+      {
+        "evidence": "仍以調養為要，勿過勞",
+        "relation": "關心",
+        "relation_type": "other",
+        "source": "皇帝",
+        "target": "黃仕簡"
+      }
+    ],
+    "responds_to": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+    "text": "仍以調養為要，勿過勞",
+    "title": "皇帝關心黃仕簡身體，囑咐其注意調養勿過勞",
+    "where": "廈門",
+    "who": [
+      "皇帝",
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "marker": "已有旨了。欽此。",
+    "opinion": "皇帝表示已經對此事件發布了諭旨，因此對此奏摺不再另行批示。",
+    "position": "尾批",
+    "relations": [
+      {
+        "evidence": "謹先恭摺由驛六百里奏聞",
+        "relation": "奏聞",
+        "relation_type": "report",
+        "source": "黃仕簡",
+        "target": "皇帝"
+      }
+    ],
+    "responds_to": "伏乞皇上睿鑒。",
+    "text": "已有旨了。欽此。",
+    "title": "皇帝批示黃仕簡奏摺，表示已發布諭旨",
+    "where": "彰化",
+    "who": [
+      "皇帝",
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  }
+]

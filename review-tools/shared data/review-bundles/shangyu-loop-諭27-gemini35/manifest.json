@@ -1,0 +1,16 @@
+{
+  "name": "shangyu-loop-諭27-gemini35",
+  "created_at": "2026-07-17T13:09:00",
+  "source": "outputs/attempt-002/dual-timeline-data.json",
+  "model": "gemini-3.5-flash",
+  "doc_ids": [
+    "諭27"
+  ],
+  "candidate_doc_ids": [],
+  "candidate_response_doc_ids": [
+    "奏177"
+  ],
+  "chain": [
+    "shangyu-review-loop"
+  ]
+}

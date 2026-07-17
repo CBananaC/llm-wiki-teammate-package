@@ -1,0 +1,39 @@
+{
+  "name": "zhu-review-loop-17870201-17870202",
+  "created_at": "2026-07-14T17:08:22",
+  "source": "outputs/attempt-002/stage1-date-adjusted.json",
+  "offset": 0,
+  "limit": 2,
+  "date_from": "1787-02-01",
+  "date_to": "1787-02-02",
+  "date_mode": "primary",
+  "doc_types": [],
+  "model": "gemini-3.5-flash",
+  "doc_ids": [
+    "硃125"
+  ],
+  "chain": [
+    "zhu-review-loop",
+    "summary",
+    "divide",
+    "lin-events",
+    "qing-events-done",
+    "qing-events-plan",
+    "qing-events-nonmil",
+    "zhupi",
+    "edict-match"
+  ],
+  "loop_skill": "skills/zhu-review-loop.md",
+  "loop_type": "zhu-review-loop",
+  "doc_type": "硃批",
+  "skill_files": {
+    "summary": "quick-summary.md",
+    "divide": "divide-into-parts.md",
+    "lin-events": "extract-lin-actions.md",
+    "qing-events-done": "extract-qing-actions-done.md",
+    "qing-events-plan": "extract-qing-actions-planned.md",
+    "qing-events-nonmil": "extract-qing-nonmilitary-actions.md",
+    "zhupi": "extract-zhupi.md",
+    "edict-match": "edict-match.md"
+  }
+}

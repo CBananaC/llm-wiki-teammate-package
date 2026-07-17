@@ -1,0 +1,155 @@
+[
+  {
+    "description": "依欽奉諭旨，提臣黃仕簡與陸路提臣任承恩須約會日期，同時並力夾攻賊匪。文中並稱兩提臣雖自不同口岸進口，但皆克期於正月十三日進剿，屬尚待實施之部署。",
+    "howKnown": "據欽奉諭旨及道府同知稟報",
+    "quote": "臣查節次欽奉諭旨：『以閩人性本慓輕，不宜零星打仗，飭令兩提臣務須約會日期，同時並力夾攻。』……今鹿港、鹿耳門相距頗遙，兩提臣先後進口，皆克期於十三日剿賊，正與聖訓相符。",
+    "relations": [
+      {
+        "evidence": "飭令兩提臣務須約會日期，同時並力夾攻",
+        "relation": "飭令",
+        "relation_type": "command",
+        "source": "乾隆帝",
+        "target": "黃仕簡"
+      },
+      {
+        "evidence": "飭令兩提臣務須約會日期，同時並力夾攻",
+        "relation": "飭令",
+        "relation_type": "command",
+        "source": "乾隆帝",
+        "target": "任承恩"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "兩提臣約期夾攻",
+    "whenAr": "1787/01/13",
+    "whenCh": "正月十三日",
+    "whenKnownCh": "",
+    "where": "鹿耳門、鹿港、諸羅一帶",
+    "who": [
+      "黃仕簡",
+      "任承恩",
+      "乾隆帝"
+    ],
+    "who_loc": {
+      "任承恩": "鹿港",
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月十三日",
+    "_whenArModel": "1787/02/01",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "提臣黃仕簡已登岸後，預定於正月十三日前往收復諸羅，屬尚未執行之進兵計畫。",
+    "howKnown": "據泉、廈道府同知稟報",
+    "quote": "黃仕簡定於十三日前往收復諸羅",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡擬復諸羅",
+    "whenAr": "1787/01/13",
+    "whenCh": "正月十三日",
+    "whenKnownCh": "",
+    "where": "諸羅",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月十三日",
+    "_whenArModel": "1787/02/01",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "陸路提臣任承恩已於初六日抵鹿港登岸，並預定於正月十三日分兵進剿，屬尚未執行之軍事部署。",
+    "howKnown": "據泉、廈道府同知稟報",
+    "quote": "陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "任承恩分兵進剿",
+    "whenAr": "1787/01/13",
+    "whenCh": "正月十三日",
+    "whenKnownCh": "",
+    "where": "鹿港",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "鹿港"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月十三日",
+    "_whenArModel": "1787/02/01",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "徐鼎士等由閩安出口赴淡水、新莊等處剿援，文中稱其兵抵北淡後，將與鹿港、鹿耳門兩路官軍形成三路圍攻，以期一舉蕆事。就此段而言，三路合圍仍屬將行未行之部署。",
+    "howKnown": "據沿海塘汛稟報推知",
+    "quote": "鹿港與北淡相去較近，徐鼎士等兵抵北淡，又復適當其時，三路圍攻，自必一舉蕆事。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐鼎士北淡會剿",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "北淡",
+    "who": [
+      "徐鼎士"
+    ],
+    "who_loc": {
+      "徐鼎士": "北淡"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  },
+  {
+    "description": "徐嗣曾認為此時沿海一帶尤應嚴密截拿，以防賊匪竄逸；營汛口岸既有弁兵駐紮，並須加強稽查。此為尚待持續施行的防堵部署。",
+    "howKnown": "臣自陳籌畫",
+    "quote": "此時沿海一帶，尤宜嚴密截拿（硃批：此為最要），防其竄逸，營汛口岸設有弁兵駐紮，尚易稽查。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "沿海嚴密截拿",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "沿海一帶",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福建"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  },
+  {
+    "description": "徐嗣曾先已嚴飭濱海各縣地方文武員弁，於一切可偷渡之汊港選撥兵役、羅織巡查；並再度通飭各處，以賊匪將被蕩平之際更加堵防，不使一名竄匿漏網。此為防範賊匪內竄偷渡的預備與命令。",
+    "howKnown": "臣親自部署",
+    "quote": "臣先已嚴飭各該地方文武員弁，選撥兵役，於凡可偷渡之處，羅織巡查……現復通飭以賊匪洗蕩在即，加意堵防，毋使一名竄匿漏網。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "各港汊設巡防堵",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "自漳、泉、興化至福州、福寧濱海各縣汊港",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福建"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  }
+]

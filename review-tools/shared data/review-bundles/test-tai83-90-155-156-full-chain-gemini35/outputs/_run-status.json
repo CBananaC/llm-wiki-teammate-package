@@ -1,0 +1,34 @@
+{
+  "台83": {
+    "divide": true,
+    "lin-events": true,
+    "qing-events-all": true,
+    "zhupi": true,
+    "edict-match": true,
+    "situfit": true
+  },
+  "台90": {
+    "divide": true,
+    "lin-events": true,
+    "qing-events-all": true,
+    "zhupi": true,
+    "edict-match": true,
+    "situfit": true
+  },
+  "台155": {
+    "divide": true,
+    "lin-events": true,
+    "qing-events-all": true,
+    "zhupi": true,
+    "edict-match": true,
+    "situfit": true
+  },
+  "台156": {
+    "divide": true,
+    "lin-events": true,
+    "qing-events-all": true,
+    "zhupi": true,
+    "edict-match": true,
+    "situfit": true
+  }
+}

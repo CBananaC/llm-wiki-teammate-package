@@ -1,0 +1,108 @@
+[
+  {
+    "doc_id": "諭27",
+    "candidate_doc_ids": [],
+    "candidate_response_doc_ids": [
+      "奏177"
+    ],
+    "prompt": "上諭審閱迴圈",
+    "response": "```json\n{\n  \"reported_events\": [\n    {\n      \"side\": \"lin\",\n      \"subtitle\": \"林爽文糾眾滋擾劫縣戕官\",\n      \"description\": \"臺灣彰化地方發生賊匪林爽文等糾眾滋擾、劫掠縣城並殺害官員之重大案件。\",\n      \"where\": \"福建臺灣彰化地方\",\n      \"who\": [\n        \"林爽文\"\n      ],\n      \"whenCh\": \"乾隆五十一年年底\",\n      \"whenAr\": \"未明\",\n      \"edict_quote\": \"現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。\",\n      \"direct_report\": {\n        \"source_doc_id\": \"未明\",\n        \"source_official\": \"未明\",\n        \"source_send_date\": \"未明\",\n        \"source_receive_date\": \"未明\",\n        \"source_quote\": \"未明\"\n      },\n      \"source_documents\": [],\n      \"comment_subtitle\": \"未明\",\n      \"emperor_comment\": \"未明\",\n      \"comment_quote\": \"未明\"\n    },\n    {\n      \"side\": \"qing\",\n      \"subtitle\": \"黃仕簡與任承恩渡臺剿捕\",\n      \"description\": \"水師提督黃仕簡與陸路提督任承恩皆已率領兵丁渡海前往臺灣進行剿捕。\",\n      \"where\": \"臺灣\",\n      \"who\": [\n        \"黃仕簡\",\n        \"任承恩\"\n      ],\n      \"whenCh\": \"乾隆五十一年十二月至五十二年正月間\",\n      \"whenAr\": \"未明\",\n      \"edict_quote\": \"水師提督黃仕簡、陸路提督任承恩俱已帶兵渡臺剿捕。\",\n      \"direct_report\": {\n        \"source_doc_id\": \"未明\",\n        \"source_official\": \"未明\",\n        \"source_send_date\": \"未明\",\n        \"source_receive_date\": \"未明\",\n        \"source_quote\": \"未明\"\n      },\n      \"source_documents\": [],\n      \"comment_subtitle\": \"未明\",\n      \"emperor_comment\": \"未明\",\n      \"comment_quote\": \"未明\"\n    }\n  ],\n  \"source_coverage\": [\n    {\n      \"candidate_doc_id\": \"奏177\",\n      \"status\": \"not_used\",\n      \"relation\": \"not_applicable\",\n      \"supported_event_indices\": [],\n      \"reason\": \"該摺為乾隆五十二年二月十七日之奏摺，時間在諭旨（正月初二日）之後，且其內容為查辦江蘇營伍硝磺缺額之案，與本諭旨所提之林爽文起事及調兵防守蚶江無關。\"\n    }\n  ],\n  \"commands\": [\n    {\n      \"title\": \"命藍元枚署理福建陸路提督並駐紮蚶江\",\n      \"target\": [\n        \"藍元枚\"\n      ],\n      \"summary\": \"因福建陸路提督任承恩已渡臺剿賊，漳泉要地不可無大員彈壓。藍元枚為福建世家且熟諳當地情形，著其接奉諭旨後，即刻由驛迅速前往泉州，署理福建陸路提督，並駐紮蚶江一帶，協助常青調度接應一切事宜。\",\n      \"quote\": \"著傳諭藍元枚接奉此旨，即行驛迅速前往泉州，署理福建陸路提督，即駐紮蚶江一帶，幫同常調度接應一切事宜，以期迅速蕆事。\",\n      \"responses\": []\n    },\n    {\n      \"title\": \"命李世傑揀員暫署江南提督印務\",\n      \"target\": [\n        \"李世傑\"\n      ],\n      \"summary\": \"因江南提督藍元枚調往福建署理陸路提督，其遺留之江南提督印務，著兩江總督李世傑於該省總兵之內，揀選合適官員暫行署理。\",\n      \"quote\": \"所有江南提督印務，著李世傑於該省總兵內，揀員暫行署理。\",\n      \"responses\": []\n    }\n  ],\n  \"timeliness_evidence\": {\n    \"status\": \"insufficient\",\n    \"window_start\": \"未明\",\n    \"window_end\": \"1787/01/20\",\n    \"note\": \"本案未提供乾隆五十二年正月初二日以前的任何候選奏摺，無法得知皇帝獲悉林爽文起事及提督渡臺的確切奏報日期與回報窗口。\"\n  },\n  \"uncertainty\": \"無\"\n}\n```",
+    "model": "saved prompt output",
+    "parsed": {
+      "reported_events": [
+        {
+          "side": "lin",
+          "subtitle": "林爽文糾眾滋擾劫縣戕官",
+          "description": "臺灣彰化地方發生賊匪林爽文等糾眾滋擾、劫掠縣城並殺害官員之重大案件。",
+          "where": "福建臺灣彰化地方",
+          "who": [
+            "林爽文"
+          ],
+          "whenCh": "乾隆五十一年年底",
+          "whenAr": "未明",
+          "edict_quote": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。",
+          "direct_report": {
+            "source_doc_id": "未明",
+            "source_official": "未明",
+            "source_send_date": "未明",
+            "source_receive_date": "未明",
+            "source_quote": "未明"
+          },
+          "source_documents": [],
+          "comment_subtitle": "未明",
+          "emperor_comment": "未明",
+          "comment_quote": "未明"
+        },
+        {
+          "side": "qing",
+          "subtitle": "黃仕簡與任承恩渡臺剿捕",
+          "description": "水師提督黃仕簡與陸路提督任承恩皆已率領兵丁渡海前往臺灣進行剿捕。",
+          "where": "臺灣",
+          "who": [
+            "黃仕簡",
+            "任承恩"
+          ],
+          "whenCh": "乾隆五十一年十二月至五十二年正月間",
+          "whenAr": "未明",
+          "edict_quote": "水師提督黃仕簡、陸路提督任承恩俱已帶兵渡臺剿捕。",
+          "direct_report": {
+            "source_doc_id": "未明",
+            "source_official": "未明",
+            "source_send_date": "未明",
+            "source_receive_date": "未明",
+            "source_quote": "未明"
+          },
+          "source_documents": [],
+          "comment_subtitle": "未明",
+          "emperor_comment": "未明",
+          "comment_quote": "未明"
+        }
+      ],
+      "source_coverage": [
+        {
+          "candidate_doc_id": "奏177",
+          "status": "not_used",
+          "relation": "not_applicable",
+          "supported_event_indices": [],
+          "reason": "該摺為乾隆五十二年二月十七日之奏摺，時間在諭旨（正月初二日）之後，且其內容為查辦江蘇營伍硝磺缺額之案，與本諭旨所提之林爽文起事及調兵防守蚶江無關。"
+        }
+      ],
+      "commands": [
+        {
+          "title": "命藍元枚署理福建陸路提督並駐紮蚶江",
+          "target": [
+            "藍元枚"
+          ],
+          "summary": "因福建陸路提督任承恩已渡臺剿賊，漳泉要地不可無大員彈壓。藍元枚為福建世家且熟諳當地情形，著其接奉諭旨後，即刻由驛迅速前往泉州，署理福建陸路提督，並駐紮蚶江一帶，協助常青調度接應一切事宜。",
+          "quote": "著傳諭藍元枚接奉此旨，即行驛迅速前往泉州，署理福建陸路提督，即駐紮蚶江一帶，幫同常調度接應一切事宜，以期迅速蕆事。",
+          "responses": []
+        },
+        {
+          "title": "命李世傑揀員暫署江南提督印務",
+          "target": [
+            "李世傑"
+          ],
+          "summary": "因江南提督藍元枚調往福建署理陸路提督，其遺留之江南提督印務，著兩江總督李世傑於該省總兵之內，揀選合適官員暫行署理。",
+          "quote": "所有江南提督印務，著李世傑於該省總兵內，揀員暫行署理。",
+          "responses": []
+        }
+      ],
+      "timeliness_evidence": {
+        "status": "insufficient",
+        "window_start": "未明",
+        "window_end": "1787/01/20",
+        "note": "本案未提供乾隆五十二年正月初二日以前的任何候選奏摺，無法得知皇帝獲悉林爽文起事及提督渡臺的確切奏報日期與回報窗口。"
+      },
+      "uncertainty": "無"
+    },
+    "source_coverage_check": {
+      "candidate_doc_ids": [],
+      "reported_candidate_doc_ids": [],
+      "missing_candidate_doc_ids": [],
+      "unexpected_reported_doc_ids": [
+        "奏177"
+      ],
+      "all_candidates_reviewed": true
+    }
+  }
+]

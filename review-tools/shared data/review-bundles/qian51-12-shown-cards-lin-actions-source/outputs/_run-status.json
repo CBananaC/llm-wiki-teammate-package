@@ -1,0 +1,15 @@
+{
+  "台2": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台3": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台4": {
+    "divide": true
+  }
+}

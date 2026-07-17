@@ -1,0 +1,86 @@
+[
+  {
+    "description": "泉、廈道府同知稟報，提臣黃仕簡與總兵郝壯猷已由鹿耳門登岸，黃仕簡預定於正月十三日前往收復諸羅。文中僅述「定於」前往，未敘其已實際收復。",
+    "howKnown": "據泉、廈道府同知稟報",
+    "quote": "提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡擬復諸羅",
+    "whenAr": "1787/01/13",
+    "whenCh": "正月十三日",
+    "whenKnownCh": "數日以來",
+    "where": "諸羅",
+    "who": [
+      "黃仕簡",
+      "郝壯猷"
+    ],
+    "who_loc": {
+      "郝壯猷": "鹿耳門",
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月十三日",
+    "_whenArModel": "1787/01/31",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "泉、廈道府同知稟報，陸路提臣任承恩於正月初六日抵鹿港登岸，預定於正月十三日分兵進剿。文中僅載其定期進剿，未敘實際進剿結果。",
+    "howKnown": "據泉、廈道府同知稟報",
+    "quote": "陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "任承恩分兵進剿",
+    "whenAr": "1787/01/13",
+    "whenCh": "正月十三日",
+    "whenKnownCh": "數日以來",
+    "where": "鹿港",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "鹿港"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月十三日",
+    "_whenArModel": "1787/01/31",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "徐嗣曾認為沿海一帶最要緊的是嚴密截拿，防止賊匪竄逸；他先已嚴飭漳、泉、興化至福州、福寧濱海各縣文武員弁，選撥兵役，在可偷渡之處巡查，並現復通飭加意堵防，毋使一名漏網。此為對沿海防堵、巡查、截拿的部署命令。",
+    "howKnown": "徐嗣曾奏稱自身部署",
+    "quote": "此時沿海一帶，尤宜嚴密截拿（硃批：此為最要），防其竄逸……臣先已嚴飭各該地方文武員弁，選撥兵役，於凡可偷渡之處，羅織巡查……現復通飭以賊匪洗蕩在即，加意堵防，毋使一名竄匿漏網。",
+    "relations": [
+      {
+        "evidence": "臣先已嚴飭各該地方文武員弁……現復通飭",
+        "relation": "嚴飭、通飭",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "各該地方文武員弁"
+      },
+      {
+        "evidence": "選撥兵役，於凡可偷渡之處，羅織巡查",
+        "relation": "選撥",
+        "relation_type": "command",
+        "source": "各該地方文武員弁",
+        "target": "兵役"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "通飭沿海堵防",
+    "whenAr": "1787/01/18",
+    "whenCh": "正月十八日",
+    "whenKnownCh": "正月十八日",
+    "where": "漳、泉、興化至福州、福寧濱海各縣",
+    "who": [
+      "徐嗣曾",
+      "各該地方文武員弁",
+      "兵役"
+    ],
+    "who_loc": {},
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月十八日",
+    "_whenArModel": "1787/02/05",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十八日"
+  }
+]

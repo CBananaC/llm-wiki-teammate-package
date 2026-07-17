@@ -1,0 +1,39 @@
+[
+  {
+    "description": "十二月二十三日及二十六至二十八日，大姑陷等處賊匪遭官兵義勇分路剿殺後，仍呈現散去後又再聚集的狀態。原文僅概稱「旋散旋聚」，未具名其首領。",
+    "howKnown": "據署淡水都司易連、新莊巡檢王增錞稟稱",
+    "quote": "十二月二十三及二十六、七、八等日，督率官兵義勇，分路剿殺大姑陷等處賊匪……賊匪雖屢經剿殺，旋散旋聚。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪散而復聚",
+    "whenAr": "1786/12/23",
+    "whenCh": "十二月二十三日及二十六、七、八等日",
+    "whenKnownCh": "正月十六日",
+    "where": "大姑陷等處",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月二十三日",
+    "_whenArModel": "1787/01/11-1787/01/16",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十六日"
+  },
+  {
+    "description": "黃仕簡、郝壯猷由鹿耳門登岸後，賊匪得知清軍大兵已到，紛紛散去。原文未具體說明散去地點與賊首姓名。",
+    "howKnown": "疊接泉、廈道府同知稟報",
+    "quote": "提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "聞大兵到散去",
+    "whenAr": "1787/01/04",
+    "whenCh": "正月初四日後",
+    "whenKnownCh": "",
+    "where": "鹿耳門附近",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月初四日",
+    "_whenArModel": "1787/01/22",
+    "dateSource": "event-year-inferred"
+  }
+]

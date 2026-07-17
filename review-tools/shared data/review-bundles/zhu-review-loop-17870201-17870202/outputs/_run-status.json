@@ -1,0 +1,12 @@
+{
+  "硃125": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "qing-events-done": true,
+    "qing-events-plan": true,
+    "qing-events-nonmil": true,
+    "zhupi": true,
+    "edict-match": true
+  }
+}

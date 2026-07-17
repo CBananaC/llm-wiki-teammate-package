@@ -1,0 +1,281 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Imperial Communication Analysis Workflow</title>
+  <meta name="description" content="Interactive bilingual workflow for reconstructing Qing documentary exchanges and reviewing AI-assisted historical analysis.">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <button id="language-toggle" class="language-toggle" type="button" aria-label="切換至中文">中文</button>
+
+  <main class="workflow-shell">
+    <section class="phase" aria-labelledby="connection-title">
+      <header class="phase-heading">
+        <p data-i18n="connectionKicker">DOCUMENT RELATIONSHIPS</p>
+        <h1 id="connection-title" data-i18n="connectionTitle">Reconstruct the correspondence network</h1>
+      </header>
+
+      <div class="vertical-flow compact-flow">
+        <div class="terminal-node">
+          <span data-i18n="sourceCorpus">SOURCE CORPUS</span>
+          <strong data-i18n="corpusDesc">Official memorials, vermilion rescripts, and imperial edicts</strong>
+        </div>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="flow-node done" type="button" data-node="pair-zhu">
+          <span class="node-index">R1</span><span class="node-status" data-i18n="established">ESTABLISHED</span>
+          <strong data-i18n="pairZhuTitle">Recover replies to earlier vermilion rescripts</strong>
+          <small data-i18n="pairZhuDesc">Correlate authorship, documentary dates, and quoted imperial wording</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="flow-node done" type="button" data-node="pair-yu">
+          <span class="node-index">R2</span><span class="node-status" data-i18n="established">ESTABLISHED</span>
+          <strong data-i18n="pairYuTitle">Recover official responses to imperial edicts</strong>
+          <small data-i18n="pairYuDesc">Correlate recipients, transmission intervals, and cited edict passages</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="flow-node next" type="button" data-node="pair-yu-source">
+          <span class="node-index">R3</span><span class="node-status" data-i18n="planned">PLANNED</span>
+          <strong data-i18n="pairSourceTitle">Identify the report underlying each imperial edict</strong>
+          <small data-i18n="pairSourceDesc">Prioritise reports received on the issue date or within the preceding three days</small>
+        </button>
+      </div>
+    </section>
+
+    <div class="phase-connector" aria-hidden="true"></div>
+
+    <section class="phase" aria-labelledby="preread-title">
+      <header class="phase-heading">
+        <p data-i18n="prereadKicker">READING PREPARATION</p>
+        <h2 id="preread-title" data-i18n="prereadTitle">Prepare each document for close reading</h2>
+      </header>
+
+      <div class="vertical-flow compact-flow">
+        <button class="flow-node active" type="button" data-node="summary">
+          <span class="node-index">P1</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+          <strong data-i18n="summaryTitle">Create a concise documentary synopsis</strong>
+          <small data-i18n="summaryDesc">Present the document’s principal report, request, judgment, or command in its information panel</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="flow-node active" type="button" data-node="divide">
+          <span class="node-index">P2</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+          <strong data-i18n="divideTitle">Map the document’s internal structure</strong>
+          <small data-i18n="divideDesc">Segment the text into consecutive units with descriptive headings and faithful synopses</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="decision-node" type="button" data-node="human-read">
+          <span data-i18n="researcherCheckpoint">RESEARCHER CHECKPOINT</span>
+          <strong data-i18n="closeReadingTitle">Conduct close reading of the original text</strong>
+          <small data-i18n="closeReadingDesc">Analytical assistance guides navigation; interpretation remains grounded in the primary source</small>
+        </button>
+      </div>
+    </section>
+
+    <div class="branch-connector" aria-hidden="true"><span></span></div>
+
+    <section class="loop-stage" aria-labelledby="loops-title">
+      <header class="phase-heading centred-heading">
+        <p data-i18n="analysisKicker">DOCUMENT-CENTRED ANALYSIS</p>
+        <h2 id="loops-title" data-i18n="analysisTitle">Two complementary review cycles</h2>
+      </header>
+
+      <div class="loop-grid">
+        <article class="loop-lane">
+          <header class="loop-head">
+            <span class="loop-number" data-i18n="cycleOne">CYCLE I</span>
+            <div>
+              <h3 data-i18n="zhuCycleTitle">Official memorial and vermilion-rescript cycle</h3>
+              <p data-i18n="zhuCycleDesc">Reconstruct reported military activity, documentary provenance, and the ensuing imperial-official exchange.</p>
+            </div>
+          </header>
+          <div class="loop-path">
+            <button class="flow-node active" type="button" data-node="zhu-select">
+              <span class="node-index">Z0</span><span class="node-status" data-i18n="input">INPUT</span>
+              <strong data-i18n="zhuSelectTitle">Establish the memorial record</strong>
+              <small data-i18n="zhuSelectDesc">Retain documentary identity, authorship, transmission dates, and complete text</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="zhu-lin">
+              <span class="node-index">Z1</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuLinTitle">Extract reported 林方 military actions</strong>
+              <small data-i18n="zhuLinDesc">Record discrete actions presented as completed events</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node done" type="button" data-node="zhu-qing-done">
+              <span class="node-index">Z2</span><span class="node-status" data-i18n="established">ESTABLISHED</span>
+              <strong data-i18n="zhuQingDoneTitle">Extract completed 清方 military actions</strong>
+              <small data-i18n="zhuQingDoneDesc">Distinguish accomplished operations from proposals and orders</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node next" type="button" data-node="zhu-qing-plan">
+              <span class="node-index">Z3</span><span class="node-status" data-i18n="planned">PLANNED</span>
+              <strong data-i18n="zhuQingPlanTitle">Extract prospective 清方 military actions</strong>
+              <small data-i18n="zhuQingPlanDesc">Record requested, intended, conditional, and ordered operations separately</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="zhu-source">
+              <span class="node-index">Z4</span><span class="node-status" data-i18n="perEvent">PER EVENT</span>
+              <strong data-i18n="zhuSourceTitle">Establish documentary provenance</strong>
+              <small data-i18n="zhuSourceDesc">Connect each event to exact quotations and supported source relations</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="zhu-emperor">
+              <span class="node-index">Z5</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuEmperorTitle">Analyse the imperial vermilion rescript</strong>
+              <small data-i18n="zhuEmperorDesc">Identify placement, response target, judgment, directive, and exact wording</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="zhu-yu-reply">
+              <span class="node-index">Z6</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuYuTitle">Correlate subsequent imperial edicts</strong>
+              <small data-i18n="zhuYuDesc">Retain only edict passages that demonstrably address the memorial</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="zhu-official-reply">
+              <span class="node-index">Z7</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuReplyTitle">Correlate later official responses</strong>
+              <small data-i18n="zhuReplyDesc">Identify acknowledgment, implementation, or reasoned reply in later memorials</small>
+            </button>
+          </div>
+          <div class="loopback" aria-hidden="true"><span data-i18n="nextZhu">next 硃批 record</span></div>
+        </article>
+
+        <article class="loop-lane">
+          <header class="loop-head">
+            <span class="loop-number" data-i18n="cycleTwo">CYCLE II</span>
+            <div>
+              <h3 data-i18n="yuCycleTitle">Imperial-edict knowledge and response cycle</h3>
+              <p data-i18n="yuCycleDesc">Reconstruct the emperor’s information state, directives, official follow-up, and temporal adequacy.</p>
+            </div>
+          </header>
+          <div class="loop-path">
+            <button class="flow-node active" type="button" data-node="yu-select">
+              <span class="node-index">Y0</span><span class="node-status" data-i18n="input">INPUT</span>
+              <strong data-i18n="yuSelectTitle">Establish the imperial-edict record</strong>
+              <small data-i18n="yuSelectDesc">Assemble the edict, eligible prior reports, and later response candidates</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="yu-lin">
+              <span class="node-index">Y1</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="yuLinTitle">Extract 林方 events represented in imperial knowledge</strong>
+              <small data-i18n="yuLinDesc">Treat them as previously reported events rather than events of the edict date</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="yu-qing">
+              <span class="node-index">Y2</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="yuQingTitle">Extract 清方 events represented in imperial knowledge</strong>
+              <small data-i18n="yuQingDesc">Separate reported operations from newly issued imperial commands</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node next" type="button" data-node="yu-source">
+              <span class="node-index">Y3</span><span class="node-status" data-i18n="refinement">REFINEMENT</span>
+              <strong data-i18n="yuSourceTitle">Identify the direct documentary source</strong>
+              <small data-i18n="yuSourceDesc">Match each imperially reported event to the official document that conveyed it</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="yu-command">
+              <span class="node-index">Y4</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="yuCommandTitle">Classify imperial directives</strong>
+              <small data-i18n="yuCommandDesc">Separate commands from criticism, evaluation, information, and reward</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node active" type="button" data-node="yu-official-reply">
+              <span class="node-index">Y5</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="yuReplyTitle">Correlate official implementation and reply</strong>
+              <small data-i18n="yuReplyDesc">Require an appropriate recipient, later date, and documentary evidence of response</small>
+            </button>
+            <div class="down-arrow" aria-hidden="true"></div>
+            <button class="flow-node next" type="button" data-node="yu-timeliness">
+              <span class="node-index">Y6</span><span class="node-status" data-i18n="assessment">ASSESSMENT</span>
+              <strong data-i18n="yuTimelinessTitle">Assess temporal adequacy</strong>
+              <small data-i18n="yuTimelinessDesc">Compare battlefield change, transmission delay, and the emperor’s response window</small>
+            </button>
+          </div>
+          <div class="loopback" aria-hidden="true"><span data-i18n="nextYu">next 上諭 record</span></div>
+        </article>
+      </div>
+    </section>
+
+    <div class="phase-connector" aria-hidden="true"></div>
+
+    <section class="phase phase-output" aria-labelledby="output-title">
+      <header class="phase-heading">
+        <p data-i18n="reviewKicker">EVIDENCE REVIEW</p>
+        <h2 id="output-title" data-i18n="reviewTitle">Convert model findings into reviewable evidence</h2>
+      </header>
+      <div class="vertical-flow compact-flow">
+        <button class="flow-node active" type="button" data-node="json-output">
+          <span class="node-index">O1</span><span class="node-status">JSON</span>
+          <strong data-i18n="jsonTitle">Preserve structured analytical records</strong>
+          <small data-i18n="jsonDesc">Maintain stable, stage-specific outputs with documentary identifiers and exact evidence</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="review-card-node" type="button" data-node="review-card">
+          <span class="card-kicker" data-i18n="reviewCard">EVIDENCE CARD</span>
+          <strong data-i18n="cardTitle">Concise analytical proposition</strong>
+          <p data-i18n="cardDesc">Contextual explanation of the proposed historical finding.</p>
+          <blockquote data-i18n="cardQuote">“Verbatim evidence from the primary document.”</blockquote>
+          <span class="source-row" data-i18n="cardSource">Document · date · author · source relation</span>
+          <span class="decision-row"><b data-i18n="accept">Accept</b><i data-i18n="reject">Reject</i></span>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <button class="flow-node review" type="button" data-node="human-adopt">
+          <span class="node-index">O3</span><span class="node-status" data-i18n="researcherDecision">RESEARCHER DECISION</span>
+          <strong data-i18n="adoptTitle">Validate, revise, or reject the proposed finding</strong>
+          <small data-i18n="adoptDesc">Only researcher-approved evidence enters the interpretive record</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
+        <div class="terminal-node terminal-end">
+          <span data-i18n="iteration">ITERATION</span>
+          <strong data-i18n="iterationDesc">Persist the reviewed evidence and advance to the next document</strong>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <dialog id="step-dialog" aria-labelledby="dialog-title">
+    <div class="dialog-head">
+      <div>
+        <p id="dialog-phase" class="eyebrow"></p>
+        <h2 id="dialog-title"></h2>
+      </div>
+      <button id="dialog-close" class="icon-button" type="button" aria-label="Close">×</button>
+    </div>
+    <div class="dialog-body">
+      <section class="step-overview">
+        <div id="dialog-status" class="detail-status"></div>
+        <p id="dialog-summary" class="step-summary"></p>
+        <div class="detail-grid">
+          <div>
+            <h3 data-i18n="algorithm">Analytical procedure</h3>
+            <ol id="dialog-logic"></ol>
+          </div>
+          <div>
+            <h3 data-i18n="dataContract">Data contract</h3>
+            <dl id="dialog-contract"></dl>
+          </div>
+          <div>
+            <h3 data-i18n="chatUsageTitle">Use in the AI chat panel</h3>
+            <div id="dialog-chat-usage" class="chat-usage"></div>
+          </div>
+        </div>
+      </section>
+      <section class="source-viewer" aria-labelledby="source-title">
+        <div class="source-head">
+          <div>
+            <p class="eyebrow" data-i18n="implementation">IMPLEMENTATION SOURCE</p>
+            <h3 id="source-title" data-i18n="sourceTitle">Prompt, skill, and runner</h3>
+          </div>
+          <span id="source-loading" data-i18n="loadingSources">Loading source files…</span>
+        </div>
+        <div id="source-tabs" class="source-tabs" role="tablist" aria-label="Source files"></div>
+        <div class="source-path" id="source-path"></div>
+        <pre id="source-code"><code data-i18n="selectSource">Select a source file to inspect it.</code></pre>
+      </section>
+    </div>
+  </dialog>
+
+  <script src="app.js"></script>
+</body>
+</html>

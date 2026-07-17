@@ -1,0 +1,82 @@
+{
+  "台41": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台42": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台40": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台44": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台56": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台57": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台59": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台60": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台61": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台64": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台71": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台72": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台77": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台78": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台82": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  },
+  "台128": {
+    "divide": true,
+    "lin-events": true,
+    "source-chain": true
+  }
+}

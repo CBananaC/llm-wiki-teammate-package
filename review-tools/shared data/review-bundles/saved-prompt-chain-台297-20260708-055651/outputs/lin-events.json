@@ -1,0 +1,49 @@
+[
+  {
+    "description": "林爽文起事後，起事民變隊伍攻陷並佔據了鳳山縣與諸羅縣，至黃仕簡渡臺時兩縣仍為賊匪所據。",
+    "howKnown": "親歷",
+    "quote": "查，鳳山、諸羅二縣，奴才到臺灣時，各縣尚為賊踞，未經收復。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪佔據鳳山諸羅二縣",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "鳳山縣、諸羅縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {},
+    "doc_id": "台297"
+  },
+  {
+    "description": "在清軍收復諸羅與鳳山後，敗散的賊匪四處逃竄，並於府城（郡城）附近的村莊重新潛聚並進行滋擾。",
+    "howKnown": "探報",
+    "quote": "殺敗賊匪，四處逃竄，復於附郡村莊，潛聚滋擾。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪於郡城附近村莊潛聚滋擾",
+    "whenAr": "1787/03",
+    "whenCh": "二月",
+    "whenKnownCh": "",
+    "where": "臺灣府城附近村莊",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "台297"
+  },
+  {
+    "description": "諸羅縣轄下的大武壟、礁吧哖（噍吧哖）等莊，仍有大批民變匪黨聚集，依憑險峻山路進行抗衡。",
+    "howKnown": "探報",
+    "quote": "而諸羅之大武壟、礁〔噍〕吧哖各莊，仍有匪黨聚集。該處山路極為險峻",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "匪黨聚集大武壟及礁吧哖",
+    "whenAr": "1787/04",
+    "whenCh": "三月",
+    "whenKnownCh": "",
+    "where": "大武壟、噍吧哖",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "台297"
+  }
+]

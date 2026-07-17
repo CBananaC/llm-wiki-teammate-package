@@ -1,0 +1,462 @@
+[
+  {
+    "doc_id": "諭20",
+    "candidate_doc_ids": [
+      "硃32",
+      "硃31",
+      "硃35",
+      "硃33",
+      "硃34",
+      "硃25",
+      "硃23",
+      "硃22",
+      "硃21"
+    ],
+    "candidate_response_doc_ids": [
+      "奏67",
+      "硃105",
+      "奏74",
+      "硃110",
+      "硃113",
+      "奏117",
+      "奏124"
+    ],
+    "prompt": "上諭審閱迴圈",
+    "response": "```json\n{\n  \"reported_events\": [\n    {\n      \"side\": \"lin\",\n      \"subtitle\": \"林爽文糾眾滋事與彰化失陷\",\n      \"description\": \"彰化匪徒林爽文等糾眾滋事，攔截要路，致使信息不通，並攻陷彰化縣城。\",\n      \"where\": \"彰化\",\n      \"who\": [\"林爽文\"],\n      \"whenCh\": \"乾隆五十一年十一月二十七日夜至二十九日\",\n      \"whenAr\": \"1786/12/17\",\n      \"edict_quote\": \"彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通\",\n      \"direct_report\": {\n        \"source_doc_id\": \"硃33\",\n        \"source_official\": \"常青\",\n        \"source_send_date\": \"1786/12/13\",\n        \"source_receive_date\": \"1786/12/29\",\n        \"source_quote\": \"彰化匪徒林爽文等結黨四擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷，路途梗塞\"\n      },\n      \"source_documents\": [\n        {\n          \"source_doc_id\": \"硃33\",\n          \"relation\": \"direct\",\n          \"source_official\": \"常青\",\n          \"source_send_date\": \"1786/12/13\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"彰化匪徒林爽文等結黨四擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷，路途梗塞\",\n          \"supported_event_indices\": [1]\n        },\n        {\n          \"source_doc_id\": \"硃34\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"黃仕簡\",\n          \"source_send_date\": \"1786/12/12\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"大里杙等莊有奸民林爽文、王芬等結黨，乘值歲暮搶劫...十一月二十七夜四更時候，賊匪散而復聚，竟有數千人，往劫大墩營盤。並於大肚溪邊聚匪截路，以致信息不通\"\n        },\n        {\n          \"source_doc_id\": \"硃31\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"任承恩\",\n          \"source_send_date\": \"1786/12/13\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"彰化縣城被賊匪攻陷，殺害官員，阻絕文報\"\n        },\n        {\n          \"source_doc_id\": \"硃35\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"常青\",\n          \"source_send_date\": \"1786/12/15\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"彰化已被賊踞，不得往府求救...十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池\"\n        },\n        {\n          \"source_doc_id\": \"硃25\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"黃仕簡\",\n          \"source_send_date\": \"1786/12/10\",\n          \"source_receive_date\": \"1786/12/27\",\n          \"source_quote\": \"臺灣彰化縣屬又有匪徒聚集會黨，於十一月九日辰刻，攻打彰化縣城。至午刻，縣城被陷\"\n        },\n        {\n          \"source_doc_id\": \"硃22\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"任承恩\",\n          \"source_send_date\": \"1786/12/10\",\n          \"source_receive_date\": \"1786/12/27\",\n          \"source_quote\": \"彰化縣匪徒林爽文結黨四虐...十一月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞\"\n        },\n        {\n          \"source_doc_id\": \"硃21\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"常青\",\n          \"source_send_date\": \"1786/12/12\",\n          \"source_receive_date\": \"1786/12/27\",\n          \"source_quote\": \"十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞\"\n        }\n      ],\n      \"comment_subtitle\": \"斥為烏合之眾\",\n      \"emperor_comment\": \"皇帝認為林爽文等奸民糾眾滋事，不過是烏合之眾，與上年漳泉械鬥案情事相等，不難撲滅。\",\n      \"comment_quote\": \"此等奸民糾衆滋事，不過麼烏合。上年臺灣即有漳、泉兩處匪徒，糾集械鬥，滋擾村莊等案。一經黃仕簡帶兵前往督辦，立即撲滅，將首夥各犯戮淨盡。今林爽文等結黨橫行，情事相等。\"\n    },\n    {\n      \"side\": \"qing\",\n      \"subtitle\": \"黃仕簡帶兵渡臺進剿\",\n      \"description\": \"福建水師提督黃仕簡帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩會剿。\",\n      \"where\": \"廈門至臺灣南路\",\n      \"who\": [\"黃仕簡\"],\n      \"whenCh\": \"乾隆五十一年十二月初十日\",\n      \"whenAr\": \"1786/12/26\",\n      \"edict_quote\": \"黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。\",\n      \"direct_report\": {\n        \"source_doc_id\": \"硃34\",\n        \"source_official\": \"黃仕簡\",\n        \"source_send_date\": \"1786/12/12\",\n        \"source_receive_date\": \"1786/12/29\",\n        \"source_quote\": \"由南親赴會剿。所有原擬由北路淡水夾攻之水六官兵，飛咨六路提臣任承恩，迅速查辦\"\n      },\n      \"source_documents\": [\n        {\n          \"source_doc_id\": \"硃34\",\n          \"relation\": \"direct\",\n          \"source_official\": \"黃仕簡\",\n          \"source_send_date\": \"1786/12/12\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"由南親赴會剿。所有原擬由北路淡水夾攻之水六官兵，飛咨六路提臣任承恩，迅速查辦\",\n          \"supported_event_indices\": [2]\n        },\n        {\n          \"source_doc_id\": \"硃25\",\n          \"relation\": \"corroborating\",\n          \"source_official\": \"黃仕簡\",\n          \"source_send_date\": \"1786/12/10\",\n          \"source_receive_date\": \"1786/12/27\",\n          \"source_quote\": \"奴才於初十日帶領官兵登舟候風放洋飛渡之際...奴才直由鹿耳門、郡城南路進兵，會督夾攻\"\n        },\n        {\n          \"source_doc_id\": \"硃33\",\n          \"relation\": \"relay\",\n          \"source_official\": \"常青\",\n          \"source_send_date\": \"1786/12/13\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"現在派調各路官兵，已准水師提臣黃仕簡吝報，於初十日率師登舟，由鹿耳門前往\"\n        }\n      ],\n      \"comment_subtitle\": \"期盼望風潰散\",\n      \"emperor_comment\": \"皇帝認為黃仕簡在福建素有名望，他一到臺灣，匪黨必然望風潰散，即使其病後精力不足，亦可派總兵協同。\",\n      \"comment_quote\": \"黃仕簡籍隸本省，現任水師提督，素有名望。現已帶兵渡臺，該提督到彼，匪黨自必望風潰散。\"\n    },\n    {\n      \"side\": \"qing\",\n      \"subtitle\": \"任承恩預備渡臺並請簡派重臣\",\n      \"description\": \"陸路提督任承恩挑派兵丁預備，等候督臣抵達泉州後即登舟渡臺，並上奏請求皇帝簡派重臣前來督辦。\",\n      \"where\": \"泉州\",\n      \"who\": [\"任承恩\"],\n      \"whenCh\": \"乾隆五十一年十二月十三日\",\n      \"whenAr\": \"1786/12/29\",\n      \"edict_quote\": \"又據任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺，並請簡派重臣督辦各等語\",\n      \"direct_report\": {\n        \"source_doc_id\": \"硃32\",\n        \"source_official\": \"任承恩\",\n        \"source_send_date\": \"1786/12/13\",\n        \"source_receive_date\": \"1786/12/29\",\n        \"source_quote\": \"仰懇皇上天恩，特簡重臣臨閩鎮安督辦，歲事方能迅速。\"\n      },\n      \"source_documents\": [\n        {\n          \"source_doc_id\": \"硃32\",\n          \"relation\": \"direct\",\n          \"source_official\": \"任承恩\",\n          \"source_send_date\": \"1786/12/13\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"仰懇皇上天恩，特簡重臣臨閩鎮安督辦，歲事方能迅速。\",\n          \"supported_event_indices\": [3]\n        },\n        {\n          \"source_doc_id\": \"硃31\",\n          \"relation\": \"direct\",\n          \"source_official\": \"任承恩\",\n          \"source_send_date\": \"1786/12/13\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"一俟到日，會籌妥協，立即登舟飛渡臺灣，協同黃仕簡戮力剿除\"\n          \"supported_event_indices\": [3]\n        }\n      ],\n      \"comment_subtitle\": \"嚴厲斥責不成話\",\n      \"emperor_comment\": \"皇帝痛斥任承恩請求簡派重臣的提議極不成話，認為提鎮本有綏靖地方之責，遇事即請欽差是推卸責任，且水陸兩提督不應同時遠渡重洋而置內地於不顧。\",\n      \"comment_quote\": \"至所稱簡派欽差督辦，更不成話。督撫提鎮俱有綏靖地方之責，設一遇匪徒滋事，輒請欽派大臣督辦，又安用伊等爲耶？\"\n    },\n    {\n      \"side\": \"qing\",\n      \"subtitle\": \"常青派兵並令任承恩等由鹿耳門前進\",\n      \"description\": \"總督常青接獲彰化失陷及淡水同知程峻之子程必大等求救消息後，派兵二千二百名，令任承恩及參將福蘭泰等由鹿耳門前進會同夾攻。\",\n      \"where\": \"泉州\",\n      \"who\": [\"常青\", \"任承恩\", \"福蘭泰\"],\n      \"whenCh\": \"乾隆五十一年十二月十五日\",\n      \"whenAr\": \"1786/12/29\",\n      \"edict_quote\": \"詢悉淡水同知程峻之子程必大，及外委虞文光等彰化失陷，文報梗塞情形，已派兵二千二百名，令任承恩及參將福蘭泰等，由鹿耳門前進會同夾攻等語\",\n      \"direct_report\": {\n        \"source_doc_id\": \"硃35\",\n        \"source_official\": \"常青\",\n        \"source_send_date\": \"1786/12/15\",\n        \"source_receive_date\": \"1786/12/29\",\n        \"source_quote\": \"即將提標挑出精兵一千二百名，先由該提臣統領...再派福協、興協、長福等營勁兵一千名，檄令三將福蘭泰統領...仍於鹿耳門前進\"\n      },\n      \"source_documents\": [\n        {\n          \"source_doc_id\": \"硃35\",\n          \"relation\": \"direct\",\n          \"source_official\": \"常青\",\n          \"source_send_date\": \"1786/12/15\",\n          \"source_receive_date\": \"1786/12/29\",\n          \"source_quote\": \"即將提標挑出精兵一千二百名，先由該提臣統領...再派福協、興協、長福等營勁兵一千名，檄令三將福蘭泰統領...仍於鹿耳門前進\",\n          \"supported_event_indices\": [4]\n        }\n      ],\n      \"comment_subtitle\": \"指責張皇失措\",\n      \"emperor_comment\": \"皇帝認為常青未經歷練，遇事不能鎮定，派任承恩渡海是失體之舉，但既然任承恩已經出發，便不再拘泥，令其務必實力勇往速戰速決。\",\n      \"comment_quote\": \"看來常青未經歷練，遇事不能鎮定...任承恩本不應前往，今既已渡臺，亦不須拘泥回任，務須實力勇往，會同黃仕簡分路夾攻\"\n    }\n  ],\n  \"source_coverage\": [\n    {\n      \"candidate_doc_id\": \"硃32\",\n      \"status\": \"used\",\n      \"relation\": \"direct\",\n      \"supported_event_indices\": [3],\n      \"reason\": \"任承恩親自上奏請求特簡重臣臨閩督辦，為上諭中「並請簡派重臣督辦」之直接來源。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃31\",\n      \"status\": \"used\",\n      \"relation\": \"direct\",\n      \"supported_event_indices\": [1, 3],\n      \"reason\": \"任承恩報告接獲程必大等人求救、彰化失陷，以及自己挑派兵丁一千名準備登舟渡臺會剿之情形。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃35\",\n      \"status\": \"used\",\n      \"relation\": \"direct\",\n      \"supported_event_indices\": [1, 4],\n      \"reason\": \"常青報告親提程必大等人訊問彰化失陷細節，並調派兵力二千二百名令任承恩與福蘭泰由鹿耳門前進之情形。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃33\",\n      \"status\": \"used\",\n      \"relation\": \"direct\",\n      \"supported_event_indices\": [1, 2],\n      \"reason\": \"常青報告接獲臺灣鎮道關於林爽文攻打大墩、彰化失陷之稟報，並提及黃仕簡已於初十日率師登舟。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃34\",\n      \"status\": \"used\",\n      \"relation\": \"direct\",\n      \"supported_event_indices\": [1, 2],\n      \"reason\": \"黃仕簡報告接獲鎮道關於林爽文滋事之咨文，並說明自己由南路、飛咨任承恩由北路分路會剿之規劃。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃25\",\n      \"status\": \"used\",\n      \"relation\": \"corroborating\",\n      \"supported_event_indices\": [1, 2],\n      \"reason\": \"黃仕簡於十二月初十日先行奏報彰化失陷及自己帶兵登舟渡臺之摺，收受日為十二月二十七日，在上諭之前，具佐證作用。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃23\",\n      \"status\": \"not_used\",\n      \"relation\": \"not_applicable\",\n      \"supported_event_indices\": [],\n      \"reason\": \"此為任承恩於十二月初十日之附片，僅提及收到黃仕簡之札會，無上諭中提及之具體事件細節。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃22\",\n      \"status\": \"used\",\n      \"relation\": \"corroborating\",\n      \"supported_event_indices\": [1],\n      \"reason\": \"任承恩於十二月初十日奏報林爽文攻陷彰化之摺，收受日為十二月二十七日，在上諭之前，具佐證作用。\"\n    },\n    {\n      \"candidate_doc_id\": \"硃21\",\n      \"status\": \"used\",\n      \"relation\": \"corroborating\",\n      \"supported_event_indices\": [1],\n      \"reason\": \"常青於十二月十二日奏報林爽文攻陷彰化之摺，收受日為十二月二十七日，在上諭之前，具佐證作用。\"\n    }\n  ],\n  \"commands\": [\n    {\n      \"title\": \"飭令任承恩實力夾攻速回\",\n      \"target\": [\"任承恩\"],\n      \"summary\": \"任承恩既然已經渡臺，便不須拘泥回任，務必與黃仕簡分路夾攻，迅速擒拿兇匪，完工後立刻返回內地本任。\",\n      \"quote\": \"任承恩本不應前往，今既已渡臺，亦不須拘泥回任，務須實力勇往，會同黃仕簡分路夾攻，速擒兇匪，以期剋日功速回。\",\n      \"responses\": []\n    },\n    {\n      \"title\": \"命常青駐紮內地調度\",\n      \"target\": [\"常青\"],\n      \"summary\": \"總督常青不應親自渡臺，只需駐紮在蚶江、廈門一帶進行調度與策應，此時應以鎮靜內地為最重要任務。\",\n      \"quote\": \"常青仍祇須駐紮蚶江、廈門一帶調度策應，此時總以鎮靜內地爲要。\",\n      \"responses\": [\n        {\n          \"resp_doc_id\": \"硃110\",\n          \"resp_official\": \"常青\",\n          \"resp_send_date\": \"1787/01/13\",\n          \"resp_subtitle\": \"遵旨駐紮蚶江廈門調度\",\n          \"resp_desc\": \"常青表示將恪遵諭旨，仍駐紮於蚶江、廈門一帶調度策應，不敢少動聲色。\",\n          \"resp_quote\": \"臣惟恪遵諭旨，仍駐蚶江、廈門一帶，調度策應，務期鎮靜，不敢少動聲色，致廑聖懷。\"\n        }\n      ]\n    },\n    {\n      \"title\": \"命徐嗣曾坐鎮省垣及嚴防沿海\",\n      \"target\": [\"徐嗣曾\"],\n      \"summary\": \"傳諭巡撫徐嗣曾務必不動聲色，坐鎮省城，且不宜輕動恆瑞的旗兵；同時飭令沿海口岸文武官員嚴密巡查，緝拿偷渡匪犯。\",\n      \"quote\": \"著傳諭徐嗣曾，務宜不動聲色，彈壓坐鎮省垣，恆瑞旗兵更不宜輕動。並飭沿海口岸文武員弁，嚴密巡查，遇有竄逸偷渡匪犯，即擒拿究辦。\",\n      \"responses\": [\n        {\n          \"resp_doc_id\": \"硃113\",\n          \"resp_official\": \"徐嗣曾\",\n          \"resp_send_date\": \"1787/01/14\",\n          \"resp_subtitle\": \"遵旨坐鎮省垣並嚴防沿海\",\n          \"resp_desc\": \"徐嗣曾覆奏表示已遵旨不動聲色、鎮靜彈壓，並嚴飭沿海各屬文武官員嚴密巡防、稽查偷渡匪犯。\",\n          \"resp_quote\": \"臣惟有凜遵諭旨，鎮靜彈壓...並飭加意防範，仍懸賞諭令親屬鄰佑，捕拿首報須妥協辦理\"\n        }\n      ]\n    },\n    {\n      \"title\": \"查明黃仕簡傳牌洩密案\",\n      \"target\": [\"常青\"],\n      \"summary\": \"黃仕簡所發的六百里奏摺傳牌上竟寫有「會匪糾眾攻陷彰化縣」字樣，傳播驛站駭人聽聞，命常青查明後參奏。\",\n      \"quote\": \"乃傳牌上竟有會匪糾衆攻陷彰化縣字樣，傳播驛站，豈不駭人聽聞？此必黃仕簡心神恍惚，以致標弁字識等，隨意填寫，率行傳發。並著常青查明參奏。\",\n      \"responses\": [\n        {\n          \"resp_doc_id\": \"硃110\",\n          \"resp_official\": \"常青\",\n          \"resp_send_date\": \"1787/01/13\",\n          \"resp_subtitle\": \"承諾查明黃仕簡傳牌案\",\n          \"resp_desc\": \"常青表示將遵旨於事後查明黃仕簡傳牌率填字樣之情事，另行參奏。\",\n          \"resp_quote\": \"其黃仕簡發摺傳牌，率填攻城等字樣，容俟查明另行三奏。\"\n        }\n      ]\n    },\n    {\n      \"title\": \"傳旨申飭各員並加緊復奏\",\n      \"target\": [\"常青\", \"黃仕簡\", \"任承恩\"],\n      \"summary\": \"對常青、黃仕簡、任承恩等人的張皇畏懼予以傳旨申飭，並要求他們接旨後鎮定安輯，迅速將剿捕與拿獲匪犯情形加緊復奏。\",\n      \"quote\": \"常青、黃仕簡、任承恩，俱著傳旨申飭。該督等接奉此旨，務須鎮定安輯，遵照妥辦...迅速由六百里加緊復奏。\",\n      \"responses\": [\n        {\n          \"resp_doc_id\": \"硃110\",\n          \"resp_official\": \"常青\",\n          \"resp_send_date\": \"1787/01/13\",\n          \"resp_subtitle\": \"遵旨覆奏並深表愧悚\",\n          \"resp_desc\": \"常青接奉申飭諭旨後，表示罔識遵循、不勝愧悚，並報告最新剿捕與盤獲匪犯陳樵之情形。\",\n          \"resp_quote\": \"一經聖明指示周詳，不勝愧悚之至...茲又據漳浦縣盤獲匪犯陳樵一名，現在飛提嚴究辦理。\"\n        },\n        {\n          \"resp_doc_id\": \"奏124\",\n          \"resp_official\": \"黃仕簡\",\n          \"resp_send_date\": \"1787/01/29\",\n          \"resp_subtitle\": \"接奉申飭並恭謝恩賞\",\n          \"resp_desc\": \"黃仕簡在臺灣軍營接奉申飭與前次賞賜荷包等諭旨，表示感激並力疾趨事，誓期剋日平定。\",\n          \"resp_quote\": \"奴才謹遵諭旨查辦，另行覆奏...奴才惟有勉竭駑胎，督率官兵奮勇剿滅賊匪\"\n        }\n      ]\n    }\n  ],\n  \"timeliness_evidence\": {\n    \"status\": \"sufficient\",\n    \"window_start\": \"1786/12/10\",\n    \"window_end\": \"1786/12/29\",\n    \"note\": \"本批直接報告（硃32、硃31、硃34、硃35）均於乾隆五十一年十二月十二日至十五日之間自閩省發出，於十二月二十九日送達皇帝並奉硃批，同日皇帝即發出本件「諭20」上諭。從最早期報告（十二月初十日黃仕簡、任承恩摺）起算，決策窗口為19天，時效極為緊湊且證據充分。\"\n  },\n  \"uncertainty\": \"無\"\n}\n```",
+    "model": "saved prompt output",
+    "parsed": {
+      "reported_events": [
+        {
+          "side": "lin",
+          "subtitle": "林爽文糾眾滋事與彰化失陷",
+          "description": "彰化匪徒林爽文等糾眾滋事，攔截要路，致使信息不通，並攻陷彰化縣城。",
+          "where": "彰化",
+          "who": [
+            "林爽文"
+          ],
+          "whenCh": "乾隆五十一年十一月二十七日夜至二十九日",
+          "whenAr": "1786/12/17",
+          "edict_quote": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通",
+          "direct_report": {
+            "source_doc_id": "硃33",
+            "source_official": "常青",
+            "source_send_date": "1786/12/13",
+            "source_receive_date": "1786/12/29",
+            "source_quote": "彰化匪徒林爽文等結黨四擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷，路途梗塞"
+          },
+          "source_documents": [
+            {
+              "source_doc_id": "硃33",
+              "relation": "direct",
+              "source_official": "常青",
+              "source_send_date": "1786/12/13",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "彰化匪徒林爽文等結黨四擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷，路途梗塞",
+              "supported_event_indices": [
+                1
+              ]
+            },
+            {
+              "source_doc_id": "硃34",
+              "relation": "corroborating",
+              "source_official": "黃仕簡",
+              "source_send_date": "1786/12/12",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "大里杙等莊有奸民林爽文、王芬等結黨，乘值歲暮搶劫...十一月二十七夜四更時候，賊匪散而復聚，竟有數千人，往劫大墩營盤。並於大肚溪邊聚匪截路，以致信息不通"
+            },
+            {
+              "source_doc_id": "硃31",
+              "relation": "corroborating",
+              "source_official": "任承恩",
+              "source_send_date": "1786/12/13",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "彰化縣城被賊匪攻陷，殺害官員，阻絕文報"
+            },
+            {
+              "source_doc_id": "硃35",
+              "relation": "corroborating",
+              "source_official": "常青",
+              "source_send_date": "1786/12/15",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "彰化已被賊踞，不得往府求救...十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池"
+            },
+            {
+              "source_doc_id": "硃25",
+              "relation": "corroborating",
+              "source_official": "黃仕簡",
+              "source_send_date": "1786/12/10",
+              "source_receive_date": "1786/12/27",
+              "source_quote": "臺灣彰化縣屬又有匪徒聚集會黨，於十一月九日辰刻，攻打彰化縣城。至午刻，縣城被陷"
+            },
+            {
+              "source_doc_id": "硃22",
+              "relation": "corroborating",
+              "source_official": "任承恩",
+              "source_send_date": "1786/12/10",
+              "source_receive_date": "1786/12/27",
+              "source_quote": "彰化縣匪徒林爽文結黨四虐...十一月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞"
+            },
+            {
+              "source_doc_id": "硃21",
+              "relation": "corroborating",
+              "source_official": "常青",
+              "source_send_date": "1786/12/12",
+              "source_receive_date": "1786/12/27",
+              "source_quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞"
+            }
+          ],
+          "comment_subtitle": "斥為烏合之眾",
+          "emperor_comment": "皇帝認為林爽文等奸民糾眾滋事，不過是烏合之眾，與上年漳泉械鬥案情事相等，不難撲滅。",
+          "comment_quote": "此等奸民糾衆滋事，不過麼烏合。上年臺灣即有漳、泉兩處匪徒，糾集械鬥，滋擾村莊等案。一經黃仕簡帶兵前往督辦，立即撲滅，將首夥各犯戮淨盡。今林爽文等結黨橫行，情事相等。"
+        },
+        {
+          "side": "qing",
+          "subtitle": "黃仕簡帶兵渡臺進剿",
+          "description": "福建水師提督黃仕簡帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩會剿。",
+          "where": "廈門至臺灣南路",
+          "who": [
+            "黃仕簡"
+          ],
+          "whenCh": "乾隆五十一年十二月初十日",
+          "whenAr": "1786/12/26",
+          "edict_quote": "黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+          "direct_report": {
+            "source_doc_id": "硃34",
+            "source_official": "黃仕簡",
+            "source_send_date": "1786/12/12",
+            "source_receive_date": "1786/12/29",
+            "source_quote": "由南親赴會剿。所有原擬由北路淡水夾攻之水六官兵，飛咨六路提臣任承恩，迅速查辦"
+          },
+          "source_documents": [
+            {
+              "source_doc_id": "硃34",
+              "relation": "direct",
+              "source_official": "黃仕簡",
+              "source_send_date": "1786/12/12",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "由南親赴會剿。所有原擬由北路淡水夾攻之水六官兵，飛咨六路提臣任承恩，迅速查辦",
+              "supported_event_indices": [
+                2
+              ]
+            },
+            {
+              "source_doc_id": "硃25",
+              "relation": "corroborating",
+              "source_official": "黃仕簡",
+              "source_send_date": "1786/12/10",
+              "source_receive_date": "1786/12/27",
+              "source_quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際...奴才直由鹿耳門、郡城南路進兵，會督夾攻"
+            },
+            {
+              "source_doc_id": "硃33",
+              "relation": "relay",
+              "source_official": "常青",
+              "source_send_date": "1786/12/13",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "現在派調各路官兵，已准水師提臣黃仕簡吝報，於初十日率師登舟，由鹿耳門前往"
+            }
+          ],
+          "comment_subtitle": "期盼望風潰散",
+          "emperor_comment": "皇帝認為黃仕簡在福建素有名望，他一到臺灣，匪黨必然望風潰散，即使其病後精力不足，亦可派總兵協同。",
+          "comment_quote": "黃仕簡籍隸本省，現任水師提督，素有名望。現已帶兵渡臺，該提督到彼，匪黨自必望風潰散。"
+        },
+        {
+          "side": "qing",
+          "subtitle": "任承恩預備渡臺並請簡派重臣",
+          "description": "陸路提督任承恩挑派兵丁預備，等候督臣抵達泉州後即登舟渡臺，並上奏請求皇帝簡派重臣前來督辦。",
+          "where": "泉州",
+          "who": [
+            "任承恩"
+          ],
+          "whenCh": "乾隆五十一年十二月十三日",
+          "whenAr": "1786/12/29",
+          "edict_quote": "又據任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺，並請簡派重臣督辦各等語",
+          "direct_report": {
+            "source_doc_id": "硃32",
+            "source_official": "任承恩",
+            "source_send_date": "1786/12/13",
+            "source_receive_date": "1786/12/29",
+            "source_quote": "仰懇皇上天恩，特簡重臣臨閩鎮安督辦，歲事方能迅速。"
+          },
+          "source_documents": [
+            {
+              "source_doc_id": "硃32",
+              "relation": "direct",
+              "source_official": "任承恩",
+              "source_send_date": "1786/12/13",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "仰懇皇上天恩，特簡重臣臨閩鎮安督辦，歲事方能迅速。",
+              "supported_event_indices": [
+                3
+              ]
+            },
+            {
+              "source_doc_id": "硃31",
+              "relation": "direct",
+              "source_official": "任承恩",
+              "source_send_date": "1786/12/13",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "一俟到日，會籌妥協，立即登舟飛渡臺灣，協同黃仕簡戮力剿除",
+              "supported_event_indices": [
+                3
+              ]
+            }
+          ],
+          "comment_subtitle": "嚴厲斥責不成話",
+          "emperor_comment": "皇帝痛斥任承恩請求簡派重臣的提議極不成話，認為提鎮本有綏靖地方之責，遇事即請欽差是推卸責任，且水陸兩提督不應同時遠渡重洋而置內地於不顧。",
+          "comment_quote": "至所稱簡派欽差督辦，更不成話。督撫提鎮俱有綏靖地方之責，設一遇匪徒滋事，輒請欽派大臣督辦，又安用伊等爲耶？"
+        },
+        {
+          "side": "qing",
+          "subtitle": "常青派兵並令任承恩等由鹿耳門前進",
+          "description": "總督常青接獲彰化失陷及淡水同知程峻之子程必大等求救消息後，派兵二千二百名，令任承恩及參將福蘭泰等由鹿耳門前進會同夾攻。",
+          "where": "泉州",
+          "who": [
+            "常青",
+            "任承恩",
+            "福蘭泰"
+          ],
+          "whenCh": "乾隆五十一年十二月十五日",
+          "whenAr": "1786/12/29",
+          "edict_quote": "詢悉淡水同知程峻之子程必大，及外委虞文光等彰化失陷，文報梗塞情形，已派兵二千二百名，令任承恩及參將福蘭泰等，由鹿耳門前進會同夾攻等語",
+          "direct_report": {
+            "source_doc_id": "硃35",
+            "source_official": "常青",
+            "source_send_date": "1786/12/15",
+            "source_receive_date": "1786/12/29",
+            "source_quote": "即將提標挑出精兵一千二百名，先由該提臣統領...再派福協、興協、長福等營勁兵一千名，檄令三將福蘭泰統領...仍於鹿耳門前進"
+          },
+          "source_documents": [
+            {
+              "source_doc_id": "硃35",
+              "relation": "direct",
+              "source_official": "常青",
+              "source_send_date": "1786/12/15",
+              "source_receive_date": "1786/12/29",
+              "source_quote": "即將提標挑出精兵一千二百名，先由該提臣統領...再派福協、興協、長福等營勁兵一千名，檄令三將福蘭泰統領...仍於鹿耳門前進",
+              "supported_event_indices": [
+                4
+              ]
+            }
+          ],
+          "comment_subtitle": "指責張皇失措",
+          "emperor_comment": "皇帝認為常青未經歷練，遇事不能鎮定，派任承恩渡海是失體之舉，但既然任承恩已經出發，便不再拘泥，令其務必實力勇往速戰速決。",
+          "comment_quote": "看來常青未經歷練，遇事不能鎮定...任承恩本不應前往，今既已渡臺，亦不須拘泥回任，務須實力勇往，會同黃仕簡分路夾攻"
+        }
+      ],
+      "source_coverage": [
+        {
+          "candidate_doc_id": "硃32",
+          "status": "used",
+          "relation": "direct",
+          "supported_event_indices": [
+            3
+          ],
+          "reason": "任承恩親自上奏請求特簡重臣臨閩督辦，為上諭中「並請簡派重臣督辦」之直接來源。"
+        },
+        {
+          "candidate_doc_id": "硃31",
+          "status": "used",
+          "relation": "direct",
+          "supported_event_indices": [
+            1,
+            3
+          ],
+          "reason": "任承恩報告接獲程必大等人求救、彰化失陷，以及自己挑派兵丁一千名準備登舟渡臺會剿之情形。"
+        },
+        {
+          "candidate_doc_id": "硃35",
+          "status": "used",
+          "relation": "direct",
+          "supported_event_indices": [
+            1,
+            4
+          ],
+          "reason": "常青報告親提程必大等人訊問彰化失陷細節，並調派兵力二千二百名令任承恩與福蘭泰由鹿耳門前進之情形。"
+        },
+        {
+          "candidate_doc_id": "硃33",
+          "status": "used",
+          "relation": "direct",
+          "supported_event_indices": [
+            1,
+            2
+          ],
+          "reason": "常青報告接獲臺灣鎮道關於林爽文攻打大墩、彰化失陷之稟報，並提及黃仕簡已於初十日率師登舟。"
+        },
+        {
+          "candidate_doc_id": "硃34",
+          "status": "used",
+          "relation": "direct",
+          "supported_event_indices": [
+            1,
+            2
+          ],
+          "reason": "黃仕簡報告接獲鎮道關於林爽文滋事之咨文，並說明自己由南路、飛咨任承恩由北路分路會剿之規劃。"
+        },
+        {
+          "candidate_doc_id": "硃25",
+          "status": "used",
+          "relation": "corroborating",
+          "supported_event_indices": [
+            1,
+            2
+          ],
+          "reason": "黃仕簡於十二月初十日先行奏報彰化失陷及自己帶兵登舟渡臺之摺，收受日為十二月二十七日，在上諭之前，具佐證作用。"
+        },
+        {
+          "candidate_doc_id": "硃23",
+          "status": "not_used",
+          "relation": "not_applicable",
+          "supported_event_indices": [],
+          "reason": "此為任承恩於十二月初十日之附片，僅提及收到黃仕簡之札會，無上諭中提及之具體事件細節。"
+        },
+        {
+          "candidate_doc_id": "硃22",
+          "status": "used",
+          "relation": "corroborating",
+          "supported_event_indices": [
+            1
+          ],
+          "reason": "任承恩於十二月初十日奏報林爽文攻陷彰化之摺，收受日為十二月二十七日，在上諭之前，具佐證作用。"
+        },
+        {
+          "candidate_doc_id": "硃21",
+          "status": "used",
+          "relation": "corroborating",
+          "supported_event_indices": [
+            1
+          ],
+          "reason": "常青於十二月十二日奏報林爽文攻陷彰化之摺，收受日為十二月二十七日，在上諭之前，具佐證作用。"
+        }
+      ],
+      "commands": [
+        {
+          "title": "飭令任承恩實力夾攻速回",
+          "target": [
+            "任承恩"
+          ],
+          "summary": "任承恩既然已經渡臺，便不須拘泥回任，務必與黃仕簡分路夾攻，迅速擒拿兇匪，完工後立刻返回內地本任。",
+          "quote": "任承恩本不應前往，今既已渡臺，亦不須拘泥回任，務須實力勇往，會同黃仕簡分路夾攻，速擒兇匪，以期剋日功速回。",
+          "responses": []
+        },
+        {
+          "title": "命常青駐紮內地調度",
+          "target": [
+            "常青"
+          ],
+          "summary": "總督常青不應親自渡臺，只需駐紮在蚶江、廈門一帶進行調度與策應，此時應以鎮靜內地為最重要任務。",
+          "quote": "常青仍祇須駐紮蚶江、廈門一帶調度策應，此時總以鎮靜內地爲要。",
+          "responses": [
+            {
+              "resp_doc_id": "硃110",
+              "resp_official": "常青",
+              "resp_send_date": "1787/01/13",
+              "resp_subtitle": "遵旨駐紮蚶江廈門調度",
+              "resp_desc": "常青表示將恪遵諭旨，仍駐紮於蚶江、廈門一帶調度策應，不敢少動聲色。",
+              "resp_quote": "臣惟恪遵諭旨，仍駐蚶江、廈門一帶，調度策應，務期鎮靜，不敢少動聲色，致廑聖懷。"
+            }
+          ]
+        },
+        {
+          "title": "命徐嗣曾坐鎮省垣及嚴防沿海",
+          "target": [
+            "徐嗣曾"
+          ],
+          "summary": "傳諭巡撫徐嗣曾務必不動聲色，坐鎮省城，且不宜輕動恆瑞的旗兵；同時飭令沿海口岸文武官員嚴密巡查，緝拿偷渡匪犯。",
+          "quote": "著傳諭徐嗣曾，務宜不動聲色，彈壓坐鎮省垣，恆瑞旗兵更不宜輕動。並飭沿海口岸文武員弁，嚴密巡查，遇有竄逸偷渡匪犯，即擒拿究辦。",
+          "responses": [
+            {
+              "resp_doc_id": "硃113",
+              "resp_official": "徐嗣曾",
+              "resp_send_date": "1787/01/14",
+              "resp_subtitle": "遵旨坐鎮省垣並嚴防沿海",
+              "resp_desc": "徐嗣曾覆奏表示已遵旨不動聲色、鎮靜彈壓，並嚴飭沿海各屬文武官員嚴密巡防、稽查偷渡匪犯。",
+              "resp_quote": "臣惟有凜遵諭旨，鎮靜彈壓...並飭加意防範，仍懸賞諭令親屬鄰佑，捕拿首報須妥協辦理"
+            }
+          ]
+        },
+        {
+          "title": "查明黃仕簡傳牌洩密案",
+          "target": [
+            "常青"
+          ],
+          "summary": "黃仕簡所發的六百里奏摺傳牌上竟寫有「會匪糾眾攻陷彰化縣」字樣，傳播驛站駭人聽聞，命常青查明後參奏。",
+          "quote": "乃傳牌上竟有會匪糾衆攻陷彰化縣字樣，傳播驛站，豈不駭人聽聞？此必黃仕簡心神恍惚，以致標弁字識等，隨意填寫，率行傳發。並著常青查明參奏。",
+          "responses": [
+            {
+              "resp_doc_id": "硃110",
+              "resp_official": "常青",
+              "resp_send_date": "1787/01/13",
+              "resp_subtitle": "承諾查明黃仕簡傳牌案",
+              "resp_desc": "常青表示將遵旨於事後查明黃仕簡傳牌率填字樣之情事，另行參奏。",
+              "resp_quote": "其黃仕簡發摺傳牌，率填攻城等字樣，容俟查明另行三奏。"
+            }
+          ]
+        },
+        {
+          "title": "傳旨申飭各員並加緊復奏",
+          "target": [
+            "常青",
+            "黃仕簡",
+            "任承恩"
+          ],
+          "summary": "對常青、黃仕簡、任承恩等人的張皇畏懼予以傳旨申飭，並要求他們接旨後鎮定安輯，迅速將剿捕與拿獲匪犯情形加緊復奏。",
+          "quote": "常青、黃仕簡、任承恩，俱著傳旨申飭。該督等接奉此旨，務須鎮定安輯，遵照妥辦...迅速由六百里加緊復奏。",
+          "responses": [
+            {
+              "resp_doc_id": "硃110",
+              "resp_official": "常青",
+              "resp_send_date": "1787/01/13",
+              "resp_subtitle": "遵旨覆奏並深表愧悚",
+              "resp_desc": "常青接奉申飭諭旨後，表示罔識遵循、不勝愧悚，並報告最新剿捕與盤獲匪犯陳樵之情形。",
+              "resp_quote": "一經聖明指示周詳，不勝愧悚之至...茲又據漳浦縣盤獲匪犯陳樵一名，現在飛提嚴究辦理。"
+            },
+            {
+              "resp_doc_id": "奏124",
+              "resp_official": "黃仕簡",
+              "resp_send_date": "1787/01/29",
+              "resp_subtitle": "接奉申飭並恭謝恩賞",
+              "resp_desc": "黃仕簡在臺灣軍營接奉申飭與前次賞賜荷包等諭旨，表示感激並力疾趨事，誓期剋日平定。",
+              "resp_quote": "奴才謹遵諭旨查辦，另行覆奏...奴才惟有勉竭駑胎，督率官兵奮勇剿滅賊匪"
+            }
+          ]
+        }
+      ],
+      "timeliness_evidence": {
+        "status": "sufficient",
+        "window_start": "1786/12/10",
+        "window_end": "1786/12/29",
+        "note": "本批直接報告（硃32、硃31、硃34、硃35）均於乾隆五十一年十二月十二日至十五日之間自閩省發出，於十二月二十九日送達皇帝並奉硃批，同日皇帝即發出本件「諭20」上諭。從最早期報告（十二月初十日黃仕簡、任承恩摺）起算，決策窗口為19天，時效極為緊湊且證據充分。"
+      },
+      "uncertainty": "無"
+    },
+    "source_coverage_check": {
+      "candidate_doc_ids": [
+        "硃32",
+        "硃31",
+        "硃35",
+        "硃33",
+        "硃34",
+        "硃25",
+        "硃23",
+        "硃22",
+        "硃21"
+      ],
+      "reported_candidate_doc_ids": [
+        "硃32",
+        "硃31",
+        "硃35",
+        "硃33",
+        "硃34",
+        "硃25",
+        "硃23",
+        "硃22",
+        "硃21"
+      ],
+      "missing_candidate_doc_ids": [],
+      "unexpected_reported_doc_ids": [],
+      "all_candidates_reviewed": true
+    }
+  }
+]

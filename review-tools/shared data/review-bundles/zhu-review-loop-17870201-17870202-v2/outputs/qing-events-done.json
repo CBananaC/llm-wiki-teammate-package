@@ -1,0 +1,262 @@
+[
+  {
+    "description": "福建巡撫徐嗣曾已派調副將徐鼎士等率兵船由閩安出口，赴淡水、新莊等處剿援；兵船於正月初七日出五虎門放洋，至十二日已經過黃岐、北菱等洋面北上。此為已實際進行中的海上調兵行動。",
+    "howKnown": "沿海塘汛稟報",
+    "quote": "臣派調副將徐鼎士等由閩安出口，前赴淡水、新莊等處剿援，於初七日出五虎門放洋……該將兵船已於十二日經過黃岐、北菱等洋面，乘風北上",
+    "relations": [
+      {
+        "evidence": "臣派調副將徐鼎士等由閩安出口，前赴淡水、新莊等處剿援",
+        "relation": "派調",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "徐鼎士"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "徐鼎士北上渡臺",
+    "whenAr": "1787/01/07",
+    "whenCh": "正月初七日至十二日",
+    "whenKnownCh": "正月十二日",
+    "where": "自閩安經五虎門、黃岐、北菱洋面赴北淡",
+    "who": [
+      "徐嗣曾",
+      "徐鼎士"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福建",
+      "徐鼎士": "黃岐、北菱等洋面"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月初七日",
+    "_whenArModel": "1787/02/24-1787/03/01",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十二日"
+  },
+  {
+    "description": "十二月十八日，原署淡水同知程峻之幕友壽同春設法擊退賊匪，並會同俸滿巡檢李生樁與原任榆林縣知縣孫讓率領義勇收復竹塹；又追捕賊匪王作等三十餘人並處死。此為一波包含退賊、收城與追捕處決的連貫行動。",
+    "howKnown": "據淡水右營守備董得魁稟報",
+    "quote": "十二月十八日，有原署淡水同知程峻之幕友壽同春，用計退賊，會同俸滿巡檢李生樁及塹城書院掌教之原任榆林縣知縣孫讓，率勵義勇，收復竹塹，追獲賊匪王作等三十餘人正法。",
+    "relations": [
+      {
+        "evidence": "會同俸滿巡檢李生樁及塹城書院掌教之原任榆林縣知縣孫讓",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "李生樁"
+      },
+      {
+        "evidence": "會同俸滿巡檢李生樁及塹城書院掌教之原任榆林縣知縣孫讓",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "孫讓"
+      },
+      {
+        "evidence": "追獲賊匪王作等三十餘人正法",
+        "relation": "追獲",
+        "relation_type": "conflict",
+        "source": "壽同春",
+        "target": "王作"
+      },
+      {
+        "evidence": "追獲賊匪王作等三十餘人正法",
+        "relation": "追獲",
+        "relation_type": "conflict",
+        "source": "李生樁",
+        "target": "王作"
+      },
+      {
+        "evidence": "追獲賊匪王作等三十餘人正法",
+        "relation": "追獲",
+        "relation_type": "conflict",
+        "source": "孫讓",
+        "target": "王作"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "壽同春等收復竹塹",
+    "whenAr": "1786/12/18",
+    "whenCh": "十二月十八日",
+    "whenKnownCh": "正月十六日",
+    "where": "竹塹",
+    "who": [
+      "壽同春",
+      "李生樁",
+      "孫讓",
+      "王作",
+      "董得魁"
+    ],
+    "who_loc": {
+      "壽同春": "竹塹",
+      "孫讓": "竹塹",
+      "李生樁": "竹塹",
+      "王作": "竹塹",
+      "董得魁": "淡水右營"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月十八日",
+    "_whenArModel": "1787/02/05",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十六日"
+  },
+  {
+    "description": "在竹塹收復後，淡水右營守備董得魁即馳赴塹城，與當地守軍協同防守。此為實際執行的增援守禦行動。",
+    "howKnown": "據淡水右營守備董得魁稟報",
+    "quote": "該守備馳往塹城，協同守禦。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "董得魁赴塹協守",
+    "whenAr": "1787/02/05",
+    "whenCh": "同日",
+    "whenKnownCh": "正月十六日",
+    "where": "塹城",
+    "who": [
+      "董得魁"
+    ],
+    "who_loc": {
+      "董得魁": "塹城"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18",
+    "whenKnownChFull": "乾隆五十二年一月十六日"
+  },
+  {
+    "description": "十二月二十三日及二十六至二十八日，署淡水都司易連與新莊巡檢王增錞督率官兵、義勇分路剿殺大姑陷等處賊匪，官兵及義民合計殺賊百餘人與數十人不等，並先後擒獲陳軒等十名正法，奪得旗桿與器械。此為數日內同一波分路掃蕩行動。",
+    "howKnown": "據署淡水都司易連、新莊巡檢王增錞稟稱",
+    "quote": "十二月二十三及二十六、七、八等日，督率官兵義勇，分路剿殺大姑陷等處賊匪，官兵、義民各皆奮勇殺賊百餘人、數十人不等。先後擒獲陳軒等十名正法，奪獲旗桿、器械",
+    "relations": [
+      {
+        "evidence": "署淡水都司易連、新莊巡檢王增錞稟稱：十二月二十三及二十六、七、八等日，督率官兵義勇，分路剿殺",
+        "relation": "督率",
+        "relation_type": "ally",
+        "source": "易連",
+        "target": "王增錞"
+      },
+      {
+        "evidence": "先後擒獲陳軒等十名正法",
+        "relation": "擒獲",
+        "relation_type": "conflict",
+        "source": "易連",
+        "target": "陳軒"
+      },
+      {
+        "evidence": "先後擒獲陳軒等十名正法",
+        "relation": "擒獲",
+        "relation_type": "conflict",
+        "source": "王增錞",
+        "target": "陳軒"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "易連王增錞分路剿賊",
+    "whenAr": "1786/12/23",
+    "whenCh": "十二月二十三日及二十六至二十八日",
+    "whenKnownCh": "同日（正月十六日前後）",
+    "where": "大姑陷等處",
+    "who": [
+      "易連",
+      "王增錞",
+      "陳軒"
+    ],
+    "who_loc": {
+      "易連": "淡水",
+      "王增錞": "新莊",
+      "陳軒": "大姑陷等處"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月二十三日",
+    "_whenArModel": "1787/02/10-1787/02/15",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十六日"
+  },
+  {
+    "description": "提臣黃仕簡與總兵郝壯猷已於正月初四日由鹿耳門登岸。此為清軍主力抵臺上岸的已完成機動。",
+    "howKnown": "泉、廈道府同知疊接稟報",
+    "quote": "提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸",
+    "relations": [
+      {
+        "evidence": "提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸",
+        "relation": "同由鹿耳門登岸",
+        "relation_type": "ally",
+        "source": "黃仕簡",
+        "target": "郝壯猷"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡郝壯猷登岸鹿耳門",
+    "whenAr": "1787/01/04",
+    "whenCh": "正月初四日",
+    "whenKnownCh": "數日以來",
+    "where": "鹿耳門",
+    "who": [
+      "黃仕簡",
+      "郝壯猷"
+    ],
+    "who_loc": {
+      "郝壯猷": "鹿耳門",
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月初四日",
+    "_whenArModel": "1787/02/21",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "陸路提臣任承恩已於正月初六日抵達鹿港並登岸。此為清軍另一支援軍已完成的登陸行動。",
+    "howKnown": "泉、廈道府同知疊接稟報",
+    "quote": "陸路提臣任承恩初六日抵鹿港登岸",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "任承恩抵鹿港登岸",
+    "whenAr": "1787/01/06",
+    "whenCh": "正月初六日",
+    "whenKnownCh": "數日以來",
+    "where": "鹿港",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "鹿港"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月初六日",
+    "_whenArModel": "1787/02/23",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "在提臣任承恩尚未到達之前，鹿港署守備陳邦光已先行擒獲賊匪簡鳩等六名。此為地方守軍先期執行的捕拿行動。",
+    "howKnown": "泉、廈道府同知稟報",
+    "quote": "鹿港署守備陳邦光於提臣任承恩未到之先，又擒獲賊匪簡鳩等六名。",
+    "relations": [
+      {
+        "evidence": "鹿港署守備陳邦光於提臣任承恩未到之先，又擒獲賊匪簡鳩等六名",
+        "relation": "擒獲",
+        "relation_type": "conflict",
+        "source": "陳邦光",
+        "target": "簡鳩"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "陳邦光擒簡鳩等犯",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "數日以來",
+    "where": "鹿港",
+    "who": [
+      "陳邦光",
+      "簡鳩"
+    ],
+    "who_loc": {
+      "簡鳩": "鹿港",
+      "陳邦光": "鹿港"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  }
+]

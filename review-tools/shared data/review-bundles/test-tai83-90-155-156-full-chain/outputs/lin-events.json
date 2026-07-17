@@ -1,0 +1,108 @@
+[
+  {
+    "description": "彰化匪徒林爽文、王芬等人謀劃不軌，攻陷了諸羅縣與彰化縣兩座城邑。",
+    "howKnown": "臺灣道永福稟報",
+    "quote": "彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+    "relations": [
+      {
+        "evidence": "彰匪林爽文、王芬等謀為不軌",
+        "relation": "謀為不軌",
+        "relation_type": "ally",
+        "source": "林爽文",
+        "target": "王芬"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文王芬等攻陷諸羅彰化兩邑",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十四日",
+    "where": "諸羅縣, 彰化縣",
+    "who": [
+      "林爽文",
+      "王芬"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣",
+      "王芬": "彰化縣"
+    },
+    "doc_id": "台83",
+    "sources": [
+      {
+        "doc_id": "台83",
+        "quote": "彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+        "howKnown": "臺灣道永福稟報",
+        "whenKnown": "十二月十四日"
+      }
+    ]
+  },
+  {
+    "description": "賊匪約兩千餘人於十二月十三日天明時分，直接攻打鳳山縣城。",
+    "howKnown": "南路兵丁劉茂光回報",
+    "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪兩千餘人直攻鳳山縣城",
+    "whenAr": "",
+    "whenCh": "十二月十三日天明時候",
+    "whenKnownCh": "十二月十三日亥刻",
+    "where": "鳳山縣城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "台83",
+    "sources": [
+      {
+        "doc_id": "台83",
+        "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。",
+        "howKnown": "南路兵丁劉茂光回報",
+        "whenKnown": "十二月十三日亥刻"
+      }
+    ]
+  },
+  {
+    "description": "鳳山守軍追擊稍退的賊匪時，賊匪乘機從龜山北門突入城內。",
+    "howKnown": "南路兵丁劉茂光回報",
+    "quote": "賊匪乘虛由龜山北門撲入城內。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪乘虛由北門撲入鳳山城",
+    "whenAr": "",
+    "whenCh": "十二月十三日",
+    "whenKnownCh": "十二月十三日亥刻",
+    "where": "鳳山縣城龜山北門",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "台83",
+    "sources": [
+      {
+        "doc_id": "台83",
+        "quote": "賊匪乘虛由龜山北門撲入城內。",
+        "howKnown": "南路兵丁劉茂光回報",
+        "whenKnown": "十二月十三日亥刻"
+      }
+    ]
+  },
+  {
+    "description": "賊人進入鳳山縣署，導致縣令湯大奎情急自刎。",
+    "howKnown": "逃回鳳邑跟丁稟報",
+    "quote": "賊人進入縣署",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊人進入鳳山縣署",
+    "whenAr": "",
+    "whenCh": "十二月十三日",
+    "whenKnownCh": "十二月十三日亥刻",
+    "where": "鳳山縣署",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "台83",
+    "sources": [
+      {
+        "doc_id": "台83",
+        "quote": "賊人進入縣署",
+        "howKnown": "逃回鳳邑跟丁稟報",
+        "whenKnown": "十二月十三日亥刻"
+      }
+    ]
+  }
+]

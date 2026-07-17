@@ -1,0 +1,362 @@
+[
+  {
+    "description": "福建水師提督黃仕簡委任提標右營遊擊邱維揚，率領二百名士兵渡海前往臺灣，查探賊匪情況、首領身份、起釁原因、村莊受擾情況，以及當地官員是否已收復城池並捕獲匪徒。",
+    "howKnown": "親自執行",
+    "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何興釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+    "relations": [
+      {
+        "evidence": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺",
+        "relation": "委令",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "邱維揚"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "委派邱維揚率兵二百渡臺查探",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福建至臺灣",
+    "who": [
+      "黃仕簡",
+      "邱維揚",
+      "提標右營遊擊",
+      "兵二百名"
+    ],
+    "who_loc": {
+      "邱維揚": "福建",
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡命令挑選提標五營的官員、士兵共一千名，並配備充足的軍火、器械，準備好商船和哨船。",
+    "howKnown": "親自執行",
+    "quote": "一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。",
+    "relations": [
+      {
+        "evidence": "一面飭令挑選提標五營員弁及備戰兵丁一千名",
+        "relation": "飭令",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "提標五營員弁及備戰兵丁一千名"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "飭令挑選備戰兵丁及軍備",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福建",
+    "who": [
+      "黃仕簡",
+      "提標五營員弁及備戰兵丁一千名"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡發文給督臣，請其委派金門鎮總兵羅英笈前往廈門，就近協助彈壓照應。",
+    "howKnown": "親自執行",
+    "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+    "relations": [
+      {
+        "evidence": "札達督臣檄委金門鎮總兵羅英笈",
+        "relation": "札達",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "督臣"
+      },
+      {
+        "evidence": "札達督臣檄委金門鎮總兵羅英笈",
+        "relation": "檄委",
+        "relation_type": "command",
+        "source": "督臣",
+        "target": "羅英笈"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "札達督臣檄委羅英笈彈壓廈門",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "督臣",
+      "羅英笈",
+      "金門鎮總兵"
+    ],
+    "who_loc": {
+      "督臣": "福建",
+      "羅英笈": "金門",
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡緊急發文給撫臣、六路提臣、藩臬兩司、興泉道、水師各鎮協營以及臺灣鎮、道，嚴令各營縣在各口岸要隘堵截盤查、緝捕賊匪。",
+    "howKnown": "親自執行",
+    "quote": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+    "relations": [
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "撫臣"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "六路提臣"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "藩臬兩司"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "興泉道"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "水師各鎮協營"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣鎮"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣道"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "飛札各級官員堵緝盤拿賊匪",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "各口岸要隘",
+    "who": [
+      "黃仕簡",
+      "撫臣",
+      "六路提臣",
+      "藩臬兩司",
+      "興泉道",
+      "水師各鎮協營",
+      "臺灣鎮",
+      "臺灣道",
+      "營",
+      "縣"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡已派遣其所屬的五營官兵，並點驗確認軍械船隻均已齊備。",
+    "howKnown": "親自執行",
+    "quote": "現在派撥本標五營官兵，軍械船隻均點驗齊備",
+    "relations": [
+      {
+        "evidence": "現在派撥本標五營官兵",
+        "relation": "派撥",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "本標五營官兵"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "派撥本標五營官兵並點驗軍備",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福建",
+    "who": [
+      "黃仕簡",
+      "本標五營官兵"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡於十二月初十日帶領官兵登上船隻，等待有利風向，準備渡海前往臺灣。",
+    "howKnown": "親自執行",
+    "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+    "relations": [
+      {
+        "evidence": "奴才於初十日帶領官兵登舟",
+        "relation": "帶領",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "官兵"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡率兵登舟候風渡臺",
+    "whenAr": "1786/12/30",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "",
+    "where": "福建沿海",
+    "who": [
+      "黃仕簡",
+      "官兵"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "署北路淡水同知程峻與守備董得魁在彰化縣城失陷後，督率兵役，整備槍炮，並募集鄉勇和社番，在扼要地點分頭堵截防禦，同時進行救援。",
+    "howKnown": "轉述 (程峻、董得魁會稟)",
+    "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+    "relations": [
+      {
+        "evidence": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "relation": "督同",
+        "relation_type": "command",
+        "source": "程峻",
+        "target": "兵役"
+      },
+      {
+        "evidence": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "程峻",
+        "target": "鄉勇"
+      },
+      {
+        "evidence": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "程峻",
+        "target": "社番"
+      },
+      {
+        "evidence": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "relation": "督同",
+        "relation_type": "command",
+        "source": "董得魁",
+        "target": "兵役"
+      },
+      {
+        "evidence": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "董得魁",
+        "target": "鄉勇"
+      },
+      {
+        "evidence": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "董得魁",
+        "target": "社番"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "淡水同知程峻等督兵募集鄉勇堵禦救援",
+    "whenAr": "",
+    "whenCh": "十一月二十九日後",
+    "whenKnownCh": "十二月初十日",
+    "where": "淡水、大甲社、扼要處所",
+    "who": [
+      "程峻",
+      "董得魁",
+      "兵役",
+      "鄉勇",
+      "社番"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡緊急發文給六路提臣、水師、海壇、閩安、烽火各鎮協營，要求他們立即從就近的省營調派官兵，增援北路進行剿匪。",
+    "howKnown": "親自執行",
+    "quote": "除星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+    "relations": [
+      {
+        "evidence": "星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+        "relation": "星飛咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "六路提臣"
+      },
+      {
+        "evidence": "星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+        "relation": "星飛咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "水師"
+      },
+      {
+        "evidence": "星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+        "relation": "星飛咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "海壇"
+      },
+      {
+        "evidence": "星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+        "relation": "星飛咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "閩安"
+      },
+      {
+        "evidence": "星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+        "relation": "星飛咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "烽火各鎮、協、營"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "星飛咨行各鎮協營續調官兵援剿",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福建省營",
+    "who": [
+      "黃仕簡",
+      "六路提臣",
+      "水師",
+      "海壇",
+      "閩安",
+      "烽火各鎮、協、營",
+      "官兵"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建"
+    },
+    "doc_id": "台25"
+  }
+]

@@ -1,0 +1,715 @@
+[
+  {
+    "doc_id": "台25",
+    "evTitle": "皇帝關心黃仕簡身體，囑咐其注意調養勿過勞",
+    "addressee": "黃仕簡",
+    "items": []
+  },
+  {
+    "doc_id": "台25",
+    "evTitle": "皇帝批示黃仕簡奏摺，表示已發布諭旨",
+    "addressee": "黃仕簡",
+    "items": []
+  },
+  {
+    "doc_id": "天13",
+    "evTitle": "皇帝嘉獎黃仕簡帶病親征並賜予賞賜，同時諭其保重身體",
+    "addressee": "黃仕簡",
+    "items": [
+      {
+        "action_quote": "黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。並著於辦理搜捕諸務外，仍加意調攝，勿勞。",
+        "doc_id": "台51",
+        "how": "黃仕簡在接獲臺灣賊匪攻城殺官的消息後，不顧病體，親自率領官兵船隻渡海東征。他於正月初三夜抵達鹿耳門，初四早登岸進城，並立即將抵臺官兵分派堵截、保固府城，同時相機發兵進剿。他預計陸路提督任承恩也將率兵抵臺，屆時可南北夾攻，迅速剿滅逆賊。",
+        "receive_date": "",
+        "relations": [
+          {
+            "evidence": "力疾帶領登舟東渡進剿",
+            "relation": "帶領",
+            "relation_type": "command",
+            "source": "黃仕簡",
+            "target": "官兵"
+          },
+          {
+            "evidence": "嚴加保固府城",
+            "relation": "保固",
+            "relation_type": "command",
+            "source": "黃仕簡",
+            "target": "府城"
+          },
+          {
+            "evidence": "日內六路提臣任承恩亦即續帶官兵...自可調度分發，南北夾攻",
+            "relation": "會同",
+            "relation_type": "ally",
+            "source": "黃仕簡",
+            "target": "任承恩"
+          },
+          {
+            "evidence": "賊匪林爽文、王芬等糾夥謀為不軌",
+            "relation": "糾夥",
+            "relation_type": "ally",
+            "source": "林爽文",
+            "target": "王芬"
+          },
+          {
+            "evidence": "猝攻北路大墩營盤",
+            "relation": "攻",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "大墩營盤"
+          },
+          {
+            "evidence": "赫生額...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "赫生額"
+          },
+          {
+            "evidence": "耿世文...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "耿世文"
+          },
+          {
+            "evidence": "俞竣先被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "俞竣"
+          },
+          {
+            "evidence": "匪黨數千攻彰化縣...縣城被陷",
+            "relation": "攻陷",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "彰化縣"
+          },
+          {
+            "evidence": "孫景燧...俱被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "孫景燧"
+          },
+          {
+            "evidence": "長庚...俱被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "長庚"
+          },
+          {
+            "evidence": "劉亨基...俱被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "劉亨基"
+          },
+          {
+            "evidence": "馮啟宗...俱被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "馮啟宗"
+          },
+          {
+            "evidence": "王宗武俱被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "王宗武"
+          },
+          {
+            "evidence": "攻陷諸羅縣城",
+            "relation": "攻陷",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "諸羅縣城"
+          },
+          {
+            "evidence": "董啟埏...俱同日被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "董啟埏"
+          },
+          {
+            "evidence": "李中揚...俱同日被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "李中揚"
+          },
+          {
+            "evidence": "郝輝龍...俱同日被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "郝輝龍"
+          },
+          {
+            "evidence": "鍾燕超俱同日被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "鍾燕超"
+          },
+          {
+            "evidence": "南路賊匪復攻陷鳳山縣城",
+            "relation": "攻陷",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "鳳山縣城"
+          },
+          {
+            "evidence": "知縣湯大奎自刎盡難",
+            "relation": "自刎",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "湯大奎"
+          },
+          {
+            "evidence": "典史史謙被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "史謙"
+          },
+          {
+            "evidence": "賊眾連結，迫攻府城",
+            "relation": "迫攻",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "府城"
+          },
+          {
+            "evidence": "臺灣鎮總兵柴大紀督率官兵堵禦",
+            "relation": "督率",
+            "relation_type": "command",
+            "source": "柴大紀",
+            "target": "官兵"
+          },
+          {
+            "evidence": "臺灣道永福等招募鄉勇、義民協同官兵守禦",
+            "relation": "招募",
+            "relation_type": "command",
+            "source": "永福",
+            "target": "鄉勇、義民"
+          },
+          {
+            "evidence": "海壇鎮總兵郝壯猷...亦於是日到臺...隨同水師提臣協力進剿",
+            "relation": "會同",
+            "relation_type": "ally",
+            "source": "郝壯猷",
+            "target": "黃仕簡"
+          },
+          {
+            "evidence": "臺灣水師協副將丁朝雄...亦於是日到臺...隨同水師提臣協力進剿",
+            "relation": "會同",
+            "relation_type": "ally",
+            "source": "丁朝雄",
+            "target": "黃仕簡"
+          },
+          {
+            "evidence": "署福州城守副將事長福營三將那穆素里亦於是日到臺...隨同水師提臣協力進剿",
+            "relation": "會同",
+            "relation_type": "ally",
+            "source": "那穆素里",
+            "target": "黃仕簡"
+          }
+        ],
+        "response_date": "1787/01/05",
+        "response_quote": "奴才聞報，隨即派調官兵、船隻，力疾帶領登舟東渡進剿，並將接准臺灣鎮、道初報情形，均經恭摺具奏。自十二月十五日出口，連日俱遇頂頭暴風，狂浪洶湧，但臺郡急望救援，奴才日夜在洋親督各船敲銭駕駛，衝風觸浪，不避艱危。仰蒙皇上福庇，所帶官兵、船隻幸俱保固，於正月初三夜趕潮進入鹿耳門，初四早登岸進城。",
+        "subtitle": "黃仕簡帶病渡臺進剿並報告抵臺後情勢與兵力部署",
+        "where": "臺灣 (鹿耳門, 府城, 彰化, 諸羅, 淡水, 鳳山, 大墩營盤)",
+        "who": [
+          "黃仕簡",
+          "林爽文",
+          "王芬",
+          "赫生額",
+          "耿世文",
+          "俞竣",
+          "孫景燧",
+          "長庚",
+          "劉亨基",
+          "馮啟宗",
+          "王宗武",
+          "董啟埏",
+          "李中揚",
+          "郝輝龍",
+          "鍾燕超",
+          "湯大奎",
+          "史謙",
+          "柴大紀",
+          "永福",
+          "郝壯猷",
+          "丁朝雄",
+          "那穆素里",
+          "任承恩"
+        ],
+        "who_loc": {
+          "丁朝雄": "鹿耳門",
+          "任承恩": "臺灣",
+          "俞竣": "大墩營盤",
+          "劉亨基": "彰化縣",
+          "史謙": "鳳山縣",
+          "孫景燧": "彰化縣",
+          "李中揚": "諸羅縣",
+          "林爽文": "彰化",
+          "柴大紀": "府城",
+          "永福": "府城",
+          "湯大奎": "鳳山縣",
+          "王宗武": "彰化縣",
+          "王芬": "彰化",
+          "耿世文": "大墩營盤",
+          "董啟埏": "諸羅縣",
+          "赫生額": "大墩營盤",
+          "那穆素里": "鹿耳門",
+          "郝壯猷": "鹿耳門",
+          "郝輝龍": "諸羅縣",
+          "鍾燕超": "諸羅縣",
+          "長庚": "彰化縣",
+          "馮啟宗": "彰化縣",
+          "黃仕簡": "鹿耳門"
+        }
+      }
+    ]
+  },
+  {
+    "doc_id": "天13",
+    "evTitle": "皇帝諭令黃仕簡查明諸羅戰果並核實獎勵有功官兵",
+    "addressee": "黃仕簡",
+    "items": []
+  },
+  {
+    "doc_id": "天13",
+    "evTitle": "皇帝指示督撫查明彰化知縣俞駿（峻）殉職情況並議恤",
+    "addressee": "",
+    "items": []
+  },
+  {
+    "doc_id": "天13",
+    "evTitle": "皇帝肯定夾攻策略並指示常青、任承恩嚴防賊匪內渡",
+    "addressee": "",
+    "items": []
+  },
+  {
+    "doc_id": "天13",
+    "evTitle": "皇帝告誡常青、徐嗣曾等督撫切勿張皇失措，以免民心疑駭",
+    "addressee": "",
+    "items": []
+  },
+  {
+    "doc_id": "天13",
+    "evTitle": "皇帝要求各級官員持續迅速奏報剿捕進展",
+    "addressee": "",
+    "items": []
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "諭黃仕簡帶病親征應以調養為要勿過勞",
+    "addressee": "黃仕簡",
+    "items": [
+      {
+        "action_quote": "仍以調養為要，勿過勞",
+        "doc_id": "台51",
+        "how": "黃仕簡奏報他儘管帶病，仍親自率領官兵船隻渡海進剿臺灣匪徒，並於正月初三夜抵達鹿耳門，初四早登岸進城。他詳細報告了臺灣各縣城被攻陷、官員被害以及匪徒猖獗的情形，並說明他已分派官兵堵截、保固府城，等待陸路提臣任承恩到臺後南北夾攻。此舉雖未直接提及皇帝的諭旨，但其「力疾帶領」的行動，直接回應了皇帝對其「帶病親征應以調養為要勿過勞」的關切。",
+        "receive_date": "",
+        "relations": [
+          {
+            "evidence": "力疾帶領登舟東渡進剿",
+            "relation": "帶領",
+            "relation_type": "command",
+            "source": "黃仕簡",
+            "target": "官兵"
+          },
+          {
+            "evidence": "東渡進剿",
+            "relation": "進剿",
+            "relation_type": "conflict",
+            "source": "黃仕簡",
+            "target": "匪徒"
+          },
+          {
+            "evidence": "林爽文、王芬等糾夥謀為不軌",
+            "relation": "糾夥",
+            "relation_type": "ally",
+            "source": "林爽文",
+            "target": "王芬"
+          },
+          {
+            "evidence": "赫生額...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "赫生額"
+          },
+          {
+            "evidence": "耿世文...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "耿世文"
+          },
+          {
+            "evidence": "俞竣先被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "俞竣先"
+          },
+          {
+            "evidence": "孫景燧...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "孫景燧"
+          },
+          {
+            "evidence": "長庚...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "長庚"
+          },
+          {
+            "evidence": "劉亨基...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "劉亨基"
+          },
+          {
+            "evidence": "馮啟宗...被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "馮啟宗"
+          },
+          {
+            "evidence": "王宗武俱被殺害",
+            "relation": "殺害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "王宗武"
+          },
+          {
+            "evidence": "董啟埏...被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "董啟埏"
+          },
+          {
+            "evidence": "李中揚...被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "李中揚"
+          },
+          {
+            "evidence": "郝輝龍...被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "郝輝龍"
+          },
+          {
+            "evidence": "鍾燕超俱同日被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "鍾燕超"
+          },
+          {
+            "evidence": "南路賊匪復攻陷鳳山縣城，知縣湯大奎自刎盡難",
+            "relation": "攻陷",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "湯大奎"
+          },
+          {
+            "evidence": "典史史謙被害",
+            "relation": "被害",
+            "relation_type": "conflict",
+            "source": "林爽文",
+            "target": "史謙"
+          },
+          {
+            "evidence": "柴大紀督率官兵堵禦",
+            "relation": "督率",
+            "relation_type": "command",
+            "source": "柴大紀",
+            "target": "官兵"
+          },
+          {
+            "evidence": "永福等招募鄉勇、義民協同官兵守禦",
+            "relation": "招募",
+            "relation_type": "command",
+            "source": "永福",
+            "target": "鄉勇"
+          },
+          {
+            "evidence": "永福等招募鄉勇、義民協同官兵守禦",
+            "relation": "招募",
+            "relation_type": "command",
+            "source": "永福",
+            "target": "義民"
+          },
+          {
+            "evidence": "郝壯猷...亦於是日到臺",
+            "relation": "到臺",
+            "relation_type": "ally",
+            "source": "郝壯猷",
+            "target": "黃仕簡"
+          },
+          {
+            "evidence": "丁朝雄...亦於是日到臺",
+            "relation": "到臺",
+            "relation_type": "ally",
+            "source": "丁朝雄",
+            "target": "黃仕簡"
+          },
+          {
+            "evidence": "那穆素里亦於是日到臺",
+            "relation": "到臺",
+            "relation_type": "ally",
+            "source": "那穆素里",
+            "target": "黃仕簡"
+          },
+          {
+            "evidence": "日內六路提臣任承恩亦即續帶官兵...自可調度分發，南北夾攻",
+            "relation": "調度分發",
+            "relation_type": "ally",
+            "source": "黃仕簡",
+            "target": "任承恩"
+          }
+        ],
+        "response_date": "乾隆五十二年正月初五日",
+        "response_quote": "奴才聞報，隨即派調官兵、船隻，力疾帶領登舟東渡進剿，並將接准臺灣鎮、道初報情形，均經恭摺具奏。",
+        "subtitle": "黃仕簡帶病親征並奏報渡臺日期及臺灣各城情形",
+        "where": "臺灣, 鹿耳門, 彰化縣, 諸羅縣, 淡水, 鳳山縣, 府城, 金門, 料羅",
+        "who": [
+          "黃仕簡",
+          "郝壯猷",
+          "丁朝雄",
+          "那穆素里",
+          "林爽文",
+          "王芬",
+          "赫生額",
+          "耿世文",
+          "俞竣先",
+          "孫景燧",
+          "長庚",
+          "劉亨基",
+          "馮啟宗",
+          "王宗武",
+          "董啟埏",
+          "李中揚",
+          "郝輝龍",
+          "鍾燕超",
+          "湯大奎",
+          "史謙",
+          "柴大紀",
+          "永福",
+          "任承恩"
+        ],
+        "who_loc": {
+          "丁朝雄": "臺灣",
+          "任承恩": "蚶江",
+          "俞竣先": "彰化縣",
+          "劉亨基": "彰化縣",
+          "史謙": "鳳山縣",
+          "孫景燧": "彰化縣",
+          "李中揚": "諸羅縣",
+          "林爽文": "彰化縣",
+          "柴大紀": "府城",
+          "永福": "府城",
+          "湯大奎": "鳳山縣",
+          "王宗武": "彰化縣",
+          "王芬": "彰化縣",
+          "耿世文": "彰化縣",
+          "董啟埏": "諸羅縣",
+          "赫生額": "彰化縣",
+          "那穆素里": "臺灣",
+          "郝壯猷": "臺灣",
+          "郝輝龍": "諸羅縣",
+          "鍾燕超": "諸羅縣",
+          "長庚": "彰化縣",
+          "馮啟宗": "彰化縣",
+          "黃仕簡": "鹿耳門"
+        }
+      }
+    ]
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "諭黃仕簡等官員對林爽文匪亂張皇失措",
+    "addressee": "",
+    "items": []
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "諭黃仕簡帶病處理軍務稍涉矜張",
+    "addressee": "黃仕簡",
+    "items": []
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "諭黃仕簡既已渡臺應繼續由南路進剿",
+    "addressee": "",
+    "items": []
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "諭任承恩不應渡臺但既已前往務須協同黃仕簡夾攻",
+    "addressee": "任承恩",
+    "items": []
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "諭閩浙總督常青駐紮蚶江廈門調度策應",
+    "addressee": "常青",
+    "items": [
+      {
+        "action_quote": "此時總以鎮靜內地爲要。",
+        "doc_id": "台53",
+        "how": "常青在審訊逆犯楊振國（楊詠）等人後，密奏天地會的根源，並在奏摺中強調，雖然賊人本籍多在漳屬，但目前民情尚屬寧靜，若稍有張皇，恐會引起驚疑。他表示會密飭下屬訪察嚴防，待臺匪蕩平後再查辦，並飛咨提臣追究嚴烟下落，同時派員密查廣東的洪二房和尚及朱姓人士。",
+        "receive_date": "",
+        "relations": [
+          {
+            "evidence": "臣將逆匪楊振國即楊詠等研訊",
+            "relation": "研訊",
+            "relation_type": "other",
+            "source": "常青",
+            "target": "楊振國"
+          },
+          {
+            "evidence": "臣將逆匪楊振國即楊詠等研訊",
+            "relation": "研訊",
+            "relation_type": "other",
+            "source": "常青",
+            "target": "楊詠"
+          },
+          {
+            "evidence": "復率同司、道再四詰問。據楊詠、楊軒同供",
+            "relation": "詰問",
+            "relation_type": "other",
+            "source": "常青",
+            "target": "楊軒"
+          },
+          {
+            "evidence": "小的們聽得嚴烟說及起會的根源",
+            "relation": "聽得...說及",
+            "relation_type": "other",
+            "source": "楊詠",
+            "target": "莊烟"
+          },
+          {
+            "evidence": "小的們聽得嚴烟說及起會的根源",
+            "relation": "聽得...說及",
+            "relation_type": "other",
+            "source": "楊軒",
+            "target": "莊烟"
+          },
+          {
+            "evidence": "莊烟即嚴烟過臺來興起的",
+            "relation": "興起",
+            "relation_type": "other",
+            "source": "莊烟",
+            "target": "洪二房"
+          },
+          {
+            "evidence": "莊烟即嚴烟過臺來興起的",
+            "relation": "興起",
+            "relation_type": "other",
+            "source": "莊烟",
+            "target": "朱姓"
+          },
+          {
+            "evidence": "洪二房，同一個姓朱的人起的",
+            "relation": "同...起",
+            "relation_type": "other",
+            "source": "洪二房",
+            "target": "朱姓"
+          },
+          {
+            "evidence": "拿林爽文並楊光勳案内逸犯",
+            "relation": "案内逸犯",
+            "relation_type": "other",
+            "source": "林爽文",
+            "target": "楊光勳"
+          },
+          {
+            "evidence": "一面飛咨提臣，即於臺地追究嚴烟下落",
+            "relation": "飛咨",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "提臣"
+          },
+          {
+            "evidence": "臣隨派心腹妥弁，帶領咨文，飛投廣東督、撫二臣",
+            "relation": "飛投咨文",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "廣東督"
+          },
+          {
+            "evidence": "臣隨派心腹妥弁，帶領咨文，飛投廣東督、撫二臣",
+            "relation": "飛投咨文",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "廣東撫"
+          }
+        ],
+        "response_date": "1787/01/06",
+        "response_quote": "雖賊人本籍多在漳屬，其中自難保無勾連串結情事，但現在該處民情尚屬寧靜，若一涉張皇，轉恐驚疑四起。臣惟有密飭該鎮、道等悉心訪察，加意嚴防，俟臺匪蕩平，以次查辦。",
+        "subtitle": "常青密奏天地會根源，強調鎮靜民情以防驚疑",
+        "where": "漳屬,臺灣,廣東",
+        "who": [
+          "常青",
+          "楊振國",
+          "楊詠",
+          "楊軒",
+          "莊烟",
+          "嚴烟",
+          "洪二房",
+          "朱姓",
+          "林爽文",
+          "楊光勳",
+          "廣東督",
+          "廣東撫",
+          "提臣"
+        ],
+        "who_loc": {
+          "嚴烟": "平和縣",
+          "常青": "泉州",
+          "廣東撫": "廣東",
+          "廣東督": "廣東",
+          "提臣": "福建",
+          "朱姓": "廣東",
+          "林爽文": "彰化",
+          "楊光勳": "彰化",
+          "楊振國": "彰化",
+          "楊詠": "彰化",
+          "楊軒": "彰化",
+          "洪二房": "廣東",
+          "莊烟": "平和縣"
+        }
+      }
+    ]
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "申飭黃仕簡奏摺洩露彰化失陷軍情",
+    "addressee": "常青",
+    "items": []
+  },
+  {
+    "doc_id": "天20",
+    "evTitle": "傳旨申飭常青黃仕簡任承恩等官員",
+    "addressee": "",
+    "items": []
+  }
+]

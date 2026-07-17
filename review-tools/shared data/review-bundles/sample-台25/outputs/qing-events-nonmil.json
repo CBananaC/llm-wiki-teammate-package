@@ -1,0 +1,309 @@
+[
+  {
+    "description": "福建水師提督黃仕簡委派提標右營遊擊邱維揚，率兵二百名渡臺，確查賊匪人數、首領、起事原因、對村莊的擾害情況，以及當地文武官員是否已收復城池、捕獲匪首，並協同追捕散逃匪徒。",
+    "howKnown": "黃仕簡自述",
+    "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+    "relations": [
+      {
+        "evidence": "奴才一面委令提標右營遊擊邱維揚",
+        "relation": "委令",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "邱維揚"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "委派邱維揚赴臺查辦匪情",
+    "whenAr": "",
+    "whenCh": "十二月初五日後，初十日前",
+    "whenKnownCh": "",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡",
+      "邱維揚"
+    ],
+    "who_loc": {
+      "邱維揚": "渡臺途中",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡札文督臣，檄委金門鎮總兵羅英笈就近前來廈門，負責彈壓照應地方事務。",
+    "howKnown": "黃仕簡自述",
+    "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+    "relations": [
+      {
+        "evidence": "札達督臣檄委金門鎮總兵羅英笈",
+        "relation": "札達督臣檄委",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "羅英笈"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "札委羅英笈彈壓廈門地方",
+    "whenAr": "",
+    "whenCh": "十二月初五日後，初十日前",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "羅英笈"
+    ],
+    "who_loc": {
+      "羅英笈": "金門",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡因慮及賊匪可能竄逃內地，緊急發文給撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，嚴飭各營、縣在各口岸要隘處堵截、緝捕、盤查匪徒。",
+    "howKnown": "黃仕簡自述",
+    "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+    "relations": [
+      {
+        "evidence": "飛札撫臣",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "撫臣"
+      },
+      {
+        "evidence": "飛札六路提臣",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "六路提臣"
+      },
+      {
+        "evidence": "飛札藩臬兩司",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "藩臬兩司"
+      },
+      {
+        "evidence": "飛札興泉道",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "興泉道"
+      },
+      {
+        "evidence": "飛札水師各鎮協營",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "水師各鎮協營"
+      },
+      {
+        "evidence": "飛札臺灣鎮",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣鎮"
+      },
+      {
+        "evidence": "飛札臺灣道",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣道"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "撫臣",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "撫臣",
+        "target": "各縣"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "六路提臣",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "六路提臣",
+        "target": "各縣"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "藩臬兩司",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "藩臬兩司",
+        "target": "各縣"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "興泉道",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "興泉道",
+        "target": "各縣"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "水師各鎮協營",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "水師各鎮協營",
+        "target": "各縣"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "臺灣鎮",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "臺灣鎮",
+        "target": "各縣"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "臺灣道",
+        "target": "各營"
+      },
+      {
+        "evidence": "一體嚴飭營、縣",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "臺灣道",
+        "target": "各縣"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "飛札各級官員堵緝匪徒",
+    "whenAr": "",
+    "whenCh": "十二月初五日後，初十日前",
+    "whenKnownCh": "",
+    "where": "福建內地及臺灣各口岸要隘",
+    "who": [
+      "黃仕簡",
+      "撫臣",
+      "六路提臣",
+      "藩臬兩司",
+      "興泉道",
+      "水師各鎮協營",
+      "臺灣鎮",
+      "臺灣道",
+      "各營",
+      "各縣"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "署北路淡水同知程峻與守備董得魁會同兵役，募集鄉勇及社番，以應對彰化縣匪犯林爽文等結黨滋事。",
+    "howKnown": "程峻、董得魁會稟黃仕簡",
+    "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+    "relations": [
+      {
+        "evidence": "募集鄉勇社番",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "程峻",
+        "target": "鄉勇"
+      },
+      {
+        "evidence": "募集鄉勇社番",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "程峻",
+        "target": "社番"
+      },
+      {
+        "evidence": "募集鄉勇社番",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "董得魁",
+        "target": "鄉勇"
+      },
+      {
+        "evidence": "募集鄉勇社番",
+        "relation": "募集",
+        "relation_type": "command",
+        "source": "董得魁",
+        "target": "社番"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "程峻董得魁募集鄉勇社番",
+    "whenAr": "",
+    "whenCh": "十一月二十九日後，十二月初十日前",
+    "whenKnownCh": "十二月初十日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁",
+      "鄉勇",
+      "社番"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "署北路淡水同知程峻與守備董得魁表示，因彰化城失陷，目前難以探聽被害文武官員的確切人數，待查明實情後將另行稟報。",
+    "howKnown": "程峻、董得魁會稟黃仕簡",
+    "quote": "再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "程峻董得魁查探官員傷亡",
+    "whenAr": "",
+    "whenCh": "十一月二十九日後，十二月初十日前",
+    "whenKnownCh": "十二月初十日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "台25"
+  }
+]

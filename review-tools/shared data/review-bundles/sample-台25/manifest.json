@@ -1,0 +1,27 @@
+{
+  "name": "sample-台25",
+  "created_at": "2026-07-13T12:50:09",
+  "source": "outputs/attempt-002/stage1-date-adjusted.json",
+  "offset": 0,
+  "limit": 2,
+  "date_from": "",
+  "date_to": "",
+  "date_mode": "primary",
+  "doc_types": [],
+  "model": "gemini-2.5-flash",
+  "doc_ids": [
+    "台25"
+  ],
+  "chain": [
+    "summary",
+    "divide",
+    "lin-events",
+    "source-chain",
+    "qing-events-done",
+    "qing-events-plan",
+    "qing-events-nonmil",
+    "zhupi",
+    "edict-match",
+    "official-response"
+  ]
+}

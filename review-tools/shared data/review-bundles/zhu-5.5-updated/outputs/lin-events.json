@@ -1,0 +1,137 @@
+[
+  {
+    "description": "十二月十八日，竹塹一帶有賊匪盤據或進犯，壽同春等用計退賊並收復竹塹，追獲王作等三十餘人。此處林方行動依原文「退賊」「收復竹塹」可知，重點為賊匪先在竹塹形成軍事占據或攻擾態勢。",
+    "howKnown": "據淡水右營守備董得魁稟報",
+    "quote": "十二月十八日，有原署淡水同知程峻之幕友壽同春，用計退賊，會同俸滿巡檢李生樁及塹城書院掌教之原任榆林縣知縣孫讓，率勵義勇，收復竹塹，追獲賊匪王作等三十餘人正法。",
+    "relations": [
+      {
+        "evidence": "幕友壽同春，用計退賊",
+        "relation": "退賊",
+        "relation_type": "conflict",
+        "source": "壽同春",
+        "target": "王作等賊匪"
+      },
+      {
+        "evidence": "會同俸滿巡檢李生樁",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "李生樁"
+      },
+      {
+        "evidence": "會同……孫讓，率勵義勇，收復竹塹",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "孫讓"
+      },
+      {
+        "evidence": "據淡水右營守備董得魁稟報",
+        "relation": "稟報",
+        "relation_type": "report",
+        "source": "董得魁",
+        "target": "徐嗣曾"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "賊匪據擾竹塹",
+    "whenAr": "1786/12/18",
+    "whenCh": "十二月十八日",
+    "whenKnownCh": "正月十六日",
+    "where": "竹塹",
+    "who": [
+      "王作等賊匪",
+      "壽同春",
+      "李生樁",
+      "孫讓",
+      "董得魁"
+    ],
+    "who_loc": {
+      "壽同春": "竹塹",
+      "孫讓": "竹塹",
+      "李生樁": "竹塹",
+      "王作等賊匪": "竹塹",
+      "董得魁": "塹城"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月十八日",
+    "_whenArModel": "1787/02/05",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十六日"
+  },
+  {
+    "description": "十二月二十三日及二十六至二十八日，大姑陷等處賊匪與官兵、義勇相遇，雖屢遭剿殺，仍呈現散去後又聚集的狀態。原文將其概括為「旋散旋聚」，顯示賊匪在該區反覆集結活動。",
+    "howKnown": "據署淡水都司易連、新莊巡檢王增錞稟稱",
+    "quote": "十二月二十三及二十六、七、八等日，督率官兵義勇，分路剿殺大姑陷等處賊匪，官兵、義民各皆奮勇殺賊百餘人、數十人不等。先後擒獲陳軒等十名正法，奪獲旗桿、器械，義民間有受傷。賊匪雖屢經剿殺，旋散旋聚。",
+    "relations": [
+      {
+        "evidence": "據署淡水都司易連、新莊巡檢王增錞稟稱",
+        "relation": "稟稱",
+        "relation_type": "report",
+        "source": "易連",
+        "target": "徐嗣曾"
+      },
+      {
+        "evidence": "據署淡水都司易連、新莊巡檢王增錞稟稱",
+        "relation": "稟稱",
+        "relation_type": "report",
+        "source": "王增錞",
+        "target": "徐嗣曾"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "賊匪大姑陷聚散",
+    "whenAr": "1786/12",
+    "whenCh": "十二月二十三及二十六、七、八等日",
+    "whenKnownCh": "正月十六日",
+    "where": "大姑陷等處",
+    "who": [
+      "陳軒等賊匪",
+      "易連",
+      "王增錞"
+    ],
+    "who_loc": {
+      "易連": "淡水",
+      "王增錞": "新莊",
+      "陳軒等賊匪": "大姑陷等處"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月",
+    "_whenArModel": "1787/02/10、1787/02/13-1787/02/15",
+    "dateSource": "event-year-inferred",
+    "whenKnownChFull": "乾隆五十二年一月十六日"
+  },
+  {
+    "description": "提臣黃仕簡、總兵郝壯猷於正月初四日由鹿耳門登岸後，賊匪得知大兵已到，紛紛散去。此為林方在官軍登岸消息刺激下的撤散行動。",
+    "howKnown": "疊接泉、廈道府同知稟報",
+    "quote": "提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。",
+    "relations": [
+      {
+        "evidence": "賊匪知大兵已到，紛紛散去",
+        "relation": "知大兵已到，紛紛散去",
+        "relation_type": "conflict",
+        "source": "賊匪",
+        "target": "黃仕簡、郝壯猷所部大兵"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "賊匪聞兵散去",
+    "whenAr": "1787/01/04",
+    "whenCh": "正月初四日後",
+    "whenKnownCh": "數日以來",
+    "where": "鹿耳門一帶",
+    "who": [
+      "賊匪",
+      "黃仕簡",
+      "郝壯猷"
+    ],
+    "who_loc": {
+      "郝壯猷": "鹿耳門",
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十二年一月初四日",
+    "_whenArModel": "1787/02/21後",
+    "dateSource": "event-year-inferred"
+  }
+]

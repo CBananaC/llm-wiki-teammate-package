@@ -1,0 +1,12 @@
+.DS_Store
+__pycache__/
+*.pyc
+.env
+.env.*
+*.local.env
+api-keys.*
+secrets/
+*.key
+*.pem
+*service-account*.json
+

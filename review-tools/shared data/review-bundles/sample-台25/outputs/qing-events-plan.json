@@ -1,0 +1,307 @@
+[
+  {
+    "description": "福建水師提督黃仕簡委派提標右營遊擊邱維揚，率領二百名兵丁先行渡臺，負責查明匪徒人數、首領、起事原因、對村莊的擾害情況，並確認臺灣文武官員是否已收復城池、捕獲匪首，若有散逃則協同追捕。",
+    "howKnown": "黃仕簡自述",
+    "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何興釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+    "relations": [
+      {
+        "evidence": "奴才一面委令提標右營遊擊邱維揚",
+        "relation": "委令",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "邱維揚"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡委邱維揚率兵渡臺查剿匪徒",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡",
+      "邱維揚"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡飭令挑選提標五營的官員、兵丁共一千名，配備充足的軍火器械，並備妥商船、哨船，準備渡臺。",
+    "howKnown": "黃仕簡自述",
+    "quote": "一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡飭令挑選千名兵丁備戰渡臺",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "福建",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡雖舊疾復發，身體不適，但感念皇恩，認為海疆事務緊急，決定抱病迅速親自前往臺灣剿捕匪徒。",
+    "howKnown": "黃仕簡自述",
+    "quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡擬抱病親赴臺灣剿捕匪徒",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡札請督臣檄委金門鎮總兵羅英笈，就近前往廈門地方，負責彈壓照應。",
+    "howKnown": "黃仕簡自述",
+    "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+    "relations": [
+      {
+        "evidence": "札達督臣",
+        "relation": "札達",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "督臣"
+      },
+      {
+        "evidence": "檄委金門鎮總兵羅英笈",
+        "relation": "檄委",
+        "relation_type": "command",
+        "source": "督臣",
+        "target": "羅英笈"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡札請督臣委羅英笈彈壓廈門",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "督臣",
+      "羅英笈"
+    ],
+    "who_loc": {
+      "羅英笈": "金門",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡擔心匪徒聞訊逃竄內地，因此飛札福建巡撫、六路提督、布政使、按察使、興泉道以及水師各鎮協營，並臺灣鎮、道，一體嚴飭所屬營、縣在各口岸要隘處堵截緝捕。",
+    "howKnown": "黃仕簡自述",
+    "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、六路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+    "relations": [
+      {
+        "evidence": "飛札撫臣",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "撫臣"
+      },
+      {
+        "evidence": "飛札六路提臣",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "六路提臣"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "藩司"
+      },
+      {
+        "evidence": "飛札撫臣、六路提臣、藩臬兩司",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臬司"
+      },
+      {
+        "evidence": "飛札興泉道",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "興泉道"
+      },
+      {
+        "evidence": "飛札水師各鎮協營",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "水師各鎮協營"
+      },
+      {
+        "evidence": "飛札臺灣鎮、道",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣鎮"
+      },
+      {
+        "evidence": "飛札臺灣鎮、道",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣道"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡飛札各官嚴飭堵緝竄逃匪徒",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "福建沿海各口岸要隘、臺灣各口岸要隘",
+    "who": [
+      "黃仕簡",
+      "撫臣",
+      "六路提臣",
+      "藩司",
+      "臬司",
+      "興泉道",
+      "水師各鎮協營",
+      "臺灣鎮",
+      "臺灣道"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡仍計畫繼續調派水陸官兵，考慮從鹿耳門和淡水兩路南北夾擊匪徒。",
+    "howKnown": "黃仕簡自述",
+    "quote": "仍擬續調水六官兵酌由鹿耳門、淡水南北兩路夾攻在案。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡擬續調水陸官兵南北夾攻",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡所屬的本標五營官兵、軍械及船隻均已點驗齊備，準備出發。",
+    "howKnown": "黃仕簡自述",
+    "quote": "現在派撥本標五營官兵，軍械船隻均點驗齊備",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡所屬五營官兵軍械船隻備齊",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "福建",
+    "who": [
+      "黃仕簡",
+      "本標五營官兵"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡認為淡水一路必須救援夾攻，且此時北風有利渡海，因此已星夜咨請六路提督、水師、海壇、閩安、烽火各鎮協營，立即從就近的省營調派官兵，從北路前往臺灣支援剿匪。",
+    "howKnown": "黃仕簡自述",
+    "quote": "除星飛咨行六路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+    "relations": [
+      {
+        "evidence": "星飛咨行六路提臣",
+        "relation": "咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "六路提臣"
+      },
+      {
+        "evidence": "星飛咨行六路提臣、水師",
+        "relation": "咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "水師"
+      },
+      {
+        "evidence": "星飛咨行水師、海壇",
+        "relation": "咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "海壇"
+      },
+      {
+        "evidence": "星飛咨行海壇、閩安",
+        "relation": "咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "閩安"
+      },
+      {
+        "evidence": "星飛咨行閩安、烽火各鎮、協、營",
+        "relation": "咨行",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "烽火"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡咨請各鎮協營續調官兵北路援剿",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "臺灣、福建",
+    "who": [
+      "黃仕簡",
+      "六路提臣",
+      "水師",
+      "海壇",
+      "閩安",
+      "烽火"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  },
+  {
+    "description": "福建水師提督黃仕簡計畫親自率兵，直接從鹿耳門、郡城南路進攻臺灣，與北路援軍會合，共同夾擊匪徒。",
+    "howKnown": "黃仕簡自述",
+    "quote": "奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡擬由鹿耳門南路進兵夾攻",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "臺灣 (鹿耳門、郡城)",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "台25"
+  }
+]

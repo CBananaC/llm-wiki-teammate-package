@@ -1,0 +1,88 @@
+[
+  {
+    "marker": "已有旨了",
+    "opinion": "乾隆帝表示對於普吉保所奏報之沿途接仗及抵達鹿港等事宜，此前已另有旨意下達。",
+    "position": "尾批",
+    "relations": [
+      {
+        "evidence": "奴才面商柴大紀",
+        "relation": "面商",
+        "relation_type": "ally",
+        "source": "普吉保",
+        "target": "柴大紀"
+      },
+      {
+        "evidence": "會同任承恩相機合力進剿",
+        "relation": "會同進剿",
+        "relation_type": "ally",
+        "source": "普吉保",
+        "target": "任承恩"
+      },
+      {
+        "evidence": "奴才即率副將格繃額、署遊擊唐昌宗，督令官兵施放槍炮",
+        "relation": "督令",
+        "relation_type": "command",
+        "source": "普吉保",
+        "target": "格繃額"
+      },
+      {
+        "evidence": "奴才即率副將格繃額、署遊擊唐昌宗，督令官兵施放槍炮",
+        "relation": "督令",
+        "relation_type": "command",
+        "source": "普吉保",
+        "target": "唐昌宗"
+      },
+      {
+        "evidence": "一面揮令副將林天洛由東面大竹林抄截賊人後路",
+        "relation": "揮令",
+        "relation_type": "command",
+        "source": "普吉保",
+        "target": "林天洛"
+      },
+      {
+        "evidence": "林爽文令葉省帶令千餘人",
+        "relation": "令",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "葉省"
+      },
+      {
+        "evidence": "交暫護鹿港同知黃嘉訓研訊明確",
+        "relation": "交研訊",
+        "relation_type": "command",
+        "source": "普吉保",
+        "target": "黃嘉訓"
+      }
+    ],
+    "responds_to": "福建汀州鎮總兵官奴才普吉保跪奏，為奏聞事。……所有沿途打仗殺賊情形暨到鹿港日期，理合恭摺，由驛六百里馳奏。伏乞皇上睿鑒。謹奏",
+    "text": "已有旨了。欽此。",
+    "title": "批示普吉保沿途剿賊及抵鹿港事宜已有旨意",
+    "where": "鹿仔港",
+    "who": [
+      "普吉保",
+      "柴大紀",
+      "黃仕簡",
+      "任承恩",
+      "林爽文",
+      "格繃額",
+      "唐昌宗",
+      "林天洛",
+      "張貴",
+      "莊光喜",
+      "林超",
+      "葉省",
+      "張厭",
+      "黃嘉訓"
+    ],
+    "who_loc": {
+      "任承恩": "鹿仔港",
+      "唐昌宗": "鹿仔港",
+      "普吉保": "鹿仔港",
+      "林爽文": "大里杙",
+      "柴大紀": "諸羅",
+      "黃仕簡": "臺灣府城",
+      "黃嘉訓": "鹿仔港"
+    },
+    "doc_id": "台216"
+  }
+]

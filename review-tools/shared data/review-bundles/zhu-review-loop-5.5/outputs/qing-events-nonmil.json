@@ -1,0 +1,142 @@
+[
+  {
+    "description": "壽同春會同李生樁、孫讓率勵義勇收復竹塹後，追獲賊匪王作等三十餘人並予正法。此處擷取其捕獲後正法的處置。",
+    "howKnown": "據淡水右營守備董得魁稟報",
+    "quote": "十二月十八日，有原署淡水同知程峻之幕友壽同春，用計退賊，會同俸滿巡檢李生樁及塹城書院掌教之原任榆林縣知縣孫讓，率勵義勇，收復竹塹，追獲賊匪王作等三十餘人正法。",
+    "relations": [
+      {
+        "evidence": "會同俸滿巡檢李生樁",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "李生樁"
+      },
+      {
+        "evidence": "會同……塹城書院掌教之原任榆林縣知縣孫讓",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "孫讓"
+      },
+      {
+        "evidence": "追獲賊匪王作等三十餘人正法",
+        "relation": "追獲正法",
+        "relation_type": "conflict",
+        "source": "壽同春",
+        "target": "王作"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "王作等匪正法",
+    "whenAr": "1786/12/18",
+    "whenCh": "十二月十八日",
+    "whenKnownCh": "十六日",
+    "where": "竹塹",
+    "who": [
+      "壽同春",
+      "李生樁",
+      "孫讓",
+      "王作"
+    ],
+    "who_loc": {
+      "壽同春": "竹塹",
+      "孫讓": "竹塹",
+      "李生樁": "竹塹",
+      "王作": "竹塹"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月十八日",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "署淡水都司易連、新莊巡檢王增錞於剿辦大姑陷等處後，先後擒獲陳軒等十名賊匪並予正法。此處擷取其捕獲後正法的處置。",
+    "howKnown": "據署淡水都司易連、新莊巡檢王增錞稟稱",
+    "quote": "同日又據署淡水都司易連、新莊巡檢王增錞稟稱：十二月二十三及二十六、七、八等日，督率官兵義勇，分路剿殺大姑陷等處賊匪……先後擒獲陳軒等十名正法。",
+    "relations": [
+      {
+        "evidence": "先後擒獲陳軒等十名正法",
+        "relation": "擒獲正法",
+        "relation_type": "conflict",
+        "source": "易連",
+        "target": "陳軒"
+      },
+      {
+        "evidence": "先後擒獲陳軒等十名正法",
+        "relation": "擒獲正法",
+        "relation_type": "conflict",
+        "source": "王增錞",
+        "target": "陳軒"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "陳軒等匪正法",
+    "whenAr": "1786/12",
+    "whenCh": "十二月二十三及二十六、七、八等日",
+    "whenKnownCh": "十六日",
+    "where": "大姑陷等處",
+    "who": [
+      "易連",
+      "王增錞",
+      "陳軒"
+    ],
+    "who_loc": {
+      "易連": "大姑陷等處",
+      "王增錞": "大姑陷等處",
+      "陳軒": "大姑陷等處"
+    },
+    "doc_id": "硃125",
+    "whenChFull": "乾隆五十一年十二月",
+    "dateSource": "event-year-inferred"
+  },
+  {
+    "description": "徐嗣曾先已嚴飭沿海各地方文武員弁，在漳、泉、興化至福州、福寧濱海各縣凡可偷渡之處，選撥兵役，羅織巡查，以防賊匪竄逸。",
+    "howKnown": "徐嗣曾自述",
+    "quote": "臣先已嚴飭各該地方文武員弁，選撥兵役，於凡可偷渡之處，羅織巡查。",
+    "relations": [
+      {
+        "evidence": "臣先已嚴飭各該地方文武員弁，選撥兵役，於凡可偷渡之處，羅織巡查",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "各該地方文武員弁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "嚴飭巡查偷渡",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "漳、泉、興化至福州、福寧濱海各縣",
+    "who": [
+      "徐嗣曾",
+      "各該地方文武員弁"
+    ],
+    "who_loc": {},
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  },
+  {
+    "description": "徐嗣曾現復通飭沿海地方，以賊匪即將被洗蕩為由，加意堵防，務使賊匪不得竄匿漏網。",
+    "howKnown": "徐嗣曾自述",
+    "quote": "現復通飭以賊匪洗蕩在即，加意堵防，毋使一名竄匿漏網。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "通飭加意堵防",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "漳、泉、興化至福州、福寧濱海各縣沿海汊港",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {},
+    "doc_id": "硃125",
+    "whenChFull": "",
+    "dateSource": "doc-send",
+    "whenChFallback": "乾隆五十二年一月十八日",
+    "whenArFallback": "1787/01/18"
+  }
+]

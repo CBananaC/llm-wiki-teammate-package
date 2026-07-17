@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>文書 × 模型輸出比較</title>
+  <style>
+    :root{
+      --bg:#f8f5ee;--paper:#fffdf8;--paper2:#f6efe1;--ink:#2d261d;--muted:#7a6f63;
+      --line:#dccfbd;--line2:#e8dece;--shadow:0 10px 30px rgba(69,52,28,.08);
+      --original:#8a6f44;--gpt55:#7656b5;--gpt54:#4f7c68;--gemini:#3978a7;--deepseek:#b45f46;
+      --mark:#f3df9e;--nav-h:58px;
+    }
+    *{box-sizing:border-box}
+    html{scroll-behavior:smooth}
+    body{margin:0;color:var(--ink);background:radial-gradient(circle at top left,#fffaf1 0,var(--bg) 44%,#efe6d6 100%);font-family:ui-serif,Georgia,"Times New Roman","Noto Serif CJK TC",serif}
+    button,input,select,textarea{font:inherit;color:inherit}
+    button{cursor:pointer}
+    .topbar{padding:24px 28px 17px;border-bottom:1px solid #e0d5c3;background:rgba(248,245,238,.94)}
+    .topline{display:flex;align-items:flex-start;justify-content:space-between;gap:18px}
+    h1{font-size:28px;line-height:1.2;margin:0 0 8px;letter-spacing:.02em}
+    .subtitle{max-width:920px;color:var(--muted);line-height:1.55}
+    .ghost-btn,.primary-btn,.small-btn,.folder-btn{border:1px solid #cbbba5;border-radius:8px;background:#fffaf1;padding:7px 12px;box-shadow:0 2px 7px rgba(69,52,28,.05)}
+    .primary-btn{background:#3e634f;color:#fff;border-color:#3e634f}
+    .small-btn{padding:5px 9px;font-size:12px}
+    .ghost-btn:hover,.small-btn:hover,.folder-btn:hover{background:#f2e8d9}
+    .primary-btn:hover{background:#31523f}
+    .setup{margin:16px 28px 0;border:1px solid var(--line);border-radius:16px;background:rgba(255,253,248,.92);box-shadow:var(--shadow);overflow:hidden}
+    .setup-head{display:flex;align-items:center;gap:12px;padding:13px 16px;border-bottom:1px solid var(--line2)}
+    .setup-head h2{font-size:17px;margin:0}
+    .setup-head .hint{font-size:13px;color:var(--muted);margin-right:auto}
+    .setup-body{padding:14px 16px 16px}
+    .steps{display:grid;grid-template-columns:minmax(240px,1.2fr) 3fr;gap:14px}
+    .source-box,.slot{border:1px solid var(--line2);border-radius:12px;background:#fffdf9;padding:11px}
+    .source-box h3,.slot h3{font-size:14px;margin:0 0 7px}
+    .source-actions,.slot-actions{display:flex;flex-wrap:wrap;gap:7px;align-items:center}
+    .source-path,.bundle-path{flex:1 1 220px;min-width:0;border:1px solid #d7cab7;border-radius:7px;background:#fff;padding:7px 9px;font-size:12px}
+    .slot-grid{display:grid;grid-template-columns:repeat(4,minmax(190px,1fr));gap:9px}
+    .slot{position:relative;border-top:3px solid var(--accent)}
+    .slot-title{display:flex;align-items:center;gap:7px}
+    .model-dot{width:9px;height:9px;border-radius:50%;background:var(--accent);flex:none}
+    .slot-status{font-size:11px;line-height:1.35;color:var(--muted);margin:7px 0 0;min-height:30px}
+    .slot-status.ok{color:#2f6b49}.slot-status.error{color:#9b4035}.slot-status.loading{color:#8a641c}
+    .visually-hidden{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+    .setup-foot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:12px;padding-top:11px;border-top:1px solid var(--line2)}
+    .setup-note{font-size:12px;color:var(--muted);line-height:1.5;margin-right:auto}
+    details.paste{margin-top:10px;border-top:1px dashed var(--line);padding-top:9px}
+    details.paste summary{cursor:pointer;font-size:13px;font-weight:700;color:#5f4b36}
+    .paste-grid{display:grid;grid-template-columns:140px 1fr;gap:7px;margin-top:9px}
+    .paste-grid input,.paste-grid textarea{width:100%;border:1px solid #d7cab7;border-radius:7px;background:#fff;padding:7px 9px}
+    .paste-grid textarea{grid-column:1/-1;min-height:120px;resize:vertical;line-height:1.6}
+    main{padding:16px 28px 40px}
+    .doc-controls{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:12px}
+    .doc-controls label{font-size:13px;font-weight:700}
+    .doc-select{min-width:330px;max-width:620px;border:1px solid #cbbba5;border-radius:8px;background:#fffdf8;padding:7px 9px}
+    .selected-docs{display:flex;flex-wrap:wrap;gap:6px;flex:1 1 320px}
+    .doc-chip{display:inline-flex;align-items:center;gap:6px;border:1px solid #cbbba5;border-radius:999px;background:#fffaf1;padding:5px 7px 5px 10px;font-size:12px}
+    .doc-chip button{border:0;background:transparent;color:#9a5848;padding:0 2px;font-size:15px;line-height:1}
+    .section-nav{position:sticky;top:0;z-index:25;display:flex;gap:6px;overflow-x:auto;padding:9px 10px;border:1px solid var(--line);border-radius:12px;background:rgba(248,245,238,.96);backdrop-filter:blur(7px);box-shadow:0 5px 18px rgba(69,52,28,.08);margin-bottom:12px}
+    .section-tab{flex:0 0 auto;border:1px solid #d4c7b4;border-radius:999px;background:#fffaf1;padding:7px 11px;font-size:12px;white-space:nowrap}
+    .section-tab:hover{background:#f1e8da}.section-tab.active{background:#3f5f4d;color:#fff;border-color:#3f5f4d}
+    .section-tab .count{display:inline-block;min-width:18px;margin-left:5px;padding:1px 5px;border-radius:999px;background:rgba(0,0,0,.08);font-size:10px;text-align:center}
+    .section-tab.active .count{background:rgba(255,255,255,.2)}
+    .matrix-scroll{overflow-x:auto;border:1px solid var(--line);border-radius:16px;background:rgba(255,253,248,.72);box-shadow:var(--shadow)}
+    .matrix-grid{display:grid;grid-template-columns:minmax(390px,1.25fr) repeat(4,minmax(310px,1fr));min-width:1690px}
+    .matrix-head{position:sticky;top:57px;z-index:20;border-bottom:1px solid var(--line);background:rgba(248,245,238,.97);backdrop-filter:blur(8px)}
+    .column-head{padding:10px 12px;border-right:1px solid var(--line);min-height:65px}
+    .column-head:last-child{border-right:0}
+    .column-kicker{font-size:10px;letter-spacing:.09em;text-transform:uppercase;color:var(--muted)}
+    .column-name{display:flex;align-items:center;gap:8px;font-weight:700;margin-top:3px}
+    .column-name .bar{width:22px;height:3px;border-radius:9px;background:var(--accent)}
+    .column-meta{font-size:11px;color:var(--muted);margin-top:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+    .doc-sheet{border-bottom:2px solid #cdbfa9}.doc-sheet:last-child{border-bottom:0}
+    .doc-banner{position:sticky;left:0;z-index:4;display:flex;gap:10px;align-items:baseline;padding:10px 13px;background:#efe5d4;border-bottom:1px solid var(--line);min-width:1690px}
+    .doc-banner strong{font-size:15px}.doc-banner span{font-size:12px;color:var(--muted)}
+    .matrix-cell{min-height:420px;padding:11px;border-right:1px solid var(--line);background:rgba(255,253,248,.7)}
+    .matrix-cell:last-child{border-right:0}
+    .original-cell{background:rgba(250,246,237,.9)}
+    .cell-top{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+    .cell-top h3{font-size:14px;margin:0}.result-count{font-size:10px;color:var(--muted);border:1px solid var(--line);border-radius:999px;padding:2px 7px}
+    .original-meta{display:grid;grid-template-columns:auto 1fr;gap:3px 8px;font-size:12px;margin-bottom:9px;padding:8px;border-radius:8px;background:#f7efdf}
+    .original-meta dt{color:var(--muted)}.original-meta dd{margin:0}
+    .body-text{white-space:pre-wrap;line-height:1.85;font-size:13px;padding:10px 11px;border:1px solid var(--line2);border-radius:9px;background:#fffdf8;max-height:68vh;overflow:auto}
+    mark.evidence{background:var(--mark);color:#4a3712;border-radius:2px;padding:0 1px}
+    .evidence-note{font-size:11px;color:var(--muted);margin:7px 1px 0}
+    .rescript{margin-top:9px;border-left:3px solid #b45f46;background:#fbefe9;border-radius:0 8px 8px 0;padding:8px 10px;font-size:12px;line-height:1.65}
+    .empty-state{padding:52px 22px;text-align:center;color:var(--muted)}
+    .empty-state strong{display:block;color:var(--ink);font-size:18px;margin-bottom:6px}
+    .output-empty{display:grid;place-items:center;min-height:170px;border:1px dashed #d8cbb8;border-radius:10px;color:var(--muted);font-size:12px;text-align:center;padding:18px}
+    .section-block{margin-bottom:15px}.section-block:last-child{margin-bottom:0}
+    .section-heading{display:flex;align-items:center;gap:7px;margin:0 0 7px;padding-bottom:5px;border-bottom:1px solid var(--line2);font-size:12px;color:#695a43}
+    .section-heading .mini-count{margin-left:auto;color:var(--muted)}
+    .output-card{border:1px solid #d9cebd;border-radius:10px;background:#fffdf8;padding:9px 10px;margin-bottom:8px;box-shadow:0 3px 10px rgba(69,52,28,.04)}
+    .output-card:last-child{margin-bottom:0}
+    .output-title{font-weight:700;font-size:13px;line-height:1.45}
+    .output-sub{font-size:12px;line-height:1.6;color:#514638;margin-top:5px}
+    .meta-line{display:flex;flex-wrap:wrap;gap:4px 9px;color:var(--muted);font-size:11px;margin-top:5px}
+    .tag{display:inline-block;border:1px solid #ddd1be;border-radius:999px;background:#f7f0e4;padding:2px 7px;font-size:10px;color:#665945}
+    .quote{margin-top:7px;padding:7px 8px;border-left:3px solid #c9aa61;background:#f7f0df;border-radius:0 7px 7px 0;font-size:11.5px;line-height:1.65;color:#514431}
+    .quote .ql{display:block;color:#8a6f44;font-size:10px;font-weight:700;margin-bottom:2px}
+    .parts{counter-reset:part}.part-card{position:relative;padding-left:32px}.part-card:before{counter-increment:part;content:counter(part);position:absolute;left:9px;top:9px;width:16px;height:16px;border-radius:50%;background:#e7dcc9;color:#6e5d43;font-size:10px;display:grid;place-items:center}
+    .chain{border-left:2px solid #b7c8bc;padding-left:9px;margin-top:8px}.hop{position:relative;font-size:11.5px;line-height:1.55;margin:7px 0}.hop:before{content:"";position:absolute;left:-14px;top:5px;width:7px;height:7px;border-radius:50%;background:#4f7c68}
+    .arrow{color:#8a7b67;margin:0 4px}.point{border-top:1px dashed var(--line);padding-top:8px;margin-top:8px}
+    .pair-quotes{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pair-quotes .quote{margin-top:5px}
+    details.raw{margin-top:7px}details.raw summary{cursor:pointer;font-size:10px;color:var(--muted)}details.raw pre{white-space:pre-wrap;word-break:break-word;font:10px/1.45 ui-monospace,SFMono-Regular,Menlo,monospace;background:#f4eee3;border-radius:7px;padding:7px;max-height:240px;overflow:auto}
+    .setup.collapsed .setup-body{display:none}.setup.collapsed .setup-head{border-bottom:0}
+    .notice{position:fixed;right:18px;bottom:18px;z-index:80;max-width:360px;padding:10px 12px;border:1px solid #cdbfa9;border-radius:10px;background:#2d261d;color:#fffaf1;box-shadow:0 10px 30px rgba(0,0,0,.2);font-size:12px;line-height:1.5;opacity:0;transform:translateY(8px);pointer-events:none;transition:.2s}
+    .notice.show{opacity:1;transform:none}
+    @media(max-width:1050px){.steps{grid-template-columns:1fr}.slot-grid{grid-template-columns:repeat(2,minmax(190px,1fr))}.topline{flex-direction:column}.setup,main{margin-left:14px;margin-right:14px}.topbar{padding-left:18px;padding-right:18px}}
+    @media(max-width:620px){.slot-grid{grid-template-columns:1fr}.doc-select{min-width:220px;width:100%}.paste-grid{grid-template-columns:1fr}.topbar{padding:18px 14px}.setup{margin:12px 10px 0}main{padding:12px 10px 30px}}
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="topline">
+      <div>
+        <h1>文書 × 模型輸出比較</h1>
+        <div class="subtitle">第一欄固定顯示原文；其餘四欄比較 GPT-5.5、GPT-5.4、Gemini 與 DeepSeek 的審閱迴圈輸出。使用同一個目錄切換，所有模型欄會同步顯示相同工作步驟。</div>
+      </div>
+      <button class="ghost-btn" id="toggleSetup" type="button">收起輸入設定</button>
+    </div>
+  </header>
+
+  <section class="setup" id="setupPanel" aria-label="輸入設定">
+    <div class="setup-head">
+      <h2>輸入方法</h2>
+      <span class="hint">先載入原文資料，再為四個模型各指定一個 review bundle。</span>
+      <button class="primary-btn" id="loadExamples" type="button">載入現有範例</button>
+    </div>
+    <div class="setup-body">
+      <div class="steps">
+        <div class="source-box">
+          <h3>1. 原文資料</h3>
+          <div class="source-actions">
+            <input class="source-path" id="sourcePath" value="/shared/stage1_original_text.json" aria-label="原文 JSON 路徑">
+            <button class="small-btn" id="loadSourcePath" type="button">載入路徑</button>
+            <label class="folder-btn small-btn" for="sourceFile">選擇 JSON</label>
+            <input class="visually-hidden" id="sourceFile" type="file" accept=".json,application/json">
+          </div>
+          <div class="slot-status" id="sourceStatus">尚未載入。支援 stage1_original_text.json 或包含 records 陣列的 JSON。</div>
+          <details class="paste">
+            <summary>或直接貼上一份原文</summary>
+            <div class="paste-grid">
+              <input id="pasteDocId" placeholder="文書編號，例如 硃125" aria-label="貼上文書編號">
+              <input id="pasteTitle" placeholder="標題" aria-label="貼上文書標題">
+              <textarea id="pasteBody" placeholder="貼上原文……" aria-label="貼上原文內容"></textarea>
+              <button class="primary-btn" id="addPastedDoc" type="button">加入這份文書</button>
+            </div>
+          </details>
+        </div>
+        <div>
+          <div class="slot-grid" id="slotGrid"></div>
+        </div>
+      </div>
+      <div class="setup-foot">
+        <span class="setup-note">路徑載入需以本機伺服器開啟此頁；直接雙擊 HTML 時，請使用「選擇 JSON／選擇 bundle 資料夾」。每個 bundle 資料夾應包含 manifest.json 與 outputs/*.json。</span>
+        <button class="small-btn" id="clearAll" type="button">清除全部</button>
+      </div>
+    </div>
+  </section>
+
+  <main>
+    <div class="doc-controls">
+      <label for="docSelect">2. 加入比較文書</label>
+      <select class="doc-select" id="docSelect"><option value="">請先載入原文或 bundle</option></select>
+      <button class="primary-btn" id="addDoc" type="button">加入文書</button>
+      <div class="selected-docs" id="selectedDocs" aria-label="已選文書"></div>
+    </div>
+
+    <nav class="section-nav" id="sectionNav" aria-label="統一輸出目錄"></nav>
+
+    <div class="matrix-scroll">
+      <div class="matrix-grid matrix-head" id="matrixHead"></div>
+      <div id="workspace">
+        <div class="empty-state"><strong>尚未選擇文書</strong>載入資料後，從上方清單加入一至兩份文書；之後可繼續新增。</div>
+      </div>
+    </div>
+  </main>
+  <div class="notice" id="notice" role="status" aria-live="polite"></div>
+
+  <script>
+  (()=>{
+    'use strict';
+    const SLOT_DEFS=[
+      {key:'gpt55',label:'GPT-5.5',accent:'var(--gpt55)',path:''},
+      {key:'gpt54',label:'GPT-5.4',accent:'var(--gpt54)',path:'/shared/review-bundles/Zhu-5.4-updated'},
+      {key:'gemini',label:'Gemini',accent:'var(--gemini)',path:'/shared/review-bundles/zhu-review-loop-17870201-17870202'},
+      {key:'deepseek',label:'DeepSeek',accent:'var(--deepseek)',path:'/shared/review-bundles/zhu-review-deepseek'}
+    ];
+    const SECTIONS=[
+      {key:'all',label:'全部輸出'},
+      {key:'summary',label:'摘要',file:'summary'},
+      {key:'divide',label:'分段',file:'division-parts'},
+      {key:'lin',label:'林方行動',file:'lin-events'},
+      {key:'source',label:'林方來源鏈',file:'source-chain'},
+      {key:'qingDone',label:'清方已行動',file:'qing-events-done'},
+      {key:'qingPlan',label:'清方擬行動',file:'qing-events-plan'},
+      {key:'qingNonmil',label:'清方非軍事',file:'qing-events-nonmil'},
+      {key:'zhupi',label:'硃批',file:'zhupi'},
+      {key:'edict',label:'相關上諭',file:'edict-match'},
+      {key:'official',label:'官員回應',file:'official-response'}
+    ];
+    const OUTPUT_FILES=[...new Set(SECTIONS.filter(s=>s.file).map(s=>s.file))];
+    const state={documents:new Map(),bundles:{},selected:[],active:'summary'};
+    const $=s=>document.querySelector(s);
+    const esc=v=>String(v??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+    const docId=r=>String(r?.doc_id??r?.id??r?.memDoc??'');
+    const arr=v=>Array.isArray(v)?v:[];
+    const text=v=>typeof v==='string'?v:'';
+    const basename=p=>String(p||'').split('/').pop();
+    const sectionDef=k=>SECTIONS.find(s=>s.key===k);
+
+    function toast(message){const n=$('#notice');n.textContent=message;n.classList.add('show');clearTimeout(toast.t);toast.t=setTimeout(()=>n.classList.remove('show'),3200)}
+    function setStatus(id,message,kind=''){const el=$(id);if(!el)return;el.textContent=message;el.className='slot-status '+kind}
+    function dateValue(r){for(const k of ['receive_date','send_date','announce_date','issue_date']){const v=r?.[k];if(Array.isArray(v)&&v[1])return v[1];if(typeof v==='string'&&v)return v}return ''}
+
+    function initSlots(){
+      $('#slotGrid').innerHTML=SLOT_DEFS.map(s=>`<section class="slot" style="--accent:${s.accent}">
+        <h3 class="slot-title"><span class="model-dot"></span>${esc(s.label)}</h3>
+        <div class="slot-actions">
+          <input class="bundle-path" id="path-${s.key}" value="${esc(s.path)}" placeholder="review bundle 路徑" aria-label="${esc(s.label)} bundle 路徑">
+          <button class="small-btn load-path" data-slot="${s.key}" type="button">載入路徑</button>
+          <label class="folder-btn small-btn" for="folder-${s.key}">選擇資料夾</label>
+          <input class="visually-hidden folder-input" id="folder-${s.key}" data-slot="${s.key}" type="file" webkitdirectory directory multiple>
+        </div>
+        <div class="slot-status" id="status-${s.key}">尚未載入。</div>
+      </section>`).join('');
+      document.querySelectorAll('.load-path').forEach(b=>b.addEventListener('click',()=>loadBundlePath(b.dataset.slot,$(`#path-${b.dataset.slot}`).value)));
+      document.querySelectorAll('.folder-input').forEach(i=>i.addEventListener('change',()=>loadBundleFiles(i.dataset.slot,i.files)));
+    }
+
+    function sourceRecords(data){if(Array.isArray(data))return data;if(Array.isArray(data?.records))return data.records;if(Array.isArray(data?.documents))return data.documents;return []}
+    function ingestSource(data,label='source JSON'){
+      const records=sourceRecords(data);if(!records.length)throw new Error('找不到文書陣列');
+      records.forEach(r=>{const id=docId(r);if(id)state.documents.set(id,{...r,id,doc_id:id})});
+      setStatus('#sourceStatus',`已載入 ${records.length} 份文書｜${label}`,'ok');
+      refreshDocPicker();render();return records.length;
+    }
+    async function loadSourceUrl(url){
+      setStatus('#sourceStatus','載入中……','loading');
+      try{const res=await fetch(url,{cache:'no-store'});if(!res.ok)throw new Error(`HTTP ${res.status}`);ingestSource(await res.json(),url)}
+      catch(e){setStatus('#sourceStatus',`無法載入：${e.message}。可改用「選擇 JSON」。`,'error');throw e}
+    }
+    async function loadSourceFile(file){if(!file)return;setStatus('#sourceStatus','讀取檔案中……','loading');try{ingestSource(JSON.parse(await file.text()),file.name)}catch(e){setStatus('#sourceStatus',`讀取失敗：${e.message}`,'error')}}
+
+    function ensureManifestDocs(manifest){arr(manifest?.doc_ids).forEach(id=>{id=String(id);if(!state.documents.has(id))state.documents.set(id,{id,doc_id:id,title:'（尚未載入原文）',body:''})})}
+    function storeBundle(slot,manifest,outputs,label){
+      state.bundles[slot]={manifest:manifest||{},outputs:outputs||{},label};ensureManifestDocs(manifest);
+      const model=manifest?.model||SLOT_DEFS.find(s=>s.key===slot)?.label||slot;
+      const count=Object.values(outputs).reduce((n,v)=>n+(Array.isArray(v)?v.length:0),0);
+      setStatus(`#status-${slot}`,`已載入 ${model}｜${arr(manifest?.doc_ids).length} 份文書｜${count} 筆輸出`,'ok');
+      refreshDocPicker();autoSelectDocument();render();
+    }
+    async function fetchOptional(url){try{const r=await fetch(url,{cache:'no-store'});return r.ok?await r.json():null}catch{return null}}
+    async function loadBundlePath(slot,path){
+      path=String(path||'').trim().replace(/\/$/,'');if(!path){setStatus(`#status-${slot}`,'請輸入路徑或選擇資料夾。','error');return}
+      setStatus(`#status-${slot}`,'載入中……','loading');
+      try{
+        const manifest=await fetchOptional(`${path}/manifest.json`);if(!manifest)throw new Error('找不到 manifest.json');
+        const pairs=await Promise.all(OUTPUT_FILES.map(async f=>[f,await fetchOptional(`${path}/outputs/${f}.json`)]));
+        const outputs=Object.fromEntries(pairs.filter(([,v])=>v!==null));storeBundle(slot,manifest,outputs,path);
+      }catch(e){setStatus(`#status-${slot}`,`無法載入：${e.message}`,'error')}
+    }
+    async function loadBundleFiles(slot,fileList){
+      const files=[...(fileList||[])];if(!files.length)return;setStatus(`#status-${slot}`,'讀取資料夾中……','loading');
+      try{
+        const manifestFile=files.find(f=>/(^|\/)manifest\.json$/i.test(f.webkitRelativePath||f.name));
+        if(!manifestFile)throw new Error('資料夾內找不到 manifest.json');
+        const manifest=JSON.parse(await manifestFile.text()),outputs={};
+        for(const name of OUTPUT_FILES){const f=files.find(x=>basename(x.webkitRelativePath||x.name)===`${name}.json`&&/(^|\/)outputs\//.test(x.webkitRelativePath||''));if(f)outputs[name]=JSON.parse(await f.text())}
+        storeBundle(slot,manifest,outputs,manifestFile.webkitRelativePath?.split('/')[0]||manifestFile.name);
+      }catch(e){setStatus(`#status-${slot}`,`讀取失敗：${e.message}`,'error')}
+    }
+
+    function candidateIds(){
+      const ids=new Set(state.documents.keys());Object.values(state.bundles).forEach(b=>arr(b.manifest?.doc_ids).forEach(id=>ids.add(String(id))));
+      return [...ids].sort((a,b)=>a.localeCompare(b,'zh-Hant-u-co-stroke'));
+    }
+    function refreshDocPicker(){
+      const select=$('#docSelect'),current=select.value;const ids=candidateIds();
+      select.innerHTML=ids.length?'<option value="">選擇文書……</option>'+ids.map(id=>{const r=state.documents.get(id)||{};return `<option value="${esc(id)}">${esc(id)}｜${esc(r.title||'未命名')}</option>`}).join(''):'<option value="">請先載入原文或 bundle</option>';
+      if(ids.includes(current))select.value=current;renderSelectedDocs();
+    }
+    function autoSelectDocument(){if(state.selected.length)return;const loaded=Object.values(state.bundles).flatMap(b=>arr(b.manifest?.doc_ids).map(String));const id=loaded.find(x=>state.documents.has(x))||candidateIds()[0];if(id){state.selected=[id];refreshDocPicker();render()}}
+    function addDocument(id){id=String(id||'');if(!id||state.selected.includes(id))return;if(!state.documents.has(id))state.documents.set(id,{id,doc_id:id,title:'（尚未載入原文）',body:''});state.selected.push(id);refreshDocPicker();render()}
+    function renderSelectedDocs(){$('#selectedDocs').innerHTML=state.selected.map(id=>`<span class="doc-chip"><b>${esc(id)}</b><span>${esc((state.documents.get(id)||{}).title||'')}</span><button type="button" data-remove-doc="${esc(id)}" aria-label="移除 ${esc(id)}">×</button></span>`).join('');document.querySelectorAll('[data-remove-doc]').forEach(b=>b.addEventListener('click',()=>{state.selected=state.selected.filter(x=>x!==b.dataset.removeDoc);refreshDocPicker();render()}))}
+
+    function rowBelongs(row,id){return String(row?.doc_id??row?.memDoc??row?.document_id??'')===String(id)}
+    function rowsFor(bundle,section,id){const def=sectionDef(section),data=def?.file?bundle?.outputs?.[def.file]:null;if(!Array.isArray(data))return[];return data.filter(r=>rowBelongs(r,id))}
+    function countFor(section){if(section==='all')return SECTIONS.filter(s=>s.file).reduce((n,s)=>n+countFor(s.key),0);return state.selected.reduce((n,id)=>n+SLOT_DEFS.reduce((m,s)=>m+rowsFor(state.bundles[s.key],section,id).length,0),0)}
+    function renderNav(){
+      $('#sectionNav').innerHTML=SECTIONS.map(s=>`<button class="section-tab ${s.key===state.active?'active':''}" data-section="${s.key}" type="button">${esc(s.label)}<span class="count">${countFor(s.key)}</span></button>`).join('');
+      document.querySelectorAll('[data-section]').forEach(b=>b.addEventListener('click',()=>{state.active=b.dataset.section;renderNav();renderWorkspace()}));
+    }
+    function renderHead(){
+      const heads=[{label:'原文',accent:'var(--original)',meta:`${state.documents.size} 份可選文書`,kicker:'Source'},...SLOT_DEFS.map(s=>{const b=state.bundles[s.key];return{label:s.label,accent:s.accent,kicker:'Model output',meta:b?(b.manifest?.model||b.label):'尚未載入 bundle'}})];
+      $('#matrixHead').innerHTML=heads.map(h=>`<div class="column-head" style="--accent:${h.accent}"><div class="column-kicker">${esc(h.kicker)}</div><div class="column-name"><span class="bar"></span>${esc(h.label)}</div><div class="column-meta" title="${esc(h.meta)}">${esc(h.meta)}</div></div>`).join('');
+    }
+
+    function summaryText(row){if(typeof row?.summary==='string')return row.summary;if(typeof row?._raw?.text==='string')return row._raw.text;const a=row?.analysis||row?.summary||{};return a.what_info_telling_emperor||a.key_info||a.overall_summary||a.text||''}
+    function quoteBlock(label,value){return value?`<div class="quote"><span class="ql">${esc(label)}</span>${esc(value)}</div>`:''}
+    function tags(values){return arr(values).filter(Boolean).map(v=>`<span class="tag">${esc(typeof v==='string'?v:(v.name||JSON.stringify(v)))}</span>`).join('')}
+    function rawDetails(row){return `<details class="raw"><summary>JSON</summary><pre>${esc(JSON.stringify(row,null,2))}</pre></details>`}
+    function renderSummary(rows){return rows.map(r=>`<article class="output-card"><div class="output-title">${esc(r.title||'整體摘要')}</div><div class="output-sub">${esc(summaryText(r)||'（沒有摘要文字）')}</div>${rawDetails(r)}</article>`).join('')}
+    function renderDivide(rows){return rows.map(r=>`<div class="parts">${arr(r.parts||r._raw?.parts).map(p=>`<article class="output-card part-card"><div class="output-title">${esc(p.label||'段落')}</div><div class="output-sub">${esc(p.summary||'')}</div>${quoteBlock('原文摘錄',p.excerpt)}</article>`).join('')}</div>`).join('')}
+    function renderEvents(rows){return rows.map(r=>`<article class="output-card"><div class="output-title">${esc(r.subtitle||r.title||'未命名事件')}</div><div class="meta-line"><span>${esc(r.whenCh||r.whenAr||'日期未明')}</span><span>${esc(r.where||'地點未明')}</span></div><div class="output-sub">${esc(r.description||r.howKnown||'')}</div>${r.who?.length?`<div class="meta-line">${tags(r.who)}</div>`:''}${quoteBlock('原文依據',r.quote)}${rawDetails(r)}</article>`).join('')}
+    function renderChains(rows){return rows.map(r=>`<article class="output-card"><div class="output-title">${esc(r.evTitle||'來源鏈')}</div>${arr(r.chains).map((c,ci)=>`<div class="chain"><div class="meta-line">鏈 ${ci+1}${c.events?.length?`｜${esc(c.events.map(e=>e.subtitle).filter(Boolean).join('、'))}`:''}</div>${arr(c.hops).map(h=>`<div class="hop"><b>${esc(h.from_person||'未明')}</b><span class="arrow">→</span><b>${esc(h.to_person||'未明')}</b>${h.whenCh?`<div class="meta-line">${esc(h.whenCh)}</div>`:''}${quoteBlock('傳遞引文',h.quote||h.supporting_quote)}</div>`).join('')}</div>`).join('')}${rawDetails(r)}</article>`).join('')}
+    function renderZhupi(rows){return rows.map(r=>`<article class="output-card"><div class="output-title">${esc(r.title||r.marker||'硃批')}</div><div class="meta-line"><span>${esc(r.position||'')}</span><span>${esc(r.where||'')}</span></div>${quoteBlock('硃批原文',r.text)}${r.responds_to?quoteBlock('所回應內容',r.responds_to):''}<div class="output-sub">${esc(r.opinion||'')}</div>${r.who?.length?`<div class="meta-line">${tags(r.who)}</div>`:''}${rawDetails(r)}</article>`).join('')}
+    function renderEdicts(rows){return rows.map(r=>`<article class="output-card"><div class="output-title">${esc(r.edict_id||'上諭')}｜${esc(r.title||'')}</div><div class="meta-line"><span>${esc(r.date||'')}</span><span>${arr(r.points).length} 個對應點</span></div><div class="output-sub">${esc(r.summary||'')}</div>${arr(r.points).map(p=>`<div class="point"><div class="output-title">${esc(p.title||p.aspect||'回應點')}</div><div class="output-sub">${esc(p.how||'')}</div><div class="pair-quotes">${quoteBlock('奏摺引文',p.memorial_quote)}${quoteBlock('上諭引文',p.edict_quote)}</div></div>`).join('')}${rawDetails(r)}</article>`).join('')}
+    function renderOfficial(rows){return rows.map(r=>`<article class="output-card"><div class="output-title">${esc(r.addressee||r.title||'官員回應')}</div><div class="output-sub">${esc(r.summary||r.how||'')}</div>${rawDetails(r)}</article>`).join('')}
+    function renderRows(section,rows){if(!rows.length)return'';if(section==='summary')return renderSummary(rows);if(section==='divide')return renderDivide(rows);if(['lin','qingDone','qingPlan','qingNonmil'].includes(section))return renderEvents(rows);if(section==='source')return renderChains(rows);if(section==='zhupi')return renderZhupi(rows);if(section==='edict')return renderEdicts(rows);if(section==='official')return renderOfficial(rows);return rows.map(r=>`<article class="output-card">${rawDetails(r)}</article>`).join('')}
+    function renderModelCell(slot,id){
+      const bundle=state.bundles[slot.key];if(!bundle)return `<div class="matrix-cell"><div class="output-empty">尚未載入 ${esc(slot.label)} bundle。<br>請在上方輸入設定中選擇資料夾或載入路徑。</div></div>`;
+      const visible=state.active==='all'?SECTIONS.filter(s=>s.file&&rowsFor(bundle,s.key,id).length):[sectionDef(state.active)];
+      if(!visible.length)return `<div class="matrix-cell"><div class="output-empty">這份 bundle 沒有此文書的輸出。</div></div>`;
+      const html=visible.map(def=>{const rows=rowsFor(bundle,def.key,id);return `<section class="section-block"><h4 class="section-heading">${esc(def.label)}<span class="mini-count">${rows.length}</span></h4>${renderRows(def.key,rows)||'<div class="output-empty">此步驟沒有輸出</div>'}</section>`}).join('');
+      return `<div class="matrix-cell"><div class="cell-top"><h3>${esc(bundle.manifest?.model||slot.label)}</h3><span class="result-count">${visible.reduce((n,d)=>n+rowsFor(bundle,d.key,id).length,0)} 筆</span></div>${html}</div>`;
+    }
+
+    function collectQuotes(value,section,out=[]){
+      if(Array.isArray(value)){value.forEach(v=>collectQuotes(v,section,out));return out}if(!value||typeof value!=='object')return out;
+      const keys=section==='edict'?['memorial_quote']:section==='divide'?['excerpt']:section==='zhupi'?['text','responds_to']:['quote','supporting_quote'];
+      for(const [k,v] of Object.entries(value)){if(keys.includes(k)&&typeof v==='string'&&v.trim().length>=4)out.push(v.trim());else if(v&&typeof v==='object')collectQuotes(v,section,out)}return out;
+    }
+    function evidenceQuotes(id){const sections=state.active==='all'?SECTIONS.filter(s=>s.file):[sectionDef(state.active)];const out=[];for(const slot of SLOT_DEFS){const b=state.bundles[slot.key];for(const s of sections)rowsFor(b,s.key,id).forEach(r=>collectQuotes(r,s.key,out))}return [...new Set(out)].sort((a,b)=>b.length-a.length)}
+    function highlighted(value,quotes){value=String(value||'');const spans=[];for(const q of quotes){let start=0;while(q&&start<value.length){const i=value.indexOf(q,start);if(i<0)break;spans.push([i,i+q.length]);start=i+q.length}}spans.sort((a,b)=>a[0]-b[0]||b[1]-a[1]);const merged=[];for(const s of spans){const last=merged[merged.length-1];if(last&&s[0]<=last[1])last[1]=Math.max(last[1],s[1]);else merged.push([...s])}let html='',p=0;for(const [a,b] of merged){html+=esc(value.slice(p,a))+`<mark class="evidence">${esc(value.slice(a,b))}</mark>`;p=b}return html+esc(value.slice(p))}
+    function renderOriginal(r,id){
+      const body=r.body||'',rescript=r.rescript_text||r.rescript||'',quotes=evidenceQuotes(id);const exact=quotes.filter(q=>body.includes(q)||rescript.includes(q));
+      return `<div class="matrix-cell original-cell"><div class="cell-top"><h3>${esc(id)}｜原文</h3><span class="result-count">${exact.length} 段共同引文</span></div><dl class="original-meta"><dt>標題</dt><dd>${esc(r.title||'未命名')}</dd><dt>類型</dt><dd>${esc(r.doc_type||'未明')}</dd><dt>日期</dt><dd>${esc(dateValue(r)||'未明')}</dd></dl><div class="body-text">${highlighted(body,quotes)||'（尚未載入原文）'}</div>${rescript?`<div class="rescript"><b>硃批／批語</b><br>${highlighted(rescript,quotes)}</div>`:''}<div class="evidence-note">黃色標示為目前所選輸出步驟中，被任一模型逐字引用的原文。</div></div>`;
+    }
+    function renderWorkspace(){
+      const host=$('#workspace');if(!state.selected.length){host.innerHTML='<div class="empty-state"><strong>尚未選擇文書</strong>載入資料後，從上方清單加入一至兩份文書；之後可繼續新增。</div>';return}
+      host.innerHTML=state.selected.map(id=>{const r=state.documents.get(id)||{id,doc_id:id,title:'（尚未載入原文）',body:''};return `<section class="doc-sheet" id="doc-${esc(id)}"><div class="doc-banner"><strong>${esc(id)}</strong><span>${esc(r.title||'未命名')}</span></div><div class="matrix-grid">${renderOriginal(r,id)}${SLOT_DEFS.map(s=>renderModelCell(s,id)).join('')}</div></section>`}).join('');
+    }
+    function render(){renderHead();renderNav();renderSelectedDocs();renderWorkspace()}
+
+    async function loadExamples(){
+      $('#loadExamples').disabled=true;toast('正在載入現有原文與三個已完成 bundle……');
+      const jobs=[loadSourceUrl($('#sourcePath').value),...SLOT_DEFS.filter(s=>s.path).map(s=>loadBundlePath(s.key,$(`#path-${s.key}`).value))];
+      await Promise.allSettled(jobs);$('#loadExamples').disabled=false;autoSelectDocument();render();
+    }
+    function clearAll(){state.documents.clear();state.bundles={};state.selected=[];for(const s of SLOT_DEFS)setStatus(`#status-${s.key}`,'尚未載入。');setStatus('#sourceStatus','尚未載入。支援 stage1_original_text.json 或包含 records 陣列的 JSON。');refreshDocPicker();render();toast('已清除所有載入資料')}
+
+    initSlots();render();
+    $('#loadExamples').addEventListener('click',loadExamples);
+    $('#loadSourcePath').addEventListener('click',()=>loadSourceUrl($('#sourcePath').value).catch(()=>{}));
+    $('#sourceFile').addEventListener('change',e=>loadSourceFile(e.target.files[0]));
+    $('#addDoc').addEventListener('click',()=>addDocument($('#docSelect').value));
+    $('#docSelect').addEventListener('dblclick',()=>addDocument($('#docSelect').value));
+    $('#addPastedDoc').addEventListener('click',()=>{const id=$('#pasteDocId').value.trim(),body=$('#pasteBody').value.trim();if(!id||!body){toast('請填寫文書編號與原文');return}state.documents.set(id,{id,doc_id:id,title:$('#pasteTitle').value.trim()||'未命名文書',body,doc_type:'手動輸入'});addDocument(id);toast(`已加入 ${id}`)});
+    $('#toggleSetup').addEventListener('click',()=>{const p=$('#setupPanel');p.classList.toggle('collapsed');$('#toggleSetup').textContent=p.classList.contains('collapsed')?'展開輸入設定':'收起輸入設定'});
+    $('#clearAll').addEventListener('click',clearAll);
+  })();
+  </script>
+</body>
+</html>

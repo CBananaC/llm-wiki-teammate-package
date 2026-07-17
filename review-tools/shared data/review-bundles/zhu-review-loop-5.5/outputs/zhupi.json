@@ -1,0 +1,188 @@
+[
+  {
+    "marker": "",
+    "opinion": "皇帝認為徐嗣曾所奏嚴密截拿、堵防賊匪竄逸，是當前最緊要之事。",
+    "position": "夾批",
+    "relations": [
+      {
+        "evidence": "硃批：此為最要",
+        "relation": "批示",
+        "relation_type": "other",
+        "source": "皇上",
+        "target": "徐嗣曾"
+      }
+    ],
+    "responds_to": "「此時沿海一帶，尤宜嚴密截拿，防其竄逸」",
+    "text": "此為最要",
+    "title": "肯定徐嗣曾嚴密截拿最要",
+    "where": "沿海一帶",
+    "who": [
+      "皇上",
+      "徐嗣曾",
+      "賊匪"
+    ],
+    "who_loc": {},
+    "doc_id": "硃125"
+  },
+  {
+    "marker": "",
+    "opinion": "皇帝嘉許徐嗣曾嚴飭巡查偷渡之處，並指示須切實辦理；又因人情已大定，認為徐嗣曾不妨親自前往搜查。",
+    "position": "夾批",
+    "relations": [
+      {
+        "evidence": "好，實力為之，此時人情大定，汝不妨親去搜查矣",
+        "relation": "實力為之",
+        "relation_type": "command",
+        "source": "皇上",
+        "target": "徐嗣曾"
+      },
+      {
+        "evidence": "臣先已嚴飭各該地方文武員弁",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "各該地方文武員弁"
+      },
+      {
+        "evidence": "選撥兵役，於凡可偷渡之處，羅織巡查",
+        "relation": "選撥",
+        "relation_type": "command",
+        "source": "各該地方文武員弁",
+        "target": "兵役"
+      }
+    ],
+    "responds_to": "「臣先已嚴飭各該地方文武員弁，選撥兵役，於凡可偷渡之處，羅織巡查」",
+    "text": "好，實力為之，此時人情大定，汝不妨親去搜查矣",
+    "title": "指示徐嗣曾實力親去搜查",
+    "where": "漳、泉、興化至福州、福寧濱海各縣",
+    "who": [
+      "皇上",
+      "徐嗣曾",
+      "各該地方文武員弁",
+      "兵役",
+      "賊匪"
+    ],
+    "who_loc": {
+      "各該地方文武員弁": "漳、泉、興化至福州、福寧濱海各縣"
+    },
+    "doc_id": "硃125"
+  },
+  {
+    "marker": "已有旨了",
+    "opinion": "皇帝表示此事已另有旨意處理。",
+    "position": "尾批",
+    "relations": [
+      {
+        "evidence": "經臣恭摺奏報",
+        "relation": "奏報",
+        "relation_type": "report",
+        "source": "徐嗣曾",
+        "target": "皇上"
+      },
+      {
+        "evidence": "臣派調副將徐鼎士等由閩安出口，前赴淡水、新莊等處剿援",
+        "relation": "派調",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "徐鼎士"
+      },
+      {
+        "evidence": "該守備招集泉民剿捕賊匪",
+        "relation": "招集",
+        "relation_type": "ally",
+        "source": "董得魁",
+        "target": "泉民"
+      },
+      {
+        "evidence": "用計退賊，會同俸滿巡檢李生樁",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "李生樁"
+      },
+      {
+        "evidence": "會同俸滿巡檢李生樁及塹城書院掌教之原任榆林縣知縣孫讓",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "壽同春",
+        "target": "孫讓"
+      },
+      {
+        "evidence": "署淡水都司易連、新莊巡檢王增錞稟稱：……督率官兵義勇",
+        "relation": "督率",
+        "relation_type": "command",
+        "source": "易連",
+        "target": "官兵義勇"
+      },
+      {
+        "evidence": "署淡水都司易連、新莊巡檢王增錞稟稱：……督率官兵義勇",
+        "relation": "督率",
+        "relation_type": "command",
+        "source": "王增錞",
+        "target": "官兵義勇"
+      },
+      {
+        "evidence": "黃仕簡定於十三日前往收復諸羅",
+        "relation": "剿賊",
+        "relation_type": "conflict",
+        "source": "黃仕簡",
+        "target": "賊匪"
+      },
+      {
+        "evidence": "任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿",
+        "relation": "進剿",
+        "relation_type": "conflict",
+        "source": "任承恩",
+        "target": "賊匪"
+      },
+      {
+        "evidence": "鹿港署守備陳邦光……擒獲賊匪簡鳩等六名",
+        "relation": "擒獲",
+        "relation_type": "conflict",
+        "source": "陳邦光",
+        "target": "賊匪"
+      },
+      {
+        "evidence": "已有旨了。欽此。",
+        "relation": "批示",
+        "relation_type": "other",
+        "source": "皇上",
+        "target": "徐嗣曾"
+      }
+    ],
+    "responds_to": "徐嗣曾全摺奏報調副將徐鼎士等由閩安出口赴淡水、新莊等處剿援，並陳沿海嚴密截拿、防賊竄逸等情。",
+    "text": "已有旨了。欽此。",
+    "title": "批徐嗣曾奏摺已有旨了",
+    "where": "閩安、淡水、新莊、鹿耳門、鹿港",
+    "who": [
+      "皇上",
+      "徐嗣曾",
+      "徐鼎士",
+      "黃仕簡",
+      "郝壯猷",
+      "任承恩",
+      "董得魁",
+      "壽同春",
+      "李生樁",
+      "孫讓",
+      "易連",
+      "王增錞",
+      "陳邦光",
+      "賊匪"
+    ],
+    "who_loc": {
+      "任承恩": "鹿港",
+      "壽同春": "竹塹",
+      "孫讓": "竹塹",
+      "徐鼎士": "淡水、新莊",
+      "易連": "淡水",
+      "李生樁": "竹塹",
+      "王增錞": "新莊",
+      "董得魁": "塹城",
+      "郝壯猷": "鹿耳門",
+      "陳邦光": "鹿港",
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃125"
+  }
+]

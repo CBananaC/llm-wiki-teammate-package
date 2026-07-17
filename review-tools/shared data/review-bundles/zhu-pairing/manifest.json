@@ -1,0 +1,21 @@
+{
+  "name": "zhu-pairing",
+  "created_at": "2026-07-13T18:47:44",
+  "source": "outputs/attempt-002/dual-timeline-data.json",
+  "doc_ids": [
+    "台108",
+    "台124",
+    "台151",
+    "台155",
+    "台160",
+    "台224",
+    "台25",
+    "台262",
+    "台295",
+    "台297",
+    "台71"
+  ],
+  "chain": [
+    "zhu-pairing"
+  ]
+}

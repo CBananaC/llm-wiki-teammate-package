@@ -1,0 +1,294 @@
+[
+  {
+    "doc_id": "台83",
+    "evTitle": "全部林方事件來源",
+    "actor": "lin",
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+            "reporter": "臺灣道永福",
+            "subtitle": "林爽文王芬等攻陷諸羅彰化兩邑",
+            "whenCh": "十二月",
+            "where": "諸、彰兩邑",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣",
+            "quote": "接據臺灣道永福十二月十四日來稟",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "1787/01/23",
+            "whenCh": "十二月十四日",
+            "doc_id": "台83"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "十三日天明時候，有賊匪二千餘名直攻縣城",
+            "reporter": "南路兵丁劉茂光",
+            "subtitle": "賊匪兩千餘人直攻鳳山縣城",
+            "whenCh": "十二月十三日天明時候",
+            "where": "鳳山縣城",
+            "doc_id": "台83"
+          },
+          {
+            "quote": "賊匪乘虛由龜山北門撲入城內",
+            "reporter": "南路兵丁劉茂光",
+            "subtitle": "賊匪乘虛由北門撲入鳳山城",
+            "whenCh": "十二月十三日",
+            "where": "鳳山城",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "南路兵丁劉茂光",
+            "how": "回稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "臺灣",
+            "quote": "茲於十二月十三日亥刻，據南路兵丁劉茂光回稱",
+            "to_person": "臺灣道永福",
+            "whenAr": "1787/01/22",
+            "whenCh": "十二月十三日亥刻",
+            "doc_id": "台83"
+          },
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣",
+            "quote": "接據臺灣道永福十二月十四日來稟",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "1787/01/23",
+            "whenCh": "十二月十四日",
+            "doc_id": "台83"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "賊人進入縣署",
+            "reporter": "逃回鳳邑跟丁",
+            "subtitle": "賊人進入鳳山縣署",
+            "whenCh": "十二月十三日",
+            "where": "鳳山縣署",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "逃回鳳邑跟丁",
+            "how": "稟稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "臺灣",
+            "quote": "又據逃回鳳邑跟丁稟稱",
+            "to_person": "臺灣道永福",
+            "whenAr": "",
+            "whenCh": "十二月",
+            "doc_id": "台83"
+          },
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣",
+            "quote": "接據臺灣道永福十二月十四日來稟",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "1787/01/23",
+            "whenCh": "十二月十四日",
+            "doc_id": "台83"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "台83",
+    "evTitle": "全部清方事件來源",
+    "actor": "qing",
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "職道以臺鎮雖經調遣將兵往救諸羅，並四處堵禦，而大兵未到，郡城兵少堪虞。正在嚴督實力守禦，一面會同柴鎮設法剿捕間",
+            "reporter": "臺灣道永福",
+            "subtitle": "臺灣道嚴督郡城防禦剿捕",
+            "whenCh": "十二月十四日",
+            "where": "郡城",
+            "doc_id": "台83"
+          },
+          {
+            "quote": "臺鎮雖經調遣將兵往救諸羅，並四處堵禦",
+            "reporter": "臺灣道永福",
+            "subtitle": "臺灣道與臺鎮調兵救援堵禦",
+            "whenCh": "十二月十四日",
+            "where": "諸羅, 四處",
+            "doc_id": "台83"
+          },
+          {
+            "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚三將施放槍炮，僅斃賊五、六人，賊勢稍退。",
+            "reporter": "南路兵丁劉茂光",
+            "subtitle": "鳳邑瑚三將施放槍炮抵抗",
+            "whenCh": "十二月十三日天明時候",
+            "where": "鳳城",
+            "doc_id": "台83"
+          },
+          {
+            "quote": "賊人進入縣署，該縣湯大奎情急拔劍自刎。",
+            "reporter": "逃回鳳邑跟丁",
+            "subtitle": "鳳山縣湯大奎自刎",
+            "whenCh": "十二月十三日",
+            "where": "鳳邑縣署",
+            "doc_id": "台83"
+          },
+          {
+            "quote": "事在危急，相應飛稟迅撥大兵來臺",
+            "reporter": "臺灣道永福",
+            "subtitle": "奏請迅撥大兵來臺",
+            "whenCh": "十二月十四日",
+            "where": "臺灣",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "接據臺灣道永福十二月十四日來稟",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "1787/02/17",
+            "whenCh": "十二月三十日戌刻",
+            "doc_id": "台83"
+          },
+          {
+            "from_person": "南路兵丁劉茂光",
+            "how": "回稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "臺灣",
+            "quote": "據南路兵丁劉茂光回稱",
+            "to_person": "臺灣道永福",
+            "whenAr": "1787/01/31",
+            "whenCh": "十二月十三日亥刻",
+            "doc_id": "台83"
+          },
+          {
+            "from_person": "逃回鳳邑跟丁",
+            "how": "稟稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "臺灣",
+            "quote": "又據逃回鳳邑跟丁稟稱",
+            "to_person": "臺灣道永福",
+            "whenAr": "",
+            "whenCh": "十二月十三日之後",
+            "doc_id": "台83"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城",
+            "reporter": "廈門同知",
+            "subtitle": "黃仕簡率部渡海赴臺",
+            "whenCh": "十二月二十八日",
+            "where": "料羅 to 鹿耳",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "廈門同知",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "今據廈門同知稟報",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": "十二月二十八日之後",
+            "doc_id": "台83"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "六路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。",
+            "reporter": "蚶江通判",
+            "subtitle": "任承恩率部渡海因風雨暫泊",
+            "whenCh": "十二月二十八日",
+            "where": "蚶江 to 臭塗澳外",
+            "doc_id": "台83"
+          },
+          {
+            "quote": "旋因風雨驟作，寄泊臭塗澳外。",
+            "reporter": "蚶江通判",
+            "subtitle": "任承恩部待風渡臺",
+            "whenCh": "十二月二十八日之後",
+            "where": "臭塗澳外",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "蚶江通判",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "據蚶江通判稟報",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": "十二月二十八日之後",
+            "doc_id": "台83"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。",
+            "reporter": "署守備陳邦光",
+            "subtitle": "鹿港義民共同防守",
+            "whenCh": "不明",
+            "where": "鹿港一帶",
+            "doc_id": "台83"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署守備陳邦光",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "且接據署守備陳邦光稟報",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": "不明",
+            "doc_id": "台83"
+          }
+        ]
+      }
+    ]
+  }
+]

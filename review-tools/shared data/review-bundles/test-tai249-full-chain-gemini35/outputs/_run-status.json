@@ -1,0 +1,10 @@
+{
+  "台249": {
+    "divide": true,
+    "lin-events": true,
+    "qing-events-all": true,
+    "edict-match": true,
+    "situfit": true,
+    "zhupi": true
+  }
+}
