@@ -10,6 +10,15 @@ REGION=asia-east1
 
 Last verified against Google Cloud Run on 2026-07-17.
 
+## Source repository
+
+The proxy services and review project are maintained in:
+
+<https://github.com/CBananaC/llm-wiki-teammate-package>
+
+Agents must not execute `git push` for the user. When a push is requested,
+provide the exact command with an explicit `cd` to the repository root.
+
 The review website can use these proxy websites as its AI endpoint. The page
 posts tasks to the selected URL's `/chat` route.
 

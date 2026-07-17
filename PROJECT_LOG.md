@@ -412,6 +412,19 @@ Remaining:
 - The optional Gemini proxy still requires Flask; all four review surfaces and
   their local data work without it.
 
+### 2026-07-17 — Codex — Added the GitHub source link to service documentation
+
+Summary: Linked the proxy/service guide to the requested GitHub repository and
+repeated the no-push protocol where service redeployment instructions live.
+
+Changed:
+- Added the repository link and push protocol to
+  `tool/proxy/PROXY_WEBSITES.md`.
+
+Verified:
+- `AGENTS.md` and `CLAUDE.md` remain byte-for-byte identical.
+- No `git push` was executed by Codex.
+
 ### 2026-07-17 — Codex — Switched Google Cloud authentication account
 
 Summary: Updated local Google Cloud user authentication and ADC from the
