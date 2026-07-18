@@ -1,0 +1,12 @@
+{
+  "name": "saved-prompt-chain-諭20-20260717-162056",
+  "created_at": "2026-07-17T16:21:07",
+  "source": "outputs/attempt-002/stage1-date-adjusted.json",
+  "model": "gemini-3.5-flash",
+  "doc_ids": [
+    "諭20"
+  ],
+  "chain": [
+    "divide"
+  ]
+}

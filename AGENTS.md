@@ -14,6 +14,16 @@ layer that consumes human-reviewed results.
 - Keep source evidence separate from interpretation and mark uncertainty explicitly.
 - Do not edit raw source material. Derived or corrected material must retain provenance.
 
+## Research shorthand
+
+- `zhu` refers to a document whose `doc_type` is `硃批`; `yu` refers to a document whose `doc_type` is `上諭`.
+- In the website chart with four lines, ordinal references count from left to right: `1st` means the leftmost line, 戰場事件. Do not infer names for the other lines unless they are explicitly identified.
+
+## UI typography
+
+- When adjusting the header UI, use `介面字級` from the tool's drop-down list.
+- For all columns, use `正文` from the tool's drop-down list.
+
 ## Canonical project areas
 
 - `review-tools/(1) formal/`: complete review UI, relationship files, and formal saved state.
@@ -32,10 +42,11 @@ layer that consumes human-reviewed results.
 
 1. Read `PROJECT_LOG.md` before starting work.
 2. Before editing formal state, set `Formal review editor` in the log. Do not edit while another person or agent is listed.
-3. After each coherent adjustment, append one log entry with the author, summary, files changed, verification, and anything remaining.
+3. After each coherent adjustment, append one timestamped log entry with the date and time (`YYYY-MM-DD HH:MM`, Asia/Hong_Kong), author, summary, files changed, verification, and anything remaining.
 4. Update the log's current state when priorities, ownership, or risks change.
 5. Do not log every click, autosave, read-only inspection, or chat message.
 6. At handoff, clear the formal editor field when applicable and record the next concrete action.
+7. When asked for an end-of-day summary, review all progress entries recorded for that date, summarize the complete day's progress, and append the summary as another timestamped entry in `PROJECT_LOG.md`. Preserve the individual progress entries.
 
 ## Formal/sample isolation
 

@@ -1,0 +1,22 @@
+{
+  "name": "yu-source-dec-1786",
+  "created_at": "2026-07-18T16:16:15",
+  "source": "review-tools/shared data/stage1_original_text.json",
+  "doc_ids": [
+    "硃21",
+    "硃22",
+    "硃24",
+    "硃25",
+    "硃26",
+    "硃31",
+    "硃32",
+    "硃33",
+    "硃34",
+    "硃35",
+    "諭13",
+    "諭20"
+  ],
+  "chain": [
+    "yu-source"
+  ]
+}

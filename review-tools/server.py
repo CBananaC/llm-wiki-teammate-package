@@ -55,6 +55,8 @@ WORKFLOW_SOURCE_FILES = (
     "tool/scripts py/run_zhu_pairing.py",
     "tool/skills md/yu-response-pairing.md",
     "tool/scripts py/run_yu_pairing.py",
+    "tool/skills md/yu-source-pairing.md",
+    "tool/scripts py/run_yu_source_pairing.py",
     "tool/skills md/quick-summary.md",
     "tool/skills md/divide-into-parts.md",
     "tool/scripts py/summarize_stage1_shangzou_vertex.py",
