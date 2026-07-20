@@ -7,6 +7,12 @@ review tool is the source-review workspace; the sample tool is isolated
 presentation data; the LLM Wiki is the durable thinking and project-memory
 layer that consumes human-reviewed results.
 
+## AI loop
+
+- `AI loop` is a key process function: it runs saved prompts and/or skills as a chain, using a specified AI model on two or more original documents from the terminal.
+- The loop writes the model output as JSON and packages it as a review bundle.
+- The bundle is loaded into the website's AI chat for user review and editing before the reviewed result is added to the chart.
+
 ## Language and research rules
 
 - Use English for explanation by default and Traditional Chinese when Chinese is needed.

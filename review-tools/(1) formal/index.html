@@ -510,7 +510,6 @@
   .rv-badge { display:inline-block; background:#eef0e4; border:1px solid #d6dcc8; color:#4a5a3e;
     border-radius:999px; padding:2px 9px; font-size:calc(11.5px * var(--fs,1)); }
   .ip-editbody { float:right; font-size:calc(11px * var(--fs,1)); border:1px solid #cbbba5; background:#fffaf1; border-radius:6px; cursor:pointer; padding:1px 7px; }
-  .ip-bodyedit { width:100%; min-height:160px; font:inherit; font-size:calc(13.5px * var(--fs,1)); line-height:1.7; padding:10px; border:1px solid #d7cab7; border-radius:8px; }
   /* highlight editor popover */
   .hl-editor { position:absolute; z-index:90; right:14px; bottom:14px; width:260px; background:#fff;
     border:1px solid #cdbfa9; border-radius:10px; box-shadow:0 14px 40px rgba(60,44,20,.34); padding:10px; }
@@ -602,6 +601,8 @@
     white-space:normal;
   }
   .ix-text .seg-text { line-height:2.0; }
+  .body-inline-edit { cursor:text; outline:none; }
+  .body-inline-edit:focus { outline:none; border-radius:3px; background:rgba(120,160,210,.10); }
 
   /* lighter footer */
   .ip-foot { background:#fbf7ef; }
@@ -1629,7 +1630,7 @@
 <div class="dual-wrap">
   <div class="dual-toolbar">
     <div class="pill tb-type">
-      <button class="tb-typebtn" id="tb-typebtn" type="button" aria-expanded="false" aria-controls="tb-typepop"><span class="pl">類型</span><span class="tb-type-summary" id="tb-type-summary"></span><span aria-hidden="true">▾</span></button>
+      <button class="tb-typebtn" id="tb-typebtn" type="button" aria-expanded="false" aria-controls="tb-typepop"><span class="pl">點線類型</span><span class="tb-type-summary" id="tb-type-summary"></span><span aria-hidden="true"><svg class="svgic dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
       <div class="tb-typepop" id="tb-typepop" style="display:none">
         <div class="tf-grid">
           <div class="tf-head">類型</div><div class="tf-head tf-centre">圓點</div><div class="tf-head tf-centre">連線</div><div class="tf-head tf-centre">數量</div>
@@ -1652,7 +1653,7 @@
       </div>
     </div>
     <span class="pill" id="f-people" title="上奏・硃批：依發送者；上諭：依受文者。可加多個條件並以 且/或 組合"><span class="pl">人物</span> <span class="fp-rows"></span></span>
-    <span class="pill search"><span class="pl">🔍</span><input type="text" id="f-text" placeholder="搜尋原文 / 所有欄位…" /></span>
+    <span class="pill search"><span class="pl"><svg class="svgic search-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span><input type="text" id="f-text" placeholder="搜尋原文 / 所有欄位…" /></span>
     <span class="tb-spacer"></span>
     <span class="pill" style="display:none" aria-hidden="true">
       <button class="zoom-btn" id="d-zoomOut" type="button">−</button>
@@ -1660,7 +1661,7 @@
       <button class="zoom-btn" id="d-zoomFit" type="button">適合</button>
     </span>
     <span class="tb-edit">
-      <button class="zoom-btn wide" id="tb-editbtn" type="button" aria-expanded="false">編輯圓點 ▾</button>
+      <button class="zoom-btn wide" id="tb-editbtn" type="button" aria-expanded="false">編輯圓點 <svg class="svgic dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
       <div class="tb-editpop" id="tb-editpop" style="display:none">
         <button class="zoom-btn wide" id="d-editdots" type="button" title="編輯圓點：點圓點可編輯／移動／隱藏">編輯圓點</button>
         <button class="zoom-btn wide" id="d-adddot" type="button" title="新增圓點：點此後再點時間軸上的日期">＋圓點</button>
@@ -1671,7 +1672,7 @@
       </div>
     </span>
     <span class="tb-tools">
-      <button class="zoom-btn wide" id="tb-toolsbtn" type="button">工具 ▾</button>
+      <button class="zoom-btn wide" id="tb-toolsbtn" type="button">工具 <svg class="svgic dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
       <div class="tb-toolspop" id="tb-toolspop" style="display:none">
         <div class="ttg"><div class="tth">資料</div><div class="ttr">
           <button class="zoom-btn wide" id="ed-export-all" type="button" title="完整備份（單一檔案，可用「匯入」還原）">匯出</button>
@@ -1707,6 +1708,7 @@
         </div></div>
       </div>
     </span>
+    <button class="zoom-btn wide" id="click-network-settings" type="button" title="設定點擊圓點後顯示哪些連線">點擊後顯示範圍</button>
     <span class="count-readout" id="d-count"></span>
   </div>
   <aside class="tb-drawer" id="tb-drawer" aria-hidden="true"><div class="tb-drawer-head"><strong id="tb-drawer-title">Skills</strong><button class="tb-drawer-x" id="tb-drawer-x" type="button">×</button></div><div class="tb-drawer-body" id="tb-drawer-body"></div></aside>
@@ -1747,22 +1749,8 @@
     move:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>',
     minimize:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
     restore:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>',
-    close:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>',
-    reply:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 14 4 9 9 4"/><path d="M4 9h10a6 6 0 0 1 6 6v1"/></svg>'
+    close:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
   };
-  function normalizeOutputCardButtons(root){
-    if(!root) return;
-    root.querySelectorAll('.reply-msg').forEach(function(b){
-      b.innerHTML=IC.reply;
-      b.setAttribute('aria-label','回覆');
-      if(!b.title) b.title='回覆';
-    });
-    root.querySelectorAll('.turn-del-x, .turn-del').forEach(function(b){
-      b.innerHTML=IC.close;
-      b.setAttribute('aria-label','刪除');
-      if(!b.title) b.title='刪除';
-    });
-  }
   const TYPE_COLOR = {shangzou:'var(--official)', zhupi:'var(--reply)', shangyu:'var(--order)'};
   const TYPE_HEX   = {shangzou:'#2f75b5', zhupi:'#c46a2b', shangyu:'#7d4ab8'};
   const TYPE_BADGE = {shangzou:'b-zou', zhupi:'b-zhu', shangyu:'b-yu'};
@@ -1815,11 +1803,23 @@
   // can match every original field (doc_id, dates, archive metadata, body,
   // title, rescript_text, etc.), including fields not copied into DUAL.
   const originalDocSearch = new Map();
+  const originalDocReadable = new Map();
+  // Search values only; JSON property names such as "volume" are not searchable.
+  function searchValueText(value){
+    if(value==null) return '';
+    if(Array.isArray(value)) return value.map(searchValueText).filter(Boolean).join(' ');
+    if(typeof value==='object') return Object.keys(value).map(k=>searchValueText(value[k])).filter(Boolean).join(' ');
+    return String(value);
+  }
   function indexOriginalDocs(data){
     const docs=Array.isArray(data)?data:((data&&Array.isArray(data.documents))?data.documents:[]);
     docs.forEach(doc=>{
       const id=doc&&doc.doc_id!=null?String(doc.doc_id):'';
-      if(id) originalDocSearch.set(id, JSON.stringify(doc).toLowerCase());
+      if(id){
+        originalDocSearch.set(id, searchValueText(doc).toLowerCase());
+        const readable=Object.keys(doc||{}).map(k=>searchValueText(doc[k])).filter(Boolean).join('\n');
+        originalDocReadable.set(id, readable);
+      }
     });
   }
   fetch('/shared/stage1_original_text.json', {cache:'no-store'})
@@ -1827,10 +1827,11 @@
     .then(data=>{ indexOriginalDocs(data); render(); })
     .catch(()=>{}); // file:// and older static copies still use the embedded data
   // populate sender dropdown
+  function personFilterName(name){ return String(name||'').replace(/（等）/g,'').trim(); }
   const peopleSet=new Set();
-  recs.forEach(r=>{ if(r.type==='shangyu'){ (r.recipients||[]).forEach(n=>peopleSet.add(n)); } else if(r.author_name){ peopleSet.add(r.author_name); } });
-  const senders=[...peopleSet].sort((a,b)=>a.localeCompare(b,'zh'));
-  const personOpts='<option value="">— 選擇人物 —</option>'+senders.map(s=>`<option>${s}</option>`).join('');
+  recs.forEach(r=>{ if(r.type==='shangyu'){ (r.recipients||[]).forEach(n=>peopleSet.add(personFilterName(n))); } else if(r.author_name){ peopleSet.add(personFilterName(r.author_name)); } });
+  const senders=[...peopleSet].filter(Boolean).sort((a,b)=>a.localeCompare(b,'zh'));
+  const personOpts='<option value="">— 選擇人物 —</option>'+senders.map(s=>`<option value="${esc(s)}">${esc(s)}</option>`).join('');
   // chained person filter: [person] [+]  →  [person] [且/或][person] [+] …
   const fpRows=document.querySelector('#f-people .fp-rows');
   function fpRowHtml(withOp){
@@ -1891,6 +1892,7 @@
   let editMode=false;
   let hlEventId=null;   // when set, the event-chain (event → reporting officials → emperor) is highlighted
   let hlDocRid=null;     // when set (clicked a doc dot instead of an event), highlights the same chain anchored on that doc
+  let hlDocSide=null;    // 硃批 needs its exact second-line/third-line endpoint as the network seed
   const __spreadGroups=new Set();   // ids of merged/consolidated event dots currently "spread" (showing fanned-out original member dots)
   function toggleGroupSpread(id){ if(__spreadGroups.has(id)) __spreadGroups.delete(id); else __spreadGroups.add(id); render(); }
 
@@ -1910,7 +1912,41 @@
   const EVENT_HEX={ lin:'#b5462e', qing:'#3f6f8f', emperor:'#7a5c9e' };
   const EVENT_HL_HEX={ lin:'#efb2aa', qing:'#b4d0e4', emperor:'#d0bee8' };
   const EVENT_LABEL={ lin:'林方行動', qing:'清方行動', emperor:'皇帝行動' };
-  const QCAT_LABEL={ done:'已執行軍事', plan:'待執行軍事', nonmil:'非軍事' };
+  const QCAT_LABEL={ done:'清軍事：已執行', plan:'清軍事：待執行', nonmil:'清方：非軍事' };
+  const AI_FILTER_LABELS=Object.freeze({
+    lin:'林方行動', qingDone:'清軍事：已執行', qingPlan:'清軍事：待執行', qingNonmil:'清方：非軍事',
+    emperor:'皇帝行動', zhupi:'硃批', edict:'相關上諭', sourceChain:'來源鏈', infoSource:'資訊來源',
+    response:'官員回應', timeliness:'回應時效', consolidate:'事件整合', edictKnowledge:'上諭得知事件',
+    imperialCommand:'皇帝諭令', sourcePair:'上諭回應的奏折', priorEdict:'回應的先前上諭', manual:'自訂標註'
+  });
+  function qingFilterLabel(category){
+    const k=String(category||'').toLowerCase();
+    if(/nonmil|非軍事/.test(k)) return AI_FILTER_LABELS.qingNonmil;
+    if(/plan|待執行|計畫|計劃/.test(k)) return AI_FILTER_LABELS.qingPlan;
+    return AI_FILTER_LABELS.qingDone;
+  }
+  function pairFilterLabel(pair){
+    const rel=String(pair&&pair.relation||'official_reply_to_yu');
+    if(rel==='yu_source') return AI_FILTER_LABELS.sourcePair;
+    if(rel==='official_reply_to_emperor_zhu'||rel==='reply_to_zhu') return '回應的先前硃批';
+    return AI_FILTER_LABELS.priorEdict;
+  }
+  function eventFilterLabel(e, source){
+    const explicit=(source&&source.aiFilterLabel)||(e&&e.aiFilterLabel);
+    if(explicit) return explicit;
+    if(e&&e.respondsToEventId) return AI_FILTER_LABELS.response;
+    if(e&&e.actor==='lin') return AI_FILTER_LABELS.lin;
+    if(e&&e.actor==='qing') return qingFilterLabel(e.category||e.qcat||'done');
+    if(e&&e.actor==='emperor'){
+      const k=e.emperorDetail&&e.emperorDetail.kind;
+      if(k==='zhupi') return AI_FILTER_LABELS.zhupi;
+      if(k==='edict') return AI_FILTER_LABELS.edict;
+      if(k==='imperial_command') return AI_FILTER_LABELS.imperialCommand;
+      if(k==='situfit'||k==='timeliness') return AI_FILTER_LABELS.timeliness;
+      return AI_FILTER_LABELS.emperor;
+    }
+    return AI_FILTER_LABELS.manual;
+  }
   const LATEST_REVIEW_KEY='timelineLatestReviewDot.v1';
   function loadLatestReview(){ try{ const v=JSON.parse(localStorage.getItem(LATEST_REVIEW_KEY)||'null'); return v&&v.rid!=null?v:null; }catch(e){ return null; } }
   let latestReview=loadLatestReview();
@@ -2184,7 +2220,7 @@
     if(!typeVisible(r)) return false;
     const expr=getPeopleExpr();
     if(expr.length){
-      const has=p => r.type==='shangyu' ? (r.recipients||[]).includes(p) : r.author_name===p;
+      const has=p => r.type==='shangyu' ? (r.recipients||[]).some(n=>personFilterName(n)===p) : personFilterName(r.author_name)===p;
       let acc=has(expr[0].person);
       for(let i=1;i<expr.length;i++){ acc = expr[i].op==='and' ? (acc && has(expr[i].person)) : (acc || has(expr[i].person)); }
       if(!acc) return false;
@@ -2192,41 +2228,123 @@
     const q=document.getElementById('f-text').value.trim().toLowerCase();
     if(q){
       const sourceHay=originalDocSearch.get(String(r.id))||'';
-      const hay=sourceHay+' '+JSON.stringify(r).toLowerCase();
+      const hay=sourceHay+' '+searchValueText(r).toLowerCase();
       if(!hay.includes(q)) return false;
     }
     return true;
   }
 
-  // ===== network reach settings + presets (drives the highlighted-network walk) =====
-  const REACH_KEY='timelineReachSettings';
-  const REACH_PRESETS_KEY='timelineReachPresets';
-  const REACH_DEFAULT_KEY='timelineReachDefaultPreset';
-  const REACH_TYPES=[
-    {k:'respond',    label:'回應鏈（事件 ↔ 事件）', hint:'事件之間的回應關係，可層層延伸'},
-    {k:'pair',       label:'配對（諭 ↔ 奏／回應）', hint:'上諭與其回應文件的配對連線'},
-    {k:'memDoc',     label:'諭 → 對應奏摺',          hint:'上諭指向它所回應的那份奏摺'},
-    {k:'source',     label:'事件 → 來源文件',        hint:'事件指向其來源文件圓點'},
-    {k:'sibling',    label:'文件 → 其他相關事件',    hint:'某文件所報告／牽涉的其他事件'},
-    {k:'infoSource', label:'諭 → 引用文件',          hint:'皇帝行動所引用的官方文件'}
+  // ===== lane-first click-network settings + presets =====
+  // Values are the maximum mixed-graph hops allowed before reaching the target
+  // lane. The independent event-line network control does not use this model.
+  const CLICK_NETWORK_KEY='timelineClickNetwork';
+  const CLICK_NETWORK_PRESETS_KEY='timelineClickNetworkPresets';
+  const CLICK_NETWORK_DEFAULT_KEY='timelineClickNetworkDefaultPreset';
+  const CLICK_NETWORK_STEPS=['0','1','2','3','4','∞'];
+  const CLICK_NETWORK_LANES=[
+    {k:'events',   label:'第一線：戰場事件', hint:'林方／清方事件圓點'},
+    {k:'official', label:'第二線：官員文書', hint:'上奏／硃批送出'},
+    {k:'imperial', label:'第三線：帝國文書', hint:'硃批收批／上諭'},
+    {k:'emperor',  label:'第四線：皇帝行動', hint:'皇帝行動事件'}
   ];
-  const REACH_DEFAULTS={respond:Infinity, pair:Infinity, memDoc:Infinity, source:Infinity, sibling:2, infoSource:1, budget:4000};
-  function reachNormNum(v,fb){ if(v==null||v==='') return fb; if(v==='inf'||v==='Infinity'||v==='∞'||v===Infinity) return Infinity; const n=Number(v); return isFinite(n)&&n>=0?Math.floor(n):fb; }
-  function reachLoad(){ let o={}; try{ o=JSON.parse(localStorage.getItem(REACH_KEY)||'null')||{}; }catch(e){} const out={}; REACH_TYPES.forEach(t=>{ out[t.k]=reachNormNum(o[t.k], REACH_DEFAULTS[t.k]); }); out.budget=reachNormNum(o.budget, REACH_DEFAULTS.budget)||REACH_DEFAULTS.budget; return out; }
-  let REACH=reachLoad();
-  function reachSettings(){ return REACH||REACH_DEFAULTS; }
-  function reachEncode(){ const o={}; REACH_TYPES.forEach(t=>{ o[t.k]=REACH[t.k]===Infinity?'inf':REACH[t.k]; }); o.budget=REACH.budget; return o; }
-  function reachSave(){ try{ localStorage.setItem(REACH_KEY, JSON.stringify(reachEncode())); }catch(e){} }
-  function reachSetType(k,v){ REACH[k]=reachNormNum(v, REACH_DEFAULTS[k]); reachSave(); }
-  function reachResetDefaults(){ REACH_TYPES.forEach(t=>REACH[t.k]=REACH_DEFAULTS[t.k]); REACH.budget=REACH_DEFAULTS.budget; reachSave(); }
-  function reachPresetsAll(){ try{ return JSON.parse(localStorage.getItem(REACH_PRESETS_KEY)||'{}')||{}; }catch(e){ return {}; } }
-  function reachPresetsSave(m){ try{ localStorage.setItem(REACH_PRESETS_KEY, JSON.stringify(m)); }catch(e){} }
-  function reachSavePreset(name){ if(!name) return; const m=reachPresetsAll(); m[name]=reachEncode(); reachPresetsSave(m); }
-  function reachApplyPreset(name){ const o=reachPresetsAll()[name]; if(!o) return false; REACH_TYPES.forEach(t=>{ REACH[t.k]=reachNormNum(o[t.k], REACH_DEFAULTS[t.k]); }); REACH.budget=reachNormNum(o.budget,REACH_DEFAULTS.budget)||REACH_DEFAULTS.budget; reachSave(); return true; }
-  function reachDeletePreset(name){ const m=reachPresetsAll(); delete m[name]; reachPresetsSave(m); if(reachDefaultPreset()===name) reachSetDefaultPreset(''); }
-  function reachDefaultPreset(){ try{ return localStorage.getItem(REACH_DEFAULT_KEY)||''; }catch(e){ return ''; } }
-  function reachSetDefaultPreset(name){ try{ if(name) localStorage.setItem(REACH_DEFAULT_KEY,name); else localStorage.removeItem(REACH_DEFAULT_KEY); }catch(e){} }
-  (function(){ const d=reachDefaultPreset(); if(d) reachApplyPreset(d); })();
+  const CLICK_NETWORK_DEFAULTS={
+    events:{events:Infinity, official:Infinity, imperial:Infinity, emperor:Infinity},
+    official:{events:2, official:0, imperial:Infinity, emperor:2},
+    imperial:{events:2, official:Infinity, imperial:0, emperor:2},
+    emperor:{events:Infinity, official:Infinity, imperial:Infinity, emperor:0}
+  };
+  const CLICK_NETWORK_BUDGET=4000;
+  function clickNetworkDepth(v,fb){ if(v==null||v==='') return fb; if(v==='inf'||v==='Infinity'||v==='∞'||v===Infinity) return Infinity; const n=Number(v); return isFinite(n)&&n>=0?Math.floor(n):fb; }
+  function clickNetworkDefaultConfig(){ const out={}; CLICK_NETWORK_LANES.forEach(src=>{ out[src.k]={}; CLICK_NETWORK_LANES.forEach(dst=>{ out[src.k][dst.k]=CLICK_NETWORK_DEFAULTS[src.k][dst.k]; }); }); return out; }
+  function clickNetworkNormalize(o){ const out=clickNetworkDefaultConfig(); o=o&&typeof o==='object'?o:{}; CLICK_NETWORK_LANES.forEach(src=>{ const row=o[src.k]||{}; CLICK_NETWORK_LANES.forEach(dst=>{ out[src.k][dst.k]=clickNetworkDepth(row[dst.k], CLICK_NETWORK_DEFAULTS[src.k][dst.k]); }); }); return out; }
+  function clickNetworkLoad(){ let o={}; try{ o=JSON.parse(localStorage.getItem(CLICK_NETWORK_KEY)||'null')||{}; }catch(e){} return clickNetworkNormalize(o); }
+  let CLICK_NETWORK=clickNetworkLoad();
+  function clickNetworkSettings(){ return CLICK_NETWORK||clickNetworkDefaultConfig(); }
+  function clickNetworkEncode(){ const o={}; CLICK_NETWORK_LANES.forEach(src=>{ o[src.k]={}; CLICK_NETWORK_LANES.forEach(dst=>{ const v=CLICK_NETWORK[src.k][dst.k]; o[src.k][dst.k]=v===Infinity?'inf':v; }); }); return o; }
+  function clickNetworkSave(){ try{ localStorage.setItem(CLICK_NETWORK_KEY, JSON.stringify(clickNetworkEncode())); }catch(e){} }
+  function clickNetworkSet(source,target,value){ if(!CLICK_NETWORK[source]) CLICK_NETWORK[source]={}; CLICK_NETWORK[source][target]=clickNetworkDepth(value, CLICK_NETWORK_DEFAULTS[source][target]); clickNetworkSave(); }
+  function clickNetworkResetDefaults(){ CLICK_NETWORK=clickNetworkDefaultConfig(); clickNetworkSave(); }
+  function clickNetworkPresetsAll(){ try{ return JSON.parse(localStorage.getItem(CLICK_NETWORK_PRESETS_KEY)||'{}')||{}; }catch(e){ return {}; } }
+  function clickNetworkPresetsSave(m){ try{ localStorage.setItem(CLICK_NETWORK_PRESETS_KEY, JSON.stringify(m)); }catch(e){} }
+  function clickNetworkSavePreset(name){ if(!name) return; const m=clickNetworkPresetsAll(); m[name]=clickNetworkEncode(); clickNetworkPresetsSave(m); }
+  function clickNetworkApplyPreset(name){ const o=clickNetworkPresetsAll()[name]; if(!o) return false; CLICK_NETWORK=clickNetworkNormalize(o); clickNetworkSave(); return true; }
+  function clickNetworkDeletePreset(name){ const m=clickNetworkPresetsAll(); delete m[name]; clickNetworkPresetsSave(m); if(clickNetworkDefaultPreset()===name) clickNetworkSetDefaultPreset(''); }
+  function clickNetworkDefaultPreset(){ try{ return localStorage.getItem(CLICK_NETWORK_DEFAULT_KEY)||''; }catch(e){ return ''; } }
+  function clickNetworkSetDefaultPreset(name){ try{ if(name) localStorage.setItem(CLICK_NETWORK_DEFAULT_KEY,name); else localStorage.removeItem(CLICK_NETWORK_DEFAULT_KEY); }catch(e){} }
+  (function(){ const d=clickNetworkDefaultPreset(); if(d) clickNetworkApplyPreset(d); })();
+  function buildClickNetworkState(){
+    const recByDocId={}; recs.forEach(r=>{ recByDocId[String(r._baseId||r.id)]=r; });
+    const spreadMemberIds=new Set();
+    eventsArr().forEach(e=>{ if(Array.isArray(e.groupedFrom)&&e.groupedFrom.length&&__spreadGroups.has(e.id)){ e.groupedFrom.forEach(g=>{ const gid=typeof g==='object'?g.evId:g; if(gid) spreadMemberIds.add(gid); }); } });
+    const allEvs=eventsArr().filter(e=>!e.hidden||spreadMemberIds.has(e.id));
+    const graphEventsById=new Map(); allEvs.forEach(e=>graphEventsById.set(String(e.id),e));
+    const nodes=new Map(), adj=new Map();
+    function addNode(n){ if(!n) return; nodes.set(n.key,n); if(!adj.has(n.key)) adj.set(n.key,new Set()); }
+    function link(a,b){ if(!a||!b||a.key===b.key) return; addNode(a); addNode(b); adj.get(a.key).add(b.key); adj.get(b.key).add(a.key); }
+    function eventNode(e){ return e?{kind:'event',id:e.id,lane:e.actor==='emperor'?'emperor':'events',key:'e:'+String(e.id)}:null; }
+    function docNodeForLane(r,lane){
+      if(!r) return null;
+      const side=r.type==='zhupi' ? (lane==='official'?'L':lane==='imperial'?'R':null) : r.type==='shangzou' ? (lane==='official'?'L':null) : r.type==='shangyu' ? (lane==='imperial'?'R':null) : null;
+      return side ? {kind:'doc',rid:r._rid,side,lane,key:'d:'+String(r._rid)+':'+side} : null;
+    }
+    function docNodeForRecord(r,lane){ return docNodeForLane(r,lane)||docNodeForLane(r,lane==='official'?'imperial':'official'); }
+    function docLaneFromSide(r,side){ if(r&&r.type==='zhupi') return side==='R'?'imperial':'official'; return r&&r.type==='shangyu'?'imperial':'official'; }
+    function pairNode(r,pp){
+      if(!r) return null;
+      const a=recByDocId[String(pairSourceDocId(pp))], b=recByDocId[String(pp.reply_doc_id)];
+      const bothImperial=(a&&b&&((a.type==='zhupi'&&b.type==='shangyu')||(a.type==='shangyu'&&b.type==='zhupi')));
+      if(pp.relation==='yu_source'&&bothImperial) return docNodeForLane(r,'imperial');
+      if(bothImperial) return docNodeForLane(r,r.type==='zhupi'?'official':'imperial');
+      return docNodeForRecord(r,r.type==='shangzou'?'official':'imperial');
+    }
+    allEvs.forEach(e=>{
+      const en=eventNode(e); addNode(en);
+      (e.sources||[]).forEach(sc=>{ const r=sc&&recByDocId[String(sc.doc_id)]; if(r) link(en,docNodeForRecord(r,e.actor==='emperor'?'imperial':'official')); });
+      if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=recByDocId[String(e.emperorDetail.memDoc)]; if(r) link(en,docNodeForRecord(r,'official')); }
+      if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)){ e.emperorDetail.infoSources.forEach(sc=>{ const r=sc&&recByDocId[String(sc.doc_id)]; if(r) link(en,docNodeForRecord(r,'official')); }); }
+      const targets=[e.respondsToEventId,...(e.alsoRespondsToEventIds||[])].filter(Boolean);
+      targets.forEach(id=>{ const t=graphEventsById.get(String(id)); if(t) link(en,eventNode(t)); });
+    });
+    allDocPairs().forEach(pp=>{
+      const a=recByDocId[String(pairSourceDocId(pp))], b=recByDocId[String(pp.reply_doc_id)];
+      if(a&&b) link(pairNode(a,pp),pairNode(b,pp));
+    });
+    recs.forEach(r=>{ if(r.type==='zhupi') link(docNodeForLane(r,'official'),docNodeForLane(r,'imperial')); });
+    allEvs.forEach(e=>{
+      if(!(e.emperorDetail&&e.emperorDetail.kind==='edict'&&e.emperorDetail.memDoc)) return;
+      const edictId=(e.sources&&e.sources[0]&&e.sources[0].doc_id)||e.emperorDetail.edict_id;
+      const edict=recByDocId[String(edictId)], memorial=recByDocId[String(e.emperorDetail.memDoc)];
+      if(edict&&memorial) link(docNodeForRecord(edict,'imperial'),docNodeForRecord(memorial,'official'));
+    });
+    const hlEvent=hlEventId ? (graphEventsById.get(String(hlEventId))||eventById(hlEventId)) : null;
+    const hlDocRec=hlDocRid!=null ? recs.find(r=>String(r._rid)===String(hlDocRid)) : null;
+    const seed=hlEvent ? eventNode(hlEvent) : hlDocRec ? docNodeForLane(hlDocRec,docLaneFromSide(hlDocRec,hlDocSide)) : null;
+    const hlRids=new Set(), chainEventIds=new Set(), siblingEventIds=new Set();
+    const stats={sourceLane:seed&&seed.lane||'',docs:0,events:0,total:0,truncated:false,byLane:{events:0,official:0,imperial:0,emperor:0}};
+    if(seed){
+      addNode(seed);
+      const profile=clickNetworkSettings()[seed.lane]||{};
+      const visited=new Set(), queue=[];
+      function visit(node,depth){
+        if(!node||visited.has(node.key)) return;
+        if(visited.size>=CLICK_NETWORK_BUDGET){ stats.truncated=true; return; }
+        visited.add(node.key); stats.byLane[node.lane]=(stats.byLane[node.lane]||0)+1;
+        if(node.kind==='event') chainEventIds.add(node.id); else { const r=recs.find(x=>String(x._rid)===String(node.rid)); if(r) hlRids.add(r._rid); }
+        queue.push({node,depth});
+      }
+      visit(seed,0);
+      while(queue.length){
+        const cur=queue.shift(); const nextDepth=cur.depth+1;
+        (adj.get(cur.node.key)||[]).forEach(key=>{
+          const n=nodes.get(key), max=clickNetworkDepth(profile[n&&n.lane],0);
+          if(n&&nextDepth<=max) visit(n,nextDepth);
+        });
+      }
+      stats.total=visited.size;
+    }
+    stats.docs=hlRids.size; stats.events=chainEventIds.size;
+    return {active:!!seed,hlEvent,hlDocRec,hlRids,chainEventIds,siblingEventIds,spreadMemberIds,allEvs,stats};
+  }
   function render(){
     const H = padTop + totalDays*pxPerDay + padBot;
     curBaseH = H;
@@ -2262,6 +2380,7 @@
       s+=`<rect class="lane-grip" data-lane="${k}" x="${(xx-5).toFixed(1)}" y="${(padTop-18).toFixed(1)}" width="10" height="14" rx="3"/>`;
     });
 
+    const clickNetworkState=buildClickNetworkState();
     // group dots by (side,date) for horizontal spread
     const buckets={};
     function place(r, side, d){
@@ -2273,7 +2392,7 @@
     const matchedSet=new Set();
     recs.forEach(r=>{ if(passFilter(r)) matchedSet.add(r._rid); });
     recs.forEach(r=>{
-      if(!typeVisible(r)) return;   // unchecked types are hidden, rather than merely dimmed
+      if(!typeVisible(r)&&!clickNetworkState.hlRids.has(r._rid)) return;   // selected network endpoints remain visible
       if(r.type==='shangzou'){ const d=parseD(r.sendAr); if(d) place(r,'L',d); }
       else if(r.type==='shangyu'){ const d=parseD(r.annAr); if(d) place(r,'R',d); }
       else if(r.type==='zhupi'){ const ds=parseD(r.sendAr), dr=parseD(r.recvAr); if(ds) place(r,'L',ds); if(dr) place(r,'R',dr); }
@@ -2289,7 +2408,7 @@
     // distinguish: filter-matched (bright), opened/clicked (ring), unrelated (dim)
     const opened=new Set(cards.map(c=>c.rec&&c.rec._rid).filter(x=>x!=null));
     function isSel(rid){ return opened.has(rid) || selRid===rid; }
-    function dimmed(rid){ return !matchedSet.has(rid) && !isSel(rid); }
+    function dimmed(rid){ return !matchedSet.has(rid) && !isSel(rid) && !clickNetworkState.hlRids.has(rid); }
     // ----- field events: layout + highlight chain -----
     const recByDocId={}; recs.forEach(r=>{ recByDocId[String(r._baseId||r.id)]=r; });
     // normally-hidden events (folded into a merged/consolidated dot via groupedFrom) still need to
@@ -2299,7 +2418,7 @@
     const spreadMemberIds=new Set();
     eventsArr().forEach(e=>{ if(Array.isArray(e.groupedFrom)&&e.groupedFrom.length&&__spreadGroups.has(e.id)){
       e.groupedFrom.forEach(g=>{ const gid=typeof g==='object'?g.evId:g; if(gid) spreadMemberIds.add(gid); }); } });
-    const evs=eventsArr().filter(e=>(!e.hidden || spreadMemberIds.has(e.id)) && eventDotVisible(e));
+    const evs=eventsArr().filter(e=>(!e.hidden || spreadMemberIds.has(e.id)) && (eventDotVisible(e)||clickNetworkState.chainEventIds.has(e.id)));
     // field events (lin/qing) bucket onto Ex, spreading left; emperor's own actions bucket onto
     // Yx, spreading right -- each lane grows away from the officials/emperor doc lanes it links to.
     const ebuckets={}; evs.forEach(e=>{ if(e.actor==='emperor') return; const d=parseD(e.dateAr); if(!d) return; (ebuckets[fmt(d)]=ebuckets[fmt(d)]||[]).push(e); });
@@ -2314,54 +2433,14 @@
     // cited document (or a 諭's matched memorial, emperorDetail.memDoc) doesn't cascade into
     // pulling in every OTHER event that happens to cite it, and every document THOSE cite, etc. --
     // that unbounded fan-out was the "too broad" regression from the first version of this feature.
-    const hlEvent = hlEventId ? eventById(hlEventId) : null;
-    const hlDocRec = (hlDocRid!=null) ? recs.find(r=>r._rid===hlDocRid) : null;
-    const hlRids = new Set();
-    const chainEventIds = new Set();     // fully-lit events reached by the configurable walk
-    const siblingEventIds = new Set();   // kept for compatibility; now folded into chainEventIds
-    const chainOn = !!hlEvent || !!hlDocRec;
-    if(chainOn){
-      // ===== configurable network reach (see reachSettings / the 網絡範圍 panel) =====
-      // A single layered breadth-first walk over a mixed graph of events and documents.
-      // Each relationship TYPE has its own reach (max source-layer at which it may still
-      // expand): 0 = never, 1 = only straight from the clicked node, ... , Infinity = always.
-      // This replaces the old hard-coded rules (response-chain recursed forever; everything
-      // else was a single fixed hop) so the extent is visible and adjustable per type.
-      const RS = reachSettings();
-      const budget = RS.budget||4000;
-      const stats = {respond:0, pair:0, memDoc:0, source:0, sibling:0, infoSource:0, seed:0, truncated:false};
-      const evBySourceDoc={}, evByMemDoc={}, respFwd={}, respRev={};
-      evs.forEach(e=>{
-        (e.sources||[]).forEach(sc=>{ const k=String(sc.doc_id); (evBySourceDoc[k]=evBySourceDoc[k]||[]).push(e.id); });
-        if(e.emperorDetail && e.emperorDetail.memDoc){ const k=String(e.emperorDetail.memDoc); (evByMemDoc[k]=evByMemDoc[k]||[]).push(e.id); }
-        const outs=[]; if(e.respondsToEventId) outs.push(e.respondsToEventId); (e.alsoRespondsToEventIds||[]).forEach(x=>outs.push(x));
-        respFwd[e.id]=outs; outs.forEach(t=>{ (respRev[t]=respRev[t]||[]).push(e.id); });
-      });
-      const pairByDoc={};
-      allDocPairs().forEach(pp=>{ const a=String((typeof pairSourceDocId==='function'?pairSourceDocId(pp):pp.yu_doc_id)||''), b=String(pp.reply_doc_id||''); if(a&&b){ (pairByDoc[a]=pairByDoc[a]||[]).push(b); (pairByDoc[b]=pairByDoc[b]||[]).push(a); } });
-      const visEv=new Set(), visDoc=new Set(); let count=0; const queue=[];
-      function pushEv(id, layer, via){ if(visEv.has(id)) return; const e=eventById(id); if(!e) return; if(count>=budget){ stats.truncated=true; return; } visEv.add(id); chainEventIds.add(id); count++; if(via&&via!=='seed') stats[via]=(stats[via]||0)+1; queue.push({t:'ev', ref:e, layer}); }
-      function pushDoc(rec, layer, via){ if(!rec||visDoc.has(rec._rid)) return; if(count>=budget){ stats.truncated=true; return; } visDoc.add(rec._rid); hlRids.add(rec._rid); count++; if(via&&via!=='seed') stats[via]=(stats[via]||0)+1; queue.push({t:'doc', ref:rec, layer}); }
-      if(hlEvent) pushEv(hlEvent.id, 0, 'seed');
-      if(hlDocRec) pushDoc(hlDocRec, 0, 'seed');
-      while(queue.length){
-        const cur=queue.shift(); const L=cur.layer;
-        if(cur.t==='ev'){
-          const e=cur.ref;
-          if(L<RS.respond){ (respFwd[e.id]||[]).concat(respRev[e.id]||[]).forEach(id=>pushEv(id, L+1, 'respond')); }
-          if(L<RS.source){ (e.sources||[]).forEach(sc=>{ const r=recByDocId[String(sc.doc_id)]; if(r) pushDoc(r, L+1, 'source'); }); }
-          if(L<RS.memDoc && e.emperorDetail && e.emperorDetail.memDoc){ const r=recByDocId[String(e.emperorDetail.memDoc)]; if(r) pushDoc(r, L+1, 'memDoc'); }
-          if(L<RS.infoSource && e.emperorDetail && e.emperorDetail.infoSources){ e.emperorDetail.infoSources.forEach(s=>{ const r=recByDocId[String(s.doc_id)]; if(r) pushDoc(r, L+1, 'infoSource'); }); }
-        } else {
-          const r=cur.ref; const bid=String(r._baseId||r.id);
-          if(L<RS.sibling){ (evBySourceDoc[bid]||[]).forEach(id=>pushEv(id, L+1, 'sibling')); (evByMemDoc[bid]||[]).forEach(id=>pushEv(id, L+1, 'sibling')); }
-          if(L<RS.pair){ (pairByDoc[bid]||[]).forEach(other=>{ const orec=recByDocId[String(other)]; if(orec) pushDoc(orec, L+1, 'pair'); }); }
-        }
-      }
-      stats.docs=hlRids.size; stats.events=chainEventIds.size; stats.total=count;
-      window.__reachStats=stats;
-    } else { window.__reachStats=null; }
-    if(typeof window.__reachPanelRefresh==='function') requestAnimationFrame(window.__reachPanelRefresh);
+    const hlEvent = clickNetworkState.hlEvent;
+    const hlDocRec = clickNetworkState.hlDocRec;
+    const hlRids = clickNetworkState.hlRids;
+    const chainEventIds = clickNetworkState.chainEventIds;
+    const siblingEventIds = clickNetworkState.siblingEventIds;
+    const chainOn = clickNetworkState.active;
+    window.__clickNetworkStats=chainOn ? clickNetworkState.stats : null;
+    if(typeof window.__clickNetworkPanelRefresh==='function') requestAnimationFrame(window.__clickNetworkPanelRefresh);
     function cold(rid){ return chainOn && !hlRids.has(rid); }     // not part of the highlighted chain
     // connecting lines for zhupi
     let lines='';
@@ -2563,7 +2642,7 @@
     s+=spreadHtml;
     svg.innerHTML=s;
     updateTypeShownCounts();
-    document.getElementById('d-count').textContent = `${matchedSet.size} 件符合（共 ${recs.length} 件）`;
+    document.getElementById('d-count').textContent = `${matchedSet.size}/${recs.length}`;
     bindTimelineToolSliders();
     bindDots();
     if(typeof refreshAllColumns==='function') refreshAllColumns();
@@ -3183,7 +3262,7 @@
     const rec=recById(rid); if(!rec) return;
     setLatestReviewDot(rid, side||preferredReviewSide(rec, 'open'), 'open', {silent:true});
     selRid=Number(rid);
-    hlDocRid=Number(rid); hlEventId=null;   // clicking a doc dot also shows its event/official/emperor chain
+    hlDocRid=Number(rid); hlDocSide=side||preferredReviewSide(rec, 'open'); hlEventId=null;   // clicking a doc dot also shows its event/official/emperor chain
     render();
     openCard(rec, count>=3?3:count===2?2:1);
     requestAnimationFrame(()=>{ if(window.__focusDot) window.__focusDot(rid); });
@@ -3191,6 +3270,29 @@
 
   // ===== panel content (editable, versioned) =====
   function getBody(r){ const e=docEditsRead(r.id); return e.body!=null? e.body : (r.body||''); }
+  function reviewedSummaryTextFor(r){
+    const e=docEditsRead(r.id)||{};
+    const direct=String(e.overallAdj||'').trim();
+    if(direct) return direct;
+    const structured=e.summary;
+    if(structured){
+      const text=String(summaryTextOf(structured)||'').trim();
+      if(text) return text;
+    }
+    const answers=Array.isArray(e.answers)?e.answers:[];
+    for(let i=answers.length-1;i>=0;i--){
+      const a=answers[i]||{};
+      if(String(a.mode||'').toLowerCase()==='summary' && String(a.text||'').trim()) return String(a.text).trim();
+    }
+    const chat=Array.isArray(e.chat)?e.chat:[];
+    for(let i=chat.length-1;i>=0;i--){
+      const m=chat[i]||{}, prompt=String(m.prompt||'');
+      if(m.kind || !/(quick-summary|進一步摘要|摘要|summary)/i.test(prompt)) continue;
+      const text=String(m.response||m.text||'').trim();
+      if(text) return text;
+    }
+    return '';
+  }
   function readableHLColor(c){
     c=String(c||'').trim(); const m=c.match(/^#([0-9a-f]{6})$/i);
     if(!m) return '#f3d36b';
@@ -3203,75 +3305,73 @@
   function getNoteMode(){ try{ return localStorage.getItem('noteMode')||'margin'; }catch(e){ return 'margin'; } }
   function setNoteMode(m){ try{ localStorage.setItem('noteMode', m); }catch(e){} }
   function buildContent(host, r){
-    const overallKey = r.type==='shangyu' ? 'key_info' : 'what_info_telling_emperor';
-    let showAI=false;
     let noteMode=getNoteMode();
-    const aiItems=collectItems(getSummary(r));
-    function itemKey(it){ return it.label+'#'+(it.quote||'').slice(0,14); }
+    function itemKey(it){ return it.key||it.label+'#'+(it.quote||'').slice(0,14); }
+    function docFilterLabelVisible(label){
+      label=String(label||'');
+      if((r.type==='zhupi'||r.type==='shangzou')&&[
+        AI_FILTER_LABELS.sourcePair, AI_FILTER_LABELS.edict, AI_FILTER_LABELS.timeliness,
+        AI_FILTER_LABELS.consolidate, AI_FILTER_LABELS.emperor
+      ].includes(label)) return false;
+      if(r.type==='shangyu'&&[
+        AI_FILTER_LABELS.priorEdict, AI_FILTER_LABELS.consolidate
+      ].includes(label)) return false;
+      return true;
+    }
+    function docItemVisible(it){ return it.src==='user'||it.src==='prov'||docFilterLabelVisible(it.label); }
     function items(){
       const ie=docEditsRead(r.id).itemEdits||{}; const out=[];
+      const aiItems=reviewedAIItemsForDocument(r);
       aiItems.forEach(it=>{ const k=itemKey(it), a=ie[k]||{};
-        out.push({src:'ai', key:k, label:showAI?it.label:(a.label??it.label), summary:showAI?it.summary:(a.summary??it.summary),
-          color:readableHLColor(showAI?it.color:(a.color||it.color)), quote:showAI?it.quote:(a.frag||it.quote), block:'body', fields:showAI?(it.fields||[]):(a.fields||it.fields||[])}); });
-      if(!showAI) (docEditsRead(r.id).userHL||[]).forEach((u,ui)=>out.push({src:'user', ui, key:'u'+ui, label:u.label||'自訂標註', summary:u.summary||'', color:readableHLColor(u.color||'#f3d36b'), quote:u.frag, block:u.block||'body', fields:[]}));
+        out.push({src:'ai', key:k, label:a.label??it.label, summary:a.summary??it.summary,
+          color:readableHLColor(a.color||it.color), quote:a.frag||it.quote, block:it.block||'body', fields:a.fields||it.fields||[]}); });
+      (docEditsRead(r.id).userHL||[]).forEach((u,ui)=>out.push({src:'user', ui, key:'u'+ui, label:u.label||'自訂標註', summary:u.summary||'', color:readableHLColor(u.color||'#f3d36b'), quote:u.frag, block:u.block||'body', fields:[]}));
       // event-projection highlights: each visible event's source quote for THIS doc (single source of truth = the event)
-      if(!showAI){ const did=String(r._baseId||r.id);
+      { const did=String(r._baseId||r.id);
         visibleEvents().forEach(e=>{ (e.sources||[]).forEach(sc=>{ if(String(sc.doc_id)!==did) return; const q=sc.quote||''; if(!q.trim()) return;
-          out.push({src:'event', evId:e.id, actor:e.actor, docId:did, key:'ev:'+e.id, label:sc.label||evTitle(e), summary:e.description||'', color:readableHLColor(EVENT_HL_HEX[e.actor]||'#d6d1c7'), quote:q, block:sc.block||'body',
+          out.push({src:'event', evId:e.id, actor:e.actor, docId:did, key:'ev:'+e.id, label:eventFilterLabel(e,sc), summary:e.description||'', color:readableHLColor(EVENT_HL_HEX[e.actor]||'#d6d1c7'), quote:q, block:sc.block||'body',
             fields:[ e.description?{name:'敘述',val:e.description}:null, e.where?{name:'地點',val:e.where}:null, (e.dateAr||e.whenCh)?{name:'日期',val:e.dateAr||e.whenCh}:null ].filter(Boolean) }); }); });
         // provenance-projection highlights: each committed transmission hop whose evidence quote is in THIS doc
         visibleEvents().forEach(e=>{ allHopsOf(e).forEach(h=>{ if(String(h.doc_id)!==did) return; const q=h.quote||''; if(!q.trim()) return;
-          out.push({src:'prov', evId:e.id, hopId:h.id, actor:e.actor, docId:did, key:'pv:'+(h.id||h.layer), label:hopLabel(h), summary:hopMeta(h), color:readableHLColor(h.inferred?PROV_INFER_HL_HEX:PROV_HL_HEX), quote:q, block:h.block||'body',
+          out.push({src:'prov', evId:e.id, hopId:h.id, actor:e.actor, docId:did, key:'pv:'+(h.id||h.layer), label:AI_FILTER_LABELS.sourceChain, summary:hopMeta(h), color:readableHLColor(h.inferred?PROV_INFER_HL_HEX:PROV_HL_HEX), quote:q, block:h.block||'body',
             fields:[ {name:'方式',val:h.how||'－'}, h.place?{name:'地點',val:h.place}:null, h.whenCh?{name:'時間',val:h.whenCh}:null, {name:'判定',val:h.inferred?'由文意推斷':'原文明載'} ].filter(Boolean) }); }); }); }
-      out.forEach((it,i)=>{ it.n=i+1; it.frags=fragsOf(it.quote||''); });
-      return out;
+      const visible=out.filter(docItemVisible);
+      visible.forEach((it,i)=>{ it.n=i+1; it.frags=fragsOf(it.quote||''); });
+      return visible;
     }
     let ITEMS=items();
     const active=new Set();   // item KEYS
     const openNotes=new Set(); // item KEYS whose label details are expanded
-    function autoActive(){ const ie=docEditsRead(r.id).itemEdits||{}; ITEMS.forEach(it=>{ if(it.src==='user'||it.src==='event'||it.src==='prov'||ie[it.key]) active.add(it.key); }); }
-    autoActive();
     let divisions=deepClone(docEditsRead(r.id).divisions)||null;
     let showDiv=!!divisions;
+    function autoActive(){ if(divisions) return; const ie=docEditsRead(r.id).itemEdits||{}; ITEMS.forEach(it=>{ if(it.src==='user'||it.src==='event'||it.src==='prov'||ie[it.key]) active.add(it.key); }); }
+    autoActive();
     function saveDivisions(){ if(divisions) docEdits(r.id).divisions=deepClone(divisions); else delete docEditsRead(r.id).divisions; saveEdits(); }
 
     host.innerHTML=`<div class="ip-filterdock"><button class="ip-filterbtn" type="button"><span class="filter-icon" aria-hidden="true">${IC.filter}</span><span class="filter-label">篩選</span></button><button class="ip-settingsbtn" type="button" title="顯示設定" aria-label="顯示設定">${IC.gear}</button><div class="ip-filterpop"><span class="ip-chipbar"></span></div><div class="ip-settingspop"><div class="ip-headtoggles">
-          <label class="ios-tgl" title="切換：標註頁 / 表格頁"><span class="ios-lab l">標註</span><input class="ip-pagetgl" type="checkbox"><span class="ios-track"><span class="ios-knob"></span></span><span class="ios-lab r">表格</span></label>
-          <label class="ip-ver tgl-pill" title="切換 AI 原版 / 你的調整版"><input type="checkbox" class="ip-vtgl"> AI原版</label>
           <button class="ip-notemode tgl-pill" type="button" title="標註顯示位置：右側欄 / 行內全寬"></button>
         </div></div></div>
       <div class="ip-scroll">
         <div class="ip-pane ix active">
-          <div class="ip-overall"></div>
-          <div class="ix-cols"><div class="ix-text"></div><div class="ix-margin"></div></div>
+          <div class="ix-summary"></div><div class="ix-cols"><div class="ix-text"></div><div class="ix-margin"></div></div>
         </div>
-        <div class="ip-pane tbl"></div>
       </div>`;
     const root=host.closest('.card, .ip');
-    const ixCols=host.querySelector('.ix-cols'), textEl=host.querySelector('.ix-text'), marginEl=host.querySelector('.ix-margin');
-    const overallEl=host.querySelector('.ip-overall'), filterDock=host.querySelector('.ip-filterdock'), filterBtn=host.querySelector('.ip-filterbtn'), chipbar=host.querySelector('.ip-filterpop .ip-chipbar');
+    const ixSummary=host.querySelector('.ix-summary'), ixCols=host.querySelector('.ix-cols'), textEl=host.querySelector('.ix-text'), marginEl=host.querySelector('.ix-margin');
+    const filterDock=host.querySelector('.ip-filterdock'), filterBtn=host.querySelector('.ip-filterbtn'), chipbar=host.querySelector('.ip-filterpop .ip-chipbar');
     filterBtn.onclick=()=>{ filterDock.classList.toggle('open'); filterBtn.classList.toggle('on', filterDock.classList.contains('open')); };
     const setBtn=host.querySelector('.ip-settingsbtn'); if(setBtn){ setBtn.onclick=()=>{ filterDock.classList.toggle('setopen'); setBtn.classList.toggle('on', filterDock.classList.contains('setopen')); }; }
 
-    // header iOS page toggle: off=互動標註, on=表格
-    const pageTgl=root.querySelector('.ip-pagetgl'); pageTgl.checked=false;
-    function showPane(which){ host.querySelectorAll('.ip-pane').forEach(p=>p.classList.toggle('active', p.classList.contains(which))); if(which==='ix') renderText(); else renderTable(); }
-    pageTgl.onchange=()=>showPane(pageTgl.checked?'tbl':'ix');
-
-    const verTgl=root.querySelector('.ip-vtgl'); verTgl.checked=false;
-    verTgl.onchange=e=>{ showAI=e.target.checked; ITEMS=items(); active.clear(); if(!showAI) autoActive(); renderOverall(); renderChips(); renderText(); };
-
-    function renderOverall(){
-      const ai=(getSummary(r)||{})[overallKey]||'';
-      const adj=docEditsRead(r.id).overallAdj;
-      const val=showAI?ai:(adj!=null?adj:ai);
-      overallEl.innerHTML=`<div class="ip-ovh">總摘要 ${showAI?'（AI原版）':(adj!=null?'（已調整）':'')}</div><div class="ip-ovtext ed" contenteditable="true"></div>`;
-      overallEl.querySelector('.ip-ovtext').textContent=val||'（無）';
-      overallEl.querySelector('.ip-ovtext').addEventListener('blur',ev=>{ const t=ev.target.textContent.trim(); if(t&&t!==ai) docEdits(r.id).overallAdj=t; else delete docEditsRead(r.id).overallAdj; saveEdits(); renderOverall(); });
-    }
-
-    function groupLabel(it){ return it.src==='event' ? (EVENT_LABEL[it.actor]||'事件') : (it.src==='ai' ? String(it.label||'').split('・')[0] : it.label); }
+    function groupLabel(it){ return it.label||AI_FILTER_LABELS.manual; }
     function labelGroups(){ const g={}; ITEMS.forEach(it=>{ const lab=groupLabel(it); (g[lab]=g[lab]||[]).push(it); }); return g; }
+    function renderSummary(){
+      const text=reviewedSummaryTextFor(r);
+      ixSummary.innerHTML='';
+      if(!text) return;
+      const heading=document.createElement('div'); heading.className='ix-summary-label'; heading.textContent='摘要';
+      const body=document.createElement('div'); body.className='ix-summary-text'; body.textContent=text;
+      ixSummary.append(heading,body);
+    }
     function renderChips(){
       const g=labelGroups(); const allOn=ITEMS.length&&ITEMS.every(it=>active.has(it.key));
       const activeCount=ITEMS.filter(it=>active.has(it.key)).length;
@@ -3289,7 +3389,7 @@
       });
     }
 
-    function blocks(){ const a=[]; const bd=getBody(r); if(bd) a.push({label:'原文 body', text:bd, key:'body', isBody:true}); if(r.rescript) a.push({label:'硃批 rescript', text:r.rescript, key:'rescript'}); return a; }
+    function blocks(){ const a=[]; const bd=getBody(r); if(bd) a.push({label:'原文', text:bd, key:'body', isBody:true}); return a; }
     function zhuyiMask(text, blockKey){
       text=String(text||''); const mask=new Uint8Array(text.length);
       const add=(s,e)=>{ s=Math.max(0,s|0); e=Math.min(text.length,e|0); for(let i=s;i<e;i++) mask[i]=1; };
@@ -3332,6 +3432,37 @@
         c=e; }
       return s;
     }
+    function bodyEditorMarkup(runHtml, segmentIndex){
+      const segmentAttr=segmentIndex==null?'':` data-body-edit-segment="${segmentIndex}"`;
+      return `<span class="body-inline-edit" contenteditable="true" spellcheck="false" data-body-inline-edit="1"${segmentAttr}>${runHtml}</span>`;
+    }
+    function bodyTextFromRendered(editor){
+      const clone=editor.cloneNode(true);
+      clone.querySelectorAll('.inote,.blk-label,.seg-label,.seg-summary,.seg-num,sup').forEach(el=>el.remove());
+      const text=clone.innerText;
+      return String(text==null?clone.textContent||'':text);
+    }
+    function readBodyFromRendered(){
+      const segments=[...textEl.querySelectorAll('[data-body-inline-edit][data-body-edit-segment]')];
+      if(segments.length) return segments.map(bodyTextFromRendered).join('');
+      const editor=textEl.querySelector('[data-body-inline-edit="1"]');
+      return editor?bodyTextFromRendered(editor):getBody(r);
+    }
+    function saveBodyFromRendered(){
+      const next=readBodyFromRendered(), base=String(r.body||''), current=getBody(r);
+      if(next===current) return false;
+      if(next===base) delete docEditsRead(r.id).body;
+      else docEdits(r.id).body=next;
+      saveEdits();
+      return true;
+    }
+    function wireBodyEditors(){
+      textEl.querySelectorAll('[data-body-inline-edit]').forEach(editor=>editor.addEventListener('focusout',()=>{
+        const changed=saveBodyFromRendered();
+        if(!changed || textEl.contains(document.activeElement)) return;
+        ITEMS=items(); renderChips(); renderText(); if(typeof render==='function') render();
+      }));
+    }
     function renderText(){
       ixCols.classList.toggle('inline', noteMode==='inline');
       let html='';
@@ -3342,14 +3473,15 @@
           it.frags.forEach(f=>{ const pos=b.text.indexOf(f); if(pos>=0){ for(let c=pos;c<pos+f.length;c++) cov[c]=idx; } }); });
         const firstSeen=new Set();
         if(b.isBody && divisions && showDiv){
-          let seg=`<div class="blk" data-block="body"><span class="blk-label">原文（已分段）</span>`;
-          divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+buildRuns(b.text,cov,dv.start,dv.end,firstSeen,zmask)+`</div></div>`; });
+          let seg=`<div class="blk" data-block="body"><span class="blk-label">原文</span>`;
+          divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+bodyEditorMarkup(buildRuns(b.text,cov,dv.start,dv.end,firstSeen,zmask),di)+`</div></div>`; });
           seg+='</div>'; html+=seg;
         } else {
-          html+=`<div class="blk" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>`+buildRuns(b.text,cov,0,b.text.length,firstSeen,zmask)+`</div>`;
+          const runs=buildRuns(b.text,cov,0,b.text.length,firstSeen,zmask);
+          html+=`<div class="blk" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>${b.isBody?bodyEditorMarkup(runs):runs}</div>`;
         }
       });
-      textEl.innerHTML=html; placeNotes();
+      textEl.innerHTML=html; placeNotes(); wireBodyEditors();
       textEl.querySelectorAll('.item-edit[data-item-key]').forEach(el=>el.addEventListener('blur',()=>{
         const it=ITEMS.find(x=>x.key===el.dataset.itemKey); if(!it) return;
         const value=el.textContent.trim(), field=el.dataset.itemField||'summary';
@@ -3404,34 +3536,20 @@
       setTimeout(()=>openHLEditor({mode:'new', frag:txt, block}),0);
     });
     textEl.addEventListener('click',e=>{ const m=e.target.closest('mark.hl'); if(!m) return; openHLEditor({mode:'edit', it:ITEMS[+m.dataset.i]}); });
-    // note placement toggle (右側欄 / 行內全寬) — lives in the header next to AI原版
+    // note placement toggle (右側欄 / 行內全寬)
     const nmBtn=root.querySelector('.ip-notemode');
     function syncNmBtn(){ if(nmBtn) nmBtn.textContent = noteMode==='inline' ? '標註：行內' : '標註：右側'; }
     syncNmBtn();
     if(nmBtn) nmBtn.onclick=()=>{ noteMode = noteMode==='inline'?'margin':'inline'; setNoteMode(noteMode); syncNmBtn(); renderText(); };
-    function startBodyEdit(){
-      const blk=textEl.querySelector('.blk[data-block="body"]'); if(!blk) return;
-      const edit=document.createElement('div'); edit.className='ip-ovtext ed body-editing'; edit.contentEditable='true';
-      edit.setAttribute('role','textbox'); edit.setAttribute('aria-label','原文 body'); edit.textContent=getBody(r);
-      blk.replaceWith(edit); edit.focus();
-      edit.addEventListener('blur',()=>{ const t=edit.textContent; if(t!==r.body) docEdits(r.id).body=t; else delete docEditsRead(r.id).body; saveEdits(); renderText(); });
-    }
-    // direct original-text editing in the 標註 tab: click plain body text to edit, without using the pencil button
-    textEl.addEventListener('click',e=>{
-      if(e.target.closest('mark.hl, .inote, .ed')) return;
-      const blk=e.target.closest('.blk[data-block="body"]'); if(!blk) return;
-      const s=window.getSelection(); if(s && !s.isCollapsed) return;
-      startBodyEdit();
-    });
     function closeHLEditor(){ const e=root.querySelector('.hl-editor'); if(e) e.remove(); }
     function openHLEditor(opt){
-      closeHLEditor(); const it=opt.it; const aiLocked = showAI && it && it.src==='ai';
+      closeHLEditor(); const it=opt.it; const aiLocked = false;
       const cur={ label:it?it.label:'', summary:it?it.summary:'', color:it?it.color:'#f3d36b', frag:opt.frag||(it?it.quote:''), block:it?(it.block||'body'):opt.block };
       const ed=document.createElement('div'); ed.className='hl-editor';
       ed.innerHTML=`<div class="hle-row"><b>${opt.mode==='new'?'新增標註':(aiLocked?'AI原版（唯讀）':'編輯標註')}</b><button class="hle-x" type="button">✕</button></div>
         <div class="hle-frag"></div>
         <input class="hle-label" placeholder="標籤" ${aiLocked?'disabled':''}>
-        <textarea class="hle-sum" placeholder="摘要 / 說明" ${aiLocked?'disabled':''}></textarea>
+        <textarea class="hle-sum" placeholder="說明" ${aiLocked?'disabled':''}></textarea>
         <div class="hle-colors"></div>
         <div class="hle-row2">${opt.mode==='edit'&&!aiLocked?'<button class="hle-reframe" type="button" title="先在原文選取文字，再按此">改範圍</button>':''}${it&&!aiLocked?'<button class="hle-del" type="button">刪除</button>':''}<span style="flex:1"></span>${aiLocked?'':'<button class="hle-save" type="button">'+(opt.mode==='new'?'新增':'儲存')+'</button>'}</div>`;
       ed.querySelector('.hle-frag').textContent='「'+cur.frag.slice(0,46)+(cur.frag.length>46?'…':'')+'」';
@@ -3465,17 +3583,6 @@
       if(!uniq.length){ divisions=null; return 0; } uniq.forEach((x,i)=>{ x.end=(i+1<uniq.length)?uniq[i+1].start:body.length; x.n=i+1; }); uniq[0].start=0; divisions=uniq; showDiv=true; return uniq.length;
     }
 
-    function renderTable(){
-      const pane=host.querySelector('.ip-pane.tbl'); let h='';
-      h+=`<div class="sec-title">原文 body（可編輯）<button class="ip-editbody" type="button">編輯原文</button></div><div class="body-text bodyview">${zhuyiHtml(getBody(r),'body')}</div>`;
-      if(r.rescript) h+=`<div class="sec-title">硃批 rescript</div><div class="body-text">${zhuyiHtml(r.rescript,'rescript')}</div>`;
-      h+=`<div class="sec-title">摘要分析（可直接編輯）</div>`+summaryTable(getSummary(r));
-      pane.innerHTML=h;
-      pane.querySelector('.ip-editbody').onclick=()=>{ const edit=document.createElement('div'); edit.className='ip-ovtext ed body-editing'; edit.contentEditable='true';
-        edit.setAttribute('role','textbox'); edit.setAttribute('aria-label','原文 body'); edit.textContent=getBody(r); const v=pane.querySelector('.bodyview'); v.replaceWith(edit); edit.focus();
-        edit.addEventListener('blur',()=>{ const t=edit.textContent; if(t!==r.body) docEdits(r.id).body=t; else delete docEditsRead(r.id).body; saveEdits(); renderTable(); renderText(); }); };
-      pane.querySelectorAll('.ed[data-path]').forEach(el=>el.addEventListener('blur',()=>{ const e=docEdits(r.id); if(!e.summary) e.summary=deepClone(r.summary); setByPath(e.summary, el.dataset.path, el.textContent); saveEdits(); }));
-    }
 
     const ftBody=root.querySelector('.ft-body');
     function renderFoot(which){
@@ -3592,7 +3699,7 @@
       renderSaved();
     }
 
-    renderOverall(); renderChips(); renderTable(); renderText(); renderFoot('notes');
+    renderChips(); renderSummary(); renderText(); renderFoot('notes');
 
     // expose this card's division/AI hooks so the floating AI pet can drive it
     host.__cardApi={
@@ -4069,8 +4176,6 @@
     if(card.el.classList.contains('folded')) expandCard(card);
     if(card.buildBody) card.buildBody();
     window.__activeCard=card; activeList=card.list;
-    const pageTgl=card.el.querySelector('.ip-pagetgl');
-    if(pageTgl && pageTgl.checked){ pageTgl.checked=false; pageTgl.dispatchEvent(new Event('change')); }
     return card;
   }
   // Brief, transient feedback next to whatever the user clicked -- previously a failed quote-jump
@@ -4122,7 +4227,7 @@
       // toggle). If the doc opened on the table pane, the highlight would be applied inside a hidden
       // pane and be invisible -- force the interactive-text pane visible first.
       const ixPane=[...host.querySelectorAll('.ip-pane')].find(p=>p.classList.contains('ix'));
-      if(ixPane && !ixPane.classList.contains('active')){ const tgl=host.querySelector('.ip-pagetgl'); if(tgl&&tgl.checked){ tgl.checked=false; tgl.dispatchEvent(new Event('change')); } else host.querySelectorAll('.ip-pane').forEach(p=>p.classList.toggle('active', p===ixPane)); }
+      if(ixPane && !ixPane.classList.contains('active')) host.querySelectorAll('.ip-pane').forEach(p=>p.classList.toggle('active', p===ixPane));
       const textEl=(ixPane&&ixPane.querySelector('.ix-text'))||host.querySelector('.ix-text')||host.querySelector('.body-text'); if(!textEl) return;
       const ranges=findQuoteRanges(textEl, quote);
       if(!ranges.length){ if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center',behavior:'smooth'}); restoreAIQuoteAnchor(aiAnchor); flashQuoteMsg('已開啟文書，但找不到相符或相近的原文', originEl); return; }
@@ -4160,7 +4265,7 @@
     }, 100);
   }
   if(typeof window!=='undefined') window.flashQuoteInDoc=flashQuoteInDoc;
-  function closeEventCard(id){ const c=evCards.get(id); if(c){ c.el.remove(); evCards.delete(id); } if(hlEventId===id){ hlEventId=null; } if(typeof clearQuoteFlash==='function') clearQuoteFlash(); if(typeof cleanupEmptyColumns==='function') cleanupEmptyColumns(); render(); }
+  function closeEventCard(id){ const c=evCards.get(id); if(c){ c.el.remove(); evCards.delete(id); } if(hlEventId===id){ hlEventId=null; hlDocSide=null; } if(typeof clearQuoteFlash==='function') clearQuoteFlash(); if(typeof cleanupEmptyColumns==='function') cleanupEmptyColumns(); render(); }
   // An emperor-action event's real content is the same structured 硃批/上諭 finding shown on the AI
   // chat card that created it (quote, what's being responded to, the emperor's judgement, and a
   // source citation) -- collapsing all of that into one flattened `description` string loses the
@@ -4426,10 +4531,10 @@
   function openEventCard(ev){
     collapseUnrelatedSpreadGroups(ev.id);
     if(evCards.has(ev.id)){ closeEventCard(ev.id); return; }   // toggle off
-    hlEventId=ev.id; hlDocRid=null;
+    hlEventId=ev.id; hlDocRid=null; hlDocSide=null;
     const list=ensureList();
     const el=document.createElement('div'); el.className='card ev-card';
-    el.innerHTML=`<div class="ip-head"><button class="ip-move" type="button" title="拖曳移動">✥</button><div class="ip-titles"></div><div class="ip-btns"><button class="ip-close" type="button" title="關閉">×</button></div></div><div class="ip-body ev-body"></div>`;
+    el.innerHTML=`<div class="ip-head"><button class="ip-move" type="button" title="拖曳移動">${IC.move}</button><div class="ip-titles"></div><div class="ip-btns"><button class="ip-close" type="button" title="關閉">${IC.close}</button></div></div><div class="ip-body ev-body"></div>`;
     list.appendChild(el);
     el.querySelector('.ip-close').onclick=()=>closeEventCard(ev.id);
     if(typeof attachPanelDrag==='function') attachPanelDrag(el, {el, list, isEvent:true, eid:ev.id});
@@ -4472,7 +4577,7 @@
     if(dayCards.has(dateAr)){ closeDayCard(dateAr); return; }   // toggle off
     const list=ensureList();
     const el=document.createElement('div'); el.className='card day-card';
-    el.innerHTML=`<div class="ip-head"><button class="ip-move" type="button" title="拖曳移動">✥</button><div class="ip-titles"></div><div class="ip-btns"><button class="ip-close" type="button" title="關閉">×</button></div></div><div class="ip-body day-body"></div>`;
+    el.innerHTML=`<div class="ip-head"><button class="ip-move" type="button" title="拖曳移動">${IC.move}</button><div class="ip-titles"></div><div class="ip-btns"><button class="ip-close" type="button" title="關閉">${IC.close}</button></div></div><div class="ip-body day-body"></div>`;
     list.appendChild(el);
     el.querySelector('.ip-close').onclick=()=>closeDayCard(dateAr);
     if(typeof attachPanelDrag==='function') attachPanelDrag(el, {el, list});
@@ -4927,9 +5032,9 @@
       ev.__suggestedResponses.splice(ix,1); saveEdits(); return existing; }
     const rp=relPayloadFromItem(it);
     const respSub=(it.subtitle||(it.how||'官員回應').slice(0,20));
-    const respEv=addEvent({ actor:'qing', subtitle:respSub, what:respSub,
+    const respEv=addEvent({ actor:'qing', aiFilterLabel:AI_FILTER_LABELS.response, subtitle:respSub, what:respSub,
       description:it.how||'', where:rp.where, who:rp.who, whoLoc:rp.whoLoc, relations:rp.relations, whenCh:'', dateAr:officialResponseDateAr(it, ev.dateAr),
-      sources:[{doc_id:it.doc_id||'', quote:it.response_quote||'', label:'回應', howKnown:''}],
+      sources:[{doc_id:it.doc_id||'', quote:it.response_quote||'', label:'回應', aiFilterLabel:AI_FILTER_LABELS.response, howKnown:''}],
       respondsToEventId:evId, respondsToQuote:it.action_quote||'', receiveDate:it.receive_date||'' });
     ev.__suggestedResponses.splice(ix,1);
     saveEdits();
@@ -5459,9 +5564,9 @@
   // 回報記錄 mentions panel can show each report's own wording, not just the canonical one repeated.
   function mentionOwnFields(p){ return { ownSubtitle:p.subtitle||p.what||'', ownDescription:p.description||'', ownWhere:p.where||'', ownWhenAr:p.whenAr||'', ownWhenCh:p.whenCh||'', ownWho:p.who||[],
     ownWhoLoc:p.whoLoc||{}, ownRelations:p.relations||[] }; }
-  function commitProposal(p){ const d=eventDateFromProposal(p);
-    return addEvent({actor:p.actor, subtitle:p.subtitle, what:p.subtitle, description:p.description||'', where:p.where, who:p.who||[], whoLoc:p.whoLoc||{}, relations:p.relations||[], whenCh:p.whenCh||'', dateAr:d?fmt(d):null,
-      sources:candidateSources(p).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:s.label||p.subtitle||'', howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(p)))}); }
+  function commitProposal(p){ const d=eventDateFromProposal(p); const filterLabel=p.actor==='lin'?AI_FILTER_LABELS.lin:(p.actor==='qing'?qingFilterLabel(p.__qcat||p.qcat||p.category||'done'):eventFilterLabel({actor:p.actor}));
+    return addEvent({actor:p.actor, category:p.__qcat||p.qcat||p.category||'', aiFilterLabel:filterLabel, subtitle:p.subtitle, what:p.subtitle, description:p.description||'', where:p.where, who:p.who||[], whoLoc:p.whoLoc||{}, relations:p.relations||[], whenCh:p.whenCh||'', dateAr:d?fmt(d):null,
+      sources:candidateSources(p).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:s.label||p.subtitle||'', aiFilterLabel:filterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(p)))}); }
   // Resolve a __matchReg pointer (bucketKey/turnIndex/itemIndex, see buildExtractRegistry) back to
   // the LIVE earlier candidate item it refers to, so its up-to-date data (it may have been edited,
   // or committed by some other action, since the registry snapshot was taken) can be read/mutated.
@@ -5502,9 +5607,10 @@
     const canonical = earliestIsPrior ? earlier : p;
     const other = earliestIsPrior ? p : earlier;
     const d=eventDateFromProposal(canonical);
-    const ev=addEvent({actor:canonical.actor||p.actor, subtitle:canonical.subtitle||canonical.what, what:canonical.subtitle||canonical.what, description:canonical.description||'',
+    const canonicalFilterLabel=canonical.actor==='lin'?AI_FILTER_LABELS.lin:(canonical.actor==='qing'?qingFilterLabel(canonical.__qcat||canonical.qcat||canonical.category||'done'):eventFilterLabel({actor:canonical.actor}));
+    const ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonical.subtitle||canonical.what, what:canonical.subtitle||canonical.what, description:canonical.description||'',
       where:canonical.where||'', who:canonical.who||[], whoLoc:canonical.whoLoc||{}, relations:canonical.relations||[], whenCh:canonical.whenCh||'', dateAr:d?fmt(d):null,
-      sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonical.subtitle||canonical.what||'', howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
+      sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonical.subtitle||canonical.what||'', aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
     candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other))); });
     earlier.__added=true; earlier.__evId=ev.id;
     return ev;
@@ -5654,7 +5760,7 @@
       if(armDate){ applyArmedDate(d); return; }
       if(armEvDateId||armAddEvt){ applyEventArm(d, e); if(evtBtn) evtBtn.classList.remove('on'); return; }
       if(armAdd){ doAddAt(d, ux < (Lx+Rx)/2); disarmAdd(); if(addBtn) addBtn.classList.remove('on'); return; }
-      if(hlEventId||hlDocRid!=null){ hlEventId=null; hlDocRid=null; render(); return; }       // click empty → clear highlight chain
+      if(hlEventId||hlDocRid!=null){ hlEventId=null; hlDocRid=null; hlDocSide=null; render(); return; }       // click empty → clear highlight chain
       if(!editMode) return;
       doAddAt(d, ux < (Lx+Rx)/2);                               // edit-mode convenience add
     });
@@ -5667,14 +5773,14 @@
     function addButton(parent,label,fn,opts){ const b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem'); b.textContent=label; if(opts&&opts.disabled){ b.disabled=true; b.title=opts.title||''; } if(opts&&opts.danger)b.classList.add('tcm-danger'); b.onclick=e=>{e.preventDefault();e.stopPropagation();fn();}; parent.appendChild(b); return b; }
     function clickControl(id){ const b=document.getElementById(id); if(b){ closeMenu(); b.click(); } }
     function labelOf(id,fallback){ const b=document.getElementById(id); return b&&b.tagName!=='INPUT'?(b.textContent||'').trim()||fallback:fallback; }
-    function openDoc(rid){ const rec=recByRid(rid); if(!rec)return; const key=/^\d+$/.test(String(rid))?Number(rid):String(rid); selRid=key; hlDocRid=key; hlEventId=null; render(); openCard(rec,1); requestAnimationFrame(()=>{if(window.__focusDot)window.__focusDot(rid);}); }
+    function openDoc(rid,side){ const rec=recByRid(rid); if(!rec)return; const key=/^\d+$/.test(String(rid))?Number(rid):String(rid); selRid=key; hlDocRid=key; hlDocSide=side||preferredReviewSide(rec,'open'); hlEventId=null; render(); openCard(rec,1); requestAnimationFrame(()=>{if(window.__focusDot)window.__focusDot(rid);}); }
     function openMenu(e){
       e.preventDefault(); e.stopPropagation(); closeMenu(); closeDotPop();
       const dot=e.target.closest&&e.target.closest('.ddot,.edot'), rid=dot&&dot.dataset.rid, eid=dot&&dot.dataset.evid;
       const ref=dot?normalizeDotRef(dotRefFromEl(dot)):null, pos={clientX:e.clientX,clientY:e.clientY};
       const sr=svg.getBoundingClientRect(), date=dateFromY((e.clientY-sr.top)/scale), left=((e.clientX-sr.left)/scale)<(Lx+Rx)/2;
       menu=document.createElement('div'); menu.className='timeline-context-menu'; menu.setAttribute('role','menu'); menu.setAttribute('aria-label','時間軸功能');
-      if(!eid) addButton(menu,rid?'查看圓點資訊':(editMode?'結束編輯圓點':'編輯圓點'),()=>{closeMenu();if(rid)openDoc(rid);else clickControl('d-editdots');});
+      if(!eid) addButton(menu,rid?'查看圓點資訊':(editMode?'結束編輯圓點':'編輯圓點'),()=>{closeMenu();if(rid)openDoc(rid,dot&&dot.dataset.side);else clickControl('d-editdots');});
       if(rid){ addButton(menu,'隱藏圓點',()=>{closeMenu();const r=recByRid(rid);if(r)hideDot(r);}); addButton(menu,'刪除圓點',()=>{closeMenu();const r=recByRid(rid);if(r&&confirm('永久刪除此圓點？此動作不會出現在隱藏清單。'))removeDot(r);},{danger:true}); }
       else if(eid){ addButton(menu,'隱藏事件',()=>{closeMenu();if(eventById(eid))hideEvent(eid);}); addButton(menu,'刪除事件',()=>{closeMenu();if(eventById(eid)&&confirm('永久刪除此事件？'))removeEvent(eid);},{danger:true}); }
       const divider=()=>{const d=document.createElement('div');d.className='tcm-divider';d.setAttribute('role','separator');menu.appendChild(d);}; divider();
@@ -5691,11 +5797,6 @@
     wsChart.addEventListener('contextmenu',openMenu);document.addEventListener('pointerdown',e=>{if(menu&&!menu.contains(e.target))closeMenu();},true);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});window.addEventListener('blur',closeMenu);window.addEventListener('resize',closeMenu);scroll.addEventListener('scroll',closeMenu,{passive:true});
   })();
   rebuildRecs();
-  function setByPath(obj, path, val){
-    const ks=path.split('.'); let o=obj;
-    for(let i=0;i<ks.length-1;i++){ const k=/^\d+$/.test(ks[i])?+ks[i]:ks[i]; if(o[k]==null) o[k]={}; o=o[k]; }
-    const last=ks[ks.length-1]; o[/^\d+$/.test(last)?+last:last]=val;
-  }
   function deepClone(o){ return o==null?o:JSON.parse(JSON.stringify(o)); }
   function downloadJSON(name, data){
     const blob=new Blob([JSON.stringify(data,null,2)],{type:'application/json'});
@@ -5900,7 +6001,7 @@
   }
   function applySkillChatOutput(rel, data, collector){
     const lname=rel.toLowerCase(); let n=0;
-    const pairLabel=p=>p&&p.relation==='official_reply_to_emperor_zhu'?'硃批—回應配對':(p&&p.relation==='yu_source'?'上諭—來源配對':'上諭—回應配對');
+    const pairLabel=p=>pairFilterLabel(p);
     // 上諭—回應配對 (doc pairing) results: one pair -> one review card in the
     // no-selection panel. Nothing is written back until 加入配對 is clicked.
     if(/confirmed.?pair/.test(lname)){
@@ -6709,7 +6810,7 @@
       // text before being sent, so they're labeled by their first line).
       function chatTurnLabel(m){
         if(!m) return '（空白訊息）';
-        if(m.kind==='docpair'){ const rel=m.pair&&m.pair.relation; const lbl=rel==='official_reply_to_emperor_zhu'?'硃批—回應':'上諭—回應'; return '⇄ '+lbl+'配對'+(m.pair&&m.pair.none?'（無結果）':(m.pair?('：'+(m.pair.yu_doc_id||m.pair.zhu_doc_id||'')+'↔'+(m.pair.reply_doc_id||'')):'')); }
+        if(m.kind==='docpair'){ const lbl=pairFilterLabel(m.pair); return '⇄ '+lbl+(m.pair&&m.pair.none?'（無結果）':(m.pair?('：'+(m.pair.yu_doc_id||m.pair.zhu_doc_id||'')+'↔'+(m.pair.reply_doc_id||'')):'')); }
         if(m.kind==='shangyuloop') return '📜 上諭審閱迴圈（'+(m.events||[]).length+' 事件）';
         if(m.kind==='extract') return '◆ 擷取：'+(EVENT_LABEL[m.actor]||'事件')+'（'+(m.items||[]).length+'）';
         if(m.kind==='trace') return '⌕ 追溯來源：'+(m.evTitle||'事件');
@@ -6758,7 +6859,7 @@
           const n=m.__skillBundleDocs||'';
           return (name||'技能輸出')+(n?'　·　'+n+' 份文書':'');
         }
-        if(m.kind==='docpair') return '⇄ '+((m.pair&&m.pair.relation==='official_reply_to_emperor_zhu')?'硃批—回應':'上諭—回應')+'配對';
+        if(m.kind==='docpair') return '⇄ '+pairFilterLabel(m.pair);
         if(m.kind==='shangyuloop') return '📜 上諭審閱迴圈';
         if(m.kind==='extract') return '◆ 擷取'+(m.actor==='qing'?'清方':'林方')+'行動';
         if(m.kind==='trace') return '⌕ 追溯'+(m.actor==='qing'?'清方':'林方')+'行動來源';
@@ -6828,10 +6929,11 @@
         pop.querySelectorAll('.cb-toc-item').forEach(b=>b.onclick=()=>{ closePops(); const target=log.querySelector('[data-logi="'+b.dataset.toci+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }); }
       function buildActMenu(insertMode){ const pop=body.querySelector('.cb-pop[data-for="act"]');
         const sec=()=>'<div class="cb-div"></div>';
-        pop.innerHTML='<button class="cb-mi" data-yupair="1" type="button">相關上諭配對</button>'
-          +'<button class="cb-mi" data-yupairnc="1" type="button">相關上諭配對（無引文）</button>'
-          +'<button class="cb-mi" data-yusource="1" type="button">上諭來源（據奏）</button>'
-          +'<button class="cb-mi" data-zhupair="1" type="button">相關硃批配對</button>'
+        pop.innerHTML='<button class="cb-mi" data-yupair="1" type="button">回應的先前上諭</button>'
+          +'<button class="cb-mi" data-yupairnc="1" type="button">回應的先前上諭（無引文）</button>'
+          +'<button class="cb-mi" data-yusource="1" type="button">上諭回應的奏折</button>'
+          +'<button class="cb-mi" data-zhupair="1" type="button">回應的先前硃批</button>'
+          +sec()
           +'<button class="cb-mi" data-act="summary" type="button">摘要</button>'
           +'<button class="cb-mi" data-act="divide" type="button">分段</button>'
           +sec()
@@ -6869,10 +6971,10 @@
         pop.querySelectorAll('.cb-mi[data-zhupi]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('硃批'); else runZhupi({}); });
         pop.querySelectorAll('.cb-mi[data-situfit]').forEach(b=>b.onclick=()=>{ if(b.disabled) return; closePops(); if(insertMode) insertAtToken('回應時效'); else runSituFit(); });
         pop.querySelectorAll('.cb-mi[data-edictscan]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭'); else runEdictScan({}); });
-        pop.querySelectorAll('.cb-mi[data-yupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關上諭配對'); else runYuPairingForSel({}); });
-        pop.querySelectorAll('.cb-mi[data-yupairnc]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關上諭配對（無引文）'); else runYuPairingNoCiteForSel({}); });
-        pop.querySelectorAll('.cb-mi[data-yusource]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭來源（據奏）'); else runYuSourceForSel({}); });
-        pop.querySelectorAll('.cb-mi[data-zhupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('相關硃批配對'); else runZhuPairingForSel({}); });
+        pop.querySelectorAll('.cb-mi[data-yupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('回應的先前上諭'); else runYuPairingForSel({}); });
+        pop.querySelectorAll('.cb-mi[data-yupairnc]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('回應的先前上諭（無引文）'); else runYuPairingNoCiteForSel({}); });
+        pop.querySelectorAll('.cb-mi[data-yusource]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭回應的奏折'); else runYuSourceForSel({}); });
+        pop.querySelectorAll('.cb-mi[data-zhupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('回應的先前硃批'); else runZhuPairingForSel({}); });
         pop.querySelectorAll('.cb-mi[data-emperoraction]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('皇帝行動'); else runEmperorAction({}); });
         pop.querySelectorAll('.cb-mi[data-infosource]').forEach(b=>b.onclick=()=>{ if(b.disabled) return; closePops(); if(insertMode) insertAtToken('硃批來源'); else runInfoSourceLookup({}); });
         pop.querySelectorAll('.cb-mi[data-officialresp]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('官員回應'); else runOfficialResponseForSelected({}); });
@@ -6983,11 +7085,11 @@
       function dpMarkMulti(str, ranges){ ranges=(ranges||[]).filter(r=>r.e>r.s).sort((a,b)=>a.s-b.s); const kept=[]; let last=-1; for(const r of ranges){ if(r.s>=last){ kept.push(r); last=r.e; } } let out='',i=0,ki=0; while(i<str.length){ if(ki<kept.length && i===kept[ki].s){ out+='<mark class="'+kept[ki].cls+'">'; const e=kept[ki].e; while(i<e){ out+=dpEscChar(str[i]); i++; } out+='</mark>'; ki++; } else { out+=dpEscChar(str[i]); i++; } } return out; }
       function docPairHtml(m,i){
         const p=m.pair||{}, ev=p.evidence||{};
-        if(p.none || (!(p.yu_doc_id||p.zhu_doc_id) && !p.reply_doc_id)){ const nd=esc(p.doc_id||''); const nt=p.relation==='official_reply_to_emperor_zhu'?'硃批—回應配對':'上諭—回應配對'; return '<div class="chat-extract dp-card" data-logi="'+i+'"><div class="cx-head">'+nt+'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button><button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div><div class="dp-none">此文書 '+nd+' 查無可信的配對結果。</div></div>'; }
+        if(p.none || (!(p.yu_doc_id||p.zhu_doc_id) && !p.reply_doc_id)){ const nd=esc(p.doc_id||''); const nt=pairFilterLabel(p); return '<div class="chat-extract dp-card" data-logi="'+i+'"><div class="cx-head">'+nt+'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button><button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div><div class="dp-none">此文書 '+nd+' 查無可信的配對結果。</div></div>'; }
         const isZhu=(p.relation==='official_reply_to_emperor_zhu');
         const isSource=(p.relation==='yu_source');
         const empLabel=isZhu?'硃批':'上諭';
-        const pairTitle=isSource?'上諭—來源配對':(isZhu?'硃批—回應配對':'上諭—回應配對');
+        const pairTitle=pairFilterLabel(p);
         const yuId=String((isZhu?(p.zhu_doc_id||p.yu_doc_id):p.yu_doc_id)||''), rpId=String(p.reply_doc_id||'');
         const yr=(typeof recByDocId2==='function')?recByDocId2(yuId):null;
         const rr=(typeof recByDocId2==='function')?recByDocId2(rpId):null;
@@ -7088,6 +7190,7 @@
           +'<div class="cx-head">'+esc(pairTitle)+'<span class="dp-badge dp-'+esc(lvl)+'">'+esc(lvlLbl)+'</span>'
             +(p.no_citation?'<span class="dp-badge dp-nocite">無引文</span>':'')
             +((p.relation==='yu_source'&&ev.yu_span_type==='narrative')?'<span class="dp-badge" style="background:#2f8f6b;color:#fff" title="上諭中無據奏標籤的敘述性奏報事實">無標籤</span>':'')
+            +(p.reply_status?'<span class="dp-badge dp-rs-'+esc(p.reply_status)+'">'+esc(({done:'完成回覆 ✓',ack:'相關未完覆 ✗',unrelated:'非回應 ✗'})[p.reply_status]||p.reply_status)+'</span>':'')
             +'<button class="reply-msg" data-i="'+i+'" type="button">回覆</button>'
             +'<button class="turn-del-x" data-i="'+i+'" type="button" title="移除此訊息">×</button></div>'
           +'<div class="dp-flow">'
@@ -7355,10 +7458,11 @@
       function commitEmperorAction(subtitle, description, dd, docId, quote, howKnown, detail, rel){
         const dateAr=emperorActionDate(dd, docId);
         rel=rel||{};
-        return addEvent({actor:'emperor', subtitle, what:subtitle, description:description||'',
+        const filterLabel=detail&&detail.kind==='zhupi'?AI_FILTER_LABELS.zhupi:(detail&&detail.kind==='edict'?AI_FILTER_LABELS.edict:(detail&&detail.kind==='imperial_command'?AI_FILTER_LABELS.imperialCommand:(detail&&detail.kind==='situfit'?AI_FILTER_LABELS.timeliness:(howKnown==='硃批'?AI_FILTER_LABELS.zhupi:(howKnown==='上諭'?AI_FILTER_LABELS.imperialCommand:(howKnown==='回應時效'?AI_FILTER_LABELS.timeliness:AI_FILTER_LABELS.emperor))))));
+        return addEvent({actor:'emperor', aiFilterLabel:filterLabel, subtitle, what:subtitle, description:description||'',
           where:rel.where||'', who:rel.who||[], whoLoc:rel.whoLoc||{}, relations:rel.relations||[],
           whenCh:(dd&&dd.whenCh)||'', dateAr:dateAr||null, emperorDetail:detail||null,
-          sources:[{doc_id:docId, quote:quote||'', label:subtitle, howKnown:howKnown||''}] });
+          sources:[{doc_id:docId, quote:quote||'', label:subtitle, aiFilterLabel:filterLabel, howKnown:howKnown||''}] });
       }
       // These three build the exact same commit inputs the original 加入為皇帝行動 click uses, pulled
       // out on their own so a failed (dateless) attempt can be RETRIED later with the current logic --
@@ -7888,7 +7992,6 @@
         });
         if(repairedEmperor){ saveEdits(); render(); }
         log.innerHTML=c.length?c.map((m,i)=> m.kind==='docpair'?docPairHtml(m,i):(m.kind==='shangyuloop'?shangyuLoopHtml(m,i):(m.kind==='extract'?extractHtml(m,i):(m.kind==='trace'?traceHtml(m,i):(m.kind==='officialresponse'?officialResponseHtml(m,i):(m.kind==='zhupi'?zhupiHtml(m,i):(m.kind==='edictmatch'?edictHtml(m,i):(m.kind==='infosource'?infoSourceHtml(m,i):(m.kind==='dedupe'?dedupeHtml(m,i):(m.kind==='daysum'?daySumHtml(m,i):(m.kind==='consolidate'?consolidateHtml(m,i):(m.kind==='situfit'?situFitHtml(m,i):(m.kind==='emperoraction'?emperorActionHtml(m,i):turnHtml(m,i)))))))))))))).join(''):'<div class="record-empty">尚無對話。在下方輸入即可開始。</div>';
-        normalizeOutputCardButtons(log);
         (function dpRunHeaders(){ let lastRid=null;
           log.querySelectorAll('.dp-card[data-logi]').forEach(card=>{ const idx=+card.dataset.logi; const mm=c[idx]; if(!mm) return; const rid=mm.__skillRunId||('at:'+(mm.at||idx));
             if(rid!==lastRid){ let n=0; for(let j=idx;j<c.length&&c[j]&&c[j].kind==='docpair'&&(c[j].__skillRunId||('at:'+(c[j].at||j)))===rid;j++) n++;
@@ -8058,8 +8161,8 @@
           saveEdits(); if(typeof render==='function') render(); renderLog({preserve:true}); });
         // ---- 上諭審閱迴圈 (shangyuloop) card handlers ----
         function slTurn(i){ const c=chatArr(curStore()); const m=c&&c[+i]; return (m&&m.kind==='shangyuloop')?m:null; }
-        function slAddEvent(ev){ if(ev.__evId) return eventById(ev.__evId); const e=commitProposal(ev.__evItem); ev.__added=true; ev.__evId=e&&e.id; return e; }
-        function slCommitCommand(m,c){ if(c.__eaEvId) return c.__eaEvId; const tgt=(c.target||[]).join('、'); const desc=[c.summary,tgt?('對象：'+tgt):''].filter(Boolean).join('\n'); const e=commitEmperorAction(c.title||c.summary||'諭令',desc,{whenAr:m.edictDate||'',whenCh:''},m.edictId,c.quote||'','上諭',null,{}); c.__added=true; c.__eaEvId=e&&e.id; return c.__eaEvId; }
+        function slAddEvent(ev){ if(ev.__evId) return eventById(ev.__evId); const e=commitProposal(ev.__evItem); if(e){ e.aiFilterLabel=AI_FILTER_LABELS.edictKnowledge; (e.sources||[]).forEach(s=>s.aiFilterLabel=AI_FILTER_LABELS.edictKnowledge); } ev.__added=true; ev.__evId=e&&e.id; return e; }
+        function slCommitCommand(m,c){ if(c.__eaEvId) return c.__eaEvId; const tgt=(c.target||[]).join('、'); const desc=[c.summary,tgt?('對象：'+tgt):''].filter(Boolean).join('\n'); const e=commitEmperorAction(c.title||c.summary||'諭令',desc,{whenAr:m.edictDate||'',whenCh:''},m.edictId,c.quote||'','上諭',{kind:'imperial_command'},{}); c.__added=true; c.__eaEvId=e&&e.id; return c.__eaEvId; }
         log.querySelectorAll('.sl-more').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev) return; if(b.dataset.step==='c') ev.__revealC=true; else ev.__revealB=true; saveEdits(); renderLog({preserve:true}); });
         log.querySelectorAll('.sl-add-ev').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__added) return; slAddEvent(ev); saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入「'+(ev.subtitle||'事件')+'」為事件。'; });
         log.querySelectorAll('.sl-add-info').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const ev=m.events[+b.dataset.j]; if(!ev||ev.__infoAdded) return; const target=slAddEvent(ev); if(!target) return; const r=ev.report||{}; const obj={info:'直接奏報',quote:r.quote||'',doc_id:r.doc_id||'',srcTitle:r.title||'',srcAuthor:r.official||'',srcSentAr:r.sendAr||'',emperor_quote:ev.edictQuote||'',emperorDocId:m.edictId||''}; target.__suggestedInfoSources=[obj]; if(typeof commitSuggestedInfoSources==='function') commitSuggestedInfoSources(target.id); ev.__infoAdded=true; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已將直接奏報加入「皇帝得知」資訊。'; });
@@ -8348,7 +8451,7 @@
         const actor = included.every(m=>m.actor===included[0].actor) ? included[0].actor
           : (included.some(m=>m.actor==='emperor') && included.every(m=>m.actor==='emperor'||m.actor==='lin'||m.actor==='qing')) ? 'emperor' : included[0].actor;
         const sources=included.map(m=>({doc_id:m.doc_id||'', quote:m.quote||'', label:it.title||'', howKnown:m.howKnown||''})).filter(s=>s.doc_id);
-        const ev=addEvent({actor, subtitle:it.title||'（合併事件）', what:it.title||'（合併事件）', description:it.description||'',
+        const ev=addEvent({actor, aiFilterLabel:AI_FILTER_LABELS.consolidate, subtitle:it.title||'（合併事件）', what:it.title||'（合併事件）', description:it.description||'',
           where:it.where||'', who:Array.isArray(it.who)?it.who:[], whenCh:it.whenCh||'', dateAr:it.dateAr||null,
           whoLoc:parseWhoLoc(whoLocStr({whoLoc:it.whoLoc||{}})), relations:parseRel(relStr({relations:it.relations||[]})),
           sources, groupedFrom: included.map(m=>({evId:m.evId, actor:m.actor, doc_id:m.doc_id||'', quote:m.quote||'', howKnown:m.howKnown||'', title:m.title||'',
@@ -8547,7 +8650,7 @@
               pairs.forEach(p=>{ const prid=String(p.reply_doc_id||'').trim();
                 if(prid!==String(mem._baseId||mem.id)&&prid!==String(mem.id)) return;
                 if((p.match_level||'weak')==='weak' && !ctx.includeWeak) return;
-                added+=pushPairCards({reply_doc_id:mem.id, yu_doc_id:(ed._baseId||ed.id), relation:'official_reply_to_yu', match_level:p.match_level||'weak', evidence:p.evidence||{}}, '上諭—回應配對');
+                added+=pushPairCards({reply_doc_id:mem.id, yu_doc_id:(ed._baseId||ed.id), relation:'official_reply_to_yu', match_level:p.match_level||'weak', evidence:p.evidence||{}}, pairFilterLabel({relation:'official_reply_to_yu'}));
               });
             }catch(e){} }
           if(typeof markAIReview==='function') markAIReview('edict',[mem]);
@@ -8588,7 +8691,7 @@
           if(!scored.length) continue;
           ran++;
           const cands=scored.map(x=>x.z);
-          st2.textContent='AI 配對相關上諭（無引文）…（'+esc(ed.id)+'）';
+          st2.textContent='AI 搜尋回應的先前上諭（無引文）…（'+esc(ed.id)+'）';
           let block='【本上諭】\ndoc_id：'+(ed._baseId||ed.id)+'\n發布日：'+(issue||'未明')+'（'+(ed.annCh||'')+'）\n受命官員：'+(((ed.recipients||[]).join('、'))||(ed.author_name||''))+'\n標題：'+(ed.title||'')+'\n原文：\n'+recordBody(ed)+'\n\n';
           scored.forEach((x,i)=>{ const c=x.z; block+='【候選回應 '+(i+1)+'】\ndoc_id：'+(c._baseId||c.id)+'\n具奏官員：'+String(c.author_name||'').trim()+'\n上奏日：'+(c.sendAr||'未明')+'\n距上諭：'+x.lag+' 日\n主題重疊：'+x.score.toFixed(3)+'\n原文：\n'+recordBody(c)+'\n\n'; });
           const idmap=new Map(); cands.forEach(c=>{ idmap.set(String(c._baseId||c.id),c); idmap.set(String(c.id),c); });
@@ -8597,12 +8700,12 @@
               if((p.match_level||'weak')==='weak' && !ctx.includeWeak) return;
               if((p.reply_status||'')==='unrelated' && !ctx.includeUnrelated) return;
               const ev=Object.assign({}, p.evidence||{}); ev.no_citation=true; if(p.reply_status) ev.reply_status=p.reply_status;
-              added+=pushPairCards({reply_doc_id:c.id, yu_doc_id:(ed._baseId||ed.id), relation:'official_reply_to_yu', no_citation:true, match_level:p.match_level||'weak', reply_status:p.reply_status||'ack', evidence:ev}, '上諭—回應配對（無引文）');
+              added+=pushPairCards({reply_doc_id:c.id, yu_doc_id:(ed._baseId||ed.id), relation:'official_reply_to_yu', no_citation:true, match_level:p.match_level||'weak', reply_status:p.reply_status||'ack', evidence:ev}, pairFilterLabel({relation:'official_reply_to_yu'})+'（無引文）');
             });
           }catch(e){}
           if(typeof markAIReview==='function') markAIReview('edict',[ed]);
         }
-        renderLog({}); st2.textContent='完成：相關上諭配對（無引文），新增 '+added+' 則'+(ran?'':'（所選上諭在 +'+(WMIN+1)+'～+'+WMAX+' 日窗內無主題相符候選）')+'。';
+        renderLog({}); st2.textContent='完成：回應的先前上諭（無引文），新增 '+added+' 則'+(ran?'':'（所選上諭在 +'+(WMIN+1)+'～+'+WMAX+' 日窗內無主題相符候選）')+'。';
       }
       // ===== 上諭來源（據奏）: backward edge. Anchored on a selected 上諭; extracts
       // 據…奏 fragments, takes 奏摺 RECEIVED in [issue-BACK, issue] whose author is
@@ -8640,19 +8743,19 @@
           const cands=yuSourceCandidates(ed);
           if(!cands.length) continue;
           ran++;
-          st2.textContent='AI 追溯上諭來源…（'+esc(ed.id)+'）';
+          st2.textContent='AI 搜尋上諭回應的奏折…（'+esc(ed.id)+'）';
           let block='【本上諭】\ndoc_id：'+(ed._baseId||ed.id)+'\n發布日：'+(issue||'未明')+'（'+(ed.annCh||'')+'）\n受命官員：'+(((ed.recipients||[]).join('、'))||(ed.author_name||''))+'\n標題：'+(ed.title||'')+'\n原文：\n'+recordBody(ed)+'\n\n偵測到的據…奏片段：\n'+spans.slice(0,8).map(s=>'・'+s).join('\n')+'\n\n';
           cands.forEach((x,i)=>{ const c=x.z; const label=x.basis==='named'?'具名來源':(x.basis==='corroborating'?'同期候選':'全域候選'); block+='【候選來源奏摺 '+(i+1)+'】\ndoc_id：'+(c._baseId||c.id)+'\n候選類別：'+label+'\n具奏官員：'+String(c.author_name||'').trim()+'\n上奏日：'+(c.sendAr||'未明')+'\n收到／硃批日：'+(c.recvAr||'未明')+'\n距上諭：'+x.lag+' 日前收到\n原文：\n'+recordBody(c)+'\n\n'; });
           const idmap=new Map(); cands.forEach(x=>{ const c=x.z; idmap.set(String(c._baseId||c.id),c); idmap.set(String(c.id),c); });
           try{ const pairs=await callPairProxy((skillPromptFor('yu-source-pairing')||YU_SOURCE_PROMPT_EXTENDED||YU_SOURCE_PROMPT)+'\n\n'+block);
             pairs.forEach(p=>{ const sid=String(p.source_doc_id||p.reply_doc_id||'').trim(); const c=idmap.get(sid); if(!c) return;
               if((p.match_level||'weak')==='weak' && !ctx.includeWeak) return;
-              added+=pushPairCards({yu_doc_id:(ed._baseId||ed.id), reply_doc_id:c.id, relation:'yu_source', match_level:p.match_level||'weak', evidence:p.evidence||{}}, '上諭—來源配對');
+              added+=pushPairCards({yu_doc_id:(ed._baseId||ed.id), reply_doc_id:c.id, relation:'yu_source', match_level:p.match_level||'weak', evidence:p.evidence||{}}, pairFilterLabel({relation:'yu_source'}));
             });
           }catch(e){}
           if(typeof markAIReview==='function') markAIReview('edict',[ed]);
         }
-        renderLog({}); st2.textContent='完成：上諭來源（據奏），新增 '+added+' 則'+(ran?'':'（所選上諭未偵測到據…奏或窗內無相符奏摺）')+'。';
+        renderLog({}); st2.textContent='完成：上諭回應的奏折，新增 '+added+' 則'+(ran?'':'（所選上諭未偵測到據…奏或窗內無相符奏摺）')+'。';
       }
       async function runZhuPairingForSel(ctx){ ctx=ctx||{};
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
@@ -8675,7 +8778,7 @@
             .slice(0,12);
           if(!scored.length) continue;
           const cands=scored.map(x=>x.z);
-          st2.textContent='AI 配對硃批…（'+esc(mem.id)+'）';
+          st2.textContent='AI 搜尋回應的先前硃批…（'+esc(mem.id)+'）';
           let block='【本回應】\ndoc_id：'+(mem._baseId||mem.id)+'\n具奏官員：'+author+'\n上奏日：'+(mem.sendAr||'未明')+'\n標題：'+(mem.title||'')+'\n偵測到的硃批引用段落：\n';
           spans.slice(0,5).forEach(sp=>{ block+='---\n'+(sp.passage||('…'+sp.marker+'：「'+sp.quoted+'」'))+'\n'; });
           block+='\n';
@@ -8684,7 +8787,7 @@
           try{ const pairs=await callPairProxy(ZHU_PAIR_PROMPT+'\n\n'+block);
             pairs.forEach(p=>{ const zid=String(p.zhu_doc_id||'').trim(); if(!valid.has(zid)) return;
               if((p.match_level||'weak')==='weak' && !ctx.includeWeak) return;
-              added+=pushPairCards({reply_doc_id:mem.id, zhu_doc_id:zid, yu_doc_id:zid, relation:'official_reply_to_emperor_zhu', match_level:p.match_level||'weak', evidence:p.evidence||{}}, '硃批—回應配對');
+              added+=pushPairCards({reply_doc_id:mem.id, zhu_doc_id:zid, yu_doc_id:zid, relation:'official_reply_to_emperor_zhu', match_level:p.match_level||'weak', evidence:p.evidence||{}}, pairFilterLabel({relation:'official_reply_to_emperor_zhu'}));
             });
           }catch(e){}
           if(typeof markAIReview==='function') markAIReview('edict',[mem]);
@@ -9783,76 +9886,93 @@
 
   initFloatingTools();
 
-  const LABELS={
-    what_info_telling_emperor:'稟報內容', key_info:'核心資訊',
-    sources_of_information:'情報來源', responding_to_other_official_messages:'回應他官文書',
-    replying_to_previous_emperor_order:'回應前次諭旨', official_location_now:'官員當前位置',
-    military_actions_done_reported_by_officials:'已執行軍事行動', planned_action:'後續計畫',
-    emperor_reply:'皇帝硃批', emperor_opinion:'皇帝看法', emperor_command:'皇帝諭令',
-    responding_to_message:'回應之原奏', major_locations:'主要地名', uncertainty:'不確定處',
-    yu_written_by:'撰諭者',
-    source_actor:'來源人物', source_type:'文書類型', message_summary:'內容摘要',
-    source_message_sent_date:'發出日', official_received_date:'官員收到日', quotation:'引文',
-    other_official_sender:'原發文者', original_message_summary:'原文摘要', original_message_sent_date:'原文發出日',
-    answer:'判定', summary:'摘要', emperor_received_or_responded_date:'皇帝回覆日', message_sent_date:'發出日'
-  };
-  function lab(k){ return LABELS[k]||k; }
-
-  function leaf(v, path){
-    const empty=(v===null||v===undefined||v==='');
-    return `<span class="ed" contenteditable="true" data-path="${path}">${empty?'':esc(String(v))}</span>`;
-  }
-  function valHtml(v, path){
-    if(Array.isArray(v)){
-      if(!v.length) return '<span style="color:var(--muted)">—</span>';
-      if(typeof v[0]==='object' && v[0]!==null){
-        return v.map((o,i)=>kvTable(o, path+'.'+i)).join('<div style="height:6px"></div>');
-      }
-      return v.map((x,i)=>leaf(x, path+'.'+i)).join('、');
-    }
-    if(v && typeof v==='object') return kvTable(v, path);
-    return leaf(v, path);
-  }
-  function kvTable(obj, path){
-    let rows='';
-    for(const k in obj){ rows+=`<tr><th>${esc(lab(k))}</th><td>${valHtml(obj[k], (path?path+'.':'')+k)}</td></tr>`; }
-    return `<table class="sum-tbl">${rows}</table>`;
-  }
-  function summaryTable(s){ if(!s) return '<div class="body-text">（無摘要）</div>'; return kvTable(s, ''); }
-
-  // ---- interactive annotation ----
+  // ---- reviewed AI output used by the document-information filter ----
   const HL_PALETTE=['#f3d36b','#aedfb6','#a8d8f0','#e9b8d8','#f1c09f','#c9b8ee','#9ddfd4','#dec06b','#c9dd8f','#f1b1ac'];
   const BAD_QUOTE=/^(無|未明|不詳|無引文|none|n\/a|na|—|-)?$/i;
   function isRealQuote(q){ return typeof q==='string' && q.trim().length>=2 && !BAD_QUOTE.test(q.trim()); }
-  function pickSummary(o){ return o.message_summary||o.summary||o.original_message_summary||o.answer||''; }
-  function fragsOf(q){ return q.split(/\s*(?:\.{2,}|…|⋯|；|;|﹔)\s*/).map(s=>s.trim()).filter(s=>s.length>=2); }
-
-  // all non-empty scalar fields of an object (the same info the 表格 shows), excluding the quote itself
-  function objFields(obj){ const skip={quotation:1}; const out=[];
-    for(const k in obj){ if(skip[k]) continue; const v=obj[k]; if(v==null||v==='') continue;
-      if(typeof v==='object'){ if(Array.isArray(v)){ const flat=v.filter(x=>x!=null&&x!=='').map(x=>typeof x==='object'?Object.values(x).filter(Boolean).join('／'):String(x)); if(flat.length) out.push({name:lab(k), val:flat.join('、')}); } continue; }
-      const sv=String(v).trim(); if(sv && !BAD_QUOTE.test(sv)) out.push({name:lab(k), val:sv}); }
-    return out; }
-  // collect quotable items from an analysis object
-  function collectItems(analysis){
-    const items=[];
-    function add(key,obj){
-      if(!obj || typeof obj!=='object') return;
-      if(isRealQuote(obj.quotation)){
-        const actor=obj.source_actor||obj.other_official_sender||'';
-        items.push({ label:(LABELS[key]||key)+(actor?'・'+actor:''),
-          summary:pickSummary(obj), quote:obj.quotation, frags:fragsOf(obj.quotation), fields:objFields(obj) });
-      }
+  function fragsOf(q){ return String(q||'').split(/\s*(?:\.{2,}|…|⋯|；|;|﹔)\s*/).map(s=>s.trim()).filter(s=>s.length>=2); }
+  function aiFields(){
+    return Array.from(arguments).filter(x=>x&&x[1]!=null&&String(x[1]).trim()&&!BAD_QUOTE.test(String(x[1]).trim()))
+      .map(x=>({name:String(x[0]),val:Array.isArray(x[1])?x[1].filter(Boolean).join('、'):String(x[1]).trim()}));
+  }
+  function reviewedAIItemsForDocument(r){
+    const out=[], seen=new Set(), stores=[], storeSeen=new Set(), currentId=String(r&&((r._baseId||r.id))||'');
+    const colorFor=label=> label===AI_FILTER_LABELS.lin?'#efb2aa' : label.indexOf('清軍事')===0||label===AI_FILTER_LABELS.qingNonmil?'#b4d0e4' :
+      label===AI_FILTER_LABELS.emperor||label===AI_FILTER_LABELS.zhupi||label===AI_FILTER_LABELS.edict||label===AI_FILTER_LABELS.imperialCommand?'#d0bee8' :
+      label===AI_FILTER_LABELS.response||label===AI_FILTER_LABELS.timeliness?'#b8d6ad' : '#c9b8ee';
+    function add(label, quote, docId, summary, fields, block){
+      label=String(label||AI_FILTER_LABELS.manual).trim(); quote=String(quote||'').trim();
+      if(!isRealQuote(quote)||!quoteMatchesRecord(r,quote)) return;
+      if(docId && !docIdMatchesRecord(r,docId)) return;
+      const normalized=quote.replace(/[\s\u3000]/g,'');
+      const key='ai:'+label+'|'+String(docId||currentId)+'|'+normalized.slice(0,220);
+      if(seen.has(key)) return; seen.add(key);
+      const fs=Array.isArray(fields)?fields.filter(x=>x&&x.val!=null&&String(x.val).trim()):[];
+      const first=fragsOf(quote)[0]||quote;
+      out.push({src:'ai',key,label,summary:String(summary||''),quote,frags:fragsOf(quote),block:block||((r.rescript&&String(r.rescript).indexOf(first)>=0)?'rescript':'body'),fields:fs,color:colorFor(label)});
     }
-    if(!analysis) return items;
-    for(const k in analysis){
-      const v=analysis[k];
-      if(Array.isArray(v)) v.forEach(el=>add(k,el));
-      else if(v && typeof v==='object') add(k,v);
+    function addStore(s){ if(s&&typeof s==='object'&&!storeSeen.has(s)){ storeSeen.add(s); stores.push(s); } }
+    addStore(docEditsRead(r.id));
+    const groups=(EDITS&&EDITS.__workspaceGroups)||{};
+    Object.keys(groups).forEach(k=>{ const g=groups[k], ids=g&&g.doc_ids; if(g&&(!Array.isArray(ids)||!ids.length||ids.some(id=>docIdMatchesRecord(r,id)))) addStore(g); });
+    Object.keys(EDITS||{}).forEach(k=>{ if(k.indexOf('__')===0) return; if(k===currentId||docIdMatchesRecord(r,k)) addStore(EDITS[k]); });
+    function extractItem(m,it,storeId){
+      const actor=it.actor||m.actor||''; const label=actor==='lin'?AI_FILTER_LABELS.lin:qingFilterLabel(it.__qcat||it.qcat||it.category||m.category||'done');
+      const baseFields=aiFields(['地點',it.where],['人物',Array.isArray(it.who)?it.who.join('、'):it.who],['時間',it.whenCh||it.whenAr],['日期',it.whenAr]);
+      const sources=Array.isArray(it.sources)?it.sources:[];
+      if(sources.length) sources.forEach(s=>add(label,s.quote||s.quotation,s.doc_id||it.doc_id||m.docId||storeId,it.description||it.subtitle||it.what,baseFields));
+      else add(label,it.quote||it.quotation,it.doc_id||m.docId||storeId,it.description||it.subtitle||it.what,baseFields);
     }
-    // assign numbers & colors
-    items.forEach((it,i)=>{ it.n=i+1; it.color=HL_PALETTE[i%HL_PALETTE.length]; });
-    return items;
+    function addPair(p){
+      if(!p||typeof p!=='object'||p.none) return;
+      const rel=String(p.relation||'official_reply_to_yu'), label=pairFilterLabel(p), ev=p.evidence||{};
+      const sourceId=p.yu_doc_id||p.zhu_doc_id||'', replyId=p.reply_doc_id||'';
+      const addSeg=s=>{ if(!s||typeof s!=='object') return; const prior=s.yu||s.zhu||s.prior||s.source||s.matched_yu_span||s.matched_zhu_span; const reply=s.reply||s.quote_in_reply||s.reply_span||s.response; if(prior) add(label,prior,sourceId,'配對中的先前文書',aiFields(['配對類型',label])); if(reply) add(label,reply,replyId,'回應文書中的配對引文',aiFields(['配對類型',label])); };
+      if(Array.isArray(ev.segments)) ev.segments.forEach(addSeg);
+      add(label,ev.matched_yu_span||ev.matched_zhu_span||ev.yu_quote||ev.zhu_quote,sourceId,'配對中的先前文書',aiFields(['配對類型',label]));
+      add(label,ev.quote_in_reply||ev.reply_quote||ev.reply_span,replyId,'回應文書中的配對引文',aiFields(['配對類型',label]));
+    }
+    function processTurn(m,storeId){
+      if(!m||typeof m!=='object') return;
+      const its=Array.isArray(m.items)?m.items:[];
+      if(m.kind==='extract') its.forEach(it=>extractItem(m,it,storeId));
+      else if(m.kind==='trace') (Array.isArray(m.chains)?m.chains:its).forEach(ch=>{
+        (ch.hops||[]).forEach(h=>add(AI_FILTER_LABELS.sourceChain,h.quote,h.doc_id||storeId,hopMeta(h),aiFields(['方式',h.how],['地點',h.place],['時間',h.whenCh],['判定',h.inferred?'由文意推斷':'原文明載'])));
+        (ch.events||[]).forEach(e=>add(AI_FILTER_LABELS.sourceChain,e.quote,e.doc_id||storeId,e.subtitle,aiFields(['人物',e.reporter],['地點',e.where],['時間',e.whenCh])));
+      });
+      else if(m.kind==='officialresponse') its.forEach(it=>{
+        add(AI_FILTER_LABELS.response,it.response_quote,it.doc_id||it.response_doc_id||storeId,it.subtitle||it.how,aiFields(['地點',it.where],['時間',it.whenCh||it.whenAr],['方式',it.how]));
+        add(AI_FILTER_LABELS.emperor,it.action_quote,it.action_doc_id||it.emperorDocId,it.action_subtitle||'被回應的皇帝行動');
+      });
+      else if(m.kind==='situfit'){
+        (m.changes||[]).forEach(it=>add(AI_FILTER_LABELS.timeliness,it.quote,it.doc_id||it.docId,it.how||it.reasoning,aiFields(['判定',it.how],['原因',it.reasoning])));
+        (m.responses||[]).forEach(it=>add(AI_FILTER_LABELS.timeliness,it.quote,it.doc_id||it.docId,it.how||it.reasoning,aiFields(['判定',it.how],['原因',it.reasoning])));
+      } else if(m.kind==='zhupi') its.forEach(it=>add(AI_FILTER_LABELS.zhupi,it.text||it.quote||it.marker,it.doc_id||m.docId||storeId,it.opinion||it.responds_to||'硃批',aiFields(['回應',it.responds_to],['御意',it.opinion])));
+      else if(m.kind==='edictmatch') its.forEach(it=>{
+        const edictFields=aiFields(['日期',it.date],['判定',it.how],['方面',it.aspect]);
+        add(AI_FILTER_LABELS.edict,it.edict_quote,it.edict_id,it.title||it.aspect||it.how,edictFields);
+        add(AI_FILTER_LABELS.edict,it.memorial_quote,it.memDoc||m.memDoc,it.title||it.aspect||it.how,edictFields);
+        (it.points||[]).forEach(pt=>{ add(AI_FILTER_LABELS.edict,pt.edict_quote,it.edict_id,pt.aspect||pt.how,aiFields(['判定',pt.how],['方面',pt.aspect])); add(AI_FILTER_LABELS.edict,pt.memorial_quote,it.memDoc||m.memDoc,pt.aspect||pt.how,aiFields(['判定',pt.how],['方面',pt.aspect])); });
+      });
+      else if(m.kind==='infosource') its.forEach(it=>{
+        add(AI_FILTER_LABELS.infoSource,it.quote,it.doc_id||it.source_doc_id,it.how||it.reasoning,aiFields(['如何得知',it.how],['納入',it.include===false?'否':'是']));
+        add(AI_FILTER_LABELS.infoSource,it.emperor_quote,it.emperorDocId||it.emperor_doc_id||m.docId,it.how||it.reasoning,aiFields(['如何得知',it.how],['納入',it.include===false?'否':'是']));
+      });
+      else if(m.kind==='consolidate') its.forEach(it=>(it.members||[]).forEach(mm=>add(AI_FILTER_LABELS.consolidate,mm.quote,mm.doc_id, it.title||it.description,aiFields(['合併事件',it.title],['地點',it.where],['日期',it.dateAr||it.whenCh]))));
+      else if(m.kind==='shangyuloop'){
+        if(m.section==='events') (m.events||[]).forEach(e=>{
+          const report=e.report||{}; add(AI_FILTER_LABELS.edictKnowledge,report.quote||e.report_quote,report.doc_id||e.report_doc_id,e.subtitle||e.description,aiFields(['地點',e.where],['日期',e.whenCh||e.whenAr]));
+          add(AI_FILTER_LABELS.edictKnowledge,e.edictQuote,m.edictId||m.docId,e.subtitle||e.description);
+          const comment=e.comment||{}; add(AI_FILTER_LABELS.emperor,comment.quote,m.edictId||m.docId,comment.text||'皇帝評論');
+        });
+        if(m.section==='commands') (m.commands||[]).forEach(c=>{ add(AI_FILTER_LABELS.imperialCommand,c.quote||c.edict_quote,m.edictId||m.docId,c.subtitle||c.how,aiFields(['對象',c.target],['日期',c.whenCh||c.whenAr])); (c.responses||[]).forEach(x=>add(AI_FILTER_LABELS.response,x.quote,x.doc_id,x.how||x.subtitle,aiFields(['方式',x.how],['日期',x.whenCh||x.whenAr]))); });
+      } else if(m.kind==='docpair') addPair(m.pair||m);
+      else if(m.kind==='emperoraction') its.forEach(it=>add(it.source==='上諭'?AI_FILTER_LABELS.imperialCommand:AI_FILTER_LABELS.emperor,it.quote||it.text,it.doc_id||m.docId||storeId,it.description||it.subtitle,aiFields(['回應',it.responds_to],['方面',it.aspect])));
+    }
+    stores.forEach(s=>chatArr(s).forEach(m=>processTurn(m,s.doc_id||s.docId||'')));
+    allDocPairs().forEach(addPair);
+    out.forEach((it,i)=>{ it.n=i+1; });
+    return out;
   }
 
   // build interactive pane for record r
@@ -9871,6 +9991,74 @@
     updateSummary();
   })();
   let tmo; document.getElementById('f-text').addEventListener('input',()=>{ clearTimeout(tmo); tmo=setTimeout(render,180); });
+  // ===== Claude: live search-results dropdown + copy-all-ids =====
+  (function setupSearchDropdown(){
+    const input=document.getElementById('f-text'); if(!input) return;
+    const pill=input.closest('.pill.search'); if(!pill) return;
+    const pop=document.createElement('div'); pop.className='search-pop'; pop.style.display='none';
+    pill.appendChild(pop);
+    function searchHayFor(r){ return (originalDocSearch.get(String(r._baseId||r.id))||'')+' '+searchValueText(r).toLowerCase(); }
+    function readableFieldsFor(r){
+      const body=typeof recordBody==='function'?recordBody(r):(r&&r.body)||'';
+      const projected=[r&&r.doc_type,r&&r.title,r&&r.author_name,Array.isArray(r&&r.recipients)?r.recipients.join('、'):r&&r.recipients,
+        r&&r.sendAr,r&&r.recvAr,r&&r.annAr,r&&r.rescript].filter(Boolean).join('\n');
+      return [body, projected, originalDocReadable.get(String(r&&((r._baseId||r.id))))||'', searchValueText(r)].map(x=>String(x||'').trim()).filter(Boolean);
+    }
+    function countOccurrences(text, q){
+      const hay=String(text||'').toLowerCase(), needle=String(q||'').toLowerCase(); if(!needle) return 0;
+      let count=0, at=0; while((at=hay.indexOf(needle,at))>=0){ count++; at+=needle.length; } return count;
+    }
+    function searchExcerptLimit(){
+      const popWidth=pop.getBoundingClientRect().width;
+      const width=popWidth||Math.min(760,Math.max(420,Math.floor(window.innerWidth*.92)));
+      const scale=parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--ui-fs'))||1;
+      const glyphWidth=12.5*scale;
+      return Math.max(19,Math.floor((width-52)/glyphWidth));
+    }
+    function searchDetailFor(r, q){
+      const sources=readableFieldsFor(r), source=sources.find(x=>x.toLowerCase().includes(q))||sources[0]||'';
+      const compact=source.replace(/\s+/g,' ').trim(), at=compact.toLowerCase().indexOf(q), count=countOccurrences(source,q);
+      if(at<0) return {html:esc(compact.slice(0,searchExcerptLimit())), count};
+      const limit=Math.max(searchExcerptLimit(),q.length+2), before=Math.max(1,Math.floor((limit-q.length)/2));
+      let start=0, end=compact.length;
+      if(compact.length>limit){
+        const after=compact.length-(at+q.length);
+        if(at>=before&&after>=before){
+          start=Math.max(0,at-before);
+          end=Math.min(compact.length,start+limit);
+        } else if(at<before){
+          start=0;
+          end=Math.min(compact.length,limit);
+        } else {
+          end=compact.length;
+          start=Math.max(0,end-limit);
+        }
+      }
+      return {html:(start>0?'⋯⋯':'')+esc(compact.slice(start,at))+'<span class="search-hit">'+esc(compact.slice(at,at+q.length))+'</span>'+esc(compact.slice(at+q.length,end))+(end<compact.length?'⋯⋯':''), count};
+    }
+    function matchesFor(q){ q=q.trim().toLowerCase(); if(!q) return []; const out=[];
+      recs.forEach(r=>{ if(searchHayFor(r).includes(q)) out.push(r); }); return out; }
+    let cur=[], typeFilter='';
+    const typeOptions=Object.keys(TYPE_LABEL).map(k=>'<option value="'+esc(k)+'">'+esc(TYPE_LABEL[k])+'</option>').join('');
+    function renderPop(){ const q=input.value.trim(); if(!q){ typeFilter=''; pop.style.display='none'; return; }
+      cur=matchesFor(q);
+      const visible=typeFilter?cur.filter(r=>r.type===typeFilter):cur;
+      const rows=visible.map(r=>{ const tp=r.type; const badge=tp?`<span class="badge ${TYPE_BADGE[tp]||''}">${TYPE_SHORT_LABEL[tp]||''}</span>`:''; const detail=searchDetailFor(r,q.toLowerCase()); const count=detail.count>1?`<span class="search-match-count">(${detail.count})</span>`:'';
+        return `<button class="search-item" type="button" data-rid="${r._rid}" title="${esc(r.title||'')}"><span class="search-main">${badge}<b class="sid">${esc(idLabelOf(r)||r.id)}</b><span class="stt">${esc(r.title||'')}</span></span><span class="search-excerpt"><span class="search-excerpt-text">${detail.html}</span>${count}</span></button>`; }).join('');
+      const empty=visible.length?'':'<div class="search-empty">無符合的文書</div>';
+      pop.innerHTML=`<div class="search-foot"><span class="search-cnt">${visible.length} 筆符合</span><select class="search-type-filter" aria-label="按文書類型篩選" title="按文書類型篩選"><option value="">全部類型</option>${typeOptions}</select><button class="search-copyall" type="button" title="複製全部編號" aria-label="複製全部編號"><svg class="search-copy-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="8" width="11" height="11" rx="2"/><path d="M16 8V6a2 2 0 0 0-2-2H6a2 2 0 0 0-2 2v8a2 2 0 0 0 2 2h2"/></svg></button></div><div class="search-list">${rows}${empty}</div>`;
+      pop.style.display='block';
+      const tf=pop.querySelector('.search-type-filter'); if(tf){ tf.value=typeFilter; tf.onchange=()=>{ typeFilter=tf.value; renderPop(); }; }
+      pop.querySelectorAll('.search-item').forEach(b=>b.onclick=()=>{ if(window.__cmdPickDot) window.__cmdPickDot(b.dataset.rid); });
+      const cp=pop.querySelector('.search-copyall'); if(cp) cp.onclick=()=>{ const ids=visible.map(r=>String(idLabelOf(r)||r.id||'')).filter(Boolean);
+        copyText(ids.join('\n')).then(()=>{ const old=cp.innerHTML; cp.textContent='✓'; cp.setAttribute('aria-label','已複製 '+ids.length+' 個編號'); setTimeout(()=>{ cp.innerHTML=old; cp.setAttribute('aria-label','複製全部編號'); },1100); }); };
+    }
+    input.addEventListener('input', renderPop);
+    input.addEventListener('focus', renderPop);
+    document.addEventListener('mousedown',e=>{ if(!pill.contains(e.target)) pop.style.display='none'; });
+    input.addEventListener('keydown',e=>{ if(e.key==='Escape'){ pop.style.display='none'; } });
+  })();
+
   // header export-all / import-all + dirty tracking
   document.getElementById('ed-export-all').addEventListener('click',()=>{ downloadJSON('formal_all.data', EDITS); window.__edDirty=false; });
   // Split export: same underlying EDITS data as the full backup above, but
@@ -10022,87 +10210,102 @@
     render();
     if(!shownOnce){ requestAnimationFrame(()=>requestAnimationFrame(()=>{ if(scroll.clientHeight>0&&!shownOnce){ shownOnce=true; firstView(); } })); }
   };
-  // ===== 網絡範圍 (Network reach) live control panel =====
-  (function reachPanelInit(){
-    const STEPS=['0','1','2','3','4','∞'];
+  // ===== 點擊後顯示範圍 (lane-first click-network panel) =====
+  (function clickNetworkPanelInit(){
+    const wrap=document.createElement('div'); wrap.id='click-network-panel';
+    wrap.style.cssText='position:fixed;top:70px;right:14px;z-index:12002;width:min(440px,calc(100vw - 24px));max-height:84vh;overflow:auto;background:var(--panel,#fbf7ee);border:1px solid var(--line-strong,#cdbf9e);border-radius:12px;box-shadow:0 6px 22px rgba(60,45,20,.28);color:var(--ink,#3c3526);display:none;';
+    const targetLabels={
+      events:{events:'第一線事件／回應事件',official:'第二線來源文書',imperial:'第三線帝國文書',emperor:'第四線皇帝行動'},
+      official:{events:'第一線自己的事件',official:'第二線其他官員文書',imperial:'第三線硃批收批／配對上諭',emperor:'第四線皇帝行動'},
+      imperial:{events:'第一線來源／回應事件',official:'第二線對應奏摺／資訊來源',imperial:'第三線其他帝國文書',emperor:'第四線皇帝行動'},
+      emperor:{events:'第一線官員回應事件',official:'第二線對應／資訊來源奏摺',imperial:'第三線來源上諭／硃批',emperor:'第四線其他皇帝行動'}
+    };
     function toStep(v){ return v===Infinity?'∞':String(v); }
-    function fromStep(s){ return s==='∞'?Infinity:Number(s); }
-    const wrap=document.createElement('div'); wrap.id='reach-panel';
-    wrap.style.cssText='position:fixed;top:70px;right:14px;z-index:99998;width:312px;max-height:82vh;overflow:auto;'
-      +'background:#fbf7ee;border:1px solid #cdbf9e;border-radius:10px;box-shadow:0 6px 22px rgba(60,45,20,.28);'
-      +'font:13px/1.45 system-ui,"PingFang TC","Microsoft JhengHei",sans-serif;color:#3c3526;display:none;';
-    const launch=document.createElement('button'); launch.id='reach-launch'; launch.type='button';
-    launch.textContent='網絡範圍';
-    launch.title='檢視並控制點擊圓點時，關係網絡延伸多遠';
-    launch.style.cssText='position:fixed;top:70px;right:14px;z-index:99999;background:#4f8f70;color:#fff;border:none;'
-      +'border-radius:8px;padding:6px 11px;font:600 12.5px system-ui,sans-serif;cursor:pointer;box-shadow:0 2px 8px rgba(60,45,20,.3);';
-    function typeRow(t){
-      const cur=toStep(REACH[t.k]);
-      const btns=STEPS.map(s=>`<button type="button" class="rp-step" data-k="${t.k}" data-v="${s}" `
-        +`style="flex:1;border:1px solid #cdbf9e;background:${s===cur?'#4f8f70':'#fff'};color:${s===cur?'#fff':'#5c4a2c'};`
-        +`padding:3px 0;font:600 12px system-ui;cursor:pointer;">${s}</button>`).join('');
-      return `<div class="rp-type" data-k="${t.k}" style="margin:9px 0 4px;">`
-        +`<div style="display:flex;justify-content:space-between;align-items:baseline;gap:6px;">`
-        +`<span style="font-weight:600;">${t.label}</span>`
-        +`<span class="rp-count" data-k="${t.k}" style="font:600 11px system-ui;color:#4f8f70;white-space:nowrap;">·</span></div>`
-        +`<div style="color:#8a7a58;font-size:11px;margin:1px 0 3px;">${t.hint}</div>`
-        +`<div style="display:flex;gap:3px;border-radius:6px;overflow:hidden;">${btns}</div></div>`;
+    function fromStep(v){ return v==='∞'?Infinity:Number(v); }
+    function laneLabel(k){ const lane=CLICK_NETWORK_LANES.find(x=>x.k===k); return lane?lane.label:k; }
+    function escHtml(v){ return String(v==null?'':v).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c])); }
+    function targetRow(source,target){
+      const cur=toStep(CLICK_NETWORK[source.k][target.k]);
+      const steps=CLICK_NETWORK_STEPS.map(v=>`<button type="button" class="cn-step ${v===cur?'is-on':''}" data-source="${source.k}" data-target="${target.k}" data-value="${v}">${v}</button>`).join('');
+      return `<div class="cn-target"><span class="cn-target-label">${targetLabels[source.k][target.k]}</span><div class="cn-steps">${steps}</div></div>`;
     }
-    function build(){
-      wrap.innerHTML=''
-        +`<div style="display:flex;justify-content:space-between;align-items:center;padding:9px 11px;border-bottom:1px solid #e3d8bd;background:#f2ead7;border-radius:10px 10px 0 0;">`
-        +`<strong style="font-size:13.5px;">網絡範圍 · 延伸控制</strong>`
-        +`<button type="button" id="rp-close" style="border:none;background:none;font-size:16px;cursor:pointer;color:#8a7a58;line-height:1;">×</button></div>`
-        +`<div style="padding:4px 12px 10px;">`
-        +`<div style="color:#6b5c3c;font-size:11.5px;margin:6px 0 2px;">點任一圓點／事件後，下方即時顯示各類關係實際延伸的節點數。數字＝該關係最多延伸幾層（0＝關閉，∞＝不限）。設定會套用到你點擊的<b>每一個</b>圓點。</div>`
-        +REACH_TYPES.map(typeRow).join('')
-        +`<div class="rp-summary" style="margin:9px 0 2px;padding:6px 8px;background:#f2ead7;border-radius:6px;font-size:11.5px;color:#5c4a2c;">尚未選取圓點</div>`
-        +`<div style="border-top:1px solid #e3d8bd;margin:10px 0 6px;"></div>`
-        +`<div style="font-weight:600;margin-bottom:4px;">預設組合（Presets）</div>`
-        +`<div style="display:flex;gap:5px;align-items:center;margin-bottom:5px;">`
-        +`<select id="rp-preset" style="flex:1;padding:3px;border:1px solid #cdbf9e;border-radius:5px;background:#fff;font:12px system-ui;"></select>`
-        +`<button type="button" id="rp-apply" style="border:1px solid #4f8f70;background:#4f8f70;color:#fff;border-radius:5px;padding:3px 8px;cursor:pointer;font:600 12px system-ui;">套用</button></div>`
-        +`<div style="display:flex;gap:5px;flex-wrap:wrap;">`
-        +`<button type="button" id="rp-saveas" style="flex:1;border:1px solid #cdbf9e;background:#fff;border-radius:5px;padding:3px 6px;cursor:pointer;font:12px system-ui;">另存目前設定…</button>`
-        +`<button type="button" id="rp-default" style="flex:1;border:1px solid #cdbf9e;background:#fff;border-radius:5px;padding:3px 6px;cursor:pointer;font:12px system-ui;">設為預設</button>`
-        +`<button type="button" id="rp-delete" style="flex:1;border:1px solid #cdbf9e;background:#fff;border-radius:5px;padding:3px 6px;cursor:pointer;font:12px system-ui;">刪除</button>`
-        +`<button type="button" id="rp-reset" style="flex:1;border:1px solid #cdbf9e;background:#fff;border-radius:5px;padding:3px 6px;cursor:pointer;font:12px system-ui;">恢復預設值</button></div>`
-        +`<div id="rp-defnote" style="color:#8a7a58;font-size:11px;margin-top:5px;"></div>`
-        +`</div>`;
-      populatePresets();
-      updateDefNote();
-      wrap.querySelector('#rp-close').onclick=()=>{ wrap.style.display='none'; launch.style.display='block'; };
-      reachPanelRefresh();
+    function laneSection(source,index){
+      return `<section class="cn-lane ${index===0?'is-first':''}" data-source-lane="${source.k}"><div class="cn-lane-head"><strong>${source.label}</strong><span>點到此線時</span></div><div class="cn-lane-hint">${source.hint}。每列是到目標線的最多跳數。</div>${CLICK_NETWORK_LANES.map(target=>targetRow(source,target)).join('')}</section>`;
     }
     function populatePresets(){
-      const sel=wrap.querySelector('#rp-preset'); if(!sel) return; const names=Object.keys(reachPresetsAll());
-      const def=reachDefaultPreset();
-      sel.innerHTML=names.length?names.map(n=>`<option value="${n.replace(/"/g,'&quot;')}">${n}${n===def?' ★預設':''}</option>`).join('')
-        :'<option value="">（尚無預設）</option>';
+      const select=wrap.querySelector('#cn-preset'); if(!select) return;
+      const names=Object.keys(clickNetworkPresetsAll()), def=clickNetworkDefaultPreset();
+      select.innerHTML=names.length?names.map(n=>`<option value="${escHtml(n)}">${escHtml(n)}${n===def?' ★預設':''}</option>`).join(''):'<option value="">（尚無預設）</option>';
     }
-    function updateDefNote(){ const n=wrap.querySelector('#rp-defnote'); if(n){ const d=reachDefaultPreset(); n.textContent=d?('目前預設：'+d+'（每次載入自動套用）'):'尚未設定自動套用的預設。'; } }
-    function syncSteps(){ wrap.querySelectorAll('.rp-step').forEach(b=>{ const on=toStep(REACH[b.dataset.k])===b.dataset.v; b.style.background=on?'#4f8f70':'#fff'; b.style.color=on?'#fff':'#5c4a2c'; }); }
-    function reachPanelRefresh(){
-      const st=window.__reachStats; const sum=wrap.querySelector('.rp-summary');
-      REACH_TYPES.forEach(t=>{ const c=wrap.querySelector('.rp-count[data-k="'+t.k+'"]'); if(c){ const n=st?(st[t.k]||0):null; c.textContent=(n==null)?'·':('+ '+n); c.style.color=(n)?'#4f8f70':'#b8ab88'; } });
-      if(sum){ if(!st){ sum.textContent='尚未選取圓點'; } else { sum.innerHTML='本次點擊共點亮 <b>'+(st.docs||0)+'</b> 份文件、<b>'+(st.events||0)+'</b> 個事件'+(st.truncated?'（已達節點上限 '+(REACH.budget)+'，已截斷）':''); sum.style.color=st.truncated?'#b5462e':'#4f8f70'; } }
+    function updateDefaultNote(){
+      const node=wrap.querySelector('#cn-defnote'); if(!node) return;
+      const d=clickNetworkDefaultPreset(); node.textContent=d?('目前預設：'+d+'（每次載入自動套用）'):'尚未設定自動套用的預設。';
+    }
+    function syncSteps(){
+      wrap.querySelectorAll('.cn-step').forEach(btn=>{ const on=toStep(CLICK_NETWORK[btn.dataset.source][btn.dataset.target])===btn.dataset.value; btn.classList.toggle('is-on',on); });
+    }
+    function refresh(){
       syncSteps();
+      const summary=wrap.querySelector('#cn-summary'); if(!summary) return;
+      const st=window.__clickNetworkStats;
+      if(!st){ summary.textContent='尚未選取圓點。'; summary.classList.remove('has-network'); return; }
+      summary.classList.add('has-network');
+      summary.innerHTML=`來源：<b>${escHtml(laneLabel(st.sourceLane))}</b>　點亮 <b>${st.docs||0}</b> 份文件、<b>${st.events||0}</b> 個事件（共 ${st.total||0} 個節點）${st.truncated?'，已達安全上限':''}`;
     }
-    window.__reachPanelRefresh=reachPanelRefresh;
-    wrap.addEventListener('click',function(e){
-      const step=e.target.closest('.rp-step');
-      if(step){ reachSetType(step.dataset.k, fromStep(step.dataset.v)); syncSteps(); reRender(); return; }
+    function build(){
+      wrap.innerHTML=`<div class="cn-head"><strong>點擊後顯示範圍</strong><button type="button" id="cn-close" aria-label="關閉">×</button></div>`
+        +`<div class="cn-intro">只套用於一般點擊圓點；事件鏈／show network 不受影響。數字是由被點圓點到目標線的最多跳數，0＝不延伸，∞＝不限。</div>`
+        +CLICK_NETWORK_LANES.map(laneSection).join('')
+        +`<div id="cn-summary" class="cn-summary">尚未選取圓點。</div>`
+        +`<div class="cn-presets"><div class="cn-presets-title">預設組合</div><div class="cn-preset-row"><select id="cn-preset"></select><button type="button" id="cn-apply">套用</button></div><div class="cn-preset-actions"><button type="button" id="cn-saveas">另存目前設定…</button><button type="button" id="cn-default">設為預設</button><button type="button" id="cn-delete">刪除</button><button type="button" id="cn-reset">恢復預設值</button></div><div id="cn-defnote"></div></div>`;
+      populatePresets(); updateDefaultNote(); refresh();
+      wrap.querySelector('#cn-close').onclick=()=>{ wrap.style.display='none'; };
+    }
+    function rebuild(){ const display=wrap.style.display; build(); wrap.style.display=display; }
+    wrap.addEventListener('click',e=>{
+      const step=e.target.closest('.cn-step');
+      if(step){ clickNetworkSet(step.dataset.source,step.dataset.target,fromStep(step.dataset.value)); syncSteps(); render(); return; }
       const id=e.target.id;
-      if(id==='rp-apply'){ const sel=wrap.querySelector('#rp-preset'); if(sel&&sel.value){ reachApplyPreset(sel.value); rebuild(); reRender(); } }
-      else if(id==='rp-saveas'){ const name=prompt('預設名稱：'); if(name&&name.trim()){ reachSavePreset(name.trim()); populatePresets(); const sel=wrap.querySelector('#rp-preset'); if(sel) sel.value=name.trim(); } }
-      else if(id==='rp-default'){ const sel=wrap.querySelector('#rp-preset'); if(sel&&sel.value){ reachSetDefaultPreset(sel.value); populatePresets(); updateDefNote(); } }
-      else if(id==='rp-delete'){ const sel=wrap.querySelector('#rp-preset'); if(sel&&sel.value&&confirm('刪除預設「'+sel.value+'」？')){ reachDeletePreset(sel.value); populatePresets(); updateDefNote(); } }
-      else if(id==='rp-reset'){ reachResetDefaults(); rebuild(); reRender(); }
+      if(id==='cn-apply'){ const select=wrap.querySelector('#cn-preset'); if(select&&select.value){ clickNetworkApplyPreset(select.value); rebuild(); render(); } }
+      else if(id==='cn-saveas'){ const name=prompt('預設名稱：'); if(name&&name.trim()){ clickNetworkSavePreset(name.trim()); populatePresets(); const select=wrap.querySelector('#cn-preset'); if(select) select.value=name.trim(); } }
+      else if(id==='cn-default'){ const select=wrap.querySelector('#cn-preset'); if(select&&select.value){ clickNetworkSetDefaultPreset(select.value); populatePresets(); updateDefaultNote(); } }
+      else if(id==='cn-delete'){ const select=wrap.querySelector('#cn-preset'); if(select&&select.value&&confirm('刪除預設「'+select.value+'」？')){ clickNetworkDeletePreset(select.value); populatePresets(); updateDefaultNote(); } }
+      else if(id==='cn-reset'){ clickNetworkResetDefaults(); rebuild(); render(); }
     });
-    function rebuild(){ const disp=wrap.style.display; build(); wrap.style.display=disp; }
-    function reRender(){ try{ render(); }catch(e){} }
-    document.body.appendChild(wrap); document.body.appendChild(launch);
-    launch.onclick=()=>{ wrap.style.display='block'; launch.style.display='none'; build(); };
+    function open(){ build(); wrap.style.display='block'; requestAnimationFrame(refresh); }
+    window.__openClickNetworkPanel=open;
+    window.__clickNetworkPanelRefresh=refresh;
+    document.body.appendChild(wrap);
+  })();
+  // ===== Claude: custom "hold to see label" tooltips for icon-only symbol buttons =====
+  // Converts title="..." to data-tip="..." on any button whose visible content is just an icon
+  // (an inline <svg>/CSS-mask glyph with no other text, or a short 1-2 char symbol like ✕/+/−),
+  // so the browser's native tooltip is replaced by the CSS one below (.search-copyall-style text
+  // buttons that already show a label are left alone -- they don't need a second label). Runs once
+  // on load and again via MutationObserver, since most of these buttons are rebuilt by innerHTML on
+  // every re-render (AI chip row, card headers, etc).
+  (function setupSymbolTooltips(){
+    function isSymbolButton(el){
+      if(!el || el.tagName!=='BUTTON') return false;
+      const title=el.getAttribute('title'); if(!title) return false;
+      const hasSvg=!!el.querySelector('svg');
+      const txt=(el.textContent||'').trim();
+      if(hasSvg) return txt==='';
+      return txt.length>0 && txt.length<=2 && !/[\u4e00-\u9fff]/.test(txt);
+    }
+    function convert(el){ if(isSymbolButton(el)){ el.setAttribute('data-tip', el.getAttribute('title')); el.removeAttribute('title'); } }
+    function scan(root){
+      if(!root || root.nodeType!==1) return;
+      if(root.matches && root.matches('button[title]')) convert(root);
+      if(root.querySelectorAll) root.querySelectorAll('button[title]').forEach(convert);
+    }
+    scan(document.body);
+    new MutationObserver(muts=>{
+      muts.forEach(m=>{
+        if(m.addedNodes) m.addedNodes.forEach(n=>scan(n));
+        if(m.type==='attributes' && m.attributeName==='title' && m.target) scan(m.target);
+      });
+    }).observe(document.body, {childList:true, subtree:true, attributes:true, attributeFilter:['title']});
   })();
   render(); window.__renderDual();
 })();
@@ -10426,7 +10629,7 @@ body .pill, body .dual-toolbar .pill, body.dark-mode .pill {
   border-radius:var(--r1); padding:3px 8px; font-size:12.5px; gap:6px; color:var(--ink);
   box-shadow:none;
 }
-body .dual-toolbar .pl { color:var(--faint); font-weight:700; font-size:11px !important;
+body .dual-toolbar .pl { color:var(--faint); font-weight:700; font-size:calc(15px * var(--ui-fs,1)) !important;
   text-transform:uppercase; letter-spacing:.06em; }
 body .pill.search { background:var(--panel); border:1px solid var(--line-strong); min-width:220px; }
 body .count-readout { color:var(--faint); font-size:12px; }
@@ -10509,7 +10712,14 @@ body.dark-mode .drawer-dockbtns button, body.dark-mode .tb-close, body.dark-mode
   box-shadow:none; width:24px; height:22px;
 }
 body .ip-btns button:hover, body .drawer-dockbtns button:hover {
-  background:var(--sunken); color:var(--ink);
+  background:none; color:var(--ink);
+}
+/* Two older rules (one dark-mode-only base-button block, one in the general boxed-button system)
+   still put a backdrop behind .ip-btns on hover in dark mode; both out-specificity the light-only
+   fix above, so force it off explicitly with !important, in both modes, for good measure. */
+body .ip-btns button:hover, body .drawer-dockbtns button:hover,
+body.dark-mode .ip-btns button:hover, body.dark-mode .drawer-dockbtns button:hover {
+  background:none !important;
 }
 body .ip-pin.on { background:var(--accent-soft) !important; color:var(--accent) !important; }
 .tb-close, .drawer-close, .fp-close, .ws-list-x { color:var(--faint); }
@@ -10619,7 +10829,7 @@ body.dark-mode .ip-filterdock {
 body .ip-foot, body .ft-body, body.dark-mode .ip-foot, body.dark-mode .ft-body {
   background:var(--surface) !important; border-top:1px solid var(--line) !important;
 }
-.card .ip-scroll { padding:10px 14px 14px !important; }
+.card .ip-scroll { padding:10px 8px 10px !important; }
 .ip-head-resize::after { background:var(--line-strong); }
 
 /* columns */
@@ -10641,8 +10851,10 @@ body .ws-div::after { background:var(--line-strong); }
 .ws-list { padding-bottom:10px !important; }
 
 /* single-card panel: flush to window — no selection ring, no gap/margin */
+/* single-card panel: same backdrop margin + rounded corners as the multi-card / AI-panel columns,
+   instead of sitting flush and square against the sunken column background. */
 .ws-list.single { padding-left:0 !important; padding-right:0 !important; padding-bottom:0 !important; }
-.ws-list.single > .card { margin:0 !important; border-radius:0 !important; }
+.ws-list.single > .card { margin:8px 8px 0 !important; border-radius:var(--r2) !important; }
 .ws-list.single > .card.pinned, .ws-list.single > .card.wsel { box-shadow:none !important; }
 
 /* ─── 6. DOCUMENT TEXT = reading sheet; sections = rail blocks ─ */
@@ -10663,7 +10875,7 @@ body.dark-mode .ix-text .seg.sc2, body.dark-mode .ix-text .seg.sc3 {
   background:transparent !important; border-left:3px solid var(--line-strong) !important;
   border-radius:0 !important; padding:2px 0 4px 14px !important; margin:0 0 16px !important;
 }
-body .ix-text .seg:hover { border-left-color:var(--accent) !important; }
+body .ix-text .seg:hover { border-left:0 !important; }
 body .ix-text .seg-num, body.dark-mode .ix-text .seg-num {
   display:inline-block; background:var(--sunken); color:var(--muted) !important;
   border-radius:4px; padding:0 6px; font-family:var(--font-ui);
@@ -11316,10 +11528,20 @@ body .ix-cols{ gap:12px !important; padding:16px 0 12px !important; border-top:1
 body .ix-text{ background:transparent !important; padding:0 !important; border-radius:0 !important; }
 body .ix-text .blk-label{ margin:0 0 12px !important; color:var(--muted) !important; }
 /* 每一段（part）之間更大間距 */
-body .ix-text .seg{ padding:2px 0 6px 12px !important; margin:0 !important;
-  border-left:2px solid var(--line-strong) !important; }
-body .ix-text .seg + .seg{ margin-top:20px !important; }
+body .ix-text .seg,
+body .ix-text .seg.sc0, body .ix-text .seg.sc1,
+body .ix-text .seg.sc2, body .ix-text .seg.sc3,
+body.dark-mode .ix-text .seg.sc0, body.dark-mode .ix-text .seg.sc1,
+body.dark-mode .ix-text .seg.sc2, body.dark-mode .ix-text .seg.sc3 {
+  background:var(--surface) !important; padding:12px 14px 14px !important; margin:0 !important;
+  border-left:0 !important; border-radius:10px !important;
+  box-shadow:0 1px 3px rgba(60,44,20,.10) !important; }
+body .ix-text .seg + .seg{ margin-top:28px !important; }
 body .ix-text .seg-head{ margin-bottom:8px !important; }
+/* division-of-part subtitles: readable but still secondary to each part title */
+body .ix-text .seg-summary, body.dark-mode .ix-text .seg-summary {
+  font-size:calc(14px * var(--fs,1)) !important; line-height:1.65 !important;
+}
 body .ip-pane.tbl{ padding:0 !important; }
 body .ip-titles .meta-table{ line-height:1.5 !important; }
 /* ⚙ 檢視 settings menu (consolidated toggles) */
@@ -11336,7 +11558,7 @@ body .ip-setpop .ip-headtoggles{ display:flex !important; flex-direction:column 
 .ip-setpop .tgl-pill{ width:100%; justify-content:center; }
 /* Header UI shared with the primary timeline. */
 .dual-toolbar{ gap:8px 10px !important; padding:9px 16px !important; }
-.dual-toolbar .pl, .dual-toolbar label, .dual-toolbar .count-readout{ font-size:calc(15px * var(--fs,1)) !important; }
+.dual-toolbar .pl, .dual-toolbar label, .dual-toolbar .count-readout{ font-size:calc(15px * var(--ui-fs,1)) !important; }
 .dual-toolbar .zoom-btn{ font-size:calc(14.5px * var(--fs,1)); }
 .dual-toolbar .pill{ border-radius:10px; }
 .tb-type .t-short{ display:none; }
@@ -11457,6 +11679,14 @@ body .cb-pop.is-viewport{
   font-size:calc(16px * var(--ui-fs,1)) !important;
 }
 .dual-toolbar .pl, .dual-toolbar .zoom-btn.wide{ font-size:calc(15px * var(--ui-fs,1)) !important; }
+body .dual-toolbar > #click-network-settings{
+  display:none !important;
+  height:calc(48px * var(--ui-fs,1)) !important;
+  min-height:calc(48px * var(--ui-fs,1)) !important;
+  padding-left:calc(11px * var(--ui-fs,1)) !important;
+  padding-right:calc(11px * var(--ui-fs,1)) !important;
+  font-size:calc(15px * var(--ui-fs,1)) !important;
+}
 /* The launch buttons scale in both diameter and text size when A−/A+ is used. */
 body .float-tools button, body.dark-mode .float-tools button{
   width:calc(54px * var(--ui-fs,1)); height:calc(54px * var(--ui-fs,1));
@@ -11542,15 +11772,29 @@ body.dark-mode .ws-list-bar.bar-off { display:none !important; }
 
 body .ip-overall, body.dark-mode .ip-overall {
   position:relative !important; background:var(--panel,#fdfbf5) !important; border:1px solid var(--line,#ece1cd) !important;
-  border-radius:var(--r2,9px) !important; padding:11px 14px 12px !important; margin:0 0 14px !important;
+  border-radius:var(--r2,9px) !important; padding:11px 11px 12px !important; margin:0 0 14px !important;
 }
 body .ip-ovh, body.dark-mode .ip-ovh {
   text-transform:uppercase !important; font-size:calc(11px * var(--fs,1)) !important;
 }
+body .ix-summary, body.dark-mode .ix-summary {
+  position:relative !important; background:var(--panel,#fdfbf5) !important; border:1px solid var(--line,#ece1cd) !important;
+  border-radius:var(--r2,9px) !important; padding:11px 13px 12px !important; margin:0 0 20px !important;
+}
+body .ix-summary:empty, body.dark-mode .ix-summary:empty { display:none !important; }
+body .ix-summary-label, body.dark-mode .ix-summary-label {
+  margin:0 0 5px !important; color:var(--muted,#7a6f63) !important; font-size:calc(11px * var(--fs,1)) !important;
+  font-weight:750 !important; letter-spacing:.08em !important;
+}
+body .ix-summary-text, body.dark-mode .ix-summary-text {
+  color:var(--ink,#3d352d) !important; font-size:calc(14px * var(--fs,1)) !important;
+  line-height:1.75 !important; white-space:pre-wrap !important; overflow-wrap:anywhere !important;
+}
+body.dark-mode .ix-summary-text { color:var(--ink) !important; }
 body .ix-cols, body.dark-mode .ix-cols { border-top:none !important; padding-top:0 !important; }
 body .ix-text, body.dark-mode .ix-text {
-  position:relative !important; background:var(--panel,#fdfbf5) !important; border:1px solid var(--line,#ece1cd) !important;
-  border-radius:var(--r2,9px) !important; padding:13px 16px 14px !important;
+  position:relative !important; background:transparent !important; border:0 !important;
+  border-radius:0 !important; padding:0 !important;
 }
 body .ix-text .blk-label, body.dark-mode .ix-text .blk-label { color:#8a6a2e !important; }
 body.dark-mode .ix-text .blk-label { color:#d8b36a !important; }
@@ -11566,15 +11810,20 @@ body .sess-div span, body.dark-mode .sess-div span {
 /* (1)(3) Icon-only chips: just the glyph, no text label, consistent size. */
 body .cb-chip.cb-icon-only { padding:3px 8px; }
 body .cb-chip.cb-icon-only .cb-ic { font-size:calc(14px * var(--fs,1)); }
-/* (5) Tool-box header drag handle (✥): render as the same borderless ghost glyph as its ✕,
-   not a bordered default-button box. */
-body .tb-head .tb-move, body .tb-head .ip-move,
-body.dark-mode .tb-head .tb-move, body.dark-mode .tb-head .ip-move {
+/* (5) Tool-box header move/close: same borderless "symbol button" family as
+   ip-filterbtn/ip-settingsbtn/cb-icon-only -- same padding, radius, and auto sizing, not a
+   bordered default-button box and not its own one-off padding/radius. */
+body .tb-head .tb-move, body .tb-head .ip-move, body .tb-head .tb-close,
+body.dark-mode .tb-head .tb-move, body.dark-mode .tb-head .ip-move, body.dark-mode .tb-head .tb-close {
   border:none !important; background:none !important; box-shadow:none !important;
   color:var(--faint) !important; font-size:calc(16px * var(--fs,1)) !important;
-  padding:0 4px !important; width:auto !important; height:auto !important; min-width:0 !important;
+  padding:3px !important; margin:0 !important; min-width:0 !important;
+  width:auto !important; height:auto !important; border-radius:var(--r1) !important;
+  display:inline-flex !important; align-items:center !important; justify-content:center !important;
 }
-body .tb-head .tb-move:hover, body .tb-head .ip-move:hover { color:var(--ink) !important; background:none !important; }
+body .tb-head .tb-move:hover, body .tb-head .ip-move:hover, body .tb-head .tb-close:hover {
+  color:var(--ink) !important; background:none !important;
+}
 
 /* ===== Claude: SVG icon buttons + doc-panel polish =====
    Inline SVG icons render identically everywhere (the serif UI font lacked ☰/⊟/↥/⚙ glyphs and
@@ -11599,150 +11848,209 @@ body .ip-filterbtn { border-radius:999px; width:auto; padding:3px 10px; }
 body .ip-filterbtn .filter-label { display:none !important; }
 body .ip-filterbtn .filter-icon { font-size:calc(15px * var(--fs,1)); display:inline-flex; align-items:center; }
 body .ip-settingsbtn { font-size:calc(15px * var(--fs,1)); }
-/* (7) division part titles: no longer tiny */
-body .ix-text .seg-label, body.dark-mode .ix-text .seg-label { font-size:calc(16px * var(--fs,1)) !important;
-  font-weight:700 !important; color:var(--ink) !important; }
+/* (5) document-type badge: rounded square, larger, scaled by the 內文 (正文) font size (--fs) */
+body .ip-titles .m1 .badge { border-radius:7px !important; font-size:calc(22px * var(--fs,1)) !important;
+  font-weight:800 !important; line-height:1.05 !important; padding:3px 9px !important; vertical-align:-3px !important; }
+/* (7) division part subtitles: compact in the default segmented view */
+body .ix-text .seg-label, body.dark-mode .ix-text .seg-label { font-size:calc(12px * var(--fs,1)) !important;
+  line-height:1.35 !important; font-weight:650 !important; color:var(--ink) !important; }
 body .ix-text .seg-num, body.dark-mode .ix-text .seg-num { font-size:calc(13px * var(--fs,1)) !important; }
 
-/* Final compact control pass: icon controls share one borderless ghost geometry. */
-body .ip-filterdock {
-  margin:0 !important;
-  padding:0 !important;
-  min-height:24px !important;
-  background:var(--surface) !important;
-}
-body .ip-btns button,
-body .ip-filterbtn,
-body .ip-settingsbtn,
-body .chat-log .reply-msg,
-body .chat-log .turn-del-x,
-body .chat-log .turn-del {
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  width:24px !important;
-  min-width:24px !important;
-  height:24px !important;
-  min-height:24px !important;
-  box-sizing:border-box !important;
-  padding:0 !important;
-  border:none !important;
-  border-radius:4px !important;
-  background:transparent !important;
-  box-shadow:none !important;
-  color:var(--faint) !important;
-  font-size:calc(15px * var(--fs,1)) !important;
-  line-height:1 !important;
-  cursor:pointer !important;
-}
-body .ip-btns button:hover,
-body .ip-filterbtn:hover,
-body .ip-settingsbtn:hover,
-body .chat-log .reply-msg:hover,
-body .chat-log .turn-del-x:hover,
-body .chat-log .turn-del:hover {
-  border:none !important;
-  background:var(--sunken) !important;
-  box-shadow:none !important;
-  color:var(--ink) !important;
-}
-body .ip-filterbtn.on,
-body .ip-settingsbtn.on {
-  border:none !important;
-  background:var(--accent-soft) !important;
-  color:var(--accent) !important;
-}
-body .chat-log .turn-del-x:hover,
-body .chat-log .turn-del:hover { color:var(--danger) !important; }
-body .ip-filterbtn .filter-icon,
-body .ip-btns button .svgic,
-body .ip-settingsbtn .svgic,
-body .chat-log .reply-msg .svgic,
-body .chat-log .turn-del-x .svgic,
-body .chat-log .turn-del .svgic {
-  width:1em !important;
-  height:1em !important;
-  margin:0 !important;
-}
-body .chat-log .cxh-chip,
-body .chat-log [class*="dp-rs-"] { display:none !important; }
-body .tool-box[data-kind="ai"] .tb-title:empty { display:none !important; }
+/* ===== Claude: button unification + doc-panel polish (round 2) ===== */
+/* (A) document-type badge: smaller than the title (title is ~14px*--fs), still scaled by the 內文
+   (正文) font size var (--fs); rounded square. */
+body .ip-titles .m1 .badge { border-radius:6px !important; font-size:calc(12px * var(--fs,1)) !important;
+  font-weight:800 !important; line-height:1.15 !important; padding:2px 6px !important; vertical-align:1px !important; }
+/* (B) every icon button is a borderless ghost glyph at one size -- no pill boxes. Covers the doc
+   filter + settings buttons and the AI icon-only chips (list/collapse/jump/gear). */
+body .ip-filterbtn, body .ip-settingsbtn,
+body .cb-chip.cb-icon-only {
+  border:none !important; background:none !important; box-shadow:none !important;
+  color:var(--faint) !important; padding:3px !important; margin:0 !important; min-width:0 !important;
+  width:auto !important; height:auto !important; border-radius:var(--r1) !important;
+  font-size:calc(16px * var(--fs,1)) !important; display:inline-flex !important;
+  align-items:center !important; justify-content:center !important; }
+body .ip-settingsbtn { margin-left:auto !important; }
+body .ip-filterbtn:hover, body .ip-settingsbtn:hover,
+body .cb-chip.cb-icon-only:hover { color:var(--ink) !important; background:none !important; }
+body .ip-filterbtn.on, body .ip-settingsbtn.on,
+body .cb-chip.cb-icon-only.on { color:var(--accent) !important; background:none !important; }
+/* (D) filter/settings bar spans the full card width (cancel the card's 16px padding) instead of
+   floating inset with a gap on each side. */
+body .ip-filterdock { margin-left:-16px !important; margin-right:-16px !important;
+  padding-left:16px !important; padding-right:16px !important; }
+/* (E) no completion/status chip in AI output cards */
+body .chat-extract .cxh-chip, body.dark-mode .chat-extract .cxh-chip { display:none !important; }
+/* (F) reply button -> reply icon (mask keeps it theme-aware via currentColor) */
+body .reply-msg { font-size:0 !important; line-height:0 !important; color:var(--faint) !important;
+  border:none !important; background:none !important; padding:3px !important;
+  display:inline-flex !important; align-items:center; justify-content:center; }
+body .reply-msg::before { content:""; display:inline-block; width:15px; height:15px; background-color:currentColor;
+  -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpolyline%20points%3D%279%2017%204%2012%209%207%27/%3E%3Cpath%20d%3D%27M20%2018v-2a4%204%200%200%200-4-4H4%27/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cpolyline%20points%3D%279%2017%204%2012%209%207%27/%3E%3Cpath%20d%3D%27M20%2018v-2a4%204%200%200%200-4-4H4%27/%3E%3C/svg%3E") center/contain no-repeat; }
+body .reply-msg:hover { color:var(--ink) !important; background:none !important; }
+/* (G) output-card close (✕) -> unified close icon, same ghost style as every other symbol button */
+body .turn-del, body .turn-del-x { font-size:0 !important; line-height:0 !important; color:var(--faint) !important;
+  border:none !important; background:none !important; padding:3px !important;
+  display:inline-flex !important; align-items:center; justify-content:center; }
+body .turn-del::before, body .turn-del-x::before { content:""; display:inline-block; width:15px; height:15px;
+  background-color:currentColor; -webkit-mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cline%20x1%3D%276%27%20y1%3D%276%27%20x2%3D%2718%27%20y2%3D%2718%27/%3E%3Cline%20x1%3D%2718%27%20y1%3D%276%27%20x2%3D%276%27%20y2%3D%2718%27/%3E%3C/svg%3E") center/contain no-repeat; mask:url("data:image/svg+xml,%3Csvg%20xmlns%3D%27http%3A//www.w3.org/2000/svg%27%20viewBox%3D%270%200%2024%2024%27%20fill%3D%27none%27%20stroke%3D%27%23000%27%20stroke-width%3D%272%27%20stroke-linecap%3D%27round%27%20stroke-linejoin%3D%27round%27%3E%3Cline%20x1%3D%276%27%20y1%3D%276%27%20x2%3D%2718%27%20y2%3D%2718%27/%3E%3Cline%20x1%3D%2718%27%20y1%3D%276%27%20x2%3D%276%27%20y2%3D%2718%27/%3E%3C/svg%3E") center/contain no-repeat; }
+body .turn-del:hover, body .turn-del-x:hover { color:var(--ink) !important; background:none !important; }
 
-/* Keep the document type subordinate to its title while following the 正文 scale. */
-body .ip-titles .m1 .badge {
-  border-radius:4px !important;
-  font-size:calc(11px * var(--fs,1)) !important;
-  font-weight:650 !important;
-  line-height:1.1 !important;
-  padding:1px 6px !important;
-  vertical-align:1px !important;
+/* ===== Claude: toolbar + search polish ===== */
+/* (1) keep the lane-first network settings hook hidden from the main toolbar */
+/* Lane-first controls for the normal dot-click network. */
+body #click-network-panel{ font:12px/1.45 var(--font-ui,system-ui,"PingFang TC","Microsoft JhengHei",sans-serif); }
+body #click-network-panel .cn-head{ display:flex; align-items:center; justify-content:space-between; gap:10px; padding:10px 13px; border-bottom:1px solid var(--line,#e3d8bd); background:var(--surface-2,#f2ead7); border-radius:12px 12px 0 0; }
+body #click-network-panel .cn-head strong{ font-size:14px; }
+body #click-network-panel .cn-head button{ border:0; background:transparent; color:var(--muted,#8a7a58); font-size:19px; line-height:1; cursor:pointer; padding:0 2px; }
+body #click-network-panel .cn-intro{ padding:9px 13px; color:var(--muted,#6b5c3c); border-bottom:1px solid var(--line,#e3d8bd); }
+body #click-network-panel .cn-lane{ margin:9px 10px; padding:9px; border:1px solid var(--line,#e3d8bd); border-radius:9px; background:var(--surface,#fffdf8); }
+body #click-network-panel .cn-lane.is-first{ border-color:var(--accent-line,#b9d0c4); }
+body #click-network-panel .cn-lane-head{ display:flex; justify-content:space-between; align-items:baseline; gap:8px; color:var(--ink,#3c3526); }
+body #click-network-panel .cn-lane-head span{ color:var(--muted,#8a7a58); font-size:11px; }
+body #click-network-panel .cn-lane-hint{ color:var(--muted,#8a7a58); font-size:11px; margin:2px 0 7px; }
+body #click-network-panel .cn-target{ display:grid; grid-template-columns:minmax(0,1fr) auto; align-items:center; gap:7px; padding:5px 0; border-top:1px solid color-mix(in srgb,var(--line,#e3d8bd) 70%,transparent); }
+body #click-network-panel .cn-target-label{ min-width:0; color:var(--ink,#5c4a2c); }
+body #click-network-panel .cn-steps{ display:flex; gap:2px; }
+body #click-network-panel .cn-step{ min-width:24px; border:1px solid var(--line-strong,#cdbf9e); border-radius:4px; background:var(--panel,#fff); color:var(--muted,#5c4a2c); padding:3px 4px; font:600 11px/1 system-ui,sans-serif; cursor:pointer; }
+body #click-network-panel .cn-step.is-on{ background:var(--accent,#4f8f70); border-color:var(--accent,#4f8f70); color:#fff; }
+body #click-network-panel .cn-summary{ margin:10px; padding:8px 10px; border:1px solid var(--line,#e3d8bd); border-radius:7px; background:var(--surface-2,#f2ead7); color:var(--muted,#6b5c3c); }
+body #click-network-panel .cn-summary.has-network{ color:var(--accent,#2e6b52); }
+body #click-network-panel .cn-presets{ margin:10px; padding:9px 0 2px; border-top:1px solid var(--line,#e3d8bd); }
+body #click-network-panel .cn-presets-title{ font-weight:700; margin-bottom:5px; }
+body #click-network-panel .cn-preset-row{ display:flex; gap:6px; }
+body #click-network-panel .cn-preset-row select{ min-width:0; flex:1; border:1px solid var(--line-strong,#cdbf9e); border-radius:5px; background:var(--panel,#fff); color:var(--ink,#3c3526); padding:5px; }
+body #click-network-panel .cn-preset-row button, body #click-network-panel .cn-preset-actions button{ border:1px solid var(--line-strong,#cdbf9e); border-radius:5px; background:var(--panel,#fff); color:var(--ink,#5c4a2c); padding:5px 7px; cursor:pointer; }
+body #click-network-panel .cn-preset-row button{ background:var(--accent,#4f8f70); border-color:var(--accent,#4f8f70); color:#fff; font-weight:700; }
+body #click-network-panel .cn-preset-actions{ display:flex; flex-wrap:wrap; gap:5px; margin-top:6px; }
+body #click-network-panel .cn-preset-actions button{ flex:1 1 45%; }
+body #click-network-panel #cn-defnote{ margin-top:5px; color:var(--muted,#8a7a58); font-size:11px; }
+@media (max-width:600px){ body #click-network-panel{ top:56px; right:8px; width:calc(100vw - 16px); } body #click-network-panel .cn-target{ grid-template-columns:1fr; gap:4px; } body #click-network-panel .cn-steps{ width:100%; } body #click-network-panel .cn-step{ flex:1; } }
+/* (2) dropdown carets rendered as a small chevron glyph, not a text triangle */
+.dd-caret { width:0.62em !important; height:0.62em !important; opacity:.65; margin-left:3px; vertical-align:0; }
+/* (3a) match count: compact "N/M", larger -- scaled by the interface font size (--ui-fs), same
+   axis as every other toolbar chrome element, not by the document/content font size (--fs). */
+body .count-readout, body.dark-mode .count-readout { font-size:calc(16px * var(--ui-fs,1)) !important;
+  font-weight:700 !important; color:var(--muted) !important; font-variant-numeric:tabular-nums; }
+/* (3b) type button shows only the label, no counts */
+#tb-type-summary { display:none !important; }
+/* (4) people/search: bigger label (人物), matching the 編輯圓點／工具 button scale; surface text
+   (選擇人物 / placeholder) a notch smaller but still readable -- all on the --ui-fs axis so A-/A+
+   (介面字級) actually resizes them. */
+body #f-people .pl { font-size:calc(16px * var(--ui-fs,1)) !important; }
+body .pill.search .pl { display:inline-flex; align-items:center; }
+body .pill.search input, body .pill.search input::placeholder { font-size:calc(14px * var(--ui-fs,1)) !important; }
+.pill.search .search-ic { width:1.05em; height:1.05em; color:var(--faint); }
+/* (5) restyle the native 選擇人物 / 且-或 dropdowns to match the parchment UI */
+body #f-people .fp-person, body #f-people .fp-op {
+  appearance:none !important; -webkit-appearance:none !important;
+  border:1px solid var(--line-strong) !important; background:var(--panel) !important;
+  color:var(--ink) !important; border-radius:var(--r1) !important;
+  font-size:calc(14px * var(--ui-fs,1)) !important; padding:3px 22px 3px 9px !important; cursor:pointer;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a7a58' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E") !important;
+  background-repeat:no-repeat !important; background-position:right 6px center !important; background-size:11px 11px !important; }
+body #f-people .fp-person:hover, body #f-people .fp-op:hover { border-color:var(--faint) !important; background-color:var(--surface) !important; }
+/* (6) live search results dropdown -- each result has a title row and a centered
+   source-text match row; every size below is on the --ui-fs axis. */
+.pill.search { position:relative; }
+.search-pop { position:absolute; top:calc(100% + 6px); left:0; z-index:400; min-width:min(420px, calc(100vw - 24px));
+  width:max-content; max-width:min(760px, 92vw);
+  max-height:min(72vh, 760px); overflow:auto; background:var(--panel); border:1px solid var(--line-strong);
+    border-radius:var(--r2); box-shadow:var(--sh-3); padding:5px; font-family:var(--font-ui); }
+.search-pop .search-list { display:flex; flex-direction:column; }
+.search-pop .search-item { display:flex; flex-direction:column; align-items:stretch; gap:2px; width:100%; box-sizing:border-box; text-align:left; border:none;
+  background:none; cursor:pointer; padding:7px 9px; border-radius:6px; font-size:calc(14px * var(--ui-fs,1)) !important; color:var(--ink); line-height:1.4; }
+.search-pop .search-item + .search-item { border-top:1px solid var(--line); }
+.search-pop .search-item:hover { background:var(--surface); }
+.search-pop .search-main { display:flex; align-items:center; gap:7px; width:100%; min-width:0; white-space:nowrap; }
+.search-pop .search-main .badge { flex:0 0 auto; }
+.search-pop .search-main .sid { color:var(--faint); font-weight:700; margin-right:5px; white-space:nowrap; flex:0 0 auto; }
+.search-pop .search-main .stt { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:1 1 auto; min-width:0; }
+.search-pop .search-excerpt { display:flex; align-items:center; justify-content:center; gap:4px; width:100%; min-width:0; box-sizing:border-box; padding:1px 4px 0; color:var(--faint);
+  font-size:calc(12.5px * var(--ui-fs,1)) !important; line-height:1.35; text-align:center; white-space:nowrap; overflow:hidden; }
+body.dark-mode .search-pop .search-excerpt { color:var(--muted); }
+.search-pop .search-excerpt-text { min-width:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; flex:0 1 auto; }
+.search-pop .search-excerpt .search-hit { color:#c0392b; font-weight:700; }
+.search-pop .search-excerpt .search-match-count { flex:0 0 auto; color:var(--muted); font-weight:700; font-variant-numeric:tabular-nums; }
+.search-pop .search-empty { padding:10px 12px; color:var(--muted); font-size:calc(13px * var(--ui-fs,1)) !important; }
+.search-pop .search-foot { position:sticky; top:0; z-index:3; display:flex; align-items:center; gap:8px;
+  background:var(--panel); border-bottom:1px solid var(--line); margin:-5px -5px 4px; padding:7px 9px 5px; }
+.search-pop .search-cnt { margin-right:auto; color:var(--muted); font-size:calc(13px * var(--ui-fs,1)) !important; white-space:nowrap; }
+.search-pop .search-type-filter { appearance:none; -webkit-appearance:none; border:1px solid var(--line-strong); background:var(--panel); color:var(--muted);
+  border-radius:var(--r1); padding:3px 22px 3px 8px; font:inherit; font-size:calc(12px * var(--ui-fs,1)) !important; cursor:pointer; white-space:nowrap;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%238a7a58' stroke-width='2.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat:no-repeat; background-position:right 6px center; background-size:11px 11px; }
+.search-pop .search-type-filter:hover { border-color:var(--faint); background-color:var(--surface); }
+.search-pop .search-copyall { display:inline-flex; align-items:center; justify-content:center; width:28px; height:28px; box-sizing:border-box;
+  border:1px solid var(--accent-line); background:var(--accent-soft); color:var(--accent);
+  border-radius:var(--r1); padding:4px; font:inherit; font-size:calc(13px * var(--ui-fs,1)) !important; font-weight:600; cursor:pointer; }
+.search-pop .search-copyall .search-copy-ic { width:1em; height:1em; }
+.search-pop .search-copyall:hover { filter:brightness(0.97); }
+
+/* ===== Claude: delayed black tooltip label for icon-only symbol buttons ===== */
+/* Shows after ~1s of hovering (not immediately), like a native tooltip but styled consistently
+   everywhere instead of relying on the OS/browser's own title-tooltip look. The delay trick: the
+   base rule's opacity transition has no delay (so it hides promptly on mouse-out); only the
+   :hover rule's transition has the 1s delay (so it takes a beat to appear). */
+button[data-tip] { position:relative; }
+button[data-tip]::after {
+  content:attr(data-tip);
+  position:absolute; left:50%; bottom:calc(100% + 7px); transform:translateX(-50%) translateY(2px);
+  background:#232323; color:#fff; font:500 calc(11.5px * var(--ui-fs,1))/1.4 var(--font-ui, inherit);
+  padding:4px 9px; border-radius:6px; white-space:nowrap; max-width:min(320px, 60vw);
+  box-shadow:0 4px 14px rgba(0,0,0,.28); pointer-events:none; z-index:20000;
+  opacity:0; visibility:hidden; transition:opacity .12s ease, visibility 0s linear .12s, transform .12s ease;
+}
+button[data-tip]:hover::after {
+  opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
+  transition:opacity .12s ease 1s, visibility 0s linear 1s, transform .12s ease 1s;
+}
+/* a button hugging the right edge of the viewport (e.g. the search-copyall footer button) should
+   not push its label off-screen -- flip the label to the left edge of the button instead */
+.search-pop button[data-tip]::after, .col-dd-pop button[data-tip]::after {
+  left:auto; right:0; transform:translateY(2px);
+}
+.search-pop button[data-tip]:hover::after, .col-dd-pop button[data-tip]:hover::after {
+  transform:translateY(0);
 }
 
-/* Match the single document panel shell to the rounded AI tool panel. */
-body .ws-list.single {
-  background:var(--sunken) !important;
-  border:1px solid var(--line) !important;
-  border-radius:var(--r2) !important;
-  box-sizing:border-box !important;
-  padding:8px !important;
-  gap:0 !important;
+/* document-info heading/card alignment */
+body .ix-summary-label, body .ix-text .blk-label,
+body.dark-mode .ix-summary-label, body.dark-mode .ix-text .blk-label {
+  color:#8a6a2e !important; font-family:var(--font-ui) !important;
+  font-size:calc(12px * var(--fs,1)) !important; font-weight:650 !important;
+  line-height:1.4 !important; letter-spacing:0 !important; text-transform:none !important;
+  white-space:normal !important;
 }
-body .ws-list.single > .card {
-  margin:0 !important;
-  border:1px solid var(--line) !important;
-  border-radius:var(--r2) !important;
-  box-shadow:var(--sh-2) !important;
+body.dark-mode .ix-summary-label, body.dark-mode .ix-text .blk-label { color:#d8b36a !important; }
+/* summary and division cards share the same outer geometry and inner text inset */
+body .ix-summary, body.dark-mode .ix-summary { padding:12px 14px 14px !important; }
+body .ix-summary-label, body.dark-mode .ix-summary-label { margin-left:0 !important; margin-bottom:12px !important; }
+body .ix-summary-text, body.dark-mode .ix-summary-text { margin:0 !important; }
+body .ix-text .seg-summary, body.dark-mode .ix-text .seg-summary { margin-left:0 !important; }
+body .ix-text .blk-label, body.dark-mode .ix-text .blk-label { margin:0 0 12px 14px !important; }
+/* division title hierarchy: title largest, summary smallest but readable */
+body .ix-text .seg-label, body.dark-mode .ix-text .seg-label {
+  font-size:calc(16px * var(--fs,1)) !important; line-height:1.45 !important; font-weight:700 !important;
 }
-body .ws-list.single > .card .ip-filterdock {
-  min-height:36px !important;
-  padding:6px 12px !important;
-}
-
-/* Match the AI header's right-side controls to its left icon chips. */
-body .tool-box .tb-move,
-body .tool-box .tb-close {
-  display:inline-flex !important;
-  align-items:center !important;
-  justify-content:center !important;
-  width:auto !important;
-  min-width:0 !important;
-  height:auto !important;
-  min-height:0 !important;
-  padding:3px 8px !important;
-  border:none !important;
-  border-radius:var(--r1) !important;
-  background:transparent !important;
-  box-shadow:none !important;
-  color:var(--faint) !important;
-  font-size:calc(14px * var(--fs,1)) !important;
-  line-height:1 !important;
-  cursor:pointer !important;
-}
-body .tool-box .tb-move:hover,
-body .tool-box .tb-close:hover {
-  border:none !important;
-  background:var(--sunken) !important;
-  box-shadow:none !important;
-  color:var(--ink) !important;
-}
-body .tool-box .tb-move .svgic,
-body .tool-box .tb-close .svgic {
-  width:1em !important;
-  height:1em !important;
-  margin:0 !important;
+body .ix-text .seg-summary, body.dark-mode .ix-text .seg-summary {
+  font-size:calc(12px * var(--fs,1)) !important; line-height:1.5 !important; font-weight:500 !important;
 }
 
-/* Make 原文 BODY use the same tap-to-edit surface as 總摘要. */
-body .ip-ovtext { white-space:pre-wrap !important; }
-body .ix-text .blk[data-block="body"] {
-  font-size:calc(13.5px * var(--fs,1)) !important;
-  line-height:1.9 !important;
-  white-space:pre-wrap !important;
+/* divided source parts: white cards with the same thin brown border as 摘要 */
+body .ix-text .seg, body .ix-text .seg.sc0, body .ix-text .seg.sc1,
+body .ix-text .seg.sc2, body .ix-text .seg.sc3,
+body.dark-mode .ix-text .seg, body.dark-mode .ix-text .seg.sc0,
+body.dark-mode .ix-text .seg.sc1, body.dark-mode .ix-text .seg.sc2,
+body.dark-mode .ix-text .seg.sc3 {
+  background:#fff !important; border:1px solid var(--line,#e5dacb) !important;
+  border-radius:var(--r2,9px) !important; box-shadow:none !important;
 }
-body .ip-ovtext.body-editing {
-  min-height:160px !important;
-  margin:0 !important;
-  cursor:text;
+body.dark-mode .ix-text .seg, body.dark-mode .ix-text .seg.sc0,
+body.dark-mode .ix-text .seg.sc1, body.dark-mode .ix-text .seg.sc2,
+body.dark-mode .ix-text .seg.sc3 { background:var(--panel) !important; }
+body .ix-text .seg:hover, body.dark-mode .ix-text .seg:hover {
+  border:1px solid var(--line,#e5dacb) !important;
 }
 </style>
 
@@ -11791,7 +12099,7 @@ body .ip-ovtext.body-editing {
         del.addEventListener('click',function(e){ e.preventDefault(); e.stopPropagation(); }, false); }
     });
   }
-  /* A-style header on every result card: kind badge + title */
+  /* A-style header on every result card: kind badge + title + status chip */
   function enhanceHeads(){
     document.querySelectorAll('.chat-extract:not([data-cxh])').forEach(function(card){
       card.setAttribute('data-cxh','1');
@@ -11809,6 +12117,14 @@ body .ip-ovtext.body-editing {
       var tt=document.createElement('span'); tt.className='cxh-title'; tt.textContent=title; tt.title=title;
       head.insertBefore(tt, head.firstChild);
       head.insertBefore(badge, tt);
+      var pend=card.querySelectorAll('.cx-acts .cx-add, .cx-acts .cx-addmention, .src-add-leftover, .zp-addact, .em-addact').length;
+      var done=card.querySelectorAll('.cx-done').length;
+      if(pend||done){
+        var chip=document.createElement('span'); chip.className='cxh-chip '+(pend?'pend':'done');
+        chip.textContent=pend?('\u5F85\u8655\u7406 '+pend):'\u2713 \u5B8C\u6210';
+        var firstBtn=head.querySelector('button');
+        head.insertBefore(chip, firstBtn||null);
+      }
     });
   }
   /* C: day separators in the main chat log */
@@ -11856,6 +12172,8 @@ body .ip-ovtext.body-editing {
       btn.addEventListener('click',function(e){ e.stopPropagation(); var open=pop.style.display==='none'; pop.style.display=open?'grid':'none'; btn.classList.toggle('on',open); });
       document.addEventListener('click',function(ev){ if(pop.style.display!=='none'&&!pop.contains(ev.target)&&ev.target!==btn){ pop.style.display='none'; btn.classList.remove('on'); } });
     }
+    var clickNetworkBtn=document.getElementById('click-network-settings');
+    if(clickNetworkBtn) clickNetworkBtn.addEventListener('click',function(e){ e.stopPropagation(); if(window.__openClickNetworkPanel) window.__openClickNetworkPanel(); if(pop){ pop.style.display='none'; if(btn) btn.classList.remove('on'); } });
     var editMenuBtn=document.getElementById('tb-editbtn'), editPop=document.getElementById('tb-editpop');
     if(editMenuBtn&&editPop){
       function closeEditMenu(){ editPop.style.display='none'; editMenuBtn.classList.remove('on'); editMenuBtn.setAttribute('aria-expanded','false'); }

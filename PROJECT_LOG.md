@@ -138,6 +138,26 @@ Verified:
 Remaining:
 - None.
 
+### 2026-07-20 18:45 HKT — Codex — Unhid the click-network settings button
+
+Summary: Moved `點擊後顯示範圍` out of the closed Tools popover and into the
+always-visible main toolbar in both formal and sample UIs. It still opens the
+same lane-first network settings panel, while the connection opacity sliders
+remain under Tools.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- Each HTML file has exactly one network-settings button in the main toolbar.
+- `git diff --check` passed.
+
+Remaining:
+- None.
+
 ### 2026-07-17 — Codex — Promoted the model-output comparison tool
 
 Summary: Moved the model-comparison HTML out of attempt storage and made it a named review tool.
@@ -1246,43 +1266,637 @@ Remaining:
   SVG icons inherit sensible colors in both themes — they use
   `stroke:currentColor`, so they follow each button's text color).
 
-### 2026-07-18 15:33 HKT — Codex — Reran sample Yu-source export
+### 2026-07-20 14:38 HKT — Claude — Button unification + doc-panel polish, round 2 (formal + sample)
 
-Summary: Re-ran the sample-targeted marked-pair exporter after the sample
-state changed.
+Summary: Six adjustments from human review, applied identically to both tools.
+(A) Document-type badge (硃/諭/奏 before the title) was too large — reduced
+to ~12px*--fs (smaller than the ~14px title) while still scaling with the
+內文/正文 font size (--fs) and keeping the rounded-square shape.
+(B) Unified every icon button to a single borderless ghost style — the doc
+filter and settings buttons (and the AI icon-only chips) previously sat in
+pill boxes; all boxes removed, one size (16px*--fs), faint colour, subtle
+hover. Active (.on) state now shown by accent colour instead of a box.
+(C) Removed the "AI 助手" title text from the AI tool panel header (kept the
+other tool titles); the header now shows just its icons.
+(D) The doc-card filter/settings bar was inset by the card's 16px padding,
+leaving a visible gap on each side — it now full-bleeds to the card edge
+(margin:0 -16px + matching padding), reading as a proper full-width toolbar.
+(E) Hid the completion/status chip (✓ 完成 / 待處理) in AI output cards
+(.cxh-chip).
+(F) Replaced the 回覆 reply button text with a reply-arrow icon.
+(G) Replaced the ✕ close (.turn-del / .turn-del-x) in AI output cards with
+the unified close icon, matching every other symbol button.
+F and G use CSS mask-image (data-URI SVG + background-color:currentColor)
+rather than editing the ~9 separate button-markup sites, so they stay
+theme-aware and required no JS/markup churn. Only (C) touched JS (one
+ternary in createToolBox).
 
 Files:
-- `review-tools/(2) sample/yu-source-confirmed.json`
-- `review-tools/shared data/review-bundles/yu-source-confirmed-sample/`
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
 - `PROJECT_LOG.md`
 
 Verified:
-- Export contains 202 `yu_source` pairs.
-- No document IDs were missing from the canonical Stage 1 corpus.
+- Both HTML files' embedded JavaScript parsed successfully.
+- Rendered headlessly against the real stylesheet: doc card (badge now
+  smaller than title, filter/settings borderless, filter bar full-width),
+  an AI output card (no status chip; reply-arrow and unified close icons),
+  and the AI header with the empty title (icons sit cleanly, no orphaned
+  gap). All correct.
+- Diffed the new CSS block and the JS edit between formal and sample: identical.
+
+Remaining:
+- Human confirmation in the real app, incl. dark mode. Note: the AI footer
+  dropdown buttons that carry TEXT (套用 value `硃41 ▾`, `功能 ▾`) were left
+  as bordered buttons — only icon buttons were de-boxed. Flag if those
+  should go boxless too. The bulk-copy (`複製`) action removed earlier still
+  has no replacement.
+
+### 2026-07-20 14:52 HKT — Claude — Top-toolbar cleanup + live search dropdown (formal + sample)
+
+Summary: Six changes to the dual-timeline top toolbar and search, applied
+identically to both tools.
+(1) Hid the floating 網絡範圍 (network-reach) launcher button
+(`#reach-launch{display:none}`). The panel/feature still exists in code but
+is no longer launchable from that button — relocate into 工具 if it's wanted
+back.
+(2) Replaced the text dropdown carets (`▾`) on the 點線類型 / 編輯圓點 / 工具
+buttons with a small inline SVG chevron (`.dd-caret`), matching the SVG icon
+system.
+(3a) Match-count readout changed from `N 件符合（共 M 件）` to a compact
+`N/M`, enlarged (16px*--fs, bold, tabular numerals).
+(3b) The type-filter button now reads just `點線類型` — the running
+dot/line counts (`6/7點 · 11/11線`) are hidden (`#tb-type-summary`).
+(4) People/search font balance: the `人物` label is larger (14px*--fs); the
+select value (選擇人物) and the search placeholder are smaller (11.5px*--fs).
+The search `🔍` emoji was replaced with an inline SVG magnifier.
+(5) Restyled the native `選擇人物` / `且-或` `<select>`s (appearance:none,
+parchment bg, thin border, custom SVG chevron background) so they match the
+rest of the UI instead of looking like OS-native dropdowns.
+(6) NEW: a live search-results dropdown under the search box. As the user
+types, it lists every matching document (badge + doc id + full title, same
+full-text match the timeline filter uses, capped at 60 shown), with a
+footer showing the total count and a `複製全部編號` button that copies ALL
+matching doc IDs (not just the shown 60), one per line, to the clipboard.
+Clicking a result opens that document (via `window.__cmdPickDot`).
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded JavaScript parsed successfully.
+- Rendered the real page headlessly: toolbar shows chevron carets, styled
+  person select, magnifier icon, `點線類型` (no counts), and `236/363`; the
+  reach button computes to display:none.
+- Drove the search live: typing shows the results dropdown with
+  badge/id/title rows; the `複製全部編號` button copied 184 IDs (one per
+  line, verified via clipboard read) and showed the "已複製 184 個編號"
+  confirmation.
+- Diffed the new JS + CSS regions between formal and sample: identical.
+
+Remaining:
+- Human confirmation in the real app (dark mode too). Note: search full-text
+  matching is broad (matches any field incl. body text), so a common name
+  like 黃仕簡 returns many docs — that's expected for full-text, flag if a
+  title/id-only search mode is wanted instead.
+
+### 2026-07-20 07:05 HKT — Claude — Fix toolbar --ui-fs scaling, widen search dropdown, restore doc-panel backdrop (formal + sample)
+
+Summary: Three follow-up fixes to the previous toolbar+search round, applied
+identically to both tools.
+
+(1) The new toolbar/search elements (search box text, search-results list,
+`人物`/`選擇人物`, `點線類型` label, the `N/M` match count) had been styled
+against `--fs` (the 正文/content font-size scale) instead of `--ui-fs` (the
+介面字級/interface font-size scale that 編輯圓點/工具/A−/A+ actually use).
+Two pre-existing, higher-specificity legacy rules were also silently
+overriding several of these to a flat, non-scaling size regardless of which
+variable was used:
+  - `body .dual-toolbar .pl { font-size:11px !important; }` — was pinning
+    every `.pl` label (incl. `點線類型`) to a flat 11px.
+  - `.dual-toolbar .pl, .dual-toolbar label, .dual-toolbar .count-readout{
+    font-size:calc(15px * var(--fs,1)) !important; }` — was pinning the
+    match-count readout to the content scale, not the interface scale.
+  Both were switched to `var(--ui-fs,1)` (root-cause fix, not just a patch
+  on top). All the round-9 toolbar/search CSS was also rewritten onto the
+  `--ui-fs` axis with sizes matched to 編輯圓點/工具 (~15-16px baseline) and
+  given `!important` where a same-specificity legacy rule would otherwise
+  win by source order. Verified empirically: with `--ui-fs` forced to 1.3,
+  編輯圓點 (19.5px), 點線類型 label (19.5px), match count (19.5px), search
+  input (18.2px) and search-result rows (18.2px) now all scale together.
+(2) `.search-pop` was widened from `max-width:min(520px, 80vw)` to
+  `width:max-content` with `min-width:min(420px, 100vw-24px)` and
+  `max-width:min(760px, 92vw)`; each `.search-item` row is now
+  `white-space:nowrap` with the title (`.stt`) as a `flex:1 1 auto`
+  ellipsis-truncating span, so badge+id+title render on one line by
+  default instead of wrapping to two.
+(3) The single-document info panel (`.ws-list.single`) previously sat flush
+  and square against its sunken column background
+  (`padding:0 !important; margin:0 !important; border-radius:0 !important`
+  on the card), unlike the AI panel (`.ws-tools > .tool-box`), which keeps
+  the standard `margin:8px 8px 0; border-radius:var(--r2)` treatment and so
+  shows a visible light-brown backdrop with rounded corners. Restored the
+  same margin/radius/padding to `.ws-list.single` and its card so the doc
+  panel now matches the AI panel's backdrop + rounded-corner look.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded JavaScript parsed successfully (`new
+  Function()` over the largest inline `<script>`).
+- Diffed the edited regions between formal and sample: identical (the only
+  diffs anywhere in the two files are the pre-existing formal/sample data
+  paths and comments, unrelated to this round).
+- Rendered headlessly: toolbar screenshot shows 點線類型/人物/編輯圓點/工具/
+  count all visually consistent in size; typed a live search query and
+  confirmed every result row (badge+id+title) sits on one line at the wider
+  popup width; forced `--ui-fs` to 1.3 and re-measured computed font sizes
+  to confirm every new element scales in lockstep with 編輯圓點/工具; built
+  a synthetic single-card doc panel next to a synthetic AI tool-box panel
+  and confirmed both now show the same backdrop margin + rounded top
+  corners.
+
+Remaining:
+- Human confirmation in the real app, incl. dark mode and the real A−/A+
+  control (this round verified `--ui-fs` scaling by setting the CSS
+  variable directly in a headless page, not by clicking the actual
+  toolbar's A+ button, which lives inside a popover not exercised here).
+
+### 2026-07-20 07:25 HKT — Claude — Thin the doc-panel backdrop, tighten 總摘要/原文 box padding (formal + sample)
+
+Summary: The previous backdrop restore (see the entry above) overcorrected —
+`.ws-list.single` got its own 9px column padding *plus* the card's 8px
+margin on every side (17px total), roughly double the AI panel's 8px
+(`.ws-tools` has zero column padding; only the tool-box's own `margin:8px
+8px 0` creates the backdrop). Fixed by zeroing `.ws-list.single`'s column
+padding again and trimming the card's margin back to `8px 8px 0` (matching
+`.ws-list > .card, .ws-tools > .tool-box` exactly, one-for-one) instead of
+adding a bottom margin too.
+
+Separately, the 總摘要 (`.ip-overall`) and 原文 BODY (`.ix-text`) boxes sat
+much further from the card edge than an AI chat bubble does: `.ip-scroll`
+had 14px of its own left/right padding, and the boxes added another 14-16px
+on top of that (~28-30px total). Reduced `.ip-scroll`'s horizontal padding
+to 8px (matching the AI panel's `.tb-body`) and trimmed `.ip-overall`
+14px→11px and `.ix-text` 16px→13px horizontal padding, bringing the total
+inset down to roughly the AI panel's ~21px.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded JavaScript parsed successfully.
+- Diffed the edited regions between formal and sample: identical (same 77
+  pre-existing lines of formal/sample-only differences as every prior
+  round; nothing new).
+- Rebuilt the synthetic single-card-doc-panel vs. tool-box-AI-panel
+  comparison and confirmed both columns now show the same backdrop
+  thickness, and the 總摘要/原文 boxes sit closer to the card's edges.
+
+Remaining:
+- Human confirmation in the real app, incl. dark mode.
+
+### 2026-07-20 07:45 HKT — Claude — Fix invisible-glyph buttons, unify AI-panel/doc-panel symbol buttons, remove backdrop-on-hover, add delayed tooltips (formal + sample)
+
+Summary: Four changes, applied identically to both tools.
+
+(1) Found that `createToolBox()` (builds every tool-box header, incl. the
+AI panel) and the event-card/day-card headers still built their
+move/close buttons from raw `✥`/`×` text glyphs, missed by the earlier
+site-wide switch to inline-SVG icons (`IC.move`/`IC.close`) that was done
+specifically because Unicode symbols didn't render on the user's machine.
+Converted all three remaining call sites to the SVG icons — this directly
+addresses "unify the AI panel's top-right 2 buttons with other symbol
+buttons," since they may have been rendering as blank/tofu boxes before.
+(2) Unified `.tb-move`/`.tb-close` (AI panel header) onto the same
+borderless "symbol button" family as `.ip-filterbtn`/`.ip-settingsbtn`/
+`.cb-chip.cb-icon-only` (same 3px padding, same `var(--r1)` border-radius,
+same auto sizing) instead of their own slightly different padding and no
+radius.
+(3) The doc panel's three top-right buttons (`.ip-btns` move/minimize/
+close) showed a light-brown backdrop (`background:var(--sunken)`) on
+hover, unlike every other symbol button's color-only hover. Two separate
+legacy rules set this (one light-mode, one dark-mode with its own
+`background:#33404c`/`var(--surface)`), so both were overridden — the
+light-mode source rule directly, the dark-mode ones via an `!important`
+override since they out-specificity a plain fix.
+(4) Added a shared "hold to see label" tooltip system for every icon-only
+symbol button (SVG icon or a 1-2 char glyph like ✕/+/−, detected
+automatically — text buttons like `功能 ▾` are left alone since they
+already show a label). A small script converts each such button's
+existing `title` attribute to `data-tip` (suppressing the native OS
+tooltip) on load and on every subsequent re-render via a MutationObserver
+(most of these buttons are rebuilt by `innerHTML`, not persistent DOM
+nodes). Pure-CSS delayed reveal: `opacity`/`visibility` transition with
+no delay on the base rule (hides instantly) but a 1s `transition-delay`
+on the `:hover` rule (so the black label only appears after ~1s of
+hovering), positioned above the button, with a right-edge flip for
+buttons near the edge of a popup (search results, TOC dropdown).
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded JavaScript parsed successfully.
+- Diffed the edited regions between formal and sample: identical (same 77
+  pre-existing formal/sample-only lines as every prior round).
+- Rendered a synthetic AI tool-box header + doc card side by side:
+  confirmed `title` attributes were converted to `data-tip` on load for
+  every targeted button (tb-move, tb-close, ip-move, ip-min, ip-close,
+  ip-filterbtn, ip-settingsbtn); confirmed hovering `.ip-move` shows only a
+  color change, no backdrop; confirmed the black tooltip label appears
+  only after ~1s of continuous hover and disappears promptly on mouse-out.
+
+Remaining:
+- Human confirmation in the real app, incl. dark mode.
+- Investigating a separate report: "now can't show the full text of each
+  doc in the doc info panel." Reviewed every CSS/JS change from the last
+  two rounds (padding/backdrop/margin edits) and could not find a
+  mechanism that would hide or truncate document body text — no
+  `overflow:hidden`, `max-height`, or text-truncation rule was touched,
+  and a synthetic single-card panel with a long multi-segment document
+  scrolled to and fully displayed its last segment in testing. Real
+  document data isn't available in this sandbox (the timeline fetches
+  `/formal/...json` over `file://`, which the browser blocks via CORS, so
+  no dots are clickable here) — asked the user for a screenshot of the
+  broken state to pin down the actual cause rather than guessing further.
+
+### 2026-07-20 16:31 HKT — Codex — Replace document-info summary/table filters with reviewed AI-output labels (formal + sample)
+
+Summary:
+- Replaced the document-info filter's legacy embedded-summary collector with a collector over saved, quoted AI-chat output, covering event extraction categories, source chains, official responses, timing checks, 硃批／上諭 outputs, information sources, consolidation, 上諭 review-loop outputs, emperor actions, and document-pair evidence.
+- Added Traditional Chinese filter labels, including `清軍事：已執行`, `清軍事：待執行`, `清方：非軍事`, `上諭回應的奏折`, `回應的先前上諭`, and `回應的先前硃批`; removed the old 摘要 label path and the document-info table/AI-original toggles.
+- Applied the equivalent change to both HTML tools and preserved the document metadata table and raw source data.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-loaded both local pages, opened a document panel in each, and confirmed no legacy table, page toggle, AI-original toggle, overall-summary pane, summary table, or old visible pair labels; browser error logs were empty.
+
+Remaining:
+- Human confirmation of the final Chinese label wording and visual grouping in the real research workflow.
+
+### 2026-07-20 16:35 HKT — Codex — Expanded header search results with matching excerpts (formal + sample)
+
+Summary:
+- Removed the 60-result render cap and the old 「僅顯示前 60 筆」 notice; the dropdown now renders the complete matching set and keeps the copy-all action over all matches.
+- Added a second, centered source-text line for every result. It shows the first matching occurrence, highlights the query in red, and appends the document-level occurrence count.
+- Added a readable original-source index while preserving the existing lowercase search index, so timeline filtering behavior remains unchanged.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- git diff --check passed.
+- Browser-tested both local pages with 常: each rendered 256 result rows, no old limit notice, a second excerpt line, red .search-hit text, and a scrollable dropdown containing all rows.
+- Formal and sample search-dropdown blocks are identical.
+
+Remaining:
+- Human confirmation of the excerpt wording and spacing in the real research workflow.
+
+### 2026-07-20 16:47 HKT — Codex — Simplify document-info body and segmented-part presentation (formal + sample)
+
+Summary:
+- Made the saved division view the only active document-info body filter by default when divisions exist; other annotation groups remain available through the filter control.
+- Renamed both plain and segmented body headings to `原文` and removed the separate bottom `硃批 rescript` block.
+- Removed the segmented-part left rail and its green hover behavior, made the outer body surface transparent, and gave each part its own surface with 28px spacing.
+- Reduced the default segmented-part subtitle size to 12px.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-loaded both local pages, opened document panels, confirmed `原文` is the only body heading, confirmed no separate rescript block or legacy summary/table panes, and found no browser console errors.
+- Confirmed the renderer/CSS rules are synchronized in both files for the default division state, independent part surfaces, removed hover rail, larger inter-part spacing, and smaller subtitles.
+
+Remaining:
+- Human confirmation of the segmented-card spacing in a saved-division document with the research data loaded.
+
+### 2026-07-20 16:52 HKT — Codex — Scope pair filters by document type (formal + sample)
+
+Summary:
+- Hid `上諭回應的奏折` AI-output filters from official documents (`硃批` and `上奏`).
+- Hid `回應的先前上諭` from 上諭 documents, where that response relationship is not applicable.
+- Kept the underlying saved AI-chat output intact; this change only controls document-info filter visibility and highlights.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed before the log update.
+- Browser-loaded both local pages, opened document panels, confirmed no pair labels appeared in the available blank preview state, and found no browser console errors.
+- Confirmed the same document-type filtering rules are present in both HTML files.
+
+Remaining:
+- Human confirmation with the full saved AI pair outputs loaded in the research workflow.
+
+### 2026-07-20 17:03 HKT — Codex — Refine document-type filter visibility for AI/event projections (formal + sample)
+
+Summary:
+- For `硃批` and `上奏`, hid `相關上諭`, `回應時效`, `事件整合`, and `皇帝行動` filter groups, in addition to the previously hidden 上諭-pair group.
+- For 上諭, hid `事件整合` and `回應的先前上諭`, while retaining `皇帝行動` items whose source is the 上諭.
+- Applied the visibility rule after combining saved AI items and event projections, so excluded groups cannot reappear through either path.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-loaded both local pages, opened document panels, confirmed the new logic produced no runtime errors, and found no forbidden pair labels in the available blank preview state.
+- Confirmed the same final-list visibility rules are present in both HTML files.
+
+Remaining:
+- Human confirmation with the complete saved AI/event outputs loaded in the research workflow.
+
+### 2026-07-20 17:03 HKT — Codex — Refined header people/search filters and result controls (formal + sample)
+
+Summary:
+- Removed the （等） suffix from every 人物 option and normalized filtering so the bare-name options still match the underlying records.
+- Changed header search and timeline filtering to search field values only; serialized JSON property names such as volume are no longer searchable.
+- Moved the result count and controls above the full result list, added a document-type filter, and changed 複製全部編號 to a copy-symbol button that copies the currently filtered results.
+- Kept only the first matching excerpt and now show the occurrence count when a document has more than one match.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- git diff --check passed.
+- Browser-tested both pages: 人物 options contain no （等）; volume returns 0 筆符合; 常 shows the top result header, all document types, red hits, and multi-match counts; selecting 硃批 shows 110 rows and only 硃 badges.
+- Formal and sample search blocks are identical.
+
+Remaining:
+- Human confirmation of the final header spacing and labels in the full research workflow.
+
+### 2026-07-20 17:13 HKT — Codex — Added reviewed summary card above 原文 (formal + sample)
+
+Summary:
+- Added a separate 摘要 card at the top of each document-info body, before 原文.
+- The card reads saved reviewed summary output (`overallAdj` first, then structured 摘要 output or saved summary responses) and does not use the legacy embedded `r.summary` table.
+- Kept the card out of the filter chips and hid it when no reviewed summary output exists.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-tested both local pages, opened document panels, confirmed the `ix-summary` container precedes `ix-cols`, the body label is 原文, and no separate 硃批/rescript block is rendered; no browser errors were reported.
+
+Remaining:
+- Human confirmation with the complete saved reviewed-summary outputs loaded in the research workflow.
+
+### 2026-07-20 17:20 HKT — Codex — Center search excerpts and preserve visible match counts (formal + sample)
+
+Summary:
+- Replaced the fixed search excerpt radius with a responsive excerpt limit based on the dropdown width and interface font size.
+- Kept early matches in a balanced clause-sized excerpt, so searching 二 now shows 為奏聞事。本年十二月初九日接提臣黃仕簡 with the match centered rather than starting at the document header.
+- Moved multi-match counts outside the clipped excerpt text so counts such as (9) remain visible whenever a document has more than one match.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-tested both pages with 二: 363 rows, centered target excerpt, visible (9), and identical output.
+- Rechecked volume as 0 筆符合, 常 as 256 筆符合 with 138 multi-match counts and red hits, and no browser console errors.
+- Confirmed the search JavaScript and CSS blocks remain identical between formal and sample.
+
+Remaining:
+- Human confirmation of final search excerpt spacing in the full research workflow.
+
+### 2026-07-20 17:25 HKT — Codex — Avoid forced centering at excerpt boundaries (formal + sample)
+
+Summary:
+- Center the first matching word only when the responsive excerpt window has enough source text before and after it.
+- Keep matches near the beginning or end anchored naturally to the available text instead of forcing a centered clause.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-tested both pages with 二: the early 硃26 match is naturally anchored at the beginning, while a separate result still centers when both sides have enough text; multi-match counts remain visible.
+- Rechecked volume as 0 筆符合 in both pages and found no browser console errors.
+
+Remaining:
+- Human confirmation of the final boundary behavior in the full research workflow.
+
+### 2026-07-20 17:31 HKT — Codex — Lighten search example sentences (formal + sample)
+
+Summary:
+- Changed the search dropdown's second-line sentence to a lighter theme-aware colour.
+- Preserved the red matching word and readable multi-match count styling.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- `git diff --check` passed.
+- Browser-tested both pages with 二: 363 rows, lighter sentence text, red hit, visible counts, and no browser console errors.
+
+Remaining:
+- Human confirmation of the final search text contrast in the full research workflow.
+
+### 2026-07-20 17:23 HKT — Codex — Made 原文 editing inline (formal + sample)
+
+Summary:
+- Replaced the old click-to-textarea original-text editor with an inline `contenteditable` editor at the exact 原文 location.
+- Wrapped each divided source segment in its own inline editor while keeping division titles and summaries as their existing inline editors.
+- Saved edited source text on focusout, excluding annotation notes and generated superscript numbers from the stored body text.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+- Browser-tested both local pages: each document panel has a `contenteditable` `.body-inline-edit`, no `.ip-bodyedit` textarea is created, and no browser warnings or errors were reported.
+
+Remaining:
+- Human confirmation of caret placement and editing feel with the complete saved research state.
+
+### 2026-07-20 17:31 HKT — Codex — Matched document-panel headings and division-card styling
+
+Summary:
+- Matched the `摘要` and `原文` headings in font family, size, weight, line height, letter spacing, colour, and alignment in both review UIs.
+- Changed each division-of-part card to a white surface with only the thin brown border used by the summary card; removed the card shadow and hover border variation.
+- Preserved a readable light-gold heading colour in dark mode.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+- Browser-tested the document-panel styling path and finalized the browser check without console errors.
+
+Remaining:
+- Human confirmation of the final visual treatment in the full saved research state.
+
+### 2026-07-20 17:35 HKT — Codex — Enlarged division subtitles
+
+Summary:
+- Increased the subtitle text beneath each division-of-part title from its compact default to `14px` with a more readable line height.
+- Applied the same rule to the formal and sample review UIs.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+- Browser smoke check completed for both local pages without console errors.
+
+Remaining:
+- Human confirmation of the subtitle size in the full saved research state.
+
+### 2026-07-20 17:39 HKT — Codex — Aligned summary and division-card geometry
+
+Summary:
+- Standardized the summary card's inner padding to match each division card's `14px` horizontal inset.
+- Kept the `摘要` heading aligned to the shared outer edge while aligning summary text and division subtitles to the same inner text start.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+- Browser-loaded the sample UI and confirmed the alignment rules are present; no populated document was selected in the smoke view.
+
+Remaining:
+- Human confirmation of the final visual alignment in the full saved research state.
+
+### 2026-07-20 17:41 HKT — Codex — Rebalanced division title and summary sizes
+
+Summary:
+- Made each division title moderately larger (`16px`) so it is the largest text within its part.
+- Reduced the summary line below it to a still-readable `12.5px`, keeping the main source text between the two sizes.
+- Applied the same hierarchy to formal and sample UIs.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+- Browser-loaded the sample UI and confirmed the final `.seg-label`/`.seg-summary` rules are present.
+
+Remaining:
+- Human confirmation of the final text hierarchy in the full saved research state.
+
+### 2026-07-20 17:44 HKT — Codex — Reduced division summaries and padded 摘要 heading
+
+Summary:
+- Reduced each division summary line to `12px` so it remains the smallest text in the part without becoming too small.
+- Removed the negative left offset from `摘要`, restoring the card's normal inner padding so the heading no longer touches the border.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+
+Remaining:
+- Human confirmation of the final spacing and text hierarchy in the full saved research state.
+
+### 2026-07-20 17:46 HKT — Codex — Aligned 原文 with the summary subtitle inset
+
+Summary:
+- Added the same `14px` left inset to the `原文` heading used by the summary subtitle and division subtitles.
+- Applied the adjustment to both formal and sample UIs.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+
+Remaining:
+- Human confirmation of the final heading alignment in the full saved research state.
+
+### 2026-07-20 18:21 HKT — Codex — Exported verified sample 上諭—奏折 data
+
+Summary: Exported all verified `yu_source` 上諭—奏折 records from the sample
+state into the requested `review-tools/(2) sample/yu-source.json` file. The
+export contains 213 records, all with relation `yu_source`.
+
+Files:
+- `review-tools/(2) sample/yu-source.json`
+- `review-tools/shared data/review-bundles/yu-source-sample-verified/`
+- `PROJECT_LOG.md`
+
+Verified:
+- Exported pair keys exactly match the 213 verified `__docPairs` source pairs
+  in `review-tools/(2) sample/sample_all.data`.
+- No records are missing or extra; all 213 source documents were found in the
+  canonical corpus.
+- The generated review bundle also contains 213 pairs.
+- `git diff --check` passed.
 
 Remaining:
 - None for this export.
 
-### 2026-07-18 17:34 HKT — Codex — Refined document-panel and AI output controls (formal + sample)
+### 2026-07-20 18:36 HKT — Codex — Grouped relationship prompts in the AI-chat menu
 
-Summary: Continued the Claude UI pass in both timeline tools. Reduced the document-type badge below the title while keeping it tied to the 正文 font-size control; flattened filter, settings, reply, and close controls into a shared 24px borderless icon style; removed the AI 助手 title text, redundant completion/reply-status labels, and filter-dock padding; and normalized reply/close controls to SVG icons.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
-
-Verified:
-- All five formal and six sample embedded script blocks parse successfully.
-- The changed icon, normalizer, header, and final CSS regions are identical between formal and sample.
-- `git diff --check` passes.
-
-Remaining:
-- Human visual confirmation in the real app, especially dark mode and the final spacing around the document-info filter dock.
-
-### 2026-07-18 17:48 HKT — Codex — Rounded document panel shell and thickened filter bar (formal + sample)
-
-Summary: Matched the single document-info panel to the AI panel treatment. Added a light-brown, thin-bordered surround, restored rounded corners and a soft boundary shadow on the document card, and increased the filter/settings bar to a 36px strip.
+Summary: Added a section boundary after the four relationship prompts—回應的先前上諭、回應的先前上諭（無引文）、上諭回應的奏折、回應的先前硃批—so they form one individual part before 摘要／分段 in both review UIs.
 
 Files:
 - `review-tools/(1) formal/index.html`
@@ -1290,16 +1904,20 @@ Files:
 - `PROJECT_LOG.md`
 
 Verified:
-- All five formal and six sample embedded script blocks parse successfully.
-- Final control and panel CSS regions are identical between formal and sample.
-- `git diff --check` passes.
+- Confirmed both menus keep the four requested prompts together and place the separator immediately before 摘要／分段.
+- Parsed all embedded scripts in both HTML files successfully.
+- `git diff --check` passed.
 
 Remaining:
-- Human visual confirmation in the real app, especially dark mode and the final backdrop thickness.
+- Human confirmation of the new AI-chat menu grouping.
 
-### 2026-07-18 17:58 HKT — Codex — Matched AI header controls and BODY edit surface (formal + sample)
+### 2026-07-20 18:39 HKT — Codex — Replaced global click-network reach controls with lane-first profiles
 
-Summary: Matched the AI panel's right move/close controls to the left icon-chip style with the shared SVG assets and borderless geometry. Changed document 原文 BODY tap/table editing to reuse the 總摘要 contenteditable surface, with matching whitespace, text scale, and line-height behavior.
+Summary:
+- Replaced the old relationship-type depth controls for normal dot clicks with four source-lane sections, each containing four target-lane depth controls (`0`-`4` and `∞`).
+- Rebuilt normal click traversal as a mixed dot-to-dot graph covering event sources, event responses, document pairs, 硃批 send/receive endpoints, matched 上諭—奏摺 links, and emperor-action information sources.
+- Preserved the clicked 硃批 endpoint side and kept selected network endpoint dots visible even when their ordinary dot filter is off. The separate event-line/show-network path remains independent.
+- Added persisted presets and opened the new panel from the header Tools > 連線 group in both formal and sample UIs.
 
 Files:
 - `review-tools/(1) formal/index.html`
@@ -1307,9 +1925,67 @@ Files:
 - `PROJECT_LOG.md`
 
 Verified:
-- All five formal and six sample embedded script blocks parse successfully.
-- Shared AI-control and BODY-editor CSS/JavaScript regions are identical between formal and sample.
-- `git diff --check` passes.
+- Embedded JavaScript parsed successfully in both HTML files.
+- `git diff --check` passed.
+- Browser smoke-tested the formal and sample pages: the new panel renders 4 source sections and 16 target rows; changing 第一線 → 第二線 to `0` reduced the clicked event network to the seed event; a document click highlighted the selected 硃批 send/receive pair.
 
 Remaining:
-- Human visual confirmation in the real app.
+- Human confirmation of the default lane depths and final visual grouping.
+
+### 2026-07-20 18:41 HKT — Codex — Defined the AI loop process
+
+Summary: Documented the end-to-end AI loop from terminal model execution to
+human review and chart integration.
+
+Files:
+- `AGENTS.md`
+- `CLAUDE.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The AI loop is defined as a chained run of saved prompts and/or skills
+  using a specified AI model on two or more original documents from the
+  terminal.
+- The definition requires JSON output and a review bundle loaded into the
+  website's AI chat for user review and editing before chart addition.
+- The definition was added identically to both agent instruction files.
+
+Remaining:
+- None.
+
+### 2026-07-20 18:49 HKT — Codex — Scaled the visible network button with 介面字級
+
+Summary: Applied the `--ui-fs` interface-font scale to the visible
+`點擊後顯示範圍` button's text, horizontal padding, and toolbar height in both
+formal and sample UIs.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- The button's font and geometry reference `--ui-fs` in both HTML files.
+- `git diff --check` passed.
+
+Remaining:
+- None.
+
+### 2026-07-20 18:51 HKT — Codex — Hid the click-network settings button
+
+Summary: Hid the visible `點擊後顯示範圍` toolbar control in both formal and
+sample UIs while preserving the existing lane-first panel logic and handler.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded JavaScript parsed successfully in both HTML files.
+- The network-settings control is hidden by CSS in both HTML files.
+- `git diff --check` passed.
+
+Remaining:
+- None.

@@ -1,0 +1,22 @@
+{
+  "name": "yu-source-feb-mar-1787-missed",
+  "created_at": "2026-07-20T15:20:42",
+  "source": "review-tools/shared data/stage1_original_text.json",
+  "doc_ids": [
+    "硃125",
+    "硃153",
+    "硃155",
+    "硃195",
+    "奏232",
+    "硃281",
+    "諭87",
+    "諭123",
+    "諭132",
+    "諭160",
+    "諭196",
+    "諭226"
+  ],
+  "chain": [
+    "yu-source"
+  ]
+}

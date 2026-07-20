@@ -464,14 +464,19 @@ def main():
     ap.add_argument("--no-recall-audit", action="store_true",
                     help="Disable the second-pass completeness audit.")
     ap.add_argument("--bundle-name", default="yu-source")
+    ap.add_argument(
+        "--bundle-only",
+        action="store_true",
+        help="Write only the shared review bundle; do not touch formal yu-source.json.",
+    )
     args = ap.parse_args()
 
     records = load_records()
     by_id = {r.get("id"): r for r in records}
 
-    out_path = ROOT / "review-tools" / "(1) formal" / "yu-source.json"
+    out_path = None if args.bundle_only else ROOT / "review-tools" / "(1) formal" / "yu-source.json"
     existing_pairs, existing_analyzed, done_ids = [], [], set()
-    if args.skip_done and out_path.exists():
+    if args.skip_done and out_path and out_path.exists():
         prev = json.loads(out_path.read_text(encoding="utf-8"))
         if isinstance(prev, dict):
             existing_pairs, existing_analyzed = prev.get("pairs", []), prev.get("analyzed", [])
@@ -580,7 +585,8 @@ def main():
 
     analyzed = sorted(set(existing_analyzed) | {a for a in run_analyzed if a})
     result = {"pairs": deduped, "analyzed": analyzed}
-    out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
+    if out_path:
+        out_path.write_text(json.dumps(result, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
     bundle_root = ROOT / "review-tools" / "shared data" / "review-bundles" / args.bundle_name
     (bundle_root / "outputs").mkdir(parents=True, exist_ok=True)
@@ -594,7 +600,8 @@ def main():
         "chain": ["yu-source"],
     }, ensure_ascii=False, indent=2) + "\n", encoding="utf-8")
 
-    print(out_path)
+    if out_path:
+        print(out_path)
     print(bundle_root)
     print(f"pairs: {len(deduped)} (dropped {dropped} weak; use --include-weak to keep)")
     return 0

@@ -6750,8 +6750,421 @@
           "__skillRunId": "bundle:yu-source-feb-mar-1787:mrq5feci",
           "__skillBundleName": "yu-source-feb-mar-1787",
           "__skillBundleDocs": 110
+        },
+        {
+          "at": "2026-07-20 07:03",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭20",
+            "reply_doc_id": "硃21",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。",
+                  "reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。"
+                },
+                {
+                  "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+                  "reply": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。"
+                }
+              ],
+              "memorialist": "常青",
+              "relation_note": "此摺在五日來源窗內，獨立報告彰化失陷、文報梗塞，以及常青分派黃仕簡、任承恩分路進剿；不因後來的轉奏摺已配對而省略。",
+              "send_date": "1786/12/12",
+              "matched_yu_span": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。／黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+              "quote_in_reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。／臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+          "__skillBundleName": "yu-source-dec-jan-1787-missed",
+          "__skillBundleDocs": 13
+        },
+        {
+          "at": "2026-07-20 07:03",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭20",
+            "reply_doc_id": "硃22",
+            "relation": "yu_source",
+            "match_level": "partial",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "又據任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺，並請簡派重臣督辦",
+                  "reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。"
+                }
+              ],
+              "memorialist": "任承恩",
+              "relation_note": "此摺獨立報告任承恩已派兵、整頓軍械船隻並候督臣調遣，支持上諭的「挑派兵丁預備」；「簡派重臣」未以此摺作證。",
+              "send_date": "1786/12/10",
+              "matched_yu_span": "又據任承恩奏，挑派兵丁預備。",
+              "quote_in_reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+          "__skillBundleName": "yu-source-dec-jan-1787-missed",
+          "__skillBundleDocs": 13
+        },
+        {
+          "at": "2026-07-20 07:03",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭20",
+            "reply_doc_id": "硃25",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿",
+                  "reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。"
+                }
+              ],
+              "memorialist": "黃仕簡",
+              "relation_note": "黃仕簡此摺在同一五日來源窗內，直接報告登舟放洋及先遣兵渡臺；這是獨立直奏，不應被較晚的常青轉奏摺取代。",
+              "send_date": "1786/12/10",
+              "matched_yu_span": "黃仕簡現帶兵登舟渡臺，由南路進剿。",
+              "quote_in_reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+          "__skillBundleName": "yu-source-dec-jan-1787-missed",
+          "__skillBundleDocs": 13
+        },
+        {
+          "at": "2026-07-20 07:03",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭36",
+            "reply_doc_id": "硃56",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方",
+                  "reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。"
+                }
+              ],
+              "memorialist": "常青",
+              "relation_note": "硃56為常青在五日窗內的直接奏摺，明載閩安赴淡北的一千五百名及徐鼎士帶領的續調兵，正面支持上諭的具名來源。",
+              "send_date": "1786/12/20",
+              "matched_yu_span": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方。",
+              "quote_in_reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+          "__skillBundleName": "yu-source-dec-jan-1787-missed",
+          "__skillBundleDocs": 13
+        },
+        {
+          "at": "2026-07-20 07:03",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭56",
+            "reply_doc_id": "硃82",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                  "reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。"
+                },
+                {
+                  "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                  "reply": "又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊"
+                }
+              ],
+              "memorialist": "常青",
+              "relation_note": "硃82是常青對鹿港守備擒獲四名偽官的直接奏報，明列高文麟並說明押解泉州，獨立支持上諭所據的擒獲、審明解京資訊。",
+              "send_date": "1786/12/28",
+              "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+              "quote_in_reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。／又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+          "__skillBundleName": "yu-source-dec-jan-1787-missed",
+          "__skillBundleDocs": 13
+        },
+        {
+          "at": "2026-07-20 07:03",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭56",
+            "reply_doc_id": "奏85",
+            "relation": "yu_source",
+            "match_level": "partial",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                  "reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。"
+                }
+              ],
+              "memorialist": "常青",
+              "relation_note": "奏85是五日窗內常青對同一批四名逆犯已審明解送的後續獨立覆奏；雖為後續轉述且未重列高文麟姓名，仍提供同一擒獲—解送事實，保留供人工判斷。",
+              "send_date": "1787/01/15",
+              "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+              "quote_in_reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+          "__skillBundleName": "yu-source-dec-jan-1787-missed",
+          "__skillBundleDocs": 13
+        },
+        {
+          "at": "2026-07-20 08:08",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭87",
+            "reply_doc_id": "硃125",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+                  "reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。"
+                }
+              ],
+              "memorialist": "徐嗣曾",
+              "relation_note": "徐嗣曾直奏；此摺在五日來源窗內，獨立記錄黃仕簡、郝壯猷到臺及十三日會剿，不因同一資訊已有奏127配對而省略。",
+              "send_date": "1787/01/18",
+              "matched_yu_span": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+              "quote_in_reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+          "__skillBundleName": "yu-source-feb-mar-1787-missed",
+          "__skillBundleDocs": 12
+        },
+        {
+          "at": "2026-07-20 08:08",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭123",
+            "reply_doc_id": "硃153",
+            "relation": "yu_source",
+            "match_level": "partial",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "孫景燧等守禦城池被戕害，殊堪憐憫",
+                  "reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。"
+                }
+              ],
+              "memorialist": "任承恩",
+              "relation_note": "任承恩直奏；此摺在五日來源窗內，獨立概括報告彰化失陷及文武官員被害，但未逐名列出。諭123所列三人的具名及印信證據仍由現有奏154及其他來源供證；本案保留供人工判斷，不視為具名細節的直接複本。",
+              "send_date": "1787/01/14",
+              "matched_yu_span": "孫景燧等守禦城池被戕害，殊堪憐憫",
+              "quote_in_reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+          "__skillBundleName": "yu-source-feb-mar-1787-missed",
+          "__skillBundleDocs": 12
+        },
+        {
+          "at": "2026-07-20 08:08",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭132",
+            "reply_doc_id": "硃155",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "現在黃仕簡",
+                  "reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。"
+                },
+                {
+                  "yu": "任承恩齊抵臺灣，督率弁兵，分路進攻",
+                  "reply": "日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。"
+                }
+              ],
+              "memorialist": "黃仕簡",
+              "relation_note": "黃仕簡直奏；此摺在五日來源窗內，獨立報告兩提督抵臺、分派官兵南北夾攻，故不因常青轉奏的硃153、硃158已配對而省略。",
+              "send_date": "1787/01/05",
+              "matched_yu_span": "現在黃仕簡、任承恩齊抵臺灣，督率弁兵，分路進攻",
+              "quote_in_reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。／日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。",
+              "yu_span_type": "narrative",
+              "match_basis": "window",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+          "__skillBundleName": "yu-source-feb-mar-1787-missed",
+          "__skillBundleDocs": 12
+        },
+        {
+          "at": "2026-07-20 08:08",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭160",
+            "reply_doc_id": "硃195",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+                  "reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。"
+                }
+              ],
+              "memorialist": "黃仕簡（等）",
+              "relation_note": "黃仕簡、普吉保合奏；摺中明引柴大紀咨報蔡紹等供詞，這是呈遞朝廷的獨立合奏，不是只應保留的單一轉奏。",
+              "send_date": "1787/01/29",
+              "matched_yu_span": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+              "quote_in_reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。",
+              "yu_span_type": "cited",
+              "match_basis": "window",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+          "__skillBundleName": "yu-source-feb-mar-1787-missed",
+          "__skillBundleDocs": 12
+        },
+        {
+          "at": "2026-07-20 08:08",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭196",
+            "reply_doc_id": "奏232",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+                  "reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。"
+                }
+              ],
+              "memorialist": "李侍堯",
+              "relation_note": "李侍堯直奏；摺首署名異作李傳堯，李堯為李侍堯的異名。送出日距上諭五日，仍在固定五日來源窗內。",
+              "send_date": "1787/03/08",
+              "matched_yu_span": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+              "quote_in_reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。",
+              "yu_span_type": "cited",
+              "match_basis": "window",
+              "selection_pass": "manual_five_day_audit"
+            },
+            "__added": true
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+          "__skillBundleName": "yu-source-feb-mar-1787-missed",
+          "__skillBundleDocs": 12
+        },
+        {
+          "at": "2026-07-20 08:08",
+          "model": "local skill output",
+          "kind": "docpair",
+          "pair": {
+            "yu_doc_id": "諭226",
+            "reply_doc_id": "硃281",
+            "relation": "yu_source",
+            "match_level": "high",
+            "evidence": {
+              "segments": [
+                {
+                  "yu": "據孫士毅奏，接準李堯知會，臺灣須添兵協剿",
+                  "reply": "途次接准閩浙督臣李侍堯密札，臺灣鳳山縣地方業已收復，探訪情形，賊匪尚多，南、北兩路未能會剿，常青到彼或須酌量增兵，以期一舉蕆事，囑臣慎密預備。等語。"
+                }
+              ],
+              "memorialist": "孫士毅",
+              "relation_note": "孫士毅直奏；這是硃282之前一份獨立摺，直接記載接李侍堯知會、評估須酌量增兵並預備，不能因後來實際起程的硃282已配對而省略。",
+              "send_date": "1787/03/12",
+              "matched_yu_span": "據孫士毅奏，接準李堯知會，臺灣須添兵協剿",
+              "quote_in_reply": "途次接准閩浙督臣李侍堯密札，臺灣鳳山縣地方業已收復，探訪情形，賊匪尚多，南、北兩路未能會剿，常青到彼或須酌量增兵，以期一舉蕆事，囑臣慎密預備。等語。",
+              "yu_span_type": "cited",
+              "match_basis": "named",
+              "selection_pass": "manual_five_day_audit"
+            }
+          },
+          "prompt": "上諭—來源配對",
+          "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+          "__skillBundleName": "yu-source-feb-mar-1787-missed",
+          "__skillBundleDocs": 12
         }
       ]
+    },
+    "硃22|諭87": {
+      "doc_ids": [
+        "硃22",
+        "諭87"
+      ],
+      "notes": "",
+      "answers": [],
+      "chat": []
+    },
+    "諭132|諭87": {
+      "doc_ids": [
+        "諭87",
+        "諭132"
+      ],
+      "notes": "",
+      "answers": [],
+      "chat": []
     }
   },
   "諭20": {
@@ -6855,6 +7268,106 @@
           "__added": true
         },
         "prompt": "上諭—來源配對"
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭20",
+          "reply_doc_id": "硃21",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。",
+                "reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。"
+              },
+              {
+                "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+                "reply": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "此摺在五日來源窗內，獨立報告彰化失陷、文報梗塞，以及常青分派黃仕簡、任承恩分路進剿；不因後來的轉奏摺已配對而省略。",
+            "send_date": "1786/12/12",
+            "matched_yu_span": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。／黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+            "quote_in_reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。／臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭20",
+          "reply_doc_id": "硃22",
+          "relation": "yu_source",
+          "match_level": "partial",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "又據任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺，並請簡派重臣督辦",
+                "reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。"
+              }
+            ],
+            "memorialist": "任承恩",
+            "relation_note": "此摺獨立報告任承恩已派兵、整頓軍械船隻並候督臣調遣，支持上諭的「挑派兵丁預備」；「簡派重臣」未以此摺作證。",
+            "send_date": "1786/12/10",
+            "matched_yu_span": "又據任承恩奏，挑派兵丁預備。",
+            "quote_in_reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭20",
+          "reply_doc_id": "硃25",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿",
+                "reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。"
+              }
+            ],
+            "memorialist": "黃仕簡",
+            "relation_note": "黃仕簡此摺在同一五日來源窗內，直接報告登舟放洋及先遣兵渡臺；這是獨立直奏，不應被較晚的常青轉奏摺取代。",
+            "send_date": "1786/12/10",
+            "matched_yu_span": "黃仕簡現帶兵登舟渡臺，由南路進剿。",
+            "quote_in_reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ],
     "itemEdits": {
@@ -7269,6 +7782,42 @@
           "__added": true
         },
         "prompt": "上諭—來源配對"
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭20",
+          "reply_doc_id": "硃21",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。",
+                "reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。"
+              },
+              {
+                "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+                "reply": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "此摺在五日來源窗內，獨立報告彰化失陷、文報梗塞，以及常青分派黃仕簡、任承恩分路進剿；不因後來的轉奏摺已配對而省略。",
+            "send_date": "1786/12/12",
+            "matched_yu_span": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。／黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+            "quote_in_reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。／臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -7977,8 +8526,88 @@
           "relation": "yu_source"
         },
         "prompt": "上諭—來源配對"
+      },
+      {
+        "kind": "infosource",
+        "docId": "諭27",
+        "docType": "shangyu",
+        "docTitle": "諭兩江總督李世傑等著藍元枚署理福建陸路提督即駐蚶江",
+        "targetEvId": "",
+        "items": [
+          {
+            "include": true,
+            "emperorDocId": "諭27",
+            "info": "福建臺灣彰化地方有賊匪林爽文等糾眾滋擾。",
+            "quote": "竊照奴才等訪聞北路彰化縣大里杙等莊奸民林爽文、王芬等聚眾搶劫。",
+            "doc_id": "硃44",
+            "srcTitle": "為奏聞林爽文聚眾攻城劫營請派兵赴臺緣由事",
+            "srcAuthor": "柴大紀（等）",
+            "srcSentAr": "1786/12/02",
+            "emperor_quote": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾",
+            "daysBeforeEmperor": 31
+          },
+          {
+            "include": true,
+            "emperorDocId": "諭27",
+            "info": "此案已發展為劫縣、戕官。",
+            "quote": "為奸民猝起，劫縣傷官，恭摺奏聞事。",
+            "doc_id": "硃40",
+            "srcTitle": "為奏聞林爽文攻陷彰化情形事",
+            "srcAuthor": "柴大紀（等）",
+            "srcSentAr": "1786/12/04",
+            "emperor_quote": "劫縣戕官一案",
+            "daysBeforeEmperor": 29
+          },
+          {
+            "include": true,
+            "emperorDocId": "諭27",
+            "info": "水師提督黃仕簡已帶兵渡臺剿捕。",
+            "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+            "doc_id": "硃25",
+            "srcTitle": "為奏彰化失陷已調兵赴臺事",
+            "srcAuthor": "黃仕簡",
+            "srcSentAr": "1786/12/10",
+            "emperor_quote": "水師提督黃仕簡、陸路提督任承恩俱已帶兵渡臺剿捕",
+            "daysBeforeEmperor": 23
+          },
+          {
+            "include": true,
+            "emperorDocId": "諭27",
+            "info": "陸路提督任承恩已帶兵渡臺剿捕。",
+            "quote": "六路提臣任承恩十四日登舟，十七日乘風開駕",
+            "doc_id": "硃41",
+            "srcTitle": "為臺灣鎮道稟報彰化淡水失陷及增派援兵事",
+            "srcAuthor": "常青",
+            "srcSentAr": "1786/12/17",
+            "emperor_quote": "水師提督黃仕簡、陸路提督任承恩俱已帶兵渡臺剿捕",
+            "daysBeforeEmperor": 16
+          },
+          {
+            "include": true,
+            "emperorDocId": "諭27",
+            "info": "漳泉地方緊要。",
+            "quote": "至泉二郡，係臺灣門戶，尤為緊要。",
+            "doc_id": "硃26",
+            "srcTitle": "為奏林爽文攻陷彰化等事",
+            "srcAuthor": "徐嗣曾",
+            "srcSentAr": "1786/12/12",
+            "emperor_quote": "漳泉地方緊要",
+            "daysBeforeEmperor": 21
+          }
+        ],
+        "at": "2026-07-20 10:31",
+        "model": "gpt-5.4",
+        "info": "漳泉地方緊要。",
+        "emperor_quote": "「漳泉地方緊要」",
+        "quote": "「至泉二郡，係臺灣門戶，尤為緊要。」"
       }
-    ]
+    ],
+    "dot": {
+      "recipients": [
+        "李世傑",
+        "藍元枚"
+      ]
+    }
   },
   "諭39": {
     "chat": [
@@ -8411,6 +9040,38 @@
         "__skillRunId": "bundle:yu-source-dec-1786-jan-1787:mrq4bgrw",
         "__skillBundleName": "yu-source-dec-1786-jan-1787",
         "__skillBundleDocs": 62
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭36",
+          "reply_doc_id": "硃56",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方",
+                "reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "硃56為常青在五日窗內的直接奏摺，明載閩安赴淡北的一千五百名及徐鼎士帶領的續調兵，正面支持上諭的具名來源。",
+            "send_date": "1786/12/20",
+            "matched_yu_span": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方。",
+            "quote_in_reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -8449,6 +9110,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭20",
+          "reply_doc_id": "硃22",
+          "relation": "yu_source",
+          "match_level": "partial",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "又據任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺，並請簡派重臣督辦",
+                "reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。"
+              }
+            ],
+            "memorialist": "任承恩",
+            "relation_note": "此摺獨立報告任承恩已派兵、整頓軍械船隻並候督臣調遣，支持上諭的「挑派兵丁預備」；「簡派重臣」未以此摺作證。",
+            "send_date": "1786/12/10",
+            "matched_yu_span": "又據任承恩奏，挑派兵丁預備。",
+            "quote_in_reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -8483,6 +9176,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭20",
+          "reply_doc_id": "硃25",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿",
+                "reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。"
+              }
+            ],
+            "memorialist": "黃仕簡",
+            "relation_note": "黃仕簡此摺在同一五日來源窗內，直接報告登舟放洋及先遣兵渡臺；這是獨立直奏，不應被較晚的常青轉奏摺取代。",
+            "send_date": "1786/12/10",
+            "matched_yu_span": "黃仕簡現帶兵登舟渡臺，由南路進剿。",
+            "quote_in_reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -8650,6 +9375,38 @@
         "__skillRunId": "bundle:yu-source-dec-1786-jan-1787:mrq4bgrw",
         "__skillBundleName": "yu-source-dec-1786-jan-1787",
         "__skillBundleDocs": 62
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭36",
+          "reply_doc_id": "硃56",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方",
+                "reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "硃56為常青在五日窗內的直接奏摺，明載閩安赴淡北的一千五百名及徐鼎士帶領的續調兵，正面支持上諭的具名來源。",
+            "send_date": "1786/12/20",
+            "matched_yu_span": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方。",
+            "quote_in_reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -10013,6 +10770,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭56",
+          "reply_doc_id": "奏85",
+          "relation": "yu_source",
+          "match_level": "partial",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                "reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "奏85是五日窗內常青對同一批四名逆犯已審明解送的後續獨立覆奏；雖為後續轉述且未重列高文麟姓名，仍提供同一擒獲—解送事實，保留供人工判斷。",
+            "send_date": "1787/01/15",
+            "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "quote_in_reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -10077,6 +10866,42 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭56",
+          "reply_doc_id": "硃82",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                "reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。"
+              },
+              {
+                "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                "reply": "又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "硃82是常青對鹿港守備擒獲四名偽官的直接奏報，明列高文麟並說明押解泉州，獨立支持上諭所據的擒獲、審明解京資訊。",
+            "send_date": "1786/12/28",
+            "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "quote_in_reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。／又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -10835,6 +11660,74 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭56",
+          "reply_doc_id": "硃82",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                "reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。"
+              },
+              {
+                "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                "reply": "又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "硃82是常青對鹿港守備擒獲四名偽官的直接奏報，明列高文麟並說明押解泉州，獨立支持上諭所據的擒獲、審明解京資訊。",
+            "send_date": "1786/12/28",
+            "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "quote_in_reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。／又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
+      },
+      {
+        "at": "2026-07-20 07:03",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭56",
+          "reply_doc_id": "奏85",
+          "relation": "yu_source",
+          "match_level": "partial",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+                "reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。"
+              }
+            ],
+            "memorialist": "常青",
+            "relation_note": "奏85是五日窗內常青對同一批四名逆犯已審明解送的後續獨立覆奏；雖為後續轉述且未重列高文麟姓名，仍提供同一擒獲—解送事實，保留供人工判斷。",
+            "send_date": "1787/01/15",
+            "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "quote_in_reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
+        "__skillBundleName": "yu-source-dec-jan-1787-missed",
+        "__skillBundleDocs": 13
       }
     ]
   },
@@ -11890,6 +12783,15 @@
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
       }
+    ],
+    "notesList": [
+      {
+        "id": "nmrsume754cz7",
+        "body": "",
+        "exchanges": [],
+        "at": "2026-07-20 06:33",
+        "updated": "2026-07-20 06:33"
+      }
     ]
   },
   "硃125": {
@@ -11987,6 +12889,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭87",
+          "reply_doc_id": "硃125",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+                "reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。"
+              }
+            ],
+            "memorialist": "徐嗣曾",
+            "relation_note": "徐嗣曾直奏；此摺在五日來源窗內，獨立記錄黃仕簡、郝壯猷到臺及十三日會剿，不因同一資訊已有奏127配對而省略。",
+            "send_date": "1787/01/18",
+            "matched_yu_span": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+            "quote_in_reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -12863,6 +13797,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭87",
+          "reply_doc_id": "硃125",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+                "reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。"
+              }
+            ],
+            "memorialist": "徐嗣曾",
+            "relation_note": "徐嗣曾直奏；此摺在五日來源窗內，獨立記錄黃仕簡、郝壯猷到臺及十三日會剿，不因同一資訊已有奏127配對而省略。",
+            "send_date": "1787/01/18",
+            "matched_yu_span": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+            "quote_in_reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ],
     "dot": {
@@ -14199,6 +15165,38 @@
         "__skillRunId": "bundle:yu-source-feb-mar-1787:mrq5feci",
         "__skillBundleName": "yu-source-feb-mar-1787",
         "__skillBundleDocs": 110
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭123",
+          "reply_doc_id": "硃153",
+          "relation": "yu_source",
+          "match_level": "partial",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "孫景燧等守禦城池被戕害，殊堪憐憫",
+                "reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。"
+              }
+            ],
+            "memorialist": "任承恩",
+            "relation_note": "任承恩直奏；此摺在五日來源窗內，獨立概括報告彰化失陷及文武官員被害，但未逐名列出。諭123所列三人的具名及印信證據仍由現有奏154及其他來源供證；本案保留供人工判斷，不視為具名細節的直接複本。",
+            "send_date": "1787/01/14",
+            "matched_yu_span": "孫景燧等守禦城池被戕害，殊堪憐憫",
+            "quote_in_reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -14376,6 +15374,42 @@
         "__skillRunId": "bundle:yu-source-feb-mar-1787:mrq5feci",
         "__skillBundleName": "yu-source-feb-mar-1787",
         "__skillBundleDocs": 110
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭132",
+          "reply_doc_id": "硃155",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "現在黃仕簡",
+                "reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。"
+              },
+              {
+                "yu": "任承恩齊抵臺灣，督率弁兵，分路進攻",
+                "reply": "日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。"
+              }
+            ],
+            "memorialist": "黃仕簡",
+            "relation_note": "黃仕簡直奏；此摺在五日來源窗內，獨立報告兩提督抵臺、分派官兵南北夾攻，故不因常青轉奏的硃153、硃158已配對而省略。",
+            "send_date": "1787/01/05",
+            "matched_yu_span": "現在黃仕簡、任承恩齊抵臺灣，督率弁兵，分路進攻",
+            "quote_in_reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。／日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。",
+            "yu_span_type": "narrative",
+            "match_basis": "window",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -14680,6 +15714,42 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭132",
+          "reply_doc_id": "硃155",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "現在黃仕簡",
+                "reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。"
+              },
+              {
+                "yu": "任承恩齊抵臺灣，督率弁兵，分路進攻",
+                "reply": "日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。"
+              }
+            ],
+            "memorialist": "黃仕簡",
+            "relation_note": "黃仕簡直奏；此摺在五日來源窗內，獨立報告兩提督抵臺、分派官兵南北夾攻，故不因常青轉奏的硃153、硃158已配對而省略。",
+            "send_date": "1787/01/05",
+            "matched_yu_span": "現在黃仕簡、任承恩齊抵臺灣，督率弁兵，分路進攻",
+            "quote_in_reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。／日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。",
+            "yu_span_type": "narrative",
+            "match_basis": "window",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -16578,6 +17648,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭160",
+          "reply_doc_id": "硃195",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+                "reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。"
+              }
+            ],
+            "memorialist": "黃仕簡（等）",
+            "relation_note": "黃仕簡、普吉保合奏；摺中明引柴大紀咨報蔡紹等供詞，這是呈遞朝廷的獨立合奏，不是只應保留的單一轉奏。",
+            "send_date": "1787/01/29",
+            "matched_yu_span": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+            "quote_in_reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。",
+            "yu_span_type": "cited",
+            "match_basis": "window",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -17083,6 +18185,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭160",
+          "reply_doc_id": "硃195",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+                "reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。"
+              }
+            ],
+            "memorialist": "黃仕簡（等）",
+            "relation_note": "黃仕簡、普吉保合奏；摺中明引柴大紀咨報蔡紹等供詞，這是呈遞朝廷的獨立合奏，不是只應保留的單一轉奏。",
+            "send_date": "1787/01/29",
+            "matched_yu_span": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+            "quote_in_reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。",
+            "yu_span_type": "cited",
+            "match_basis": "window",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -17149,6 +18283,38 @@
         "__skillRunId": "bundle:yu-source:mrou0zvm",
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭123",
+          "reply_doc_id": "硃153",
+          "relation": "yu_source",
+          "match_level": "partial",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "孫景燧等守禦城池被戕害，殊堪憐憫",
+                "reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。"
+              }
+            ],
+            "memorialist": "任承恩",
+            "relation_note": "任承恩直奏；此摺在五日來源窗內，獨立概括報告彰化失陷及文武官員被害，但未逐名列出。諭123所列三人的具名及印信證據仍由現有奏154及其他來源供證；本案保留供人工判斷，不視為具名細節的直接複本。",
+            "send_date": "1787/01/14",
+            "matched_yu_span": "孫景燧等守禦城池被戕害，殊堪憐憫",
+            "quote_in_reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -18123,7 +19289,15 @@
         "__skillBundleName": "yu-source",
         "__skillBundleDocs": 141
       }
-    ]
+    ],
+    "dot": {
+      "annAr": "1787/02/11",
+      "recipients": [
+        "任承恩",
+        "黃仕簡"
+      ],
+      "title": "諭內閣福建提督黃仕簡任承恩安坐郡城著傳旨嚴行申飭迅速復奏"
+    }
   },
   "硃146": {
     "chat": [
@@ -23247,6 +24421,271 @@
         "match_basis": "window"
       },
       "at": "2026-07-18 09:20"
+    },
+    {
+      "yu_doc_id": "諭20",
+      "reply_doc_id": "硃21",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。",
+            "reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。"
+          },
+          {
+            "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+            "reply": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。"
+          }
+        ],
+        "memorialist": "常青",
+        "relation_note": "此摺在五日來源窗內，獨立報告彰化失陷、文報梗塞，以及常青分派黃仕簡、任承恩分路進剿；不因後來的轉奏摺已配對而省略。",
+        "send_date": "1786/12/12",
+        "matched_yu_span": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。／黃仕簡現帶兵登舟渡臺，由南路進剿，並飛諮陸路提督任承恩，率兵由北路會剿。",
+        "quote_in_reply": "現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。／臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。派令副將丁朝雄、參將那穆素里帶領臣標兵八百名、海壇鎮兵四百名、閩安、烽火營兵三百名，聽海壇鎮總兵郝壯猷調遣，由閩安出口至淡水前進，兩路圍攻。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 07:04"
+    },
+    {
+      "yu_doc_id": "諭20",
+      "reply_doc_id": "硃22",
+      "relation": "yu_source",
+      "match_level": "partial",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "又據任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺，並請簡派重臣督辦",
+            "reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。"
+          }
+        ],
+        "memorialist": "任承恩",
+        "relation_note": "此摺獨立報告任承恩已派兵、整頓軍械船隻並候督臣調遣，支持上諭的「挑派兵丁預備」；「簡派重臣」未以此摺作證。",
+        "send_date": "1786/12/10",
+        "matched_yu_span": "又據任承恩奏，挑派兵丁預備。",
+        "quote_in_reply": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 07:04"
+    },
+    {
+      "yu_doc_id": "諭20",
+      "reply_doc_id": "硃25",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "黃仕簡現帶兵登舟渡臺，由南路進剿",
+            "reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。"
+          }
+        ],
+        "memorialist": "黃仕簡",
+        "relation_note": "黃仕簡此摺在同一五日來源窗內，直接報告登舟放洋及先遣兵渡臺；這是獨立直奏，不應被較晚的常青轉奏摺取代。",
+        "send_date": "1786/12/10",
+        "matched_yu_span": "黃仕簡現帶兵登舟渡臺，由南路進剿。",
+        "quote_in_reply": "奴才於初十日帶領官兵登舟候風放洋飛渡之際／奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 07:05"
+    },
+    {
+      "yu_doc_id": "諭36",
+      "reply_doc_id": "硃56",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方",
+            "reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。"
+          }
+        ],
+        "memorialist": "常青",
+        "relation_note": "硃56為常青在五日窗內的直接奏摺，明載閩安赴淡北的一千五百名及徐鼎士帶領的續調兵，正面支持上諭的具名來源。",
+        "send_date": "1786/12/20",
+        "matched_yu_span": "據常青奏，接準撫臣諮會，將備調省城兵一千五百名，令副將徐鼎士等統領，赴援艋舺地方。",
+        "quote_in_reply": "其由閩安出口派赴淡北之官兵一千五百名。／茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 07:06"
+    },
+    {
+      "yu_doc_id": "諭56",
+      "reply_doc_id": "硃82",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。"
+          },
+          {
+            "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "reply": "又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊"
+          }
+        ],
+        "memorialist": "常青",
+        "relation_note": "硃82是常青對鹿港守備擒獲四名偽官的直接奏報，明列高文麟並說明押解泉州，獨立支持上諭所據的擒獲、審明解京資訊。",
+        "send_date": "1786/12/28",
+        "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+        "quote_in_reply": "當即擒獲執旗之偽副元帥楊振國、偽協鎮高文麟、偽先鋒陳高、偽辦理水師軍務楊軒等四名。／又將擒獲偽官楊振國等四名，押回鹿港，裝入檻車，交丁憂典史李爾和、受傷之北協外委許瑪分撥兵丁，配船解送泉州，聽候勘訊",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 07:07"
+    },
+    {
+      "yu_doc_id": "諭56",
+      "reply_doc_id": "奏85",
+      "relation": "yu_source",
+      "match_level": "partial",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+            "reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。"
+          }
+        ],
+        "memorialist": "常青",
+        "relation_note": "奏85是五日窗內常青對同一批四名逆犯已審明解送的後續獨立覆奏；雖為後續轉述且未重列高文麟姓名，仍提供同一擒獲—解送事實，保留供人工判斷。",
+        "send_date": "1787/01/15",
+        "matched_yu_span": "據常青奏，擒獲賊目高文麟等四名審明解京一折",
+        "quote_in_reply": "再，逆匪餘黨先據鹿仔港署守備陳邦光獲到楊振國即楊詠等四名，業經臣審明，解送刑部，已於正月初六日具奏在案。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 07:07"
+    },
+    {
+      "yu_doc_id": "諭87",
+      "reply_doc_id": "硃125",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+            "reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。"
+          }
+        ],
+        "memorialist": "徐嗣曾",
+        "relation_note": "徐嗣曾直奏；此摺在五日來源窗內，獨立記錄黃仕簡、郝壯猷到臺及十三日會剿，不因同一資訊已有奏127配對而省略。",
+        "send_date": "1787/01/18",
+        "matched_yu_span": "徐嗣曾奏，接據廈防同知劉嘉會稟報，官兵到臺，賊匪紛紛散去。定於十三日會剿，收復諸羅等處。",
+        "quote_in_reply": "且數日以來，疊接泉、廈道府同知稟報：提臣黃仕簡、總兵郝壯猷皆於初四日由鹿耳門登岸，賊匪知大兵已到，紛紛散去。黃仕簡定於十三日前往收復諸羅，陸路提臣任承恩初六日抵鹿港登岸，亦定於十三日分兵進剿。各等語。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 08:09"
+    },
+    {
+      "yu_doc_id": "諭123",
+      "reply_doc_id": "硃153",
+      "relation": "yu_source",
+      "match_level": "partial",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "孫景燧等守禦城池被戕害，殊堪憐憫",
+            "reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。"
+          }
+        ],
+        "memorialist": "任承恩",
+        "relation_note": "任承恩直奏；此摺在五日來源窗內，獨立概括報告彰化失陷及文武官員被害，但未逐名列出。諭123所列三人的具名及印信證據仍由現有奏154及其他來源供證；本案保留供人工判斷，不視為具名細節的直接複本。",
+        "send_date": "1787/01/14",
+        "matched_yu_span": "孫景燧等守禦城池被戕害，殊堪憐憫",
+        "quote_in_reply": "攻陷城池，戕害文武官員，罪大惡極，深堪痛恨。",
+        "yu_span_type": "cited",
+        "match_basis": "named",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 08:10"
+    },
+    {
+      "yu_doc_id": "諭132",
+      "reply_doc_id": "硃155",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "現在黃仕簡",
+            "reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。"
+          },
+          {
+            "yu": "任承恩齊抵臺灣，督率弁兵，分路進攻",
+            "reply": "日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。"
+          }
+        ],
+        "memorialist": "黃仕簡",
+        "relation_note": "黃仕簡直奏；此摺在五日來源窗內，獨立報告兩提督抵臺、分派官兵南北夾攻，故不因常青轉奏的硃153、硃158已配對而省略。",
+        "send_date": "1787/01/05",
+        "matched_yu_span": "現在黃仕簡、任承恩齊抵臺灣，督率弁兵，分路進攻",
+        "quote_in_reply": "於正月初三夜，趕潮進入鹿耳門。初四早，登岸進城。／日內陸路提臣任承恩亦即續帶官兵及金門、南澳、銅山等標營兵丁到臺，自可調度分發，南北夾攻，以期速殲逆賊，痛加剿洗，重治收復各縣城池，綏靖海疆。",
+        "yu_span_type": "narrative",
+        "match_basis": "window",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 08:11"
+    },
+    {
+      "yu_doc_id": "諭160",
+      "reply_doc_id": "硃195",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+            "reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。"
+          }
+        ],
+        "memorialist": "黃仕簡（等）",
+        "relation_note": "黃仕簡、普吉保合奏；摺中明引柴大紀咨報蔡紹等供詞，這是呈遞朝廷的獨立合奏，不是只應保留的單一轉奏。",
+        "send_date": "1787/01/29",
+        "matched_yu_span": "現據黃仕簡奏到，拿獲賊匪蔡紹等，訊據供稱賊首林爽文等團聚斗六門，勢尚猖獗，猶思復攻諸羅。而任承恩、柴大紀俱有官兵單薄，需撥兵接應之語。",
+        "quote_in_reply": "二十七日，又接臺灣鎮總兵柴大紀咨稱：克復諸羅後，於二十五日拿獲林爽文差探軍情之賊匪蔡紹、蘇梅二名，訊據供認林爽文等，俱團聚斗六門，有賊夥甚眾，聞要復攻諸羅，請撥兵赴諸應援。等因。",
+        "yu_span_type": "cited",
+        "match_basis": "window",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 08:11"
+    },
+    {
+      "yu_doc_id": "諭196",
+      "reply_doc_id": "奏232",
+      "relation": "yu_source",
+      "match_level": "high",
+      "evidence": {
+        "segments": [
+          {
+            "yu": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+            "reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。"
+          }
+        ],
+        "memorialist": "李侍堯",
+        "relation_note": "李侍堯直奏；摺首署名異作李傳堯，李堯為李侍堯的異名。送出日距上諭五日，仍在固定五日來源窗內。",
+        "send_date": "1787/03/08",
+        "matched_yu_span": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+        "quote_in_reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。",
+        "yu_span_type": "cited",
+        "match_basis": "window",
+        "selection_pass": "manual_five_day_audit"
+      },
+      "at": "2026-07-20 08:11"
     }
   ],
   "硃79": {
@@ -25119,6 +26558,38 @@
         "__skillRunId": "bundle:yu-source-1787-03:mrq0ykig",
         "__skillBundleName": "yu-source-1787-03",
         "__skillBundleDocs": 38
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭196",
+          "reply_doc_id": "奏232",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+                "reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。"
+              }
+            ],
+            "memorialist": "李侍堯",
+            "relation_note": "李侍堯直奏；摺首署名異作李傳堯，李堯為李侍堯的異名。送出日距上諭五日，仍在固定五日來源窗內。",
+            "send_date": "1787/03/08",
+            "matched_yu_span": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+            "quote_in_reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。",
+            "yu_span_type": "cited",
+            "match_basis": "window",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -25582,6 +27053,37 @@
         "__skillRunId": "bundle:yu-source-1787-03:mrq0ykig",
         "__skillBundleName": "yu-source-1787-03",
         "__skillBundleDocs": 38
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭226",
+          "reply_doc_id": "硃281",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據孫士毅奏，接準李堯知會，臺灣須添兵協剿",
+                "reply": "途次接准閩浙督臣李侍堯密札，臺灣鳳山縣地方業已收復，探訪情形，賊匪尚多，南、北兩路未能會剿，常青到彼或須酌量增兵，以期一舉蕆事，囑臣慎密預備。等語。"
+              }
+            ],
+            "memorialist": "孫士毅",
+            "relation_note": "孫士毅直奏；這是硃282之前一份獨立摺，直接記載接李侍堯知會、評估須酌量增兵並預備，不能因後來實際起程的硃282已配對而省略。",
+            "send_date": "1787/03/12",
+            "matched_yu_span": "據孫士毅奏，接準李堯知會，臺灣須添兵協剿",
+            "quote_in_reply": "途次接准閩浙督臣李侍堯密札，臺灣鳳山縣地方業已收復，探訪情形，賊匪尚多，南、北兩路未能會剿，常青到彼或須酌量增兵，以期一舉蕆事，囑臣慎密預備。等語。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          }
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
@@ -25898,7 +27400,39 @@
     ]
   },
   "硃281": {
-    "chat": []
+    "chat": [
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭226",
+          "reply_doc_id": "硃281",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據孫士毅奏，接準李堯知會，臺灣須添兵協剿",
+                "reply": "途次接准閩浙督臣李侍堯密札，臺灣鳳山縣地方業已收復，探訪情形，賊匪尚多，南、北兩路未能會剿，常青到彼或須酌量增兵，以期一舉蕆事，囑臣慎密預備。等語。"
+              }
+            ],
+            "memorialist": "孫士毅",
+            "relation_note": "孫士毅直奏；這是硃282之前一份獨立摺，直接記載接李侍堯知會、評估須酌量增兵並預備，不能因後來實際起程的硃282已配對而省略。",
+            "send_date": "1787/03/12",
+            "matched_yu_span": "據孫士毅奏，接準李堯知會，臺灣須添兵協剿",
+            "quote_in_reply": "途次接准閩浙督臣李侍堯密札，臺灣鳳山縣地方業已收復，探訪情形，賊匪尚多，南、北兩路未能會剿，常青到彼或須酌量增兵，以期一舉蕆事，囑臣慎密預備。等語。",
+            "yu_span_type": "cited",
+            "match_basis": "named",
+            "selection_pass": "manual_five_day_audit"
+          }
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
+      }
+    ]
   },
   "硃283": {
     "chat": []
@@ -26011,6 +27545,38 @@
         "__skillRunId": "bundle:yu-source-feb-mar-1787:mrq5feci",
         "__skillBundleName": "yu-source-feb-mar-1787",
         "__skillBundleDocs": 110
+      },
+      {
+        "at": "2026-07-20 08:08",
+        "model": "local skill output",
+        "kind": "docpair",
+        "pair": {
+          "yu_doc_id": "諭196",
+          "reply_doc_id": "奏232",
+          "relation": "yu_source",
+          "match_level": "high",
+          "evidence": {
+            "segments": [
+              {
+                "yu": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+                "reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。"
+              }
+            ],
+            "memorialist": "李侍堯",
+            "relation_note": "李侍堯直奏；摺首署名異作李傳堯，李堯為李侍堯的異名。送出日距上諭五日，仍在固定五日來源窗內。",
+            "send_date": "1787/03/08",
+            "matched_yu_span": "據李堯奏，接副將丁朝雄等稟報，郝壯猷一路，於二月二十一日收復鳳山縣城，南路已無大隊賊夥，可以全力專注北路，以期迅速掃除等語。",
+            "quote_in_reply": "臣接印以來，探訪軍營情形，並三閱臺灣各員弁稟報，知黃仕簡、任承恩尚未會合進兵，正深疑慮，適得副將丁朝雄等具報郝壯猷收復鳳山之信，竊意南路自此廓清，可用全力向北路會攻逆匪林爽文之大里杙巢穴，當即據報馳奏在案。",
+            "yu_span_type": "cited",
+            "match_basis": "window",
+            "selection_pass": "manual_five_day_audit"
+          },
+          "__added": true
+        },
+        "prompt": "上諭—來源配對",
+        "__skillRunId": "bundle:yu-source-feb-mar-1787-missed:mrsy031j",
+        "__skillBundleName": "yu-source-feb-mar-1787-missed",
+        "__skillBundleDocs": 12
       }
     ]
   },
