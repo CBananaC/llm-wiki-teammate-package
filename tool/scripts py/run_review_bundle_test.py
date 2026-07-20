@@ -16,6 +16,7 @@ import time
 import urllib.error
 import urllib.request
 from datetime import datetime
+from decimal import Decimal, ROUND_HALF_UP
 from pathlib import Path
 from typing import Any
 
@@ -163,6 +164,19 @@ def skill_prompt(step: str) -> str:
 # returns when present; otherwise falls back to a CJK-aware estimate (marked ~).
 TOKEN_STATS: dict[str, dict] = {}
 
+# Standard online token prices in USD per 1M tokens.  The Gemini 3.5 Flash
+# entry is the default used by the current zhu25 run.  Callers can override
+# either rate on the command line when using Batch, Flex, Priority, or a
+# provider-specific price.
+MODEL_PRICES_USD_PER_MILLION = {
+    "gemini-3.5-flash": (1.50, 9.00),
+    "gemini-3-flash-preview": (0.50, 3.00),
+    "gemini-3.1-flash-lite": (0.25, 1.50),
+    "gemini-2.5-flash": (0.30, 2.50),
+    "gemini-2.5-flash-lite": (0.10, 0.40),
+    "gemini-2.5-pro": (1.25, 10.00),
+}
+
 
 def _est_tokens(s: str) -> int:
     s = s or ""
@@ -171,7 +185,8 @@ def _est_tokens(s: str) -> int:
 
 
 def _record_step_tokens(step: str, payload: dict, result: dict) -> None:
-    st = TOKEN_STATS.setdefault(step, {"calls": 0, "prompt": 0, "completion": 0, "total": 0, "exact": True})
+    accounting_step = str(payload.get("_accounting_step") or step or "?")
+    st = TOKEN_STATS.setdefault(accounting_step, {"calls": 0, "prompt": 0, "completion": 0, "total": 0, "exact": True})
     st["calls"] += 1
     usage = result.get("usage") if isinstance(result, dict) else None
     if isinstance(usage, dict) and (usage.get("total_tokens") or usage.get("prompt_tokens") or usage.get("completion_tokens")):
@@ -179,7 +194,8 @@ def _record_step_tokens(step: str, payload: dict, result: dict) -> None:
         c = int(usage.get("completion_tokens") or 0)
         t = int(usage.get("total_tokens") or (p + c))
     else:
-        p = _est_tokens(json.dumps(payload, ensure_ascii=False))
+        estimate_payload = {k: v for k, v in payload.items() if k != "_accounting_step"}
+        p = _est_tokens(json.dumps(estimate_payload, ensure_ascii=False))
         c = _est_tokens(json.dumps(result, ensure_ascii=False))
         t = p + c
         st["exact"] = False
@@ -187,7 +203,7 @@ def _record_step_tokens(step: str, payload: dict, result: dict) -> None:
     st["completion"] += c
     st["total"] += t
     tag = "" if st["exact"] else "~"
-    print(f"    [tokens] {step}: {tag}{t} (prompt {p} + completion {c})")
+    print(f"    [tokens] {accounting_step}: {tag}{t} (prompt {p} + completion {c})")
 
 
 def print_token_summary() -> None:
@@ -208,6 +224,101 @@ def print_token_summary() -> None:
     print(f"{'ALL STEPS':<20}{gcalls:>7}{gp:>13}{gc:>13}{gt:>13}")
     if any_est:
         print("~ = estimated (proxy did not return exact usage; redeploy gemini-proxy for exact counts)")
+
+
+def build_cost_summary(model: str, input_price: float | None = None,
+                       output_price: float | None = None) -> dict[str, Any]:
+    """Build a serializable USD cost table from the accumulated token totals."""
+    rates = MODEL_PRICES_USD_PER_MILLION.get(model)
+    input_rate = input_price if input_price is not None else (rates[0] if rates else None)
+    output_rate = output_price if output_price is not None else (rates[1] if rates else None)
+    rows = []
+    total_input = total_output = total_cost = 0.0
+    total_prompt = total_completion = total_calls = 0
+    estimated = False
+    # TOKEN_STATS is populated in call order, which is also the loop order for
+    # the mass runner.  Preserve that order in the spending table so the cost
+    # follows the workflow rather than an alphabetical sort.
+    for step in TOKEN_STATS:
+        st = TOKEN_STATS[step]
+        row = {
+            "step": step,
+            "calls": st["calls"],
+            "prompt_tokens": st["prompt"],
+            "completion_tokens": st["completion"],
+            "exact_tokens": bool(st["exact"]),
+            "input_cost_usd": None,
+            "output_cost_usd": None,
+            "cost_usd": None,
+        }
+        if input_rate is not None and output_rate is not None:
+            row["input_cost_usd"] = st["prompt"] * input_rate / 1_000_000
+            row["output_cost_usd"] = st["completion"] * output_rate / 1_000_000
+            row["cost_usd"] = row["input_cost_usd"] + row["output_cost_usd"]
+            total_input += row["input_cost_usd"]
+            total_output += row["output_cost_usd"]
+            total_cost += row["cost_usd"]
+        total_prompt += st["prompt"]
+        total_completion += st["completion"]
+        total_calls += st["calls"]
+        estimated = estimated or not st["exact"]
+        rows.append(row)
+    return {
+        "model": model,
+        "pricing_basis": "standard online token rates",
+        "input_usd_per_million_tokens": input_rate,
+        "output_usd_per_million_tokens": output_rate,
+        "estimated": estimated,
+        "calls": total_calls,
+        "prompt_tokens": total_prompt,
+        "completion_tokens": total_completion,
+        "input_cost_usd": total_input if input_rate is not None and output_rate is not None else None,
+        "output_cost_usd": total_output if input_rate is not None and output_rate is not None else None,
+        "cost_usd": total_cost if input_rate is not None and output_rate is not None else None,
+        "rows": rows,
+    }
+
+
+def print_cost_summary(model: str, input_price: float | None = None,
+                       output_price: float | None = None) -> dict[str, Any]:
+    """Print and return the end-of-run spending table."""
+    summary = build_cost_summary(model, input_price, output_price)
+    input_rate = summary["input_usd_per_million_tokens"]
+    output_rate = summary["output_usd_per_million_tokens"]
+    print("\n=== Spending by step (USD) ===")
+    if input_rate is None or output_rate is None:
+        print(f"No price is configured for model {model!r}; pass --input-price-per-million and --output-price-per-million.")
+        return summary
+    print(f"model: {model} | input ${input_rate:.2f}/M | output ${output_rate:.2f}/M")
+    print(f"{'step':<28}{'calls':>7}{'input tok':>14}{'output tok':>14}{'input $':>12}{'output $':>12}{'total $':>12}")
+
+    def usd(value: float, mark: str = "") -> str:
+        rounded = Decimal(str(value)).quantize(Decimal("0.000001"), rounding=ROUND_HALF_UP)
+        return f"{mark}${rounded:f}"
+
+    for row in summary["rows"]:
+        mark = "~" if not row["exact_tokens"] else ""
+        input_cost = usd(row["input_cost_usd"], mark)
+        output_cost = usd(row["output_cost_usd"], mark)
+        total_cost = usd(row["cost_usd"], mark)
+        print(
+            f"{row['step']:<28}{row['calls']:>7}"
+            f"{mark + str(row['prompt_tokens']):>14}{mark + str(row['completion_tokens']):>14}"
+            f"{input_cost:>12}{output_cost:>12}{total_cost:>12}"
+        )
+    print("-" * 99)
+    total_mark = "~" if summary["estimated"] else ""
+    total_input = usd(summary["input_cost_usd"], total_mark)
+    total_output = usd(summary["output_cost_usd"], total_mark)
+    total_cost = usd(summary["cost_usd"], total_mark)
+    print(
+        f"{'ALL STEPS':<28}{summary['calls']:>7}"
+        f"{total_mark + str(summary['prompt_tokens']):>14}{total_mark + str(summary['completion_tokens']):>14}"
+        f"{total_input:>12}{total_output:>12}{total_cost:>12}"
+    )
+    if summary["estimated"]:
+        print("~ = estimated token count; spending is approximate until the proxy returns usage metadata")
+    return summary
 
 
 def post_json(url: str, payload: dict[str, Any], timeout: int, retries: int = 3, retry_sleep: int = 12) -> dict[str, Any]:

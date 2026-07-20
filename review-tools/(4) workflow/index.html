@@ -35,10 +35,10 @@
           <small data-i18n="pairYuDesc">Correlate recipients, transmission intervals, and cited edict passages</small>
         </button>
         <div class="down-arrow" aria-hidden="true"></div>
-        <button class="flow-node next" type="button" data-node="pair-yu-source">
-          <span class="node-index">R3</span><span class="node-status" data-i18n="planned">PLANNED</span>
+        <button class="flow-node done" type="button" data-node="pair-yu-source">
+          <span class="node-index">R3</span><span class="node-status" data-i18n="established">ESTABLISHED</span>
           <strong data-i18n="pairSourceTitle">Identify the report underlying each imperial edict</strong>
-          <small data-i18n="pairSourceDesc">Prioritise reports received on the issue date or within the preceding three days</small>
+          <small data-i18n="pairSourceDesc">Use the curated yu_source records and their paired quotations</small>
         </button>
       </div>
     </section>
@@ -52,6 +52,12 @@
       </header>
 
       <div class="vertical-flow compact-flow">
+        <button class="flow-node active" type="button" data-node="official-select">
+          <span class="node-index">P0</span><span class="node-status" data-i18n="input">INPUT</span>
+          <strong data-i18n="officialSelectTitle">Select the official document first</strong>
+          <small data-i18n="officialSelectDesc">Keep one fixed 奏摺／硃批 scope for the whole loop</small>
+        </button>
+        <div class="down-arrow" aria-hidden="true"></div>
         <button class="flow-node active" type="button" data-node="summary">
           <span class="node-index">P1</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
           <strong data-i18n="summaryTitle">Create a concise documentary synopsis</strong>
@@ -77,71 +83,71 @@
     <section class="loop-stage" aria-labelledby="loops-title">
       <header class="phase-heading centred-heading">
         <p data-i18n="analysisKicker">DOCUMENT-CENTRED ANALYSIS</p>
-        <h2 id="loops-title" data-i18n="analysisTitle">Two complementary review cycles</h2>
+        <h2 id="loops-title" data-i18n="analysisTitle">One official-document-first review loop</h2>
       </header>
 
-      <div class="loop-grid">
+      <div class="loop-grid" style="grid-template-columns:minmax(0,1fr)">
         <article class="loop-lane">
           <header class="loop-head">
-            <span class="loop-number" data-i18n="cycleOne">CYCLE I</span>
+            <span class="loop-number" data-i18n="cycleOne">OFFICIAL-DOCUMENT LOOP</span>
             <div>
-              <h3 data-i18n="zhuCycleTitle">Official memorial and vermilion-rescript cycle</h3>
-              <p data-i18n="zhuCycleDesc">Reconstruct reported military activity, documentary provenance, and the ensuing imperial-official exchange.</p>
+              <h3 data-i18n="zhuCycleTitle">Review one official document from events to imperial-official exchange</h3>
+              <p data-i18n="zhuCycleDesc">Extract events and sources together, then traverse only confirmed relationship edges.</p>
             </div>
           </header>
           <div class="loop-path">
-            <button class="flow-node active" type="button" data-node="zhu-select">
-              <span class="node-index">Z0</span><span class="node-status" data-i18n="input">INPUT</span>
-              <strong data-i18n="zhuSelectTitle">Establish the memorial record</strong>
-              <small data-i18n="zhuSelectDesc">Retain documentary identity, authorship, transmission dates, and complete text</small>
+            <button class="flow-node active" type="button" data-node="official-lin">
+              <span class="node-index">O3</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuSelectTitle">Extract 林方 events</strong>
+              <small data-i18n="zhuSelectDesc">Source chains are traced during the same extraction run</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node active" type="button" data-node="zhu-lin">
-              <span class="node-index">Z1</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
-              <strong data-i18n="zhuLinTitle">Extract reported 林方 military actions</strong>
-              <small data-i18n="zhuLinDesc">Record discrete actions presented as completed events</small>
+            <button class="flow-node active" type="button" data-node="official-qing">
+              <span class="node-index">O4</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuLinTitle">Extract 清方 actions（三類合一）</strong>
+              <small data-i18n="zhuLinDesc">Combine completed military, planned military, and non-military actions</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node done" type="button" data-node="zhu-qing-done">
-              <span class="node-index">Z2</span><span class="node-status" data-i18n="established">ESTABLISHED</span>
-              <strong data-i18n="zhuQingDoneTitle">Extract completed 清方 military actions</strong>
-              <small data-i18n="zhuQingDoneDesc">Distinguish accomplished operations from proposals and orders</small>
+            <button class="flow-node done" type="button" data-node="event-dedup-source">
+              <span class="node-index">O5</span><span class="node-status" data-i18n="established">ESTABLISHED</span>
+              <strong data-i18n="zhuQingDoneTitle">Identify repeated reports and the earliest event</strong>
+              <small data-i18n="zhuQingDoneDesc">Offer merge or keep separate; preserve each report and source chain</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node next" type="button" data-node="zhu-qing-plan">
-              <span class="node-index">Z3</span><span class="node-status" data-i18n="planned">PLANNED</span>
-              <strong data-i18n="zhuQingPlanTitle">Extract prospective 清方 military actions</strong>
-              <small data-i18n="zhuQingPlanDesc">Record requested, intended, conditional, and ordered operations separately</small>
+            <button class="flow-node active" type="button" data-node="confirmed-yu-response">
+              <span class="node-index">O6</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuQingPlanTitle">Explain how the document answers earlier 上諭</strong>
+              <small data-i18n="zhuQingPlanDesc">Use existing official_reply_to_yu pairs; do not search again</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node active" type="button" data-node="zhu-source">
-              <span class="node-index">Z4</span><span class="node-status" data-i18n="perEvent">PER EVENT</span>
-              <strong data-i18n="zhuSourceTitle">Establish documentary provenance</strong>
-              <small data-i18n="zhuSourceDesc">Connect each event to exact quotations and supported source relations</small>
+            <button class="flow-node active" type="button" data-node="combined-emperor-actions">
+              <span class="node-index">O7</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuSourceTitle">Combine 硃批 and paired 上諭 into emperor actions</strong>
+              <small data-i18n="zhuSourceDesc">Output only imperial comments, replies, and commands with all sources</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node active" type="button" data-node="zhu-emperor">
-              <span class="node-index">Z5</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
-              <strong data-i18n="zhuEmperorTitle">Analyse the imperial vermilion rescript</strong>
-              <small data-i18n="zhuEmperorDesc">Identify placement, response target, judgment, directive, and exact wording</small>
+            <button class="flow-node active" type="button" data-node="emperor-dedup">
+              <span class="node-index">O8</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuEmperorTitle">Identify repeated emperor actions across time</strong>
+              <small data-i18n="zhuEmperorDesc">Name the earliest equivalent action and offer merge or keep separate</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node active" type="button" data-node="zhu-yu-reply">
-              <span class="node-index">Z6</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
-              <strong data-i18n="zhuYuTitle">Correlate subsequent imperial edicts</strong>
-              <small data-i18n="zhuYuDesc">Retain only edict passages that demonstrably address the memorial</small>
+            <button class="flow-node active" type="button" data-node="confirmed-official-response">
+              <span class="node-index">O9</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
+              <strong data-i18n="zhuYuTitle">Analyze later official replies through confirmed pairs</strong>
+              <small data-i18n="zhuYuDesc">Follow each paired 上諭 to its existing official_reply_to_yu records</small>
             </button>
             <div class="down-arrow" aria-hidden="true"></div>
-            <button class="flow-node active" type="button" data-node="zhu-official-reply">
-              <span class="node-index">Z7</span><span class="node-status" data-i18n="operational">OPERATIONAL</span>
-              <strong data-i18n="zhuReplyTitle">Correlate later official responses</strong>
-              <small data-i18n="zhuReplyDesc">Identify acknowledgment, implementation, or reasoned reply in later memorials</small>
+            <button class="flow-node active" type="button" data-node="json-output">
+              <span class="node-index">O10</span><span class="node-status">JSON + CARDS</span>
+              <strong data-i18n="zhuReplyTitle">Save every stage as reviewable evidence</strong>
+              <small data-i18n="zhuReplyDesc">No relationship becomes evidence without the researcher’s decision</small>
             </button>
           </div>
           <div class="loopback" aria-hidden="true"><span data-i18n="nextZhu">next 硃批 record</span></div>
         </article>
 
-        <article class="loop-lane">
+        <article class="loop-lane" hidden>
           <header class="loop-head">
             <span class="loop-number" data-i18n="cycleTwo">CYCLE II</span>
             <div>

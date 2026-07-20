@@ -13,6 +13,59 @@ SPEC.loader.exec_module(proxy)
 
 
 class ProviderRoutingTests(unittest.TestCase):
+    def test_confirmed_yu_response_uses_only_supplied_pair_records(self):
+        prompts = []
+
+        def generated(prompt, *_args, **_kwargs):
+            prompts.append(prompt)
+            return '{"items":[{"yu_doc_id":"諭1","subtitle":"遵旨覆奏"}]}'
+
+        with patch.object(proxy, "_generate", side_effect=generated):
+            response = proxy.app.test_client().post("/chat", json={
+                "mode": "confirmed_yu_response",
+                "reply": {"id": "硃1", "body": "臣已遵辦"},
+                "edicts": [{"id": "諭1", "body": "著即辦理"}],
+            })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json()["items"][0]["yu_doc_id"], "諭1")
+        self.assertIn("不得重新判斷是否配對", prompts[0])
+
+    def test_combined_emperor_actions_preserves_multiple_sources(self):
+        result = (
+            '{"actions":[{"title":"嘉許甲官","sources":['
+            '{"doc_id":"硃1","source_type":"硃批","quote":"汝辦理甚好"},'
+            '{"doc_id":"諭2","source_type":"上諭","quote":"甲官辦理甚好"}]}]}'
+        )
+        with patch.object(proxy, "_generate", return_value=result):
+            response = proxy.app.test_client().post("/chat", json={
+                "mode": "combined_emperor_actions",
+                "memorial": {"id": "硃1", "rescript": "汝辦理甚好"},
+                "edicts": [{"id": "諭2", "body": "甲官辦理甚好"}],
+            })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(len(response.get_json()["actions"][0]["sources"]), 2)
+
+    def test_official_response_confirmed_path_disables_pair_rediscovery(self):
+        prompts = []
+
+        def generated(prompt, *_args, **_kwargs):
+            prompts.append(prompt)
+            return '{"addressee":"甲","items":[{"doc_id":"硃3","subtitle":"甲遵旨覆奏"}]}'
+
+        with patch.object(proxy, "_generate", side_effect=generated):
+            response = proxy.app.test_client().post("/chat", json={
+                "mode": "official_response",
+                "confirmed_pairs_only": True,
+                "action": {"what": "命甲辦理"},
+                "candidates": [{"doc_id": "硃3", "body": "臣已遵辦"}],
+            })
+
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.get_json()["items"][0]["doc_id"], "硃3")
+        self.assertIn("不得另搜、不得重判配對", prompts[0])
+
     def test_json_list_accepts_nested_compatible_response_shapes(self):
         raw = '{"data":{"result":{"items":[{"title":"event one"}]}}}'
         self.assertEqual(proxy._json_list(raw, "events"), [{"title": "event one"}])

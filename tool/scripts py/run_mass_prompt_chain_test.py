@@ -14,6 +14,7 @@ import re
 import time
 import sys
 import urllib.error
+from contextlib import contextmanager
 from datetime import datetime, timedelta
 from pathlib import Path
 from typing import Any
@@ -29,6 +30,7 @@ from run_review_bundle_test import (  # noqa: E402
     primary_date,
     read_json,
     record_payload,
+    print_cost_summary,
     skill_prompt,
     within_days,
     write_json,
@@ -43,12 +45,33 @@ QING_STEPS = {
 }
 
 
+# The proxy token counter normally groups calls by proxy mode.  These labels
+# preserve the loop's actual stages in the terminal table and in
+# cost-summary.json (for example, qing events and their source trace are one
+# logical stage for this runner).
+_ACCOUNTING_STEP = ""
+
+
+@contextmanager
+def accounting_step(label: str):
+    global _ACCOUNTING_STEP
+    previous = _ACCOUNTING_STEP
+    _ACCOUNTING_STEP = label
+    try:
+        yield
+    finally:
+        _ACCOUNTING_STEP = previous
+
+
 def post_json(url: str, payload: dict[str, Any], timeout: int, retries: int = 3, retry_sleep: int = 12) -> dict[str, Any]:
     """Retry the old proxy helper plus Cloud Run's occasional bare disconnect/502."""
+    request_payload = dict(payload)
+    if _ACCOUNTING_STEP:
+        request_payload["_accounting_step"] = _ACCOUNTING_STEP
     last: Exception | None = None
     for attempt in range(1, retries + 1):
         try:
-            return _post_json(url, payload, timeout, 1, retry_sleep)
+            return _post_json(url, request_payload, timeout, 1, retry_sleep)
         except http.client.RemoteDisconnected as exc:
             last = exc
             if attempt >= retries:
@@ -376,6 +399,10 @@ def main() -> None:
     ap.add_argument("--timeout", type=int, default=240)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--retry-sleep", type=int, default=15)
+    ap.add_argument("--input-price-per-million", type=float, default=None,
+                    help="Override input price in USD per 1M tokens")
+    ap.add_argument("--output-price-per-million", type=float, default=None,
+                    help="Override output price in USD per 1M tokens")
     ap.add_argument("--skip-done", action="store_true")
     args = ap.parse_args()
     if not args.proxy:
@@ -425,7 +452,8 @@ def main() -> None:
             inst = skill_prompt("divide")
             if inst:
                 payload["instruction"] = inst
-            data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
+            with accounting_step("divide"):
+                data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
             divisions.append({"doc_id": did, "title": doc.get("title") or "", "parts": data.get("parts", []), "_raw": data})
             write_json(out_dir / "division-parts.json", divisions)
             mark(did, "divide")
@@ -435,9 +463,11 @@ def main() -> None:
             doc_lin = [x for x in lin_events if str(x.get("doc_id")) == did]
         else:
             print("  - lin-events + source")
-            doc_lin = run_event_step(args.proxy, args.model, doc, "lin", "", "lin-events", args.timeout, args.retries, args.retry_sleep)
+            with accounting_step("lin-events + source"):
+                doc_lin = run_event_step(args.proxy, args.model, doc, "lin", "", "lin-events", args.timeout, args.retries, args.retry_sleep)
             lin_events.extend(doc_lin)
-            chains = run_doc_trace(args.proxy, args.model, doc, "lin", [x.get("subtitle") or "" for x in doc_lin], args.timeout, args.retries, args.retry_sleep)
+            with accounting_step("lin-events + source"):
+                chains = run_doc_trace(args.proxy, args.model, doc, "lin", [x.get("subtitle") or "" for x in doc_lin], args.timeout, args.retries, args.retry_sleep)
             if chains:
                 source_rows.append({"doc_id": did, "evTitle": "全部林方事件來源", "actor": "lin", "chains": chains})
             write_json(out_dir / "lin-events.json", lin_events)
@@ -450,11 +480,13 @@ def main() -> None:
             print("  - qing events + source")
             all_qing_titles = []
             for step, (category, _) in QING_STEPS.items():
-                items = run_event_step(args.proxy, args.model, doc, "qing", category, step, args.timeout, args.retries, args.retry_sleep)
+                with accounting_step("qing events + source"):
+                    items = run_event_step(args.proxy, args.model, doc, "qing", category, step, args.timeout, args.retries, args.retry_sleep)
                 qing_rows[step].extend(items)
                 all_qing_titles.extend(x.get("subtitle") or "" for x in items)
                 write_json(out_dir / f"{step}.json", qing_rows[step])
-            chains = run_doc_trace(args.proxy, args.model, doc, "qing", all_qing_titles, args.timeout, args.retries, args.retry_sleep)
+            with accounting_step("qing events + source"):
+                chains = run_doc_trace(args.proxy, args.model, doc, "qing", all_qing_titles, args.timeout, args.retries, args.retry_sleep)
             if chains:
                 source_rows.append({"doc_id": did, "evTitle": "全部清方事件來源", "actor": "qing", "chains": chains})
                 write_json(out_dir / "source-chain.json", source_rows)
@@ -468,12 +500,14 @@ def main() -> None:
             extra = skill_prompt("zhupi")
             if extra:
                 payload["question"] = extra
-            data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
+            with accounting_step("zhupi + info source"):
+                data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
             items = [dict(x, doc_id=did) for x in data.get("zhupi", [])]
             if not items:
                 items = fallback_zhupi_items(doc)
             if items:
-                info_items = safe_fetch_info_sources(args.proxy, args.model, records, doc, doc.get("rescript_text") or doc.get("rescript") or body_of(doc), args.timeout, args.retries, args.retry_sleep)
+                with accounting_step("zhupi + info source"):
+                    info_items = safe_fetch_info_sources(args.proxy, args.model, records, doc, doc.get("rescript_text") or doc.get("rescript") or body_of(doc), args.timeout, args.retries, args.retry_sleep)
                 attach_info_to_zhupi(items, info_items)
             zhupi_rows.extend(items)
             write_json(out_dir / "zhupi.json", zhupi_rows)
@@ -500,7 +534,8 @@ def main() -> None:
                     "memorial": {"id": did, "title": doc.get("title") or "", "date": base, "body": body_of(doc)},
                     "edicts": [{"id": edid, "date": primary_date(ed), "title": ed.get("title") or "", "body": body_of(ed)}],
                 }
-                data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
+                with accounting_step("edict-match + info source"):
+                    data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
                 for match in data.get("matches", []):
                     pts = match.get("points") if isinstance(match.get("points"), list) else []
                     if not pts and (match.get("memorial_quote") or match.get("edict_quote") or match.get("how")):
@@ -510,7 +545,8 @@ def main() -> None:
             for eid in sorted({str(x.get("edict_id") or "") for x in matches_for_doc if x.get("edict_id")}):
                 ed = by_id.get(eid)
                 if ed:
-                    info_by_edict[eid] = safe_fetch_info_sources(args.proxy, args.model, records, ed, body_of(ed), args.timeout, args.retries, args.retry_sleep)
+                    with accounting_step("edict-match + info source"):
+                        info_by_edict[eid] = safe_fetch_info_sources(args.proxy, args.model, records, ed, body_of(ed), args.timeout, args.retries, args.retry_sleep)
             attach_info_to_edicts(matches_for_doc, info_by_edict)
             edict_rows.extend(matches_for_doc)
             write_json(out_dir / "edict-match.json", edict_rows)
@@ -520,7 +556,8 @@ def main() -> None:
             print("  - situfit (skip done)")
         else:
             print("  - situfit")
-            sf = run_situfit(args.proxy, args.model, records, doc, args.timeout, args.retries, args.retry_sleep)
+            with accounting_step("situfit"):
+                sf = run_situfit(args.proxy, args.model, records, doc, args.timeout, args.retries, args.retry_sleep)
             if sf:
                 situfit_rows.append(sf)
                 write_json(out_dir / "situfit.json", situfit_rows)
@@ -563,7 +600,8 @@ def main() -> None:
             "candidates": [{"doc_id": doc_id(c), "title": c.get("title") or "", "date": doc_best_ar(c), "body": body_of(c)} for c in cands],
             "question": skill_prompt("official-response"),
         }
-        data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
+        with accounting_step("official-response"):
+            data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
         official_rows.append({"doc_id": act["doc_id"], "memDoc": act.get("memDoc") or act["doc_id"], "evTitle": act["evTitle"], "addressee": data.get("addressee") or payload["addressee"], "items": data.get("items", [])})
         write_json(official_path, official_rows)
 
@@ -578,6 +616,12 @@ def main() -> None:
     write_json(out_root / "manifest.json", manifest)
     write_json(out_root / "human-edits" / "notes.json", [])
     print(f"\nWrote bundle: {out_root.relative_to(ROOT)}")
+    cost_summary = print_cost_summary(
+        args.model,
+        args.input_price_per_million,
+        args.output_price_per_million,
+    )
+    write_json(out_root / "cost-summary.json", cost_summary)
 
 
 if __name__ == "__main__":

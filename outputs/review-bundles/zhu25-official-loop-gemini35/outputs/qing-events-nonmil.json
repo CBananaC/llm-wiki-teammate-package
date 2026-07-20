@@ -1,0 +1,144 @@
+[
+  {
+    "description": "福建水師提督黃仕簡因準備親自渡臺剿捕叛軍，為穩定後方，札請閩浙總督委派金門鎮總兵羅英笈前往廈門，就近彈壓並照應地方治安。",
+    "howKnown": "親歷",
+    "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+    "relations": [
+      {
+        "evidence": "札達督臣",
+        "relation": "札達",
+        "relation_type": "report",
+        "source": "黃仕簡",
+        "target": "督臣"
+      },
+      {
+        "evidence": "檄委金門鎮總兵羅英笈",
+        "relation": "檄委",
+        "relation_type": "command",
+        "source": "督臣",
+        "target": "羅英笈"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "委派羅英笈彈壓廈門",
+    "whenAr": "1787/01/24-1787/01/29",
+    "whenCh": "十二月初五日至初十日之間",
+    "whenKnownCh": "十二月初十日",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "督臣",
+      "羅英笈"
+    ],
+    "who_loc": {
+      "羅英笈": "金門",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+        "howKnown": "親歷",
+        "whenKnown": "十二月初十日"
+      }
+    ]
+  },
+  {
+    "description": "福建水師提督黃仕簡因憂慮彰化叛軍聞風竄逃至福建內地，飛札福建巡撫、陸路提督、藩臬兩司、興泉道及水陸各協營，嚴令各港口要隘加強盤查緝捕。",
+    "howKnown": "親歷",
+    "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+    "relations": [
+      {
+        "evidence": "飛札撫臣",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "撫臣"
+      },
+      {
+        "evidence": "飛札...陸路提臣",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "陸路提臣"
+      },
+      {
+        "evidence": "飛札...臺灣鎮",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣鎮"
+      },
+      {
+        "evidence": "飛札...道",
+        "relation": "飛札",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "臺灣道"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "飛札各官嚴防盤拿",
+    "whenAr": "1787/01/24-1787/01/29",
+    "whenCh": "十二月初五日至初十日之間",
+    "whenKnownCh": "十二月初十日",
+    "where": "福建及臺灣沿海口岸",
+    "who": [
+      "黃仕簡",
+      "撫臣",
+      "陸路提臣",
+      "臺灣鎮",
+      "臺灣道"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "howKnown": "親歷",
+        "whenKnown": "十二月初十日"
+      }
+    ]
+  },
+  {
+    "description": "署理北路淡水同知程峻與守備董得魁在彰化縣城失陷後，積極整頓地方防務，募集鄉勇與大甲社等社番，於各要隘分頭防堵。",
+    "howKnown": "轉述",
+    "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+    "relations": [
+      {
+        "evidence": "署北路淡水同知程峻、守備董得魁會稟",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "淡水募集鄉勇社番",
+    "whenAr": "1787/01/18",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月初十日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "howKnown": "轉述",
+        "whenKnown": "十二月初十日"
+      }
+    ]
+  }
+]

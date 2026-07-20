@@ -3721,6 +3721,7 @@
   let EDITS={};
   try{ EDITS=JSON.parse(localStorage.getItem(EDIT_KEY)||'{}')||{}; }catch(e){ EDITS={}; }
   let CONFIRMED_PAIRS=[];
+  let CONFIRMED_YU_SOURCE_PAIRS=[];
   let __pendingStaticYuSource=null;
   function normalizePairRelation(relation){
     if(relation==='reply_to_yu') return 'official_reply_to_yu';
@@ -3735,7 +3736,7 @@
   }
   function pairSourceDocId(x){ return x&&(x.yu_doc_id||x.zhu_doc_id||''); }
   function pairKey(x){ return String(pairSourceDocId(x))+'|'+String(x&&x.reply_doc_id||'')+'|'+String(x&&x.relation||'official_reply_to_yu'); }
-  function allDocPairs(){ const a=EDITS.__docPairs||[]; const b=CONFIRMED_PAIRS||[]; if(!b.length) return a; const seen=new Set(a.map(pairKey)); return a.concat(b.filter(x=>x&&pairSourceDocId(x)&&x.reply_doc_id&&!seen.has(pairKey(x)))); }
+  function allDocPairs(){ const a=EDITS.__docPairs||[]; const b=(CONFIRMED_PAIRS||[]).concat(CONFIRMED_YU_SOURCE_PAIRS||[]); if(!b.length) return a; const seen=new Set(a.map(pairKey)); return a.concat(b.filter(x=>x&&pairSourceDocId(x)&&x.reply_doc_id&&!seen.has(pairKey(x)))); }
   async function fetchFirstJSON(urls){
     for(const url of urls){
       try{ const r=await fetch(url,{cache:'no-store'}); if(r.ok) return await r.json(); }catch(e){}
@@ -3757,7 +3758,7 @@
   }
   (function loadStaticYuSource(){
     fetchFirstJSON(['/formal/yu-source.json']).then(data=>{
-      if(data) __pendingStaticYuSource=data;
+      if(data){ __pendingStaticYuSource=data; CONFIRMED_YU_SOURCE_PAIRS=(Array.isArray(data)?data:((data&&Array.isArray(data.pairs))?data.pairs:[])).map(normalizePairRecord).filter(Boolean); }
       applyPendingStaticYuSource();
     }).catch(()=>{ __editsServerReady=true; applyPendingStaticYuSource(); });
   })();
@@ -5342,7 +5343,8 @@
   // (titles share SOME but not overwhelming overlap) fall back to textDiceSim on
   // description/quote as a secondary confirm/reject signal, mirroring runHideDuplicateShangzou's
   // two-signal (date-window + body-similarity) approach. Returns the earliest matching registry
-  // entry (by whenAr/whenCh) so "earlier" is well-defined even if the registry has several matches.
+  // entry by source-document report date (falling back to event date), so "earliest report" remains
+  // well-defined even if the registry has several matches.
   function matchCandidateInRegistry(cand, registry){
     const candTitle=cand.subtitle||cand.what||''; if(!normWhere(candTitle)) return null;
     const candText=[cand.description, sourceQuote((cand.sources||[])[0]||cand)].filter(Boolean).join(' ');
@@ -5361,7 +5363,7 @@
       return textDiceSim(candText, [r.description, r.quote].filter(Boolean).join(' '))>=0.45;
     });
     if(!hits.length) return null;
-    hits.sort((a,b)=>{ const da=parseD(a.whenAr), db=parseD(b.whenAr); if(da&&db) return da-db; if(da) return -1; if(db) return 1; return 0; });
+    hits.sort((a,b)=>{ const da=parseD((a.item&&proposalRefAr(a.item))||a.whenAr), db=parseD((b.item&&proposalRefAr(b.item))||b.whenAr); if(da&&db) return da-db; if(da) return -1; if(db) return 1; return 0; });
     return hits[0];
   }
   function candDateKey(c){ const d=parseD(c.whenAr); return d? fmt(d) : (c.whenCh||'').trim(); }
@@ -6929,7 +6931,9 @@
         pop.querySelectorAll('.cb-toc-item').forEach(b=>b.onclick=()=>{ closePops(); const target=log.querySelector('[data-logi="'+b.dataset.toci+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }); }
       function buildActMenu(insertMode){ const pop=body.querySelector('.cb-pop[data-for="act"]');
         const sec=()=>'<div class="cb-div"></div>';
-        pop.innerHTML='<button class="cb-mi" data-yupair="1" type="button">回應的先前上諭</button>'
+        pop.innerHTML='<button class="cb-mi" data-officialloop="1" type="button">官文優先審閱迴圈</button>'
+          +sec()
+          +'<button class="cb-mi" data-yupair="1" type="button">回應的先前上諭</button>'
           +'<button class="cb-mi" data-yupairnc="1" type="button">回應的先前上諭（無引文）</button>'
           +'<button class="cb-mi" data-yusource="1" type="button">上諭回應的奏折</button>'
           +'<button class="cb-mi" data-zhupair="1" type="button">回應的先前硃批</button>'
@@ -6971,6 +6975,7 @@
         pop.querySelectorAll('.cb-mi[data-zhupi]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('硃批'); else runZhupi({}); });
         pop.querySelectorAll('.cb-mi[data-situfit]').forEach(b=>b.onclick=()=>{ if(b.disabled) return; closePops(); if(insertMode) insertAtToken('回應時效'); else runSituFit(); });
         pop.querySelectorAll('.cb-mi[data-edictscan]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭'); else runEdictScan({}); });
+        pop.querySelectorAll('.cb-mi[data-officialloop]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('官文優先審閱迴圈'); else runOfficialDocumentLoop({}); });
         pop.querySelectorAll('.cb-mi[data-yupair]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('回應的先前上諭'); else runYuPairingForSel({}); });
         pop.querySelectorAll('.cb-mi[data-yupairnc]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('回應的先前上諭（無引文）'); else runYuPairingNoCiteForSel({}); });
         pop.querySelectorAll('.cb-mi[data-yusource]').forEach(b=>b.onclick=()=>{ closePops(); if(insertMode) insertAtToken('上諭回應的奏折'); else runYuSourceForSel({}); });
@@ -7089,7 +7094,8 @@
         const isZhu=(p.relation==='official_reply_to_emperor_zhu');
         const isSource=(p.relation==='yu_source');
         const empLabel=isZhu?'硃批':'上諭';
-        const pairTitle=pairFilterLabel(p);
+        const analysisOnly=!!p.analysis_only;
+        const pairTitle=analysisOnly?'回應先前上諭（既有配對）':pairFilterLabel(p);
         const yuId=String((isZhu?(p.zhu_doc_id||p.yu_doc_id):p.yu_doc_id)||''), rpId=String(p.reply_doc_id||'');
         const yr=(typeof recByDocId2==='function')?recByDocId2(yuId):null;
         const rr=(typeof recByDocId2==='function')?recByDocId2(rpId):null;
@@ -7167,7 +7173,9 @@
           ? '<div class="dp-q'+(empLocatable?' cx-q dp-loc':'')+'"'+(empLocatable?' data-doc="'+esc(yuId)+'" title="點按在原文中顯示"':'')+'>「'+dpYuInner+'」</div>'
           : '<div class="dp-q dp-q-empty">此'+empLabel+'無可對應文字 — 非本摺主要答覆對象</div>';
         const added=allDocPairs().some(x=>String(x.yu_doc_id||x.zhu_doc_id)===yuId&&String(x.reply_doc_id)===rpId&&String(x.relation||'official_reply_to_yu')===String(p.relation||'official_reply_to_yu')) || !!p.__added;
-        const addBtn = added
+        const addBtn = analysisOnly
+          ? '<span class="cx-done">✓ 使用既有配對（未重新搜尋）</span>'
+          : added
           ? '<span class="cx-done">✓ 已標記配對</span>'
           : '<button class="sl-btn dp-add" data-i="'+i+'" type="button">加入配對</button>';
         const yuNodeHtml='<div class="dp-node dp-node-yu">'
@@ -7187,7 +7195,7 @@
           ? sourceNodeHtml+receiptHtml+'<div class="dp-conn">'+connector+'</div>'+yuNodeHtml
           : yuNodeHtml+receiptHtml+'<div class="dp-conn">'+connector+'</div>'+sourceNodeHtml;
         return '<div class="chat-extract dp-card" data-logi="'+i+'">'
-          +'<div class="cx-head">'+esc(pairTitle)+'<span class="dp-badge dp-'+esc(lvl)+'">'+esc(lvlLbl)+'</span>'
+          +'<div class="cx-head">'+esc(pairTitle)+(analysisOnly&&p.subtitle?'：'+esc(p.subtitle):'')+(analysisOnly?'':'<span class="dp-badge dp-'+esc(lvl)+'">'+esc(lvlLbl)+'</span>')
             +(p.no_citation?'<span class="dp-badge dp-nocite">無引文</span>':'')
             +((p.relation==='yu_source'&&ev.yu_span_type==='narrative')?'<span class="dp-badge" style="background:#2f8f6b;color:#fff" title="上諭中無據奏標籤的敘述性奏報事實">無標籤</span>':'')
             +(p.reply_status?'<span class="dp-badge dp-rs-'+esc(p.reply_status)+'">'+esc(({done:'完成回覆 ✓',ack:'相關未完覆 ✗',unrelated:'非回應 ✗'})[p.reply_status]||p.reply_status)+'</span>':'')
@@ -7197,6 +7205,8 @@
             +'<div class="dp-line"></div>'
             +flowNodes
           +'</div>'
+          +(analysisOnly&&(ev.description||p.description)?'<div class="dp-note dp-relnote">回應說明：'+dpEvFld('description',ev.description||p.description)+'</div>':'')
+          +(analysisOnly&&p.response_type?'<div class="dp-note">回應類型：'+esc(p.response_type)+'</div>':'')
           +((isZhu&&ev.own_memorial_ref&&ev.own_memorial_ref!=='未明')?'<div class="dp-note">原奏：'+dpEvFld('own_memorial_ref',ev.own_memorial_ref)+'</div>':'')
           +(ev.relation_note?'<div class="dp-note dp-relnote">關係說明：'+dpEvFld('relation_note',ev.relation_note)+'</div>':'')
           +(ev.date_note?'<div class="dp-note">'+dpEvFld('date_note',ev.date_note)+'</div>':'')
@@ -7361,7 +7371,7 @@
       // becoming its own qing-side event (see .resp-commit binding below / commitSuggestedResponse
       // for the event-panel equivalent of the same add action).
       function officialResponseHtml(m,i){ const items=m.items||[];
-        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI 搜尋官員回應：${items.length} 筆<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
+        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.confirmedPairsOnly?'分析既有配對中的官員回應':'搜尋官員回應'}：${items.length} 筆<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(m.evTitle?`<div class="resp-topic"><span class="l">回應對象</span><div class="v">${esc(m.evTitle)}</div></div>`:'')
           +(items.length? items.map((it,j)=>{
@@ -7383,7 +7393,7 @@
                 ${it.response_quote?`<div class="cx-q" data-doc="${esc(it.doc_id||'')}" title="點按在原文中顯示">回應引文：「${esc(it.response_quote)}」</div>`:''}
                 ${respDocInfo(it)}
                 <div class="cx-acts">${committed&&!needsRelink?`<span class="cx-done">${doneLabel}</span>`:`<button class="resp-commit" data-i="${i}" data-j="${j}" data-evid="${esc(targetId)}" type="button">${needsRelink?'修正連到皇帝行動點':'加入為官員回應事件'}</button>`}</div>
-              </div>`; }).join('') : '<div class="record-empty">30日內未找到官員回應。可在輸入框補充線索後用 @官員回應 重試。</div>')+`</div>`; }
+              </div>`; }).join('') : `<div class="record-empty">${m.confirmedPairsOnly?'既有配對文書未產生可顯示的回應分析。':'30日內未找到官員回應。可在輸入框補充線索後用 @官員回應 重試。'}</div>`)+`</div>`; }
       // Emperor-action date detection: 硃批/上諭 items don't carry an AI-extracted date the way
       // event proposals do, but each item always belongs to a specific document that already HAS
       // one (the rescript's own receive date, or the edict's own announce date) -- so "detect the
@@ -7489,6 +7499,16 @@
         return { ev: commitEmperorAction(subtitle, description, dd, it.doc_id, it.text||it.marker||'', '硃批', zhupiEmperorDetail(it), relPayloadFromItem(it)), subtitle };
       }
       function buildEdictPointCommit(it, pt, m){
+        if(m&&m.combinedEmperor&&Array.isArray(pt.sources)&&pt.sources.length){
+          const dated=pt.sources.map(s=>{ const r=recByDocId2(s.doc_id); return {s,r,date:(r&&(s.source_type==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr)))||s.date||''}; })
+            .sort((a,b)=>{ const da=parseD(a.date),db=parseD(b.date); return da&&db?da-db:(da?-1:(db?1:0)); });
+          const first=dated[0]||{s:pt.sources[0],r:null,date:pt.whenAr||''};
+          const subtitle=pt.title||pt.aspect||'皇帝行動';
+          const detail={kind:'edict', combined:true, action_type:pt.action_type||pt.aspect||'', sources:pt.sources, memDoc:it.memDoc||(m&&m.memDoc)||'', memTitle:it.memTitle||'', how:pt.how||pt.description||''};
+          const ev=commitEmperorAction(subtitle, pt.how||pt.description||'', {whenAr:first.date||pt.whenAr||'',whenCh:pt.whenCh||''}, first.s.doc_id, first.s.quote||'', '硃批／上諭', detail, relPayloadFromItem(pt));
+          ev.sources=pt.sources.map(s=>({doc_id:s.doc_id||'',quote:s.quote||'',label:subtitle,aiFilterLabel:AI_FILTER_LABELS.edict,howKnown:s.source_type||'御筆'})).filter(s=>s.doc_id);
+          return {ev,subtitle};
+        }
         const dd=edictItemDetectedDate(it);
         const subtitle=edictPointSubtitle(pt, it);
         const description=[pt.how||'', it.summary||''].filter(Boolean).join('\n');
@@ -7734,8 +7754,12 @@
         if(it.memTitle) h+=`<dt>↩ 回應</dt><dd>${respTxt}</dd>`;
         return h+'</dl>';
       }
+      function combinedEmperorSourcesHtml(sources){
+        return (sources||[]).map(s=>{ const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||'御筆'; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
+          return `<div class="em-detail"><span class="l">${esc(typ)}</span>${s.quote?`<div class="cx-q" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」</div>`:''}</div><dl class="em-srcinfo"><dt>📜 ${esc(typ)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>📅 日期</dt><dd>${esc(date)}</dd>`:''}</dl>`; }).join('');
+      }
       function edictHtml(m,i){ const items=m.items||[];
-        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI 相關上諭${m.marker?'（'+esc(m.marker)+'）':''}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
+        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.combinedEmperor?'皇帝行動（硃批／上諭；既有配對）':'相關上諭'}${m.marker?'（'+esc(m.marker)+'）':''}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(items.length? items.map((it,j)=>{ const dd=edictItemDetectedDate(it);
               const pts=it.points||[];
               const overview=it.summary?`<div class="em-overview"><span class="l">概述</span><div class="ov-t em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="summary">${esc(it.summary)}</div></div>`:'';
@@ -7748,14 +7772,16 @@
               }
               return `<div class="em-group">${overview}`
                 + pts.map((pt,k)=>{
-                    const addBtn=pt.__added?emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k}):`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" data-k="${k}" type="button">加入為皇帝行動</button>`;
+                    const prior=pt.same_as_event_id&&eventById(pt.same_as_event_id);
+                    const addBtn=pt.__added?emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k}):(prior?`<button class="cx-add em-mergeact" data-i="${i}" data-j="${j}" data-k="${k}" type="button">加入（併入最早行動）</button><button class="cx-addstandalone em-addstandalone-action" data-i="${i}" data-j="${j}" data-k="${k}" type="button">仍獨立加入（不合併）</button>`:`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" data-k="${k}" type="button">加入為皇帝行動</button>`);
                     const infoBtn=pt.__added&&pt.__evId?infoSourceFollowupHtml(pt.__evId):'';
                     return `<div class="cx-ev em-item">
                     ${pt.title?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="title">${esc(pt.title)}</span></div>${pt.aspect?`<div class="em-meta em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="aspect">${esc(pt.aspect)}</div>`:''}`:(pt.aspect?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="aspect">${esc(pt.aspect)}</span></div>`:'')}
-                    <div class="em-detail">${pt.memorial_quote?`<span class="l">奏摺</span><div class="cx-q" data-doc="${esc(it.memDoc||m.memDoc||'')}" title="點按在奏摺原文顯示">「${esc(pt.memorial_quote)}」</div>`:''}${pt.edict_quote?`<span class="l">上諭回應</span><div class="cx-q" data-doc="${esc(it.edict_id||'')}" title="點按在上諭原文顯示">「${esc(pt.edict_quote)}」</div>`:''}</div>
+                    ${m.combinedEmperor?combinedEmperorSourcesHtml(pt.sources):`<div class="em-detail">${pt.memorial_quote?`<span class="l">奏摺</span><div class="cx-q" data-doc="${esc(it.memDoc||m.memDoc||'')}" title="點按在奏摺原文顯示">「${esc(pt.memorial_quote)}」</div>`:''}${pt.edict_quote?`<span class="l">上諭回應</span><div class="cx-q" data-doc="${esc(it.edict_id||'')}" title="點按在上諭原文顯示">「${esc(pt.edict_quote)}」</div>`:''}</div>`}
                     ${pt.how?`<div class="em-how em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="how">${esc(pt.how)}</div>`:''}
-                    ${edictSourceLine(it,dd)}
-                    <div class="cx-acts">${addBtn}<button class="em-open" data-doc="${esc(it.edict_id||'')}" type="button">開啟上諭</button>${infoBtn}</div>
+                    ${prior?`<div class="cx-matchnote" title="可併入最早的既有皇帝行動，或保留為獨立行動">⚠ <b>此皇帝行動先前已見於 ${esc(evTitle(prior))}${prior.dateAr?'（'+esc(prior.dateAr)+'）':''}</b></div>`:''}
+                    ${m.combinedEmperor?'':edictSourceLine(it,dd)}
+                    <div class="cx-acts">${addBtn}${it.edict_id?`<button class="em-open" data-doc="${esc(it.edict_id)}" type="button">開啟上諭</button>`:''}${infoBtn}</div>
                   </div>`; }).join('')
                 + `</div>`;
             }).join('') : '<div class="record-empty">±3 日內查無回應此奏摺的上諭。</div>')+`</div>`; }
@@ -8056,7 +8082,7 @@
           if(b.dataset.k!=null){
             const pt=(it.points||[])[+b.dataset.k]; if(!pt||pt.__added) return;
             const {ev, subtitle}=buildEdictPointCommit(it, pt, m);
-            markAIReviewDocId(it.edict_id, 'emperor-action', 'R');
+            if(m.combinedEmperor) (pt.sources||[]).forEach(s=>{ if(s.doc_id) markAIReviewDocId(s.doc_id,'emperor-action','R'); }); else markAIReviewDocId(it.edict_id, 'emperor-action', 'R');
             if(pt.__pendingResponses&&pt.__pendingResponses.length) patchEvent(ev.id,{__suggestedResponses:pt.__pendingResponses});
             delete pt.__pendingResponses;
             // eager info sources (fetched during runEdictScan) → pending review
@@ -8077,6 +8103,12 @@
           if(it.__pendingInfoSources) pendIS.push(...it.__pendingInfoSources);
           if(pendIS.length) patchEvent(ev.id,{__suggestedInfoSources:pendIS.map(s=>Object.assign({include:true},s))});
           it.__added=true; it.__evId=ev.id; saveEdits(); renderLog({preserve:true}); reportCommit(ev, subtitle); });
+        log.querySelectorAll('.em-mergeact').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; const pt=it&&it.points&&it.points[+b.dataset.k]; if(!pt||pt.__added) return;
+          const target=pt.same_as_event_id&&eventById(pt.same_as_event_id); if(!target){ const built=buildEdictPointCommit(it,pt,m); pt.__added=true; pt.__evId=built.ev.id; saveEdits(); renderLog({preserve:true}); reportCommit(built.ev,built.subtitle); return; }
+          (pt.sources||[]).forEach(s=>{ if(!s.doc_id) return; addEventMention(target.id,s.doc_id,{quote:s.quote||'',label:target.subtitle||target.what||'',howKnown:s.source_type||'御筆',ownSubtitle:pt.title||'',ownDescription:pt.how||'',ownWhere:pt.where||'',ownWhenAr:pt.whenAr||'',ownWhenCh:pt.whenCh||'',ownWho:pt.who||[],ownWhoLoc:pt.whoLoc||{},ownRelations:pt.relations||[]}); markAIReviewDocId(s.doc_id,'emperor-action','R'); });
+          pt.__added=true; pt.__evId=target.id; pt.__mergedInto=target.id; saveEdits(); renderLog({preserve:true}); st2.textContent='已將新的硃批／上諭來源併入最早皇帝行動「'+evTitle(target)+'」。'; });
+        log.querySelectorAll('.em-addstandalone-action').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; const pt=it&&it.points&&it.points[+b.dataset.k]; if(!pt||pt.__added) return;
+          const built=buildEdictPointCommit(it,pt,m); (pt.sources||[]).forEach(s=>{ if(s.doc_id) markAIReviewDocId(s.doc_id,'emperor-action','R'); }); pt.__added=true; pt.__evId=built.ev.id; pt.__keptSeparate=true; saveEdits(); renderLog({preserve:true}); reportCommit(built.ev,built.subtitle); });
         log.querySelectorAll('.ea-goto').forEach(b=>b.onclick=()=>{ const ev=eventById(b.dataset.evid); if(ev && typeof openEventCard==='function') openEventCard(ev); });
         // 查資訊來源 follow-up on a just-committed 硃批／上諭 item: runs runInfoSourceLookup against
         // that same event (patches its emperorDetail.infoSources) then re-renders this same log entry
@@ -8170,7 +8202,7 @@
         log.querySelectorAll('.sl-add-cmd').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||c.__added) return; slCommitCommand(m,c); saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入諭令為皇帝行動（第四線）。'; });
         log.querySelectorAll('.sl-resp').forEach(b=>b.onclick=async()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c) return; const evId=slCommitCommand(m,c); saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); if(evId&&typeof runOfficialResponseSearch==='function') await runOfficialResponseSearch(evId); });
         log.querySelectorAll('.sl-resp-add').forEach(b=>b.onclick=()=>{ const m=slTurn(b.dataset.i); if(!m) return; const c=m.commands[+b.dataset.k]; if(!c||!c.__eaEvId) return; const r=(c.responses||[])[+b.dataset.ri]; if(!r||r.__added) return; const targetEv=eventById(c.__eaEvId); const refAr=(targetEv||{}).dateAr||''; const it={ subtitle:r.subtitle||((r.official||'官員')+'回應'), how:r.desc||'', doc_id:r.doc_id||'', response_quote:r.quote||'', receive_date:r.sendAr||'' }; const rp=(typeof relPayloadFromItem==='function')?relPayloadFromItem(it):{where:'',who:[],whoLoc:{},relations:[]}; const respSub=it.subtitle.slice(0,24); addEvent({ actor:'qing', subtitle:respSub, what:respSub, description:it.how, where:rp.where, who:rp.who, whoLoc:rp.whoLoc, relations:rp.relations, whenCh:'', dateAr:(typeof officialResponseDateAr==='function'?officialResponseDateAr(it, refAr):(r.sendAr||null)), sources:[{doc_id:it.doc_id, quote:it.response_quote, label:'回應', howKnown:''}], respondsToEventId:c.__eaEvId, respondsToQuote:'', receiveDate:it.receive_date }); r.__added=true; saveEdits(); renderLog({preserve:true}); if(typeof render==='function') render(); st2.textContent='已加入官員回應「'+respSub+'」，並連到諭令皇帝行動點。'; });
-        log.querySelectorAll('.cx-add:not(.zp-addact):not(.em-addact):not(.eact-add):not(.ea-retry):not(.cx-addall)').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:it.__traceChains}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已加入「'+(it.subtitle||'事件')+'」，並於原文標註。'; });
+        log.querySelectorAll('.cx-add:not(.zp-addact):not(.em-addact):not(.em-mergeact):not(.eact-add):not(.ea-retry):not(.cx-addall)').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:it.__traceChains}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已加入「'+(it.subtitle||'事件')+'」，並於原文標註。'; });
         // Re-reported candidate (carries __matchReg, see runExtract/matchNoteHtml): "加入" here never
         // creates an independent second dot -- see commitMatchedCandidate for the two paths (extend
         // an already-committed event's mentions, or commit both mentions together for the first time).
@@ -8298,6 +8330,7 @@
         if(skill.kind==='zhupi'){ runZhupi({question:skill.text||''}); return; }
         if(skill.kind==='edict_match'){ runEdictScan({question:skill.text||''}); return; }
         if(skill.kind==='emperor_action'){ runEmperorAction({question:skill.text||''}); return; }
+        if(skill.kind==='official_document_loop'){ runOfficialDocumentLoop({question:skill.text||''}); return; }
         st2.textContent='此技能的 Kind「'+esc(skill.kind||'(未設定)')+'」尚無對應的顯示方式。';
       }
       function normDupText(t){ return String(t||'').replace(/【硃批】[\s\S]*$/,'').replace(/[，。、《》；：：「」『』（）()！？\s\n\r\t]/g,''); }
@@ -8756,6 +8789,62 @@
           if(typeof markAIReview==='function') markAIReview('edict',[ed]);
         }
         renderLog({}); st2.textContent='完成：上諭回應的奏折，新增 '+added+' 則'+(ran?'':'（所選上諭未偵測到據…奏或窗內無相符奏摺）')+'。';
+      }
+      function officialLoopDocId(r){ return String(r&&(r._baseId||r.id)||''); }
+      function officialLoopPairs(relation, test){ const seen=new Set(); return allDocPairs().filter(p=>p&&String(p.relation||'official_reply_to_yu')===relation&&test(p)).filter(p=>{ const k=pairKey(p); if(seen.has(k)) return false; seen.add(k); return true; }); }
+      function officialLoopEarlierYuPairs(mem){ const id=officialLoopDocId(mem); return officialLoopPairs('official_reply_to_yu',p=>String(p.reply_doc_id||'')===id&&!!recByDocId2(p.yu_doc_id)); }
+      function officialLoopSourceYuPairs(mem){ const id=officialLoopDocId(mem); return officialLoopPairs('yu_source',p=>String(p.reply_doc_id||p.source_doc_id||'')===id&&!!recByDocId2(p.yu_doc_id)); }
+      function officialLoopYuPayload(pair){ const r=recByDocId2(pair.yu_doc_id), ev=pair.evidence||{}; return r?{id:officialLoopDocId(r),title:r.title||'',date:r.annAr||r.sendAr||r.recvAr||'',body:recordBody(r),pair_evidence:{quote_in_reply:ev.quote_in_reply||'',matched_yu_span:ev.matched_yu_span||'',relation_note:ev.relation_note||''}}:null; }
+      async function runConfirmedYuResponseAnalysis(docs,ctx){ ctx=ctx||{}; let made=0;
+        for(const mem of docs){ const pairs=officialLoopEarlierYuPairs(mem), edicts=pairs.map(officialLoopYuPayload).filter(Boolean); if(!edicts.length) continue;
+          st2.textContent='AI 分析官文如何回應既有配對上諭…（'+officialLoopDocId(mem)+'）';
+          try{ const data=await callProxy({mode:'confirmed_yu_response',model:getGeminiModel(),reply:{id:officialLoopDocId(mem),author:mem.author_name||'',date:mem.sendAr||mem.recvAr||'',title:mem.title||'',body:recordBody(mem)},edicts,question:ctx.question||''});
+            const valid=new Set(edicts.map(e=>String(e.id))); const pairByYu=new Map(pairs.map(p=>[String(p.yu_doc_id),p])); const items=Array.isArray(data.items)?data.items:[]; const c=chatArr(curStore());
+            items.forEach(it=>{ const yu=String(it.yu_doc_id||''); if(!valid.has(yu)) return; const base=pairByYu.get(yu)||{}; const evidence=Object.assign({},base.evidence||{},{quote_in_reply:it.quote_in_reply||'',matched_yu_span:it.matched_yu_span||'',relation_note:it.relation_note||'',description:it.description||''});
+              c.push({kind:'docpair',prompt:'依既有配對分析官文如何回應上諭',pair:{yu_doc_id:yu,reply_doc_id:officialLoopDocId(mem),relation:'official_reply_to_yu',match_level:base.match_level||'high',analysis_only:true,subtitle:it.subtitle||'',description:it.description||'',response_type:it.response_type||'',evidence},at:nowStr(),model:getGeminiModel()}); made++; });
+            if(items.length) markAIReview('edict',[mem]);
+          }catch(e){}
+        }
+        saveEdits(); if(made) renderLog({focusLatestOutput:true}); return made;
+      }
+      function officialLoopPreviousEmperorActions(excludeIds){ const ex=new Set(excludeIds||[]); return eventsArr().filter(e=>e.actor==='emperor'&&!(e.sources||[]).some(s=>ex.has(String(s.doc_id||'')))).sort((a,b)=>{ const da=parseD(a.dateAr),db=parseD(b.dateAr); return da&&db?da-db:(da?-1:(db?1:0)); }).map(e=>({event_id:e.id,date:e.dateAr||'',title:evTitle(e),description:e.description||'',sources:(e.sources||[]).map(s=>({doc_id:s.doc_id||'',quote:s.quote||''}))})); }
+      async function runCombinedConfirmedEmperorActions(docs,ctx){ ctx=ctx||{}; const refs=[]; let made=0;
+        for(const mem of docs){ const memId=officialLoopDocId(mem), pairs=officialLoopSourceYuPairs(mem), edicts=pairs.map(officialLoopYuPayload).filter(Boolean); if(!String(mem.rescript||'').trim()&&!edicts.length) continue;
+          const allowed=new Set([memId,...edicts.map(e=>String(e.id))]); const previous=officialLoopPreviousEmperorActions(allowed); const previousIds=new Set(previous.map(x=>String(x.event_id)));
+          st2.textContent='AI 合併硃批與既有配對上諭為皇帝行動…（'+memId+'）';
+          try{ const data=await callProxy({mode:'combined_emperor_actions',model:getGeminiModel(),memorial:{id:memId,author:mem.author_name||'',date:mem.recvAr||mem.sendAr||'',title:mem.title||'',body:recordBody(mem),rescript:mem.rescript||''},edicts,previous_actions:previous,question:ctx.question||''});
+            const points=(Array.isArray(data.actions)?data.actions:[]).map(a=>{ const sources=(Array.isArray(a.sources)?a.sources:[]).map(s=>{ const did=String(s.doc_id||''); if(!allowed.has(did)) return null; const r=recByDocId2(did)||{}; return {doc_id:did,source_type:s.source_type||(r.type==='shangyu'?'上諭':'硃批'),quote:s.quote||'',title:s.title||r.title||'',date:s.date||((r.type==='shangyu')?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||''}; }).filter(s=>s&&s.doc_id&&s.quote);
+              if(!sources.length) return null; let same=String(a.same_as_event_id||''); if(!previousIds.has(same)||!eventById(same)) same=''; if(!same){ const hit=eventsArr().filter(e=>e.actor==='emperor'&&!(e.sources||[]).some(s=>allowed.has(String(s.doc_id||'')))&&(subtitlesLikelySame(evTitle(e),a.title||'')||textDiceSim(e.description||'',a.description||'')>=0.58)).sort((x,y)=>{ const dx=parseD(x.dateAr),dy=parseD(y.dateAr); return dx&&dy?dx-dy:(dx?-1:(dy?1:0)); })[0]; if(hit) same=hit.id; }
+              const prior=same&&eventById(same); const pt={title:prior?evTitle(prior):(a.title||'皇帝行動'),aspect:a.action_type||'',action_type:a.action_type||'',how:a.description||'',description:a.description||'',whenCh:a.whenCh||'',whenAr:a.whenAr||'',where:a.where||'',who:Array.isArray(a.who)?a.who:[],whoLoc:a.who_loc||a.whoLoc||{},relations:a.relations||[],sources,same_as_event_id:same}; normalizeRelLoc(pt); return pt; }).filter(Boolean);
+            if(!points.length) continue; const firstYu=edicts[0]||{}; const item={edict_id:firstYu.id||'',title:firstYu.title||'硃批／配對上諭',date:firstYu.date||mem.recvAr||'',memDoc:memId,memTitle:mem.title||'',summary:'只保留皇帝自己的評論、答覆或命令；同義硃批與上諭合為一項。',points};
+            const c=chatArr(curStore()); c.push({kind:'edictmatch',combinedEmperor:true,marker:'既有配對',memDoc:memId,items:[item],at:nowStr(),model:getGeminiModel()}); points.forEach(pt=>refs.push({mem,point:pt})); made+=points.length; markAIReview('emperor-action',[mem]);
+          }catch(e){}
+        }
+        saveEdits(); if(made) renderLog({focusLatestOutput:true}); return refs;
+      }
+      async function runConfirmedOfficialResponses(docs,actionRefs,ctx){ ctx=ctx||{}; let made=0; const seen=new Set();
+        for(const mem of docs){ const memId=officialLoopDocId(mem), sourcePairs=officialLoopSourceYuPairs(mem);
+          for(const sourcePair of sourcePairs){ const yuId=String(sourcePair.yu_doc_id||''), yr=recByDocId2(yuId)||{}; if(!yuId) continue;
+            const matching=(actionRefs||[]).filter(ref=>officialLoopDocId(ref.mem)===memId&&((ref.point&&ref.point.sources)||[]).some(s=>s.source_type==='上諭'&&String(s.doc_id||'')===yuId));
+            const analyses=matching.length?matching:[{mem,point:{title:yr.title||'既有配對上諭',whenAr:yr.annAr||yr.sendAr||'',sources:[{doc_id:yuId,source_type:'上諭',date:yr.annAr||yr.sendAr||'',quote:recordBody(yr)}]}}];
+            const pairs=officialLoopPairs('official_reply_to_yu',p=>String(p.yu_doc_id||'')===yuId&&String(p.reply_doc_id||'')!==memId), cands=pairs.map(p=>recByDocId2(p.reply_doc_id)).filter(Boolean); if(!cands.length) continue;
+            for(const ref of analyses){ const pt=ref.point||{}, ys=(pt.sources||[]).find(s=>s.source_type==='上諭'&&String(s.doc_id||'')===yuId)||{}; const key=memId+'|'+yuId+'|'+(pt.title||''); if(seen.has(key)) continue; seen.add(key);
+              st2.textContent='AI 分析既有配對中的官員回應…（'+yuId+'）';
+              try{ const data=await callProxy({mode:'official_response',model:getGeminiModel(),confirmed_pairs_only:true,action:{what:pt.title||yr.title||'既有配對上諭',whenCh:pt.whenCh||'',dateAr:ys.date||pt.whenAr||yr.annAr||yr.sendAr||'',quote:ys.quote||recordBody(yr)},addressee:Array.isArray(yr.recipients)?yr.recipients.join('、'):'',candidates:cands.map(r=>({doc_id:officialLoopDocId(r),title:r.title||'',date:docBestAr(r),body:recordBody(r)})),question:ctx.question||''});
+                const valid=new Set(cands.map(officialLoopDocId)), items=(Array.isArray(data.items)?data.items:[]).filter(it=>valid.has(String(it.doc_id||''))), c=chatArr(curStore()); c.push({kind:'officialresponse',evId:pt.__evId||pt.same_as_event_id||'',evTitle:pt.title||yr.title||'',addressee:data.addressee||'',prompt:'依既有配對分析官員如何回應上諭（未重新搜尋）',items,at:nowStr(),model:getGeminiModel(),confirmedPairsOnly:true}); made+=items.length;
+              }catch(e){}
+            }
+          }
+        }
+        saveEdits(); if(made) renderLog({focusLatestOutput:true}); return made;
+      }
+      async function runOfficialDocumentLoop(ctx){ ctx=ctx||{}; const docs=selectedApis().map(a=>a.rec).filter(r=>r.type!=='shangyu'); if(!docs.length){ st2.textContent='官文優先迴圈需先選擇奏摺／硃批文書（非上諭）。'; return; }
+        st2.textContent='官文優先迴圈：摘要…'; await send('', 'summary');
+        st2.textContent='官文優先迴圈：分段…'; await send('', 'divide');
+        st2.textContent='官文優先迴圈：林方事件與來源鏈…'; await runExtract('lin',{loopRun:true});
+        st2.textContent='官文優先迴圈：清方三類行動與來源鏈…'; await runExtract('qing',{categories:['done','plan','nonmil'],loopRun:true});
+        const nReply=await runConfirmedYuResponseAnalysis(docs,ctx); const actions=await runCombinedConfirmedEmperorActions(docs,ctx); const nOfficial=await runConfirmedOfficialResponses(docs,actions,ctx);
+        st2.textContent='官文優先迴圈完成：回應先前上諭 '+nReply+' 項、皇帝行動 '+actions.length+' 項、後續官員回應 '+nOfficial+' 項。所有關係階段只使用既有配對。';
       }
       async function runZhuPairingForSel(ctx){ ctx=ctx||{};
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }

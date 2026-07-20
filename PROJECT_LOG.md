@@ -41,6 +41,31 @@ adjustment, append one entry to the bottom of the change log.
 
 ## Change log
 
+### 2026-07-20 19:28 — Codex — Added pair-grounded official-loop proxy contracts
+
+Summary: Defined the official-document-centred review loop and added Gemini-proxy modes that analyze existing pair edges without re-searching the corpus.
+
+Changed:
+- Added `confirmed_yu_response` to explain how an official document answers already-confirmed earlier 上諭.
+- Added `combined_emperor_actions` to merge equivalent 硃批 and paired-上諭 expressions into multi-source emperor actions and compare them with earlier emperor actions.
+- Added a `confirmed_pairs_only` path to the existing official-response mode.
+- Added canonical skill specifications for the new loop and its two new analysis stages.
+
+Files:
+- `tool/proxy/gemini-proxy/main.py`
+- `tool/skills md/confirmed-yu-response-analysis.md`
+- `tool/skills md/combine-confirmed-emperor-actions.md`
+- `tool/skills md/official-document-review-loop.md`
+- `tool/skills md/official-response.md`
+
+Verified:
+- `main.py` passes Python bytecode compilation.
+- Confirmed-pair data provides the required `official_reply_to_yu` and `yu_source` graph directions.
+- Runtime endpoint smoke testing remains pending because the local workspace runtime does not currently include the proxy's Flask/Google dependencies.
+
+Remaining:
+- Wire the new graph-grounded stages into both review UIs, add the one-click official-document loop, update the workflow map, and run browser/JavaScript parity checks.
+
 ### 2026-07-17 — Codex — Created the reorganized project
 
 Summary: Created a clean working copy while preserving the original workspace.
@@ -1989,3 +2014,77 @@ Verified:
 
 Remaining:
 - None.
+
+### 2026-07-20 19:54 HKT — Codex — Implemented the official-document-first AI loop
+
+Summary: Added a one-click official-document-centred sequence to formal and
+sample review tools, updated the workflow map, and made confirmed pair JSON the
+authoritative graph for all relationship-following stages.
+
+Changed:
+- The loop now runs summary, division, 林方 extraction, and combined three-class
+  清方 extraction before relationship analysis.
+- Event extraction reuses simultaneous source-chain tracing and cross-document
+  duplicate detection; earliest matches are ordered by report date and retain
+  merge-versus-separate controls.
+- Existing `official_reply_to_yu` pairs feed response-focused earlier-上諭 cards
+  without another corpus search or pair judgement.
+- The selected document's 硃批 and confirmed `yu_source` 上諭 feed combined,
+  multi-source emperor-action cards with repeated-action review controls.
+- Every confirmed `yu_source` 上諭 is followed through confirmed
+  `official_reply_to_yu` edges to later official responses, even if the model
+  does not retain that 上諭 in an emperor-action card.
+- The workflow source viewer now exposes the new specifications and Gemini
+  proxy implementation.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `review-tools/(4) workflow/index.html`
+- `review-tools/(4) workflow/app.js`
+- `review-tools/(4) workflow/README.md`
+- `review-tools/server.py`
+- `tool/skills md/official-document-review-loop.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal and sample official-loop implementation blocks match.
+- Embedded JavaScript parses in both review HTML files; workflow JavaScript and
+  modified Python files compile.
+- All 24 visible workflow nodes have English and Traditional Chinese detail
+  records; relevant pair files remain valid JSON.
+- Formal, sample, and workflow routes returned HTTP 200 on a temporary local
+  server; `/api/workflow-sources` returned HTTP 200 and exposed all four new
+  loop/proxy sources.
+- `git diff --check` passed.
+
+Remaining:
+- Run a live Gemini request and human-review the generated cards when the proxy
+  runtime dependencies and credentials are available.
+
+### 2026-07-20 20:20 HKT — Codex — Added end-of-run spending table to mass prompt runner
+
+Summary: Added per-loop-stage token and USD spending accounting for the
+Gemini 3.5 Flash mass runner, including an all-stage total.
+
+Changed:
+- Grouped calls under the loop stages used by `run_mass_prompt_chain_test.py`.
+- Added standard Gemini model rates, command-line price overrides, and a
+  serializable `cost-summary.json` beside each generated bundle.
+- Marked costs as approximate when the proxy does not return usage metadata;
+  exact usage is used automatically if the proxy supplies it.
+
+Files:
+- `tool/scripts py/run_review_bundle_test.py`
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both runner files pass Python bytecode compilation.
+- `git diff --check` passed.
+- Offline replay of the supplied 硃25 token lines produced a total of
+  approximately `$1.101750` at the standard Gemini 3.5 Flash rates.
+
+Remaining:
+- The current deployed proxy still returns no usage metadata, so the live
+  table will remain estimated until that proxy is redeployed with usage data.

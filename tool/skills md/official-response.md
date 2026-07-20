@@ -26,6 +26,13 @@ the real response in noise (see `officialResponseCandidates()` in
 stage1-timeline.html / `official_response_candidates()` in
 `run_review_bundle_test.py`, kept in sync).
 
+The official-document review loop uses a stricter pair-grounded variant of this
+same analysis and card UI. In that variant, candidates are supplied only by
+existing `official_reply_to_yu` records for the loop's paired `上諭`, and the
+proxy receives `confirmed_pairs_only: true`. It analyzes how those already
+confirmed documents respond; it does not run the 30-day candidate search or
+re-decide whether the relationship exists.
+
 ## Used By
 
 - Website: AI 面板「動作」選單「搜尋官員回應（未來30日）」, the

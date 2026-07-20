@@ -1,5 +1,369 @@
 {
-  "__events": [],
+  "__events": [
+    {
+      "id": "evmrt6sopzwme",
+      "actor": "lin",
+      "subtitle": "匪徒於大墩殺害知縣",
+      "description": "彰化縣知縣俞峻在大墩地方查拿匪徒時，於十一月二十七日夜間遭林爽文等匪徒殺害。",
+      "what": "匪徒於大墩殺害知縣",
+      "where": "大墩",
+      "who": [
+        "林爽文",
+        "俞峻"
+      ],
+      "whoLoc": {},
+      "relations": [],
+      "provenance": [
+        {
+          "id": "pvcmrt6t9hl4sc",
+          "hops": [
+            {
+              "doc_id": "硃25",
+              "from_person": "署北路淡水同知程峻、守備董得魁",
+              "how": "會稟",
+              "inferred": false,
+              "layer": 1,
+              "place": "",
+              "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。",
+              "to_person": "福建水師提督一等海澄公黃仕簡",
+              "whenAr": "1786/12/10",
+              "whenCh": "十二月初十日",
+              "id": "pvmrt6t9hmt4y"
+            },
+            {
+              "doc_id": "硃25",
+              "from_person": "淡屬大甲社通事",
+              "how": "轉報",
+              "inferred": true,
+              "layer": 2,
+              "place": "淡水",
+              "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+              "to_person": "署北路淡水同知程峻、守備董得魁",
+              "whenAr": "",
+              "whenCh": "",
+              "id": "pvmrt6t9hmegu"
+            },
+            {
+              "doc_id": "硃25",
+              "from_person": "彰邑大肚社番",
+              "how": "字寄",
+              "inferred": false,
+              "layer": 3,
+              "place": "大肚社",
+              "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+              "to_person": "淡屬大甲社通事",
+              "whenAr": "1786/11/29",
+              "whenCh": "十一月二十九日",
+              "id": "pvmrt6t9hm5hs"
+            }
+          ],
+          "events": [
+            {
+              "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害",
+              "reporter": "彰邑大肚社番",
+              "subtitle": "匪徒於大墩殺害知縣",
+              "whenCh": "十一月二十七日夜",
+              "where": "大墩",
+              "doc_id": "硃25"
+            }
+          ]
+        }
+      ],
+      "whenCh": "十一月二十七日夜",
+      "dateAr": "1786/11/27",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+          "label": "匪徒於大墩殺害知縣",
+          "aiFilterLabel": "林方行動",
+          "howKnown": "轉述",
+          "whenKnown": "十二月初十日",
+          "ownSubtitle": "匪徒於大墩殺害知縣",
+          "ownDescription": "彰化縣知縣俞峻在大墩地方查拿匪徒時，於十一月二十七日夜間遭林爽文等匪徒殺害。",
+          "ownWhere": "大墩",
+          "ownWhenAr": "1786/11/27",
+          "ownWhenCh": "十一月二十七日夜",
+          "ownWho": [
+            "林爽文",
+            "俞峻"
+          ],
+          "ownWhoLoc": {},
+          "ownRelations": []
+        }
+      ],
+      "hidden": false,
+      "category": "",
+      "aiFilterLabel": "林方行動"
+    },
+    {
+      "id": "evmrt6tg88cpi",
+      "actor": "lin",
+      "subtitle": "林爽文部眾攻陷彰化縣城",
+      "description": "林爽文等聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻將城池攻陷，文武官員生死不明。",
+      "what": "林爽文部眾攻陷彰化縣城",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文"
+      ],
+      "whoLoc": {},
+      "relations": [],
+      "provenance": [
+        {
+          "id": "pvcmrt6timyc52",
+          "hops": [
+            {
+              "doc_id": "硃25",
+              "from_person": "署北路淡水同知程峻、守備董得魁",
+              "how": "會稟",
+              "inferred": false,
+              "layer": 1,
+              "place": "",
+              "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。",
+              "to_person": "福建水師提督一等海澄公黃仕簡",
+              "whenAr": "1786/12/10",
+              "whenCh": "十二月初十日",
+              "id": "pvmrt6timyhhh"
+            },
+            {
+              "doc_id": "硃25",
+              "from_person": "淡屬大甲社通事",
+              "how": "轉報",
+              "inferred": true,
+              "layer": 2,
+              "place": "淡水",
+              "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+              "to_person": "署北路淡水同知程峻、守備董得魁",
+              "whenAr": "",
+              "whenCh": "",
+              "id": "pvmrt6timybvl"
+            },
+            {
+              "doc_id": "硃25",
+              "from_person": "彰邑大肚社番",
+              "how": "字寄",
+              "inferred": false,
+              "layer": 3,
+              "place": "大肚社",
+              "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+              "to_person": "淡屬大甲社通事",
+              "whenAr": "1786/11/29",
+              "whenCh": "十一月二十九日",
+              "id": "pvmrt6timytqd"
+            }
+          ],
+          "events": [
+            {
+              "quote": "二十九早，彰城失陷",
+              "reporter": "彰邑大肚社番",
+              "subtitle": "林爽文部眾攻陷彰化縣城",
+              "whenCh": "十一月二十九日早",
+              "where": "彰城",
+              "doc_id": "硃25"
+            }
+          ]
+        }
+      ],
+      "whenCh": "十一月二十九日",
+      "dateAr": "1786/11/29",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。",
+          "label": "林爽文部眾攻陷彰化縣城",
+          "aiFilterLabel": "林方行動",
+          "howKnown": "訪聞",
+          "whenKnown": "十二月初五日",
+          "ownSubtitle": "林爽文部眾攻陷彰化縣城",
+          "ownDescription": "林爽文等聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻將城池攻陷，文武官員生死不明。",
+          "ownWhere": "彰化縣城",
+          "ownWhenAr": "1786/11/29",
+          "ownWhenCh": "十一月二十九日",
+          "ownWho": [
+            "林爽文"
+          ],
+          "ownWhoLoc": {},
+          "ownRelations": []
+        }
+      ],
+      "hidden": false,
+      "category": "",
+      "aiFilterLabel": "林方行動"
+    },
+    {
+      "id": "evmrt6vku51oh",
+      "actor": "emperor",
+      "subtitle": "關切黃仕簡病體並囑咐其渡台剿匪勿過度勞累",
+      "description": "回應：奴才於初十日帶領官兵登舟候風放洋飛渡之際\n御意：關切福建水師提督黃仕簡的身體狀況，因其自述「舊染風症，雖復時愈時發，現在心神氣力不能如常」，皇帝叮囑其在帶兵渡台剿匪之際，仍須以調養身體為要，避免過度勞累。",
+      "what": "關切黃仕簡病體並囑咐其渡台剿匪勿過度勞累",
+      "where": "廈門",
+      "who": [
+        "黃仕簡"
+      ],
+      "whoLoc": {
+        "黃仕簡": "廈門"
+      },
+      "relations": [],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月二十七日",
+      "dateAr": "1786/12/27",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "仍以調養為要，勿過勞",
+          "label": "關切黃仕簡病體並囑咐其渡台剿匪勿過度勞累",
+          "aiFilterLabel": "硃批",
+          "howKnown": "硃批"
+        }
+      ],
+      "hidden": false,
+      "aiFilterLabel": "硃批",
+      "emperorDetail": {
+        "kind": "zhupi",
+        "position": "夾批",
+        "text": "仍以調養為要，勿過勞",
+        "responds_to": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "opinion": "關切福建水師提督黃仕簡的身體狀況，因其自述「舊染風症，雖復時愈時發，現在心神氣力不能如常」，皇帝叮囑其在帶兵渡台剿匪之際，仍須以調養身體為要，避免過度勞累。",
+        "marker": "",
+        "doc_id": "硃25"
+      }
+    },
+    {
+      "id": "evmrt6wj3755l",
+      "actor": "emperor",
+      "subtitle": "嘉獎水師提督黃仕簡力疾親赴臺灣剿匪並賞賜慰勞",
+      "description": "皇帝對黃仕簡不顧風症、迅速帶兵渡臺的表現表示高度讚許，給予賞賜，並體恤其身體，叮囑其在剿匪之餘要注意調養、勿過勞，這與奏摺上的硃批「仍以調養為要，勿過勞」相呼應。\n此上諭針對黃仕簡報告彰化失陷、力疾親自渡臺剿匪之奏摺做出回應。皇帝高度嘉獎黃仕簡不顧病軀、星速赴臺的奮勉表現並賜予賞物，同時批准其南北夾攻的軍事部署，並指示督撫查明殉職知縣俞峻的事蹟以備撫恤，且告誡內地督撫須鎮定防範餘匪內渡，避免張皇失措。",
+      "what": "嘉獎水師提督黃仕簡力疾親赴臺灣剿匪並賞賜慰勞",
+      "where": "廈門",
+      "who": [
+        "黃仕簡"
+      ],
+      "whoLoc": {
+        "黃仕簡": "廈門"
+      },
+      "relations": [],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月二十七日",
+      "dateAr": "1786/12/27",
+      "sources": [
+        {
+          "doc_id": "諭13",
+          "quote": "至黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。著賞給大荷包一對，小藥包三對，金銀三個、銀錁三個、太平錢一對，以示優眷。並著於辦理搜捕諸務外，仍加意調攝，勿過勞。",
+          "label": "嘉獎水師提督黃仕簡力疾親赴臺灣剿匪並賞賜慰勞",
+          "aiFilterLabel": "相關上諭",
+          "howKnown": "上諭"
+        }
+      ],
+      "hidden": false,
+      "aiFilterLabel": "相關上諭",
+      "emperorDetail": {
+        "kind": "edict",
+        "aspect": "褒獎與慰勞",
+        "edict_title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+        "edict_id": "諭13",
+        "date": "1786/12/27",
+        "memorial_quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。……奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "edict_quote": "至黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。著賞給大荷包一對，小藥包三對，金銀三個、銀錁三個、太平錢一對，以示優眷。並著於辦理搜捕諸務外，仍加意調攝，勿過勞。",
+        "how": "皇帝對黃仕簡不顧風症、迅速帶兵渡臺的表現表示高度讚許，給予賞賜，並體恤其身體，叮囑其在剿匪之餘要注意調養、勿過勞，這與奏摺上的硃批「仍以調養為要，勿過勞」相呼應。",
+        "memDoc": "硃25",
+        "memTitle": "為奏彰化失陷已調兵赴臺事"
+      }
+    },
+    {
+      "id": "evmrt6x1crw40",
+      "actor": "emperor",
+      "subtitle": "命令黃仕簡會同臺灣鎮道南北夾攻以期迅速撲滅賊匪",
+      "description": "皇帝同意並指示黃仕簡按照其奏摺中規劃的南北夾攻策略，抵達臺灣後督率當地的鎮、道官兵，合力圍剿林爽文餘黨。\n此上諭針對黃仕簡報告彰化失陷、力疾親自渡臺剿匪之奏摺做出回應。皇帝高度嘉獎黃仕簡不顧病軀、星速赴臺的奮勉表現並賜予賞物，同時批准其南北夾攻的軍事部署，並指示督撫查明殉職知縣俞峻的事蹟以備撫恤，且告誡內地督撫須鎮定防範餘匪內渡，避免張皇失措。",
+      "what": "命令黃仕簡會同臺灣鎮道南北夾攻以期迅速撲滅賊匪",
+      "where": "臺灣",
+      "who": [
+        "黃仕簡"
+      ],
+      "whoLoc": {
+        "黃仕簡": "臺灣"
+      },
+      "relations": [],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月二十七日",
+      "dateAr": "1786/12/27",
+      "sources": [
+        {
+          "doc_id": "諭13",
+          "quote": "黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+          "label": "命令黃仕簡會同臺灣鎮道南北夾攻以期迅速撲滅賊匪",
+          "aiFilterLabel": "相關上諭",
+          "howKnown": "上諭"
+        }
+      ],
+      "hidden": false,
+      "aiFilterLabel": "相關上諭",
+      "emperorDetail": {
+        "kind": "edict",
+        "aspect": "軍事部署與夾攻",
+        "edict_title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+        "edict_id": "諭13",
+        "date": "1786/12/27",
+        "memorial_quote": "仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。……奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+        "edict_quote": "黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+        "how": "皇帝同意並指示黃仕簡按照其奏摺中規劃的南北夾攻策略，抵達臺灣後督率當地的鎮、道官兵，合力圍剿林爽文餘黨。",
+        "memDoc": "硃25",
+        "memTitle": "為奏彰化失陷已調兵赴臺事"
+      }
+    },
+    {
+      "id": "evmrt6xd74je0",
+      "actor": "emperor",
+      "subtitle": "嚴飭常青等沿海口岸實力巡防並處以鎮定避免內地驚惶",
+      "description": "針對黃仕簡奏摺中提到已飛札內地各官防範賊匪竄逃內地，皇帝進一步命令在蚶江彈壓的常青、任承恩嚴飭沿海口岸實力巡防，並告誡常青、徐嗣曾等必須「不動聲色」、「處以鎮定」，避免因紛紛調遣、跡涉張皇而引起內地民人恐慌。\n此上諭針對黃仕簡報告彰化失陷、力疾親自渡臺剿匪之奏摺做出回應。皇帝高度嘉獎黃仕簡不顧病軀、星速赴臺的奮勉表現並賜予賞物，同時批准其南北夾攻的軍事部署，並指示督撫查明殉職知縣俞峻的事蹟以備撫恤，且告誡內地督撫須鎮定防範餘匪內渡，避免張皇失措。",
+      "what": "嚴飭常青等沿海口岸實力巡防並處以鎮定避免內地驚惶",
+      "where": "蚶江",
+      "who": [
+        "常青",
+        "任承恩",
+        "徐嗣曾"
+      ],
+      "whoLoc": {
+        "任承恩": "蚶江",
+        "常青": "蚶江",
+        "徐嗣曾": "福州"
+      },
+      "relations": [
+        {
+          "evidence": "常青、任承恩現住蚶江一帶",
+          "relation": "協同彈壓",
+          "relation_type": "ally",
+          "source": "常青",
+          "target": "任承恩"
+        }
+      ],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月二十七日",
+      "dateAr": "1786/12/27",
+      "sources": [
+        {
+          "doc_id": "諭13",
+          "quote": "但恐餘黨四散逸，或偷越內渡。常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。常青、徐嗣曾等，總須不動聲色，妥協辦理。若因外洋遇有此等案件，該督撫等紛紛調遣，跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫不可不處以鎮定也。",
+          "label": "嚴飭常青等沿海口岸實力巡防並處以鎮定避免內地驚惶",
+          "aiFilterLabel": "相關上諭",
+          "howKnown": "上諭"
+        }
+      ],
+      "hidden": false,
+      "aiFilterLabel": "相關上諭",
+      "emperorDetail": {
+        "kind": "edict",
+        "aspect": "防範內渡與地方治安",
+        "edict_title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+        "edict_id": "諭13",
+        "date": "1786/12/27",
+        "memorial_quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+        "edict_quote": "但恐餘黨四散逸，或偷越內渡。常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。常青、徐嗣曾等，總須不動聲色，妥協辦理。若因外洋遇有此等案件，該督撫等紛紛調遣，跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫不可不處以鎮定也。",
+        "how": "針對黃仕簡奏摺中提到已飛札內地各官防範賊匪竄逃內地，皇帝進一步命令在蚶江彈壓的常青、任承恩嚴飭沿海口岸實力巡防，並告誡常青、徐嗣曾等必須「不動聲色」、「處以鎮定」，避免因紛紛調遣、跡涉張皇而引起內地民人恐慌。",
+        "memDoc": "硃25",
+        "memTitle": "為奏彰化失陷已調兵赴臺事"
+      }
+    }
+  ],
   "__workspaceGroups": {
     "none": {
       "doc_ids": [],
@@ -7227,7 +7591,12 @@
           },
           "__added": true
         },
-        "prompt": "上諭—來源配對"
+        "prompt": "上諭—來源配對",
+        "subtitle": "匪徒於大墩殺害知縣",
+        "description": "彰化縣知縣俞峻在大墩地方查拿匪徒時，於十一月二十七日夜間遭林爽文等匪徒殺害。",
+        "where": "大墩",
+        "whenCh": "十一月二十七日夜",
+        "whenAr": "1786/11/27"
       },
       {
         "at": "2026-07-17 11:05",
@@ -7247,7 +7616,12 @@
           },
           "__added": true
         },
-        "prompt": "上諭—來源配對"
+        "prompt": "上諭—來源配對",
+        "subtitle": "林爽文部眾攻陷彰化縣城",
+        "description": "林爽文等聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻將城池攻陷，文武官員生死不明。",
+        "where": "彰化縣城",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
       },
       {
         "at": "2026-07-17 11:05",
@@ -7303,7 +7677,12 @@
         "prompt": "上諭—來源配對",
         "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
         "__skillBundleName": "yu-source-dec-jan-1787-missed",
-        "__skillBundleDocs": 13
+        "__skillBundleDocs": 13,
+        "subtitle": "淡水文武分頭堵禦",
+        "description": "署北路淡水同知程峻、守備董得魁在彰化城陷後，整齊槍炮並募集鄉勇與社番，於扼要之處分頭堵禦防守。",
+        "where": "淡水",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
       },
       {
         "at": "2026-07-20 07:03",
@@ -7335,7 +7714,12 @@
         "prompt": "上諭—來源配對",
         "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
         "__skillBundleName": "yu-source-dec-jan-1787-missed",
-        "__skillBundleDocs": 13
+        "__skillBundleDocs": 13,
+        "subtitle": "派遊擊邱維揚先渡臺",
+        "description": "福建水師提督黃仕簡聞訊彰化失陷，隨即委派提標右營遊擊邱維揚率領兵丁二百名先行渡臺，確查賊匪情形。",
+        "where": "廈門",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
       },
       {
         "at": "2026-07-20 07:03",
@@ -7367,7 +7751,80 @@
         "prompt": "上諭—來源配對",
         "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
         "__skillBundleName": "yu-source-dec-jan-1787-missed",
-        "__skillBundleDocs": 13
+        "__skillBundleDocs": 13,
+        "subtitle": "黃仕簡率兵登舟候風",
+        "description": "黃仕簡挑選提標五營兵丁一千名，備齊軍火器械與船隻，於十二月初十日親自帶領官兵登舟，候風放洋飛渡臺灣。",
+        "where": "廈門",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "乾隆帝批評黃仕簡等大員辦理彰化民變張皇失措",
+        "addressee": "常青",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "檄委羅英笈彈壓廈門",
+        "description": "黃仕簡因即將親赴臺灣剿捕，札達督臣檄委金門鎮總兵羅英笈，就近前往廈門彈壓照應。",
+        "where": "廈門",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "乾隆帝體恤黃仕簡病後精力不足並指示調派總兵協同",
+        "addressee": "閩浙總督常青",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "飛札各路嚴防堵緝",
+        "description": "黃仕簡慮及賊匪竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水陸各鎮協營，嚴飭各口岸要隘進行堵緝盤拿。",
+        "where": "福建沿海",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "乾隆帝嚴厲申飭黃仕簡因心神恍惚致使傳牌洩露彰化失陷軍情",
+        "addressee": "常青",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "擬南北兩路夾攻",
+        "description": "福建水師提督黃仕簡計畫續調水陸官兵，分別由鹿耳門（南路）與淡水（北路）南北兩路夾攻彰化起事賊匪。",
+        "where": "鹿耳門、淡水",
+        "whenCh": "十一月二十九日後",
+        "whenAr": "1786/11/29"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "乾隆帝駁斥任承恩渡臺及簡派欽差之請並申飭諸臣",
+        "addressee": "常青",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "續調官兵北路援剿",
+        "description": "黃仕簡飛咨陸路提督及海壇、閩安、烽火等各鎮協營，就近於省城營分續調官兵，前往淡水北路支援剿匪。",
+        "where": "淡水",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
       }
     ],
     "itemEdits": {
@@ -7758,6 +8215,149 @@
         "__skillRunId": "bundle:yu-source-dec-1786-jan-1787:mrq4bgrw",
         "__skillBundleName": "yu-source-dec-1786-jan-1787",
         "__skillBundleDocs": 62
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "嘉獎水師提督黃仕簡力疾親赴臺灣剿匪並賞賜慰勞",
+        "addressee": "水師提督黃仕簡",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "命令黃仕簡會同臺灣鎮道南北夾攻以期迅速撲滅賊匪",
+        "addressee": "福建巡撫徐嗣曾",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [
+          {
+            "action_quote": "黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+            "doc_id": "硃94",
+            "how": "福建巡撫徐嗣曾於正月初十日收到該上諭後，隨即具奏彙報。他說明已親赴五虎門督催副將徐鼎士等兵船放洋赴臺，並巡視沿海口岸、增兵防守以防賊匪內渡；同時，他已密札漳州道府加強防範，並設法招商運米以平抑因戰事上漲的糧價，事事出以鎮定辦理。",
+            "receive_date": "乾隆五十二年正月初十日",
+            "relations": [
+              {
+                "evidence": "臣於初八日親赴督催，該副將等已先於初七日放洋。",
+                "relation": "督催",
+                "relation_type": "command",
+                "source": "徐嗣曾",
+                "target": "徐鼎士"
+              },
+              {
+                "evidence": "俱令由六赴廈，徑進鹿耳門，為提臣黃仕簡一路接應。",
+                "relation": "接應",
+                "relation_type": "ally",
+                "source": "徐嗣曾",
+                "target": "黃仕簡"
+              }
+            ],
+            "response_date": "乾隆五十二年正月初十日",
+            "response_quote": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭：『賊匪么麼烏合，黃仕簡到彼，督率該鎮道分路夾攻，盡力堵剿，無難立就撲滅。』等因。欽此。臣查賊匪自彰化滋事之後，雖又攻搶諸羅、淡水、鳳山，但如艋舺、鹿港等處，各有泉州、廣東義民數千人，奮勇急公。經署都司易連、署守備陳邦光等，率同官兵連次殺賊。並據陳邦光收復彰化等處，擒獲賊目高文麟等四犯，而總兵柴大紀於十二月十一、二、三等日，亦連殺賊匪甚多。總因臺地游手眾多，乘機搶奪，賊匪沿途誘脅同行，遂致滋蔓。而各路官兵，又因十二月中旬以後，陰雨連綿，東北風大作，兵船屢次阻風退泊。該鎮道等止能保護郡城，不能遠出剿捕，以致賊匪尚稽殄滅。",
+            "subtitle": "徐嗣曾奏報督催官兵放洋及防範內地情形",
+            "where": "福建省城",
+            "who": [
+              "徐嗣曾",
+              "徐鼎士",
+              "黃仕簡",
+              "任承恩",
+              "柴大紀",
+              "易連",
+              "陳邦光"
+            ],
+            "who_loc": {
+              "任承恩": "臺灣",
+              "徐嗣曾": "福建省城",
+              "徐鼎士": "五虎門",
+              "易連": "艋舺",
+              "柴大紀": "臺灣郡城",
+              "陳邦光": "鹿港",
+              "黃仕簡": "臺灣"
+            }
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "指示督撫查明彰化知縣俞峻被害實情以備降旨撫恤",
+        "addressee": "閩浙總督常青、福建巡撫徐嗣曾",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "嚴飭常青等沿海口岸實力巡防並處以鎮定避免內地驚惶",
+        "addressee": "閩浙總督常青、福建巡撫徐嗣曾",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [
+          {
+            "action_quote": "常青、徐嗣曾等，總須不動聲色，妥協辦理。若因外洋遇有此等案件，該督撫等紛紛調遣，跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫不可不處以鎮定也。",
+            "doc_id": "硃94",
+            "how": "福建巡撫徐嗣曾奏報，他已親自前往五虎門等沿海口岸逐一履勘，並在要隘處增派兵力實力巡防截拿。同時，他表示辦理一切防範與調遣事務皆遵旨出以鎮定，絕不敢稍涉張皇，以避免內地民人心生疑駭。",
+            "receive_date": "乾隆五十二年正月初十日辰刻",
+            "relations": [
+              {
+                "evidence": "飭令統兵官沿途催越前進",
+                "relation": "飭令",
+                "relation_type": "command",
+                "source": "徐嗣曾",
+                "target": "徐鼎士"
+              },
+              {
+                "evidence": "臣現已飛咨水陸提臣及領兵鎮將，一面剿殺賊匪，一面即於沿海汊港搜拿賊船",
+                "relation": "飛咨",
+                "relation_type": "command",
+                "source": "徐嗣曾",
+                "target": "黃仕簡"
+              },
+              {
+                "evidence": "臣現已飛咨水陸提臣及領兵鎮將，一面剿殺賊匪，一面即於沿海汊港搜拿賊船",
+                "relation": "飛咨",
+                "relation_type": "command",
+                "source": "徐嗣曾",
+                "target": "任承恩"
+              }
+            ],
+            "response_date": "乾隆五十二年正月初十日",
+            "response_quote": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭：『賊匪么麼烏合，黃仕簡到彼，督率該鎮道分路夾攻，盡力堵剿，無難立就撲滅。』等因。欽此。...臣仰承訓示，辦理一切，惟有事事出以鎮定，不敢稍存疏忽，亦斷不敢稍涉張皇，轉滋疑駭",
+            "subtitle": "徐嗣曾巡視沿海口岸並遵旨鎮靜防範",
+            "where": "福建沿海口岸",
+            "who": [
+              "徐嗣曾",
+              "徐鼎士",
+              "柴大紀",
+              "蔡攀龍",
+              "黃仕簡",
+              "任承恩"
+            ],
+            "who_loc": {
+              "任承恩": "臺灣",
+              "徐嗣曾": "省城",
+              "徐鼎士": "五虎門",
+              "柴大紀": "臺灣郡城",
+              "蔡攀龍": "臺灣郡城",
+              "黃仕簡": "臺灣"
+            }
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
       }
     ]
   },
@@ -9208,6 +9808,1135 @@
         "__skillRunId": "bundle:yu-source-dec-jan-1787-missed:mrsvoqt1",
         "__skillBundleName": "yu-source-dec-jan-1787-missed",
         "__skillBundleDocs": 13
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "lin",
+        "prompt": "（本機技能輸出：outputs/lin-events.json）",
+        "items": [
+          {
+            "actor": "lin",
+            "subtitle": "匪徒於大墩殺害知縣",
+            "description": "彰化縣知縣俞峻在大墩地方查拿匪徒時，於十一月二十七日夜間遭林爽文等匪徒殺害。",
+            "where": "大墩",
+            "whenCh": "十一月二十七日夜",
+            "whenAr": "1786/11/27",
+            "who": [
+              "林爽文",
+              "俞峻"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+                "howKnown": "轉述",
+                "whenKnown": "十二月初十日"
+              }
+            ],
+            "__added": true,
+            "__evId": "evmrt6sopzwme"
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "匪徒於大墩殺害知縣",
+        "description": "彰化縣知縣俞峻在大墩地方查拿匪徒時，於十一月二十七日夜間遭林爽文等匪徒殺害。",
+        "where": "大墩",
+        "whenCh": "十一月二十七日夜",
+        "whenAr": "1786/11/27"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "lin",
+        "prompt": "（本機技能輸出：outputs/lin-events.json）",
+        "items": [
+          {
+            "actor": "lin",
+            "subtitle": "林爽文部眾攻陷彰化縣城",
+            "description": "林爽文等聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻將城池攻陷，文武官員生死不明。",
+            "where": "彰化縣城",
+            "whenCh": "十一月二十九日",
+            "whenAr": "1786/11/29",
+            "who": [
+              "林爽文"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。",
+                "howKnown": "訪聞",
+                "whenKnown": "十二月初五日"
+              }
+            ],
+            "__added": true,
+            "__evId": "evmrt6tg88cpi"
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "林爽文部眾攻陷彰化縣城",
+        "description": "林爽文等聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻將城池攻陷，文武官員生死不明。",
+        "where": "彰化縣城",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-done.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-done.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "淡水文武分頭堵禦",
+            "description": "署北路淡水同知程峻、守備董得魁在彰化城陷後，整齊槍炮並募集鄉勇與社番，於扼要之處分頭堵禦防守。",
+            "where": "淡水",
+            "whenCh": "十一月二十九日",
+            "whenAr": "1786/11/29",
+            "who": [
+              "程峻",
+              "董得魁",
+              "黃仕簡"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+                "howKnown": "轉述",
+                "whenKnown": "十二月初十日"
+              }
+            ],
+            "__traceChains": [
+              {
+                "events": [
+                  {
+                    "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+                    "reporter": "署北路淡水同知程峻、守備董得魁",
+                    "subtitle": "淡水文武分頭堵禦",
+                    "whenCh": "",
+                    "where": "淡水",
+                    "doc_id": "硃25"
+                  }
+                ],
+                "hops": [
+                  {
+                    "doc_id": "硃25",
+                    "from_person": "署北路淡水同知程峻、守備董得魁",
+                    "how": "會稟",
+                    "inferred": false,
+                    "layer": 1,
+                    "place": "",
+                    "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。",
+                    "to_person": "福建水師提督一等海澄公黃仕簡",
+                    "whenAr": "1786/12/10",
+                    "whenCh": "十二月初十日"
+                  },
+                  {
+                    "doc_id": "硃25",
+                    "from_person": "淡屬大甲社通事",
+                    "how": "轉報",
+                    "inferred": true,
+                    "layer": 2,
+                    "place": "淡水",
+                    "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+                    "to_person": "署北路淡水同知程峻、守備董得魁",
+                    "whenAr": "",
+                    "whenCh": ""
+                  },
+                  {
+                    "doc_id": "硃25",
+                    "from_person": "彰邑大肚社番",
+                    "how": "字寄",
+                    "inferred": false,
+                    "layer": 3,
+                    "place": "大肚社",
+                    "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+                    "to_person": "淡屬大甲社通事",
+                    "whenAr": "1786/11/29",
+                    "whenCh": "十一月二十九日"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "淡水文武分頭堵禦",
+        "description": "署北路淡水同知程峻、守備董得魁在彰化城陷後，整齊槍炮並募集鄉勇與社番，於扼要之處分頭堵禦防守。",
+        "where": "淡水",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-done.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "派遊擊邱維揚先渡臺",
+            "description": "福建水師提督黃仕簡聞訊彰化失陷，隨即委派提標右營遊擊邱維揚率領兵丁二百名先行渡臺，確查賊匪情形。",
+            "where": "廈門",
+            "whenCh": "十二月初五日",
+            "whenAr": "1786/12/05",
+            "who": [
+              "黃仕簡",
+              "邱維揚"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干...",
+                "howKnown": "親歷",
+                "whenKnown": "十二月初五日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "派遊擊邱維揚先渡臺",
+        "description": "福建水師提督黃仕簡聞訊彰化失陷，隨即委派提標右營遊擊邱維揚率領兵丁二百名先行渡臺，確查賊匪情形。",
+        "where": "廈門",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-done.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "黃仕簡率兵登舟候風",
+            "description": "黃仕簡挑選提標五營兵丁一千名，備齊軍火器械與船隻，於十二月初十日親自帶領官兵登舟，候風放洋飛渡臺灣。",
+            "where": "廈門",
+            "whenCh": "十二月初十日",
+            "whenAr": "1786/12/10",
+            "who": [
+              "黃仕簡"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際...現在派撥本標五營官兵，軍械船隻均點驗齊備",
+                "howKnown": "親歷",
+                "whenKnown": "十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "黃仕簡率兵登舟候風",
+        "description": "黃仕簡挑選提標五營兵丁一千名，備齊軍火器械與船隻，於十二月初十日親自帶領官兵登舟，候風放洋飛渡臺灣。",
+        "where": "廈門",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-done.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "檄委羅英笈彈壓廈門",
+            "description": "黃仕簡因即將親赴臺灣剿捕，札達督臣檄委金門鎮總兵羅英笈，就近前往廈門彈壓照應。",
+            "where": "廈門",
+            "whenCh": "十二月初五日",
+            "whenAr": "1786/12/05",
+            "who": [
+              "黃仕簡",
+              "羅英笈"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+                "howKnown": "親歷",
+                "whenKnown": "十二月初五日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "檄委羅英笈彈壓廈門",
+        "description": "黃仕簡因即將親赴臺灣剿捕，札達督臣檄委金門鎮總兵羅英笈，就近前往廈門彈壓照應。",
+        "where": "廈門",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-done.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "飛札各路嚴防堵緝",
+            "description": "黃仕簡慮及賊匪竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水陸各鎮協營，嚴飭各口岸要隘進行堵緝盤拿。",
+            "where": "福建沿海",
+            "whenCh": "十二月初五日",
+            "whenAr": "1786/12/05",
+            "who": [
+              "黃仕簡"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+                "howKnown": "親歷",
+                "whenKnown": "十二月初五日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "飛札各路嚴防堵緝",
+        "description": "黃仕簡慮及賊匪竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水陸各鎮協營，嚴飭各口岸要隘進行堵緝盤拿。",
+        "where": "福建沿海",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-plan.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "擬南北兩路夾攻",
+            "description": "福建水師提督黃仕簡計畫續調水陸官兵，分別由鹿耳門（南路）與淡水（北路）南北兩路夾攻彰化起事賊匪。",
+            "where": "鹿耳門、淡水",
+            "whenCh": "十一月二十九日後",
+            "whenAr": "1786/11/29",
+            "who": [
+              "黃仕簡"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。",
+                "howKnown": "擬定",
+                "whenKnown": "乾隆五十一年十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "擬南北兩路夾攻",
+        "description": "福建水師提督黃仕簡計畫續調水陸官兵，分別由鹿耳門（南路）與淡水（北路）南北兩路夾攻彰化起事賊匪。",
+        "where": "鹿耳門、淡水",
+        "whenCh": "十一月二十九日後",
+        "whenAr": "1786/11/29"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-plan.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "續調官兵北路援剿",
+            "description": "黃仕簡飛咨陸路提督及海壇、閩安、烽火等各鎮協營，就近於省城營分續調官兵，前往淡水北路支援剿匪。",
+            "where": "淡水",
+            "whenCh": "十二月初十日",
+            "whenAr": "1786/12/10",
+            "who": [
+              "黃仕簡",
+              "陸路提臣"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "除星飛咨行陸路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+                "howKnown": "擬定",
+                "whenKnown": "乾隆五十一年十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "續調官兵北路援剿",
+        "description": "黃仕簡飛咨陸路提督及海壇、閩安、烽火等各鎮協營，就近於省城營分續調官兵，前往淡水北路支援剿匪。",
+        "where": "淡水",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-plan.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "黃仕簡由南路進兵",
+            "description": "黃仕簡計畫親自帶領官兵由鹿耳門、郡城南路進兵，會同北路官兵夾攻賊匪。",
+            "where": "鹿耳門、臺灣府城",
+            "whenCh": "十二月初十日",
+            "whenAr": "1786/12/10",
+            "who": [
+              "黃仕簡"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+                "howKnown": "擬定",
+                "whenKnown": "乾隆五十一年十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "黃仕簡由南路進兵",
+        "description": "黃仕簡計畫親自帶領官兵由鹿耳門、郡城南路進兵，會同北路官兵夾攻賊匪。",
+        "where": "鹿耳門、臺灣府城",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-plan.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "嚴飭口岸堵緝盤拿",
+            "description": "黃仕簡因慮賊匪聞風竄逃內地，飛札通知福建巡撫、陸路提督、藩臬兩司、興泉道、水師各鎮協營及臺灣鎮道，嚴厲命令各營、縣在各口岸要隘進行防堵與盤查。",
+            "where": "福建及臺灣各口岸要隘",
+            "whenCh": "十二月初十日以前",
+            "whenAr": "1786/12/10",
+            "who": [
+              "黃仕簡",
+              "撫臣",
+              "陸路提臣",
+              "臺灣鎮",
+              "臺灣道"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+                "howKnown": "擬定",
+                "whenKnown": "乾隆五十一年十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "嚴飭口岸堵緝盤拿",
+        "description": "黃仕簡因慮賊匪聞風竄逃內地，飛札通知福建巡撫、陸路提督、藩臬兩司、興泉道、水師各鎮協營及臺灣鎮道，嚴厲命令各營、縣在各口岸要隘進行防堵與盤查。",
+        "where": "福建及臺灣各口岸要隘",
+        "whenCh": "十二月初十日以前",
+        "whenAr": "1786/12/10"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-nonmil.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "委派羅英笈彈壓廈門",
+            "description": "福建水師提督黃仕簡因準備親自渡臺剿捕叛軍，為穩定後方，札請閩浙總督委派金門鎮總兵羅英笈前往廈門，就近彈壓並照應地方治安。",
+            "where": "廈門",
+            "whenCh": "十二月初五日至初十日之間",
+            "whenAr": "1786/12/05",
+            "who": [
+              "黃仕簡",
+              "督臣",
+              "羅英笈"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+                "howKnown": "親歷",
+                "whenKnown": "十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "委派羅英笈彈壓廈門",
+        "description": "福建水師提督黃仕簡因準備親自渡臺剿捕叛軍，為穩定後方，札請閩浙總督委派金門鎮總兵羅英笈前往廈門，就近彈壓並照應地方治安。",
+        "where": "廈門",
+        "whenCh": "十二月初五日至初十日之間",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-nonmil.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "飛札各官嚴防盤拿",
+            "description": "福建水師提督黃仕簡因憂慮彰化叛軍聞風竄逃至福建內地，飛札福建巡撫、陸路提督、藩臬兩司、興泉道及水陸各協營，嚴令各港口要隘加強盤查緝捕。",
+            "where": "福建及臺灣沿海口岸",
+            "whenCh": "十二月初五日至初十日之間",
+            "whenAr": "1786/12/05",
+            "who": [
+              "黃仕簡",
+              "撫臣",
+              "陸路提臣",
+              "臺灣鎮",
+              "臺灣道"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+                "howKnown": "親歷",
+                "whenKnown": "十二月初十日"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "飛札各官嚴防盤拿",
+        "description": "福建水師提督黃仕簡因憂慮彰化叛軍聞風竄逃至福建內地，飛札福建巡撫、陸路提督、藩臬兩司、興泉道及水陸各協營，嚴令各港口要隘加強盤查緝捕。",
+        "where": "福建及臺灣沿海口岸",
+        "whenCh": "十二月初五日至初十日之間",
+        "whenAr": "1786/12/05"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "（本機技能輸出：outputs/qing-events-nonmil.json）",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "淡水募集鄉勇社番",
+            "description": "署理北路淡水同知程峻與守備董得魁在彰化縣城失陷後，積極整頓地方防務，募集鄉勇與大甲社等社番，於各要隘分頭防堵。",
+            "where": "淡水",
+            "whenCh": "十一月二十九日",
+            "whenAr": "1786/11/29",
+            "who": [
+              "程峻",
+              "董得魁"
+            ],
+            "sources": [
+              {
+                "doc_id": "硃25",
+                "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+                "howKnown": "轉述",
+                "whenKnown": "十二月初十日"
+              }
+            ],
+            "__traceChains": [
+              {
+                "events": [
+                  {
+                    "quote": "募集鄉勇社番",
+                    "reporter": "署北路淡水同知程峻、守備董得魁",
+                    "subtitle": "淡水募集鄉勇社番",
+                    "whenCh": "",
+                    "where": "淡水",
+                    "doc_id": "硃25"
+                  }
+                ],
+                "hops": [
+                  {
+                    "doc_id": "硃25",
+                    "from_person": "署北路淡水同知程峻、守備董得魁",
+                    "how": "會稟",
+                    "inferred": false,
+                    "layer": 1,
+                    "place": "",
+                    "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。",
+                    "to_person": "福建水師提督一等海澄公黃仕簡",
+                    "whenAr": "1786/12/10",
+                    "whenCh": "十二月初十日"
+                  },
+                  {
+                    "doc_id": "硃25",
+                    "from_person": "淡屬大甲社通事",
+                    "how": "轉報",
+                    "inferred": true,
+                    "layer": 2,
+                    "place": "淡水",
+                    "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+                    "to_person": "署北路淡水同知程峻、守備董得魁",
+                    "whenAr": "",
+                    "whenCh": ""
+                  },
+                  {
+                    "doc_id": "硃25",
+                    "from_person": "彰邑大肚社番",
+                    "how": "字寄",
+                    "inferred": false,
+                    "layer": 3,
+                    "place": "大肚社",
+                    "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+                    "to_person": "淡屬大甲社通事",
+                    "whenAr": "1786/11/29",
+                    "whenCh": "十一月二十九日"
+                  }
+                ]
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1,
+        "subtitle": "淡水募集鄉勇社番",
+        "description": "署理北路淡水同知程峻與守備董得魁在彰化縣城失陷後，積極整頓地方防務，募集鄉勇與大甲社等社番，於各要隘分頭防堵。",
+        "where": "淡水",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "trace",
+        "evTitle": "本機來源鏈（2 個事件，合併為 1 條鏈）",
+        "prompt": "（本機技能輸出：outputs/source-chain.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "zhupi",
+        "docLabel": "硃25",
+        "items": [
+          {
+            "marker": "",
+            "opinion": "關切福建水師提督黃仕簡的身體狀況，因其自述「舊染風症，雖復時愈時發，現在心神氣力不能如常」，皇帝叮囑其在帶兵渡台剿匪之際，仍須以調養身體為要，避免過度勞累。",
+            "position": "夾批",
+            "relations": [],
+            "responds_to": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+            "text": "仍以調養為要，勿過勞",
+            "title": "關切黃仕簡病體並囑咐其渡台剿匪勿過度勞累",
+            "where": "廈門",
+            "who": [
+              "黃仕簡"
+            ],
+            "who_loc": {
+              "黃仕簡": "廈門"
+            },
+            "doc_id": "硃25",
+            "__added": true,
+            "__evId": "evmrt6vku51oh"
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "zhupi",
+        "docLabel": "硃25",
+        "items": [
+          {
+            "marker": "已有旨了",
+            "opinion": "表示針對黃仕簡奏報彰化失陷及調兵赴台剿捕一事，朝廷已另有旨意下達。",
+            "position": "尾批",
+            "relations": [
+              {
+                "evidence": "委令提標右營遊擊邱維揚，先帶兵二百名渡臺",
+                "relation": "委令",
+                "relation_type": "command",
+                "source": "黃仕簡",
+                "target": "邱維揚"
+              },
+              {
+                "evidence": "札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應",
+                "relation": "札達檄委",
+                "relation_type": "command",
+                "source": "黃仕簡",
+                "target": "羅英笈"
+              },
+              {
+                "evidence": "接據署北路淡水同知程峻、守備董得魁會稟",
+                "relation": "會稟",
+                "relation_type": "report",
+                "source": "程峻",
+                "target": "黃仕簡"
+              },
+              {
+                "evidence": "接據署北路淡水同知程峻、守備董得魁會稟",
+                "relation": "會稟",
+                "relation_type": "report",
+                "source": "董得魁",
+                "target": "黃仕簡"
+              }
+            ],
+            "responds_to": "合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞",
+            "text": "已有旨了。欽此。",
+            "title": "批「已有旨了」",
+            "where": "臺灣",
+            "who": [
+              "黃仕簡",
+              "林爽文",
+              "程峻",
+              "董得魁",
+              "羅英笈",
+              "邱維揚"
+            ],
+            "who_loc": {
+              "林爽文": "彰化縣",
+              "程峻": "淡水",
+              "羅英笈": "金門",
+              "董得魁": "淡水",
+              "邱維揚": "臺灣",
+              "黃仕簡": "廈門"
+            },
+            "doc_id": "硃25"
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "edictmatch",
+        "marker": "",
+        "memDoc": "硃25",
+        "items": [
+          {
+            "doc_id": "硃25",
+            "memDoc": "硃25",
+            "memTitle": "為奏彰化失陷已調兵赴臺事",
+            "edict_id": "諭13",
+            "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+            "date": "1786/12/27",
+            "summary": "此上諭針對黃仕簡報告彰化失陷、力疾親自渡臺剿匪之奏摺做出回應。皇帝高度嘉獎黃仕簡不顧病軀、星速赴臺的奮勉表現並賜予賞物，同時批准其南北夾攻的軍事部署，並指示督撫查明殉職知縣俞峻的事蹟以備撫恤，且告誡內地督撫須鎮定防範餘匪內渡，避免張皇失措。",
+            "points": [
+              {
+                "aspect": "褒獎與慰勞",
+                "edict_quote": "至黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。著賞給大荷包一對，小藥包三對，金銀三個、銀錁三個、太平錢一對，以示優眷。並著於辦理搜捕諸務外，仍加意調攝，勿過勞。",
+                "how": "皇帝對黃仕簡不顧風症、迅速帶兵渡臺的表現表示高度讚許，給予賞賜，並體恤其身體，叮囑其在剿匪之餘要注意調養、勿過勞，這與奏摺上的硃批「仍以調養為要，勿過勞」相呼應。",
+                "memorial_quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。……奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+                "relations": [],
+                "title": "嘉獎水師提督黃仕簡力疾親赴臺灣剿匪並賞賜慰勞",
+                "where": "廈門",
+                "who": [
+                  "黃仕簡"
+                ],
+                "who_loc": {
+                  "黃仕簡": "廈門"
+                },
+                "__pendingInfoSources": [
+                  {
+                    "info": "水師提督黃仕簡克服剛痊癒的病症，一聞匪訊即帶兵渡臺剿捕。",
+                    "doc_id": "硃25",
+                    "quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。",
+                    "emperor_quote": "至黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。",
+                    "srcTitle": "為奏彰化失陷已調兵赴臺事",
+                    "srcAuthor": "黃仕簡",
+                    "srcSentAr": "1786/12/10",
+                    "daysBeforeEmperor": 17,
+                    "emperorDocId": "諭13"
+                  }
+                ],
+                "__added": true,
+                "__evId": "evmrt6wj3755l"
+              },
+              {
+                "aspect": "軍事部署與夾攻",
+                "edict_quote": "黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+                "how": "皇帝同意並指示黃仕簡按照其奏摺中規劃的南北夾攻策略，抵達臺灣後督率當地的鎮、道官兵，合力圍剿林爽文餘黨。",
+                "memorial_quote": "仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。……奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+                "relations": [],
+                "title": "命令黃仕簡會同臺灣鎮道南北夾攻以期迅速撲滅賊匪",
+                "where": "臺灣",
+                "who": [
+                  "黃仕簡"
+                ],
+                "who_loc": {
+                  "黃仕簡": "臺灣"
+                },
+                "__added": true,
+                "__evId": "evmrt6x1crw40"
+              },
+              {
+                "aspect": "官員殉職撫恤",
+                "edict_quote": "該縣於搜捕賊匪後，不能嚴密防範，雖失之疏懈，但帶兵緝犯，事屬因公，倉猝被害，尚非激變者可比。並著該督撫查明該縣，如平日並無別項劣跡及激變情事，即據實奏聞，候朕降旨交部議恤。",
+                "how": "針對奏摺中提及彰化知縣俞峻在大墩地方拿匪被害，皇帝指出其雖有防範疏懈之失，但因公殉職，指示督撫查明其生前有無激變或劣跡，若無則予以撫恤。",
+                "memorial_quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷……再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實",
+                "relations": [
+                  {
+                    "evidence": "並著該督撫查明該縣",
+                    "relation": "查明",
+                    "relation_type": "command",
+                    "source": "常青",
+                    "target": "俞峻"
+                  },
+                  {
+                    "evidence": "並著該督撫查明該縣",
+                    "relation": "查明",
+                    "relation_type": "command",
+                    "source": "徐嗣曾",
+                    "target": "俞峻"
+                  }
+                ],
+                "title": "指示督撫查明彰化知縣俞峻被害實情以備降旨撫恤",
+                "where": "大墩",
+                "who": [
+                  "俞峻",
+                  "常青",
+                  "徐嗣曾"
+                ],
+                "who_loc": {
+                  "俞峻": "大墩",
+                  "常青": "泉州",
+                  "徐嗣曾": "福州"
+                }
+              },
+              {
+                "aspect": "防範內渡與地方治安",
+                "edict_quote": "但恐餘黨四散逸，或偷越內渡。常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。常青、徐嗣曾等，總須不動聲色，妥協辦理。若因外洋遇有此等案件，該督撫等紛紛調遣，跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫不可不處以鎮定也。",
+                "how": "針對黃仕簡奏摺中提到已飛札內地各官防範賊匪竄逃內地，皇帝進一步命令在蚶江彈壓的常青、任承恩嚴飭沿海口岸實力巡防，並告誡常青、徐嗣曾等必須「不動聲色」、「處以鎮定」，避免因紛紛調遣、跡涉張皇而引起內地民人恐慌。",
+                "memorial_quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+                "relations": [
+                  {
+                    "evidence": "常青、任承恩現住蚶江一帶",
+                    "relation": "協同彈壓",
+                    "relation_type": "ally",
+                    "source": "常青",
+                    "target": "任承恩"
+                  }
+                ],
+                "title": "嚴飭常青等沿海口岸實力巡防並處以鎮定避免內地驚惶",
+                "where": "蚶江",
+                "who": [
+                  "常青",
+                  "任承恩",
+                  "徐嗣曾"
+                ],
+                "who_loc": {
+                  "任承恩": "蚶江",
+                  "常青": "蚶江",
+                  "徐嗣曾": "福州"
+                },
+                "__added": true,
+                "__evId": "evmrt6xd74je0"
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "edictmatch",
+        "marker": "",
+        "memDoc": "硃25",
+        "items": [
+          {
+            "doc_id": "硃25",
+            "memDoc": "硃25",
+            "memTitle": "為奏彰化失陷已調兵赴臺事",
+            "edict_id": "諭20",
+            "title": "諭閩浙總督常青等鎮定妥辦不必紛紛赴臺",
+            "date": "1786/12/29",
+            "summary": "乾隆帝收到黃仕簡與常青關於彰化失陷及調兵赴臺的奏摺後，認為地方大員辦理此案張皇失措、過度恐慌。乾隆帝雖同意黃仕簡渡臺，但嚴厲批評陸路提督任承恩亦欲前往及請求簡派欽差之舉，並因黃仕簡在傳牌上洩露彰化失陷軍情而下令申飭與查辦。",
+            "points": [
+              {
+                "aspect": "批評官員張皇失措",
+                "edict_quote": "看來伊等辦理此事，俱不免張皇失措。此等奸民糾衆滋事，不過麼麼烏合... 臺灣常有此等糾衆不法之事，此次常青等何以張皇畏懼若此！",
+                "how": "乾隆帝指出林爽文等匪徒僅是烏合之眾，地方大員卻因彰化失陷而大舉動員、紛紛請往，實屬張皇失措、不夠鎮靜，因而對常青、黃仕簡、任承恩等人予以申飭。",
+                "memorial_quote": "訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。... 奴才冬間舊染風症... 當即力疾星速親赴該地剿捕。",
+                "relations": [
+                  {
+                    "evidence": "據常青、黃仕簡奏",
+                    "relation": "奏報",
+                    "relation_type": "report",
+                    "source": "黃仕簡",
+                    "target": "常青"
+                  }
+                ],
+                "title": "乾隆帝批評黃仕簡等大員辦理彰化民變張皇失措",
+                "where": "臺灣",
+                "who": [
+                  "黃仕簡",
+                  "常青",
+                  "任承恩"
+                ],
+                "who_loc": {
+                  "任承恩": "臺灣",
+                  "常青": "泉州",
+                  "黃仕簡": "臺灣"
+                }
+              },
+              {
+                "aspect": "對水師提督黃仕簡帶兵親往之看法",
+                "edict_quote": "黃仕簡籍隸本省，現任水師提督，素有名望。現已帶兵渡臺，該提督到彼，匪黨自必望風潰散。即使該提督病後精神照料未能周到，亦可於內地添派能事總兵一員，多帶兵丁，前往協剿幫辦。",
+                "how": "乾隆帝肯定黃仕簡在福建當地的名望，認為他親往能震懾匪黨；但考慮到他風症初癒、精力未復，指示可在內地增派能幹的總兵帶兵前往協助，而非讓陸路提督也一同渡海。",
+                "memorial_quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。",
+                "relations": [],
+                "title": "乾隆帝體恤黃仕簡病後精力不足並指示調派總兵協同",
+                "where": "臺灣",
+                "who": [
+                  "黃仕簡"
+                ],
+                "who_loc": {
+                  "黃仕簡": "臺灣"
+                }
+              },
+              {
+                "aspect": "申飭傳牌洩露軍情",
+                "edict_quote": "再，前次黃仕簡所發六百里奏摺，自應緊密不露爲是。乃傳牌上竟有會匪糾衆攻陷彰化縣字樣，傳播驛站，豈不駭人聽聞？此必黃仕簡心神恍惚，以致標弁字識等，隨意填寫，率行傳發。並著常青查明參奏。",
+                "how": "乾隆帝嚴厲斥責黃仕簡在遞送六百里加緊奏摺時，其隨行標兵竟在傳牌上公然寫出「會匪糾眾攻陷彰化縣」字樣，導致軍情在驛站傳播、駭人聽聞。皇帝認為這是黃仕簡心神恍惚、管理不周所致，命令常青查明參奏。",
+                "memorial_quote": "謹先恭摺由驛六百里奏聞",
+                "relations": [
+                  {
+                    "evidence": "並著常青查明參奏",
+                    "relation": "查明參奏",
+                    "relation_type": "command",
+                    "source": "常青",
+                    "target": "黃仕簡"
+                  }
+                ],
+                "title": "乾隆帝嚴厲申飭黃仕簡因心神恍惚致使傳牌洩露彰化失陷軍情",
+                "where": "福建",
+                "who": [
+                  "黃仕簡",
+                  "常青"
+                ],
+                "who_loc": {
+                  "常青": "泉州",
+                  "黃仕簡": "臺灣"
+                }
+              },
+              {
+                "aspect": "駁斥水陸提督俱渡重洋與簡派重臣之請",
+                "edict_quote": "乃任承恩竟欲親往，豈有水陸兩提督俱遠渡重洋，內地於不顧，辦一匪類之理？至所稱簡派欽差督辦，更不成話。... 常青、黃仕簡、任承恩，俱著傳旨申飭。",
+                "how": "乾隆帝駁斥了陸路提督任承恩也想渡台的請求，認為不能水陸兩提督皆去台灣而空虛內地。同時，他也駁斥了請求簡派欽差的提議，並對常青、黃仕簡、任承恩三人一併予以傳旨申飭。",
+                "memorial_quote": "飛札撫臣、陸路提臣... 一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。",
+                "relations": [],
+                "title": "乾隆帝駁斥任承恩渡臺及簡派欽差之請並申飭諸臣",
+                "where": "福建",
+                "who": [
+                  "任承恩",
+                  "黃仕簡",
+                  "常青"
+                ],
+                "who_loc": {
+                  "任承恩": "臺灣",
+                  "常青": "泉州",
+                  "黃仕簡": "臺灣"
+                }
+              }
+            ]
+          }
+        ],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "situfit",
+        "memDoc": "硃25",
+        "memTitle": "為奏彰化失陷已調兵赴臺事",
+        "memAuthor": "黃仕簡",
+        "sendAr": "1786/12/10",
+        "recvAr": "1786/12/27",
+        "situation": "在黃仕簡12月10日上奏至12月27日皇帝收到奏摺並做出批覆期間，臺灣的實際戰局已急劇惡化。起初內地僅知彰化縣城於11月29日失陷，但隨後短短十餘日內，北路的淡水/竹塹（12月7日）、中路的諸羅縣城（12月6日）以及南路的鳳山縣城（12月13日）相繼被起事軍攻陷。全臺幾近淪陷，僅剩府城（臺南）在總兵柴大紀率領極少數兵力下於鹽埕橋一帶與數萬起事軍血戰苦撐。此時林爽文事件已演變成全島性的大規模戰亂，而非地方官員起初所認為的「麼麼烏合」之小規模滋事。",
+        "changes": [
+          {
+            "doc_id": "奏9",
+            "subtitle": "為奏彰化縣城被賊匪攻陷事",
+            "title": "為奏彰化縣城被賊匪攻陷事",
+            "author": "任承恩",
+            "sentAr": "1786/12/13",
+            "quote": "賊匪於十二月初七日已到竹塹，四行擄搶...我父親存亡不知",
+            "how": "證實戰火已迅速向北蔓延，淡水同知駐劄之竹塹已於12月7日失守，同知程峻生死未卜，其子攜印內渡求救。"
+          },
+          {
+            "doc_id": "奏14",
+            "subtitle": "為續據臺灣鎮道稟報再行具奏事",
+            "title": "為續據臺灣鎮道稟報再行具奏事",
+            "author": "常青",
+            "sentAr": "1786/12/17",
+            "quote": "十二月初六日卯時，攻破諸羅。柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇緊守府城",
+            "how": "證實中路的諸羅縣城已於12月6日失陷，起事軍直逼府城，臺灣道派人攜印護照至內地臨海求援，形勢萬分危急。"
+          },
+          {
+            "doc_id": "硃77",
+            "subtitle": "為奏聞鳳邑被攻調兵剿捕事",
+            "title": "為奏聞鳳邑被攻調兵剿捕事",
+            "author": "柴大紀",
+            "sentAr": "1786/12/24",
+            "quote": "十三日天明時候，有賊匪二千餘名直攻縣城...賊匪乘虛由龜山北門撲入城內...鳳邑失陷",
+            "how": "證實南路的鳳山縣城亦於12/13被攻破，參將不知下落，知縣湯大奎自刎，全臺南北中三路要邑盡失。"
+          }
+        ],
+        "responses": [
+          {
+            "doc_id": "諭13",
+            "type": "上諭",
+            "date": "1786/12/27",
+            "quote": "至賊匪么麼烏合...餘黨自必聞風潰散...跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫等不可不處以鎮定也",
+            "note": "皇帝此時仍輕信「諸羅官兵殺死賊匪二千餘人」及「鎮道已抵彰城」等不實傳聞，認為起事軍只是「麼麼烏合」，極易撲滅。他嚴厲警告督撫不可「張皇失措」以免動搖內地人心。"
+          },
+          {
+            "doc_id": "諭20",
+            "type": "上諭",
+            "date": "1786/12/29",
+            "quote": "看來伊等辦理此事，俱不免張皇失措。此等奸民糾衆滋事，不過么麼烏合...豈有水陸兩提督俱遠渡重洋，內地於不顧，辦一匪類之理？至所稱簡派欽差督辦，更不成話",
+            "note": "皇帝痛斥陸路提督任承恩請求「特簡重臣臨閩督辦」是「更不成話」且「至愚」，並反對水陸兩提督同時渡臺。他堅持這只是普通小暴動，命令常青與徐嗣曾必須「鎮靜」且不可多派兵力，以免張皇。"
+          }
+        ],
+        "verdict": "mismatch",
+        "reasoning": "皇帝的回應與實際慘烈的戰局嚴重脫節（mismatch）。當皇帝於12月27日至29日發出諭旨時，臺灣南北各縣城（彰化、諸羅、鳳山、淡水）已全數失陷，府城危在旦夕。然而，皇帝因資訊滯後及主觀輕敵，仍將林爽文起事視為「麼麼烏合」之輕微騷亂，甚至輕信「諸羅殲敵二千、收復彰化」的虛假傳聞。他非但沒有意識到兵力與指揮層級的不足，反而一味嚴厲申飭常青、任承恩等官員「張皇失措」，反對增派大員（痛罵任承恩請簡重臣之議為「至愚」），並限制提督渡臺。這種「以靜制動」的指導方針完全切不中當時全臺幾乎淪陷的危急情勢。",
+        "prompt": "（本機技能輸出：outputs/situfit.json）",
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "關切黃仕簡病體並囑咐其渡台剿匪勿過度勞累",
+        "addressee": "黃仕簡",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "kind": "officialresponse",
+        "evTitle": "批「已有旨了」",
+        "addressee": "黃仕簡",
+        "prompt": "（本機技能輸出：outputs/official-response.json）",
+        "items": [],
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      },
+      {
+        "at": "2026-07-20 12:13",
+        "model": "local skill output",
+        "prompt": "（本機技能輸出：outputs/_run-status.json）",
+        "response": "{\n  \"doc_id\": \"硃25\",\n  \"divide\": true,\n  \"lin-events\": true,\n  \"qing-events-all\": true,\n  \"zhupi\": true,\n  \"edict-match\": true,\n  \"situfit\": true\n}",
+        "__skillRunId": "bundle:zhu25-official-loop-gemini35:mrt6rfc2",
+        "__skillBundleName": "zhu25-official-loop-gemini35",
+        "__skillBundleDocs": 1
+      }
+    ],
+    "divisions": [
+      {
+        "label": "獲悉彰化失陷",
+        "summary": "黃仕簡奏報於十二月初五日訪聞彰化縣城於十一月二十九日被賊匪攻陷，文武官員生死不明。",
+        "start": 0,
+        "end": 185,
+        "n": 1
+      },
+      {
+        "label": "派兵渡臺與親赴剿捕",
+        "summary": "黃仕簡在未獲正式公文前，先派遊擊邱維揚帶兵二百渡臺查探，並帶病親率一千官兵準備渡海剿捕。",
+        "start": 185,
+        "end": 423,
+        "n": 2
+      },
+      {
+        "label": "內地防堵與南北夾攻規劃",
+        "summary": "為防賊匪竄逃內地，黃仕簡飛札各省營縣嚴防口岸，並規劃由鹿耳門與淡水南北兩路夾攻。",
+        "start": 423,
+        "end": 512,
+        "n": 3
+      },
+      {
+        "label": "接獲淡水同知會稟",
+        "summary": "黃仕簡於初十日登舟之際，接獲淡水同知程峻等會稟，證實林爽文結黨起事、彰化失陷及官員被害，並請求速發大兵救援。",
+        "start": 512,
+        "end": 778,
+        "n": 4
+      },
+      {
+        "label": "調整進兵策略與馳報朝廷",
+        "summary": "黃仕簡決定續調省城官兵由淡水北路援剿，自己則由鹿耳門南路進兵夾攻，並將辦理情形以六百里加急奏聞。",
+        "start": 778,
+        "end": 942,
+        "n": 5
+      },
+      {
+        "label": "硃批",
+        "summary": "乾隆帝對此摺批示「已有旨了。欽此。」",
+        "start": 942,
+        "end": 990,
+        "n": 6
       }
     ]
   },

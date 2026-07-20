@@ -76,6 +76,19 @@ limited to that catalog.
 The existing task modes such as `summary`, `divide`, `ask`, event extraction,
 and source tracing all use the selected provider through this common route.
 
+The official-document-first loop adds three pair-grounded request paths:
+
+- `confirmed_yu_response` receives one official document and only the earlier
+  `上諭` already linked to it by `official_reply_to_yu`; it analyzes how the
+  document responds and never re-scores the pair.
+- `combined_emperor_actions` receives the document's `硃批`, only its
+  `yu_source`-linked `上諭`, and a registry of earlier emperor actions; it returns
+  multi-source imperial comments, replies, and commands plus optional earliest
+  duplicate IDs.
+- `official_response` with `confirmed_pairs_only: true` receives only later
+  reply documents already linked to the relevant `上諭`; it skips the normal
+  30-day corpus candidate search and pairing judgement.
+
 ## Security
 
 - Use an HTTPS proxy you control. A proxy operator can see any key sent from

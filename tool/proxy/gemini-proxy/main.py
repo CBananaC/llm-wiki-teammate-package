@@ -8,7 +8,8 @@ use their native or compatible HTTP APIs.
 
 Request JSON:
   {
-    "mode": "summary" | "divide" | "ask",
+    "mode": "summary" | "divide" | "events" | "confirmed_yu_response" |
+            "combined_emperor_actions" | "official_response" | "ask",
     "doc_id": "台26",
     "doc_type": "硃批",
     "title": "...",
@@ -24,6 +25,8 @@ Request JSON:
 Response JSON:
   mode summary | ask -> { "mode": "...", "text": "..." }
   mode divide        -> { "mode": "divide", "parts": [ {label, summary, excerpt}, ... ] }
+  confirmed_yu_response -> { "mode": "confirmed_yu_response", "items": [...] }
+  combined_emperor_actions -> { "mode": "combined_emperor_actions", "actions": [...] }
 """
 import json
 import os
@@ -875,6 +878,116 @@ def chat():
             evs = _json_list(_generate(prompt, True, p, _mt(p)), "events")
             return _cors(jsonify({"mode": "events", "events": evs}))
 
+        if mode == "confirmed_yu_response":
+            # The caller has already traversed the confirmed-pair graph.  This mode must not
+            # rediscover or re-score the relationship; it only explains HOW the selected official
+            # document answers each already-confirmed earlier 上諭.  Keeping this separate from the
+            # pairing modes prevents a confirmed edge from being silently rejected because wording
+            # differs, while still requiring quote-level evidence for the response analysis.
+            reply = p.get("reply") or {}
+            edicts = p.get("edicts") or []
+            reply_block = (
+                "【本官文（已由配對資料確認為下列上諭的回應）】\n"
+                "doc_id：%s　具奏官員：%s　日期：%s\n標題：%s\n原文：\n%s\n"
+                % (
+                    reply.get("id", ""), reply.get("author", ""), reply.get("date", ""),
+                    reply.get("title", ""), reply.get("body", ""),
+                )
+            )
+            yu_block = "\n【已確認的先前上諭；不得重新判斷是否配對】\n"
+            for e in edicts:
+                evidence = e.get("pair_evidence") or {}
+                yu_block += (
+                    "──── yu_doc_id=%s ｜ 日期：%s ｜ 標題：%s\n"
+                    "既有配對引文（僅供定位）：%s\n上諭原文：\n%s\n\n"
+                    % (
+                        e.get("id", ""), e.get("date", ""), e.get("title", ""),
+                        evidence.get("quote_in_reply", ""), e.get("body", ""),
+                    )
+                )
+            extra = (p.get("question") or "").strip()
+            task = (
+                "\n任務：配對關係已由研究者確認；不要搜尋其他文書、不要評分配對強弱，也不要解釋『為何兩篇是配對』。"
+                "請逐一分析本官文如何實際回應每一道上諭：遵行、回報辦理結果、申辯、澄清、請旨、表示知悉，或尚未完成。"
+                "以回應內容本身為中心，為每一道上諭拆成一項或多項具體回應。"
+                "每項給：yu_doc_id；subtitle（12-20字，直接命名官員如何回應哪一項諭令）；"
+                "description（2-4句，交代上諭要求與官員的具體回答，不談配對規則）；"
+                "response_type（done|progress|defence|clarification|request|ack）；"
+                "quote_in_reply（官員自己的回應原文，須排除其重引的皇帝話語；保留足夠上下文）；"
+                "matched_yu_span（上諭中被回應的皇帝評論、命令或問題之逐字引文；不得取據某奏等轉述情報層）；"
+                "relation_note（繁體中文一句，具體說明『諭命／諭問什麼 → 本官如何答覆』，不得寫配對判準）；"
+                "where、who、who_loc、relations（依引文填寫，無則空值）。"
+                "同一道上諭若有數個彼此獨立的回應面向，分成數項；若官文只有重引上諭而沒有自己的答覆，不得虛構回應。"
+                '\n只輸出 JSON：{"items":[{"yu_doc_id":"","subtitle":"","description":"","response_type":"done|progress|defence|clarification|request|ack",'
+                '"quote_in_reply":"","matched_yu_span":"","relation_note":"","where":"","who":[],"who_loc":{},'
+                '"relations":[{"source":"","target":"","relation":"","relation_type":"command|report|other","evidence":""}]}]}。'
+                "引文必須逐字來自所給文本，不得杜撰。"
+            )
+            prompt = reply_block + yu_block + (("\n【使用者額外要求】\n" + extra) if extra else "") + task
+            items = _json_list(_generate(prompt, True, p, _mt(p)), "items")
+            return _cors(jsonify({"mode": "confirmed_yu_response", "items": items}))
+
+        if mode == "combined_emperor_actions":
+            # Combine the emperor's own words carried by one memorial's 硃批 and by only those 上諭
+            # already linked to that memorial in the confirmed graph.  The model may also identify a
+            # semantic repeat of an earlier committed emperor action, but it can only name an id from
+            # the caller-supplied registry; it never searches the document corpus here.
+            memorial = p.get("memorial") or {}
+            edicts = p.get("edicts") or []
+            previous = p.get("previous_actions") or []
+            mem_block = (
+                "【本奏摺】\ndoc_id：%s　具奏官員：%s　上奏／收受日期：%s\n標題：%s\n"
+                "奏摺原文：\n%s\n\n【本摺硃批（皇帝原話）】\n%s\n"
+                % (
+                    memorial.get("id", ""), memorial.get("author", ""), memorial.get("date", ""),
+                    memorial.get("title", ""), memorial.get("body", ""), memorial.get("rescript", ""),
+                )
+            )
+            yu_block = "\n【既有配對資料所連到的上諭；不得另搜上諭】\n"
+            for e in edicts:
+                evidence = e.get("pair_evidence") or {}
+                yu_block += (
+                    "──── doc_id=%s ｜ 日期：%s ｜ 標題：%s\n"
+                    "本奏摺與上諭的既有對應片段：奏摺「%s」／上諭「%s」\n上諭原文：\n%s\n\n"
+                    % (
+                        e.get("id", ""), e.get("date", ""), e.get("title", ""),
+                        evidence.get("quote_in_reply", ""), evidence.get("matched_yu_span", ""),
+                        e.get("body", ""),
+                    )
+                )
+            previous_block = "\n【較早、已建立的皇帝行動（只可由此清單判定重複；已按最早來源日期排列）】\n"
+            if previous:
+                for a in previous:
+                    previous_block += (
+                        "──── event_id=%s ｜ 日期：%s ｜ 標題：%s\n說明：%s\n來源：%s\n"
+                        % (
+                            a.get("event_id", ""), a.get("date", ""), a.get("title", ""),
+                            a.get("description", ""), json.dumps(a.get("sources", []), ensure_ascii=False),
+                        )
+                    )
+            else:
+                previous_block += "（無）\n"
+            extra = (p.get("question") or "").strip()
+            task = (
+                "\n任務：只擷取皇帝自己的行動，即評論、答覆、褒獎、責備、准駁、詢問或命令。"
+                "先把每道上諭區分為（A）皇帝轉述的據奏情報與（B）皇帝自己的評論／命令；只輸出（B），不得把戰場情報本身當皇帝行動。"
+                "比較本摺硃批與所有已配對上諭：若兩處以不同人稱或措辭表達同一皇帝行動（例如『汝辦理甚好』與『某官辦理甚好』），合成一項，sources 同時列硃批與上諭；"
+                "若意義不同則分開。『已有旨』『另有旨』等只有指涉而無實質內容的套語，不得單獨虛構一項行動；只有在能由所給配對上諭明確對應其實質旨意時，才可作為該項的輔助來源。"
+                "每項給：title（12-20字，以皇帝的實際動作命名，如『嘉許某官辦理妥善』）；description（1-3句）；"
+                "action_type（comment|reply|praise|blame|approve|reject|question|command）；whenCh、whenAr、where、who、who_loc、relations；"
+                "sources（至少一項，每項含 doc_id、source_type=硃批|上諭、quote 皇帝逐字原話、title、date）。"
+                "再與『較早皇帝行動』比對是否為跨文書、跨時間重複表達的同一具體評論或命令。"
+                "只有語義與對象、事項均相同才算重複；僅主題相近不算。若重複，same_as_event_id 必須填清單中最早的等同行動 id，"
+                "並把 title 改用該最早行動的原標題；否則留空。不得輸出清單以外的 id。"
+                '\n只輸出 JSON：{"actions":[{"title":"","description":"","action_type":"comment|reply|praise|blame|approve|reject|question|command",'
+                '"whenCh":"","whenAr":"","where":"","who":[],"who_loc":{},"relations":[],"same_as_event_id":"",'
+                '"sources":[{"doc_id":"","source_type":"硃批|上諭","quote":"","title":"","date":""}]}]}。'
+                "引文必須逐字，且每個 source 的 doc_id 必須來自上列本摺或既有配對上諭。"
+            )
+            prompt = mem_block + yu_block + previous_block + (("\n【使用者額外要求】\n" + extra) if extra else "") + task
+            actions = _json_list(_generate(prompt, True, p, _mt(p)), "actions")
+            return _cors(jsonify({"mode": "combined_emperor_actions", "actions": actions}))
+
         if mode == "zhupi":
             # extract every vermilion rescript (硃批): interlinear 夾批 + end 尾批; what it responds to + the emperor's view
             task = (
@@ -970,17 +1083,32 @@ def chat():
                 "\n請先從上面的硃批／諭原文判斷：皇帝此處是對『哪一位官員』（姓名或職銜）而發；"
                 "將你的判斷填入回傳的 addressee 欄位。\n"
             )
-            cand_block = "\n【候選文書（皆為此行動之後約30日內的文書，請逐一判斷是否為對此行動的回應】\n"
+            confirmed_only = bool(p.get("confirmed_pairs_only"))
+            cand_block = (
+                "\n【既有配對資料已確認的回應文書；不得另搜、不得重判配對】\n"
+                if confirmed_only else
+                "\n【候選文書（皆為此行動之後約30日內的文書，請逐一判斷是否為對此行動的回應】\n"
+            )
             for c in cands:
                 cand_block += (
                     "──── doc_id=%s ｜ 日期：%s ｜ 標題：%s\n%s\n\n"
                     % (c.get("doc_id", ""), c.get("date", ""), c.get("title", ""), c.get("body", ""))
                 )
             extra = (p.get("question") or "").strip()
-            task = (
+            task_intro = (
+                "\n\n任務：下列文書與此上諭的回應關係已由研究者的既有配對資料確認。不要搜尋其他文書、不要以日期窗或相似度重判配對；"
+                "逐一說明每份已確認文書如何回應皇帝行動，並保留雙方逐字引文。"
+                if confirmed_only else
                 "\n\n任務：判斷候選文書中，哪些是『被指定官員（或皇帝硃批／諭所針對之官員）』對上述硃批／諭的實際回應。"
+            )
+            response_gate = (
+                "每份候選都已有配對關係；請保留並分析每份文書。從中找出官員自己的答覆／遵行／申辯原文，"
+                "不要把其重引的上諭當作 response_quote；若一份文書只明示奉旨而答覆很簡略，仍據實描述為知悉或簡略覆奏，不得虛構細節。"
+                if confirmed_only else
                 "只有當候選文書內文『明確』表明是在回應此硃批／諭（例如引述其內容、明言「奉旨」「欽遵」「硃批」「upon receiving...」之類，"
                 "或談及與該行動高度吻合的具體事由）時才視為回應；不要僅因日期相近就判定。"
+            )
+            task = task_intro + response_gate + (
                 "對每一則確實回應者，給出："
                 "doc_id（務必是上面標示的候選文書 doc_id）、"
                 "subtitle（可直接作為事件標題的一句話，繁體中文，約12-20字，須說明『此官員對此事做了什麼回應』——"
