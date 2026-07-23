@@ -2460,3 +2460,25 @@ Verified:
 Remaining:
 - Human review of the historical wording, citation page for 宋希斌, and the
   final distinction between 上諭 and 廷寄 before publication.
+
+### 2026-07-23 14:24 HKT — Codex — Drafted the research-difficulty section
+
+Summary: Wrote the Traditional Chinese section explaining why 奏折 and 上諭
+are difficult to study, including corpus scale, fragmented communication
+chains, multiple date fields, cross-sea delay, unequal information positions,
+and the limits of plain-text reading.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used the local 王劍 article PDF, 李智君 research text, FYP essay, and the
+  project timing note before drafting.
+- Included the 台951 primary-source record and marked the 李智君 page range
+  and project-statistics provenance for further verification.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the 13-day 台951 example, the 24.86/45-day project
+  statistics, and all pending page-level citations before publication.
