@@ -2614,3 +2614,26 @@ Verified:
 Remaining:
 - Human review of the exact OCR status labels, JSON field names, and relationship
   pairing rules against the final implementation.
+
+### 2026-07-23 15:09 HKT — Codex — Drafted the AI-loop section
+
+Summary: Wrote the Traditional Chinese section explaining the three AI-loop
+components: task-specific skills, model selection by controlled testing, and a
+repeatable/resumable per-document loop. It includes the project workflow,
+evidence rules, bundle metadata, model-comparison dimensions, and cautions
+against permanent model rankings or automatic relationship creation.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used the local official-document loop, summary-skill files, model-comparison
+  page, and existing GPT/Gemini/DeepSeek bundle manifests.
+- Applied full in-text project-source citations and marked page numbers as not
+  applicable for internal workflow documents.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the model-comparison wording, current model labels, and the
+  final skill/loop names before publication.
