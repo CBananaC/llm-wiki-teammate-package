@@ -1194,6 +1194,8 @@
   .cx-acts .cx-senddate,
   .cx-acts .cx-addstandalone { border:1px solid #cbbba5; background:#fffaf1; border-radius:7px; cursor:pointer; padding:3px 10px; font:inherit; font-size:calc(11.5px * var(--fs,1)); }
   .cx-acts .cx-done { color:#1f4a3a; font-size:calc(11.5px * var(--fs,1)); }
+  .cx-acts button.cx-repeat-merge:disabled,
+  .cx-acts button.cx-repeat-standalone-state:disabled { cursor:default; opacity:.68; }
   .cx-acts button.cx-done { border:1px solid #b9d0c4; background:#eef6f1; border-radius:7px; cursor:pointer; padding:3px 10px; font:inherit; }
   .cx-acts button.cx-done.ea-goto[title] { border-color:#d8a94a; background:#fff6e6; color:#7a5a12; }
   .cx-ev .ed:focus { outline:1px solid #c9b79a; background:#fffcef; }
@@ -5873,6 +5875,41 @@
     earlier.__added=true; earlier.__evId=ev.id;
     return ev;
   }
+  // Commit a repeat whose saved same_as/earliest_report metadata points to an existing event
+  // (or to an earlier, not-yet-committed candidate). This keeps the choice controls available
+  // even when the browser-side __matchReg registry was not saved with the bundle.
+  function commitRepeatMergedCandidate(p,target){
+    if(!p) return null;
+    target=target||null;
+    if(target&&target.event){
+      const ev=target.event;
+      candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p))); });
+      p.__added=true; p.__evId=ev.id; p.__mergedInto=ev.id;
+      return ev;
+    }
+    const earlier=target&&target.item;
+    if(!earlier || earlier===p) return null;
+    if(p.__matchReg){
+      const ev=commitMatchedCandidate(p);
+      if(ev){ p.__added=true; p.__evId=ev.id; p.__mergedInto=ev.id; return ev; }
+    }
+    if(earlier.__added&&earlier.__evId){
+      const ev=eventById(earlier.__evId);
+      if(!ev) return null;
+      candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p))); });
+      p.__added=true; p.__evId=ev.id; p.__mergedInto=ev.id;
+      return ev;
+    }
+    if(!earlier.__added){
+      const ev=commitProposal(earlier);
+      if(!ev) return null;
+      earlier.__added=true; earlier.__evId=ev.id;
+      candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p))); });
+      p.__added=true; p.__evId=ev.id; p.__mergedInto=ev.id;
+      return ev;
+    }
+    return null;
+  }
   // Extend an existing event with one more document's mention (reuses addEventSource's dedupe-by-
   // doc_id pattern, but always fills quote/howKnown/whenKnown -- addEventSource itself only ever
   // adds a bare source stub for manual linking, see armLinkSource). Provenance hop chains already
@@ -7546,11 +7583,107 @@
       // resolve which OTHER already-committed event it should really be a mention of, if any. Returns
       // null if there's nothing to merge into (no match, match unresolved, or it's already the same
       // event / already merged).
+      function eventRepeatRefs(it){
+        const refs=new Set(), add=v=>{ v=String(v||'').trim(); if(v) refs.add(v); };
+        if(!it) return refs;
+        [it.same_as_event_id,it.same_as,it.card_id,it.merge_group,
+          it.earliest_report&&it.earliest_report.id,
+          it.__xdocRepeat&&it.__xdocRepeat.evId,it.__xdocRepeat&&it.__xdocRepeat.card_id,
+          it.__matchReg&&it.__matchReg.evId,it.__matchReg&&it.__matchReg.card_id].forEach(add);
+        (Array.isArray(it.repeat_candidates)?it.repeat_candidates:[]).forEach(x=>{
+          if(x&&typeof x==='object') [x.id,x.card_id,x.same_as,x.event_id].forEach(add); else add(x);
+        });
+        return refs;
+      }
+      // Resolve both the old browser registry and the saved repeat-report fields. A bundle can
+      // contain a stable/obsolete same_as id while the actual event dot now has a new __evId.
+      function eventRepeatTarget(it){
+        if(!it) return null;
+        const actor=String(it.actor||'').toLowerCase();
+        const isOtherEvent=ev=>ev&&(!actor||String(ev.actor||'').toLowerCase()===actor)&&(!it.__evId||String(ev.id)!==String(it.__evId));
+        let pending=null;
+        const rememberPending=(item,source,storeId,turnIndex,itemIndex)=>{
+          if(item&&item!==it&&!pending) pending={event:null,item,source,storeId,turnIndex,itemIndex};
+        };
+        const mr=it.__matchReg;
+        if(mr){
+          const earlier=resolveMatchRegItem(mr);
+          if(earlier&&earlier!==it){
+            const ev=earlier.__added&&earlier.__evId?eventById(earlier.__evId):null;
+            if(isOtherEvent(ev)) return {event:ev,item:earlier,source:'match'};
+            rememberPending(earlier,'match');
+          }
+          const direct=mr.evId&&eventById(mr.evId);
+          if(isOtherEvent(direct)) return {event:direct,item:null,source:'match'};
+        }
+        const refs=eventRepeatRefs(it);
+        if(!refs.size) return pending;
+        const nonSelf=Array.from(refs).some(id=>!it.__evId||String(id)!==String(it.__evId));
+        if(!nonSelf&&!pending) return null;
+        for(const id of refs){
+          const direct=eventById(id);
+          if(isOtherEvent(direct)) return {event:direct,item:null,source:'saved',ref:id};
+        }
+        const er=(it.earliest_report&&typeof it.earliest_report==='object')?it.earliest_report:{};
+        const xr=(it.__xdocRepeat&&typeof it.__xdocRepeat==='object')?it.__xdocRepeat:{};
+        const preferredDoc=String(er.doc_id||xr.doc_id||'').trim();
+        let preferredAdded=null, fallbackAdded=null, preferredPending=null, fallbackPending=null;
+        const inspectStore=(store,storeId)=>{
+          if(!store||typeof store!=='object'||preferredAdded) return;
+          chatArr(store).forEach((turn,turnIndex)=>{
+            if(!turn||!Array.isArray(turn.items)) return;
+            (turn.items||[]).forEach((candidate,itemIndex)=>{
+              if(!candidate||candidate===it||candidate.__skip) return;
+              if(actor&&String(candidate.actor||'').toLowerCase()!==actor) return;
+              const ids=eventRepeatRefs(candidate);
+              [candidate.card_id,candidate.id,candidate.__evId].forEach(v=>{ v=String(v||'').trim(); if(v) ids.add(v); });
+              if(!Array.from(ids).some(id=>refs.has(id))) return;
+              const preferred=!preferredDoc||candidateDocIds(candidate).has(preferredDoc);
+              const ev=candidate.__added&&candidate.__evId?eventById(candidate.__evId):null;
+              const entry={event:ev,item:candidate,source:'saved',storeId,turnIndex,itemIndex};
+              if(ev){ if(preferred&&!preferredAdded) preferredAdded=entry; else if(!preferred&&!fallbackAdded) fallbackAdded=entry; }
+              else if(candidate.__added){ return; }
+              else if(preferred&&!preferredPending) preferredPending=entry;
+              else if(!preferred&&!fallbackPending) fallbackPending=entry;
+            });
+          });
+        };
+        Object.keys(EDITS||{}).filter(id=>id&&!id.startsWith('__')).forEach(id=>inspectStore(EDITS[id],id));
+        const groups=typeof workspaceGroups==='function'?workspaceGroups():{};
+        Object.keys(groups||{}).forEach(id=>inspectStore(groups[id],'group:'+id));
+        return preferredAdded||fallbackAdded||preferredPending||fallbackPending||pending||{event:null,item:null,source:'saved',ref:Array.from(refs)[0]};
+      }
+      function eventRepeatTargetLabel(it,target){
+        const ev=target&&target.event, item=target&&target.item;
+        const er=(it&&it.earliest_report&&typeof it.earliest_report==='object')?it.earliest_report:{};
+        const xr=(it&&it.__xdocRepeat&&typeof it.__xdocRepeat==='object')?it.__xdocRepeat:{};
+        return String((ev&&evTitle(ev))||(item&&(item.subtitle||item.what))||er.title||xr.title||'既有事件');
+      }
+      function eventRepeatActionButtons(it,i,j){
+        if(!it) return '';
+        const er=(it.earliest_report&&typeof it.earliest_report==='object')?it.earliest_report:{};
+        const xr=(it.__xdocRepeat&&typeof it.__xdocRepeat==='object')?it.__xdocRepeat:{};
+        const repeatDoc=String(er.doc_id||xr.doc_id||'').trim();
+        if(!it.__matchReg&&repeatDoc&&candidateDocIds(it).has(repeatDoc)) return '';
+        const target=eventRepeatTarget(it); if(!target) return '';
+        const title=eventRepeatTargetLabel(it,target), targetId=target.event&&target.event.id||'';
+        const base=`data-i="${i}" data-j="${j}"`;
+        const canMerge=!!(target.event||(target.item&&!target.item.__added));
+        const disabled=canMerge?'':' disabled';
+        const targetAttr=targetId?` data-target-evid="${esc(targetId)}"`:'';
+        if(it.__added){
+          if(it.__mergedInto) return '<span class="cx-done">✓ 已加入並併入來源</span>';
+          const merge=`<button class="cx-mergesrc cx-repeat-merge" ${base}${targetAttr}${disabled} type="button" title="將此文書加入「${esc(title)}」的回報記錄">＋加入來源到「${esc(title)}」</button>`;
+          return '<span class="cx-done">✓ 已加入</span>'+merge+'<button class="cx-addstandalone cx-repeat-standalone-state" type="button" disabled title="此事件已保留為獨立事件">✓ 已獨立加入（保留此事件）</button>';
+        }
+        const mergeLabel=canMerge?'加入（併入既有事件）':'加入（既有事件未載入）';
+        return `<button class="cx-addmention cx-repeat-merge" ${base}${targetAttr}${disabled} type="button" title="將此回報併入「${esc(title)}」">${mergeLabel}</button><button class="cx-addstandalone cx-repeat-standalone" ${base} type="button" title="保留為獨立事件，不併入「${esc(title)}」">仍獨立加入（不合併）</button>`;
+      }
       function matchedEarlierEventId(it){
-        if(!it.__matchReg || it.__mergedInto) return null;
-        const earlier=resolveMatchRegItem(it.__matchReg); if(!earlier || !earlier.__evId) return null;
-        if(it.__evId && String(earlier.__evId)===String(it.__evId)) return null;
-        return earlier.__evId;
+        if(!it||it.__mergedInto) return null;
+        const target=eventRepeatTarget(it), ev=target&&target.event;
+        if(!ev || (it.__evId&&String(ev.id)===String(it.__evId))) return null;
+        return ev.id;
       }
       // A candidate's own whenAr is only "complete" if the AI (or convertWhenCh) actually resolved a
       // full year/month/day Gregorian date -- otherwise it's blank or a partial guess. For a re-report
@@ -7680,16 +7813,19 @@
         const linked=matchNoteHtml(it); if(linked) return linked;
         const er=(it&&it.earliest_report&&typeof it.earliest_report==='object')?it.earliest_report:{};
         const xr=(it&&it.__xdocRepeat&&typeof it.__xdocRepeat==='object')?it.__xdocRepeat:{};
-        const repeatId=String((it&&it.same_as)||er.id||xr.evId||'');
+        const repeatId=String((it&&it.same_as)||it&&it.same_as_event_id||er.id||xr.evId||'');
         let docId=String(er.doc_id||xr.doc_id||'');
-        const prior=(repeatId&&typeof eventById==='function')?eventById(repeatId):null;
+        const target=eventRepeatTarget(it);
+        const prior=(target&&target.event)||((repeatId&&typeof eventById==='function')?eventById(repeatId):null);
+        const priorItem=target&&target.item;
         if(!docId&&prior) docId=String(((prior.sources||[])[0]||{}).doc_id||'');
+        if(!docId&&priorItem) docId=String(((priorItem.sources||[])[0]||{}).doc_id||priorItem.doc_id||'');
         if(!docId || candidateDocIds(it).has(docId)) return '';
-        const title=String(er.title||xr.title||(prior&&evTitle(prior))||'');
+        const title=String(er.title||xr.title||(prior&&evTitle(prior))||(priorItem&&(priorItem.subtitle||priorItem.what))||'');
         const date=String(er.date||er.whenAr||xr.date||xr.whenAr||'').trim()||((docId&&reportingDateForCard({doc_id:docId})).ar||'');
         const ref=[docId,title].filter(Boolean).join('／')+(date?('，'+date):'');
         if(!ref) return '';
-        const reporter=(prior&&Array.isArray(prior.who)&&prior.who.length)?String(prior.who[0]||''):'';
+        const reporter=(prior&&Array.isArray(prior.who)&&prior.who.length)?String(prior.who[0]||''):(priorItem&&Array.isArray(priorItem.who)&&priorItem.who.length?String(priorItem.who[0]||''):'');
         const sameOfficial=reporter&&it.who&&it.who.length&&String(it.who[0]||'')===reporter;
         const note=sameOfficial?`本官員先前已於 ${ref} 回報過此事件`:`此事件先前已於 ${ref} 回報過`;
         const jump=prior?' cx-jumpreport':'';
@@ -7962,6 +8098,16 @@
         // skipped has its chains discarded outright (see the .cx-skip handler) rather than kept
         // around for an event that was never considered.
         const leftover=(m.leftoverChains||[]);
+        function extractActionHtml(it,j){
+          const repeated=eventRepeatActionButtons(it,i,j);
+          if(repeated) return repeated+sendDateBtn(it,j)+(it.__evId?`<button class="cx-trace" data-i="${i}" data-j="${j}" type="button" title="搜尋此事件的情報來源鏈">▸ 搜尋來源</button>`:'')+(!it.__added?`<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`:'');
+          if(it.__added){
+            const mid=matchedEarlierEventId(it), mev=mid&&eventById(mid);
+            return '<span class="cx-done">✓ 已加入</span>'+(mev?`<button class="cx-mergesrc" data-i="${i}" data-j="${j}" type="button" title="此事件其實是「${esc(evTitle(mev))}」的重複回報，將此文書的引文／資訊加入該事件的回報記錄">＋加入來源到「${esc(evTitle(mev))}」</button>`:'')+sendDateBtn(it,j)+(it.__evId?`<button class="cx-trace" data-i="${i}" data-j="${j}" type="button" title="搜尋此事件的情報來源鏈">▸ 搜尋來源</button>`:'');
+          }
+          if(it.__matchReg) return `<button class="cx-addmention" data-i="${i}" data-j="${j}" type="button">加入（併入既有事件）</button><button class="cx-addstandalone" data-i="${i}" data-j="${j}" type="button" title="AI 認為這是重複回報，但仍以獨立事件加入，不併入「${esc(it.__matchReg.title||'')}」">仍獨立加入（不合併）</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`;
+          return `<button class="cx-add" data-i="${i}" data-j="${j}" type="button">加入</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`;
+        }
         // A candidate carrying __matchReg (see runExtract's registry tagging) is a re-report of an
         // earlier candidate's SAME real-world event -- it still gets its own card (so its own quote
         // and doc info stay visible), but its displayed title is the earlier item's own title
@@ -7977,7 +8123,7 @@
               ${repeatReportNoteHtml(it)}
               ${(it.sources||[]).map(s=>s.quote?`<div class="cx-q" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」<span class="cx-src">—${esc(s.doc_id)}${s.howKnown?'／'+esc(s.howKnown):''}</span></div>`:'').join('')}
               <dl class="cx-meta cx-facts"><dt>📍 地點</dt><dd class="loc"><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="where">${esc(it.where||'？')}</span></dd>${(it.who&&it.who.length)?`<dt>👤 人物</dt><dd class="who">${esc(it.who.join('、'))}</dd>`:''}<dt>📅 發生日期</dt><dd><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenCh">${esc(it.whenCh||'')}</span>（<span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenAr">${esc(it.whenAr||'')}</span>）${(!dateArIsFull(it.whenAr)&&it.__matchReg)?(()=>{ const fd=firstReportDate(it); return fd?` <button class="cx-usefirstdate" data-i="${i}" data-j="${j}" type="button" title="此回報日期不完整，套用首次回報「${esc(fd.title||'')}」的事件日期">用首次回報日期 ${esc(fd.dateAr)}</button>`:''; })():''}</dd></dl>
-              <div class="cx-acts">${it.__added?(it.__mergedInto?'<span class="cx-done">✓ 已加入並併入來源</span>':(()=>{ const mid=matchedEarlierEventId(it); const mev=mid&&eventById(mid); return '<span class="cx-done">✓ 已加入</span>'+(mev?`<button class="cx-mergesrc" data-i="${i}" data-j="${j}" type="button" title="此事件其實是「${esc(evTitle(mev))}」的重複回報，將此文書的引文／資訊加入該事件的回報記錄">＋加入來源到「${esc(evTitle(mev))}」</button>`:''); })())+sendDateBtn(it,j)+(it.__evId?`<button class="cx-trace" data-i="${i}" data-j="${j}" type="button" title="搜尋此事件的情報來源鏈">▸ 搜尋來源</button>`:''):(it.__matchReg?`<button class="cx-addmention" data-i="${i}" data-j="${j}" type="button">加入（併入既有事件）</button><button class="cx-addstandalone" data-i="${i}" data-j="${j}" type="button" title="AI 認為這是重複回報，但仍以獨立事件加入，不併入「${esc(it.__matchReg.title||'')}」">仍獨立加入（不合併）</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`:`<button class="cx-add" data-i="${i}" data-j="${j}" type="button">加入</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`)}</div>
+              <div class="cx-acts">${extractActionHtml(it,j)}</div>
               ${it.__added&&it.__evId?suggestedChainsHtml(eventById(it.__evId)):''}
             </div>`).join('') : '<div class="record-empty">沒有擷取到事件。</div>')
           +(items.length?`<div class="cx-foot"><button class="cx-tracesrc" data-i="${i}" type="button" title="若已勾選加入部分事件則只搜尋那些，否則搜尋全部擷取事件">⌕ 搜尋這些事件的來源鏈</button></div>`:'')
@@ -9211,6 +9357,10 @@
           const targetId=matchedEarlierEventId(it); if(!targetId) return; const target=eventById(targetId); if(!target) return;
           candidateSources(it).forEach(s=>{ addEventMention(targetId, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:target.subtitle||target.what||''}, mentionOwnFields(it))); });
           it.__mergedInto=targetId; saveEdits(); renderLog({preserve:true}); st2.textContent='已將此文書加入「'+(target.subtitle||target.what||'')+'」的回報記錄。'; });
+        // Saved repeat-report cards use the same two choices as registry-matched cards. The merge
+        // path adds this document as a mention and keeps the existing separate dot visible.
+        log.querySelectorAll('.cx-repeat-merge').forEach(b=>b.onclick=()=>{ if(b.disabled) return; const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it) return; const ev=commitRepeatMergedCandidate(it,eventRepeatTarget(it)); if(!ev) return; const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:(ev.__suggestedChains||[]).concat(it.__traceChains)}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已將此回報併入既有事件「'+(ev.subtitle||'')+'」的回報記錄。'; });
+        log.querySelectorAll('.cx-repeat-standalone').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); if(!ev) return; const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:(ev.__suggestedChains||[]).concat(it.__traceChains)}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已以獨立事件加入「'+(ev.subtitle||'')+'」，未併入既有事件。'; });
         log.querySelectorAll('.cx-senddate').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it) return; const s=(it.sources||[])[0]||{}; const r=recByDocId2(s.doc_id); const ar=r&&(r.sendAr||r.recvAr||r.annAr); if(!ar) return; it.whenAr=ar; if(!it.whenCh) it.whenCh=r.sendCh||r.recvCh||r.annCh||''; if(it.__added&&it.__evId){ const d=parseD(ar); patchEvent(it.__evId,{dateAr:d?fmt(d):null, whenCh:it.whenCh||''}); } saveEdits(); renderLog({preserve:true}); st2.textContent='已使用文書發送日：'+ar; });
         // Fill in an incomplete re-report's date with the first/earlier report's own event date
         // (see firstReportDate) -- a one-click fix for candidates whose own year/month/day couldn't

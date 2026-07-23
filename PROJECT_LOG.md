@@ -2678,3 +2678,38 @@ Verified:
 
 Remaining:
 - No button was clicked during verification because doing so would alter the saved research state; the rendered handlers and data targets were inspected without mutation.
+
+### 2026-07-23 16:23 HKT — Codex — Restored controls on all repeated Qing-event cards
+
+Summary: Repeated 清方事件 cards now resolve saved `same_as` / `earliest_report` metadata even when `__matchReg` was not persisted. Every cross-document repeat exposes the merge-into-existing-event and independent-add choices; an already-added independent repeat keeps its dot and shows a disabled independent-state control plus the merge-to-source action.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files parse all inline scripts successfully.
+- The saved sample `硃21` repeat `常青起程親赴泉州` resolves to the existing `硃26` event `常青起程前往蚶江` (`evmrx7ik2zzv2`).
+- The saved-data renderer check found controls on all 5 formal and 154 sample cross-document repeat cards.
+- `git diff --check` passes and the new helper/action sections are parity-identical between formal and sample.
+
+Remaining:
+- No state-mutating button click was performed; visual browser verification remains for the next available local browser session.
+
+### 2026-07-23 16:36 HKT — Codex — Kept repeat merge handler in the AI-panel scope
+
+Summary: Corrected the repeat merge helper so the global commit routine receives the panel-local repeat target explicitly. This prevents a real button click from losing access to the resolver nested in `renderAI`.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Inline-script parsing and `git diff --check` pass for both tools.
+- Formal/sample repeat-target, action-markup, and handler sections are parity-identical.
+- An in-memory click simulation commits both the unadded and already-added `硃21` repeat to `evmrx7ik2zzv2` and adds the `硃21` source mention without touching the saved file.
+
+Remaining:
+- No state-mutating browser click was performed; visual browser verification remains when a usable local browser session is available.
