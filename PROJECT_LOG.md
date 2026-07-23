@@ -2503,3 +2503,27 @@ Verified:
 Remaining:
 - Human review of the FYP page reference and final alignment with the actual
   four-lane chart labels before publication.
+
+### 2026-07-23 14:37 HKT — Codex — Drafted the website-purpose and system-flow section
+
+Summary: Wrote the Traditional Chinese section explaining the website's
+purpose and five-stage workflow: preserving original sources, AI extraction,
+document-relationship reconstruction, human verification, and chart display.
+The draft keeps the later sections on skills, models, and the AI loop available
+for more detailed teaching.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Re-read `PROJECT_LOG.md` and the outline before editing.
+- Used the local FYP essay, information-transmission notes, 王劍 article, and
+  the source-compilation references before drafting.
+- Used full in-text bibliographic citations and marked unresolved page or
+  metadata issues instead of inventing them.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the FYP draft's missing author/year, the 李智君 page number,
+  and the mapping to the actual four-lane chart and chat-panel controls.
