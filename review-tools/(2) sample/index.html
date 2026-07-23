@@ -3648,12 +3648,12 @@
           it.frags.forEach(f=>{ const pos=b.text.indexOf(f); if(pos>=0){ for(let c=pos;c<pos+f.length;c++) cov[c]=idx; } }); });
         const firstSeen=new Set();
         if(b.isBody && divisions && showDiv){
-          let seg=`<div class="blk" data-block="body"><span class="blk-label">原文</span>`;
+          let seg=`<div class="blk has-divisions" data-block="body"><span class="blk-label">原文</span>`;
           divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+bodyEditorMarkup(buildRuns(b.text,cov,dv.start,dv.end,firstSeen,zmask),di)+`</div></div>`; });
           seg+='</div>'; html+=seg;
         } else {
           const runs=buildRuns(b.text,cov,0,b.text.length,firstSeen,zmask);
-          html+=`<div class="blk" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>${b.isBody?bodyEditorMarkup(runs):runs}</div>`;
+          html+=`<div class="blk single-part" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>${b.isBody?bodyEditorMarkup(runs):runs}</div>`;
         }
       });
       textEl.innerHTML=html; placeNotes(); wireBodyEditors();
@@ -12984,4 +12984,74 @@ body .ix-text .seg:hover, body.dark-mode .ix-text .seg:hover {
 /* BODY text remains directly editable without reintroducing a separate table pane. */
 body .body-inline-edit { cursor:text; outline:none; }
 body .body-inline-edit:focus { outline:none; border-radius:3px; background:rgba(120,160,210,.10); }
+
+/* Document panel: one content size and one uniform card backdrop per unit. */
+body .ix-summary, body.dark-mode .ix-summary {
+  --doc-text-size:calc(16px * var(--fs,1));
+  box-sizing:border-box; background:var(--panel,#fffdf8) !important;
+  border:1px solid var(--line,#e5dacb) !important; border-radius:var(--r2,9px) !important;
+  padding:14px 16px 16px !important; margin:0 0 14px !important;
+}
+body .ix-summary-label, body .ix-summary-text,
+body .ix-text .blk-label, body .ix-text .seg-num,
+body .ix-text .seg-label, body .ix-text .seg-summary,
+body .ix-text .seg-text, body .ix-text .body-inline-edit,
+body.dark-mode .ix-summary-label, body.dark-mode .ix-summary-text,
+body.dark-mode .ix-text .blk-label, body.dark-mode .ix-text .seg-num,
+body.dark-mode .ix-text .seg-label, body.dark-mode .ix-text .seg-summary,
+body.dark-mode .ix-text .seg-text, body.dark-mode .ix-text .body-inline-edit {
+  font-size:var(--doc-text-size,calc(16px * var(--fs,1))) !important;
+}
+body .ix-summary-label, body.dark-mode .ix-summary-label,
+body .ix-text .blk-label, body.dark-mode .ix-text .blk-label {
+  display:block; margin:0 0 10px !important; line-height:1.45 !important;
+  font-weight:700 !important; color:var(--accent) !important;
+  text-transform:none !important; letter-spacing:0 !important;
+}
+body .ix-summary-text, body.dark-mode .ix-summary-text {
+  margin:0 !important; line-height:1.75 !important; color:var(--ink) !important;
+}
+body .ix-text, body.dark-mode .ix-text {
+  background:transparent !important; border:0 !important; border-radius:0 !important;
+  padding:0 !important;
+}
+body .ix-text .blk.has-divisions, body.dark-mode .ix-text .blk.has-divisions {
+  background:transparent !important; border:0 !important; padding:0 !important; margin:0 !important;
+}
+body .ix-text .blk.single-part, body.dark-mode .ix-text .blk.single-part {
+  box-sizing:border-box; background:var(--panel,#fffdf8) !important;
+  border:1px solid var(--line,#e5dacb) !important; border-radius:var(--r2,9px) !important;
+  padding:14px 16px 16px !important; margin:0 !important;
+}
+body .ix-text .seg, body .ix-text .seg.sc0, body .ix-text .seg.sc1,
+body .ix-text .seg.sc2, body .ix-text .seg.sc3,
+body.dark-mode .ix-text .seg, body.dark-mode .ix-text .seg.sc0,
+body.dark-mode .ix-text .seg.sc1, body.dark-mode .ix-text .seg.sc2,
+body.dark-mode .ix-text .seg.sc3 {
+  box-sizing:border-box; background:var(--panel,#fffdf8) !important;
+  border:1px solid var(--line,#e5dacb) !important; border-radius:var(--r2,9px) !important;
+  box-shadow:none !important; padding:14px 16px 16px !important; margin:0 0 14px !important;
+}
+body .ix-text .seg:last-child, body.dark-mode .ix-text .seg:last-child { margin-bottom:0 !important; }
+body .ix-text .seg + .seg, body.dark-mode .ix-text .seg + .seg { margin-top:0 !important; }
+body .ix-text .seg-head, body.dark-mode .ix-text .seg-head { margin:0 0 10px !important; }
+body .ix-text .seg-num, body.dark-mode .ix-text .seg-num {
+  display:inline; margin-right:5px !important; color:var(--accent) !important; font-weight:700 !important;
+}
+body .ix-text .seg-label, body.dark-mode .ix-text .seg-label {
+  display:inline !important; margin:0 !important; color:var(--ink) !important;
+  line-height:1.45 !important; font-weight:700 !important;
+}
+body .ix-text .seg-summary, body.dark-mode .ix-text .seg-summary {
+  display:block !important; margin:7px 0 10px !important; color:var(--muted) !important;
+  line-height:1.75 !important; font-weight:400 !important; white-space:normal !important;
+}
+body .ix-text .seg-text, body.dark-mode .ix-text .seg-text {
+  margin:0 !important; line-height:1.75 !important;
+}
+body .ix-text .body-inline-edit, body.dark-mode .ix-text .body-inline-edit {
+  display:block; margin:0 !important; line-height:1.75 !important; color:var(--ink) !important;
+}
+body.dark-mode .ix-summary, body.dark-mode .ix-text .blk.single-part,
+body.dark-mode .ix-text .seg { background:var(--panel) !important; }
 </style>

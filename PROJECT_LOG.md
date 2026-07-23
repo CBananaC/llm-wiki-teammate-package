@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (Codex recovery complete; human validation next)
+- Formal review editor: none (document-panel typography/backdrop adjustment complete; human validation next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -2329,3 +2329,23 @@ Remaining:
   judging weights, links, or contact details into the teaching website.
 - Design and implement the dynamic student-facing website as the next
   deliverable.
+
+### 2026-07-23 11:56 HKT — Codex — Unified document-panel typography and backdrops
+
+Summary: Adjusted the formal and sample document-information panels to use one
+content font size, one uniform backdrop for every divided original-text part,
+and a separate card backdrop for 摘要. Undivided original text is explicitly
+rendered as one single-part card, avoiding nested or alternating backgrounds.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files parse all embedded script blocks.
+- `git diff --check` passes.
+- Render markup and final panel CSS are synchronized between formal and sample.
+
+Remaining:
+- Human browser refresh and visual confirmation of the revised card proportions.
