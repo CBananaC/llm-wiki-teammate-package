@@ -1,0 +1,56 @@
+{
+  "name": "zhu-december-official-loop",
+  "created_at": "2026-07-23T10:48:01",
+  "source": "outputs/attempt-002/stage1_original_text.json",
+  "model": "gemini-3.5-flash",
+  "doc_ids": [
+    "硃22",
+    "硃23",
+    "硃21",
+    "硃24",
+    "硃26",
+    "硃25",
+    "硃32",
+    "硃31",
+    "硃35",
+    "硃33",
+    "硃34",
+    "硃41",
+    "硃42",
+    "硃40",
+    "硃44",
+    "硃56",
+    "硃58",
+    "硃57",
+    "硃59",
+    "硃60",
+    "硃61",
+    "硃64",
+    "硃71",
+    "硃72",
+    "硃77",
+    "硃78",
+    "硃82",
+    "硃128"
+  ],
+  "chain": [
+    "summary",
+    "divide",
+    "lin-events+source",
+    "qing-actions-all+source",
+    "confirmed-yu-response",
+    "combined-emperor-actions",
+    "official-response"
+  ],
+  "pair_files": [
+    "review-tools/(1) formal/yu-source.json",
+    "review-tools/(1) formal/confirmed-pairs.json"
+  ],
+  "deduplication": "existing bundle loader matchCandidateInRegistry; earliest report plus merge/separate choice",
+  "excluded_stages": [
+    "edict-match",
+    "info-source",
+    "situfit",
+    "date-window official-response search"
+  ]
+}

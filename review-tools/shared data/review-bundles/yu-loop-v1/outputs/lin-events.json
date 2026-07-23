@@ -1,0 +1,206 @@
+[
+  {
+    "category": "done",
+    "description": "臺灣彰化縣匪徒林爽文等糾眾滋事，騷擾地方。",
+    "edict_quote": "臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "臺匪林爽文等在彰化地方滋事不法",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "彰化縣匪犯林爽文等，結黨肆虐",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "林爽文等結黨滋事",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "臺灣彰化縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣彰化縣"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#lin#0",
+    "same_as": "evmr1tn80sro5",
+    "earliest_report": {
+      "id": "evmr1tn80sro5",
+      "doc_id": "硃22",
+      "date": "1786/12/10",
+      "title": "林爽文結黨騷擾地方"
+    },
+    "repeat_candidates": [
+      "evmrljglgtr7v",
+      "evmr4r7w952cm",
+      "evmr1tn80sro5",
+      "evmrln8dgz8ts"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "林爽文等賊匪攻陷彰化縣城並行竊踞。",
+    "edict_quote": "彰化縣城被匪徒竊踞。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "本日早彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "本日早彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "本日早彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "攻打彰化縣城。至午刻，縣城被陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "彰化縣城失陷",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十九日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣彰化縣"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#lin#1",
+    "same_as": "evmr1tkyye8s7",
+    "earliest_report": {
+      "id": "evmr1tkyye8s7",
+      "doc_id": "硃23",
+      "date": "1786/12/10",
+      "title": "賊匪攻破彰化縣城"
+    },
+    "repeat_candidates": [
+      "evmrdawcs99df",
+      "evmr1tncn1og3",
+      "evmr4edw1uoil",
+      "evmr1zhigjmz5",
+      "evmr8qwl3e4r0",
+      "evmr4qeh688w2",
+      "evmr1tkyye8s7"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "彰化匪徒林爽文等糾眾滋事，攻陷城池，攔截要路，導致信息不通。",
+    "edict_quote": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "大里杙等莊有奸民林爽文、王芬等結黨，乘值歲暮搶劫...於大肚溪邊聚匪截路，以致信息不通",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "彰化匪徒林爽文等結黨肆擾...大肚溪邊路，以致信息不通",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "彰化縣匪徒林爽文結黨肆虐...路途梗塞，不能前進",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "彰化縣匪徒林爽文結黨肆虐...路途梗塞，不能前遞",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "彰化縣匪犯林爽文等，結黨肆虐...道路隔絕",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "林爽文等糾眾滋事並攔截道路",
+    "whenAr": "1786-11",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "彰化",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#lin#2"
+  }
+]

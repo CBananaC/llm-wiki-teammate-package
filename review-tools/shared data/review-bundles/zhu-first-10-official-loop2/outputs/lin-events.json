@@ -1,0 +1,150 @@
+[
+  {
+    "category": "done",
+    "description": "乾隆五十一年十一月二十七日夜，彰化知縣俞峻在大墩地方率捕匪徒時，遭林爽文等起事部眾殺害。",
+    "howKnown": "轉述",
+    "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+    "relations": [
+      {
+        "evidence": "本縣俞在大墩地方拿匪被害",
+        "relation": "殺害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞峻"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "大墩地方官員被害",
+    "whenAr": "1786/12/17",
+    "whenCh": "十一月二十七日夜",
+    "whenKnownCh": "十二月初十日",
+    "where": "大墩",
+    "who": [
+      "林爽文",
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "林爽文": "大墩"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃25#lin#0",
+    "same_as": "evmr1tnaeutyx",
+    "earliest_report": {
+      "id": "evmr1tnaeutyx",
+      "doc_id": "硃22",
+      "date": "1786/12/10",
+      "title": "大墩地方殺害官員"
+    },
+    "repeat_candidates": [
+      "evmr1tnaeutyx",
+      "evmr1zhgzx5cp",
+      "evmrljszhitiw"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十一年十一月二十九日辰刻，林爽文等起事民變群眾聚集攻打彰化縣城，至午刻將城池攻陷。",
+    "howKnown": "訪聞",
+    "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "攻陷彰化縣城",
+    "whenAr": "1786/12/19",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月初五日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃25#lin#1",
+    "same_as": "evmr1tncn1og3",
+    "earliest_report": {
+      "id": "evmr1tncn1og3",
+      "doc_id": "硃22",
+      "date": "1786/12/10",
+      "title": "匪徒攻陷彰化縣城"
+    },
+    "repeat_candidates": [
+      "evmr8qwl3e4r0",
+      "evmr1tncn1og3",
+      "硃26#lin#2",
+      "evmr0n9er665w",
+      "evmr4dw72aq0o",
+      "evmrdawcs99df"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "彰化縣林爽文等人結黨起事。乾隆五十一年十一月二十七日夜，彰化知縣俞峻在大墩查拿匪徒時遇害。次日（二十八日）清晨，林爽文等攻陷彰化縣城，道路隨即梗塞。",
+    "howKnown": "轉述",
+    "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞",
+    "relations": [
+      {
+        "evidence": "俞知縣在大墩地方拿匪被害",
+        "relation": "殺害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞峻"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文起事並攻陷彰化城",
+    "whenAr": "1787/01/16",
+    "whenCh": "十一月二十七日至二十八日",
+    "whenKnownCh": "十二月十二日",
+    "where": "大墩、彰化縣城",
+    "who": [
+      "林爽文",
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃26#lin#2",
+    "same_as": "evmr1tc3ksqu1",
+    "earliest_report": {
+      "id": "evmr1tc3ksqu1",
+      "doc_id": "硃25",
+      "date": "1786/12/10",
+      "title": "匪徒於大墩殺害官員"
+    },
+    "repeat_candidates": [
+      "硃25#lin#0",
+      "evmr8qwl3e4r0",
+      "evmr1tnaeutyx",
+      "evmr1tncn1og3",
+      "evmr1tc3ksqu1",
+      "evmrljszhitiw",
+      "evmr3h91ubu4b",
+      "evmr4kdghmgrf"
+    ]
+  }
+]

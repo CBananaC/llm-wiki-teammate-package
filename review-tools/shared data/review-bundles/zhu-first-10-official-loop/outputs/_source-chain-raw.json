@@ -1,0 +1,3074 @@
+[
+  {
+    "doc_id": "硃8",
+    "evTitle": "楊光勳等結會劫囚",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "諸羅縣奸民楊光勳等人結會樹黨，並聚眾劫囚滋事。",
+      "howKnown": "查辦",
+      "quote": "諸羅縣奸民楊光勳等結會樹黨，劫囚滋事",
+      "relations": [
+        {
+          "evidence": "諸羅縣奸民楊光勳等結會樹黨...在逃之張烈",
+          "relation": "結會樹黨",
+          "relation_type": "ally",
+          "source": "張烈",
+          "target": "楊光勳"
+        },
+        {
+          "evidence": "諸羅縣奸民楊光勳等結會樹黨...賴榮",
+          "relation": "結會樹黨",
+          "relation_type": "ally",
+          "source": "賴榮",
+          "target": "楊光勳"
+        },
+        {
+          "evidence": "諸羅縣奸民楊光勳等結會樹黨...葉省",
+          "relation": "結會樹黨",
+          "relation_type": "ally",
+          "source": "葉省",
+          "target": "楊光勳"
+        },
+        {
+          "evidence": "諸羅縣奸民楊光勳等結會樹黨...蔡福",
+          "relation": "結會樹黨",
+          "relation_type": "ally",
+          "source": "蔡福",
+          "target": "楊光勳"
+        },
+        {
+          "evidence": "諸羅縣奸民楊光勳等結會樹黨...張員",
+          "relation": "結會樹黨",
+          "relation_type": "ally",
+          "source": "張員",
+          "target": "楊光勳"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "楊光勳等結會劫囚",
+      "whenAr": "1786/09/08以前",
+      "whenCh": "乾隆五十一年閏七月十六日以前",
+      "whenKnownCh": "乾隆五十一年閏七月十六日",
+      "where": "諸羅縣",
+      "who": [
+        "楊光勳",
+        "張烈",
+        "賴榮",
+        "葉省",
+        "蔡福",
+        "張員"
+      ],
+      "who_loc": {
+        "楊光勳": "諸羅縣"
+      },
+      "doc_id": "硃8",
+      "sources": [
+        {
+          "doc_id": "硃8",
+          "quote": "諸羅縣奸民楊光勳等結會樹黨，劫囚滋事"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "諸羅縣奸民楊光勳等結會樹黨，劫囚滋事",
+            "reporter": "福建臺灣鎮總兵官奴才柴大紀、福建臺灣兵備道奴才永福",
+            "subtitle": "楊光勳等結會劫囚",
+            "whenCh": "閏七月十六日以前",
+            "where": "諸羅縣"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "福建臺灣鎮總兵官奴才柴大紀、福建臺灣兵備道奴才永福",
+            "how": "奏",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣",
+            "quote": "諸羅縣奸民楊光勳等結會樹黨，劫囚滋事，經奴才等到地查辦，拿獲首、從多犯，於本年閏七月十六日恭摺奏聞",
+            "to_person": "皇帝",
+            "whenAr": "1786/09/08",
+            "whenCh": "閏七月十六日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃22",
+    "evTitle": "林爽文結黨騷擾地方",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月間，林爽文在彰化縣地方結黨滋事，騷擾地方，地方文武官員未能將其擒獲。",
+      "howKnown": "轉述",
+      "quote": "本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文結黨騷擾地方",
+      "whenAr": "",
+      "whenCh": "十一月間",
+      "whenKnownCh": "十二月初九日",
+      "where": "彰化縣",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣"
+      },
+      "doc_id": "硃22",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "林爽文結黨騷擾地方",
+            "whenCh": "十一月間",
+            "where": "彰化縣"
+          },
+          {
+            "quote": "卑職等即會帶兵役，於交界地方嚴密堵御",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻董得魁帶兵堵禦",
+            "whenCh": "十一月間",
+            "where": "交界地方"
+          },
+          {
+            "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻董得魁募勇堵禦",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "本年十二月初九日亥刻，臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱，本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
+            "to_person": "福建陸路提督任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃22",
+    "evTitle": "大墩戕官",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十七日夜，彰化知縣俞峻與北路副將赫生額在大墩地方率兵搜捕匪徒時，遭林爽文部眾殺害。",
+      "howKnown": "轉述",
+      "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害...北路赫副將與俞知縣在大墩地方拿匪，同時被害",
+      "relations": [
+        {
+          "evidence": "本縣俞在大墩地方拿匪遇害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞知縣"
+        },
+        {
+          "evidence": "北路赫副將與俞知縣在大墩地方拿匪，同時被害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "赫副將"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "大墩戕官",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月初九日",
+      "where": "大墩",
+      "who": [
+        "林爽文",
+        "俞知縣",
+        "赫副將"
+      ],
+      "who_loc": {
+        "俞知縣": "大墩",
+        "林爽文": "大墩",
+        "赫副將": "大墩"
+      },
+      "doc_id": "硃22",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害...北路赫副將與俞知縣在大墩地方拿匪，同時被害"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "大墩拿匪遇害",
+            "whenCh": "十一月二十七日夜",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡港",
+            "quote": "本年十二月初九日亥刻，臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱...適有商船飄泊淡港，隨即專差搭船馳稟",
+            "to_person": "福建陸路提督任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉報",
+            "inferred": true,
+            "layer": 2,
+            "place": "",
+            "quote": "於十一月二十九日，該番忽將原文帶回，並有彰邑大肚社番字寄淡屬大甲社通事據稱...卑職等立即督率兵役",
+            "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "",
+            "quote": "彰邑大肚社番字寄淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "北路赫副將與俞知縣在大墩地方拿匪，同時被害",
+            "reporter": "差役楊添",
+            "subtitle": "大墩拿匪遇害",
+            "whenCh": "",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "差役楊添",
+            "how": "口稱",
+            "inferred": false,
+            "layer": 1,
+            "place": "提督署",
+            "quote": "當即傳喚該差楊添進署，面加詢問...復據該差楊添口稱",
+            "to_person": "福建陸路提督任承恩",
+            "whenAr": "",
+            "whenCh": "十二月初九日"
+          },
+          {
+            "from_person": "傳說",
+            "how": "聽聞",
+            "inferred": false,
+            "layer": 2,
+            "place": "路上",
+            "quote": "小的起身在路上時，聞得傳說",
+            "to_person": "差役楊添",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃22",
+    "evTitle": "匪徒攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十七日（或二十八日）清晨，林爽文部眾攻陷彰化縣城並予以竊踞，導致南北路途梗塞。",
+      "howKnown": "轉述",
+      "quote": "本日早彰城失陷，路途梗塞...現在彰化既為匪徒竊踞",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "匪徒攻陷彰化縣城",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日",
+      "whenKnownCh": "十二月初九日",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣城"
+      },
+      "doc_id": "硃22",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "本日早彰城失陷，路途梗塞...現在彰化既為匪徒竊踞"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "本日早彰城失陷，路途梗塞，不能前遞",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "匪徒攻陷彰化縣城",
+            "whenCh": "十一月二十七日",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "差役楊添",
+            "how": "口述",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "臣接閱之下，不勝駭異。當即傳喚該差楊添進署，面加詢問，其所稱在淡水得知賊匪殺官占城情形，與該廳、營所稟大概相同。",
+            "to_person": "福建陸路提督臣任承恩",
+            "whenAr": "1787/01/27",
+            "whenCh": "十二月初九日"
+          },
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "差遣",
+            "inferred": false,
+            "layer": 2,
+            "place": "淡水",
+            "quote": "適有商船飄泊淡港，隨即專差搭船馳稟。",
+            "to_person": "差役楊添",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉報",
+            "inferred": true,
+            "layer": 3,
+            "place": "淡水",
+            "quote": "乃於十一月二十九日，該番忽將原文帶回，並有彰邑大肚社番字寄淡屬大甲社通事據稱...卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。",
+            "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 4,
+            "place": "大肚社",
+            "quote": "並有彰邑大肚社番字寄淡屬大甲社通事據稱，此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前遞，將原文附回。",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃22",
+    "evTitle": "程峻董得魁帶兵堵禦",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "淡水同知程峻與竹塹營守備董得魁聞林爽文結黨滋事，會同帶領兵役於淡水與彰化交界處嚴密防堵。",
+      "howKnown": "轉述",
+      "quote": "卑職等即會帶兵役，於交界地方嚴密堵御",
+      "relations": [
+        {
+          "evidence": "卑職等即會帶兵役",
+          "relation": "會帶兵役",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻董得魁帶兵堵禦",
+      "whenAr": "",
+      "whenCh": "十一月間",
+      "whenKnownCh": "十二月初九日",
+      "where": "交界地方",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "交界地方",
+        "董得魁": "交界地方"
+      },
+      "doc_id": "硃22",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "卑職等即會帶兵役，於交界地方嚴密堵御"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等即會帶兵役，於交界地方嚴密堵御",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻董得魁帶兵堵禦",
+            "whenCh": "十一月間",
+            "where": "交界地方"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱，本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。卑職等即會帶兵役，於交界地方嚴密堵御",
+            "to_person": "福建陸路提督任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃22",
+    "evTitle": "程峻董得魁募勇堵禦",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "程峻與董得魁得知彰化城失陷後，立即督率兵役，募集鄉勇與社番，於扼要處進行堵禦。",
+      "howKnown": "轉述",
+      "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。",
+      "relations": [
+        {
+          "evidence": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵御",
+          "relation": "會同",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻董得魁募勇堵禦",
+      "whenAr": "1787/01/17",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十二月初九日",
+      "where": "淡水",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "淡水"
+      },
+      "doc_id": "硃22",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻董得魁募勇堵禦",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "本年十二月初九日亥刻，臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱……卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。……適有商船飄泊淡港，隨即專差搭船馳稟。",
+            "to_person": "福建陸路提督任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃23",
+    "evTitle": "賊匪攻破彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "臺灣賊匪發動滋事，並攻破彰化縣城。",
+      "howKnown": "訪聞",
+      "quote": "臺灣又有賊匪滋攻破彰化縣城",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "賊匪攻破彰化縣城",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月初八日",
+      "where": "彰化縣城",
+      "who": [
+        "賊匪"
+      ],
+      "who_loc": {
+        "賊匪": "彰化縣城"
+      },
+      "doc_id": "硃23",
+      "sources": [
+        {
+          "doc_id": "硃23",
+          "quote": "臺灣又有賊匪滋攻破彰化縣城"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臺灣又有賊匪滋攻破彰化縣城",
+            "reporter": "水師提臣黃仕簡",
+            "subtitle": "賊匪攻破彰化縣城",
+            "whenCh": "",
+            "where": "彰化縣城"
+          },
+          {
+            "quote": "囑令臣一體留心",
+            "reporter": "水師提臣黃仕簡",
+            "subtitle": "黃仕簡囑令任承恩留心",
+            "whenCh": "",
+            "where": "福建"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "水師提臣黃仕簡",
+            "how": "札達",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣先於十二月初八日接到水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城，現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心。等語。",
+            "to_person": "任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃23",
+    "evTitle": "黃仕簡調兵並擬親往辦理",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "福建水師提督黃仕簡因聞知彰化縣城被攻破，現正調備兵船，並計畫一有確切消息即親自前往臺灣辦理。",
+      "howKnown": "轉述",
+      "quote": "現在調備兵船，俟一有確信，即當親往辦理",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "黃仕簡調兵並擬親往辦理",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月初八日",
+      "where": "福建",
+      "who": [
+        "黃仕簡"
+      ],
+      "who_loc": {
+        "黃仕簡": ""
+      },
+      "doc_id": "硃23",
+      "sources": [
+        {
+          "doc_id": "硃23",
+          "quote": "現在調備兵船，俟一有確信，即當親往辦理"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "現在調備兵船，俟一有確信，即當親往辦理",
+            "reporter": "黃仕簡",
+            "subtitle": "黃仕簡調兵並擬親往辦理",
+            "whenCh": "",
+            "where": "福建"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "黃仕簡",
+            "how": "札達",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣先於十二月初八日接到水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城，現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心。等語。",
+            "to_person": "任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃23",
+    "evTitle": "黃仕簡囑令任承恩留心",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "福建水師提督黃仕簡發文囑咐陸路提督任承恩一體留心防範。",
+      "howKnown": "轉述",
+      "quote": "囑令臣一體留心",
+      "relations": [
+        {
+          "evidence": "囑令臣一體留心",
+          "relation": "囑令",
+          "relation_type": "command",
+          "source": "黃仕簡",
+          "target": "任承恩"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "黃仕簡囑令任承恩留心",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月初八日",
+      "where": "福建",
+      "who": [
+        "黃仕簡",
+        "任承恩"
+      ],
+      "who_loc": {
+        "任承恩": "",
+        "黃仕簡": ""
+      },
+      "doc_id": "硃23",
+      "sources": [
+        {
+          "doc_id": "硃23",
+          "quote": "囑令臣一體留心"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "囑令臣一體留心",
+            "reporter": "水師提臣黃仕簡",
+            "subtitle": "黃仕簡囑令任承恩留心",
+            "whenCh": "",
+            "where": "福建"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "水師提臣黃仕簡",
+            "how": "札達",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城，現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
+            "to_person": "任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃21",
+    "evTitle": "林爽文結黨騷擾地方",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "十一月初，林爽文在彰化縣結黨肆虐，騷擾地方，地方文武官員未能將其擒獲。",
+      "howKnown": "轉述",
+      "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文結黨騷擾地方",
+      "whenAr": "1786/12",
+      "whenCh": "十一月初",
+      "whenKnownCh": "十二月十一日",
+      "where": "彰化縣",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣"
+      },
+      "doc_id": "硃21",
+      "sources": [
+        {
+          "doc_id": "硃21",
+          "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
+            "reporter": "署淡防廳程峻、竹塹營守備董得魁",
+            "subtitle": "林爽文結黨騷擾地方",
+            "whenCh": "十一月初間",
+            "where": "彰化縣"
+          },
+          {
+            "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。卑職等會帶兵役，於交界地方嚴密堵緝",
+            "reporter": "署淡防廳程峻、竹塹營守備董得魁",
+            "subtitle": "程峻與董得魁帶兵堵緝",
+            "whenCh": "十一月初間",
+            "where": "交界地方"
+          },
+          {
+            "quote": "十一月二十九日...卑職等立即督率兵役，扼要堵禦。",
+            "reporter": "署淡防廳程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等扼要堵禦",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "坊口",
+            "quote": "接據署淡防廳程峻、竹塹營守備董得魁會稟，十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。卑職等會帶兵役，於交界地方嚴密堵緝",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃21",
+    "evTitle": "匪徒於大墩殺害知縣",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "十一月二十七日夜，彰化縣知縣俞峻在大墩地方率兵搜捕匪徒時，遭林爽文部眾襲擊殺害。",
+      "howKnown": "轉述",
+      "quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+      "relations": [
+        {
+          "evidence": "彰化俞知縣在大墩地方拿匪遇害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文部眾",
+          "target": "俞知縣"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "匪徒於大墩殺害知縣",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月十一日",
+      "where": "大墩",
+      "who": [
+        "林爽文部眾",
+        "俞知縣"
+      ],
+      "who_loc": {
+        "俞知縣": "大墩",
+        "林爽文部眾": "大墩"
+      },
+      "doc_id": "硃21",
+      "sources": [
+        {
+          "doc_id": "硃21",
+          "quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "匪徒於大墩殺害知縣",
+            "whenCh": "十一月二十七夜",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "接據署淡防廳程峻、竹塹營守備董得魁會稟，十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。卑職等會帶兵役，於交界地方嚴密堵緝，並有公文一角，派撥番社飛遞本道衙門。十一月二十九日，據該番帶回原文，並有彰邑大肚社番寄字淡屬大甲社通事據稱，十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前進，將原文附回。等語。卑職等立即督率兵役，扼要堵禦。現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。至彰城失陷，被害文武官員探聽未的，俟查確另稟。等情到臣。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉述",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "十一月二十九日，據該番帶回原文，並有彰邑大肚社番寄字淡屬大甲社通事據稱，十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前進，將原文附回。等語。",
+            "to_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "寄字",
+            "inferred": false,
+            "layer": 3,
+            "place": "",
+            "quote": "彰邑大肚社番寄字淡屬大甲社通事據稱，十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前進，將原文附回。等語。",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃21",
+    "evTitle": "匪徒攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "十一月二十八日清晨，林爽文部眾攻陷彰化縣城並予以佔據，導致路途梗塞，內地文稟無法由正口直達。",
+      "howKnown": "轉述",
+      "quote": "本日早彰城失陷，路途梗塞，不能前進...現在彰化既為匪徒竊踞",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "匪徒攻陷彰化縣城",
+      "whenAr": "1787/01/17",
+      "whenCh": "十一月二十八日晨",
+      "whenKnownCh": "十二月十一日",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文部眾"
+      ],
+      "who_loc": {
+        "林爽文部眾": "彰化縣城"
+      },
+      "doc_id": "硃21",
+      "sources": [
+        {
+          "doc_id": "硃21",
+          "quote": "本日早彰城失陷，路途梗塞，不能前進...現在彰化既為匪徒竊踞"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前進",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "匪徒攻陷彰化縣城",
+            "whenCh": "十一月二十八日早",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "坊口",
+            "quote": "接據署淡防廳程峻、竹塹營守備董得魁會稟...等情到臣。",
+            "to_person": "閩浙總督常青",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "該番",
+            "how": "帶回",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "十一月二十九日，據該番帶回原文，並有彰邑大肚社番寄字淡屬大甲社通事據稱...等語。",
+            "to_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉交",
+            "inferred": true,
+            "layer": 3,
+            "place": "大甲社",
+            "quote": "並有彰邑大肚社番寄字淡屬大甲社通事據稱...將原文附回",
+            "to_person": "該番",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "寄字",
+            "inferred": false,
+            "layer": 4,
+            "place": "大甲社",
+            "quote": "彰邑大肚社番寄字淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃21",
+    "evTitle": "程峻與董得魁帶兵堵緝",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署淡防廳程峻、竹塹營守備董得魁聞彰化匪徒結黨，率領兵役於交界地方嚴密堵緝。",
+      "howKnown": "轉述",
+      "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐...卑職等會帶兵役，於交界地方嚴密堵緝",
+      "relations": [
+        {
+          "evidence": "署淡防廳程峻、竹塹營守備董得魁會稟...卑職等會帶兵役，於交界地方嚴密堵緝",
+          "relation": "會帶兵役",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻與董得魁帶兵堵緝",
+      "whenAr": "",
+      "whenCh": "十一月初間",
+      "whenKnownCh": "十一月二十九日",
+      "where": "淡水與彰化交界",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "竹塹"
+      },
+      "doc_id": "硃21",
+      "sources": [
+        {
+          "doc_id": "硃21",
+          "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐...卑職等會帶兵役，於交界地方嚴密堵緝"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。卑職等會帶兵役，於交界地方嚴密堵緝",
+            "reporter": "署淡防廳程峻、竹塹營守備董得魁",
+            "subtitle": "程峻與董得魁帶兵堵緝",
+            "whenCh": "十一月初間",
+            "where": "交界地方"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "坊口",
+            "quote": "途次坊口，接據署淡防廳程峻、竹塹營守備董得魁會稟，十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。卑職等會帶兵役，於交界地方嚴密堵緝",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃21",
+    "evTitle": "程峻等扼要堵禦",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "程峻、董得魁得知彰化城失陷後，立即督率兵役扼要堵禦，防範賊兵北上。",
+      "howKnown": "轉述",
+      "quote": "十一月二十九日...卑職等立即督率兵役，扼要堵禦。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "程峻等扼要堵禦",
+      "whenAr": "1787/01/18",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十一月二十九日",
+      "where": "淡水",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "竹塹"
+      },
+      "doc_id": "硃21",
+      "sources": [
+        {
+          "doc_id": "硃21",
+          "quote": "十一月二十九日...卑職等立即督率兵役，扼要堵禦。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月二十九日...卑職等立即督率兵役，扼要堵禦。",
+            "reporter": "署淡防廳程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等扼要堵禦",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署淡防廳程峻、竹塹營守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "坊口",
+            "quote": "途次坊口，接據署淡防廳程峻、竹塹營守備董得魁會稟...卑職等立即督率兵役，扼要堵禦。...等情到臣。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "林爽文等結黨搶劫",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文、王芬等人在北路大里杙等莊糾集黨羽，進行搶劫活動。",
+      "howKnown": "轉述",
+      "quote": "北路大里杙等莊，有奸民林爽文、王芬等結黨搶劫",
+      "relations": [
+        {
+          "evidence": "林爽文、王芬等結黨搶劫",
+          "relation": "結黨",
+          "relation_type": "ally",
+          "source": "林爽文",
+          "target": "王芬"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "林爽文等結黨搶劫",
+      "whenAr": "1786/12",
+      "whenCh": "十一月",
+      "whenKnownCh": "十二月十四日",
+      "where": "大里杙",
+      "who": [
+        "林爽文",
+        "王芬"
+      ],
+      "who_loc": {
+        "林爽文": "大里杙",
+        "王芬": "大里杙"
+      },
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "北路大里杙等莊，有奸民林爽文、王芬等結黨搶劫"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "北路大里杙等莊，有奸民林爽文、王芬等結黨搶劫",
+            "reporter": "臺灣鎮總兵柴大紀、該道永福",
+            "subtitle": "林爽文等結黨搶劫",
+            "whenCh": "十一月",
+            "where": "大里杙"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣鎮總兵柴大紀、該道永福",
+            "how": "移稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣府城",
+            "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟，內稱：……即於初二日由臺灣府城繕稟封發",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "1787/01/20",
+            "whenCh": "十二月初二日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "叛軍夜襲大墩營盤",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "叛軍數千人於十一月二十七日夜間散而復聚，前往襲擊駐紮在大墩的清軍營盤。",
+      "howKnown": "轉述",
+      "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。",
+      "relations": [
+        {
+          "evidence": "賊匪散而復聚，竟有數千人往劫大墩營盤",
+          "relation": "劫營",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞峻"
+        },
+        {
+          "evidence": "賊匪散而復聚，竟有數千人往劫大墩營盤",
+          "relation": "劫營",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "赫生額"
+        },
+        {
+          "evidence": "賊匪散而復聚，竟有數千人往劫大墩營盤",
+          "relation": "劫營",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "耿世文"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "叛軍夜襲大墩營盤",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月十四日",
+      "where": "大墩",
+      "who": [
+        "林爽文",
+        "俞峻",
+        "赫生額",
+        "耿世文"
+      ],
+      "who_loc": {
+        "俞峻": "大墩",
+        "林爽文": "大墩",
+        "耿世文": "大墩",
+        "赫生額": "大墩"
+      },
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。",
+            "reporter": "北路中營都司",
+            "subtitle": "叛軍夜襲大墩營盤",
+            "whenCh": "十一月二十七日夜",
+            "where": "大墩"
+          },
+          {
+            "quote": "南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城。",
+            "reporter": "北路中營都司",
+            "subtitle": "南北投匪徒糾集",
+            "whenCh": "十一月二十八日",
+            "where": "南投、北投"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+            "how": "移稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣府城",
+            "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟……即於初二日由臺灣府城繕稟封發",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十二月初二日"
+          },
+          {
+            "from_person": "北路中營都司",
+            "how": "報稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "本月初一日辰刻，據北路中營都司報稱……二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。",
+            "to_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+            "whenAr": "",
+            "whenCh": "十二月初一日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "叛軍於大肚溪截路",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "叛軍在大肚溪邊聚集並截斷道路，導致清軍南北信息不通。",
+      "howKnown": "轉述",
+      "quote": "並於大肚溪邊聚匪截路，以致信息不通。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍於大肚溪截路",
+      "whenAr": "1787/01/17",
+      "whenCh": "十一月二十八日",
+      "whenKnownCh": "十二月十四日",
+      "where": "大肚溪",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "並於大肚溪邊聚匪截路，以致信息不通。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚...並於大肚溪邊聚匪截路，以致信息不通。",
+            "reporter": "北路中營都司",
+            "subtitle": "叛軍於大肚溪截路",
+            "whenCh": "十一月二十八日",
+            "where": "大肚溪"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+            "how": "移稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣府城",
+            "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟...即於初二日由臺灣府城繕稟封發",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "1787/01/20",
+            "whenCh": "十二月初二日"
+          },
+          {
+            "from_person": "北路中營都司",
+            "how": "報稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "本月初一日辰刻，據北路中營都司報稱...並於大肚溪邊聚匪截路，以致信息不通。",
+            "to_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+            "whenAr": "1787/01/19",
+            "whenCh": "十二月初一日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "南北投匪徒糾集",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "南投、北投一帶有叛軍匪徒糾集，並傳聞準備進攻彰化縣城。",
+      "howKnown": "轉述",
+      "quote": "南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "南北投匪徒糾集",
+      "whenAr": "1787/01/17",
+      "whenCh": "十一月二十八日",
+      "whenKnownCh": "十二月十四日",
+      "where": "南投、北投",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城。",
+            "reporter": "北路中營都司",
+            "subtitle": "南北投匪徒糾集",
+            "whenCh": "十一月二十八日",
+            "where": "南投、北投"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+            "how": "移稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "臺灣府城",
+            "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟……即於初二日由臺灣府城繕稟封發",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "1787/01/20",
+            "whenCh": "十二月初二日"
+          },
+          {
+            "from_person": "北路中營都司",
+            "how": "報稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "本月初一日辰刻，據北路中營都司報稱……南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城。查縣城存兵甚少，現在調集熟番守御，請即添兵應援。等語。",
+            "to_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+            "whenAr": "1787/01/19",
+            "whenCh": "十二月初一日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "叛軍攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "叛軍攻入彰化縣城，殺害城內清廷文武官員。",
+      "howKnown": "轉述",
+      "quote": "十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍攻陷彰化縣城",
+      "whenAr": "1787/01/18",
+      "whenCh": "十一月二十九日以前",
+      "whenKnownCh": "十二月十三日",
+      "where": "彰化縣城",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "彰化縣城內被賊殺害各官",
+            "reporter": "舵工黃斌",
+            "subtitle": "叛軍攻陷彰化縣城",
+            "whenCh": "十一月二十九日以前",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "蚶江通判陳惇",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "蚶江",
+            "quote": "十三日午刻，據蚶江通判陳惇稟稱，初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官，小的就將船開至口外躲避。",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "舵工黃斌",
+            "how": "供稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "蚶江",
+            "quote": "詢據舵工黃斌供稱：十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官，小的就將船開至口外躲避。",
+            "to_person": "蚶江通判陳惇",
+            "whenAr": "",
+            "whenCh": "初十日酉時"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "叛軍進攻諸羅縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "傳聞叛軍前往諸羅縣進攻縣城，與官兵發生激烈交戰。",
+      "howKnown": "轉述",
+      "quote": "又聽人傳說，賊人赴諸羅縣攻城",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍進攻諸羅縣城",
+      "whenAr": "1787/01/18",
+      "whenCh": "十一月二十九日以前",
+      "whenKnownCh": "十二月十三日",
+      "where": "諸羅縣城",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "又聽人傳說，賊人赴諸羅縣攻城"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+            "reporter": "舵工黃斌",
+            "subtitle": "叛軍進攻諸羅縣城",
+            "whenCh": "十一月二十九日以前",
+            "where": "諸羅縣"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "蚶江通判陳惇",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "蚶江",
+            "quote": "十三日午刻，據蚶江通判陳惇稟稱，初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官，小的就將船開至口外躲避。又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。等語。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "舵工黃斌",
+            "how": "供稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "蚶江",
+            "quote": "初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官，小的就將船開至口外躲避。又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。等語。",
+            "to_person": "蚶江通判陳惇",
+            "whenAr": "",
+            "whenCh": "初十日酉時"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "黃仕簡帶兵由廈門渡台",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "水陸提督黃仕簡已率領官兵自廈門港口出發，飛渡鹿耳門前往台灣馳援。",
+      "howKnown": "探報",
+      "quote": "現在提臣黃仕簡已帶兵由廈門出口，飛渡鹿耳門",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "黃仕簡帶兵由廈門渡台",
+      "whenAr": "",
+      "whenCh": "十二月",
+      "whenKnownCh": "",
+      "where": "廈門",
+      "who": [
+        "黃仕簡"
+      ],
+      "who_loc": {
+        "黃仕簡": "廈門"
+      },
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "現在提臣黃仕簡已帶兵由廈門出口，飛渡鹿耳門"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "現在提臣黃仕簡已帶兵由廈門出口，飛渡鹿耳門",
+            "reporter": "提臣黃仕簡",
+            "subtitle": "黃仕簡帶兵由廈門渡台",
+            "whenCh": "十二月",
+            "where": "廈門"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "提臣黃仕簡",
+            "how": "移報",
+            "inferred": true,
+            "layer": 1,
+            "place": "廈門",
+            "quote": "現在提臣黃仕簡已帶兵由廈門出口，飛渡鹿耳門",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "常青與任承恩會商調兵",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "閩浙總督常青已進駐蚶江，與陸路提督任承恩會同商議，調發官兵準備由蚶江對渡至鹿仔港進剿。",
+      "howKnown": "探報",
+      "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港",
+      "relations": [
+        {
+          "evidence": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商",
+          "relation": "會商",
+          "relation_type": "ally",
+          "source": "常青",
+          "target": "任承恩"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "常青與任承恩會商調兵",
+      "whenAr": "",
+      "whenCh": "十二月",
+      "whenKnownCh": "",
+      "where": "蚶江",
+      "who": [
+        "常青",
+        "任承恩"
+      ],
+      "who_loc": {
+        "任承恩": "蚶江",
+        "常青": "蚶江"
+      },
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港",
+            "reporter": "督臣常青、陸路提臣任承恩",
+            "subtitle": "常青與任承恩會商調兵",
+            "whenCh": "十二月",
+            "where": "蚶江"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "督臣常青、陸路提臣任承恩",
+            "how": "會商與知照",
+            "inferred": true,
+            "layer": 1,
+            "place": "蚶江",
+            "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃24",
+    "evTitle": "常青調派丁朝雄等至閩安",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "閩浙總督常青調派副將丁朝雄、那穆素里帶兵至閩安，會合閩安、烽火各營兵，聽候總兵郝壯猷統領進發。",
+      "howKnown": "探報",
+      "quote": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵，聽總兵郝壯猷統領進發。",
+      "relations": [
+        {
+          "evidence": "督臣調派副將丁朝雄",
+          "relation": "調派",
+          "relation_type": "command",
+          "source": "常青",
+          "target": "丁朝雄"
+        },
+        {
+          "evidence": "督臣調派副將丁朝雄、那穆素里",
+          "relation": "調派",
+          "relation_type": "command",
+          "source": "常青",
+          "target": "那穆素里"
+        },
+        {
+          "evidence": "聽總兵郝壯猷統領進發",
+          "relation": "聽其統領",
+          "relation_type": "command",
+          "source": "丁朝雄",
+          "target": "郝壯猷"
+        },
+        {
+          "evidence": "聽總兵郝壯猷統領進發",
+          "relation": "聽其統領",
+          "relation_type": "command",
+          "source": "那穆素里",
+          "target": "郝壯猷"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "常青調派丁朝雄等至閩安",
+      "whenAr": "",
+      "whenCh": "十二月",
+      "whenKnownCh": "",
+      "where": "閩安",
+      "who": [
+        "常青",
+        "丁朝雄",
+        "那穆素里",
+        "郝壯猷"
+      ],
+      "who_loc": {
+        "丁朝雄": "閩安",
+        "常青": "蚶江",
+        "那穆素里": "閩安",
+        "郝壯猷": "閩安"
+      },
+      "doc_id": "硃24",
+      "sources": [
+        {
+          "doc_id": "硃24",
+          "quote": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵，聽總兵郝壯猷統領進發。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵，聽總兵郝壯猷統領進發。",
+            "reporter": "閩浙總督常青",
+            "subtitle": "常青調派丁朝雄等至閩安",
+            "whenCh": "十二月",
+            "where": "閩安"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "閩浙總督常青",
+            "how": "知照",
+            "inferred": true,
+            "layer": 1,
+            "place": "蚶江",
+            "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港，進攻至省城。由閩安出口，直達淡水，係海面間道，向禁船隻往來，此路最為便捷，亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵，聽總兵郝壯猷統領進發。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十二月"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "林爽文等結黨滋事",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月初，林爽文等人在彰化縣結黨，擾害地方，官府未能將其擒獲。",
+      "howKnown": "轉述",
+      "quote": "十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文等結黨滋事",
+      "whenAr": "",
+      "whenCh": "十一月初間",
+      "whenKnownCh": "十二月十二日",
+      "where": "彰化縣",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "本年十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "林爽文等結黨滋事",
+            "whenCh": "十一日初間",
+            "where": "彰化縣"
+          },
+          {
+            "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等募勇防堵淡水",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱，本年十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。...隨即專差搭船馳稟。",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "大墩戕官與攻陷彰化城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十七日夜，彰化知縣俞知縣在大墩地方搜捕匪徒時被林爽文等叛軍殺害。次日（二十八日）清晨，叛軍進而攻陷彰化縣城，並竊據該地，導致道路梗阻。",
+      "howKnown": "轉述",
+      "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞...彰化已為匪徒竊據",
+      "relations": [
+        {
+          "evidence": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞知縣"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "大墩戕官與攻陷彰化城",
+      "whenAr": "",
+      "whenCh": "十一月二十七夜至二十八日早",
+      "whenKnownCh": "十二月十二日",
+      "where": "大墩、彰化縣城",
+      "who": [
+        "林爽文",
+        "俞知縣"
+      ],
+      "who_loc": {
+        "俞知縣": "大墩",
+        "林爽文": "彰化縣"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞...彰化已為匪徒竊據"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞，不能前遞",
+            "reporter": "彰化大肚社番",
+            "subtitle": "大墩戕官與攻陷彰化城",
+            "whenCh": "十一月二十七夜至二十八日早",
+            "where": "大墩、彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "十二日辰刻，接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱……適有商船飄泊淡港，隨即專差搭船馳稟。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉報",
+            "inferred": false,
+            "layer": 2,
+            "place": "淡屬大甲社",
+            "quote": "十一月二十九日，據該番帶回原文，並有彰化大肚社番寄字淡屬大甲社通事據稱",
+            "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "彰化大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "彰化大肚社",
+            "quote": "彰化大肚社番寄字淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "程峻等率兵防堵交界",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署淡水同知程峻、竹塹營守備董得魁因聞彰化匪徒滋事，恐其竄入淡水，遂率領兵役於交界地方嚴密堵緝。",
+      "howKnown": "轉述",
+      "quote": "卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝",
+      "relations": [
+        {
+          "evidence": "會帶兵役於交界地方",
+          "relation": "會同",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻等率兵防堵交界",
+      "whenAr": "",
+      "whenCh": "十一月初間",
+      "whenKnownCh": "十二月十二日",
+      "where": "淡水與彰化交界地方",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水與彰化交界地方",
+        "董得魁": "淡水與彰化交界地方"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等率兵防堵交界",
+            "whenCh": "十一月初間",
+            "where": "淡水與彰化交界地方"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "十二日辰刻，接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱：本年十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝……十一月二十九日……隨即專差搭船馳稟。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "程峻等募勇防堵淡水",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "彰化城失陷後，程峻、董得魁立即督率兵役，募集鄉勇與大甲社番，於扼要處所進行堵禦。",
+      "howKnown": "轉述",
+      "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+      "relations": [
+        {
+          "evidence": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦",
+          "relation": "協同",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻等募勇防堵淡水",
+      "whenAr": "1787/01/17",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十二月十二日",
+      "where": "淡水",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "淡水"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等募勇防堵淡水",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱：……十一月二十九日……卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。……隨即專差搭船馳稟。",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "1786/12/19",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "黃仕簡帶兵東渡",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "福建陸路提督黃仕簡率領兵將東渡臺灣，前往捕剿滋事匪徒。",
+      "howKnown": "探報",
+      "quote": "提臣黃仕簡現又帶兵東渡",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "黃仕簡帶兵東渡",
+      "whenAr": "",
+      "whenCh": "十二月",
+      "whenKnownCh": "十二月十二日",
+      "where": "臺灣海峽",
+      "who": [
+        "黃仕簡"
+      ],
+      "who_loc": {
+        "黃仕簡": "臺灣海峽"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "提臣黃仕簡現又帶兵東渡"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "提臣黃仕簡現又帶兵東渡",
+            "reporter": "提臣黃仕簡",
+            "subtitle": "黃仕簡帶兵東渡",
+            "whenCh": "十二月",
+            "where": "臺灣海峽"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "提臣黃仕簡",
+            "how": "告知",
+            "inferred": true,
+            "layer": 1,
+            "place": "",
+            "quote": "提臣黃仕簡現又帶兵東渡",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃25",
+    "evTitle": "大墩地方殺害官員",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文等民變群眾在大墩地方與前來搜捕的彰化知縣俞峻等人發生衝突，並將其殺害。",
+      "howKnown": "轉述",
+      "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+      "relations": [
+        {
+          "evidence": "本縣俞在大墩地方拿匪被害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "大墩地方殺害官員",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月初十日",
+      "where": "大墩",
+      "who": [
+        "林爽文",
+        "俞"
+      ],
+      "who_loc": {
+        "俞": "大墩",
+        "林爽文": "大墩"
+      },
+      "doc_id": "硃25",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "大墩地方殺害官員",
+            "whenCh": "十一月二十七日夜",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署北路淡水同知程峻、守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+            "to_person": "福建水師提督黃仕簡",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉述",
+            "inferred": true,
+            "layer": 2,
+            "place": "淡屬大甲社",
+            "quote": "彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+            "to_person": "署北路淡水同知程峻、守備董得魁",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "彰邑大肚社",
+            "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃25",
+    "evTitle": "攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文等民變會黨聚集，於十一月二十九日辰刻起攻打彰化縣城，至午刻將城池攻陷，城內文武官員生死不明。",
+      "howKnown": "訪聞",
+      "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "攻陷彰化縣城",
+      "whenAr": "1787/01/18",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十二月初五日",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣城"
+      },
+      "doc_id": "硃25",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十九早，彰城失陷",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "攻陷彰化縣城",
+            "whenCh": "十一月二十九日",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署北路淡水同知程峻、守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。",
+            "to_person": "福建水師提督一等海澄公奴才黃仕簡",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉報",
+            "inferred": true,
+            "layer": 2,
+            "place": "大甲社",
+            "quote": "彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷",
+            "to_person": "署北路淡水同知程峻、守備董得魁",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "大肚社",
+            "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃25",
+    "evTitle": "程峻董得魁分頭堵禦",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署北路淡水同知程峻、守備董得魁在得知彰化城陷後，督同兵役整齊槍炮，並募集鄉勇與社番，在扼要之處分頭堵禦並設法救援。",
+      "howKnown": "轉述",
+      "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+      "relations": [
+        {
+          "evidence": "署北路淡水同知程峻、守備董得魁會稟",
+          "relation": "會稟",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻董得魁分頭堵禦",
+      "whenAr": "",
+      "whenCh": "十一月二十九日後",
+      "whenKnownCh": "十二月初十日",
+      "where": "淡水",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "淡水"
+      },
+      "doc_id": "硃25",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+            "reporter": "署北路淡水同知程峻、守備董得魁",
+            "subtitle": "程峻董得魁分頭堵禦",
+            "whenCh": "十一月二十九日後",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署北路淡水同知程峻、守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。...卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+            "to_person": "福建水師提督黃仕簡",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃31",
+    "evTitle": "賊匪攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文起事民變民兵攻陷彰化縣城，殺害駐城官員，並阻絕官方文書往來傳遞。",
+      "howKnown": "轉述",
+      "quote": "彰化縣城被賊匪攻陷，殺害官員，阻絕文報。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "賊匪攻陷彰化縣城",
+      "whenAr": "",
+      "whenCh": "十二月初九日以前",
+      "whenKnownCh": "十二月初九日",
+      "where": "彰化縣城",
+      "who": [
+        "賊匪"
+      ],
+      "who_loc": {
+        "賊匪": "彰化縣城"
+      },
+      "doc_id": "硃31",
+      "sources": [
+        {
+          "doc_id": "硃31",
+          "quote": "彰化縣城被賊匪攻陷，殺害官員，阻絕文報。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "彰化縣城被賊匪攻陷，殺害官員，阻絕文報。",
+            "reporter": "臺灣淡防同知程峻、竹塹營守備董得魁",
+            "subtitle": "賊匪攻陷彰化縣城",
+            "whenCh": "十二月初九日以前",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "任承恩",
+            "how": "奏",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉",
+            "quote": "奴才當即恭摺於初十日馳奏。...所有奴才詢據程必大等供情，及繳到關防飭交貯庫，並即統領官兵會剿緣由，馳奏以聞",
+            "to_person": "皇帝",
+            "whenAr": "1787/01/31",
+            "whenCh": "十二月十三日"
+          },
+          {
+            "from_person": "臺灣淡防同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "十二月初九日，奴才接據臺灣淡防同知程峻、竹塹營守備董得魁稟報：彰化縣城被賊匪攻陷，殺害官員，阻絕文報。各情由。",
+            "to_person": "任承恩",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃31",
+    "evTitle": "中港之役擊退官兵",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "賊匪於中港地方與前來堵禦的淡水同知程峻、竹塹營守備董得魁所率官兵鄉勇交戰。因賊匪人數眾多，官兵不敵潰敗。",
+      "howKnown": "轉述",
+      "quote": "我父親會同董守備帶領兵役鄉勇，前赴中港地方堵禦。賊匪眾多，抵敵不住……隨同守備董得魁會同程廳官帶兵在中港地方堵禦賊匪。到本月初七日，不料賊匪漸多，兵少不敵",
+      "relations": [
+        {
+          "evidence": "賊匪眾多，抵敵不住",
+          "relation": "抵敵不住",
+          "relation_type": "conflict",
+          "source": "賊匪",
+          "target": "程峻"
+        },
+        {
+          "evidence": "不料賊匪漸多，兵少不敵",
+          "relation": "兵少不敵",
+          "relation_type": "conflict",
+          "source": "賊匪",
+          "target": "董得魁"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "中港之役擊退官兵",
+      "whenAr": "",
+      "whenCh": "十二月初七日以前",
+      "whenKnownCh": "十二月十二日",
+      "where": "中港",
+      "who": [
+        "賊匪",
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "中港",
+        "董得魁": "中港",
+        "賊匪": "中港"
+      },
+      "doc_id": "硃31",
+      "sources": [
+        {
+          "doc_id": "硃31",
+          "quote": "我父親會同董守備帶領兵役鄉勇，前赴中港地方堵禦。賊匪眾多，抵敵不住……隨同守備董得魁會同程廳官帶兵在中港地方堵禦賊匪。到本月初七日，不料賊匪漸多，兵少不敵"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "我父親會同董守備帶領兵役鄉勇，前赴中港地方堵禦。賊匪眾多，抵敵不住，我父親存亡不知。",
+            "reporter": "程必大",
+            "subtitle": "中港之役擊退官兵",
+            "whenCh": "十二月初七日以前",
+            "where": "中港"
+          },
+          {
+            "quote": "賊匪於十二月初七日已到竹塹，四行擄搶。",
+            "reporter": "程必大",
+            "subtitle": "賊匪攻佔竹塹擄搶",
+            "whenCh": "十二月初七日",
+            "where": "竹塹"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "程必大",
+            "how": "口述",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "茲于十二日有該廳程峻之子程必大，奔赴奴才轅門求見，奴才立即傳進。據程必大懷取淡防同知關防，請求救援。...據程必大供：我父親程峻，現署淡水同知，駐紮竹塹。因彰化賊匪滋事，我父親會同董守備帶領兵役鄉勇，前赴中港地方堵禦。賊匪眾多，抵敵不住，我父親存亡不知。",
+            "to_person": "任承恩",
+            "whenAr": "",
+            "whenCh": "十二日"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "連日隨同守備董得魁會同程廳官帶兵在中港地方堵禦賊匪。到本月初七日，不料賊匪漸多，兵少不敵",
+            "reporter": "北路竹塹營外委虞文光、兵丁王元浩",
+            "subtitle": "中港之役擊退官兵",
+            "whenCh": "十二月初七日以前",
+            "where": "中港"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "北路竹塹營外委虞文光、兵丁王元浩",
+            "how": "口述",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "又，有北路竹塹營外委虞文光、兵丁王元浩，亦先後投到求救。...問據外委虞文光供：外委係現任臺灣北路竹塹營外委，連日隨同守備董得魁會同程廳官帶兵在中港地方堵禦賊匪。到本月初七日，不料賊匪漸多，兵少不敵，彰化地方已被賊踞，不得往府求救。董守備不及寫稟，面諭外委隨帶步兵王元浩搭船到泉求救。又問據兵丁王元浩供同。",
+            "to_person": "任承恩",
+            "whenAr": "",
+            "whenCh": "十二日"
+          },
+          {
+            "from_person": "竹塹營守備董得魁",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "中港",
+            "quote": "董守備不及寫稟，面諭外委隨帶步兵王元浩搭船到泉求救。",
+            "to_person": "北路竹塹營外委虞文光、兵丁王元浩",
+            "whenAr": "",
+            "whenCh": "本月初七日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃31",
+    "evTitle": "賊匪攻佔竹塹擄搶",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "賊匪於十二月初七日攻抵竹塹（今新竹），並在當地四處行搶，導致淡水同知程峻之子程必大攜印改裝逃往八里坌內渡求救。",
+      "howKnown": "轉述",
+      "quote": "賊匪於十二月初七日已到竹塹，四行擄搶。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "賊匪攻佔竹塹擄搶",
+      "whenAr": "1787/01/25",
+      "whenCh": "十二月初七日",
+      "whenKnownCh": "十二月十二日",
+      "where": "竹塹",
+      "who": [
+        "賊匪"
+      ],
+      "who_loc": {
+        "賊匪": "竹塹"
+      },
+      "doc_id": "硃31",
+      "sources": [
+        {
+          "doc_id": "硃31",
+          "quote": "賊匪於十二月初七日已到竹塹，四行擄搶。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "賊匪於十二月初七日已到竹塹，四行擄搶。",
+            "reporter": "程必大",
+            "subtitle": "賊匪攻佔竹塹擄搶",
+            "whenCh": "十二月初七日",
+            "where": "竹塹"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "程必大",
+            "how": "口述",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "茲于十二日有該廳程峻之子程必大，奔赴奴才轅門求見，奴才立即傳進。據程必大供：我父親程峻，現署淡水同知，駐紮竹塹。因彰化賊匪滋事，我父親會同董守備帶領兵役鄉勇，前赴中港地方堵禦。賊匪眾多，抵敵不住，我父親存亡不知。賊匪於十二月初七日已到竹塹，四行擄搶。我恐印信被他搶去，又因彰化地方已被賊踞，不能前往府城，我只得帶印改裝，跑到八里坌，搭船內渡求救的。",
+            "to_person": "任承恩",
+            "whenAr": "1787/01/30",
+            "whenCh": "十二月十二日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃35",
+    "evTitle": "匪徒攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "叛軍於十一月二十七日夜間攔路截殺彰化知縣俞峻、北協副將赫維沐及臺鎮中營遊擊耿世文，隨後攻破並佔領彰化縣城。",
+      "howKnown": "探報",
+      "quote": "探得十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池。",
+      "relations": [
+        {
+          "evidence": "彰化俞知縣...被匪徒攔路截殺",
+          "relation": "攔路截殺",
+          "relation_type": "conflict",
+          "source": "匪徒",
+          "target": "俞知縣"
+        },
+        {
+          "evidence": "北協赫副將...被匪徒攔路截殺",
+          "relation": "攔路截殺",
+          "relation_type": "conflict",
+          "source": "匪徒",
+          "target": "赫副將"
+        },
+        {
+          "evidence": "臺鎮中營耿遊擊，被匪徒攔路截殺",
+          "relation": "攔路截殺",
+          "relation_type": "conflict",
+          "source": "匪徒",
+          "target": "耿遊擊"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "匪徒攻陷彰化縣城",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月十四日",
+      "where": "彰化縣",
+      "who": [
+        "匪徒",
+        "俞知縣",
+        "赫副將",
+        "耿遊擊"
+      ],
+      "who_loc": {
+        "俞知縣": "彰化縣",
+        "匪徒": "彰化縣",
+        "耿遊擊": "彰化縣",
+        "赫副將": "彰化縣"
+      },
+      "doc_id": "硃35",
+      "sources": [
+        {
+          "doc_id": "硃35",
+          "quote": "探得十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "探得十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池。",
+            "reporter": "守備林登雲",
+            "subtitle": "匪徒攻陷彰化縣城",
+            "whenCh": "十一月二十七夜",
+            "where": "彰化縣"
+          },
+          {
+            "quote": "又聞得竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散。",
+            "reporter": "守備林登雲",
+            "subtitle": "賊匪中港擊散官兵並搶擄竹塹",
+            "whenCh": "十二月初七日",
+            "where": "中港"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "守備林登雲",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "又接據臣差往探信之守備林登雲稟報：探得十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃35",
+    "evTitle": "賊匪中港擊散官兵並搶擄竹塹",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "叛軍於十二月初七日進攻中港，擊散前來堵禦的淡水同知程峻與守備董得魁所率官兵，隨後攻入竹塹四處搶擄。",
+      "howKnown": "轉述",
+      "quote": "賊匪于十初七日已到竹塹，四行搶擄...竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散。",
+      "relations": [
+        {
+          "evidence": "竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散",
+          "relation": "殺散",
+          "relation_type": "conflict",
+          "source": "賊匪",
+          "target": "程同知"
+        },
+        {
+          "evidence": "竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散",
+          "relation": "殺散",
+          "relation_type": "conflict",
+          "source": "賊匪",
+          "target": "董守備"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "賊匪中港擊散官兵並搶擄竹塹",
+      "whenAr": "1787/01/25",
+      "whenCh": "十二月初七日",
+      "whenKnownCh": "十二月十二日",
+      "where": "中港",
+      "who": [
+        "賊匪",
+        "程同知",
+        "董守備"
+      ],
+      "who_loc": {
+        "程同知": "中港",
+        "董守備": "中港",
+        "賊匪": "中港"
+      },
+      "doc_id": "硃35",
+      "sources": [
+        {
+          "doc_id": "硃35",
+          "quote": "賊匪于十初七日已到竹塹，四行搶擄...竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "因彰化賊匪滋事，我父親會同董守備，帶領兵役鄉勇，赴中港地方堵禦。賊匪眾多，抵敵不住，我父親存亡不知。賊匪于十初七日已到竹塹，四行搶擄",
+            "reporter": "程必大",
+            "subtitle": "賊匪中港擊散官兵並搶擄竹塹",
+            "whenCh": "十二月初七日",
+            "where": "中港"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "惠安",
+            "quote": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱：十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。...理合稟報。等由到臣。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "程必大",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "泉州",
+            "quote": "據程必大供稱：父親程峻現署淡水同知，駐紮竹塹。因彰化賊匪滋事，我父親會同董守備，帶領兵役鄉勇，赴中港地方堵禦。賊匪眾多，抵敵不住，我父親存亡不知。賊匪于十初七日已到竹塹，四行搶擄，我恐印信被他搶去，又因彰化地方已被賊踞，不能前往府城，只得帶印改裝，跑到八里坌內渡求救的。",
+            "to_person": "泉州府知府王右弼、晉江縣知縣徐夢麟、陸路提督",
+            "whenAr": "1787/01/30",
+            "whenCh": "十二月十二日"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "隨同守備董得魁，並程廳官帶兵到中港堵禦賊匪。本月初七日，不料賊人漸多，兵少不敵。",
+            "reporter": "北路竹塹營外委虞文光、兵丁王元浩",
+            "subtitle": "賊匪中港擊散官兵並搶擄竹塹",
+            "whenCh": "十二月初七日",
+            "where": "中港"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "惠安",
+            "quote": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱：...又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉...理合稟報。等由到臣。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "北路竹塹營外委虞文光、兵丁王元浩",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "泉州",
+            "quote": "據外委虞文光供：係現任臺灣北路竹塹外委，隨同守備董得魁，並程廳官帶兵到中港堵禦賊匪。本月初七日，不料賊人漸多，兵少不敵。彰化已被賊踞，不得往府求救。董守備面諭外委，帶著步兵王元浩搭船來泉求救。各等情。",
+            "to_person": "泉州府知府王右弼、晉江縣知縣徐夢麟、陸路提督",
+            "whenAr": "1787/01/30",
+            "whenCh": "十二月十二日"
+          },
+          {
+            "from_person": "守備董得魁",
+            "how": "口述",
+            "inferred": false,
+            "layer": 3,
+            "place": "中港",
+            "quote": "董守備面諭外委，帶著步兵王元浩搭船來泉求救。",
+            "to_person": "北路竹塹營外委虞文光、兵丁王元浩",
+            "whenAr": "1787/01/25",
+            "whenCh": "十二月初七日"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "又聞得竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散。",
+            "reporter": "守備林登雲",
+            "subtitle": "賊匪中港擊散官兵並搶擄竹塹",
+            "whenCh": "十二月初七日",
+            "where": "中港"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "守備林登雲",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "又接據臣差往探信之守備林登雲稟報：探得十一月二十七夜，彰化俞知縣同北協赫副將、臺鎮中營耿遊擊，被匪徒攔路截殺，攻破彰化縣，踞住城池。又聞得竹塹程同知、董守備，帶兵並鄉勇往中港堵禦，於本月初七日亦被賊殺散。等語。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃35",
+    "evTitle": "程必大攜印內渡求救",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "署淡水同知程峻之子程必大，因竹塹失陷，攜帶淡防同知關防改裝內渡至泉州求救。",
+      "howKnown": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱",
+      "quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。...只得帶印改裝，跑到八里坌內渡求救的。",
+      "relations": [
+        {
+          "evidence": "署淡水同知程峻之子程必大",
+          "relation": "之子",
+          "relation_type": "kinship",
+          "source": "程峻",
+          "target": "程必大"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程必大攜印內渡求救",
+      "whenAr": "1787/01/30",
+      "whenCh": "十二月十二日",
+      "whenKnownCh": "十二月十三日夜",
+      "where": "泉州",
+      "who": [
+        "程必大",
+        "程峻"
+      ],
+      "who_loc": {
+        "程峻": "竹塹",
+        "程必大": "泉州"
+      },
+      "doc_id": "硃35",
+      "sources": [
+        {
+          "doc_id": "硃35",
+          "quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。...只得帶印改裝，跑到八里坌內渡求救的。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。...只得帶印改裝，跑到八里坌內渡求救的。",
+            "reporter": "程必大",
+            "subtitle": "程必大攜印內渡求救",
+            "whenCh": "十二日",
+            "where": "泉州"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱：十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。",
+            "to_person": "閩浙總督常青",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "程必大",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "泉州",
+            "quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。...當即隨同陸路提督傳詢。據程必大供稱：...我恐印信被他搶去，又因彰化地方已被賊踞，不能前往府城，只得帶印改裝，跑到八里坌內渡求救的。",
+            "to_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "whenAr": "",
+            "whenCh": "十二日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃35",
+    "evTitle": "虞文光等渡海求救",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "竹塹營外委虞文光與兵丁王元浩奉守備董得魁之命，搭船至泉州求救。",
+      "howKnown": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱",
+      "quote": "又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉...董守備面諭外委，帶著步兵王元浩搭船來泉求救。",
+      "relations": [
+        {
+          "evidence": "董守備面諭外委，帶著步兵王元浩搭船來泉求救",
+          "relation": "面諭",
+          "relation_type": "command",
+          "source": "董得魁",
+          "target": "虞文光"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "虞文光等渡海求救",
+      "whenAr": "1787/01/30",
+      "whenCh": "十二月十二日",
+      "whenKnownCh": "十二月十三日夜",
+      "where": "泉州",
+      "who": [
+        "虞文光",
+        "王元浩",
+        "董得魁"
+      ],
+      "who_loc": {
+        "王元浩": "泉州",
+        "董得魁": "中港",
+        "虞文光": "泉州"
+      },
+      "doc_id": "硃35",
+      "sources": [
+        {
+          "doc_id": "硃35",
+          "quote": "又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉...董守備面諭外委，帶著步兵王元浩搭船來泉求救。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉...董守備面諭外委，帶著步兵王元浩搭船來泉求救。",
+            "reporter": "北路竹塹營外委虞文光、兵丁王元浩",
+            "subtitle": "虞文光等渡海求救",
+            "whenCh": "十二月十二日",
+            "where": "泉州"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱：十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉，當即隨同陸路提督傳詢。...理合稟報。等由到臣。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": "十二月十二日"
+          },
+          {
+            "from_person": "北路竹塹營外委虞文光、兵丁王元浩",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "泉州",
+            "quote": "又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉，當即隨同陸路提督傳詢。據...外委虞文光供：...董守備面諭外委，帶著步兵王元浩搭船來泉求救。各等情。",
+            "to_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "whenAr": "",
+            "whenCh": "十二月十二日"
+          },
+          {
+            "from_person": "守備董得魁",
+            "how": "口述",
+            "inferred": false,
+            "layer": 3,
+            "place": "中港",
+            "quote": "董守備面諭外委，帶著步兵王元浩搭船來泉求救。",
+            "to_person": "北路竹塹營外委虞文光、兵丁王元浩",
+            "whenAr": "",
+            "whenCh": "十二月初七日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃35",
+    "evTitle": "泉州府收存關防並看管外委",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "泉州府知府王右弼等將程必大帶回的淡防同知關防收存府庫，並將外委虞文光等人嚴行看管。",
+      "howKnown": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟報",
+      "quote": "隨將關防收存府庫，外委虞文光等嚴行看管外，理合稟報。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "泉州府收存關防並看管外委",
+      "whenAr": "1787/01/30",
+      "whenCh": "十二月十二日",
+      "whenKnownCh": "十二月十三日夜",
+      "where": "泉州",
+      "who": [
+        "王右弼",
+        "徐夢麟",
+        "虞文光"
+      ],
+      "who_loc": {
+        "徐夢麟": "泉州",
+        "王右弼": "泉州",
+        "虞文光": "泉州"
+      },
+      "doc_id": "硃35",
+      "sources": [
+        {
+          "doc_id": "硃35",
+          "quote": "隨將關防收存府庫，外委虞文光等嚴行看管外，理合稟報。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "隨將關防收存府庫，外委虞文光等嚴行看管外，理合稟報。",
+            "reporter": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "subtitle": "泉州府收存關防並看管外委",
+            "whenCh": "十二日",
+            "where": "泉州"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "泉州府知府王右弼、晉江縣知縣徐夢麟",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "接據泉州府知府王右弼、晉江縣知縣徐夢麟稟稱：……隨將關防收存府庫，外委虞文光等嚴行看管外，理合稟報。等由到臣。",
+            "to_person": "閩浙總督臣常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  }
+]

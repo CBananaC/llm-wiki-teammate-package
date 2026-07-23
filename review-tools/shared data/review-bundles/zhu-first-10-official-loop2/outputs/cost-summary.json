@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": true,
+  "calls": 24,
+  "prompt_tokens": 57028,
+  "completion_tokens": 12378,
+  "input_cost_usd": 0.08554199999999999,
+  "output_cost_usd": 0.111402,
+  "cost_usd": 0.196944,
+  "rows": [
+    {
+      "step": "combined-emperor-actions",
+      "calls": 2,
+      "prompt_tokens": 18858,
+      "completion_tokens": 3518,
+      "exact_tokens": false,
+      "input_cost_usd": 0.028287,
+      "output_cost_usd": 0.031662,
+      "cost_usd": 0.059949
+    },
+    {
+      "step": "merge-emperor-actions",
+      "calls": 1,
+      "prompt_tokens": 1660,
+      "completion_tokens": 282,
+      "exact_tokens": false,
+      "input_cost_usd": 0.00249,
+      "output_cost_usd": 0.002538,
+      "cost_usd": 0.0050279999999999995
+    },
+    {
+      "step": "repeat-report",
+      "calls": 15,
+      "prompt_tokens": 12875,
+      "completion_tokens": 4203,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0193125,
+      "output_cost_usd": 0.037827,
+      "cost_usd": 0.057139499999999996
+    },
+    {
+      "step": "official-response",
+      "calls": 6,
+      "prompt_tokens": 23635,
+      "completion_tokens": 4375,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0354525,
+      "output_cost_usd": 0.039375,
+      "cost_usd": 0.07482749999999999
+    }
+  ]
+}

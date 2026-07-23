@@ -1,0 +1,718 @@
+[
+  {
+    "category": "done",
+    "description": "閩浙總督常青遵旨留駐蚶江、廈門一帶，負責調度策應，以求鎮靜。",
+    "howKnown": "親歷",
+    "quote": "臣惟恪尊諭旨，仍駐蚶江、廈門一帶，調度策應",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "常青留駐蚶江廈門調度",
+    "whenAr": "1787/03",
+    "whenCh": "乾隆五十二年正月",
+    "whenKnownCh": "乾隆五十二年正月十三日",
+    "where": "蚶江、廈門",
+    "who": [
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "廈門"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "臣惟恪尊諭旨，仍駐蚶江、廈門一帶，調度策應"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃110#qing#0"
+  },
+  {
+    "category": "done",
+    "description": "漳浦縣官兵盤查並捕獲匪犯陳樵一名。",
+    "howKnown": "轉述",
+    "quote": "茲又據漳浦縣盤獲匪犯陳樵一名",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "漳浦縣盤獲匪犯陳樵",
+    "whenAr": "1787/02",
+    "whenCh": "乾隆五十二年正月",
+    "whenKnownCh": "乾隆五十二年正月",
+    "where": "漳浦縣",
+    "who": [
+      "陳樵"
+    ],
+    "who_loc": {
+      "陳樵": "漳浦縣"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "茲又據漳浦縣盤獲匪犯陳樵一名"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃110#qing#1"
+  },
+  {
+    "category": "nonmil",
+    "description": "閩浙總督常青下令將捕獲的匪犯陳樵迅速提訊，嚴加審究辦理。",
+    "howKnown": "親歷",
+    "quote": "現在飛提嚴究辦理。",
+    "relations": [
+      {
+        "evidence": "現在飛提嚴究辦理",
+        "relation": "飛提嚴究",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "陳樵"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青飛提嚴究陳樵",
+    "whenAr": "1787/03/02",
+    "whenCh": "乾隆五十二年正月十三日",
+    "whenKnownCh": "乾隆五十二年正月十三日",
+    "where": "廈門",
+    "who": [
+      "常青",
+      "陳樵"
+    ],
+    "who_loc": {
+      "常青": "廈門",
+      "陳樵": "漳浦縣"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "現在飛提嚴究辦理。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃110#qing#2"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青時常飭令沿海文武官員，進行慎密巡查，防範賊匪潛逃。",
+    "howKnown": "親歷",
+    "quote": "臣惟時飭沿海文武員弁，慎密巡查",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "常青飭令沿海文武巡查",
+    "whenAr": "1787/03",
+    "whenCh": "乾隆五十二年正月",
+    "whenKnownCh": "乾隆五十二年正月十三日",
+    "where": "福建沿海",
+    "who": [
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "廈門"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "臣惟時飭沿海文武員弁，慎密巡查"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃110#qing#3"
+  },
+  {
+    "category": "nonmil",
+    "description": "閩浙總督常青與福建巡撫向居民發出告示，懸立重賞，鼓勵捕獲潛逃回籍的賊匪。",
+    "howKnown": "親歷",
+    "quote": "並與撫臣曉諭居民，懸立重賞，遇有賊匪潛逃回籍，捕獲首報",
+    "relations": [
+      {
+        "evidence": "並與撫臣曉諭居民",
+        "relation": "與...曉諭居民",
+        "relation_type": "ally",
+        "source": "常青",
+        "target": "撫臣"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青與撫臣曉諭居民懸賞",
+    "whenAr": "1787/03",
+    "whenCh": "乾隆五十二年正月",
+    "whenKnownCh": "乾隆五十二年正月十三日",
+    "where": "福建沿海",
+    "who": [
+      "常青",
+      "撫臣"
+    ],
+    "who_loc": {
+      "常青": "廈門",
+      "撫臣": "福州"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "並與撫臣曉諭居民，懸立重賞，遇有賊匪潛逃回籍，捕獲首報"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃110#qing#4"
+  },
+  {
+    "category": "plan",
+    "description": "陸路提督任承恩在臺灣與黃仕簡協同殲滅賊匪、辦妥事務後，計畫立即返回內地。",
+    "howKnown": "親歷",
+    "quote": "今任承恩既已渡臺，即遵旨俟其同黃仕簡殲匪蕆事，即行速回",
+    "relations": [
+      {
+        "evidence": "俟其同黃仕簡殲匪蕆事",
+        "relation": "同...殲匪蕆事",
+        "relation_type": "ally",
+        "source": "任承恩",
+        "target": "黃仕簡"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "任承恩擬事竣速回內地",
+    "whenAr": "1787/03",
+    "whenCh": "乾隆五十二年正月",
+    "whenKnownCh": "乾隆五十二年正月十三日",
+    "where": "臺灣",
+    "who": [
+      "任承恩",
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "任承恩": "臺灣",
+      "黃仕簡": "臺灣"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "今任承恩既已渡臺，即遵旨俟其同黃仕簡殲匪蕆事，即行速回"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃110#qing#5"
+  },
+  {
+    "category": "done",
+    "description": "淡水同知程峻前往交界地方召募鄉勇進行堵禦與救援。",
+    "howKnown": "轉述",
+    "quote": "本官亦往交界地方召募鄉勇堵禦，一面救援",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "程峻募集鄉勇防禦",
+    "whenAr": "",
+    "whenCh": "十二月初六日以前",
+    "whenKnownCh": "十二月十三日",
+    "where": "交界地方",
+    "who": [
+      "程峻"
+    ],
+    "who_loc": {
+      "程峻": "交界地方"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "本官亦往交界地方召募鄉勇堵禦，一面救援"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#6"
+  },
+  {
+    "category": "done",
+    "description": "臺灣鎮總兵柴大紀與臺灣道永福派遊擊耿世文會同北協副將赫生額、同知長庚、彰化知縣俞峻前往大里杙等莊查拿結黨搶劫之奸民。",
+    "howKnown": "轉述",
+    "quote": "撥遊擊耿世文帶兵會同北協副將赫升〔生〕額、同知長庚、彰化知縣俞峻前往查拿",
+    "relations": [
+      {
+        "evidence": "撥遊擊耿世文帶兵會同北協副將赫升〔生〕額、同知長庚、彰化知縣俞峻前往查拿",
+        "relation": "撥",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "耿世文"
+      },
+      {
+        "evidence": "撥遊擊耿世文帶兵會同北協副將赫升〔生〕額、同知長庚、彰化知縣俞峻前往查拿",
+        "relation": "撥",
+        "relation_type": "command",
+        "source": "永福",
+        "target": "耿世文"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀派兵查拿大里杙奸民",
+    "whenAr": "",
+    "whenCh": "十一月二十七日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "大里杙",
+    "who": [
+      "柴大紀",
+      "永福",
+      "耿世文",
+      "赫生額",
+      "長庚",
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "大里杙",
+      "柴大紀": "臺灣府城",
+      "永福": "臺灣府城",
+      "耿世文": "大里杙",
+      "赫生額": "大里杙",
+      "長庚": "大里杙"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "撥遊擊耿世文帶兵會同北協副將赫升〔生〕額、同知長庚、彰化知縣俞峻前往查拿"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#7",
+    "same_as": "evmr1w7rp98f2",
+    "earliest_report": {
+      "id": "evmr1w7rp98f2",
+      "doc_id": "硃44",
+      "date": "1786/12/02",
+      "title": "赫生額等帶兵搜捕大里杙匪徒"
+    },
+    "repeat_candidates": [
+      "evmr1w7rp98f2"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "彰化知縣俞峻、北協副將赫生額、遊擊耿世文帶兵駐扎於離彰化縣城三十里之大墩汛地搜捕賊匪。",
+    "howKnown": "轉述",
+    "quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "俞峻等帶兵駐扎大墩",
+    "whenAr": "",
+    "whenCh": "十一月二十八日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "大墩",
+    "who": [
+      "俞峻",
+      "赫生額",
+      "耿世文"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "耿世文": "大墩",
+      "赫生額": "大墩"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#8",
+    "same_as": "evmr1w7rp98f2",
+    "earliest_report": {
+      "id": "evmr1w7rp98f2",
+      "doc_id": "硃44",
+      "date": "1786/12/02",
+      "title": "赫生額等帶兵搜捕大里杙匪徒"
+    },
+    "repeat_candidates": [
+      "evmr1w7rp98f2"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "臺灣鎮總兵柴大紀與臺灣道永福率領遊擊李中揚、林光玉、楊起麟等帶兵飛赴諸羅、彰化要處分路剿捕賊匪。",
+    "howKnown": "轉述",
+    "quote": "本鎮職道等會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵，即於初二日早飛赴諸、彰要處，分路剿捕",
+    "relations": [
+      {
+        "evidence": "會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵",
+        "relation": "率",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "李中揚"
+      },
+      {
+        "evidence": "會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵",
+        "relation": "率",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "林光玉"
+      },
+      {
+        "evidence": "會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵",
+        "relation": "率",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "楊起麟"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀率兵赴諸彰分路剿捕",
+    "whenAr": "1787/01/20",
+    "whenCh": "十二月初二日早",
+    "whenKnownCh": "十二月十四日",
+    "where": "諸羅、彰化",
+    "who": [
+      "柴大紀",
+      "永福",
+      "李中揚",
+      "林光玉",
+      "楊起麟"
+    ],
+    "who_loc": {
+      "李中揚": "諸羅",
+      "林光玉": "諸羅",
+      "柴大紀": "諸羅",
+      "楊起麟": "諸羅",
+      "永福": "諸羅"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "本鎮職道等會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵，即於初二日早飛赴諸、彰要處，分路剿捕"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#9",
+    "same_as": "evmr0lrxt688q",
+    "earliest_report": {
+      "id": "evmr0lrxt688q",
+      "doc_id": "硃44",
+      "date": "1786/12/02",
+      "title": "柴大紀等率兵北上剿捕"
+    },
+    "repeat_candidates": [
+      "evmr0lrxt688q",
+      "evmr1w8kk76go",
+      "evmr628lhqnip",
+      "evmr0nmm2i2y3"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "臺灣鎮總兵柴大紀與臺灣道永福檄調澎湖右營遊擊蔡攀龍率八百名兵力來營聽候調用。",
+    "howKnown": "轉述",
+    "quote": "檄調澎湖右營遊擊蔡攀龍八百名，來營聽候調用",
+    "relations": [
+      {
+        "evidence": "檄調澎湖右營遊擊蔡攀龍八百名，來營聽候調用",
+        "relation": "檄調",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "蔡攀龍"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀檄調澎湖右營兵力",
+    "whenAr": "",
+    "whenCh": "十二月初二日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "臺灣府城",
+    "who": [
+      "柴大紀",
+      "永福",
+      "蔡攀龍"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣府城",
+      "永福": "臺灣府城",
+      "蔡攀龍": "澎湖"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "檄調澎湖右營遊擊蔡攀龍八百名，來營聽候調用"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#10",
+    "same_as": "evmr0ls47av0v",
+    "earliest_report": {
+      "id": "evmr0ls47av0v",
+      "doc_id": "硃44",
+      "date": "1786/12/02",
+      "title": "檄調澎湖協兵丁渡臺"
+    },
+    "repeat_candidates": [
+      "evmr1w9e7h22u",
+      "evmr0ls47av0v"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "水陸提督黃仕簡已帶領官兵由廈門港口出發，飛渡鹿耳門前往臺灣救援。",
+    "howKnown": "探報",
+    "quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡帶兵由廈門渡臺",
+    "whenAr": "",
+    "whenCh": "十二月十四日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "廈門、鹿耳門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "鹿耳門"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#11"
+  },
+  {
+    "category": "plan",
+    "description": "閩浙總督常青駐紮蚶江，與陸路提督任承恩會商調發官兵，計畫由蚶江對渡鹿仔港進攻。",
+    "howKnown": "探報",
+    "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港",
+    "relations": [
+      {
+        "evidence": "與陸路提臣任承恩會商",
+        "relation": "會商",
+        "relation_type": "ally",
+        "source": "常青",
+        "target": "任承恩"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青與任承恩商調官兵渡臺",
+    "whenAr": "",
+    "whenCh": "十二月十四日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "蚶江",
+    "who": [
+      "常青",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "蚶江",
+      "常青": "蚶江"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#12"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青調派副將丁朝雄、那穆素里帶領官兵至閩安，會合閩安、烽火各營兵力。",
+    "howKnown": "探報",
+    "quote": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵",
+    "relations": [
+      {
+        "evidence": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安",
+        "relation": "調派",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "丁朝雄"
+      },
+      {
+        "evidence": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安",
+        "relation": "調派",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "那穆素里"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青調派丁朝雄等至閩安會兵",
+    "whenAr": "",
+    "whenCh": "十二月十四日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "閩安",
+    "who": [
+      "常青",
+      "丁朝雄",
+      "那穆素里"
+    ],
+    "who_loc": {
+      "丁朝雄": "閩安",
+      "常青": "蚶江",
+      "那穆素里": "閩安"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#13",
+    "same_as": "evmr3gh25vdx1",
+    "earliest_report": {
+      "id": "evmr3gh25vdx1",
+      "doc_id": "硃21",
+      "date": "1786/12/12",
+      "title": "郝壯猷率兵由淡水前進圍攻"
+    },
+    "repeat_candidates": [
+      "evmr3gh25vdx1"
+    ]
+  },
+  {
+    "category": "plan",
+    "description": "計畫由總兵郝壯猷統領閩安會合之官兵，由閩安出口直達淡水進發。",
+    "howKnown": "探報",
+    "quote": "聽總兵郝壯猷統領進發",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "郝壯猷統領官兵進發淡水",
+    "whenAr": "1787/01/22",
+    "whenCh": "十二月十四日",
+    "whenKnownCh": "十二月十四日",
+    "where": "閩安",
+    "who": [
+      "郝壯猷"
+    ],
+    "who_loc": {
+      "郝壯猷": "閩安"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "聽總兵郝壯猷統領進發"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#14"
+  },
+  {
+    "category": "nonmil",
+    "description": "福建巡撫徐嗣曾備齊船隻、挑選兵丁、配備器械，並準備火藥、鉛彈、大炮、行糧、鹽菜及賞號等軍需物資。",
+    "howKnown": "親歷",
+    "quote": "臣現已備齊船隻，挑兵配械，多帶火藥、鉛彈，並帶大炮二尊，及應需行糧、鹽菜、賞號等項",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾備辦渡臺軍需物資",
+    "whenAr": "",
+    "whenCh": "十二月十四日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "省城",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "省城"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "臣現已備齊船隻，挑兵配械，多帶火藥、鉛彈，並帶大炮二尊，及應需行糧、鹽菜、賞號等項"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#15"
+  },
+  {
+    "category": "done",
+    "description": "福建巡撫徐嗣曾親自前往船上，遣發省城挑選之兵丁起程前往淡水。",
+    "howKnown": "親歷",
+    "quote": "臣親至船上，遣發起身",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾親至船上遣發省兵",
+    "whenAr": "",
+    "whenCh": "十二月十四日以前",
+    "whenKnownCh": "十二月十四日",
+    "where": "省城",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "省城"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "臣親至船上，遣發起身"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#16"
+  },
+  {
+    "category": "done",
+    "description": "福建巡撫徐嗣曾嚴厲命令沿海各口岸，實施巡邏防守，以防範賊匪竄逃。",
+    "howKnown": "親歷",
+    "quote": "臣現在嚴飭沿海口岸，實力徼巡，防其竄逸",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾嚴飭沿海口岸巡防",
+    "whenAr": "1787/01/22",
+    "whenCh": "十二月十四日",
+    "whenKnownCh": "十二月十四日",
+    "where": "福建沿海口岸",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "省城"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "臣現在嚴飭沿海口岸，實力徼巡，防其竄逸"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#17"
+  },
+  {
+    "category": "done",
+    "description": "福建巡撫徐嗣曾再次飛速命令蚶江等處，派遣專差前往探聽實在的殺賊情形。",
+    "howKnown": "親歷",
+    "quote": "再飛飭蚶江等處專差飛探實在殺賊情形",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾飛飭專差探聽殺賊情形",
+    "whenAr": "1787/01/22",
+    "whenCh": "十二月十四日",
+    "whenKnownCh": "十二月十四日",
+    "where": "蚶江",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "省城"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "再飛飭蚶江等處專差飛探實在殺賊情形"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃24#qing#18"
+  }
+]

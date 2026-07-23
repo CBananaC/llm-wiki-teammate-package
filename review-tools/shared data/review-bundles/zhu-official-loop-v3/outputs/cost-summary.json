@@ -1,0 +1,14 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": false,
+  "calls": 0,
+  "prompt_tokens": 0,
+  "completion_tokens": 0,
+  "input_cost_usd": 0.0,
+  "output_cost_usd": 0.0,
+  "cost_usd": 0.0,
+  "rows": []
+}

@@ -1,0 +1,75 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": true,
+  "calls": 37,
+  "prompt_tokens": 85741,
+  "completion_tokens": 27741,
+  "input_cost_usd": 0.12861150000000002,
+  "output_cost_usd": 0.249669,
+  "cost_usd": 0.37828049999999996,
+  "rows": [
+    {
+      "step": "summary",
+      "calls": 2,
+      "prompt_tokens": 2077,
+      "completion_tokens": 353,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0031155,
+      "output_cost_usd": 0.003177,
+      "cost_usd": 0.0062925
+    },
+    {
+      "step": "divide",
+      "calls": 2,
+      "prompt_tokens": 2139,
+      "completion_tokens": 2744,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0032085,
+      "output_cost_usd": 0.024696,
+      "cost_usd": 0.0279045
+    },
+    {
+      "step": "yu-reported-events",
+      "calls": 2,
+      "prompt_tokens": 13183,
+      "completion_tokens": 4858,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0197745,
+      "output_cost_usd": 0.043722,
+      "cost_usd": 0.0634965
+    },
+    {
+      "step": "yu-emperor-actions",
+      "calls": 2,
+      "prompt_tokens": 2244,
+      "completion_tokens": 3647,
+      "exact_tokens": false,
+      "input_cost_usd": 0.003366,
+      "output_cost_usd": 0.032823,
+      "cost_usd": 0.036189
+    },
+    {
+      "step": "official-response",
+      "calls": 11,
+      "prompt_tokens": 53910,
+      "completion_tokens": 13634,
+      "exact_tokens": false,
+      "input_cost_usd": 0.080865,
+      "output_cost_usd": 0.122706,
+      "cost_usd": 0.203571
+    },
+    {
+      "step": "repeat-report",
+      "calls": 18,
+      "prompt_tokens": 12188,
+      "completion_tokens": 2505,
+      "exact_tokens": false,
+      "input_cost_usd": 0.018282,
+      "output_cost_usd": 0.022545,
+      "cost_usd": 0.040827
+    }
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "硃110": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "__global__": {
+    "merge-emperor-actions": true,
+    "repeat-report": true,
+    "official-response": true,
+    "merge-emperor-actions-version": "source-union-v4",
+    "repeat-report-version": "cross-document-only-v5",
+    "official-response-version": "emperor-action-relevance-v4"
+  },
+  "硃24": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "lin-events-version": "svo-v1",
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "qing-actions-all-version": "svo-v1",
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true,
+    "combined-emperor-actions-version": "memorial-relevance-v9"
+  }
+}

@@ -1,0 +1,93 @@
+[
+  {
+    "description": "彰化縣匪徒林爽文等人結黨，在地方上肆虐擾害，文武官員未能將其擒獲。",
+    "howKnown": "轉述",
+    "quote": "聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文等結黨肆虐",
+    "whenAr": "1786/12",
+    "whenCh": "十一月初間",
+    "whenKnownCh": "十二月十二日",
+    "where": "彰化縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。",
+        "howKnown": "轉述",
+        "whenKnown": "十二月十二日"
+      }
+    ]
+  },
+  {
+    "description": "林爽文等匪徒在彰化大墩地方，將前來捕匪的彰化縣知縣俞峻戕害。",
+    "howKnown": "轉述",
+    "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+    "relations": [
+      {
+        "evidence": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "relation": "戕害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞峻"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "大墩戕害知縣",
+    "whenAr": "1787/01/16",
+    "whenCh": "十一月二十七日夜",
+    "whenKnownCh": "十二月十二日",
+    "where": "大墩",
+    "who": [
+      "林爽文",
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "林爽文": "大墩"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "howKnown": "轉述",
+        "whenKnown": "十二月十二日"
+      }
+    ]
+  },
+  {
+    "description": "林爽文率眾攻陷彰化縣城並予以竊據，導致道路梗塞，公文無法前遞。",
+    "howKnown": "轉述",
+    "quote": "本日早彰城失陷，路途梗塞，不能前遞...彰化已為匪徒竊據",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "攻陷彰化縣城",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十八日早",
+    "whenKnownCh": "十二月十二日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "本日早彰城失陷，路途梗塞，不能前遞...彰化已為匪徒竊據",
+        "howKnown": "轉述",
+        "whenKnown": "十二月十二日"
+      }
+    ]
+  }
+]

@@ -1,0 +1,169 @@
+[
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡率兵登船出海渡台，計畫由南路（鹿耳門）登陸進剿。",
+    "edict_quote": "黃仕簡現帶兵登舟渡臺，由南路進剿",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才業將辦理赴剿，於十二月初十日登舟候風飛渡等緣由...奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際...奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "已准水師提臣黃仕簡吝報，於初十日率師登舟，由鹿耳門前往。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "黃仕簡帶兵登舟渡台",
+    "whenAr": "1786-12-30",
+    "whenCh": "乾隆五十一年十二月初十日",
+    "where": "廈門至鹿耳門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#0",
+    "same_as": "evmr1yozc92mu",
+    "earliest_report": {
+      "id": "evmr1yozc92mu",
+      "doc_id": "硃25",
+      "date": "1786/12/10",
+      "title": "黃仕簡率兵登舟候風渡臺"
+    },
+    "repeat_candidates": [
+      "evmr3hc8bt05y",
+      "evmr1yozc92mu"
+    ]
+  },
+  {
+    "category": "plan",
+    "description": "福建陸路提督任承恩挑選並派定備戰兵丁，計畫等總督常青抵達泉州後，立即登船渡台會剿。",
+    "edict_quote": "任承恩奏，挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "奴才並已挑派備戰兵丁一千名...一俟到日，會籌妥協，立即登舟飛渡臺灣",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "任承恩挑兵預備渡台",
+    "whenAr": "1787-01-31",
+    "whenCh": "乾隆五十一年十二月十三日",
+    "where": "泉州",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "泉州"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#1"
+  },
+  {
+    "category": "plan",
+    "description": "陸路提督任承恩上奏，懇請皇帝特簡重臣臨閩督辦台灣善後與軍事，以求迅速完事。",
+    "edict_quote": "並請簡派重臣督辦",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃32",
+        "source_official": "任承恩",
+        "source_quote": "仰懇皇上天恩，特簡重臣臨閩鎮安督辦，蕆事方能迅速。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "任承恩請求簡派重臣督辦",
+    "whenAr": "1787-01-31",
+    "whenCh": "乾隆五十一年十二月十三日",
+    "where": "泉州",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "泉州"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#2"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青調派兵丁二千二百名，令陸路提督任承恩及參將福蘭泰等統領，由鹿耳門前進，與水師會同夾攻。",
+    "edict_quote": "已派兵二千二百名，令任承恩及參將福蘭泰等，由鹿耳門前進會同夾攻",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃35",
+        "source_official": "常青",
+        "source_quote": "即將提標挑出精兵一千二百名，先由該提臣統領...仍於鹿耳門前進。再派福協、興協、長福等營勁兵一千名，檄令參將福蘭泰統領...帶往聽候調遣。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/15"
+      }
+    ],
+    "subtitle": "常青派兵二千二百名由鹿耳門進攻",
+    "whenAr": "1787-02-02",
+    "whenCh": "乾隆五十一年十二月十五日",
+    "where": "泉州至鹿耳門",
+    "who": [
+      "常青",
+      "任承恩",
+      "福蘭泰"
+    ],
+    "who_loc": {
+      "任承恩": "泉州",
+      "常青": "泉州",
+      "福蘭泰": "泉州"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#3"
+  },
+  {
+    "category": "nonmil",
+    "description": "水師提督黃仕簡在發出的傳牌上，隨意填寫「會匪糾眾攻陷彰化縣」字樣，傳播於驛站，造成人心惶恐。",
+    "edict_quote": "傳牌上竟有會匪糾衆攻陷彰化縣字樣，傳播驛站",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [],
+    "subtitle": "黃仕簡傳牌填寫會匪攻陷彰化",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "驛站",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#4"
+  }
+]

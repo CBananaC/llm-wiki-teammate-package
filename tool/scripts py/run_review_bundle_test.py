@@ -24,6 +24,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[2]
 SOURCE = ROOT / "outputs" / "attempt-002" / "stage1_original_text.json"
 SKILLS_DIR = ROOT / "tool" / "skills md"
+BUNDLES_DIR = ROOT / "review-tools" / "shared data" / "review-bundles"
 
 # Chain step -> the skill file that owns its prompt text. Same skill file is
 # read by the website (via review-app's /api/skills) for the single-doc
@@ -36,9 +37,15 @@ STEP_SKILL = {
     "qing-events-done": "extract-qing-actions-done.md",
     "qing-events-plan": "extract-qing-actions-planned.md",
     "qing-events-nonmil": "extract-qing-nonmilitary-actions.md",
+    "qing-actions-all": "extract-qing-actions-all.md",
+    "qing-events-all": "extract-qing-actions-all.md",
     "zhupi": "extract-zhupi.md",
     "edict-match": "edict-match.md",
+    "combined-emperor-actions": "emperor-actions-confirmed-zhu-yu.md",
     "official-response": "official-response.md",
+    "yu-reported-events": "extract-yu-reported-events.md",
+    "yu-emperor-actions": "extract-yu-emperor-actions.md",
+    "repeat-report": "repeat-report-dedup.md",
 }
 
 # qing-events-* steps all use proxy mode "events" with actor=qing and a
@@ -47,6 +54,8 @@ QING_EVENT_CATEGORY = {
     "qing-events-done": "done",
     "qing-events-plan": "plan",
     "qing-events-nonmil": "nonmil",
+    "qing-actions-all": "all",
+    "qing-events-all": "all",
 }
 
 _WEBSITE_PROMPT_RE = re.compile(r"^##\s*Website Prompt[ \t]*\n(.*?)(?=\n##\s|\Z)", re.S | re.M)
@@ -702,7 +711,10 @@ def main() -> None:
         docs = docs[args.offset : args.offset + args.limit]
     steps = set(split_csv(args.steps))
     bundle_name = args.bundle or f"test-first-{args.limit}-docs-{datetime.now().strftime('%Y%m%d-%H%M%S')}"
-    out_root = ROOT / "outputs" / "review-bundles" / bundle_name
+    # The local review website reads bundles from the canonical shared-data
+    # directory.  Writing there directly keeps terminal output immediately
+    # loadable through 資料 → 載入技能輸出.
+    out_root = BUNDLES_DIR / bundle_name
     (out_root / "outputs").mkdir(parents=True, exist_ok=True)
     (out_root / "human-edits").mkdir(parents=True, exist_ok=True)
 

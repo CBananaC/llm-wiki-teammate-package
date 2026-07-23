@@ -1,0 +1,380 @@
+[
+  {
+    "description": "彰化知縣俞（俞峻）在大墩地方率兵搜捕匪徒時，不幸遇害身亡。",
+    "howKnown": "轉述",
+    "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+    "relations": [
+      {
+        "evidence": "本縣俞在大墩地方拿匪被害",
+        "relation": "殺害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "官兵大墩緝匪遇害",
+    "whenAr": "1787/01/15",
+    "whenCh": "十一月二十七日",
+    "whenKnownCh": "十二月初十日",
+    "where": "大墩",
+    "who": [
+      "俞",
+      "林爽文"
+    ],
+    "who_loc": {
+      "俞": "大墩",
+      "林爽文": "大墩"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+        "howKnown": "轉述",
+        "whenKnown": "十二月初十日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "林爽文等匪徒聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻將城池攻陷，文武官員生死不明。",
+    "howKnown": "訪聞",
+    "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "匪徒攻陷彰化縣城",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月初五日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。",
+        "howKnown": "訪聞",
+        "whenKnown": "十二月初五日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "署北路淡水同知程峻、守備董得魁在得知彰化失陷後，整齊槍炮，募集鄉勇與社番，於扼要之處分頭堵禦並設法救援。",
+    "howKnown": "轉述",
+    "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+    "relations": [
+      {
+        "evidence": "署北路淡水同知程峻、守備董得魁會稟",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "淡水官兵分頭堵禦",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月初十日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+        "howKnown": "轉述",
+        "whenKnown": "十二月初十日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "福建水師提督黃仕簡委派提標右營遊擊邱維揚，先行率領兵丁二百名渡臺，確查賊匪人數與起釁緣由。",
+    "howKnown": "親歷",
+    "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干",
+    "relations": [
+      {
+        "evidence": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺",
+        "relation": "委令",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "邱維揚"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "派兵先渡臺灣確查",
+    "whenAr": "",
+    "whenCh": "十二月初五日至十二月初十日之間",
+    "whenKnownCh": "十二月初十日",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡",
+      "邱維揚"
+    ],
+    "who_loc": {
+      "邱維揚": "臺灣",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干",
+        "howKnown": "親歷",
+        "whenKnown": "十二月初十日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "福建水師提督黃仕簡親自帶領官兵登舟，在廈門候風，準備放洋飛渡臺灣進行剿捕。",
+    "howKnown": "親歷",
+    "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡率兵登舟候風",
+    "whenAr": "1787/01/28",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "十二月初十日",
+    "where": "廈門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "howKnown": "親歷",
+        "whenKnown": "十二月初十日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "閩浙總督常青與福建巡撫徐嗣曾面商後，於十二月十一日自省城起程前往蚶江，以便就近察看臺灣局勢並相機調度。",
+    "howKnown": "親歷",
+    "quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+    "relations": [
+      {
+        "evidence": "督臣常青與臣面商",
+        "relation": "面商",
+        "relation_type": "ally",
+        "source": "常青",
+        "target": "徐嗣曾"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "督臣常青前赴蚶江",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月十一日",
+    "whenKnownCh": "十二月十一日",
+    "where": "蚶江",
+    "who": [
+      "常青",
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "常青": "蚶江",
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+        "howKnown": "親歷",
+        "whenKnown": "十二月十一日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "署淡水同知程峻、竹塹營守備董得魁因聞彰化匪徒滋事，恐其竄入淡水界內，遂會同率領兵役於交界地方嚴密堵緝。",
+    "howKnown": "轉述",
+    "quote": "卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝",
+    "relations": [
+      {
+        "evidence": "會帶兵役於交界地方，嚴密堵緝",
+        "relation": "會帶兵役",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "淡水官兵於交界堵緝",
+    "whenAr": "1786/12/20",
+    "whenCh": "十一月初間",
+    "whenKnownCh": "十二月十二日",
+    "where": "淡水與彰化交界地方",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水與彰化交界地方",
+      "董得魁": "淡水與彰化交界地方"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝",
+        "howKnown": "轉述",
+        "whenKnown": "十二月十二日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "彰化縣知縣俞峻在大墩地方搜捕匪徒時遇害，次日清晨彰化縣城即被林爽文等民變隊伍攻陷。",
+    "howKnown": "轉述",
+    "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞",
+    "relations": [
+      {
+        "evidence": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害",
+        "relation": "殺害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞峻"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "俞知縣大墩遇害及彰城失陷",
+    "whenAr": "1787/01/15",
+    "whenCh": "十一月二十七日夜至二十八日早",
+    "whenKnownCh": "十二月十二日",
+    "where": "大墩、彰化縣城",
+    "who": [
+      "俞峻",
+      "林爽文"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞",
+        "howKnown": "轉述",
+        "whenKnown": "十二月十二日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "得知彰化失陷後，淡水同知程峻、守備董得魁立即率領兵役，並募集鄉勇與社番，於要隘處進行防堵防禦。",
+    "howKnown": "轉述",
+    "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+    "relations": [
+      {
+        "evidence": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦",
+        "relation": "協同堵禦",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "淡水募勇扼要堵禦",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月十二日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+        "howKnown": "轉述",
+        "whenKnown": "十二月十二日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "福建巡撫徐嗣曾飛飭福州、福寧、興化、漳州、泉州等沿海地方官員嚴行截拿逃竄匪徒，並密令漳、泉二府曉諭保族鄰里，搜捕偷回原籍的奸匪。",
+    "howKnown": "親歷",
+    "quote": "臣現在飛飭福州、福寧、興化、漳、泉一帶沿海地方文武員弁，嚴行截拿...臣密飭該道、府明白曉諭各地保族、鄰人等，或有竄回原籍，立即捕拿",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "沿海及漳泉地方嚴防截拿",
+    "whenAr": "1787/01/30",
+    "whenCh": "十二月十二日",
+    "whenKnownCh": "十二月十二日",
+    "where": "福建沿海",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "臣現在飛飭福州、福寧、興化、漳、泉一帶沿海地方文武員弁，嚴行截拿...臣密飭該道、府明白曉諭各地保族、鄰人等，或有竄回原籍，立即捕拿",
+        "howKnown": "親歷",
+        "whenKnown": "十二月十二日"
+      }
+    ],
+    "category": "done"
+  },
+  {
+    "description": "因淡水至府城道路梗阻，徐嗣曾密飭淡水、廈門、蚶江等處文武官員，派遣妥幹丁役前往臺灣偵探實在情形。",
+    "howKnown": "親歷",
+    "quote": "除密飭淡水、廈門、蚶江等處文武員弁，專差妥幹丁役前往偵探",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "派員前往臺灣偵探",
+    "whenAr": "1787/01/30",
+    "whenCh": "十二月十二日",
+    "whenKnownCh": "十二月十二日",
+    "where": "臺灣",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "除密飭淡水、廈門、蚶江等處文武員弁，專差妥幹丁役前往偵探",
+        "howKnown": "親歷",
+        "whenKnown": "十二月十二日"
+      }
+    ],
+    "category": "done"
+  }
+]

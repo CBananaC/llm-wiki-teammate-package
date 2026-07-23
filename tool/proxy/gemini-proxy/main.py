@@ -791,9 +791,11 @@ def chat():
 
         if mode == "events":
             actor = p.get("actor", "lin")
-            category = (p.get("category") or "").strip()   # for qing: 'done' | 'plan' | 'nonmil'
+            category = (p.get("category") or "").strip()   # for qing: 'all' | 'done' | 'plan' | 'nonmil'
             if actor == "lin":
                 who = "林爽文等民變一方（叛軍）的軍事行動"
+            elif category == "all":
+                who = "清朝官方（官員、官軍、義民、鄉勇或行政機構）的三類行動：已執行軍事、尚未執行的計畫／命令、以及已執行非軍事措施"
             elif category == "plan":
                 who = "清朝官方（官員、官軍）『計畫、奏請、奉命但尚未執行』的軍事或防剿行動"
             elif category == "nonmil":
@@ -822,6 +824,15 @@ def chat():
                         "（以聚焦為準，不受行動方分類限制；該事件可能是某官員遇害、某地失陷等）。"
                         "在原文中定位對應字句作為 quote。重點是實地發生的行動本身，而非奏報這個動作。"
                         "對每個事件給出：")
+            elif actor == "qing" and category == "all":
+                task = (
+                    f"\n\n任務：從上述文書中擷取屬於「{who}」的所有具體行動，並在同一次輸出中為每一條標示 category。"
+                    "category 只能是 done、plan、nonmil：done 是已實際執行的軍事／防剿行動；plan 是計畫、奏請、命令、擬議或預備但尚未證實已執行的軍事／防剿行動；nonmil 是已實際執行的非軍事行政、安撫、賑濟、審訊、籌餉、人事、善後或其他實質措施。"
+                    "同一段若同時含已執行與計畫，拆成相應的兩條；不同類別不要用同一條事件重複表示。"
+                    "排除林方行動、純粹奏報／聞報／轉述，以及只出現在引用的舊奏／舊諭／據某官報告中的舊行動。"
+                    "不要把本文收發文書本身當成事件；重點是清方實際作為或明確計畫。"
+                    "對每個事件給出："
+                )
             elif actor == "qing" and category == "plan":
                 task = (f"\n\n任務：從上述文書中，擷取屬於「{who}」——即清方『尚未執行、僅屬計畫／奏請／奉命／擬議／預備』的軍事或防剿行動，不要遺漏。"
                         "例如：某官奏請調兵、命某將前往剿辦、擬於某日出兵、預備堵禦、籌議進剿方略等，但文中未敘其已執行。"
@@ -872,7 +883,7 @@ def chat():
                 "quote（從『原文』中盡量逐字節錄、可作為此事件依據的一段引文）、"
                 "howKnown（此官員如何得知，如親歷、探報、轉述、訪聞）、"
                 "whenKnownCh（官員得知的中曆日期，若有）。"
-                '只輸出 JSON：{"events":[{"subtitle":"","description":"","side":"","where":"","who":[],"who_loc":{},"relations":[{"source":"","target":"","relation":"","relation_type":"","evidence":""}],"whenCh":"","whenAr":"","quote":"","howKnown":"","whenKnownCh":""}]}。'
+                '只輸出 JSON：{"events":[{"category":"done|plan|nonmil","subtitle":"","description":"","side":"","where":"","who":[],"who_loc":{},"relations":[{"source":"","target":"","relation":"","relation_type":"","evidence":""}],"whenCh":"","whenAr":"","quote":"","howKnown":"","whenKnownCh":""}]}。'
                 '若無相關事件，輸出 {"events":[]}。'
             )
             evs = _json_list(_generate(prompt, True, p, _mt(p)), "events")
@@ -938,9 +949,10 @@ def chat():
             mem_block = (
                 "【本奏摺】\ndoc_id：%s　具奏官員：%s　上奏／收受日期：%s\n標題：%s\n"
                 "奏摺原文：\n%s\n\n【本摺硃批（皇帝原話）】\n%s\n"
+                "【正文內明示的硃批片段（若有）】\n%s\n"
                 % (
                     memorial.get("id", ""), memorial.get("author", ""), memorial.get("date", ""),
-                    memorial.get("title", ""), memorial.get("body", ""), memorial.get("rescript", ""),
+                    memorial.get("title", ""), memorial.get("body", ""), memorial.get("rescript", ""), memorial.get("zhupi_text", ""),
                 )
             )
             yu_block = "\n【既有配對資料所連到的上諭；不得另搜上諭】\n"
@@ -1137,6 +1149,111 @@ def chat():
             items = data.get("items", []) if isinstance(data, dict) else []
             guessed_addressee = (data.get("addressee", "") if isinstance(data, dict) else "") or addressee
             return _cors(jsonify({"mode": "official_response", "addressee": guessed_addressee, "items": items}))
+
+        if mode == "repeat_report":
+            # Decide whether ONE freshly-extracted card is the SAME concrete occurrence as any of a
+            # caller-supplied shortlist of earlier cards. Judges sameness only; returns matching ids.
+            actor = (p.get("actor") or "").strip()
+            actor_label = (
+                "林爽文等民變一方的事件" if actor == "lin"
+                else "清方（官員、官軍、義民、鄉勇或機構）的行動" if actor == "qing"
+                else "皇帝自己的評論／答覆／命令等行動" if actor == "emperor"
+                else "事件／行動"
+            )
+            card = p.get("card") or {}
+            cands = p.get("candidates") or []
+            new_block = (
+                "【新擷取的卡片（%s）】\n標題：%s\n敘述：%s\n原文引文：%s\n回報文書：%s ｜ 回報日期：%s\n"
+                % (actor_label, card.get("title", ""), card.get("description", ""), card.get("quote", ""),
+                   card.get("doc_id", ""), card.get("date", ""))
+            )
+            cand_block = "\n【較早的候選卡片（來自其他文書或既有審閱；已按主題相關度預篩）】\n"
+            for c in cands:
+                cand_block += (
+                    "──── id=%s ｜ 回報文書：%s ｜ 回報日期：%s ｜ 標題：%s\n敘述：%s\n引文：%s\n\n"
+                    % (c.get("id", ""), c.get("doc_id", ""), c.get("date", ""), c.get("title", ""),
+                       c.get("description", ""), c.get("quote", ""))
+                )
+            extra = (p.get("question") or "").strip()
+            task = (
+                "\n任務：判斷上列較早候選中，哪些與『新擷取卡片』其實是『同一件具體事件／行動的重複回報』，"
+                "即使措辭不同、由不同官員或作者敘述、或觀察角度不同。『同一件』的標準是同一個具體動作或事件"
+                "（同一主體、同一對象、同一地點與時間所指），而非僅牽涉相同人物、相同戰役或相同大主題。"
+                "不同的具體事件（不同日期、地點、動作、主事者）即使高度相似也不算同一件；皇帝行動須同一對象且同一具體評論／命令才算重複。"
+                "只回傳確屬同一件的候選 id；若無，回傳空陣列。不得回傳清單以外的 id，不得杜撰。"
+                '\n只輸出 JSON：{"same_ids":[],"reason":""}。'
+            )
+            prompt = new_block + cand_block + (("\n【使用者額外要求】\n" + extra) if extra else "") + task
+            data = _strip_json(_generate(prompt, True, p, _mt(p)))
+            allowed = {str(c.get("id", "")) for c in cands}
+            raw_ids = data.get("same_ids", []) if isinstance(data, dict) else []
+            same_ids = [str(i) for i in raw_ids if str(i) in allowed] if isinstance(raw_ids, list) else []
+            return _cors(jsonify({"mode": "repeat_report", "same_ids": same_ids, "reason": (data.get("reason", "") if isinstance(data, dict) else "")}))
+
+        if mode == "yu_reported_events":
+            # From ONE 上諭, extract the 林方/清方 events the EMPEROR STATES HE KNOWS (through reports),
+            # NOT battlefield fact, and for each list which supplied candidate memorials reported it
+            # (source trace via the yu-source network -- who told the emperor, in which doc, not a full
+            # local->military->official relay chain).
+            edict = p.get("edict") or {}
+            cands = p.get("candidates") or []
+            actor = (p.get("actor") or "all").strip()
+            side_rule = (
+                "只擷取林爽文等民變一方（side=\"lin\"）的事件。" if actor == "lin"
+                else "只擷取清方（官員、官軍、義民、鄉勇；side=\"qing\"）的事件，並為每條標 category（done|plan|nonmil）。" if actor == "qing"
+                else "同時擷取林方（side=\"lin\"）與清方（side=\"qing\"）事件；清方每條標 category（done|plan|nonmil）。"
+            )
+            edict_block = (
+                "【本上諭】\ndoc_id：%s　日期：%s\n標題：%s\n原文：\n%s\n"
+                % (edict.get("id", ""), edict.get("date", ""), edict.get("title", ""), edict.get("body", ""))
+            )
+            cand_block = "\n【候選來源文書（研究者既有 yu-source 網絡所連、日期在本上諭之前的奏摺／硃批；只可用這些判定來源）】\n"
+            if cands:
+                for c in cands:
+                    cand_block += (
+                        "──── source_doc_id=%s ｜ 具奏官員：%s ｜ 上奏日：%s ｜ 收受／硃批日：%s\n原文：\n%s\n\n"
+                        % (c.get("doc_id", ""), c.get("official", ""), c.get("send_date", ""), c.get("receive_date", ""), c.get("body", ""))
+                    )
+            else:
+                cand_block += "（無候選；source_documents 一律留空）\n"
+            extra = (p.get("question") or "").strip()
+            task = (
+                "\n任務：\n"
+                "1. 從本上諭擷取『皇帝透過奏報／稟報得知』的既往事件——" + side_rule +
+                "這些是已發生的歷史事件（非上諭發布日的新行動）。每條給 side、subtitle、description、where、who、who_loc、whenCh、whenAr（可靠才填）、"
+                "edict_quote（上諭中敘述此事的逐字原文）；清方另給 category。\n"
+                "2. 對每條事件，只在上列候選文書中做來源比對：列出所有其原文支持該事件的候選，放入 source_documents，"
+                "每項給 source_doc_id、relation（direct＝該官員親報、corroborating＝他人另報同事、relay＝文中明言轉述他人之報）、"
+                "source_official、source_send_date、source_receive_date、source_quote（候選原文逐字）。"
+                "只可引用上列候選，且其收受／硃批日須在本上諭日期之前；無支持者則 source_documents 留空。不得杜撰來源或重建未載的傳遞鏈。"
+                '\n只輸出 JSON：{"events":[{"side":"lin|qing","category":"done|plan|nonmil","subtitle":"","description":"","where":"","who":[],"who_loc":{},"relations":[],"whenCh":"","whenAr":"","edict_quote":"",'
+                '"source_documents":[{"source_doc_id":"","relation":"direct|corroborating|relay","source_official":"","source_send_date":"","source_receive_date":"","source_quote":""}]}]}。'
+                "所有引文必須逐字，不得杜撰。"
+            )
+            prompt = edict_block + cand_block + (("\n【使用者額外要求】\n" + extra) if extra else "") + task
+            evs = _json_list(_generate(prompt, True, p, _mt(p)), "events")
+            return _cors(jsonify({"mode": "yu_reported_events", "events": evs}))
+
+        if mode == "yu_emperor_actions":
+            # From ONE 上諭, extract the emperor's OWN actions: comments/judgements and concrete commands.
+            edict = p.get("edict") or {}
+            edict_block = (
+                "【本上諭（皇帝之文書）】\ndoc_id：%s　日期：%s\n標題：%s\n原文：\n%s\n"
+                % (edict.get("id", ""), edict.get("date", ""), edict.get("title", ""), edict.get("body", ""))
+            )
+            extra = (p.get("question") or "").strip()
+            task = (
+                "\n任務：只擷取『皇帝自己的行動』——他的評論／褒獎／責備／准駁／詢問，以及他下達的具體命令。"
+                "先區分（A）皇帝轉述的『據某奏／某官報告』等情報與（B）皇帝自己的話；只輸出（B）。"
+                "命令、批評、獎懲若對象或功能不同，分成不同項；套語（如『欽此』『已有旨』）不單獨成項。"
+                "每項給 title（12-20字，以皇帝動作命名）、action_type（comment|command|praise|blame|approve|reject|question）、"
+                "description（1-2句）、target（受命／受評官員字串陣列）、whenCh、whenAr、where、who、who_loc、relations、quote（皇帝原話逐字）。"
+                '\n只輸出 JSON：{"actions":[{"title":"","action_type":"comment|command|praise|blame|approve|reject|question","description":"","target":[],"whenCh":"","whenAr":"","where":"","who":[],"who_loc":{},"relations":[],"quote":""}]}。'
+                "所有引文必須逐字來自本上諭，不得杜撰。"
+            )
+            prompt = edict_block + (("\n【使用者額外要求】\n" + extra) if extra else "") + task
+            acts = _json_list(_generate(prompt, True, p, _mt(p)), "actions")
+            return _cors(jsonify({"mode": "yu_emperor_actions", "actions": acts}))
 
         if mode == "event_one":
             text = (p.get("text") or "").strip()

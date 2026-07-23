@@ -1,0 +1,102 @@
+[
+  {
+    "category": "done",
+    "description": "彰化匪徒林爽文等結黨滋事，並於要路進行攔截，導致台灣南北路與內地之間的信息不通。",
+    "edict_quote": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "大里杙等莊有奸民林爽文、王芬等結黨，乘值歲暮搶劫...於大肚溪邊聚匪截路，以致信息不通。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "彰化匪徒林爽文等結黨肆擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷，路途梗塞。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "彰化縣匪徒林爽文結黨肆虐，騷擾地方...彰城失陷，路途梗塞，不能前進",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "彰化縣匪徒林爽文結黨肆虐，騷擾地方...彰城失陷，路途梗塞，不能前遞",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "彰化縣匪犯林爽文等，結黨肆虐...彰城失陷...兵力單薄，道路隔絕",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "林爽文等糾眾滋事並攔截道路",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月至十二月",
+    "where": "彰化",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#lin#0"
+  },
+  {
+    "category": "done",
+    "description": "署淡水同知程峻之子程必大攜帶關防，與竹塹營外委虞文光等人逃至泉州，報告彰化縣城失陷、道路梗塞之實情。",
+    "edict_quote": "淡水同知程峻之子程必大，及外委虞文光等彰化失陷，文報梗塞情形",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "十二日有該廳程峻之子程必大，奔赴奴才轅門求見...彰化地方已被賊踞，不能前往府城，我只得帶印改裝，跑到八里坌，搭船內渡求救的。問據外委虞文光供...彰化地方已被賊踞，不得往府求救。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃35",
+        "source_official": "常青",
+        "source_quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉...彰化已被賊踞，不得往府求救。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/15"
+      }
+    ],
+    "subtitle": "程必大等內渡報告彰化失陷",
+    "whenAr": "1786-12-31",
+    "whenCh": "乾隆五十一年十二月十二日",
+    "where": "泉州",
+    "who": [
+      "程必大",
+      "虞文光"
+    ],
+    "who_loc": {
+      "程必大": "泉州",
+      "虞文光": "泉州"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#lin#1"
+  }
+]

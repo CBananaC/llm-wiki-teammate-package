@@ -1,0 +1,115 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": true,
+  "calls": 36,
+  "prompt_tokens": 49874,
+  "completion_tokens": 19249,
+  "input_cost_usd": 0.074811,
+  "output_cost_usd": 0.17324099999999998,
+  "cost_usd": 0.248052,
+  "rows": [
+    {
+      "step": "summary",
+      "calls": 2,
+      "prompt_tokens": 1998,
+      "completion_tokens": 338,
+      "exact_tokens": false,
+      "input_cost_usd": 0.002997,
+      "output_cost_usd": 0.003042,
+      "cost_usd": 0.006039
+    },
+    {
+      "step": "divide",
+      "calls": 2,
+      "prompt_tokens": 2060,
+      "completion_tokens": 2358,
+      "exact_tokens": false,
+      "input_cost_usd": 0.00309,
+      "output_cost_usd": 0.021222,
+      "cost_usd": 0.024312
+    },
+    {
+      "step": "lin-events",
+      "calls": 2,
+      "prompt_tokens": 2238,
+      "completion_tokens": 842,
+      "exact_tokens": false,
+      "input_cost_usd": 0.003357,
+      "output_cost_usd": 0.007578,
+      "cost_usd": 0.010935
+    },
+    {
+      "step": "lin-source-chain",
+      "calls": 5,
+      "prompt_tokens": 6866,
+      "completion_tokens": 2115,
+      "exact_tokens": false,
+      "input_cost_usd": 0.010299,
+      "output_cost_usd": 0.019035,
+      "cost_usd": 0.029334
+    },
+    {
+      "step": "qing-actions-all",
+      "calls": 2,
+      "prompt_tokens": 2719,
+      "completion_tokens": 2724,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0040785,
+      "output_cost_usd": 0.024516,
+      "cost_usd": 0.0285945
+    },
+    {
+      "step": "qing-source-chain",
+      "calls": 3,
+      "prompt_tokens": 4168,
+      "completion_tokens": 965,
+      "exact_tokens": false,
+      "input_cost_usd": 0.006252,
+      "output_cost_usd": 0.008685,
+      "cost_usd": 0.014936999999999999
+    },
+    {
+      "step": "combined-emperor-actions",
+      "calls": 1,
+      "prompt_tokens": 8874,
+      "completion_tokens": 1963,
+      "exact_tokens": false,
+      "input_cost_usd": 0.013311,
+      "output_cost_usd": 0.017667,
+      "cost_usd": 0.030978
+    },
+    {
+      "step": "merge-emperor-actions",
+      "calls": 1,
+      "prompt_tokens": 1039,
+      "completion_tokens": 158,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0015585,
+      "output_cost_usd": 0.001422,
+      "cost_usd": 0.0029805
+    },
+    {
+      "step": "repeat-report",
+      "calls": 15,
+      "prompt_tokens": 11993,
+      "completion_tokens": 4106,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0179895,
+      "output_cost_usd": 0.036954,
+      "cost_usd": 0.0549435
+    },
+    {
+      "step": "official-response",
+      "calls": 3,
+      "prompt_tokens": 7919,
+      "completion_tokens": 3680,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0118785,
+      "output_cost_usd": 0.03312,
+      "cost_usd": 0.0449985
+    }
+  ]
+}

@@ -1,54 +1,71 @@
 #!/usr/bin/env python3
-"""Run the current multi-step saved-prompt chain on a small doc set first.
+"""Run the official-document review loop against selected source documents.
 
-Default test set: 台83, 台90, 台155, 台156.
+The loop is deliberately pair-grounded after event extraction. It does not
+search all 上諭 by date and it does not run the old 回應時效/situfit stage:
+
+  summary -> division -> 林方 events + per-event source chains
+  -> 清方 three-in-one events + per-event source chains
+  -> confirmed prior-上諭 response -> combined emperor actions
+  -> confirmed official responses for each emperor action.
+
+The bundle is written directly to the shared review-bundle directory used by
+the website. Existing UI code supplies cross-document repeat-report matching
+and the merge/separate choice when the bundle is loaded.
 """
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import http.client
 import json
 import os
 import re
-import time
 import sys
+import time
 import urllib.error
 from contextlib import contextmanager
-from datetime import datetime, timedelta
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
 sys.path.insert(0, str(Path(__file__).resolve().parent))
 
 from run_review_bundle_test import (  # noqa: E402
+    BUNDLES_DIR,
     ROOT,
     SOURCE,
+    date_pair_value,
     doc_best_ar,
-    official_response_candidates,
+    merge_source_chains_by_signature,
     post_json as _post_json,
     primary_date,
+    print_cost_summary,
     read_json,
     record_payload,
-    print_cost_summary,
     skill_prompt,
-    within_days,
     write_json,
 )
 
 
 DEFAULT_DOC_IDS = "台83,台90,台155,台156"
-QING_STEPS = {
-    "qing-events-done": ("done", "extract-qing-actions-done.md"),
-    "qing-events-plan": ("plan", "extract-qing-actions-planned.md"),
-    "qing-events-nonmil": ("nonmil", "extract-qing-nonmilitary-actions.md"),
-}
+DEFAULT_MODEL = "gemini-3.5-flash"
+PAIR_DIR = ROOT / "review-tools" / "(1) formal"
+YU_SOURCE_PATH = PAIR_DIR / "yu-source.json"
+CONFIRMED_PAIRS_PATH = PAIR_DIR / "confirmed-pairs.json"
+FORMAL_STATE_PATH = PAIR_DIR / "formal_all.data"
 
+LOOP_CHAIN = [
+    "summary",
+    "divide",
+    "lin-events+source",
+    "qing-actions-all+source",
+    "confirmed-yu-response",
+    "combined-emperor-actions",
+    "official-response",
+]
 
-# The proxy token counter normally groups calls by proxy mode.  These labels
-# preserve the loop's actual stages in the terminal table and in
-# cost-summary.json (for example, qing events and their source trace are one
-# logical stage for this runner).
 _ACCOUNTING_STEP = ""
 
 
@@ -63,8 +80,14 @@ def accounting_step(label: str):
         _ACCOUNTING_STEP = previous
 
 
-def post_json(url: str, payload: dict[str, Any], timeout: int, retries: int = 3, retry_sleep: int = 12) -> dict[str, Any]:
-    """Retry the old proxy helper plus Cloud Run's occasional bare disconnect/502."""
+def post_json(
+    url: str,
+    payload: dict[str, Any],
+    timeout: int,
+    retries: int = 3,
+    retry_sleep: int = 12,
+) -> dict[str, Any]:
+    """Call the proxy and retry transient Cloud Run/provider failures."""
     request_payload = dict(payload)
     if _ACCOUNTING_STEP:
         request_payload["_accounting_step"] = _ACCOUNTING_STEP
@@ -84,7 +107,7 @@ def post_json(url: str, payload: dict[str, Any], timeout: int, retries: int = 3,
                 raise
             print(f"    retry {attempt}/{retries} after HTTP {exc.code}")
             time.sleep(retry_sleep * attempt)
-        except (urllib.error.URLError, TimeoutError) as exc:
+        except (urllib.error.URLError, TimeoutError, ConnectionError) as exc:
             last = exc
             if attempt >= retries:
                 raise
@@ -93,19 +116,48 @@ def post_json(url: str, payload: dict[str, Any], timeout: int, retries: int = 3,
     raise last or RuntimeError("request failed")
 
 
-def doc_id(record: dict[str, Any]) -> str:
+def split_csv(value: str) -> list[str]:
+    return [part.strip() for part in (value or "").split(",") if part.strip()]
+
+
+def doc_id_of(record: dict[str, Any]) -> str:
     return str(record.get("doc_id") or record.get("id") or "")
 
 
-def date_pair_value(record: dict[str, Any], key: str) -> str:
-    value = record.get(key)
-    if isinstance(value, list) and len(value) > 1:
-        return value[1] or ""
-    return ""
+def body_of(record: dict[str, Any]) -> str:
+    return str(record.get("body") or "")
+
+
+def rescript_of(record: dict[str, Any]) -> str:
+    return str(record.get("rescript_text") or record.get("rescript") or "")
+
+
+def author_name(record: dict[str, Any]) -> str:
+    author = record.get("author")
+    if isinstance(author, dict):
+        return str(author.get("name") or "")
+    if isinstance(author, str):
+        return author
+    return str(record.get("author_name") or "")
+
+
+def record_date(record: dict[str, Any]) -> str:
+    return (
+        date_pair_value(record, "receive_date")
+        or date_pair_value(record, "send_date")
+        or date_pair_value(record, "announce_date")
+        or date_pair_value(record, "issue_date")
+    )
+
+
+def imperial_date(record: dict[str, Any]) -> str:
+    if record.get("doc_type") == "上諭":
+        return date_pair_value(record, "announce_date") or date_pair_value(record, "send_date")
+    return date_pair_value(record, "receive_date") or date_pair_value(record, "send_date")
 
 
 def parse_date(value: str):
-    value = (value or "").replace("/", "-")
+    value = str(value or "").replace("/", "-")
     if not re.fullmatch(r"\d{4}-\d{1,2}-\d{1,2}", value):
         return None
     try:
@@ -114,312 +166,704 @@ def parse_date(value: str):
         return None
 
 
-def fmt_date(d) -> str:
-    return f"{d.year:04d}/{d.month:02d}/{d.day:02d}"
+def verified_quote(source: str, quote: str) -> str:
+    src = re.sub(r"\s+", "", str(source or ""))
+    raw = str(quote or "").strip()
+    if not src or not raw:
+        return ""
+    candidates = [raw]
+    if len(raw) >= 2 and raw[0] in "「『\"" and raw[-1] in "」』\"":
+        candidates.append(raw[1:-1].strip())
+    # Models sometimes include the explanatory label 「硃批：」 or 「上諭：」;
+    # retain only the exact quoted imperial words when that suffix is verbatim.
+    if "：" in raw:
+        candidates.append(raw.split("：", 1)[1].strip())
+    for candidate in candidates:
+        q = re.sub(r"\s+", "", candidate)
+        if q and q in src:
+            return candidate.strip()
+    return ""
 
 
-def dates_within_days(value: str, base: str, days: int, forward_only: bool = False) -> bool:
-    dv = parse_date(value)
-    db = parse_date(base)
-    if not dv or not db:
-        return False
-    diff = (dv - db).days
-    return 0 <= diff <= days if forward_only else abs(diff) <= days
+def quote_is_verbatim(source: str, quote: str) -> bool:
+    return bool(verified_quote(source, quote))
 
 
-def body_of(record: dict[str, Any]) -> str:
-    return record.get("body") or ""
-
-
-def author_name(record: dict[str, Any]) -> str:
-    author = record.get("author") or {}
-    return record.get("author_name") or author.get("name") or ""
-
-
-def rec_type(record: dict[str, Any]) -> str:
-    dt = record.get("doc_type")
-    if dt == "硃批":
-        return "zhupi"
-    if dt == "上諭":
-        return "shangyu"
-    return "shangzou"
-
-
-def own_emperor_date(record: dict[str, Any]) -> str:
-    if record.get("doc_type") == "上諭":
-        return date_pair_value(record, "announce_date") or date_pair_value(record, "send_date")
-    return date_pair_value(record, "receive_date") or date_pair_value(record, "send_date")
-
-
-def extract_json_object(text: str) -> dict[str, Any]:
-    text = (text or "").strip()
-    text = re.sub(r"^```(?:json)?\s*|\s*```$", "", text, flags=re.S)
-    try:
-        data = json.loads(text)
-        return data if isinstance(data, dict) else {}
-    except json.JSONDecodeError:
-        m = re.search(r"\{.*\}", text, re.S)
-        if not m:
-            return {}
-        try:
-            data = json.loads(m.group(0))
-            return data if isinstance(data, dict) else {}
-        except json.JSONDecodeError:
-            return {}
-
-
-def char_bigrams(value: str) -> list[str]:
-    s = re.sub(r"\s+", "", value or "")
-    return [s[i : i + 2] for i in range(max(0, len(s) - 1))]
-
-
-def likely_overlap(a: str, b: str) -> bool:
-    aa = re.sub(r"\s+", "", a or "")
-    bb = re.sub(r"\s+", "", b or "")
-    if not aa or not bb:
-        return False
-    if aa in bb or bb in aa:
-        return True
-    a_bi = char_bigrams(aa)
-    b_bi = set(char_bigrams(bb))
-    return bool(a_bi) and sum(1 for x in a_bi if x in b_bi) / len(a_bi) > 0.35
-
-
-def annotate_chains(chains: list[dict[str, Any]], did: str) -> list[dict[str, Any]]:
-    out = []
-    for ch in chains or []:
-        ch = dict(ch)
-        ch["hops"] = [dict(h, doc_id=str(h.get("doc_id") or did)) for h in (ch.get("hops") or [])]
-        ch["events"] = [dict(e, doc_id=str(e.get("doc_id") or did)) for e in (ch.get("events") or [])]
-        out.append(ch)
-    return out
+def source_text(record: dict[str, Any]) -> str:
+    return body_of(record) + "\n" + rescript_of(record)
 
 
 def add_default_source(item: dict[str, Any], did: str) -> dict[str, Any]:
     item = dict(item)
     item.setdefault("doc_id", did)
-    item.setdefault("sources", [{
-        "doc_id": did,
-        "quote": item.get("quote") or "",
-        "howKnown": item.get("howKnown") or "",
-        "whenKnown": item.get("whenKnownCh") or "",
-    }])
+    sources = item.get("sources")
+    if not isinstance(sources, list) or not sources:
+        item["sources"] = [{"doc_id": did, "quote": item.get("quote") or ""}]
     return item
 
 
-def run_event_step(proxy: str, model: str, doc: dict[str, Any], actor: str, category: str, step: str, timeout: int, retries: int, retry_sleep: int) -> list[dict[str, Any]]:
-    payload = record_payload(doc, "events", model)
-    payload.update({"actor": actor, "category": category, "actor_instruction": skill_prompt(step)})
-    data = post_json(proxy, payload, timeout, retries, retry_sleep)
-    return [add_default_source(it, doc_id(doc)) for it in data.get("events", [])]
+def pair_rows(path: Path) -> list[dict[str, Any]]:
+    raw = read_json(path, {})
+    if isinstance(raw, dict):
+        rows = raw.get("pairs")
+    else:
+        rows = raw
+    return [dict(row) for row in rows or [] if isinstance(row, dict)]
 
 
-def run_doc_trace(proxy: str, model: str, doc: dict[str, Any], actor: str, titles: list[str], timeout: int, retries: int, retry_sleep: int) -> list[dict[str, Any]]:
-    if not titles:
-        return []
-    hint = "已知本文書已擷取出以下事件標題：" + "、".join(f"「{t}」" for t in titles if t) + "。描述每條來源鏈的 events[].subtitle 時，若對應到上述某一事件，請直接沿用該事件標題的原文字（逐字），不要另擬新標題。"
-    payload = record_payload(doc, "trace", model)
-    payload.update({"actor": actor, "side": actor, "question": hint})
-    try:
-        data = post_json(proxy, payload, timeout, retries, retry_sleep)
-        return annotate_chains(data.get("chains", []), doc_id(doc))
-    except Exception as exc:  # noqa: BLE001
-        return [{"hops": [], "events": [], "error": str(exc)}]
+def pair_source_doc_id(pair: dict[str, Any]) -> str:
+    for key in ("yu_doc_id", "zhu_doc_id", "source_doc_id", "source_id"):
+        value = pair.get(key)
+        if value:
+            return str(value)
+    for key in ("yu", "zhu", "source"):
+        nested = pair.get(key)
+        if isinstance(nested, dict) and nested.get("id"):
+            return str(nested["id"])
+    return ""
 
 
-def info_source_candidates(records: list[dict[str, Any]], base: dict[str, Any], lookback_days: int = 60) -> list[dict[str, Any]]:
-    base_date = parse_date(own_emperor_date(base))
-    if not base_date:
-        return []
-    lo = base_date - timedelta(days=lookback_days)
-    base_id = doc_id(base)
-    out = []
-    for rec in records:
-        if rec.get("doc_type") == "上諭" or doc_id(rec) == base_id:
+def pair_yu_doc_id(pair: dict[str, Any]) -> str:
+    value = pair.get("yu_doc_id")
+    if value:
+        return str(value)
+    nested = pair.get("yu")
+    return str(nested.get("id") or "") if isinstance(nested, dict) else ""
+
+
+def pair_reply_doc_id(pair: dict[str, Any]) -> str:
+    for key in ("reply_doc_id", "reply_id"):
+        value = pair.get(key)
+        if value:
+            return str(value)
+    nested = pair.get("reply")
+    return str(nested.get("id") or "") if isinstance(nested, dict) else ""
+
+
+def load_existing_pairs() -> list[dict[str, Any]]:
+    """Load only the pair graphs already accepted by the formal workspace."""
+    candidates = pair_rows(YU_SOURCE_PATH) + pair_rows(CONFIRMED_PAIRS_PATH)
+    formal = read_json(FORMAL_STATE_PATH, {})
+    if isinstance(formal, dict):
+        candidates.extend(row for row in formal.get("pairs", []) if isinstance(row, dict))
+        candidates.extend(row for row in formal.get("__docPairs", []) if isinstance(row, dict))
+    out: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for pair in candidates:
+        relation = str(pair.get("relation") or "")
+        source = pair_source_doc_id(pair)
+        reply = pair_reply_doc_id(pair)
+        key = "|".join((relation, source, reply, json.dumps(pair.get("evidence") or {}, ensure_ascii=False, sort_keys=True)))
+        if key in seen:
             continue
-        d = parse_date(date_pair_value(rec, "send_date") or date_pair_value(rec, "receive_date"))
-        if d and lo <= d < base_date:
-            out.append(rec)
-    out.sort(key=lambda r: parse_date(date_pair_value(r, "send_date") or date_pair_value(r, "receive_date")) or base_date)
+        seen.add(key)
+        out.append(pair)
     return out
 
 
-def fetch_info_sources(proxy: str, model: str, records: list[dict[str, Any]], base: dict[str, Any], emperor_text: str, timeout: int, retries: int, retry_sleep: int) -> dict[str, Any]:
-    cands = info_source_candidates(records, base)
-    if not cands or not emperor_text:
-        return {"items": [], "candCount": len(cands)}
-    payload = [{
-        "doc_id": doc_id(r),
-        "title": r.get("title") or "",
-        "author": author_name(r),
-        "type": r.get("doc_type") or "",
-        "sendAr": date_pair_value(r, "send_date"),
-        "recvAr": date_pair_value(r, "receive_date"),
-        "body": body_of(r),
-    } for r in cands]
-    question = (
-        "以下是一份皇帝文書（硃批或上諭）的原文（emperor_text），以及在此文書之前，各官員所上呈的候選奏摺／文書列表（candidates）。"
-        "請找出皇帝原文中，皇帝所提及／回應的每一項具體資訊（事實、回報的情況、人名、地名、事件等——不要包含皇帝自己下達的命令或意見），"
-        "並針對每一項資訊，判斷它最可能是根據 candidates 中哪一份文書、哪一段引文而來。"
-        '請只輸出 JSON，格式：{"items":[{"info":"皇帝提及的這項資訊（一句話概述）","doc_id":"該資訊來源候選文書的id","quote":"該候選文書中的引文（逐字）","emperor_quote":"皇帝文書中引用或提及此資訊的原文（逐字）"}]}。'
-        "\n【emperor_text】\n" + emperor_text
-        + "\n【candidates】\n" + json.dumps(payload, ensure_ascii=False)
-    )
-    data = post_json(proxy, {"mode": "ask", "model": model, "question": question, "prompt": question}, timeout, retries, retry_sleep)
-    result = data if isinstance(data.get("items"), list) else extract_json_object(data.get("text") or data.get("answer") or "")
-    base_date = parse_date(own_emperor_date(base))
-    items = []
-    by_id = {doc_id(r): r for r in records}
-    for it in result.get("items", []) if isinstance(result, dict) else []:
-        src = by_id.get(str(it.get("doc_id") or ""))
-        src_date = parse_date((date_pair_value(src, "send_date") or date_pair_value(src, "receive_date")) if src else "")
-        items.append({
-            "info": it.get("info") or "",
-            "doc_id": str(it.get("doc_id") or ""),
-            "quote": it.get("quote") or "",
-            "emperor_quote": it.get("emperor_quote") or "",
-            "srcTitle": src.get("title") if src else "",
-            "srcAuthor": author_name(src) if src else "",
-            "srcSentAr": (date_pair_value(src, "send_date") or date_pair_value(src, "receive_date")) if src else "",
-            "daysBeforeEmperor": (base_date - src_date).days if base_date and src_date else None,
-            "emperorDocId": doc_id(base),
-        })
-    return {"items": [x for x in items if x["info"] and x["doc_id"]], "candCount": len(cands)}
+def pairs_for_selected_yu_source(pairs: list[dict[str, Any]], did: str) -> list[dict[str, Any]]:
+    return [
+        pair
+        for pair in pairs
+        if str(pair.get("relation") or "") == "yu_source"
+        and pair_reply_doc_id(pair) == did
+        and pair_yu_doc_id(pair)
+    ]
 
 
-def safe_fetch_info_sources(proxy: str, model: str, records: list[dict[str, Any]], base: dict[str, Any], emperor_text: str, timeout: int, retries: int, retry_sleep: int) -> list[dict[str, Any]]:
-    try:
-        return fetch_info_sources(proxy, model, records, base, emperor_text, timeout, retries, retry_sleep).get("items") or []
-    except Exception as exc:  # noqa: BLE001
-        print(f"    info-source lookup failed for {doc_id(base)}; continuing without pending sources: {exc}")
-        return []
+def pairs_for_previous_yu_response(pairs: list[dict[str, Any]], did: str) -> list[dict[str, Any]]:
+    return [
+        pair
+        for pair in pairs
+        if str(pair.get("relation") or "") == "official_reply_to_yu"
+        and pair_reply_doc_id(pair) == did
+        and pair_yu_doc_id(pair)
+    ]
 
 
-def attach_info_to_zhupi(items: list[dict[str, Any]], info_items: list[dict[str, Any]]) -> None:
-    for it in items:
-        text = (it.get("text") or "") + (it.get("responds_to") or "") + (it.get("opinion") or "")
-        matched = [s for s in info_items if likely_overlap(s.get("emperor_quote") or "", text)]
-        if matched:
-            it["__pendingInfoSources"] = matched
-    if info_items and not any(it.get("__pendingInfoSources") for it in items):
-        for it in items:
-            it["__pendingInfoSources"] = info_items
+def pair_evidence(pair: dict[str, Any]) -> dict[str, Any]:
+    evidence = pair.get("evidence")
+    return dict(evidence) if isinstance(evidence, dict) else {}
 
 
-def fallback_zhupi_items(doc: dict[str, Any]) -> list[dict[str, Any]]:
-    text = (doc.get("rescript_text") or doc.get("rescript") or "").strip()
-    if doc.get("doc_type") != "硃批" or not text:
-        return []
-    marker = text if len(text) <= 16 else ""
-    author = author_name(doc)
-    title = f"批「{text}」" if marker else f"對{author or '原奏官員'}奏報作出硃批"
-    return [{
-        "doc_id": doc_id(doc),
-        "text": text,
-        "position": "尾批",
-        "responds_to": doc.get("title") or "",
-        "opinion": "皇帝以硃批表示已閱悉並作出簡短回應。",
-        "title": title,
-        "marker": marker,
-        "where": "",
-        "who": [author] if author else [],
-        "who_loc": {},
-        "relations": [],
-    }]
-
-
-def attach_info_to_edicts(matches: list[dict[str, Any]], info_by_edict: dict[str, list[dict[str, Any]]]) -> None:
-    for match in matches:
-        info_items = info_by_edict.get(str(match.get("edict_id") or ""), [])
-        for pt in match.get("points") or []:
-            text = (pt.get("edict_quote") or "") + (pt.get("how") or "")
-            matched = [s for s in info_items if likely_overlap(s.get("emperor_quote") or "", text)]
-            if matched:
-                pt["__pendingInfoSources"] = matched
-
-
-def run_situfit(proxy: str, model: str, records: list[dict[str, Any]], mem: dict[str, Any], timeout: int, retries: int, retry_sleep: int) -> dict[str, Any] | None:
-    send = date_pair_value(mem, "send_date")
-    recv = date_pair_value(mem, "receive_date")
-    ds = parse_date(send)
-    dr = parse_date(recv)
-    if not ds or not dr:
+def pair_yu_payload(pair: dict[str, Any], by_id: dict[str, dict[str, Any]]) -> dict[str, Any] | None:
+    yid = pair_yu_doc_id(pair)
+    record = by_id.get(yid)
+    if not record or record.get("doc_type") != "上諭":
         return None
-    lo, hi = sorted([ds, dr])
-    base_id = doc_id(mem)
-    change_docs = []
-    response_docs = []
-    for r in records:
-        if doc_id(r) == base_id:
-            continue
-        if r.get("doc_type") != "上諭":
-            d = parse_date(date_pair_value(r, "send_date") or date_pair_value(r, "receive_date"))
-            if d and lo <= d <= hi:
-                change_docs.append(r)
-        if r.get("doc_type") in {"硃批", "上諭"}:
-            rd = date_pair_value(r, "announce_date") if r.get("doc_type") == "上諭" else date_pair_value(r, "receive_date")
-            if dates_within_days(rd, recv, 3, forward_only=True):
-                response_docs.append(r)
-    baseline = {"doc_id": base_id, "title": mem.get("title") or "", "author": author_name(mem), "sendAr": send, "recvAr": recv, "body": body_of(mem), "rescript": mem.get("rescript_text") or mem.get("rescript") or "", "summary": mem.get("summary") or {}}
-    change_payload = [{"doc_id": doc_id(r), "title": r.get("title") or "", "author": author_name(r), "type": r.get("doc_type") or "", "sendAr": date_pair_value(r, "send_date"), "recvAr": date_pair_value(r, "receive_date"), "body": body_of(r)} for r in change_docs]
-    response_payload = [{"doc_id": doc_id(r), "title": r.get("title") or "", "type": r.get("doc_type") or "", "date": date_pair_value(r, "announce_date") if r.get("doc_type") == "上諭" else date_pair_value(r, "receive_date"), "recipients": r.get("recipients") or [], "body": body_of(r), "rescript": r.get("rescript_text") or r.get("rescript") or ""} for r in response_docs]
-    question = (
-        "以下是一份奏摺（上奏）與皇帝硃批的基本資料（baseline），以及該奏摺上奏日至硃批受文日之間，其他官員所上呈的其他奏摺／文書（change_docs），"
-        "還有硃批受文日起至其後 3 日內頒布／發出的所有硃批與上諭（response_docs）。請判斷皇帝回應時實際情勢是否已變，以及回應是否切合當時情勢。"
-        '請只輸出 JSON，格式：{"situation":"","changes":[{"doc_id":"","subtitle":"","title":"","author":"","sentAr":"","quote":"","how":""}],"responses":[{"doc_id":"","type":"","date":"","quote":"","note":""}],"verdict":"fits/stale-but-harmless/mismatch","reasoning":""}。'
-        "\n【baseline】\n" + json.dumps(baseline, ensure_ascii=False)
-        + "\n【change_docs】\n" + json.dumps(change_payload, ensure_ascii=False)
-        + "\n【response_docs】\n" + json.dumps(response_payload, ensure_ascii=False)
-    )
-    data = post_json(proxy, {"mode": "ask", "model": model, "question": question, "prompt": question}, timeout, retries, retry_sleep)
-    result = data if data.get("situation") or data.get("verdict") else extract_json_object(data.get("text") or data.get("answer") or "")
-    if not result:
-        return None
+    evidence = pair_evidence(pair)
     return {
-        "doc_id": base_id,
-        "memDoc": base_id,
-        "memTitle": mem.get("title") or "",
-        "memAuthor": author_name(mem),
-        "sendAr": send,
-        "recvAr": recv,
-        "situation": result.get("situation") or "",
-        "changes": result.get("changes") or [],
-        "responses": result.get("responses") or [],
-        "verdict": result.get("verdict") or "",
-        "reasoning": result.get("reasoning") or "",
+        "id": yid,
+        "title": record.get("title") or "",
+        "date": imperial_date(record) or primary_date(record),
+        "body": body_of(record),
+        "pair_evidence": {
+            "quote_in_reply": evidence.get("quote_in_reply") or "",
+            "matched_yu_span": evidence.get("matched_yu_span") or "",
+            "relation_note": evidence.get("relation_note") or "",
+        },
     }
 
 
+def run_summary(proxy: str, model: str, doc: dict[str, Any], timeout: int, retries: int, retry_sleep: int) -> dict[str, Any]:
+    payload = record_payload(doc, "summary", model)
+    instruction = skill_prompt("summary")
+    if instruction:
+        payload["instruction"] = instruction
+    with accounting_step("summary"):
+        data = post_json(proxy, payload, timeout, retries, retry_sleep)
+    text = data.get("text") or data.get("summary") or ""
+    if isinstance(text, dict):
+        text = text.get("text") or text.get("summary") or json.dumps(text, ensure_ascii=False)
+    return {"doc_id": doc_id_of(doc), "title": doc.get("title") or "", "summary": str(text)}
+
+
+def run_division(proxy: str, model: str, doc: dict[str, Any], timeout: int, retries: int, retry_sleep: int) -> dict[str, Any]:
+    payload = record_payload(doc, "divide", model)
+    instruction = skill_prompt("divide")
+    if instruction:
+        payload["instruction"] = instruction
+    with accounting_step("divide"):
+        data = post_json(proxy, payload, timeout, retries, retry_sleep)
+    return {"doc_id": doc_id_of(doc), "title": doc.get("title") or "", "parts": data.get("parts", [])}
+
+
+def run_events(
+    proxy: str,
+    model: str,
+    doc: dict[str, Any],
+    actor: str,
+    category: str,
+    skill_step: str,
+    timeout: int,
+    retries: int,
+    retry_sleep: int,
+) -> list[dict[str, Any]]:
+    payload = record_payload(doc, "events", model)
+    payload.update({
+        "actor": actor,
+        "category": category,
+        "actor_instruction": skill_prompt(skill_step),
+    })
+    with accounting_step("lin-events" if actor == "lin" else "qing-actions-all"):
+        data = post_json(proxy, payload, timeout, retries, retry_sleep)
+    rows: list[dict[str, Any]] = []
+    for raw in data.get("events", []) if isinstance(data.get("events"), list) else []:
+        if not isinstance(raw, dict):
+            continue
+        item = add_default_source(raw, doc_id_of(doc))
+        item.setdefault("actor", actor)
+        if actor == "qing":
+            item["category"] = str(item.get("category") or item.get("qing_category") or item.get("qcat") or "done")
+            if item["category"] not in {"done", "plan", "nonmil"}:
+                item["category"] = "done"
+        rows.append(item)
+    return rows
+
+
+def trace_event(
+    proxy: str,
+    model: str,
+    doc: dict[str, Any],
+    item: dict[str, Any],
+    side: str,
+    timeout: int,
+    retries: int,
+    retry_sleep: int,
+) -> dict[str, Any]:
+    payload = record_payload(doc, "trace", model)
+    payload.update({
+        "side": side,
+        "single": True,
+        "event": {
+            "actor": side,
+            "category": item.get("category") or "",
+            "subtitle": item.get("subtitle") or "",
+            "description": item.get("description") or "",
+            "where": item.get("where") or "",
+            "whenCh": item.get("whenCh") or item.get("whenAr") or "",
+            "quote": item.get("quote") or ((item.get("sources") or [{}])[0].get("quote") or ""),
+        },
+    })
+    instruction = skill_prompt("source-chain")
+    if instruction:
+        payload["question"] = instruction
+    try:
+        with accounting_step("lin-source-chain" if side == "lin" else "qing-source-chain"):
+            data = post_json(proxy, payload, timeout, retries, retry_sleep)
+        chains = data.get("chains", []) if isinstance(data.get("chains"), list) else []
+        return {"doc_id": doc_id_of(doc), "evTitle": item.get("subtitle") or "", "actor": side, "event": item, "chains": chains}
+    except Exception as exc:  # a trace failure should not discard extracted events
+        print(f"      source-chain failed for {item.get('subtitle') or '(untitled)'}: {exc}")
+        return {"doc_id": doc_id_of(doc), "evTitle": item.get("subtitle") or "", "actor": side, "event": item, "chains": [], "error": str(exc)}
+
+
+def trace_events_parallel(proxy, model, doc, items, side, timeout, retries, retry_sleep, workers=6):
+    """Run per-event source-chain traces concurrently; order preserved."""
+    if not items:
+        return []
+    if workers <= 1 or len(items) == 1:
+        return [trace_event(proxy, model, doc, it, side, timeout, retries, retry_sleep) for it in items]
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=min(workers, len(items))) as ex:
+        return list(ex.map(lambda it: trace_event(proxy, model, doc, it, side, timeout, retries, retry_sleep), items))
+
+
+def earlier_emperor_actions(exclude_ids: set[str], by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    state = read_json(FORMAL_STATE_PATH, {})
+    events = state.get("__events", []) if isinstance(state, dict) else []
+    out: list[dict[str, Any]] = []
+    for event in events:
+        if not isinstance(event, dict):
+            continue
+        actor = str(event.get("actor") or "").lower()
+        if actor not in {"emperor", "皇帝"}:
+            continue
+        sources = []
+        for src in event.get("sources") or []:
+            if isinstance(src, str):
+                src = {"doc_id": src, "quote": ""}
+            if not isinstance(src, dict):
+                continue
+            sources.append({"doc_id": str(src.get("doc_id") or ""), "quote": src.get("quote") or ""})
+        if any(src.get("doc_id") in exclude_ids for src in sources):
+            continue
+        event_id = str(event.get("id") or "")
+        if not event_id:
+            continue
+        out.append({
+            "event_id": event_id,
+            "date": event.get("dateAr") or event.get("whenAr") or "",
+            "title": event.get("subtitle") or event.get("what") or "",
+            "description": event.get("description") or "",
+            "sources": sources,
+        })
+    out.sort(key=lambda row: (parse_date(row.get("date") or "") or datetime.max.date(), row.get("event_id") or ""))
+    # formal_all.data can contain several saved extraction cards for the same
+    # already-committed action. Keep the earliest representative in the prompt;
+    # this both names the earliest action and avoids sending a large duplicate
+    # registry to every combined-action call.
+    unique: list[dict[str, Any]] = []
+    seen_titles: set[str] = set()
+    for row in out:
+        title_key = re.sub(r"[\s，。、《》；：：「」『』（）()！？]", "", str(row.get("title") or ""))
+        if title_key and title_key in seen_titles:
+            continue
+        if title_key:
+            seen_titles.add(title_key)
+        unique.append(row)
+    return unique
+
+
+def source_type(record: dict[str, Any]) -> str:
+    return "上諭" if record.get("doc_type") == "上諭" else "硃批"
+
+
+def selected_emperor_sources(
+    doc: dict[str, Any],
+    selected_pairs: list[dict[str, Any]],
+    by_id: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Build the only imperial source set the combined-action call may see."""
+    did = doc_id_of(doc)
+    out: list[dict[str, Any]] = []
+    if doc.get("doc_type") == "硃批":
+        out.append({
+            "id": did,
+            "title": doc.get("title") or "",
+            "date": imperial_date(doc),
+            "body": body_of(doc),
+            "source_type": "硃批",
+            "pair_evidence": {},
+        })
+    seen = {did}
+    for pair in selected_pairs:
+        payload = pair_yu_payload(pair, by_id)
+        if not payload or payload["id"] in seen:
+            continue
+        payload["source_type"] = "上諭"
+        seen.add(payload["id"])
+        out.append(payload)
+    return out
+
+
+def normalize_action_sources(
+    raw_sources: Any,
+    allowed: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    if not isinstance(raw_sources, list):
+        return []
+    out: list[dict[str, Any]] = []
+    seen: set[tuple[str, str]] = set()
+    for raw in raw_sources:
+        if not isinstance(raw, dict):
+            continue
+        sid = str(raw.get("doc_id") or raw.get("id") or "")
+        if sid not in allowed:
+            continue
+        quote = str(raw.get("quote") or "").strip()
+        record = allowed[sid]
+        quote = verified_quote(source_text(record), quote)
+        if not quote:
+            continue
+        stype = "上諭" if record.get("doc_type") == "上諭" else "硃批"
+        key = (sid, quote)
+        if key in seen:
+            continue
+        seen.add(key)
+        out.append({
+            "doc_id": sid,
+            "source_type": stype,
+            "quote": quote,
+            "title": raw.get("title") or record.get("title") or "",
+            "date": raw.get("date") or imperial_date(record) or primary_date(record),
+        })
+    return out
+
+
+def _relevant_previous_actions(previous, doc, top_k=20, max_desc=240):
+    """Cap + trim the committed-action registry sent to the combined-emperor call.
+    Shipping every prior emperor action (hundreds, some multi-paragraph) makes the
+    request large and slow enough that Cloud Run drops the connection
+    (http.client.RemoteDisconnected), and retries resend the same body. Keep only
+    the top_k most topically relevant to this memorial and trim each description."""
+    if len(previous) <= top_k and all(len(str(a.get("description") or "")) <= max_desc for a in previous):
+        return previous
+    def _bg(x):
+        x = re.sub(r"\s+", "", str(x or ""))
+        return {x[i:i + 2] for i in range(len(x) - 1)}
+    target = _bg((doc.get("title") or "") + body_of(doc) + rescript_of(doc))
+    def _ov(a):
+        A = _bg((a.get("title") or "") + (a.get("description") or ""))
+        return len(A & target) / len(A | target) if A and target else 0.0
+    out = []
+    for a in sorted(previous, key=_ov, reverse=True)[:top_k]:
+        a = dict(a)
+        d = str(a.get("description") or "")
+        if len(d) > max_desc:
+            a["description"] = d[:max_desc] + "…"
+        out.append(a)
+    return out
+
+
+def combined_action_rows(
+    proxy: str,
+    model: str,
+    doc: dict[str, Any],
+    selected_pairs: list[dict[str, Any]],
+    by_id: dict[str, dict[str, Any]],
+    timeout: int,
+    retries: int,
+    retry_sleep: int,
+) -> list[dict[str, Any]]:
+    did = doc_id_of(doc)
+    imperial_sources = selected_emperor_sources(doc, selected_pairs, by_id)
+    if not imperial_sources:
+        return []
+    allowed = {did: doc}
+    for payload in imperial_sources:
+        if payload["id"] in by_id:
+            allowed[payload["id"]] = by_id[payload["id"]]
+    previous = _relevant_previous_actions(earlier_emperor_actions(set(allowed), by_id), doc)
+    previous_ids = {str(row.get("event_id") or "") for row in previous}
+    zhu_text = rescript_of(doc)
+    inline = re.findall(r"(?:硃批|朱批)\s*[:：]\s*[^)）\n]+", body_of(doc))
+    if inline:
+        zhu_text = (zhu_text + "\n" if zhu_text else "") + "\n".join(inline)
+    payload = {
+        "mode": "combined_emperor_actions",
+        "model": model,
+        "question": skill_prompt("combined-emperor-actions"),
+        "memorial": {
+            "id": did,
+            "author": author_name(doc),
+            "date": imperial_date(doc) or primary_date(doc),
+            "title": doc.get("title") or "",
+            "body": body_of(doc),
+            "rescript": rescript_of(doc),
+            "zhupi_text": zhu_text,
+        },
+        "edicts": imperial_sources[1:] if imperial_sources and imperial_sources[0]["id"] == did else imperial_sources,
+        "previous_actions": previous,
+    }
+    with accounting_step("combined-emperor-actions"):
+        data = post_json(proxy, payload, timeout, retries, retry_sleep)
+    actions = data.get("actions", []) if isinstance(data.get("actions"), list) else []
+    rows: list[dict[str, Any]] = []
+    for raw in actions:
+        if not isinstance(raw, dict):
+            continue
+        sources = normalize_action_sources(raw.get("sources"), allowed)
+        if not sources:
+            continue
+        same = str(raw.get("same_as_event_id") or "")
+        if same not in previous_ids:
+            same = ""
+        prior = next((row for row in previous if row.get("event_id") == same), None)
+        description = str(raw.get("description") or raw.get("how") or "")
+        title = str(raw.get("title") or "皇帝行動")
+        if prior and prior.get("title"):
+            title = str(prior["title"])
+        point = {
+            "title": title,
+            "aspect": raw.get("action_type") or "",
+            "action_type": raw.get("action_type") or "comment",
+            "how": description,
+            "description": description,
+            "whenCh": raw.get("whenCh") or "",
+            "whenAr": raw.get("whenAr") or "",
+            "where": raw.get("where") or "",
+            "who": raw.get("who") if isinstance(raw.get("who"), list) else [],
+            "whoLoc": raw.get("who_loc") or raw.get("whoLoc") or {},
+            "relations": raw.get("relations") if isinstance(raw.get("relations"), list) else [],
+            "same_as_event_id": same,
+            "sources": sources,
+        }
+        rows.append(point)
+    if not rows:
+        return []
+    first = next((source for source in imperial_sources if source["id"] != did), imperial_sources[0])
+    return [{
+        "doc_id": did,
+        "memDoc": did,
+        "memTitle": doc.get("title") or "",
+        "combinedEmperor": True,
+        "marker": "既有配對",
+        "items": [{
+            "edict_id": first["id"],
+            "title": first.get("title") or "硃批／既有配對上諭",
+            "date": first.get("date") or imperial_date(doc),
+            "memDoc": did,
+            "memTitle": doc.get("title") or "",
+            "summary": "只保留皇帝自己的評論、答覆或命令；同義硃批與上諭合為一項。",
+            "points": rows,
+        }],
+    }]
+
+
+def response_pairs_for_source(source_id: str, source_kind: str, pairs: list[dict[str, Any]]) -> list[dict[str, Any]]:
+    relation = "official_reply_to_yu" if source_kind == "上諭" else "official_reply_to_emperor_zhu"
+    return [
+        pair
+        for pair in pairs
+        if str(pair.get("relation") or "") == relation and pair_source_doc_id(pair) == source_id and pair_reply_doc_id(pair)
+    ]
+
+
+def action_addressees(sources: list[dict[str, Any]], by_id: dict[str, dict[str, Any]], selected_doc: dict[str, Any]) -> list[str]:
+    out: list[str] = []
+    for source in sources:
+        record = by_id.get(str(source.get("doc_id") or ""), {})
+        values = record.get("recipients") if source.get("source_type") == "上諭" else [author_name(selected_doc)]
+        if not isinstance(values, list):
+            values = [values] if values else []
+        for value in values:
+            if value and str(value) not in out:
+                out.append(str(value))
+    return out
+
+
+def official_response_rows_for_actions(
+    proxy: str,
+    model: str,
+    selected_docs: list[dict[str, Any]],
+    combined_rows: list[dict[str, Any]],
+    pairs: list[dict[str, Any]],
+    by_id: dict[str, dict[str, Any]],
+    timeout: int,
+    retries: int,
+    retry_sleep: int,
+    skip_keys: set[tuple[str, str, tuple[str, ...]]] | None = None,
+    workers: int = 6,
+    on_row=None,
+) -> list[dict[str, Any]]:
+    """Build one official-response row per emperor-action point. The proxy calls
+    run CONCURRENTLY (each action is independent), and on_row is invoked from the
+    main thread as each result completes -- callers use it to save incrementally,
+    so stopping the run never loses responses already found."""
+    selected_by_id = {doc_id_of(doc): doc for doc in selected_docs}
+
+    # Phase A (fast, no network): assemble one job per emperor-action point.
+    jobs: list[dict[str, Any]] = []
+    for combined in combined_rows:
+        did = str(combined.get("doc_id") or combined.get("memDoc") or "")
+        selected = selected_by_id.get(did)
+        if not selected:
+            continue
+        for item in combined.get("items") or []:
+            for point in item.get("points") or []:
+                sources = [source for source in point.get("sources") or [] if isinstance(source, dict)]
+                source_ids = list(dict.fromkeys(str(source.get("doc_id") or "") for source in sources if source.get("doc_id")))
+                row_key = (did, str(point.get("title") or item.get("title") or "皇帝行動"), tuple(source_ids))
+                if skip_keys and row_key in skip_keys:
+                    continue
+                source_pairs: list[dict[str, Any]] = []
+                candidate_ids: list[str] = []
+                for source in sources:
+                    sid = str(source.get("doc_id") or "")
+                    skind = str(source.get("source_type") or ("上諭" if by_id.get(sid, {}).get("doc_type") == "上諭" else "硃批"))
+                    for pair in response_pairs_for_source(sid, skind, pairs):
+                        rid = pair_reply_doc_id(pair)
+                        if rid == did:
+                            continue
+                        source_pairs.append(pair)
+                        if rid and rid not in candidate_ids:
+                            candidate_ids.append(rid)
+                candidates = [by_id[rid] for rid in candidate_ids if rid in by_id]
+                if len(candidates) > 6:
+                    # Big output (many responders) is the main cause of slow calls / disconnects.
+                    # Keep the 6 reply docs closest in time to the action; confirmed pairs are
+                    # usually few, so this rarely drops a real responder.
+                    _actd = parse_date(point.get("whenAr") or "") or parse_date(next((s.get("date") for s in sources if s.get("date")), "") or "")
+                    def _prox(c, _a=_actd):
+                        cd = parse_date(doc_best_ar(c) or "")
+                        return abs((cd - _a).days) if (cd and _a) else 10 ** 6
+                    candidates = sorted(candidates, key=_prox)[:6]
+                addressees = action_addressees(sources, by_id, selected)
+                action_quote = "\n".join(
+                    f"【{source.get('source_type') or ''} {source.get('doc_id') or ''}】{source.get('quote') or ''}"
+                    for source in sources
+                    if source.get("quote")
+                )
+                jobs.append({
+                    "did": did, "selected": selected, "point": point, "item": item,
+                    "sources": sources, "source_ids": source_ids, "source_pairs": source_pairs,
+                    "candidates": candidates, "addressees": addressees, "action_quote": action_quote,
+                })
+
+    rows: list[dict[str, Any]] = []
+
+    def _row(job: dict[str, Any], response: dict[str, Any]) -> dict[str, Any]:
+        valid_ids = {doc_id_of(c) for c in job["candidates"]}
+        items = [r for r in response.get("items", []) if isinstance(r, dict) and str(r.get("doc_id") or "") in valid_ids]
+        return {
+            "doc_id": job["did"], "memDoc": job["did"], "memTitle": job["selected"].get("title") or "",
+            "evTitle": job["point"].get("title") or job["item"].get("title") or "皇帝行動",
+            "addressee": response.get("addressee") or "、".join(job["addressees"]),
+            "items": items, "source_doc_ids": job["source_ids"], "action_doc_ids": job["source_ids"],
+            "source_pairs": job["source_pairs"], "confirmedPairsOnly": True, "noConfirmedPairs": not bool(job["candidates"]),
+        }
+
+    def _emit(row: dict[str, Any]) -> None:
+        rows.append(row)
+        if on_row:
+            on_row(row)
+
+    # Actions with no confirmed reply candidate need no network call.
+    for job in jobs:
+        if not job["candidates"]:
+            _emit(_row(job, {"addressee": "、".join(job["addressees"]), "items": []}))
+    net_jobs = [job for job in jobs if job["candidates"]]
+
+    def _call(job: dict[str, Any]):
+        payload = {
+            "mode": "official_response", "model": model, "confirmed_pairs_only": True,
+            "action": {
+                "what": job["point"].get("title") or job["item"].get("title") or "皇帝行動",
+                "dateAr": job["point"].get("whenAr") or next((s.get("date") for s in job["sources"] if s.get("date")), ""),
+                "quote": job["action_quote"],
+            },
+            "addressee": "、".join(job["addressees"]),
+            "candidates": [
+                {"doc_id": doc_id_of(c), "title": c.get("title") or "", "date": doc_best_ar(c), "body": body_of(c)[:1800]}
+                for c in job["candidates"]
+            ],
+            "question": skill_prompt("official-response"),
+        }
+        ok = True
+        try:
+            resp = post_json(proxy, payload, timeout, retries, retry_sleep)
+        except Exception as exc:
+            print(f"    official-response failed for 「{job['point'].get('title') or ''}」: {exc}")
+            resp = {"addressee": "、".join(job["addressees"]), "items": []}
+            ok = False
+        return job, resp, ok
+
+    if net_jobs:
+        # official-response payloads are large (candidate memorial bodies), so cap concurrency
+        # lower than the source-chain workers to avoid overloading the proxy / provider and
+        # triggering RemoteDisconnected. A failed call writes NO row, so --skip-done retries it.
+        resp_workers = max(1, min(workers, 3))
+        with accounting_step("official-response"):
+            if resp_workers > 1 and len(net_jobs) > 1:
+                from concurrent.futures import ThreadPoolExecutor, as_completed
+                with ThreadPoolExecutor(max_workers=min(resp_workers, len(net_jobs))) as ex:
+                    futures = [ex.submit(_call, job) for job in net_jobs]
+                    for fut in as_completed(futures):
+                        job, resp, ok = fut.result()
+                        if ok:
+                            _emit(_row(job, resp))   # on_row runs on the main thread -> no write race
+            else:
+                for job in net_jobs:
+                    job, resp, ok = _call(job)
+                    if ok:
+                        _emit(_row(job, resp))
+    return rows
+
+
 def main() -> None:
-    ap = argparse.ArgumentParser()
+    ap = argparse.ArgumentParser(description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter)
     ap.add_argument("--proxy", default=os.environ.get("GEMINI_PROXY_URL", ""))
-    ap.add_argument("--model", default=os.environ.get("GEMINI_MODEL", "gemini-2.5-flash"))
-    ap.add_argument("--doc-ids", default=DEFAULT_DOC_IDS)
-    ap.add_argument("--bundle", default="test-tai83-90-155-156-full-chain")
+    ap.add_argument("--model", default=os.environ.get("GEMINI_MODEL", DEFAULT_MODEL))
+    ap.add_argument("--doc-ids", default=DEFAULT_DOC_IDS, help="Comma-separated source document ids")
+    ap.add_argument("--bundle", default="", help="Short semantic review-bundle name")
     ap.add_argument("--timeout", type=int, default=240)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--retry-sleep", type=int, default=15)
-    ap.add_argument("--input-price-per-million", type=float, default=None,
-                    help="Override input price in USD per 1M tokens")
-    ap.add_argument("--output-price-per-million", type=float, default=None,
-                    help="Override output price in USD per 1M tokens")
     ap.add_argument("--skip-done", action="store_true")
+    ap.add_argument("--workers", type=int, default=6, help="Concurrent proxy calls for source-chain traces and official-response")
+    ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--input-price-per-million", type=float, default=None)
+    ap.add_argument("--output-price-per-million", type=float, default=None)
     args = ap.parse_args()
-    if not args.proxy:
-        raise SystemExit("Set GEMINI_PROXY_URL or pass --proxy.")
 
     records = json.loads(SOURCE.read_text(encoding="utf-8"))
-    by_id = {doc_id(r): r for r in records}
-    wanted = [s.strip() for s in args.doc_ids.split(",") if s.strip()]
-    missing = [x for x in wanted if x not in by_id]
+    by_id = {doc_id_of(record): record for record in records}
+    wanted = split_csv(args.doc_ids)
+    missing = [did for did in wanted if did not in by_id]
     if missing:
         raise SystemExit("Missing doc_id(s): " + ", ".join(missing))
-    docs = [by_id[x] for x in wanted]
+    docs = [by_id[did] for did in wanted]
+    pairs = load_existing_pairs()
 
-    out_root = ROOT / "outputs" / "review-bundles" / args.bundle
+    if args.bundle:
+        bundle_name = args.bundle
+    else:
+        digest = hashlib.sha1("-".join(wanted).encode("utf-8")).hexdigest()[:8]
+        bundle_name = f"official-review-{wanted[0]}-plus{len(wanted) - 1}-{digest}"
+    out_root = BUNDLES_DIR / bundle_name
     out_dir = out_root / "outputs"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_root / "human-edits").mkdir(parents=True, exist_ok=True)
+
+    if args.dry_run:
+        print(f"DRY RUN -- bundle: {out_root.relative_to(ROOT)}")
+        print(f"model: {args.model}")
+        print(f"existing pair rows: {len(pairs)}")
+        for doc in docs:
+            did = doc_id_of(doc)
+            print(f"\n[{did}] {doc.get('doc_type')} {doc.get('title')}")
+            print(f"  date={record_date(doc)!r} author={author_name(doc)!r}")
+            print(f"  prior 上諭 response pairs: {len(pairs_for_previous_yu_response(pairs, did))}")
+            sources = pairs_for_selected_yu_source(pairs, did)
+            print(f"  existing yu_source links: {len(sources)} ({', '.join(pair_yu_doc_id(p) for p in sources) or 'none'})")
+        print("\n(no proxy calls made)")
+        return
+
+    if not args.proxy:
+        raise SystemExit("Set GEMINI_PROXY_URL or pass --proxy (or use --dry-run).")
+
+    files = {
+        "summary": out_dir / "summary.json",
+        "divide": out_dir / "division-parts.json",
+        "lin": out_dir / "lin-events.json",
+        "qing": out_dir / "qing-actions-all.json",
+        "source_raw": out_dir / "_source-chain-raw.json",
+        "source": out_dir / "source-chain.json",
+        "reply": out_dir / "confirmed-yu-response.json",
+        "emperor": out_dir / "combined-emperor-actions.json",
+        "official": out_dir / "official-response.json",
+    }
     status_path = out_dir / "_run-status.json"
     status = read_json(status_path, {}) if args.skip_done else {}
 
@@ -430,198 +874,155 @@ def main() -> None:
         status.setdefault(did, {})[step] = True
         write_json(status_path, status)
 
-    divisions = read_json(out_dir / "division-parts.json", []) if args.skip_done else []
-    lin_events = read_json(out_dir / "lin-events.json", []) if args.skip_done else []
-    qing_rows = {step: (read_json(out_dir / f"{step}.json", []) if args.skip_done else []) for step in QING_STEPS}
-    source_rows = read_json(out_dir / "source-chain.json", []) if args.skip_done else []
-    zhupi_rows = read_json(out_dir / "zhupi.json", []) if args.skip_done else []
-    edict_rows = read_json(out_dir / "edict-match.json", []) if args.skip_done else []
-    situfit_rows = read_json(out_dir / "situfit.json", []) if args.skip_done else []
+    summaries = read_json(files["summary"], []) if args.skip_done else []
+    divisions = read_json(files["divide"], []) if args.skip_done else []
+    lin_rows = read_json(files["lin"], []) if args.skip_done else []
+    qing_rows = read_json(files["qing"], []) if args.skip_done else []
+    source_raw = read_json(files["source_raw"], []) if args.skip_done else []
+    reply_rows = read_json(files["reply"], []) if args.skip_done else []
+    emperor_rows = read_json(files["emperor"], []) if args.skip_done else []
+    official_rows = read_json(files["official"], []) if args.skip_done else []
 
-    all_edicts = [r for r in records if r.get("doc_type") == "上諭"]
+    def flush_sources() -> None:
+        write_json(files["source_raw"], source_raw)
+        write_json(files["source"], merge_source_chains_by_signature(source_raw))
 
-    for idx, doc in enumerate(docs, 1):
-        did = doc_id(doc)
-        print(f"[{idx}/{len(docs)}] {did} {doc.get('doc_type')} {doc.get('title')}")
+    for index, doc in enumerate(docs, 1):
+        did = doc_id_of(doc)
+        print(f"[{index}/{len(docs)}] {did} {doc.get('doc_type')} {doc.get('title')}")
+        try:
+            if not done(did, "summary"):
+                print("  - summary")
+                summaries.append(run_summary(args.proxy, args.model, doc, args.timeout, args.retries, args.retry_sleep))
+                write_json(files["summary"], summaries)
+                mark(did, "summary")
 
-        if done(did, "divide"):
-            print("  - divide (skip done)")
-        else:
-            print("  - divide")
-            payload = record_payload(doc, "divide", args.model)
-            inst = skill_prompt("divide")
-            if inst:
-                payload["instruction"] = inst
-            with accounting_step("divide"):
-                data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
-            divisions.append({"doc_id": did, "title": doc.get("title") or "", "parts": data.get("parts", []), "_raw": data})
-            write_json(out_dir / "division-parts.json", divisions)
-            mark(did, "divide")
+            if not done(did, "divide"):
+                print("  - divide")
+                divisions.append(run_division(args.proxy, args.model, doc, args.timeout, args.retries, args.retry_sleep))
+                write_json(files["divide"], divisions)
+                mark(did, "divide")
 
-        if done(did, "lin-events"):
-            print("  - lin-events + source (skip done)")
-            doc_lin = [x for x in lin_events if str(x.get("doc_id")) == did]
-        else:
-            print("  - lin-events + source")
-            with accounting_step("lin-events + source"):
-                doc_lin = run_event_step(args.proxy, args.model, doc, "lin", "", "lin-events", args.timeout, args.retries, args.retry_sleep)
-            lin_events.extend(doc_lin)
-            with accounting_step("lin-events + source"):
-                chains = run_doc_trace(args.proxy, args.model, doc, "lin", [x.get("subtitle") or "" for x in doc_lin], args.timeout, args.retries, args.retry_sleep)
-            if chains:
-                source_rows.append({"doc_id": did, "evTitle": "全部林方事件來源", "actor": "lin", "chains": chains})
-            write_json(out_dir / "lin-events.json", lin_events)
-            write_json(out_dir / "source-chain.json", source_rows)
-            mark(did, "lin-events")
+            if done(did, "lin-events"):
+                lin_items = [row for row in lin_rows if doc_id_of(row) == did]
+            else:
+                print("  - lin-events + per-event source chain")
+                lin_items = run_events(args.proxy, args.model, doc, "lin", "", "lin-events", args.timeout, args.retries, args.retry_sleep)
+                lin_rows.extend(lin_items)
+                write_json(files["lin"], lin_rows)
+                mark(did, "lin-events")
+            if not done(did, "source-chain-lin"):
+                print(f"    - 林方來源鏈 ×{len(lin_items)}（並行 {args.workers}）")
+                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, lin_items, "lin", args.timeout, args.retries, args.retry_sleep, args.workers))
+                flush_sources()
+                mark(did, "source-chain-lin")
 
-        if done(did, "qing-events-all"):
-            print("  - qing events + source (skip done)")
-        else:
-            print("  - qing events + source")
-            all_qing_titles = []
-            for step, (category, _) in QING_STEPS.items():
-                with accounting_step("qing events + source"):
-                    items = run_event_step(args.proxy, args.model, doc, "qing", category, step, args.timeout, args.retries, args.retry_sleep)
-                qing_rows[step].extend(items)
-                all_qing_titles.extend(x.get("subtitle") or "" for x in items)
-                write_json(out_dir / f"{step}.json", qing_rows[step])
-            with accounting_step("qing events + source"):
-                chains = run_doc_trace(args.proxy, args.model, doc, "qing", all_qing_titles, args.timeout, args.retries, args.retry_sleep)
-            if chains:
-                source_rows.append({"doc_id": did, "evTitle": "全部清方事件來源", "actor": "qing", "chains": chains})
-                write_json(out_dir / "source-chain.json", source_rows)
-            mark(did, "qing-events-all")
+            if done(did, "qing-actions-all"):
+                qing_items = [row for row in qing_rows if doc_id_of(row) == did]
+            else:
+                print("  - qing-actions-all + per-event source chain")
+                qing_items = run_events(args.proxy, args.model, doc, "qing", "all", "qing-actions-all", args.timeout, args.retries, args.retry_sleep)
+                qing_rows.extend(qing_items)
+                write_json(files["qing"], qing_rows)
+                mark(did, "qing-actions-all")
+            if not done(did, "source-chain-qing"):
+                print(f"    - 清方來源鏈 ×{len(qing_items)}（並行 {args.workers}）")
+                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, qing_items, "qing", args.timeout, args.retries, args.retry_sleep, args.workers))
+                flush_sources()
+                mark(did, "source-chain-qing")
 
-        if done(did, "zhupi"):
-            print("  - zhupi + info source (skip done)")
-        else:
-            print("  - zhupi + info source")
-            payload = record_payload(doc, "zhupi", args.model)
-            extra = skill_prompt("zhupi")
-            if extra:
-                payload["question"] = extra
-            with accounting_step("zhupi + info source"):
-                data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
-            items = [dict(x, doc_id=did) for x in data.get("zhupi", [])]
-            if not items:
-                items = fallback_zhupi_items(doc)
-            if items:
-                with accounting_step("zhupi + info source"):
-                    info_items = safe_fetch_info_sources(args.proxy, args.model, records, doc, doc.get("rescript_text") or doc.get("rescript") or body_of(doc), args.timeout, args.retries, args.retry_sleep)
-                attach_info_to_zhupi(items, info_items)
-            zhupi_rows.extend(items)
-            write_json(out_dir / "zhupi.json", zhupi_rows)
-            mark(did, "zhupi")
+            # The remaining stages are pair-grounded and therefore do not run a corpus search.
+            if not done(did, "confirmed-yu-response"):
+                prior_pairs = pairs_for_previous_yu_response(pairs, did)
+                edicts = [payload for payload in (pair_yu_payload(pair, by_id) for pair in prior_pairs) if payload]
+                if edicts:
+                    print(f"  - confirmed prior 上諭 response ({len(edicts)} existing pair(s))")
+                    payload = {
+                        "mode": "confirmed_yu_response",
+                        "model": args.model,
+                        "reply": {"id": did, "author": author_name(doc), "date": record_date(doc), "title": doc.get("title") or "", "body": body_of(doc)},
+                        "edicts": edicts,
+                        "question": skill_prompt("confirmed-yu-response"),
+                    }
+                    with accounting_step("confirmed-yu-response"):
+                        data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
+                    valid = {str(item["id"]) for item in edicts}
+                    pair_by_yu = {pair_yu_doc_id(pair): pair for pair in prior_pairs}
+                    items = []
+                    for item in data.get("items", []) if isinstance(data.get("items"), list) else []:
+                        yid = str(item.get("yu_doc_id") or "")
+                        if yid not in valid:
+                            continue
+                        base = pair_by_yu.get(yid, {})
+                        items.append(dict(item, yu_doc_id=yid))
+                    reply_rows.append({"doc_id": did, "memDoc": did, "pairs": prior_pairs, "items": items})
+                    write_json(files["reply"], reply_rows)
+                mark(did, "confirmed-yu-response")
 
-        if done(did, "edict-match"):
-            print("  - edict-match + info source (skip done)")
-        else:
-            print("  - edict-match + info source")
-            if doc.get("doc_type") == "上諭":
-                print("    - skip 上諭 source document")
-                mark(did, "edict-match")
-                continue
-            base = primary_date(doc)
-            cands = [r for r in all_edicts if within_days(primary_date(r), base, 3)][:20] if base else []
-            matches_for_doc = []
-            for j, ed in enumerate(cands, 1):
-                edid = doc_id(ed)
-                print(f"    - {j}/{len(cands)} {did} x {edid}")
-                payload = {
-                    "mode": "edict_match",
-                    "model": args.model,
-                    "question": skill_prompt("edict-match"),
-                    "memorial": {"id": did, "title": doc.get("title") or "", "date": base, "body": body_of(doc)},
-                    "edicts": [{"id": edid, "date": primary_date(ed), "title": ed.get("title") or "", "body": body_of(ed)}],
-                }
-                with accounting_step("edict-match + info source"):
-                    data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
-                for match in data.get("matches", []):
-                    pts = match.get("points") if isinstance(match.get("points"), list) else []
-                    if not pts and (match.get("memorial_quote") or match.get("edict_quote") or match.get("how")):
-                        pts = [{"aspect": "", "memorial_quote": match.get("memorial_quote") or "", "edict_quote": match.get("edict_quote") or "", "how": match.get("how") or ""}]
-                    matches_for_doc.append({"doc_id": did, "memDoc": did, "memTitle": doc.get("title") or "", "edict_id": str(match.get("edict_id") or edid), "title": ed.get("title") or "", "date": primary_date(ed), "summary": match.get("summary") or "", "points": pts})
-            info_by_edict = {}
-            for eid in sorted({str(x.get("edict_id") or "") for x in matches_for_doc if x.get("edict_id")}):
-                ed = by_id.get(eid)
-                if ed:
-                    with accounting_step("edict-match + info source"):
-                        info_by_edict[eid] = safe_fetch_info_sources(args.proxy, args.model, records, ed, body_of(ed), args.timeout, args.retries, args.retry_sleep)
-            attach_info_to_edicts(matches_for_doc, info_by_edict)
-            edict_rows.extend(matches_for_doc)
-            write_json(out_dir / "edict-match.json", edict_rows)
-            mark(did, "edict-match")
-
-        if done(did, "situfit"):
-            print("  - situfit (skip done)")
-        else:
-            print("  - situfit")
-            with accounting_step("situfit"):
-                sf = run_situfit(args.proxy, args.model, records, doc, args.timeout, args.retries, args.retry_sleep)
-            if sf:
-                situfit_rows.append(sf)
-                write_json(out_dir / "situfit.json", situfit_rows)
-            mark(did, "situfit")
-
-    print("- official-response")
-    official_path = out_dir / "official-response.json"
-    official_rows = read_json(official_path, []) if args.skip_done else []
-    existing = {(str(r.get("doc_id")), str(r.get("evTitle") or "")) for r in official_rows}
-    doc_ids = {doc_id(d) for d in docs}
-    actions = []
-    for it in zhupi_rows:
-        did = str(it.get("doc_id") or "")
-        if did not in doc_ids:
+            if done(did, "combined-emperor-actions"):
+                doc_emperor = [row for row in emperor_rows if str(row.get("doc_id") or row.get("memDoc") or "") == did]
+            else:
+                source_pairs = pairs_for_selected_yu_source(pairs, did)
+                print(f"  - combined emperor actions ({len(source_pairs)} existing yu_source link(s))")
+                doc_emperor = combined_action_rows(args.proxy, args.model, doc, source_pairs, by_id, args.timeout, args.retries, args.retry_sleep)
+                emperor_rows.extend(doc_emperor)
+                write_json(files["emperor"], emperor_rows)
+                mark(did, "combined-emperor-actions")
+        except Exception as exc:  # preserve completed earlier documents and resume safely
+            print(f"  !! {did} failed ({exc}); rerun with --skip-done to continue")
             continue
-        rec = by_id.get(did) or {}
-        actions.append({"doc_id": did, "memDoc": did, "evTitle": it.get("title") or it.get("text") or "硃批", "dateAr": date_pair_value(rec, "receive_date") or date_pair_value(rec, "send_date"), "quote": it.get("text") or it.get("marker") or "", "addressee": [author_name(rec)] if author_name(rec) else []})
-    for it in edict_rows:
-        eid = str(it.get("edict_id") or "")
-        mid = str(it.get("doc_id") or it.get("memDoc") or "")
-        if eid not in doc_ids and mid not in doc_ids:
-            continue
-        ed = by_id.get(eid) or {}
-        pts = it.get("points") or []
-        for pt in pts or [{}]:
-            actions.append({"doc_id": eid, "memDoc": mid, "evTitle": pt.get("title") or pt.get("aspect") or it.get("title") or "上諭", "dateAr": it.get("date") or date_pair_value(ed, "announce_date") or date_pair_value(ed, "send_date"), "quote": pt.get("edict_quote") or "", "addressee": list(ed.get("recipients") or [])})
-    for j, act in enumerate(actions, 1):
-        key = (act["doc_id"], act["evTitle"])
-        if args.skip_done and key in existing:
-            print(f"  - {j}/{len(actions)} skip {act['evTitle']}")
-            continue
-        if not act["dateAr"]:
-            continue
-        cands = official_response_candidates(records, act["dateAr"], act["doc_id"], act["addressee"])
-        payload = {
-            "mode": "official_response",
-            "model": args.model,
-            "action": {"what": act["evTitle"], "dateAr": act["dateAr"], "quote": act["quote"]},
-            "addressee": "、".join(act["addressee"]) if act["addressee"] else "",
-            "candidates": [{"doc_id": doc_id(c), "title": c.get("title") or "", "date": doc_best_ar(c), "body": body_of(c)} for c in cands],
-            "question": skill_prompt("official-response"),
-        }
-        with accounting_step("official-response"):
-            data = post_json(args.proxy, payload, args.timeout, args.retries, args.retry_sleep)
-        official_rows.append({"doc_id": act["doc_id"], "memDoc": act.get("memDoc") or act["doc_id"], "evTitle": act["evTitle"], "addressee": data.get("addressee") or payload["addressee"], "items": data.get("items", [])})
-        write_json(official_path, official_rows)
+
+    # Official response is intentionally post-loop so each action can be built
+    # from the complete combined-emperor-actions output. Each action gets one
+    # union of fixed pair edges, not a separate 30-day candidate search.
+    if not done("__global__", "official-response"):
+        print(f"- official-response for each extracted emperor action (existing pairs only; parallel {args.workers}, incremental save)")
+        existing_keys = {(str(row.get("doc_id") or ""), str(row.get("evTitle") or ""), tuple(row.get("source_doc_ids") or [])) for row in official_rows}
+
+        def _save_official(row):
+            # incremental save: each completed response is written immediately, so
+            # stopping the run never loses responses already found.
+            official_rows.append(row)
+            write_json(files["official"], official_rows)
+
+        official_response_rows_for_actions(
+            args.proxy,
+            args.model,
+            docs,
+            emperor_rows,
+            pairs,
+            by_id,
+            args.timeout,
+            args.retries,
+            args.retry_sleep,
+            existing_keys if args.skip_done else None,
+            workers=args.workers,
+            on_row=_save_official,
+        )
+        mark("__global__", "official-response")
+
+    if source_raw:
+        flush_sources()
 
     manifest = {
-        "name": args.bundle,
+        "name": bundle_name,
         "created_at": datetime.now().isoformat(timespec="seconds"),
         "source": str(SOURCE.relative_to(ROOT)),
         "model": args.model,
         "doc_ids": wanted,
-        "chain": ["divide", "lin-events+source", "qing-events-done+source", "qing-events-plan+source", "qing-events-nonmil+source", "zhupi+info-source", "edict-match+info-source", "situfit", "official-response"],
+        "chain": LOOP_CHAIN,
+        "pair_files": [str(YU_SOURCE_PATH.relative_to(ROOT)), str(CONFIRMED_PAIRS_PATH.relative_to(ROOT))],
+        "deduplication": "existing bundle loader matchCandidateInRegistry; earliest report plus merge/separate choice",
+        "excluded_stages": ["edict-match", "info-source", "situfit", "date-window official-response search"],
     }
     write_json(out_root / "manifest.json", manifest)
-    write_json(out_root / "human-edits" / "notes.json", [])
+    if not (out_root / "human-edits" / "notes.json").exists():
+        write_json(out_root / "human-edits" / "notes.json", [])
+    cost = print_cost_summary(args.model, args.input_price_per_million, args.output_price_per_million)
+    write_json(out_dir / "cost-summary.json", cost)
+
     print(f"\nWrote bundle: {out_root.relative_to(ROOT)}")
-    cost_summary = print_cost_summary(
-        args.model,
-        args.input_price_per_million,
-        args.output_price_per_million,
-    )
-    write_json(out_root / "cost-summary.json", cost_summary)
+    print("Open the timeline page and choose 資料 → 載入技能輸出.")
 
 
 if __name__ == "__main__":

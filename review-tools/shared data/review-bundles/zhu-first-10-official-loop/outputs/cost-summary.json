@@ -1,0 +1,55 @@
+{
+  "model": "gemini-3.6-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": null,
+  "output_usd_per_million_tokens": null,
+  "estimated": true,
+  "calls": 121,
+  "prompt_tokens": 150520,
+  "completion_tokens": 41644,
+  "input_cost_usd": null,
+  "output_cost_usd": null,
+  "cost_usd": null,
+  "rows": [
+    {
+      "step": "combined-emperor-actions",
+      "calls": 2,
+      "prompt_tokens": 18654,
+      "completion_tokens": 2685,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "merge-emperor-actions",
+      "calls": 1,
+      "prompt_tokens": 9878,
+      "completion_tokens": 754,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "repeat-report",
+      "calls": 112,
+      "prompt_tokens": 98207,
+      "completion_tokens": 33646,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "official-response",
+      "calls": 6,
+      "prompt_tokens": 23781,
+      "completion_tokens": 4559,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    }
+  ]
+}

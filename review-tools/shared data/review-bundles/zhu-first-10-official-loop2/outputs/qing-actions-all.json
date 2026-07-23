@@ -1,0 +1,558 @@
+[
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡委派提標右營遊擊邱維揚率領二百名兵丁先行渡臺，以確查彰化賊匪人數、起因及地方受害情形。",
+    "howKnown": "親歷",
+    "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+    "relations": [
+      {
+        "evidence": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺",
+        "relation": "委令",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "邱維揚"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "委令邱維揚帶兵渡臺",
+    "whenAr": "",
+    "whenCh": "十二月初五日後",
+    "whenKnownCh": "",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡",
+      "邱維揚"
+    ],
+    "who_loc": {
+      "邱維揚": "臺灣",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#0"
+  },
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火器械並備齊商哨船隻。",
+    "howKnown": "親歷",
+    "quote": "一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "挑選提標兵丁備戰",
+    "whenAr": "",
+    "whenCh": "十二月初五日至十二月初十日之間",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#1"
+  },
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡於十二月初十日帶領官兵登舟，在廈門候風準備放洋飛渡臺灣進行剿捕。",
+    "howKnown": "親歷",
+    "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡帶兵登舟候風",
+    "whenAr": "1787/01/28",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#2"
+  },
+  {
+    "category": "nonmil",
+    "description": "黃仕簡因將親赴臺灣，札達督臣檄委金門鎮總兵羅英笈前來廈門就近彈壓照應。",
+    "howKnown": "親歷",
+    "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+    "relations": [
+      {
+        "evidence": "札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應",
+        "relation": "檄委",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "羅英笈"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "檄委羅英笈彈壓廈門",
+    "whenAr": "",
+    "whenCh": "十二月初五日至十二月初十日之間",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "羅英笈"
+    ],
+    "who_loc": {
+      "羅英笈": "金門",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#3"
+  },
+  {
+    "category": "done",
+    "description": "黃仕簡飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，嚴飭各口岸要隘堵緝盤拿竄逃賊匪。",
+    "howKnown": "親歷",
+    "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "飛札各路嚴防堵緝",
+    "whenAr": "",
+    "whenCh": "十二月初五日至十二月初十日之間",
+    "whenKnownCh": "",
+    "where": "福建",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#4"
+  },
+  {
+    "category": "plan",
+    "description": "黃仕簡計畫續調水陸官兵，分別由鹿耳門與淡水南北兩路對賊匪進行夾攻。",
+    "howKnown": "親歷",
+    "quote": "仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "擬調水陸官兵夾攻",
+    "whenAr": "",
+    "whenCh": "十二月初十日前",
+    "whenKnownCh": "",
+    "where": "臺灣",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#5"
+  },
+  {
+    "category": "done",
+    "description": "署北路淡水同知程峻、守備董得魁在彰化失陷後，督同兵役、整齊槍炮，並募集鄉勇與大甲社番在要隘分頭堵禦。",
+    "howKnown": "轉述",
+    "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+    "relations": [
+      {
+        "evidence": "接據署北路淡水同知程峻、守備董得魁會稟",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "程峻等募集鄉勇防禦",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月初十日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#6"
+  },
+  {
+    "category": "plan",
+    "description": "黃仕簡計畫親率大軍直接由鹿耳門、郡城南路進兵，會同北路軍隊夾攻賊匪。",
+    "howKnown": "親歷",
+    "quote": "奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "擬由鹿耳門南路進兵",
+    "whenAr": "",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "",
+    "where": "鹿耳門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "奴才直由鹿耳門、郡城南路進兵，會督夾攻。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#7"
+  },
+  {
+    "category": "plan",
+    "description": "黃仕簡計畫飛咨陸路提臣及海壇、閩安、烽火各鎮協營，就近調撥省城營分官兵前往淡水北路進行援剿。",
+    "howKnown": "親歷",
+    "quote": "除星飛咨行陸路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "擬調省營官兵北路援剿",
+    "whenAr": "",
+    "whenCh": "十二月初十日",
+    "whenKnownCh": "",
+    "where": "淡水",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃25",
+    "sources": [
+      {
+        "doc_id": "硃25",
+        "quote": "除星飛咨行陸路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃25#qing#8"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青與福建巡撫徐嗣曾商議後，於十二月十一日自省城起程前往蚶江，以便就近察看臺灣局勢並相機調度。",
+    "howKnown": "親歷",
+    "quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+    "relations": [
+      {
+        "evidence": "督臣常青與臣面商",
+        "relation": "面商",
+        "relation_type": "ally",
+        "source": "常青",
+        "target": "徐嗣曾"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青赴蚶江就近調度",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月十一日",
+    "whenKnownCh": "十二月十一日",
+    "where": "蚶江",
+    "who": [
+      "常青",
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "常青": "蚶江",
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#9",
+    "same_as": "evmr3ggkd5t4y",
+    "earliest_report": {
+      "id": "evmr3ggkd5t4y",
+      "doc_id": "硃21",
+      "date": "1786/12/12",
+      "title": "常青親赴泉州調度防務"
+    },
+    "repeat_candidates": [
+      "evmr3ggkd5t4y"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "署臺灣府淡水同知程峻與竹塹營守備董得魁，因聞彰化匪徒滋事，擔心匪徒竄入淡水，遂率領兵役於淡水與彰化交界處嚴密堵緝。",
+    "howKnown": "轉述",
+    "quote": "會帶兵役於交界地方，嚴密堵緝",
+    "relations": [
+      {
+        "evidence": "會帶兵役於交界地方，嚴密堵緝",
+        "relation": "會帶兵役",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "程峻等率兵防堵淡彰交界",
+    "whenAr": "",
+    "whenCh": "十一月",
+    "whenKnownCh": "十二月十二日",
+    "where": "淡水與彰化交界",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水與彰化交界",
+      "董得魁": "淡水與彰化交界"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "會帶兵役於交界地方，嚴密堵緝"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#10"
+  },
+  {
+    "category": "done",
+    "description": "彰化縣知縣俞峻於十一月二十七日夜間，在大墩地方率兵搜捕匪徒，不幸被害。",
+    "howKnown": "轉述",
+    "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "俞峻大墩拿匪被害",
+    "whenAr": "1787/01/15",
+    "whenCh": "十一月二十七日夜",
+    "whenKnownCh": "十二月十二日",
+    "where": "大墩",
+    "who": [
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "大墩"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#11"
+  },
+  {
+    "category": "done",
+    "description": "署淡水同知程峻與守備董得魁得知彰化城失陷後，立即督率兵役，募集地方鄉勇與社番，於要隘處扼要堵禦。",
+    "howKnown": "轉述",
+    "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+    "relations": [
+      {
+        "evidence": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦",
+        "relation": "協同防禦",
+        "relation_type": "ally",
+        "source": "程峻",
+        "target": "董得魁"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "程峻等募集鄉勇社番防禦",
+    "whenAr": "",
+    "whenCh": "十一月二十九日後",
+    "whenKnownCh": "十二月十二日",
+    "where": "淡水",
+    "who": [
+      "程峻",
+      "董得魁"
+    ],
+    "who_loc": {
+      "程峻": "淡水",
+      "董得魁": "淡水"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#12",
+    "same_as": "硃25#qing#6",
+    "earliest_report": {
+      "id": "硃25#qing#6",
+      "doc_id": "硃25",
+      "date": "1786/12/10",
+      "title": "程峻等募集鄉勇防禦"
+    },
+    "repeat_candidates": [
+      "硃25#qing#6"
+    ]
+  },
+  {
+    "category": "plan",
+    "description": "福建巡撫徐嗣曾飛速飭令各營縣，加緊準備火藥、鉛彈，並雇備船隻，以備隨時調遣渡臺。",
+    "howKnown": "親歷",
+    "quote": "臣現亦飛飭營縣，多備火藥、鉛彈，雇備船隻，聽候撥用。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾飭備火藥船隻聽候撥用",
+    "whenAr": "",
+    "whenCh": "十二月十二日以前",
+    "whenKnownCh": "十二月十二日",
+    "where": "福建",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "臣現亦飛飭營縣，多備火藥、鉛彈，雇備船隻，聽候撥用。"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#13"
+  },
+  {
+    "category": "plan",
+    "description": "巡撫徐嗣曾因恐臺灣匪徒四散竄匿或偷越內渡，飛飭福州、福寧、興化、漳州、泉州一帶沿海文武官員，嚴密防範並截拿越渡匪徒。",
+    "howKnown": "親歷",
+    "quote": "臣現在飛飭福州、福寧、興化、漳、泉一帶沿海地方文武員弁，嚴行截拿",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾飭沿海文武截拿逃匪",
+    "whenAr": "",
+    "whenCh": "十二月十二日以前",
+    "whenKnownCh": "十二月十二日",
+    "where": "福建沿海",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "臣現在飛飭福州、福寧、興化、漳、泉一帶沿海地方文武員弁，嚴行截拿"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#14"
+  },
+  {
+    "category": "plan",
+    "description": "巡撫徐嗣曾密飭漳州、泉州道府官員，明白曉諭地方保族、鄰里，若有臺灣匪徒竄回原籍，立即捕拿，首報者給予重賞，並要求不動聲色，避免張皇。",
+    "howKnown": "親歷",
+    "quote": "臣密飭該道、府明白曉諭各地保族、鄰人等，或有竄回原籍，立即捕拿，首報加以重賞。仍飭不動聲色，不得稍有張皇",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾飭道府曉諭捕拿回籍匪徒",
+    "whenAr": "",
+    "whenCh": "十二月十二日以前",
+    "whenKnownCh": "十二月十二日",
+    "where": "漳州、泉州",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "臣密飭該道、府明白曉諭各地保族、鄰人等，或有竄回原籍，立即捕拿，首報加以重賞。仍飭不動聲色，不得稍有張皇"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#15"
+  },
+  {
+    "category": "plan",
+    "description": "因淡水至府城道路梗阻，巡撫徐嗣曾密飭淡水、廈門、蚶江等處文武官員，專差妥幹丁役前往臺灣偵探實在情形。",
+    "howKnown": "親歷",
+    "quote": "除密飭淡水、廈門、蚶江等處文武員弁，專差妥幹丁役前往偵探",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾密飭派員赴臺偵探",
+    "whenAr": "",
+    "whenCh": "十二月十二日以前",
+    "whenKnownCh": "十二月十二日",
+    "where": "淡水、廈門、蚶江",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃26",
+    "sources": [
+      {
+        "doc_id": "硃26",
+        "quote": "除密飭淡水、廈門、蚶江等處文武員弁，專差妥幹丁役前往偵探"
+      }
+    ],
+    "actor": "qing",
+    "card_id": "硃26#qing#16"
+  }
+]

@@ -1,0 +1,672 @@
+[
+  {
+    "doc_id": "硃26",
+    "memDoc": "硃26",
+    "memTitle": "為奏林爽文攻陷彰化等事",
+    "evTitle": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+    "addressee": "徐嗣曾",
+    "items": [
+      {
+        "action_quote": "常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
+        "doc_id": "硃94",
+        "how": "福建巡撫徐嗣曾接獲十二月二十七日上諭後，回報其親自前往五虎門、閩安等沿海口岸逐一履勘，並在汛兵單少之處增派兵力巡防。同時，他飛咨水陸提督及領兵將領在沿海搜捕、燒毀賊船，並密令漳州道府妥為防範，懸賞緝捕可能潛逃回籍的賊匪，以防其內渡漏網。",
+        "is_response": true,
+        "receive_date": "1787/01/10",
+        "relations": [
+          {
+            "evidence": "臣密札該道朱芫會、知府黃彬，不動聲色，妥為防範",
+            "relation": "密札",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "朱芫會"
+          },
+          {
+            "evidence": "臣密札該道朱芫會、知府黃彬，不動聲色，妥為防範",
+            "relation": "密札",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "黃彬"
+          },
+          {
+            "evidence": "臣現已飛咨水陸提臣及領兵鎮將，一面剿殺賊匪，一面即於沿海汊港搜拿賊船",
+            "relation": "飛咨",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "黃仕簡"
+          },
+          {
+            "evidence": "臣現已飛咨水陸提臣及領兵鎮將，一面剿殺賊匪，一面即於沿海汊港搜拿賊船",
+            "relation": "飛咨",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "任承恩"
+          }
+        ],
+        "response_date": "1787/01/10",
+        "response_quote": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭……特恐剿捕之時，竄匿亡命，勢所必有。若逃入臺地內山，官兵長圍攻逼，搜拿不悉不淨。惟海洋瞬息千里，倘賊匪竄逸內渡，防緝稍有未周，或恐漏網。臣察閱總兵柴大紀咨內，有賊匪小船數百隻浮水而來，被炮打沉數十隻，餘船遠逃之語。如果該匪等出海駕逃，即難蹤跡臣現已飛咨水陸提臣及領兵鎮將，一面剿殺賊匪，一面即於沿海汊港搜拿賊船，先行燒沉淨盡。至內地沿海口岸，先已添撥兵丁，協同截捕。臣發諭地方官弁，以疏漏一名，罪同縱賊，使各屬共知警惕。",
+        "subtitle": "徐嗣曾巡視閩安沿海口岸並嚴防臺匪內渡",
+        "where": "閩安",
+        "who": [
+          "徐嗣曾",
+          "黃仕簡",
+          "任承恩",
+          "柴大紀",
+          "朱芫會",
+          "黃彬"
+        ],
+        "who_loc": {
+          "任承恩": "臺灣",
+          "徐嗣曾": "省城",
+          "朱芫會": "漳州",
+          "柴大紀": "臺灣",
+          "黃仕簡": "臺灣",
+          "黃彬": "漳州"
+        }
+      },
+      {
+        "action_quote": "常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
+        "doc_id": "硃105",
+        "how": "閩浙總督常青接獲十二月二十七日上諭後，回報已調集福寧、延、建等處官兵及廣東兵力，並令汀州鎮總兵普吉保帶兵由廈門出口。針對防範餘匪內渡，他已嚴飭沿海口岸文武員弁實力巡查，並成功在漳浦縣盤獲匪犯陳樵，現正嚴加審究。",
+        "is_response": true,
+        "receive_date": "1787/01/11",
+        "relations": [
+          {
+            "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
+            "relation": "稟報",
+            "relation_type": "report",
+            "source": "羅澤坤",
+            "target": "常青"
+          },
+          {
+            "evidence": "臣並令調來之汀州鎮總兵普吉保，添帶水師兵六百名，由廈出口",
+            "relation": "令",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "普吉保"
+          },
+          {
+            "evidence": "其餘沿海口岸，嚴飭文武員弁，實力巡查",
+            "relation": "嚴飭",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "羅澤坤"
+          }
+        ],
+        "response_date": "1787/01/12",
+        "response_quote": "臣於正月十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十一年十二月二十七日奉上諭……其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
+        "subtitle": "常青遵旨嚴飭沿海口岸巡查並調兵進剿",
+        "where": "泉州",
+        "who": [
+          "常青",
+          "任承恩",
+          "黃仕簡",
+          "普吉保",
+          "羅澤坤",
+          "陳樵"
+        ],
+        "who_loc": {
+          "任承恩": "臺灣",
+          "常青": "泉州",
+          "普吉保": "廈門",
+          "羅澤坤": "漳浦縣",
+          "陳樵": "漳浦縣",
+          "黃仕簡": "臺灣"
+        }
+      }
+    ],
+    "source_doc_ids": [
+      "硃26",
+      "諭13"
+    ],
+    "action_doc_ids": [
+      "硃26",
+      "諭13"
+    ],
+    "source_pairs": [
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃94",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:23",
+        "evidence": {
+          "marker": "承准廷寄十二月二十七日奉上諭",
+          "quote_in_reply": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭：「賊匪么麼烏合，黃仕簡到彼，督率該鎮道分路夾攻，盡力堵剿，無難立就撲滅。」等因。欽此",
+          "matched_yu_span": "至賊匪麼烏合，經諸羅官兵剿殺二千餘人，餘黨自必聞風潰散。黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月初十日",
+          "date_note": "奏摺中「初十日」承接前文，為乾隆五十二年正月初十日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃94",
+          "title": "為恭摺覆奏督催官兵放洋及巡查海口等緣由事",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "徐嗣曾",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/10",
+          "receive_date": "1787/01/22"
+        }
+      },
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃105",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:35",
+        "evidence": {
+          "marker": "奉上諭",
+          "quote_in_reply": "正月十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十一年十二月二十七日奉上諭：「據常青等奏，臺灣彰化縣匪徒林爽文等結黨滋事，騷擾地方。等語。著傳諭常青徐嗣曾等，總須不動聲色，妥協辦理，迅速由六百里加緊復〔覆〕奏。云云。」欽此",
+          "matched_yu_span": "據常青等奏，臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。……常青、徐嗣曾等，總須不動聲色，妥協辦理。……迅速由六百里復奏。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月十一日",
+          "date_note": "奏摺中「正月十一日」承准，按時序為乾隆五十二年丁未年正月十一日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃105",
+          "title": "為奏聞臺灣近日情形",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "常青",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/12",
+          "receive_date": "1787/01/25"
+        }
+      }
+    ],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false,
+    "responseError": ""
+  },
+  {
+    "doc_id": "硃26",
+    "memDoc": "硃26",
+    "memTitle": "為奏林爽文攻陷彰化等事",
+    "evTitle": "肯定密飭保鄰捕拿原籍竄回匪犯之舉",
+    "addressee": "徐嗣曾",
+    "items": [],
+    "source_doc_ids": [
+      "硃26"
+    ],
+    "action_doc_ids": [
+      "硃26"
+    ],
+    "source_pairs": [],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": true,
+    "responseError": ""
+  },
+  {
+    "doc_id": "硃26",
+    "memDoc": "硃26",
+    "memTitle": "為奏林爽文攻陷彰化等事",
+    "evTitle": "申飭官員應處以鎮定、切勿張皇",
+    "addressee": "徐嗣曾",
+    "items": [
+      {
+        "action_quote": "常青、徐嗣曾等，總須不動聲色，妥協辦理。若因外洋遇有此等案件，該督撫等紛紛調遣，跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫不可不處以鎮定也。",
+        "doc_id": "硃94",
+        "how": "徐嗣曾接獲十二月二十七日上諭後，報告其親赴閩安督催官兵放洋及巡視沿海口岸的經過。他強調已密令漳州道府不動聲色妥為防範，並出示曉諭以安民心。他表示自己辦理一切事務皆出以鎮定，絕不敢稍涉張皇以致內地民人疑駭。",
+        "is_response": true,
+        "receive_date": "乾隆五十二年正月初十日",
+        "relations": [
+          {
+            "evidence": "臣於初八日親赴督催，該副將等已先於初七日放洋",
+            "relation": "督催",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "徐鼎士"
+          },
+          {
+            "evidence": "臣密札該道朱芫會、知府黃彬，不動聲色，妥為防範",
+            "relation": "密札",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "朱芫會"
+          },
+          {
+            "evidence": "臣密札該道朱芫會、知府黃彬，不動聲色，妥為防範",
+            "relation": "密札",
+            "relation_type": "command",
+            "source": "徐嗣曾",
+            "target": "黃彬"
+          },
+          {
+            "evidence": "昨據興泉道萬鐘傑稟報",
+            "relation": "稟報",
+            "relation_type": "report",
+            "source": "萬鐘傑",
+            "target": "徐嗣曾"
+          }
+        ],
+        "response_date": "乾隆五十二年正月初十日",
+        "response_quote": "臣密札該道朱芫會、知府黃彬，不動聲色，妥為防範。復會同督臣出示曉諭，以賊匪雖係漳人，其在臺滋事，與原籍親屬毫無干涉。惟藏匿引逆，例應同罪，將來賊匪潛逃回籍，即捕獲首報，並懸賞格，剴切示諭。仍令該道府將該處地方情形，按日稟報。臣復密加防察，現在實俱寧謐，並無驚疑之處。...臣仰承訓示，辦理一切，惟有事事出以鎮定，不敢稍存疏忽，亦斷不敢稍涉張皇，轉滋疑駭",
+        "subtitle": "徐嗣曾奏報密防漳州並事事出以鎮定",
+        "where": "福建省城",
+        "who": [
+          "徐嗣曾",
+          "黃仕簡",
+          "郝壯猷",
+          "徐鼎士",
+          "柴大紀",
+          "蔡攀龍",
+          "林光玉",
+          "任承恩",
+          "萬鐘傑",
+          "朱芫會",
+          "黃彬"
+        ],
+        "who_loc": {
+          "任承恩": "廈門",
+          "徐嗣曾": "福建省城",
+          "徐鼎士": "五虎門",
+          "朱芫會": "漳州",
+          "林光玉": "臺灣郡城",
+          "柴大紀": "臺灣郡城",
+          "萬鐘傑": "泉州",
+          "蔡攀龍": "臺灣郡城",
+          "郝壯猷": "廈門",
+          "黃仕簡": "料羅",
+          "黃彬": "漳州"
+        }
+      },
+      {
+        "action_quote": "常青、徐嗣曾等，總須不動聲色，妥協辦理。若因外洋遇有此等案件，該督撫等紛紛調遣，跡涉張皇，轉致內地民人心生疑駭，殊有關係，該督撫不可不處以鎮定也。",
+        "doc_id": "硃105",
+        "how": "常青接獲十二月二十七日上諭後，向皇帝報告臺灣各處戰況及官兵、義民抵禦賊匪的情形。他表示內地各境目前均寧謐，且漳州之兵並未調派以示不動聲色，自己唯有鎮靜辦理，不敢過涉張皇。",
+        "is_response": true,
+        "receive_date": "乾隆五十二年正月十一日",
+        "relations": [
+          {
+            "evidence": "隨於抵泉後，商之陸路提臣任承恩，多帶官兵，相度機宜，統率前進",
+            "relation": "商之",
+            "relation_type": "ally",
+            "source": "常青",
+            "target": "任承恩"
+          },
+          {
+            "evidence": "又經撫臣徐嗣曾添調督、撫標兵，直赴淡水之橫舺一帶，互相援救",
+            "relation": "添調兵力配合",
+            "relation_type": "ally",
+            "source": "徐嗣曾",
+            "target": "常青"
+          },
+          {
+            "evidence": "臣並令調來之汀州鎮總兵普吉保，添帶水師兵六百名，由廈出口",
+            "relation": "令調",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "普吉保"
+          }
+        ],
+        "response_date": "乾隆五十二年正月十二日",
+        "response_quote": "臣於正月十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十一年十二月二十七日奉上諭：「據常青等奏，臺灣彰化縣匪徒林爽文等結黨滋事，騷擾地方。等語。著傳諭常青徐嗣曾等，總須不動聲色，妥協辦理，迅速由六百里加緊復〔覆〕奏。云云。」欽此。...至內地各境，俱皆寧謐，徵兵雖多，臣俱酌量選派。即如漳州之兵，並未調派，示其不動聲色。...臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
+        "subtitle": "常青奏報調兵進剿並遵旨鎮靜辦理",
+        "where": "泉州",
+        "who": [
+          "常青",
+          "徐嗣曾",
+          "任承恩",
+          "黃仕簡",
+          "郝壯猷",
+          "徐鼎士",
+          "普吉保",
+          "孫士毅",
+          "柴大紀",
+          "蔡攀龍",
+          "林光玉",
+          "陳邦光",
+          "易連"
+        ],
+        "who_loc": {
+          "任承恩": "鹿仔港",
+          "孫士毅": "廣東",
+          "常青": "泉州",
+          "徐嗣曾": "福建省城",
+          "普吉保": "廈門",
+          "林光玉": "臺灣郡城",
+          "柴大紀": "臺灣郡城",
+          "蔡攀龍": "臺灣郡城",
+          "黃仕簡": "鹿耳門"
+        }
+      }
+    ],
+    "source_doc_ids": [
+      "硃26",
+      "諭13"
+    ],
+    "action_doc_ids": [
+      "硃26",
+      "諭13"
+    ],
+    "source_pairs": [
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃94",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:23",
+        "evidence": {
+          "marker": "承准廷寄十二月二十七日奉上諭",
+          "quote_in_reply": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭：「賊匪么麼烏合，黃仕簡到彼，督率該鎮道分路夾攻，盡力堵剿，無難立就撲滅。」等因。欽此",
+          "matched_yu_span": "至賊匪麼烏合，經諸羅官兵剿殺二千餘人，餘黨自必聞風潰散。黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月初十日",
+          "date_note": "奏摺中「初十日」承接前文，為乾隆五十二年正月初十日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃94",
+          "title": "為恭摺覆奏督催官兵放洋及巡查海口等緣由事",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "徐嗣曾",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/10",
+          "receive_date": "1787/01/22"
+        }
+      },
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃105",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:35",
+        "evidence": {
+          "marker": "奉上諭",
+          "quote_in_reply": "正月十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十一年十二月二十七日奉上諭：「據常青等奏，臺灣彰化縣匪徒林爽文等結黨滋事，騷擾地方。等語。著傳諭常青徐嗣曾等，總須不動聲色，妥協辦理，迅速由六百里加緊復〔覆〕奏。云云。」欽此",
+          "matched_yu_span": "據常青等奏，臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。……常青、徐嗣曾等，總須不動聲色，妥協辦理。……迅速由六百里復奏。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月十一日",
+          "date_note": "奏摺中「正月十一日」承准，按時序為乾隆五十二年丁未年正月十一日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃105",
+          "title": "為奏聞臺灣近日情形",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "常青",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/12",
+          "receive_date": "1787/01/25"
+        }
+      }
+    ],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false,
+    "responseError": ""
+  },
+  {
+    "doc_id": "硃26",
+    "memDoc": "硃26",
+    "memTitle": "為奏林爽文攻陷彰化等事",
+    "evTitle": "對彰化知縣俞峻被害之定性與撫恤",
+    "addressee": "",
+    "items": [],
+    "source_doc_ids": [
+      "諭13"
+    ],
+    "action_doc_ids": [
+      "諭13"
+    ],
+    "source_pairs": [
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃94",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:23",
+        "evidence": {
+          "marker": "承准廷寄十二月二十七日奉上諭",
+          "quote_in_reply": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭：「賊匪么麼烏合，黃仕簡到彼，督率該鎮道分路夾攻，盡力堵剿，無難立就撲滅。」等因。欽此",
+          "matched_yu_span": "至賊匪麼烏合，經諸羅官兵剿殺二千餘人，餘黨自必聞風潰散。黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月初十日",
+          "date_note": "奏摺中「初十日」承接前文，為乾隆五十二年正月初十日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃94",
+          "title": "為恭摺覆奏督催官兵放洋及巡查海口等緣由事",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "徐嗣曾",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/10",
+          "receive_date": "1787/01/22"
+        }
+      },
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃105",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:35",
+        "evidence": {
+          "marker": "奉上諭",
+          "quote_in_reply": "正月十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十一年十二月二十七日奉上諭：「據常青等奏，臺灣彰化縣匪徒林爽文等結黨滋事，騷擾地方。等語。著傳諭常青徐嗣曾等，總須不動聲色，妥協辦理，迅速由六百里加緊復〔覆〕奏。云云。」欽此",
+          "matched_yu_span": "據常青等奏，臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。……常青、徐嗣曾等，總須不動聲色，妥協辦理。……迅速由六百里復奏。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月十一日",
+          "date_note": "奏摺中「正月十一日」承准，按時序為乾隆五十二年丁未年正月十一日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃105",
+          "title": "為奏聞臺灣近日情形",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "常青",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/12",
+          "receive_date": "1787/01/25"
+        }
+      }
+    ],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false,
+    "responseError": "HTTP 400"
+  },
+  {
+    "doc_id": "硃26",
+    "memDoc": "硃26",
+    "memTitle": "為奏林爽文攻陷彰化等事",
+    "evTitle": "褒獎黃仕簡迅速帶兵渡臺",
+    "addressee": "黃仕簡",
+    "items": [],
+    "source_doc_ids": [
+      "諭13"
+    ],
+    "action_doc_ids": [
+      "諭13"
+    ],
+    "source_pairs": [
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃94",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:23",
+        "evidence": {
+          "marker": "承准廷寄十二月二十七日奉上諭",
+          "quote_in_reply": "初十日辰刻回署途次，承准廷寄十二月二十七日奉上諭：「賊匪么麼烏合，黃仕簡到彼，督率該鎮道分路夾攻，盡力堵剿，無難立就撲滅。」等因。欽此",
+          "matched_yu_span": "至賊匪麼烏合，經諸羅官兵剿殺二千餘人，餘黨自必聞風潰散。黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月初十日",
+          "date_note": "奏摺中「初十日」承接前文，為乾隆五十二年正月初十日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃94",
+          "title": "為恭摺覆奏督催官兵放洋及巡查海口等緣由事",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "徐嗣曾",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/10",
+          "receive_date": "1787/01/22"
+        }
+      },
+      {
+        "yu_doc_id": "諭13",
+        "reply_doc_id": "硃105",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:35",
+        "evidence": {
+          "marker": "奉上諭",
+          "quote_in_reply": "正月十一日承准大學士公阿桂、大學士和珅字寄，乾隆五十一年十二月二十七日奉上諭：「據常青等奏，臺灣彰化縣匪徒林爽文等結黨滋事，騷擾地方。等語。著傳諭常青徐嗣曾等，總須不動聲色，妥協辦理，迅速由六百里加緊復〔覆〕奏。云云。」欽此",
+          "matched_yu_span": "據常青等奏，臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。……常青、徐嗣曾等，總須不動聲色，妥協辦理。……迅速由六百里復奏。",
+          "issue_date": "乾隆五十一年十二月二十七日",
+          "receive_date": "乾隆五十二年正月十一日",
+          "date_note": "奏摺中「正月十一日」承准，按時序為乾隆五十二年丁未年正月十一日。"
+        },
+        "yu": {
+          "id": "諭13",
+          "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "常青",
+          "recipients": [
+            "任承恩",
+            "常青",
+            "徐嗣曾",
+            "黃仕簡"
+          ],
+          "issue_date": "1786/12/27",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃105",
+          "title": "為奏聞臺灣近日情形",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "常青",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/12",
+          "receive_date": "1787/01/25"
+        }
+      }
+    ],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false,
+    "responseError": ""
+  }
+]

@@ -1,0 +1,623 @@
+[
+  {
+    "doc_id": "硃25",
+    "evTitle": "大墩地方官員被害",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十七日夜，彰化知縣俞峻在大墩地方率捕匪徒時，遭林爽文等起事部眾殺害。",
+      "howKnown": "轉述",
+      "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+      "relations": [
+        {
+          "evidence": "本縣俞在大墩地方拿匪被害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞峻"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "大墩地方官員被害",
+      "whenAr": "1786/12/17",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月初十日",
+      "where": "大墩",
+      "who": [
+        "林爽文",
+        "俞峻"
+      ],
+      "who_loc": {
+        "俞峻": "大墩",
+        "林爽文": "大墩"
+      },
+      "doc_id": "硃25",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。"
+        }
+      ],
+      "actor": "lin",
+      "card_id": "硃25#lin#0",
+      "same_as": "evmr1tnaeutyx",
+      "earliest_report": {
+        "id": "evmr1tnaeutyx",
+        "doc_id": "硃22",
+        "date": "1786/12/10",
+        "title": "大墩地方殺害官員"
+      },
+      "repeat_candidates": [
+        "evmr1tnaeutyx",
+        "evmr1zhgzx5cp",
+        "硃26#lin#2",
+        "evmrljszhitiw",
+        "evmr3h91ubu4b",
+        "evmr0n9b69n1a"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "大墩地方官員被害",
+            "whenCh": "十一月二十七日夜",
+            "where": "大墩"
+          },
+          {
+            "quote": "二十九早，彰城失陷",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "攻陷彰化縣城",
+            "whenCh": "十一月二十九日",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署北路淡水同知程峻、守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。",
+            "to_person": "福建水師提督一等海澄公奴才黃仕簡",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉報",
+            "inferred": true,
+            "layer": 2,
+            "place": "淡屬大甲社",
+            "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+            "to_person": "署北路淡水同知程峻、守備董得魁",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "彰邑大肚社",
+            "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃25",
+    "evTitle": "攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十九日辰刻，林爽文等起事民變群眾聚集攻打彰化縣城，至午刻將城池攻陷。",
+      "howKnown": "訪聞",
+      "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "攻陷彰化縣城",
+      "whenAr": "1786/12/19",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十二月初五日",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣城"
+      },
+      "doc_id": "硃25",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷"
+        }
+      ],
+      "actor": "lin",
+      "card_id": "硃25#lin#1",
+      "same_as": "evmr1tncn1og3",
+      "earliest_report": {
+        "id": "evmr1tncn1og3",
+        "doc_id": "硃22",
+        "date": "1786/12/10",
+        "title": "匪徒攻陷彰化縣城"
+      },
+      "repeat_candidates": [
+        "evmr8qwl3e4r0",
+        "evmr1tncn1og3",
+        "硃26#lin#2",
+        "evmr0n9er665w",
+        "evmr4dw72aq0o",
+        "evmrdawcs99df"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十九早，彰城失陷",
+            "reporter": "彰邑大肚社番",
+            "subtitle": "攻陷彰化縣城",
+            "whenCh": "十一月二十九日",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署北路淡水同知程峻、守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷...等情前來。",
+            "to_person": "福建水師提督一等海澄公奴才黃仕簡",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉報",
+            "inferred": true,
+            "layer": 2,
+            "place": "淡水",
+            "quote": "彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷...等情前來。",
+            "to_person": "署北路淡水同知程峻、守備董得魁",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "彰邑大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "淡屬大甲社",
+            "quote": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃25",
+    "evTitle": "程峻等募集鄉勇防禦",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署北路淡水同知程峻、守備董得魁在彰化失陷後，督同兵役、整齊槍炮，並募集鄉勇與大甲社番在要隘分頭堵禦。",
+      "howKnown": "轉述",
+      "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+      "relations": [
+        {
+          "evidence": "接據署北路淡水同知程峻、守備董得魁會稟",
+          "relation": "會同",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻等募集鄉勇防禦",
+      "whenAr": "1787/01/17",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十二月初十日",
+      "where": "淡水",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "淡水"
+      },
+      "doc_id": "硃25",
+      "sources": [
+        {
+          "doc_id": "硃25",
+          "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃25#qing#6"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。",
+            "reporter": "署北路淡水同知程峻、守備董得魁",
+            "subtitle": "程峻等募集鄉勇防禦",
+            "whenCh": "十一月二十九日",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署北路淡水同知程峻、守備董得魁",
+            "how": "會稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。等情前來。",
+            "to_person": "黃仕簡",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "林爽文起事並攻陷彰化城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "彰化縣林爽文等人結黨起事。乾隆五十一年十一月二十七日夜，彰化知縣俞峻在大墩查拿匪徒時遇害。次日（二十八日）清晨，林爽文等攻陷彰化縣城，道路隨即梗塞。",
+      "howKnown": "轉述",
+      "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞",
+      "relations": [
+        {
+          "evidence": "俞知縣在大墩地方拿匪被害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞峻"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "林爽文起事並攻陷彰化城",
+      "whenAr": "1787/01/16",
+      "whenCh": "十一月二十七日至二十八日",
+      "whenKnownCh": "十二月十二日",
+      "where": "大墩、彰化縣城",
+      "who": [
+        "林爽文",
+        "俞峻"
+      ],
+      "who_loc": {
+        "俞峻": "大墩",
+        "林爽文": "彰化縣城"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞"
+        }
+      ],
+      "actor": "lin",
+      "card_id": "硃26#lin#2",
+      "same_as": "evmr1tncn1og3",
+      "earliest_report": {
+        "id": "evmr1tncn1og3",
+        "doc_id": "硃22",
+        "date": "1786/12/10",
+        "title": "匪徒攻陷彰化縣城"
+      },
+      "repeat_candidates": [
+        "evmr8qwl3e4r0",
+        "evmr1tncn1og3",
+        "evmr3h91ubu4b"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞",
+            "reporter": "彰化大肚社番",
+            "subtitle": "林爽文起事並攻陷彰化城",
+            "whenCh": "十一月二十七日至二十八日",
+            "where": "大墩、彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "十二日辰刻，接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱……適有商船飄泊淡港，隨即專差搭船馳稟。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "撥遞公文之番",
+            "how": "帶回",
+            "inferred": false,
+            "layer": 2,
+            "place": "淡水",
+            "quote": "十一月二十九日，據該番帶回原文，並有彰化大肚社番寄字淡屬大甲社通事據稱……將原文附回。",
+            "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "whenAr": "1787/01/17",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉述",
+            "inferred": true,
+            "layer": 3,
+            "place": "大甲社",
+            "quote": "並有彰化大肚社番寄字淡屬大甲社通事據稱，二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞，不能前遞，將原文附回。",
+            "to_person": "撥遞公文之番",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "彰化大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 4,
+            "place": "大甲社",
+            "quote": "彰化大肚社番寄字淡屬大甲社通事據稱",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "程峻等率兵防堵淡彰交界",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署臺灣府淡水同知程峻與竹塹營守備董得魁，因聞彰化匪徒滋事，擔心匪徒竄入淡水，遂率領兵役於淡水與彰化交界處嚴密堵緝。",
+      "howKnown": "轉述",
+      "quote": "會帶兵役於交界地方，嚴密堵緝",
+      "relations": [
+        {
+          "evidence": "會帶兵役於交界地方，嚴密堵緝",
+          "relation": "會帶兵役",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻等率兵防堵淡彰交界",
+      "whenAr": "",
+      "whenCh": "十一月",
+      "whenKnownCh": "十二月十二日",
+      "where": "淡水與彰化交界",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水與彰化交界",
+        "董得魁": "淡水與彰化交界"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "會帶兵役於交界地方，嚴密堵緝"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃26#qing#10"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等率兵防堵淡彰交界",
+            "whenCh": "十一日初間",
+            "where": "交界地方"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡港",
+            "quote": "十二日辰刻，接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱，本年十一日初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。卑職等因淡、彰連界，恐有匪徒竄入，勾結滋害，會帶兵役於交界地方，嚴密堵緝...適有商船飄泊淡港，隨即專差搭船馳稟。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "俞峻大墩拿匪被害",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "彰化縣知縣俞峻於十一月二十七日夜間，在大墩地方率兵搜捕匪徒，不幸被害。",
+      "howKnown": "轉述",
+      "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "俞峻大墩拿匪被害",
+      "whenAr": "1787/01/15",
+      "whenCh": "十一月二十七日夜",
+      "whenKnownCh": "十二月十二日",
+      "where": "大墩",
+      "who": [
+        "俞峻"
+      ],
+      "who_loc": {
+        "俞峻": "大墩"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃26#qing#11"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+            "reporter": "彰化大肚社番",
+            "subtitle": "俞峻大墩拿匪被害",
+            "whenCh": "十一月二十七日夜",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "十二日辰刻，接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱，本年十一日初間，聞彰化縣匪徒林爽文等結黨肆虐……十一月二十九日，據該番帶回原文，並有彰化大肚社番寄字淡屬大甲社通事據稱，二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷，路途梗塞，不能前遞，將原文附回。卑職等立即督率兵役……隨即專差搭船馳稟。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "淡屬大甲社通事",
+            "how": "轉述",
+            "inferred": false,
+            "layer": 2,
+            "place": "大甲社",
+            "quote": "十一月二十九日，據該番帶回原文，並有彰化大肚社番寄字淡屬大甲社通事據稱，二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+            "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "whenAr": "",
+            "whenCh": "十一月二十九日"
+          },
+          {
+            "from_person": "彰化大肚社番",
+            "how": "字寄",
+            "inferred": false,
+            "layer": 3,
+            "place": "大肚社",
+            "quote": "彰化大肚社番寄字淡屬大甲社通事據稱，二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+            "to_person": "淡屬大甲社通事",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃26",
+    "evTitle": "程峻等募集鄉勇社番防禦",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署淡水同知程峻與守備董得魁得知彰化城失陷後，立即督率兵役，募集地方鄉勇與社番，於要隘處扼要堵禦。",
+      "howKnown": "轉述",
+      "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+      "relations": [
+        {
+          "evidence": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦",
+          "relation": "協同防禦",
+          "relation_type": "ally",
+          "source": "程峻",
+          "target": "董得魁"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "程峻等募集鄉勇社番防禦",
+      "whenAr": "",
+      "whenCh": "十一月二十九日後",
+      "whenKnownCh": "十二月十二日",
+      "where": "淡水",
+      "who": [
+        "程峻",
+        "董得魁"
+      ],
+      "who_loc": {
+        "程峻": "淡水",
+        "董得魁": "淡水"
+      },
+      "doc_id": "硃26",
+      "sources": [
+        {
+          "doc_id": "硃26",
+          "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃26#qing#12",
+      "same_as": "硃25#qing#6",
+      "earliest_report": {
+        "id": "硃25#qing#6",
+        "doc_id": "硃25",
+        "date": "1786/12/10",
+        "title": "程峻等募集鄉勇防禦"
+      },
+      "repeat_candidates": [
+        "硃25#qing#6"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。",
+            "reporter": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "subtitle": "程峻等募集鄉勇社番防禦",
+            "whenCh": "十一月二十九日後",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "十二日辰刻，接據署臺灣府淡水同知程峻、竹塹營守備董得魁稟稱……卑職等立即督率兵役，募集鄉勇、社番，扼要堵禦。……隨即專差搭船馳稟。",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十一月二十九日後"
+          }
+        ]
+      }
+    ]
+  }
+]

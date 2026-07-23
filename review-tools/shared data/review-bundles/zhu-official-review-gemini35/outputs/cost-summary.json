@@ -1,0 +1,85 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": true,
+  "calls": 30,
+  "prompt_tokens": 132406,
+  "completion_tokens": 13003,
+  "input_cost_usd": 0.198609,
+  "output_cost_usd": 0.11702699999999999,
+  "cost_usd": 0.31563599999999997,
+  "rows": [
+    {
+      "step": "summary",
+      "calls": 2,
+      "prompt_tokens": 1998,
+      "completion_tokens": 355,
+      "exact_tokens": false,
+      "input_cost_usd": 0.002997,
+      "output_cost_usd": 0.003195,
+      "cost_usd": 0.006192
+    },
+    {
+      "step": "divide",
+      "calls": 2,
+      "prompt_tokens": 2060,
+      "completion_tokens": 2464,
+      "exact_tokens": false,
+      "input_cost_usd": 0.00309,
+      "output_cost_usd": 0.022176,
+      "cost_usd": 0.025266
+    },
+    {
+      "step": "lin-events",
+      "calls": 2,
+      "prompt_tokens": 2238,
+      "completion_tokens": 817,
+      "exact_tokens": false,
+      "input_cost_usd": 0.003357,
+      "output_cost_usd": 0.007353,
+      "cost_usd": 0.01071
+    },
+    {
+      "step": "lin-source-chain",
+      "calls": 5,
+      "prompt_tokens": 6852,
+      "completion_tokens": 2032,
+      "exact_tokens": false,
+      "input_cost_usd": 0.010278,
+      "output_cost_usd": 0.018288,
+      "cost_usd": 0.028566
+    },
+    {
+      "step": "qing-actions-all",
+      "calls": 2,
+      "prompt_tokens": 2719,
+      "completion_tokens": 2990,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0040785,
+      "output_cost_usd": 0.02691,
+      "cost_usd": 0.0309885
+    },
+    {
+      "step": "qing-source-chain",
+      "calls": 15,
+      "prompt_tokens": 21067,
+      "completion_tokens": 4321,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0316005,
+      "output_cost_usd": 0.038889,
+      "cost_usd": 0.0704895
+    },
+    {
+      "step": "combined-emperor-actions",
+      "calls": 2,
+      "prompt_tokens": 95472,
+      "completion_tokens": 24,
+      "exact_tokens": false,
+      "input_cost_usd": 0.143208,
+      "output_cost_usd": 0.000216,
+      "cost_usd": 0.143424
+    }
+  ]
+}

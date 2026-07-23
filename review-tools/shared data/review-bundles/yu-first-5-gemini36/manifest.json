@@ -1,0 +1,31 @@
+{
+  "name": "yu-first-5-gemini36",
+  "created_at": "2026-07-23T11:08:51",
+  "source": "outputs/attempt-002/stage1_original_text.json",
+  "model": "gemini-3.6-flash",
+  "doc_ids": [
+    "諭13",
+    "諭20",
+    "諭24",
+    "諭27",
+    "諭28"
+  ],
+  "kind": "yu_first_loop",
+  "chain": [
+    "summary",
+    "divide",
+    "yu-reported-events (lin+qing+source)",
+    "yu-emperor-actions",
+    "official-response",
+    "repeat-report"
+  ],
+  "networks": [
+    "yu_source (source trace)",
+    "official_reply_to_yu (later responses)"
+  ],
+  "deduplication": "repeat_report annotates same_as/earliest_report on 林/清/皇帝/回應 vs committed dots; website offers merge/keep",
+  "excluded_stages": [
+    "回應時效 / timeliness",
+    "date-window corpus search"
+  ]
+}

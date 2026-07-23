@@ -1,0 +1,112 @@
+{
+  "硃8": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃22": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃23": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃21": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃24": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃26": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true,
+    "combined-emperor-actions-version": "memorial-relevance-v3"
+  },
+  "硃25": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true,
+    "combined-emperor-actions-version": "memorial-relevance-v3"
+  },
+  "硃32": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃31": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃35": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "__global__": {
+    "merge-emperor-actions": true,
+    "repeat-report": true,
+    "official-response": true,
+    "merge-emperor-actions-version": "source-union-v3",
+    "repeat-report-version": "cross-document-only-v4",
+    "official-response-version": "emperor-action-relevance-v3"
+  }
+}

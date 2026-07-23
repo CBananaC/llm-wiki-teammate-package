@@ -1,0 +1,65 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": true,
+  "calls": 12,
+  "prompt_tokens": 15885,
+  "completion_tokens": 8848,
+  "input_cost_usd": 0.0238275,
+  "output_cost_usd": 0.07963200000000001,
+  "cost_usd": 0.1034595,
+  "rows": [
+    {
+      "step": "divide",
+      "calls": 2,
+      "prompt_tokens": 2060,
+      "completion_tokens": 2551,
+      "exact_tokens": false,
+      "input_cost_usd": 0.00309,
+      "output_cost_usd": 0.022959,
+      "cost_usd": 0.026049
+    },
+    {
+      "step": "lin-events + source",
+      "calls": 4,
+      "prompt_tokens": 4330,
+      "completion_tokens": 2234,
+      "exact_tokens": false,
+      "input_cost_usd": 0.006495,
+      "output_cost_usd": 0.020106,
+      "cost_usd": 0.026601
+    },
+    {
+      "step": "qing actions (three categories) + source",
+      "calls": 2,
+      "prompt_tokens": 1933,
+      "completion_tokens": 2175,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0028995,
+      "output_cost_usd": 0.019575,
+      "cost_usd": 0.022474499999999998
+    },
+    {
+      "step": "qing events + source",
+      "calls": 2,
+      "prompt_tokens": 2158,
+      "completion_tokens": 1553,
+      "exact_tokens": false,
+      "input_cost_usd": 0.003237,
+      "output_cost_usd": 0.013977,
+      "cost_usd": 0.017214
+    },
+    {
+      "step": "combined emperor actions",
+      "calls": 2,
+      "prompt_tokens": 5404,
+      "completion_tokens": 335,
+      "exact_tokens": false,
+      "input_cost_usd": 0.008106,
+      "output_cost_usd": 0.003015,
+      "cost_usd": 0.011121
+    }
+  ]
+}

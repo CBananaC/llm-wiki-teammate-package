@@ -1,0 +1,26 @@
+{
+  "硃25": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true
+  },
+  "硃26": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "__global__": {
+    "merge-emperor-actions": true,
+    "repeat-report": true,
+    "official-response": true
+  }
+}

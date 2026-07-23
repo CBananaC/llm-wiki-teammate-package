@@ -1,0 +1,101 @@
+[
+  {
+    "category": "done",
+    "description": "彰化匪徒林爽文等結黨滋事，攔截要道，導致臺灣南北路交通與信息中斷。",
+    "edict_quote": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "大里杙等莊有奸民林爽文、王芬等結黨，乘值歲暮搶劫...並於大肚溪邊聚匪截路，以致信息不通。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "大里杙等莊有奸民林爽文、王芬等結黨...並於大肚溪邊路，以致信息不通。",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "彰化縣匪徒林爽文結黨肆虐，騷擾地方...路途梗塞，不能前進",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "彰化縣匪徒林爽文結黨肆虐，騷擾地方...路途梗塞，不能前遞",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "彰化縣匪犯林爽文等，結黨肆虐...道路隔絕，伏祈迅速大兵拯救。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "林爽文等糾眾滋事阻截要路",
+    "whenAr": "1786-11",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "臺灣彰化、大肚溪一帶",
+    "who": [
+      "林爽文",
+      "王芬"
+    ],
+    "who_loc": {
+      "林爽文": "大里杙"
+    },
+    "doc_id": "諭20",
+    "sources": [
+      {
+        "doc_id": "諭20",
+        "quote": "彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃34",
+        "quote": "大里杙等莊有奸民林爽文、王芬等結黨，乘值歲暮搶劫...並於大肚溪邊聚匪截路，以致信息不通。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃33",
+        "quote": "大里杙等莊有奸民林爽文、王芬等結黨...並於大肚溪邊路，以致信息不通。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "彰化縣匪徒林爽文結黨肆虐，騷擾地方...路途梗塞，不能前進",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃22",
+        "quote": "彰化縣匪徒林爽文結黨肆虐，騷擾地方...路途梗塞，不能前遞",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "彰化縣匪犯林爽文等，結黨肆虐...道路隔絕，伏祈迅速大兵拯救。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭20#lin#0"
+  }
+]

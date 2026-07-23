@@ -1,0 +1,555 @@
+[
+  {
+    "description": "彰化縣匪徒林爽文等結黨滋事，騷擾地方。",
+    "edict_quote": "臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "十一月間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "彰化縣匪犯林爽文等，結黨肆虐",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "十一月初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      }
+    ],
+    "subtitle": "林爽文結黨滋事騷擾地方",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "臺灣彰化縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣彰化縣"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "十一月間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃22",
+        "quote": "十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "彰化縣匪犯林爽文等，結黨肆虐",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "十一月初間，聞彰化縣匪徒林爽文等結黨肆虐，擾害地方",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#lin#0",
+    "same_as": "evmr1tn80sro5",
+    "earliest_report": {
+      "id": "evmr1tn80sro5",
+      "doc_id": "硃22",
+      "date": "1786/12/10",
+      "title": "林爽文結黨騷擾地方"
+    },
+    "repeat_candidates": [
+      "evmrljglgtr7v",
+      "evmr1tn80sro5",
+      "evmrln8dgz8ts",
+      "evmr4r7w952cm"
+    ]
+  },
+  {
+    "description": "彰化知縣俞峻前往搜捕賊匪，賊匪散而復聚，俞峻拿匪被害，彰化縣城被匪徒竊踞。",
+    "edict_quote": "知縣俞駿（峻）拿匪被害，彰化縣城被匪徒竊踞。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      }
+    ],
+    "subtitle": "知縣俞峻拿匪被害及彰城被竊踞",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十七日至二十九日",
+    "where": "臺灣彰化縣",
+    "who": [
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "彰化縣大墩"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "知縣俞駿（峻）拿匪被害，彰化縣城被匪徒竊踞。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃22",
+        "quote": "二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。本日早彰城失陷",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#lin#1",
+    "same_as": "evmr1zhgzx5cp",
+    "earliest_report": {
+      "id": "evmr1zhgzx5cp",
+      "doc_id": "硃26",
+      "date": "1786/12/12",
+      "title": "大墩地方官員遇害"
+    },
+    "repeat_candidates": [
+      "evmr1zhgzx5cp"
+    ]
+  },
+  {
+    "description": "蚶江通判陳惇稟稱據船戶黃斌供述，有傳說賊匪前往諸羅縣攻打城池。",
+    "edict_quote": "有傳說賊人赴諸羅縣攻城",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "傳說賊匪赴諸羅縣攻城",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "福建省臺灣府諸羅縣",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "有傳說賊人赴諸羅縣攻城",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#lin#2"
+  },
+  {
+    "description": "彰化匪徒林爽文等糾眾滋事，攔截要路致信息不通，臺灣鎮道稟報請添兵救援。",
+    "edict_quote": "據常青、黃仕簡奏，接臺灣鎮道稟報，彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "大里杙等莊有奸民林爽文、王芬等結黨……截路，以致信息不通……請即添兵應援",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "彰化匪徒林爽文等結黨肆擾……路途梗塞……請即添兵應援",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "林爽文等彰化滋事攔路",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月至十二月",
+    "where": "彰化",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化"
+    },
+    "doc_id": "諭20",
+    "sources": [
+      {
+        "doc_id": "諭20",
+        "quote": "據常青、黃仕簡奏，接臺灣鎮道稟報，彰化匪徒林爽文等糾衆滋事，攔截要路，以致信息不通，請添兵救援。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃34",
+        "quote": "大里杙等莊有奸民林爽文、王芬等結黨……截路，以致信息不通……請即添兵應援",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃33",
+        "quote": "彰化匪徒林爽文等結黨肆擾……路途梗塞……請即添兵應援",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭20#lin#3"
+  },
+  {
+    "description": "淡水同知程峻之子程必大及外委虞文光到泉州，稟報彰化縣城失陷、文報梗塞情形。",
+    "edict_quote": "詢悉淡水同知程峻之子程必大，及外委虞文光等彰化失陷，文報梗塞情形",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃35",
+        "source_official": "常青",
+        "source_quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/15"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "有該廳程峻之子程必大，奔赴奴才轅門求見……又有北路竹塹營外委虞文光、兵丁王元浩，亦先後投到求救",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "程必大虞文光報彰化失陷文報梗塞",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十二日",
+    "where": "彰化",
+    "who": [
+      "程必大",
+      "虞文光"
+    ],
+    "who_loc": {
+      "程必大": "泉州",
+      "虞文光": "泉州"
+    },
+    "doc_id": "諭20",
+    "sources": [
+      {
+        "doc_id": "諭20",
+        "quote": "詢悉淡水同知程峻之子程必大，及外委虞文光等彰化失陷，文報梗塞情形",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃35",
+        "quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃31",
+        "quote": "有該廳程峻之子程必大，奔赴奴才轅門求見……又有北路竹塹營外委虞文光、兵丁王元浩，亦先後投到求救",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭20#lin#4"
+  },
+  {
+    "category": null,
+    "description": "賊匪林爽文等人於十一月二十九日攻破彰化縣城，十二月初六日攻破諸羅縣城。",
+    "edict_quote": "賊匪於十一月二十九、十二月初六等日，攻破彰化、諸羅。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "十一月二十九日賊匪攻陷彰化，十二月初六日卯時，攻破諸羅。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "十一月二十九日攻破彰化，初六日卯時攻破諸羅。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "賊匪攻破彰化諸羅",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十九日、十二月初六日",
+    "where": "彰化、諸羅",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化、諸羅"
+    },
+    "doc_id": "諭24",
+    "sources": [
+      {
+        "doc_id": "諭24",
+        "quote": "賊匪於十一月二十九、十二月初六等日，攻破彰化、諸羅。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "十一月二十九日賊匪攻陷彰化，十二月初六日卯時，攻破諸羅。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "十一月二十九日攻破彰化，初六日卯時攻破諸羅。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭24#lin#5",
+    "same_as": "evmrd6kim0uhi",
+    "earliest_report": {
+      "id": "evmrd6kim0uhi",
+      "doc_id": "硃83",
+      "date": "1787/01/02",
+      "title": "起事攻陷諸彰兩邑"
+    },
+    "repeat_candidates": [
+      "evmrd6kim0uhi"
+    ]
+  },
+  {
+    "category": null,
+    "description": "林爽文等於福建臺灣彰化地方糾眾滋事，攻陷縣城並殺害官員。",
+    "edict_quote": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "彰化匪徒林爽文等結黨肆擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "十一月二十九日賊匪攻陷彰化",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "臺匪林爽文等滋事不法，攻陷彰化縣城",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "林爽文糾眾滋擾劫縣戕官",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "福建臺灣彰化地方",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化"
+    },
+    "doc_id": "諭27",
+    "sources": [
+      {
+        "doc_id": "諭27",
+        "quote": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃33",
+        "quote": "彰化匪徒林爽文等結黨肆擾，十一月二十七夜，彰化俞令拿匪遇害，彰城失陷",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "十一月二十九日賊匪攻陷彰化",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "臺匪林爽文等滋事不法，攻陷彰化縣城",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭27#lin#6"
+  },
+  {
+    "description": "臺灣賊匪林爽文等聚衆滋事，攻陷縣城並劫殺縣官。",
+    "edict_quote": "閩省臺灣賊匪林爽文等，聚衆滋事，劫縣官一事，前據黃仕簡、任承恩各奏",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "聞報臺灣匪犯攻陷彰化縣城殺官",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "彰化縣城被賊匪攻陷，殺害官員",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "林爽文聚衆滋事攻劫縣官",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "臺灣彰化縣等處",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "閩省臺灣賊匪林爽文等，聚衆滋事，劫縣官一事，前據黃仕簡、任承恩各奏",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃34",
+        "quote": "聞報臺灣匪犯攻陷彰化縣城殺官",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃31",
+        "quote": "彰化縣城被賊匪攻陷，殺害官員",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭28#lin#7",
+    "same_as": "諭27#lin#6",
+    "earliest_report": {
+      "id": "諭27#lin#6",
+      "doc_id": "諭27",
+      "date": "1787/01/02",
+      "title": "林爽文糾眾滋擾劫縣戕官"
+    },
+    "repeat_candidates": [
+      "諭27#lin#6"
+    ]
+  }
+]

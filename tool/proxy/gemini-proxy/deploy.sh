@@ -39,11 +39,19 @@ if [[ -n "${TOKENROUTER_API_KEY:-}" ]]; then
   ENV_VARS="${ENV_VARS},TOKENROUTER_API_KEY=${TOKENROUTER_API_KEY}"
 fi
 
+# --timeout: Cloud Run's default request timeout is 300s; the heaviest reasoning
+# call (combined emperor actions) can run longer, and when it does Cloud Run drops
+# the connection mid-flight (the client sees http.client.RemoteDisconnected and
+# retries fail the same way). Give a single request up to 10 minutes.
+# --cpu/--memory: a little more headroom so a large prompt is processed faster.
 gcloud run deploy "$SERVICE" \
   --source . \
   --project "$PROJECT" \
   --region "$REGION" \
   --allow-unauthenticated \
+  --timeout 600 \
+  --cpu 2 \
+  --memory 1Gi \
   --set-env-vars "$ENV_VARS"
 
 echo

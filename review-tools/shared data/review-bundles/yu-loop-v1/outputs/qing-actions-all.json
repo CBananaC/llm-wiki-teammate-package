@@ -1,0 +1,509 @@
+[
+  {
+    "category": "done",
+    "description": "彰化知縣俞峻會同副將前往各莊搜捕賊匪，因防範疏懈，遭散而復聚之數千賊匪襲擊，倉猝被害。",
+    "edict_quote": "知縣俞駿（峻）拿匪被害，彰化縣城被匪徒竊踞。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "知縣俞峻拿匪被害",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十七日夜",
+    "where": "大墩",
+    "who": [
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "彰化縣"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#qing#0"
+  },
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡聞訊後，立即帶兵渡臺進行剿捕。",
+    "edict_quote": "黃仕簡已帶兵渡臺剿捕",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "提臣黃仕簡現又帶兵東渡",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "黃仕簡帶兵渡臺",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初十日",
+    "where": "廈門至臺灣",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建水師提督"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#qing#1",
+    "same_as": "evmr1yozc92mu",
+    "earliest_report": {
+      "id": "evmr1yozc92mu",
+      "doc_id": "硃25",
+      "date": "1786/12/10",
+      "title": "黃仕簡率兵登舟候風渡臺"
+    },
+    "repeat_candidates": [
+      "諭20#qing#5",
+      "evmr1yozc92mu",
+      "evmr3hc8bt05y"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青與陸路提督任承恩親自前往泉州、蚶江一帶彈壓並居中調度兵力。",
+    "edict_quote": "常青同任承恩親往泉州、蚶江彈壓調度等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "臣於十一日自省起程，親赴泉州一帶，沿途迎探。... 臣即於泉州駐扎，會同陸路提臣任承恩居中調度",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      }
+    ],
+    "subtitle": "常青、任承恩親往泉州蚶江調度",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十一日",
+    "where": "泉州、蚶江",
+    "who": [
+      "常青",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "福建陸路提督",
+      "常青": "閩浙總督"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#qing#2",
+    "same_as": "evmr3ggkd5t4y",
+    "earliest_report": {
+      "id": "evmr3ggkd5t4y",
+      "doc_id": "硃21",
+      "date": "1786/12/12",
+      "title": "常青親赴泉州調度防務"
+    },
+    "repeat_candidates": [
+      "evmr3ggkd5t4y"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "傳聞賊匪前往諸羅縣攻城，被當地官兵擊殺二千餘人。",
+    "edict_quote": "接蚶江通判陳惇稟稱，昨據船戶黃斌供，有傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "諸羅官兵擊殺賊匪二千餘人",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初",
+    "where": "諸羅縣",
+    "who": [
+      "官兵"
+    ],
+    "who_loc": {
+      "官兵": "諸羅縣"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#qing#3"
+  },
+  {
+    "category": "done",
+    "description": "傳聞臺灣鎮、道官兵已抵達彰化城，賊匪多被炮火擊殺或逃散。",
+    "edict_quote": "又鎮道已抵彰城，賊匪俱被殺死等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死，亦有逃避者。鎮、道皆紮住彰城",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "鎮道官兵抵達彰城擊散賊匪",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初六日",
+    "where": "彰化縣城",
+    "who": [
+      "柴大紀",
+      "永福"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣鎮總兵",
+      "永福": "臺灣道"
+    },
+    "doc_id": "諭13",
+    "card_id": "諭13#qing#4"
+  },
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡帶兵登舟渡臺，由南路（鹿耳門）進剿。",
+    "edict_quote": "黃仕簡現帶兵登舟渡臺，由南路進剿",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才業將辦理赴剿，於十二月初十日登舟候風飛渡等緣由...由南親赴會剿",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才於初十日帶領官兵登舟候風放洋飛渡...由鹿耳門、郡城南路進兵",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "水師提臣黃仕簡...於初十日率師登舟，由鹿耳門前往",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "飛咨水師提臣黃仕簡率領本標兵...由鹿耳門飛渡前進",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      }
+    ],
+    "subtitle": "黃仕簡帶兵渡臺進剿",
+    "whenAr": "1786-12-10",
+    "whenCh": "乾隆五十一年十二月初十日",
+    "where": "廈門至臺灣南路",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建水師提督"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#5",
+    "same_as": "evmr1yozc92mu",
+    "earliest_report": {
+      "id": "evmr1yozc92mu",
+      "doc_id": "硃25",
+      "date": "1786/12/10",
+      "title": "黃仕簡率兵登舟候風渡臺"
+    },
+    "repeat_candidates": [
+      "諭13#qing#1",
+      "evmr3hc8bt05y",
+      "evmr1yozc92mu"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "黃仕簡飛諮陸路提督任承恩，率兵由北路會剿。",
+    "edict_quote": "並飛諮陸路提督任承恩，率兵由北路會剿",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "飛諮陸路提臣任承恩，迅速查辦，由省登舟渡往",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "星飛諮行陸路提臣...續調官兵北路援剿",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      }
+    ],
+    "subtitle": "黃仕簡飛諮任承恩會剿",
+    "whenAr": "1786-12",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "福建至臺灣北路",
+    "who": [
+      "黃仕簡",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "福建陸路提督",
+      "黃仕簡": "福建水師提督"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#6"
+  },
+  {
+    "category": "done",
+    "description": "陸路提督任承恩挑派兵丁預備，等待督臣常青抵達泉州後立即登舟渡臺。",
+    "edict_quote": "挑派兵丁預備，一俟督臣抵泉，立即登舟渡臺",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "奴才並已挑派備戰兵丁一千名...一俟到日，會籌妥協，立即登舟飛渡臺灣",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "任承恩挑派兵丁預備渡臺",
+    "whenAr": "1786-12",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "泉州",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "福建陸路提督"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#7"
+  },
+  {
+    "category": "nonmil",
+    "description": "任承恩上奏請求皇帝特簡重臣臨閩督辦臺灣事宜。",
+    "edict_quote": "並請簡派重臣督辦",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃32",
+        "source_official": "任承恩",
+        "source_quote": "仰懇皇上天恩，特簡重臣臨閩鎮安督辦",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "任承恩請簡派重臣督辦",
+    "whenAr": "1786-12-13",
+    "whenCh": "乾隆五十一年十二月十三日",
+    "where": "泉州",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "福建陸路提督"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#8",
+    "same_as": "evmr3ihz7ym0j",
+    "earliest_report": {
+      "id": "evmr3ihz7ym0j",
+      "doc_id": "硃32",
+      "date": "1786/12/13",
+      "title": "奏請特簡重臣臨閩督辦"
+    },
+    "repeat_candidates": [
+      "evmr3ihz7ym0j"
+    ]
+  },
+  {
+    "category": "nonmil",
+    "description": "淡水同知程峻之子程必大攜帶關防，與竹塹營外委虞文光等，因彰化及竹塹失陷、文報梗塞，內渡至泉州求援。",
+    "edict_quote": "淡水同知程峻之子程必大，及外委虞文光等彰化失陷，文報梗塞情形",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "茲于十二日有該廳程峻之子程必大，奔赴奴才轅門求見...又，有北路竹塹營外委虞文光、兵丁王元浩，亦先後投到求救",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃35",
+        "source_official": "常青",
+        "source_quote": "十二日有署淡水同知程峻之子程必大，懷取淡防同知關防，赴泉求救。又有北路竹塹營外委虞文光、兵丁王元浩，亦先後到泉",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/15"
+      }
+    ],
+    "subtitle": "程必大及虞文光等內渡求援",
+    "whenAr": "1786-12-12",
+    "whenCh": "乾隆五十一年十二月十二日",
+    "where": "竹塹至泉州",
+    "who": [
+      "程必大",
+      "虞文光"
+    ],
+    "who_loc": {
+      "程必大": "淡水同知程峻之子",
+      "虞文光": "竹塹營外委"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#9"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青派兵二千二百名，令任承恩及參將福蘭泰等由鹿耳門前進，會同夾攻。",
+    "edict_quote": "已派兵二千二百名，令任承恩及參將福蘭泰等，由鹿耳門前進會同夾攻",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃35",
+        "source_official": "常青",
+        "source_quote": "即將提標挑出精兵一千二百名，先由該提臣統領...仍於鹿耳門前進。再派福協、興協、長福等營勁兵一千名，檄令參將福蘭泰統領...帶往聽候調遣",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/15"
+      }
+    ],
+    "subtitle": "常青派兵二千二百名渡臺會剿",
+    "whenAr": "1786-12",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "泉州至鹿耳門",
+    "who": [
+      "常青",
+      "任承恩",
+      "福蘭泰"
+    ],
+    "who_loc": {
+      "任承恩": "福建陸路提督",
+      "常青": "閩浙總督",
+      "福蘭泰": "參將"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#10"
+  },
+  {
+    "category": "nonmil",
+    "description": "黃仕簡所發傳牌上寫有「會匪糾眾攻陷彰化縣」字樣，傳播驛站，驚駭聽聞。",
+    "edict_quote": "傳牌上竟有會匪糾衆攻陷彰化縣字樣，傳播驛站",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [],
+    "subtitle": "黃仕簡傳牌洩露彰化失陷",
+    "whenAr": "1786-12",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "驛站",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建水師提督"
+    },
+    "doc_id": "諭20",
+    "card_id": "諭20#qing#11"
+  }
+]

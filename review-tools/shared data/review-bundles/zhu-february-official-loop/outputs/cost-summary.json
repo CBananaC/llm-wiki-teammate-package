@@ -1,0 +1,105 @@
+{
+  "model": "gemini-3.6-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": null,
+  "output_usd_per_million_tokens": null,
+  "estimated": true,
+  "calls": 501,
+  "prompt_tokens": 1050929,
+  "completion_tokens": 256152,
+  "input_cost_usd": null,
+  "output_cost_usd": null,
+  "cost_usd": null,
+  "rows": [
+    {
+      "step": "summary",
+      "calls": 41,
+      "prompt_tokens": 33409,
+      "completion_tokens": 6529,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "divide",
+      "calls": 41,
+      "prompt_tokens": 34680,
+      "completion_tokens": 39537,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "lin-events",
+      "calls": 41,
+      "prompt_tokens": 38341,
+      "completion_tokens": 11811,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "lin-source-chain",
+      "calls": 51,
+      "prompt_tokens": 80559,
+      "completion_tokens": 15314,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "qing-actions-all",
+      "calls": 41,
+      "prompt_tokens": 50477,
+      "completion_tokens": 41273,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "qing-source-chain",
+      "calls": 184,
+      "prompt_tokens": 254392,
+      "completion_tokens": 42941,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "combined-emperor-actions",
+      "calls": 41,
+      "prompt_tokens": 342268,
+      "completion_tokens": 31379,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "confirmed-yu-response",
+      "calls": 27,
+      "prompt_tokens": 78403,
+      "completion_tokens": 33570,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "official-response",
+      "calls": 34,
+      "prompt_tokens": 138400,
+      "completion_tokens": 33798,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    }
+  ]
+}

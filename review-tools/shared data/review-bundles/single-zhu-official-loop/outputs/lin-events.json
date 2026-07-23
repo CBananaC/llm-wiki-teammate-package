@@ -1,0 +1,208 @@
+[
+  {
+    "category": "done",
+    "description": "彰化起事領袖林爽文等人糾集部眾不法滋事，並攻打騷擾臺灣的三個縣治。",
+    "howKnown": "轉述",
+    "quote": "彰化匪徒林爽文等糾眾滋事...臺匪林爽文等糾眾不法，攻擾三縣",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文糾眾攻擾三縣",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十三日",
+    "where": "臺灣彰化縣等三縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "硃110",
+    "sources": [
+      {
+        "doc_id": "硃110",
+        "quote": "彰化匪徒林爽文等糾眾滋事...臺匪林爽文等糾眾不法，攻擾三縣"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃110#lin#0"
+  },
+  {
+    "category": "done",
+    "description": "林爽文等起事群眾攻陷彰化縣城，並殺害城內官員。",
+    "howKnown": "轉述",
+    "quote": "彰化縣城內被賊殺害各官",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "匪徒攻陷彰化殺害官員",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十九日以前",
+    "whenKnownCh": "十二月十三日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "彰化縣城內被賊殺害各官"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃24#lin#1",
+    "same_as": "evmr1tbd1qrzj",
+    "earliest_report": {
+      "id": "evmr1tbd1qrzj",
+      "doc_id": "硃25",
+      "date": "1786/12/10",
+      "title": "林爽文等攻陷彰化縣城"
+    },
+    "repeat_candidates": [
+      "evmrdawcs99df",
+      "evmr4edw1uoil",
+      "evmr4qeh688w2",
+      "evmr1tbd1qrzj"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "傳聞起事群眾前往諸羅縣攻打縣城，與官兵交戰。",
+    "howKnown": "轉述",
+    "quote": "賊人赴諸羅縣攻城，被官兵殺死二千餘人",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "匪徒赴諸羅縣攻城",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十九日以前",
+    "whenKnownCh": "十二月十三日",
+    "where": "諸羅縣城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "賊人赴諸羅縣攻城，被官兵殺死二千餘人"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃24#lin#2"
+  },
+  {
+    "category": "done",
+    "description": "林爽文、王芬等糾集數千人，於十一月二十七日夜間四更時分，散而復聚，前往劫掠大墩營盤。",
+    "howKnown": "探報",
+    "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤",
+    "relations": [
+      {
+        "evidence": "有奸民林爽文、王芬等結黨搶劫",
+        "relation": "結黨",
+        "relation_type": "ally",
+        "source": "林爽文",
+        "target": "王芬"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "匪徒夜間劫掠大墩營盤",
+    "whenAr": "1787/01/15",
+    "whenCh": "十一月二十七日夜四更",
+    "whenKnownCh": "十二月十四日",
+    "where": "大墩",
+    "who": [
+      "林爽文",
+      "王芬"
+    ],
+    "who_loc": {
+      "林爽文": "大墩",
+      "王芬": "大墩"
+    },
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃24#lin#3",
+    "same_as": "evmr0liujo73b",
+    "earliest_report": {
+      "id": "evmr0liujo73b",
+      "doc_id": "硃44",
+      "date": "1786/12/02",
+      "title": "叛軍夜襲大墩並截路滋事"
+    },
+    "repeat_candidates": [
+      "evmr8r5wb97w1",
+      "evmr3h91ubu4b",
+      "evmrgjtqro9rm",
+      "evmr0liujo73b",
+      "evmr626bugwdm",
+      "evmr0n9b69n1a",
+      "evmrdbmxir3uv"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "起事群眾於大肚溪邊聚集並阻斷道路，導致官兵信息不通。",
+    "howKnown": "探報",
+    "quote": "並於大肚溪邊聚匪截路，以致信息不通",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "匪徒於大肚溪聚眾截路",
+    "whenAr": "1787/01/15",
+    "whenCh": "十一月二十七日夜至二十八日",
+    "whenKnownCh": "十二月十四日",
+    "where": "大肚溪",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "並於大肚溪邊聚匪截路，以致信息不通"
+      }
+    ],
+    "actor": "lin",
+    "card_id": "硃24#lin#4",
+    "same_as": "evmr0liujo73b",
+    "earliest_report": {
+      "id": "evmr0liujo73b",
+      "doc_id": "硃44",
+      "date": "1786/12/02",
+      "title": "叛軍夜襲大墩並截路滋事"
+    },
+    "repeat_candidates": [
+      "evmr0liujo73b"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "南投、北投一帶有起事群眾糾集，並傳聞準備進攻彰化縣城。",
+    "howKnown": "探報",
+    "quote": "南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林方南北投匪徒糾集欲攻縣城",
+    "whenAr": "1787/01/15",
+    "whenCh": "十一月二十七日夜至二十八日",
+    "whenKnownCh": "十二月十四日",
+    "where": "南投、北投",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃24",
+    "sources": [
+      {
+        "doc_id": "硃24",
+        "quote": "南、北〔投〕一帶亦有匪徒糾集，且聞要攻縣城"
+      }
+    ],
+    "actor": "lin",
+    "subtitle_original": "南北投匪徒糾集欲攻縣城",
+    "card_id": "硃24#lin#5"
+  }
+]

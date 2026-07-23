@@ -1,0 +1,404 @@
+[
+  {
+    "category": "done",
+    "description": "彰化知縣俞峻在大墩地方帶兵搜捕匪徒，不幸遇害。",
+    "edict_quote": "知縣俞駿（峻）拿匪被害",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。...以致被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "彰化知縣俞峻拿匪被害",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十七日夜",
+    "where": "彰化大墩",
+    "who": [
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "彰化縣知縣"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "知縣俞駿（峻）拿匪被害",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃22",
+        "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。...以致被害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#qing#0"
+  },
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡一聞匪訊，即帶兵由廈門放洋渡臺進剿。",
+    "edict_quote": "黃仕簡已帶兵渡臺剿捕",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名...由鹿耳門飛渡前進。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "提臣黃仕簡現又帶兵東渡",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "黃仕簡帶兵渡臺",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初十日",
+    "where": "廈門至臺灣",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "福建水師提督"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "黃仕簡已帶兵渡臺剿捕",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名...由鹿耳門飛渡前進。",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "提臣黃仕簡現又帶兵東渡",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#qing#1",
+    "same_as": "evmr4efuv15mq",
+    "earliest_report": {
+      "id": "evmr4efuv15mq",
+      "doc_id": "硃42",
+      "date": "1786/12/18",
+      "title": "黃仕簡配兵放洋渡臺"
+    },
+    "repeat_candidates": [
+      "evmr4efuv15mq"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青與陸路提督任承恩親往泉州、蚶江一帶駐紮，就近彈壓並調度兵力。",
+    "edict_quote": "常青同任承恩親往泉州、蚶江彈壓調度",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "臣即於泉州駐扎，會同陸路提臣任承恩居中調度",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "常青與任承恩赴泉州蚶江調度",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十一日",
+    "where": "泉州、蚶江",
+    "who": [
+      "常青",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "福建陸路提督",
+      "常青": "閩浙總督"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "常青同任承恩親往泉州、蚶江彈壓調度",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "臣即於泉州駐扎，會同陸路提臣任承恩居中調度",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#qing#2",
+    "same_as": "evmr1ziad7xs8",
+    "earliest_report": {
+      "id": "evmr1ziad7xs8",
+      "doc_id": "硃26",
+      "date": "1786/12/12",
+      "title": "總督常青起程赴蚶江"
+    },
+    "repeat_candidates": [
+      "evmr3hco9cx3b",
+      "evmr1ziad7xs8",
+      "evmr3ggkd5t4y"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "傳聞賊人前往諸羅縣攻城，被當地官兵擊殺二千餘人。",
+    "edict_quote": "傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "諸羅官兵擊殺攻城賊匪",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月底至十二月初",
+    "where": "諸羅縣",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#qing#3"
+  },
+  {
+    "category": "done",
+    "description": "傳聞臺灣鎮總兵與道員帶兵抵達彰化城，用炮火擊死並擊退賊匪，並駐紮城內。",
+    "edict_quote": "鎮道已抵彰城，賊匪俱被殺死",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死，亦有逃避者。鎮、道皆紮住彰城",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "鎮道官兵抵達彰城擊散賊匪",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初六日",
+    "where": "彰化城",
+    "who": [
+      "柴大紀",
+      "永福"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣鎮總兵",
+      "永福": "臺灣道"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "鎮道已抵彰城，賊匪俱被殺死",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死，亦有逃避者。鎮、道皆紮住彰城",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#qing#4"
+  },
+  {
+    "category": "done",
+    "description": "彰化知縣俞峻會同副將赫生額等前往各莊搜捕，賊匪先逃竄，後於夜間散而復聚數千人圍攻大墩營盤，致官兵被害。",
+    "edict_quote": "彰化知縣會同副將前往各莊搜捕，賊匪俱已逃竄。嗣又散而復聚，竟有數千人，已致被害。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。...以致被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "大墩搜捕與官兵遇害",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十七、二十八日",
+    "where": "大墩",
+    "who": [
+      "俞峻",
+      "赫生額"
+    ],
+    "who_loc": {
+      "俞峻": "彰化知縣",
+      "赫生額": "北協副將"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "彰化知縣會同副將前往各莊搜捕，賊匪俱已逃竄。嗣又散而復聚，竟有數千人，已致被害。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。...以致被害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ],
+    "card_id": "諭13#qing#5"
+  }
+]

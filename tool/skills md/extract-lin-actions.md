@@ -22,6 +22,11 @@ rule layered on top of the proxy's built-in event-extraction task (episode
 granularity, output schema, relation edges, etc.) — it only says *which*
 actions count, not how to format or split them.
 
+Every `subtitle` must be a complete subject–verb–object/action label in
+Traditional Chinese. Do not output a bare verb/object such as `攻陷彰化縣城`;
+write the supported actor explicitly, for example `林爽文攻陷彰化縣城`.
+Use the actor and object stated in `who`/`relations`; do not invent a person.
+
 ## Used By
 
 - Terminal: `tool/scripts py/run_review_bundle_test.py --steps lin-events`

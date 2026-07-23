@@ -1,0 +1,35 @@
+{
+  "model": "gemini-3.5-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": 1.5,
+  "output_usd_per_million_tokens": 9.0,
+  "estimated": true,
+  "calls": 34,
+  "prompt_tokens": 71781,
+  "completion_tokens": 13845,
+  "input_cost_usd": 0.1076715,
+  "output_cost_usd": 0.124605,
+  "cost_usd": 0.2322765,
+  "rows": [
+    {
+      "step": "repeat-report",
+      "calls": 25,
+      "prompt_tokens": 24775,
+      "completion_tokens": 2135,
+      "exact_tokens": false,
+      "input_cost_usd": 0.0371625,
+      "output_cost_usd": 0.019215,
+      "cost_usd": 0.0563775
+    },
+    {
+      "step": "official-response",
+      "calls": 9,
+      "prompt_tokens": 47006,
+      "completion_tokens": 11710,
+      "exact_tokens": false,
+      "input_cost_usd": 0.070509,
+      "output_cost_usd": 0.10539,
+      "cost_usd": 0.175899
+    }
+  ]
+}
