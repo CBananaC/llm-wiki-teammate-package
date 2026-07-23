@@ -2410,3 +2410,31 @@ Verified:
 Remaining:
 - Continue brainstorming the final information architecture, writing tone,
   interaction design, and page-level UI before implementation.
+
+### 2026-07-23 14:12 HKT — Codex — Added the AI content-writing prompt
+
+Summary: Created a Traditional Chinese writing prompt for the intro website.
+It records the writing characteristics observed in `FYP_Essay.docx`, maps the
+website sections to writing tasks, routes future research questions to the
+appropriate `2nd Material & FYP/` subfolders, and requires author/title/year/
+page-level citations with explicit handling of unresolved bibliography
+differences.
+
+Files:
+- `intro Website/ai-content-writing-prompt.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The prompt includes the approved system-first framing and all planned
+  website sections.
+- The prompt distinguishes primary evidence, published scholarship, working
+  notes, and AI interpretation.
+- The prompt includes citation templates, source-routing instructions, and a
+  no-fabrication rule for missing pages or uncertain claims.
+- `FYP_Essay.docx` was text-extracted and rendered to 25 page images for style
+  review; all rendered pages were visually inspected.
+- `git diff --check` passes.
+
+Remaining:
+- Use the prompt to draft the first website section, then adjust tone and
+  paragraph length through human review.
