@@ -10,12 +10,13 @@ DH Project/
 │   ├── (3) model-output-comparison/
 │   ├── (4) workflow/
 │   └── shared data/         # canonical Stage 1 JSON and bundles
+├── 2nd Material & FYP/       # secondary/FYP/map context for research and teaching
+├── Competition Info/         # local competition brief and submission notes
 ├── wiki/                     # compact research context and rules
 ├── tool/
 │   ├── skills md/           # canonical reusable skills
 │   ├── scripts py/          # reproducible processing scripts
 │   └── proxy/               # optional AI proxies
-└── Second hand material/FYP/
 ```
 
 ## Boundaries
@@ -24,5 +25,8 @@ DH Project/
 - Do not place generated review bundles beside the formal or sample HTML.
 - Do not edit raw evidence in place.
 - Keep formal and sample saved state separate.
+- Treat `2nd Material & FYP/` as contextual secondary/FYP material; verify
+  citations and quotations before public use.
+- Treat `Competition Info/` as a local copy of the current draft until official
+  competition details replace its placeholders.
 - Record project changes only in `PROJECT_LOG.md`.
-

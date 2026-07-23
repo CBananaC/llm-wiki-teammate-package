@@ -39,6 +39,11 @@ layer that consumes human-reviewed results.
 - `review-tools/shared data/stage1_original_text.json`: canonical Stage 1 source dataset shared by both tools.
 - `review-tools/shared data/review-bundles/`: shared model-run and human-review bundles.
 - `wiki/`: research context, rules, attempts, errors, interpretations, and accepted exports.
+- `2nd Material & FYP/`: secondary research, FYP writing/design notes, maps/GIS
+  material, and the manuscript used as contextual background for the system and
+  teaching website; it is not the canonical primary-source corpus.
+- `Competition Info/`: the local competition brief and working submission
+  notes; the supplied brief is provisional until official details are confirmed.
 - `tool/skills md/`: canonical prompt/task specifications used by website and terminal workflows.
 - `tool/scripts py/`: reproducible data-processing and model-run scripts.
 - `tool/proxy/`: optional local and deployable AI proxy services.

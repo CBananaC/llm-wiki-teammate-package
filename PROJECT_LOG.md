@@ -6,7 +6,7 @@ adjustment, append one entry to the bottom of the change log.
 
 ## Current state
 
-- Phase: active project; human validation of the formal and sample tools
+- Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
 - Formal review editor: none (Codex recovery complete; human validation next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
@@ -14,21 +14,26 @@ adjustment, append one entry to the bottom of the change log.
 - Model comparison: `review-tools/(3) model-output-comparison/index.html`
 - Workflow map: `review-tools/(4) workflow/index.html`
 - Research memory: `wiki/index.md`
+- Student-facing deliverable: a dynamic introduction and teaching website for the review system
+- Context folders: `2nd Material & FYP/` and `Competition Info/`
 - Google Cloud CLI/ADC account: `jhdgshhjs@gmail.com`
 - Google Cloud billing account: `billingAccounts/010AE1-070B25-1144FD`
 
 ## Next priorities
 
-1. Confirm that the sample shows 199 回應上諭 lines and loads the newest meaningful bundle.
-2. Select a genuinely small, representative corpus for the sample tool.
-3. Migrate active scripts from the original `outputs/attempt-002/` paths to the reorganized layout.
-4. Classify shared review bundles as accepted, experimental, rejected, or archived.
+1. Plan and build the dynamic introduction/teaching website, using the competition brief as a provisional requirements reference.
+2. Confirm that the sample shows 199 回應上諭 lines and loads the newest meaningful bundle.
+3. Select a genuinely small, representative corpus for the sample tool.
+4. Migrate active scripts from the original `outputs/attempt-002/` paths to the reorganized layout.
+5. Classify shared review bundles as accepted, experimental, rejected, or archived.
 
 ## Known cautions
 
 - The formal and sample HTML files still embed source/timeline data inherited from the original implementation.
 - Some scripts and skill notes still refer to paths in the original project.
 - Only one human or agent should edit `review-tools/(1) formal/formal_all.data` at a time.
+- `Competition Info/2026 PolyU AI X Digital Humanities Awards_AI_Classics(v.1).docx` is a bilingual public draft with unresolved placeholders and visible table/formatting inconsistencies; verify official rules before publishing dates, weights, links, or contacts.
+- `2nd Material & FYP/` contains secondary scholarship, FYP working notes, extracted text, maps, and GIS material. Verify quotations, page references, licensing, and historical claims against the underlying sources before using them publicly.
 
 ## Logging rules
 
@@ -2285,3 +2290,42 @@ Verified:
 
 Remaining:
 - Human browser refresh and visual confirmation of the formal and sample tools.
+
+### 2026-07-23 11:49 HKT — Codex — Added competition and research-context documentation
+
+Summary: Read the new competition brief and the relevant second-hand/FYP
+materials, then documented how they inform the completed review system and the
+planned student-facing introduction/teaching website. The documentation now
+separates secondary context from canonical primary-source evidence and records
+that the competition brief is provisional.
+
+Files:
+- `2nd Material & FYP/README.md`
+- `Competition Info/README.md`
+- `README.md`
+- `wiki/project-overview.md`
+- `wiki/background/research-questions.md`
+- `wiki/folder-structure.md`
+- `wiki/index.md`
+- `AGENTS.md`
+- `CLAUDE.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Reviewed the competition brief's theme, eligibility, submission formats,
+  demonstration requirements, judging directions, AI-use disclosure, source
+  acknowledgement, and draft timetable.
+- Reviewed FYP notes on information delay, official document transmission,
+  frontline autonomy, central decision-making, war/logistics, and spatial/GIS
+  context, together with the secondary-research folder map and representative
+  notes.
+- Rendered and visually inspected all nine pages of the competition brief;
+  preserved the source document unchanged.
+- `AGENTS.md` and `CLAUDE.md` remain byte-for-byte identical; documentation has
+  no whitespace errors.
+
+Remaining:
+- Confirm the final official competition rules before copying any dates,
+  judging weights, links, or contact details into the teaching website.
+- Design and implement the dynamic student-facing website as the next
+  deliverable.

@@ -10,6 +10,8 @@
 ## Project context
 
 - [[project-overview]] — scope and boundaries
+- [`../2nd Material & FYP/README.md`](<../2nd Material & FYP/README.md>) — secondary research, FYP notes, and map/GIS context
+- [`../Competition Info/README.md`](<../Competition Info/README.md>) — competition context and student-site requirements
 - [[background/research-questions]] — current research question
 - [[background/lin-shuangwen-war-stages]] — working periodization
 - [[corpora/lin-shuangwen-first-hand-json]] — canonical corpus description
@@ -32,4 +34,3 @@
 - Formal review: `../review-tools/(1) formal/`
 - Canonical Stage 1 data: `../review-tools/shared data/stage1_original_text.json`
 - Reusable skills: `../tool/skills md/`
-
