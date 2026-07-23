@@ -13055,3 +13055,58 @@ body .ix-text .body-inline-edit, body.dark-mode .ix-text .body-inline-edit {
 body.dark-mode .ix-summary, body.dark-mode .ix-text .blk.single-part,
 body.dark-mode .ix-text .seg { background:var(--panel) !important; }
 </style>
+
+<script id="primary-header-ui">
+(function(){
+  function ready(fn){
+    if(document.readyState!=='loading') fn();
+    else document.addEventListener('DOMContentLoaded',fn);
+  }
+  ready(function(){
+    var toolsBtn=document.getElementById('tb-toolsbtn');
+    var toolsPop=document.getElementById('tb-toolspop');
+    if(toolsBtn&&toolsPop&&!toolsBtn.__dropdownBound){
+      toolsBtn.__dropdownBound=true;
+      function closeTools(){
+        toolsPop.style.display='none';
+        toolsBtn.classList.remove('on');
+        toolsBtn.setAttribute('aria-expanded','false');
+      }
+      toolsBtn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var open=toolsPop.style.display==='none';
+        toolsPop.style.display=open?'grid':'none';
+        toolsBtn.classList.toggle('on',open);
+        toolsBtn.setAttribute('aria-expanded',open?'true':'false');
+      });
+      document.addEventListener('click',function(e){
+        if(toolsPop.style.display!=='none'&&!toolsPop.contains(e.target)&&e.target!==toolsBtn) closeTools();
+      });
+    }
+
+    var editBtn=document.getElementById('tb-editbtn');
+    var editPop=document.getElementById('tb-editpop');
+    if(editBtn&&editPop&&!editBtn.__dropdownBound){
+      editBtn.__dropdownBound=true;
+      function closeEdit(){
+        editPop.style.display='none';
+        editBtn.classList.remove('on');
+        editBtn.setAttribute('aria-expanded','false');
+      }
+      editBtn.addEventListener('click',function(e){
+        e.stopPropagation();
+        var open=editPop.style.display==='none';
+        editPop.style.display=open?'grid':'none';
+        editBtn.classList.toggle('on',open);
+        editBtn.setAttribute('aria-expanded',open?'true':'false');
+      });
+      editPop.addEventListener('click',function(e){
+        if(e.target.closest('button')) closeEdit();
+      });
+      document.addEventListener('click',function(e){
+        if(editPop.style.display!=='none'&&!editPop.contains(e.target)&&e.target!==editBtn) closeEdit();
+      });
+    }
+  });
+})();
+</script>
