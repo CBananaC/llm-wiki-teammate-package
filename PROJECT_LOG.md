@@ -2388,3 +2388,25 @@ Verified:
 
 Remaining:
 - Human browser refresh and visual confirmation of the horizontal alignment.
+
+### 2026-07-23 13:52 HKT — Codex — Started the intro website outline
+
+Summary: Recorded the approved framing of 奏折 and 上諭 as “two central forms
+of Qing imperial communication,” the proposed homepage opening, and the full
+brainstormed structure for the student-facing introduction and teaching site.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The outline records the system-first framing, with 林爽文事件 presented as
+  a case study.
+- The outline includes the AI-assisted, human-reviewed workflow and the
+  proposed teaching sections for sources, OCR, relationship reconstruction,
+  skills, models, loops, examples, and further use.
+- `git diff --check` passes.
+
+Remaining:
+- Continue brainstorming the final information architecture, writing tone,
+  interaction design, and page-level UI before implementation.
