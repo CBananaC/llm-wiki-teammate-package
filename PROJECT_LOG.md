@@ -2637,3 +2637,26 @@ Verified:
 Remaining:
 - Human review of the model-comparison wording, current model labels, and the
   final skill/loop names before publication.
+
+### 2026-07-23 15:15 HKT — Codex — Drafted the research-example and further-use section
+
+Summary: Completed the final Traditional Chinese content section for the intro
+website. It explains how to display selected 林爽文 research outcomes, present
+information-delay calculations and strategy changes with provenance, demonstrate
+human rejection of an unsupported AI pairing, and extend only verified results
+to the LLM Wiki and future research questions.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used the local FYP research draft, the project timing note, the 諭27 review
+  bundle, and the project overview/workflow documents.
+- Used full in-text citations and marked unpublished, internal, pending-page, and
+  project-statistics evidence separately from published historical claims.
+- `git diff --check` passes.
+
+Remaining:
+- Final editorial review of the complete outline, exact UI lane names, internal
+  statistics, and missing FYP author/year metadata before publication.
