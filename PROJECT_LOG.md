@@ -2571,3 +2571,24 @@ Verified:
 Remaining:
 - Human review of the 韓秀英 page range and final alignment with the actual
   skill output schema, chat-panel controls, and chart status labels.
+
+### 2026-07-23 15:04 HKT — Codex — Drafted the student usage section
+
+Summary: Wrote the Traditional Chinese step-by-step section explaining how
+students use the website: begin with a research question, select a small source
+set, read original texts, inspect AI output, verify evidence, mark uncertainty,
+confirm relationships, and add only reviewed results to the chart.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used 唐振耀's local methods/source-analysis text and the 台951 source note.
+- Applied full in-text bibliographic citations and preserved the distinction
+  between source evidence and website teaching design.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the 唐振耀 page range and the final wording of the website's
+  step labels and confirmation states.
