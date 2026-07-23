@@ -2438,3 +2438,25 @@ Verified:
 Remaining:
 - Use the prompt to draft the first website section, then adjust tone and
   paragraph length through human review.
+
+### 2026-07-23 14:19 HKT — Codex — Drafted the 奏折 and 上諭 introduction
+
+Summary: Wrote the first page-ready Traditional Chinese website section,
+defining 奏折, 上諭, and 硃批 as connected parts of Qing imperial
+communication. The draft follows the FYP's claim-evidence-interpretation
+style and introduces the document journey that the website will visualize.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Read the relevant local research notes and the 王劍 article PDF before
+  drafting.
+- Added author/title/year/page citations, a transparent `頁碼待核` notice for
+  the unpaginated宋希斌摘錄, and a source-verification checklist.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the historical wording, citation page for 宋希斌, and the
+  final distinction between 上諭 and 廷寄 before publication.
