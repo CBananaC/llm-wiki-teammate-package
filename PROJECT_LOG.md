@@ -2592,3 +2592,25 @@ Verified:
 Remaining:
 - Human review of the 唐振耀 page range and the final wording of the website's
   step labels and confirmation states.
+
+### 2026-07-23 15:06 HKT — Codex — Drafted the system-recreation section
+
+Summary: Wrote the Traditional Chinese tutorial for recreating the system:
+choosing a research question and source set, OCR and page-level verification,
+source-preserving structuring, rule-based and LLM-assisted relationship
+reconstruction, candidate review, and small-batch testing before scale-up.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used 唐振耀's source-method discussion, the local OCR work specification,
+  and the official-document review/pairing workflow files.
+- Included full in-text citations and explicitly separated project rules from
+  published historical claims.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the exact OCR status labels, JSON field names, and relationship
+  pairing rules against the final implementation.
