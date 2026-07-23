@@ -2527,3 +2527,26 @@ Verified:
 Remaining:
 - Human review of the FYP draft's missing author/year, the 李智君 page number,
   and the mapping to the actual four-lane chart and chat-panel controls.
+
+### 2026-07-23 14:45 HKT — Codex — Drafted the 林爽文 case-study section
+
+Summary: Wrote the Traditional Chinese case-study section explaining why
+林爽文事件 is a useful demonstration of the system: war communication,
+cross-sea information delay, an available primary-source corpus, and the
+relationship between battlefield documents and later official memory. The
+section explicitly states that the case demonstrates a transferable method,
+not the system's only research subject.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used local copies of 李天鳴、李智君、李泰翰 and the project timing notes.
+- Added full in-text citations and marked unresolved article pages and primary-
+  source metadata for later checking.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the 台852／台951 source details and the page numbers for
+  李智君 and 李泰翰 before publication.
