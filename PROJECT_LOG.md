@@ -2685,6 +2685,29 @@ Remaining:
 - Human verification of the exact 宋希斌 book pages, 李泰翰 PDF page references,
   and the final project field names for 奏折、硃批、上諭 and 廷寄.
 
+### 2026-07-23 18:11 HKT — Codex — Added the political and historical importance section
+
+Summary: Added a Traditional Chinese section explaining why 奏折、硃批 and 上諭
+are important for Qing political and historical research. The section connects
+them to central decision-making, emperor–official relations, information delay,
+first-hand evidence, local governance, military administration, and scalable
+digital research, while also explaining their evidentiary limits.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used 王劍、宋希斌、李智君 and 李泰翰 materials from `2nd Material & FYP`,
+  together with the project corpus description.
+- Added full in-text citations and clearly marked pending source pages and
+  project-specific calculations for later verification.
+- `git diff --check` passes.
+
+Remaining:
+- Human verification of the pending 宋希斌 and 李智君 page numbers and the exact
+  document sample used for any information-delay statistics.
+
 ### 2026-07-23 16:00 HKT — Codex — Added merge controls for repeated emperor actions
 
 Summary: Repeated 皇帝行動 cards now resolve stable `same_as` / `card_id` references to the earlier committed emperor-action dot. An uncommitted repeat offers both merge and standalone-add choices; an already separate repeat keeps its open button and offers a merge action.
