@@ -1,0 +1,75 @@
+[
+  {
+    "category": "done",
+    "description": "彰化林爽文等人謀為不軌，發動起事並攻占彰化城池。",
+    "howKnown": "探報",
+    "quote": "彰化賊人林爽文等，謀為不軌，攻占城池",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文起事攻陷彰化",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "彰化",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "彰化賊人林爽文等，謀為不軌，攻占城池"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "叛軍勢力蔓延淡北，攻占並占踞竹塹地方。",
+    "howKnown": "轉述",
+    "quote": "竹塹地方亦被賊人占踞",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍攻占竹塹",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十三日",
+    "where": "竹塹",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "竹塹地方亦被賊人占踞"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "隨著澎湖與安平官軍陸續帶兵抵達臺灣府城支援，包圍及進攻郡城之叛軍勢力稍有退卻。",
+    "howKnown": "探報",
+    "quote": "蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "圍攻郡城叛軍稍退",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十八日",
+    "where": "臺灣府城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退"
+      }
+    ],
+    "actor": "lin"
+  }
+]

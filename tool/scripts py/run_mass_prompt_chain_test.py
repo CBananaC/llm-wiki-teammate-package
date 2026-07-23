@@ -506,7 +506,16 @@ def normalize_action_sources(
         quote = verified_quote(source_text(record), quote)
         if not quote:
             continue
-        stype = "上諭" if record.get("doc_type") == "上諭" else "硃批"
+        raw_stype = str(raw.get("source_type") or "").strip()
+        if record.get("doc_type") == "上諭":
+            stype = "上諭"
+        elif raw_stype == "奏摺":
+            # the originating memorial passage the 上諭/硃批 is responding to (the 據奏 report);
+            # verified against the memorial body above, kept as its own source so the card shows
+            # both the emperor's words and the official report they answer.
+            stype = "奏摺"
+        else:
+            stype = "硃批"
         key = (sid, quote)
         if key in seen:
             continue
@@ -702,6 +711,10 @@ def official_response_rows_for_actions(
                 for source in sources:
                     sid = str(source.get("doc_id") or "")
                     skind = str(source.get("source_type") or ("上諭" if by_id.get(sid, {}).get("doc_type") == "上諭" else "硃批"))
+                    if skind == "奏摺":
+                        # the originating-memorial source is a display/analysis anchor only; responders
+                        # are found through the 上諭／硃批 sources, so it never contributes candidates.
+                        continue
                     for pair in response_pairs_for_source(sid, skind, pairs):
                         rid = pair_reply_doc_id(pair)
                         if rid == did:

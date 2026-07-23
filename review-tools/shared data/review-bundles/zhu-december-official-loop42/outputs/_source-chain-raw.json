@@ -1,0 +1,739 @@
+[
+  {
+    "doc_id": "硃42",
+    "evTitle": "林爽文等攻陷彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十九日，林爽文等人起事不法，率眾攻陷彰化縣城。",
+      "howKnown": "轉述",
+      "quote": "臺匪林爽文等滋事不法，攻陷彰化縣城……十一月二十九日攻破彰化",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文等攻陷彰化縣城",
+      "whenAr": "1786/12/19",
+      "whenCh": "十一月二十九日",
+      "whenKnownCh": "十二月十八日",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣城"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "臺匪林爽文等滋事不法，攻陷彰化縣城……十一月二十九日攻破彰化"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月二十九日攻破彰化",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "林爽文等攻陷彰化縣城",
+            "whenCh": "十一月二十九日",
+            "where": "彰化"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣縣典史易鳳翔",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "廈門",
+            "quote": "十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：彰化賊匪作亂，十一月二十九日攻破彰化",
+            "to_person": "興泉道萬鐘杰",
+            "whenAr": "",
+            "whenCh": "十五日亥刻"
+          },
+          {
+            "from_person": "興泉道萬鐘杰",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十八日申刻據興泉道萬鐘杰稟稱：十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：彰化賊匪作亂，十一月二十九日攻破彰化",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十八日申刻"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "叛軍攻陷諸羅縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十二月初六日卯時，叛軍攻破諸羅縣城。",
+      "howKnown": "轉述",
+      "quote": "初六日卯時攻破諸羅",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍攻陷諸羅縣城",
+      "whenAr": "1786/12/26",
+      "whenCh": "十二月初六日",
+      "whenKnownCh": "十二月十八日",
+      "where": "諸羅縣城",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "初六日卯時攻破諸羅"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "初六日卯時攻破諸羅",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "叛軍攻陷諸羅縣城",
+            "whenCh": "初六日卯時",
+            "where": "諸羅"
+          },
+          {
+            "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "叛軍於三坎店與官軍交戰",
+            "whenCh": "十二月十一日",
+            "where": "三坎店"
+          },
+          {
+            "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "柴大紀帶兵堵守三坎店",
+            "whenCh": "十二月初六日",
+            "where": "三坎店"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "興泉道萬鐘杰",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十八日申刻據興泉道萬鐘杰稟稱",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "1787/02/05",
+            "whenCh": "十八日申刻"
+          },
+          {
+            "from_person": "臺灣縣典史易鳳翔",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "廈門",
+            "quote": "十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：彰化賊匪作亂，十一月二十九日攻破彰化，初六日卯時攻破諸羅",
+            "to_person": "興泉道萬鐘杰",
+            "whenAr": "1787/02/02",
+            "whenCh": "十五日亥刻"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "叛軍於三坎店與官軍交戰",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十二月十一日，叛軍逼近距府城十里的三坎店，與臺灣鎮總兵柴大紀部隊交戰，後因官軍大施火砲而稍退。",
+      "howKnown": "轉述",
+      "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍於三坎店與官軍交戰",
+      "whenAr": "1786/12/31",
+      "whenCh": "十二月十一日",
+      "whenKnownCh": "十二月十八日",
+      "where": "三坎店",
+      "who": [
+        "柴大紀"
+      ],
+      "who_loc": {
+        "柴大紀": "三坎店"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "叛軍於三坎店與官軍交戰",
+            "whenCh": "十二月十一日",
+            "where": "三坎店"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "興泉道萬鐘杰",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十八日申刻據興泉道萬鐘杰稟稱",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十二月十八日"
+          },
+          {
+            "from_person": "臺灣縣典史易鳳翔",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "廈門",
+            "quote": "十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：彰化賊匪作亂，十一月二十九日攻破彰化，初六日卯時攻破諸羅。柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城。初七日夜，臺道因事勢急迫，不及備文，令該典史同家人二名，來廈請救。該典史於初七日夜出城，初八日配船，初九日放洋，初十至澎湖，見署澎協請救。澎兵於十二日點齊，十三日五鼓渡臺赴援，約十四日可到臺灣。又據稱，在澎聞得十一日柴鎮與賊打仗，大施火炮，賊勢稍退。",
+            "to_person": "興泉道萬鐘杰",
+            "whenAr": "",
+            "whenCh": "十二月十五日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "柴大紀帶兵堵守三坎店",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "臺灣鎮總兵柴大紀率領官兵一千餘名，離臺灣府城十里處的三坎店進行堵截防守。",
+      "howKnown": "轉述",
+      "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "柴大紀帶兵堵守三坎店",
+      "whenAr": "",
+      "whenCh": "十二月初六日",
+      "whenKnownCh": "十二月十八日",
+      "where": "三坎店",
+      "who": [
+        "柴大紀"
+      ],
+      "who_loc": {
+        "柴大紀": "三坎店"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "柴大紀帶兵堵守三坎店",
+            "whenCh": "十二月初六日",
+            "where": "三坎店"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "興泉道萬鐘杰",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十八日申刻據興泉道萬鐘杰稟稱：",
+            "to_person": "徐嗣曾",
+            "whenAr": "1787/02/05",
+            "whenCh": "十二月十八日"
+          },
+          {
+            "from_person": "臺灣縣典史易鳳翔",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "廈門",
+            "quote": "十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：",
+            "to_person": "興泉道萬鐘杰",
+            "whenAr": "1787/02/02",
+            "whenCh": "十二月十五日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "永福招募鄉勇防守府城",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "臺灣道永福招募鄉勇，嚴密防守臺灣府城。",
+      "howKnown": "轉述",
+      "quote": "臺道招募鄉勇，緊守府城。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "永福招募鄉勇防守府城",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十八日",
+      "where": "臺灣府城",
+      "who": [
+        "永福"
+      ],
+      "who_loc": {
+        "永福": "臺灣府城"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "臺道招募鄉勇，緊守府城。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臺道招募鄉勇，緊守府城。",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "永福招募鄉勇防守府城",
+            "whenCh": "",
+            "where": "臺灣府城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "興泉道萬鐘杰",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十八日申刻據興泉道萬鐘杰稟稱：",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十二月十八日"
+          },
+          {
+            "from_person": "臺灣縣典史易鳳翔",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "廈門",
+            "quote": "十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：",
+            "to_person": "興泉道萬鐘杰",
+            "whenAr": "",
+            "whenCh": "十二月十五日"
+          },
+          {
+            "from_person": "臺道",
+            "how": "口諭",
+            "inferred": false,
+            "layer": 3,
+            "place": "臺灣府城",
+            "quote": "初七日夜，臺道因事勢急迫，不及備文，令該典史同家人二名，來廈請救。",
+            "to_person": "臺灣縣典史易鳳翔",
+            "whenAr": "",
+            "whenCh": "十二月初七日夜"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "澎湖官兵渡海增援臺灣",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "澎湖協官兵於十二月十二日點齊後，於十三日黎明渡海前往臺灣支援赴援。",
+      "howKnown": "轉述",
+      "quote": "澎兵於十二日點齊，十三日五鼓渡臺赴援",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "澎湖官兵渡海增援臺灣",
+      "whenAr": "",
+      "whenCh": "十二月十三日",
+      "whenKnownCh": "十二月十八日",
+      "where": "澎湖",
+      "who": [
+        "澎湖協官兵"
+      ],
+      "who_loc": {
+        "澎湖協官兵": "澎湖"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "澎兵於十二日點齊，十三日五鼓渡臺赴援"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "澎兵於十二日點齊，十三日五鼓渡臺赴援",
+            "reporter": "臺灣縣典史易鳳翔",
+            "subtitle": "澎湖官兵渡海增援臺灣",
+            "whenCh": "十二月十三日",
+            "where": "澎湖"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "興泉道萬鐘杰",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十八日申刻據興泉道萬鐘杰稟稱：十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：彰化賊匪作亂，十一月二十九日攻破彰化，初六日卯時攻破諸羅。柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城。初七日夜，臺道因事勢急迫，不及備文，令該典史同家人二名，來廈請救。該典史於初七日夜出城，初八日配船，初九日放洋，初十至澎湖，見署澎協請救。澎兵於十二日點齊，十三日五鼓渡臺赴援，約十四日可到臺灣。",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": "十二月十八日"
+          },
+          {
+            "from_person": "臺灣縣典史易鳳翔",
+            "how": "口述",
+            "inferred": false,
+            "layer": 2,
+            "place": "廈門",
+            "quote": "十五日亥刻，有臺灣縣典史易鳳翔執臺道印信護照，同臺灣永道家人來廈，職道當即傳詢。據易典史稱：彰化賊匪作亂，十一月二十九日攻破彰化，初六日卯時攻破諸羅。柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城。初七日夜，臺道因事勢急迫，不及備文，令該典史同家人二名，來廈請救。該典史於初七日夜出城，初八日配船，初九日放洋，初十至澎湖，見署澎協請救。澎兵於十二日點齊，十三日五鼓渡臺赴援，約十四日可到臺灣。",
+            "to_person": "興泉道萬鐘杰",
+            "whenAr": "",
+            "whenCh": "十二月十五日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "黃仕簡帶兵由廈門出海",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "水師提督黃仕簡於十二月十五日率帶官兵由廈門港口出海渡臺進剿。",
+      "howKnown": "親歷",
+      "quote": "提臣黃仕簡已於十五日由廈門出口放洋",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "黃仕簡帶兵由廈門出海",
+      "whenAr": "",
+      "whenCh": "十二月十五日",
+      "whenKnownCh": "十二月十八日",
+      "where": "廈門",
+      "who": [
+        "黃仕簡"
+      ],
+      "who_loc": {
+        "黃仕簡": "廈門"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "提臣黃仕簡已於十五日由廈門出口放洋"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "提臣黃仕簡已於十五日由廈門出口放洋",
+            "reporter": "黃仕簡",
+            "subtitle": "黃仕簡帶兵由廈門出海",
+            "whenCh": "十二月十五日",
+            "where": "廈門"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "黃仕簡",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "廈門",
+            "quote": "臣查提臣黃仕簡已於十五日由廈門出口放洋",
+            "to_person": "徐嗣曾",
+            "whenAr": "1787/02/02",
+            "whenCh": "十二月十五日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "任承恩率兵登船預備渡海",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "陸路提督任承恩帶領官兵配備船隻登舟，準備渡海前往臺灣進剿。",
+      "howKnown": "親歷",
+      "quote": "陸路提臣任承恩亦配兵登舟",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "任承恩率兵登船預備渡海",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十八日",
+      "where": "廈門",
+      "who": [
+        "任承恩"
+      ],
+      "who_loc": {
+        "任承恩": "廈門"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "陸路提臣任承恩亦配兵登舟"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "陸路提臣任承恩亦配兵登舟",
+            "reporter": "陸路提臣任承恩",
+            "subtitle": "任承恩率兵登船預備渡海",
+            "whenCh": "",
+            "where": "廈門"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "陸路提臣任承恩",
+            "how": "查報",
+            "inferred": true,
+            "layer": 1,
+            "place": "廈門",
+            "quote": "臣查提臣黃仕簡已於十五日由廈門出口放洋，陸路提臣任承恩亦配兵登舟",
+            "to_person": "福建巡撫臣徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "徐嗣曾調撥兵力預備調遣",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "福建巡撫徐嗣曾於撫標及督標水師調撥兵力一千五百名並配備軍器，另調建寧、延平二鎮營兵一千名至省城預備調遣。",
+      "howKnown": "親歷",
+      "quote": "臣現於臣標及督標水師，撥兵一千五百名，配就軍火器械，並調上游之建寧、延平鎮營兵一千名來省，以備調遣。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "徐嗣曾調撥兵力預備調遣",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十八日",
+      "where": "福州",
+      "who": [
+        "徐嗣曾"
+      ],
+      "who_loc": {
+        "徐嗣曾": "福州"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "臣現於臣標及督標水師，撥兵一千五百名，配就軍火器械，並調上游之建寧、延平鎮營兵一千名來省，以備調遣。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣現於臣標及督標水師，撥兵一千五百名，配就軍火器械，並調上游之建寧、延平鎮營兵一千名來省，以備調遣。",
+            "reporter": "福建巡撫徐嗣曾",
+            "subtitle": "徐嗣曾調撥兵力預備調遣",
+            "whenCh": "",
+            "where": "福州"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "福建巡撫徐嗣曾",
+            "how": "親歷",
+            "inferred": false,
+            "layer": 1,
+            "place": "福州",
+            "quote": "臣現於臣標及督標水師，撥兵一千五百名，配就軍火器械，並調上游之建寧、延平鎮營兵一千名來省，以備調遣。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "徐嗣曾飛咨浙粵預撥兵勇",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "福建巡撫徐嗣曾飛咨廣東及浙江督撫提臣，要求於附近水師營內預先調撥備戰兵丁二三千名，駐紮於邊界以資聲援。",
+      "howKnown": "親歷",
+      "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "徐嗣曾飛咨浙粵預撥兵勇",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十八日",
+      "where": "福建",
+      "who": [
+        "徐嗣曾"
+      ],
+      "who_loc": {
+        "徐嗣曾": "福州"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。",
+            "reporter": "福建巡撫臣徐嗣曾",
+            "subtitle": "徐嗣曾飛咨浙粵預撥兵勇",
+            "whenCh": "",
+            "where": "福建"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "福建巡撫臣徐嗣曾",
+            "how": "飛咨",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。",
+            "to_person": "廣東督、撫、提臣及浙江撫、提二臣",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃42",
+    "evTitle": "徐嗣曾撥解軍餉並委員辦糧",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "福建巡撫徐嗣曾指示布政司撥銀十五萬兩解往泉州備用，並委派護糧道李振文前往蚶江隨同總督常青籌辦糧餉物資。",
+      "howKnown": "親歷",
+      "quote": "飭司撥銀十五萬兩，解赴泉州貯備，緊要動用。臣現飭司迅速解往，並另委護糧道李振文馳往蚶江，隨同督臣籌辦一切。",
+      "relations": [
+        {
+          "evidence": "另委護糧道李振文馳往蚶江",
+          "relation": "委派",
+          "relation_type": "command",
+          "source": "徐嗣曾",
+          "target": "李振文"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "徐嗣曾撥解軍餉並委員辦糧",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十八日",
+      "where": "泉州",
+      "who": [
+        "徐嗣曾",
+        "李振文",
+        "常青"
+      ],
+      "who_loc": {
+        "常青": "蚶江",
+        "徐嗣曾": "福州",
+        "李振文": "蚶江"
+      },
+      "doc_id": "硃42",
+      "sources": [
+        {
+          "doc_id": "硃42",
+          "quote": "飭司撥銀十五萬兩，解赴泉州貯備，緊要動用。臣現飭司迅速解往，並另委護糧道李振文馳往蚶江，隨同督臣籌辦一切。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "飭司撥銀十五萬兩，解赴泉州貯備，緊要動用。臣現飭司迅速解往，並另委護糧道李振文馳往蚶江，隨同督臣籌辦一切。",
+            "reporter": "督臣常青",
+            "subtitle": "徐嗣曾撥解軍餉並委員辦糧",
+            "whenCh": "十二月十七日",
+            "where": "泉州"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "督臣常青",
+            "how": "咨商",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "昨准督臣咨商，飭司撥銀十五萬兩，解赴泉州貯備，緊要動用。",
+            "to_person": "福建巡撫徐嗣曾",
+            "whenAr": "1787/01/06",
+            "whenCh": "十二月十七日"
+          }
+        ]
+      }
+    ]
+  }
+]

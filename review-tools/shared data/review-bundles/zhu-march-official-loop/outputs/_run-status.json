@@ -266,6 +266,60 @@
     "source-chain-lin": true,
     "qing-actions-all": true,
     "source-chain-qing": true,
-    "confirmed-yu-response": true
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃323": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃324": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃325": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃326": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃327": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "__global__": {
+    "official-response": true
   }
 }

@@ -1,0 +1,79 @@
+[
+  {
+    "category": "done",
+    "description": "乾隆五十一年十一月二十九日，林爽文等人起事不法，率眾攻陷彰化縣城。",
+    "howKnown": "轉述",
+    "quote": "臺匪林爽文等滋事不法，攻陷彰化縣城……十一月二十九日攻破彰化",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文等攻陷彰化縣城",
+    "whenAr": "1786/12/19",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月十八日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "臺匪林爽文等滋事不法，攻陷彰化縣城……十一月二十九日攻破彰化"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十一年十二月初六日卯時，叛軍攻破諸羅縣城。",
+    "howKnown": "轉述",
+    "quote": "初六日卯時攻破諸羅",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍攻陷諸羅縣城",
+    "whenAr": "1786/12/26",
+    "whenCh": "十二月初六日",
+    "whenKnownCh": "十二月十八日",
+    "where": "諸羅縣城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "初六日卯時攻破諸羅"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十一年十二月十一日，叛軍逼近距府城十里的三坎店，與臺灣鎮總兵柴大紀部隊交戰，後因官軍大施火砲而稍退。",
+    "howKnown": "轉述",
+    "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍於三坎店與官軍交戰",
+    "whenAr": "1786/12/31",
+    "whenCh": "十二月十一日",
+    "whenKnownCh": "十二月十八日",
+    "where": "三坎店",
+    "who": [
+      "柴大紀"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退"
+      }
+    ],
+    "actor": "lin"
+  }
+]

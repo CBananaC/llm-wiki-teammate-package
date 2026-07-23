@@ -1,0 +1,213 @@
+[
+  {
+    "category": "plan",
+    "description": "閩浙總督常青添派督標與撫標官兵一千名，檄令原任閩安協副將徐鼎士帶領，自省城南臺口配船準備渡臺支援。",
+    "howKnown": "親歷",
+    "quote": "茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+    "relations": [
+      {
+        "evidence": "檄令原任閩安協副將徐鼎士帶領",
+        "relation": "檄令",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "徐鼎士"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青派徐鼎士率兵渡臺",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福州府南臺口",
+    "who": [
+      "常青",
+      "徐鼎士"
+    ],
+    "who_loc": {
+      "常青": "泉州府",
+      "徐鼎士": "福州府南臺口"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "閩浙總督常青調集福寧、桐山、羅源等營官兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船候風渡臺，交由水師提督黃仕簡調度。",
+    "howKnown": "親歷",
+    "quote": "又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。經由鹿耳門進口，交與水師提臣黃仕簡，聽其調度",
+    "relations": [
+      {
+        "evidence": "檄令福寧右營遊擊延山帶領",
+        "relation": "檄令",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "延山"
+      },
+      {
+        "evidence": "交與水師提臣黃仕簡，聽其調度",
+        "relation": "交與",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "黃仕簡"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青調延山率兵渡臺",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福安縣白石口",
+    "who": [
+      "常青",
+      "延山",
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "常青": "泉州府",
+      "延山": "福安縣白石口",
+      "黃仕簡": "渡海途中"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。經由鹿耳門進口，交與水師提臣黃仕簡，聽其調度"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "閩浙總督常青於各營預先挑選備用兵丁，以便隨時支援策應。",
+    "howKnown": "親歷",
+    "quote": "臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "常青於各營預備兵丁",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福建",
+    "who": [
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "泉州府"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "澎湖陳副將派遣蔡遊擊帶領兵馬於十二月十四日抵達臺灣郡城支援防守。",
+    "howKnown": "探報",
+    "quote": "澎湖陳副將差蔡遊擊領兵於十四日到郡",
+    "relations": [
+      {
+        "evidence": "澎湖陳副將差蔡遊擊領兵",
+        "relation": "差",
+        "relation_type": "command",
+        "source": "陳副將",
+        "target": "蔡遊擊"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "蔡遊擊帶兵支援臺灣郡城",
+    "whenAr": "",
+    "whenCh": "十二月十四日",
+    "whenKnownCh": "",
+    "where": "臺灣府城",
+    "who": [
+      "陳副將",
+      "蔡遊擊"
+    ],
+    "who_loc": {
+      "蔡遊擊": "臺灣府城",
+      "陳副將": "澎湖"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "澎湖陳副將差蔡遊擊領兵於十四日到郡"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "安平林遊擊帶領官兵前往支援臺灣郡城，成功使賊勢稍退。",
+    "howKnown": "探報",
+    "quote": "安平林遊擊亦帶兵赴援，現在賊勢稍退",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "林遊擊帶兵赴援郡城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "臺灣府城",
+    "who": [
+      "林遊擊"
+    ],
+    "who_loc": {
+      "林遊擊": "臺灣府城"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "安平林遊擊亦帶兵赴援，現在賊勢稍退"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "水師提督黃仕簡帶領孫遊擊率兵於十二月十五日開船東渡，因風大退回後，於十七日再度開船渡臺。",
+    "howKnown": "探報",
+    "quote": "水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。",
+    "relations": [
+      {
+        "evidence": "水師黃提臺於十五日帶孫遊擊領兵開船",
+        "relation": "帶領",
+        "relation_type": "command",
+        "source": "黃仕簡",
+        "target": "孫遊擊"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "黃仕簡率兵開船東渡",
+    "whenAr": "",
+    "whenCh": "十二月十七日",
+    "whenKnownCh": "",
+    "where": "渡海途中",
+    "who": [
+      "黃仕簡",
+      "孫遊擊"
+    ],
+    "who_loc": {
+      "孫遊擊": "渡海途中",
+      "黃仕簡": "渡海途中"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。"
+      }
+    ],
+    "actor": "qing"
+  }
+]

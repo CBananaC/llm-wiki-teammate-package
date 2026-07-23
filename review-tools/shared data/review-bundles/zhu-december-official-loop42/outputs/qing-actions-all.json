@@ -1,0 +1,230 @@
+[
+  {
+    "category": "done",
+    "description": "臺灣鎮總兵柴大紀率領官兵一千餘名，離臺灣府城十里處的三坎店進行堵截防守。",
+    "howKnown": "轉述",
+    "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "柴大紀帶兵堵守三坎店",
+    "whenAr": "",
+    "whenCh": "十二月初六日",
+    "whenKnownCh": "十二月十八日",
+    "where": "三坎店",
+    "who": [
+      "柴大紀"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "臺灣道永福招募鄉勇，嚴密防守臺灣府城。",
+    "howKnown": "轉述",
+    "quote": "臺道招募鄉勇，緊守府城。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "永福招募鄉勇防守府城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十八日",
+    "where": "臺灣府城",
+    "who": [
+      "永福"
+    ],
+    "who_loc": {
+      "永福": "臺灣府城"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "臺道招募鄉勇，緊守府城。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "澎湖協官兵於十二月十二日點齊後，於十三日黎明渡海前往臺灣支援赴援。",
+    "howKnown": "轉述",
+    "quote": "澎兵於十二日點齊，十三日五鼓渡臺赴援",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "澎湖官兵渡海增援臺灣",
+    "whenAr": "",
+    "whenCh": "十二月十三日",
+    "whenKnownCh": "十二月十八日",
+    "where": "澎湖",
+    "who": [
+      "澎湖協官兵"
+    ],
+    "who_loc": {
+      "澎湖協官兵": "澎湖"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "澎兵於十二日點齊，十三日五鼓渡臺赴援"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "水師提督黃仕簡於十二月十五日率帶官兵由廈門港口出海渡臺進剿。",
+    "howKnown": "親歷",
+    "quote": "提臣黃仕簡已於十五日由廈門出口放洋",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡帶兵由廈門出海",
+    "whenAr": "",
+    "whenCh": "十二月十五日",
+    "whenKnownCh": "十二月十八日",
+    "where": "廈門",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "提臣黃仕簡已於十五日由廈門出口放洋"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "陸路提督任承恩帶領官兵配備船隻登舟，準備渡海前往臺灣進剿。",
+    "howKnown": "親歷",
+    "quote": "陸路提臣任承恩亦配兵登舟",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "任承恩率兵登船預備渡海",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十八日",
+    "where": "廈門",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "廈門"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "陸路提臣任承恩亦配兵登舟"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "福建巡撫徐嗣曾於撫標及督標水師調撥兵力一千五百名並配備軍器，另調建寧、延平二鎮營兵一千名至省城預備調遣。",
+    "howKnown": "親歷",
+    "quote": "臣現於臣標及督標水師，撥兵一千五百名，配就軍火器械，並調上游之建寧、延平鎮營兵一千名來省，以備調遣。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾調撥兵力預備調遣",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十八日",
+    "where": "福州",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "臣現於臣標及督標水師，撥兵一千五百名，配就軍火器械，並調上游之建寧、延平鎮營兵一千名來省，以備調遣。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "福建巡撫徐嗣曾飛咨廣東及浙江督撫提臣，要求於附近水師營內預先調撥備戰兵丁二三千名，駐紮於邊界以資聲援。",
+    "howKnown": "親歷",
+    "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾飛咨浙粵預撥兵勇",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十八日",
+    "where": "福建",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "nonmil",
+    "description": "福建巡撫徐嗣曾指示布政司撥銀十五萬兩解往泉州備用，並委派護糧道李振文前往蚶江隨同總督常青籌辦糧餉物資。",
+    "howKnown": "親歷",
+    "quote": "飭司撥銀十五萬兩，解赴泉州貯備，緊要動用。臣現飭司迅速解往，並另委護糧道李振文馳往蚶江，隨同督臣籌辦一切。",
+    "relations": [
+      {
+        "evidence": "另委護糧道李振文馳往蚶江",
+        "relation": "委派",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "李振文"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "徐嗣曾撥解軍餉並委員辦糧",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十八日",
+    "where": "泉州",
+    "who": [
+      "徐嗣曾",
+      "李振文",
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "蚶江",
+      "徐嗣曾": "福州",
+      "李振文": "蚶江"
+    },
+    "doc_id": "硃42",
+    "sources": [
+      {
+        "doc_id": "硃42",
+        "quote": "飭司撥銀十五萬兩，解赴泉州貯備，緊要動用。臣現飭司迅速解往，並另委護糧道李振文馳往蚶江，隨同督臣籌辦一切。"
+      }
+    ],
+    "actor": "qing"
+  }
+]

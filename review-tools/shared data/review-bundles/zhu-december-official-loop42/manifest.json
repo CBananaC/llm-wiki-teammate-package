@@ -1,10 +1,10 @@
 {
-  "name": "zhu-december-official-loop",
-  "created_at": "2026-07-23T18:08:19",
+  "name": "zhu-december-official-loop42",
+  "created_at": "2026-07-23T19:28:40",
   "source": "outputs/attempt-002/stage1_original_text.json",
   "model": "gemini-3.6-flash",
   "doc_ids": [
-    "硃56"
+    "硃42"
   ],
   "chain": [
     "summary",

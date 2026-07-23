@@ -1,0 +1,52 @@
+[
+  {
+    "category": "done",
+    "description": "彰化賊人林爽文等謀為不軌，發動起事並攻占城池，致使賊勢在臺灣各地蔓延。",
+    "howKnown": "奏報",
+    "quote": "彰化賊人林爽文等，謀為不軌，攻占城池",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文等攻占城池",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "彰化",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化"
+    },
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "彰化賊人林爽文等，謀為不軌，攻占城池"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "叛軍勢力蔓延至淡北一帶，攻占並占踞竹塹地方。",
+    "howKnown": "轉述",
+    "quote": "竹塹地方亦被賊人占踞",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊人占踞竹塹地方",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十三日",
+    "where": "竹塹",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃56",
+    "sources": [
+      {
+        "doc_id": "硃56",
+        "quote": "竹塹地方亦被賊人占踞"
+      }
+    ],
+    "actor": "lin"
+  }
+]

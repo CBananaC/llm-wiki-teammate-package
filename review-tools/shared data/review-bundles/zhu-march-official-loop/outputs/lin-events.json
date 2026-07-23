@@ -965,5 +965,552 @@
       }
     ],
     "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十一年十二月內，臺灣叛軍多次逼攻臺灣府城，經總兵柴大紀等率官兵及義民奮力殺退。",
+    "howKnown": "查",
+    "quote": "臺灣逆匪滋擾，上年十二月內，疊次迫攻府城。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪疊次迫攻臺灣府城",
+    "whenAr": "1787/01",
+    "whenCh": "五十一年十二月內",
+    "whenKnownCh": "",
+    "where": "臺灣府城",
+    "who": [
+      "臺灣逆匪"
+    ],
+    "who_loc": {
+      "臺灣逆匪": "臺灣府城"
+    },
+    "doc_id": "硃323",
+    "sources": [
+      {
+        "doc_id": "硃323",
+        "quote": "臺灣逆匪滋擾，上年十二月內，疊次迫攻府城。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十二年二月二十五日夜及二十六日，叛軍兩次進攻諸羅縣城外的清軍營盤，遭柴大紀嚴督官兵擊退。",
+    "howKnown": "據報",
+    "quote": "據報二月二十五夜並二十六日，有兩次賊匪來攻諸羅營盤。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪兩度夜襲諸羅營盤",
+    "whenAr": "1787/04/12",
+    "whenCh": "二月二十五夜並二十六日",
+    "whenKnownCh": "",
+    "where": "諸羅營盤",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "諸羅營盤"
+    },
+    "doc_id": "硃323",
+    "sources": [
+      {
+        "doc_id": "硃323",
+        "quote": "據報二月二十五夜並二十六日，有兩次賊匪來攻諸羅營盤。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十二年三月初二及十一等日，張淡、張炎、魏富等匪夥侵擾諸羅附近的牛稠溪、北勢仔莊、轆仔腳莊，遭官兵擊退並生擒數十人。",
+    "howKnown": "據報",
+    "quote": "及三月初二、十一等日，仍有匪夥肆擾諸羅附近之牛稠溪、北勢仔莊、轆仔腳莊，俱經柴大紀嚴督弁兵，奮勇打仗。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "匪夥肆擾諸羅附近村莊",
+    "whenAr": "1787/04/19",
+    "whenCh": "三月初二、十一等日",
+    "whenKnownCh": "",
+    "where": "牛稠溪、北勢仔莊、轆仔腳莊",
+    "who": [
+      "張淡",
+      "張炎",
+      "魏富"
+    ],
+    "who_loc": {
+      "張淡": "牛稠溪",
+      "張炎": "牛稠溪",
+      "魏富": "牛稠溪"
+    },
+    "doc_id": "硃323",
+    "sources": [
+      {
+        "doc_id": "硃323",
+        "quote": "及三月初二、十一等日，仍有匪夥肆擾諸羅附近之牛稠溪、北勢仔莊、轆仔腳莊，俱經柴大紀嚴督弁兵，奮勇打仗。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十二年二月二十一日，叛軍於八卦山與總兵普吉保所率官兵交戰，受傷陣亡數百名，並被擒獲二十七名。",
+    "howKnown": "查",
+    "quote": "總兵普吉保於二月二十一日在八卦山打仗，傷斃賊匪數百名，擒獲賊犯二十七名",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪於八卦山與清軍交戰",
+    "whenAr": "1787/04/08",
+    "whenCh": "二月二十一日",
+    "whenKnownCh": "",
+    "where": "八卦山",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "八卦山"
+    },
+    "doc_id": "硃323",
+    "sources": [
+      {
+        "doc_id": "硃323",
+        "quote": "總兵普吉保於二月二十一日在八卦山打仗，傷斃賊匪數百名，擒獲賊犯二十七名"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "官兵在大湖紮營月餘期間，民變軍不斷出面截殺阻攻，致使清軍無法繼續前進。",
+    "howKnown": "查明",
+    "quote": "在大湖紮營月餘，遇賊截殺，雖間得勝仗，究未能前進。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪在大湖截殺官兵",
+    "whenAr": "1787",
+    "whenCh": "二月",
+    "whenKnownCh": "三月二十一日",
+    "where": "大湖",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃324",
+    "sources": [
+      {
+        "doc_id": "硃324",
+        "quote": "在大湖紮營月餘，遇賊截殺，雖間得勝仗，究未能前進。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十二年二月二十一日清軍抵達鳳山縣城前，民變軍已先行退走，留下一座空城。",
+    "howKnown": "查明",
+    "quote": "於二月二十一日抵鳳山縣城，賊匪退走，僅存空城。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪撤離鳳山縣城",
+    "whenAr": "1787/04/09",
+    "whenCh": "二月二十一日",
+    "whenKnownCh": "三月二十一日",
+    "where": "鳳山縣城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃324",
+    "sources": [
+      {
+        "doc_id": "硃324",
+        "quote": "於二月二十一日抵鳳山縣城，賊匪退走，僅存空城。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "民變軍於山豬毛一帶攔截參將瑚圖里，致使其無法過溪與大隊會合。",
+    "howKnown": "查明",
+    "quote": "參將瑚圖里自山豬毛被賊攔截，不能過溪。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪於山豬毛攔截官兵",
+    "whenAr": "1787",
+    "whenCh": "三月初四日以前",
+    "whenKnownCh": "三月二十一日",
+    "where": "山豬毛",
+    "who": [
+      "瑚圖里"
+    ],
+    "who_loc": {
+      "瑚圖里": "山豬毛"
+    },
+    "doc_id": "硃324",
+    "sources": [
+      {
+        "doc_id": "硃324",
+        "quote": "參將瑚圖里自山豬毛被賊攔截，不能過溪。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "乾隆五十二年三月初四日，民變軍於琉璜溪圍截衝殺前往接應的遊擊鄭嵩官兵，導致官兵損失慘重，鄭嵩陣亡。",
+    "howKnown": "據報",
+    "quote": "郝壯猷派令遊擊鄭嵩帶兵前往接應... 行至琉璜溪遇賊圍截衝殺，官兵喪失甚多... 遊擊鄭嵩殺賊被槍傷陣亡。",
+    "relations": [
+      {
+        "evidence": "郝壯猷派令遊擊鄭嵩帶兵前往接應",
+        "relation": "派令",
+        "relation_type": "command",
+        "source": "郝壯猷",
+        "target": "鄭嵩"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "琉璜溪圍截衝殺官兵",
+    "whenAr": "1787/04/21",
+    "whenCh": "三月初四日",
+    "whenKnownCh": "三月十七日",
+    "where": "琉璜溪",
+    "who": [
+      "鄭嵩",
+      "郝壯猷"
+    ],
+    "who_loc": {
+      "郝壯猷": "鳳山縣城",
+      "鄭嵩": "琉璜溪"
+    },
+    "doc_id": "硃324",
+    "sources": [
+      {
+        "doc_id": "硃324",
+        "quote": "郝壯猷派令遊擊鄭嵩帶兵前往接應... 行至琉璜溪遇賊圍截衝殺，官兵喪失甚多... 遊擊鄭嵩殺賊被槍傷陣亡。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "民變軍蜂擁迫攻營盤與鳳山縣城，至三月初八日攻入城內，導致官兵潰散逃回郡城，鳳山縣城再次失守。",
+    "howKnown": "查明",
+    "quote": "賊匪遂蜂擁迫攻營盤縣城... 至初八日賊眾進城，官兵竟至潰散。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊眾攻陷鳳山縣城",
+    "whenAr": "1787/04/25",
+    "whenCh": "三月初八日",
+    "whenKnownCh": "三月二十一日",
+    "where": "鳳山縣城",
+    "who": [
+      "郝壯猷",
+      "那穆素里",
+      "羅光炤"
+    ],
+    "who_loc": {
+      "羅光炤": "鳳山縣城",
+      "那穆素里": "鳳山縣城",
+      "郝壯猷": "鳳山縣城"
+    },
+    "doc_id": "硃324",
+    "sources": [
+      {
+        "doc_id": "硃324",
+        "quote": "賊匪遂蜂擁迫攻營盤縣城... 至初八日賊眾進城，官兵竟至潰散。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "因清軍任承恩未帶兵駐紮防守，民變軍於彰化一帶勢力復張，四出滋擾並占踞彰化縣城附近村莊。",
+    "howKnown": "查明",
+    "quote": "以致賊勢日復鴟張，四出滋擾，不但彰化僅存空城，即附近村莊盡被占踞。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊勢復張占踞彰化村莊",
+    "whenAr": "1787",
+    "whenCh": "三月",
+    "whenKnownCh": "三月二十一日",
+    "where": "彰化縣城附近村莊",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃324",
+    "sources": [
+      {
+        "doc_id": "硃324",
+        "quote": "以致賊勢日復鴟張，四出滋擾，不但彰化僅存空城，即附近村莊盡被占踞。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "清軍進佔鳳山後僅得空城，叛軍隨即散而復聚，致使鳳山再度陷落。",
+    "howKnown": "來札",
+    "quote": "知鳳山復失，臺灣府城兵少...知所得僅一空城，賊匪散而復聚，轉須防守",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍散而復聚復陷鳳山",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "三月二十二日",
+    "where": "鳳山",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "鳳山"
+    },
+    "doc_id": "硃325",
+    "sources": [
+      {
+        "doc_id": "硃325",
+        "quote": "知鳳山復失，臺灣府城兵少...知所得僅一空城，賊匪散而復聚，轉須防守"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "林爽文利用搶掠所得資財廣招徒黨，各地匪徒亦豎旗響應，到處焚燒搶劫、毀壞村莊，致使無依民眾被迫從賊。",
+    "howKnown": "稟報",
+    "quote": "林爽文既以搶掠之資，益招徒黨，其他豎旗糾眾，或與林爽文相應，或效林爽文所為，到處焚劫，地無完村，被難之民無可資生，亦多去而從賊",
+    "relations": [
+      {
+        "evidence": "或與林爽文相應",
+        "relation": "相應",
+        "relation_type": "ally",
+        "source": "賊匪",
+        "target": "林爽文"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "叛軍焚劫各地廣招徒黨",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "臺灣",
+    "who": [
+      "林爽文",
+      "賊匪"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣",
+      "賊匪": "臺灣"
+    },
+    "doc_id": "硃325",
+    "sources": [
+      {
+        "doc_id": "硃325",
+        "quote": "林爽文既以搶掠之資，益招徒黨，其他豎旗糾眾，或與林爽文相應，或效林爽文所為，到處焚劫，地無完村，被難之民無可資生，亦多去而從賊"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "盜賊在蚶江上下一帶洋面持鳥槍、藤牌等械截劫過往商民船隻並打傷民眾，連續發生林寧盛、蔡榮勝等八起搶劫案。",
+    "howKnown": "派員密訪查出",
+    "quote": "查出林寧盛、蔡榮勝、紀錦成、紀再吉、施長興、王謹興蔡芳成、韓三等八案，俱在蚶江上下一帶洋面被劫，內並有執持鳥槍、藤牌等械傷人者。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "盜匪於蚶江洋面劫掠商船",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "蚶江",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃326",
+    "sources": [
+      {
+        "doc_id": "硃326",
+        "quote": "查出林寧盛、蔡榮勝、紀錦成、紀再吉、施長興、王謹興蔡芳成、韓三等八案，俱在蚶江上下一帶洋面被劫，內並有執持鳥槍、藤牌等械傷人者。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "二十餘名盜賊駕駛二隻船隻於嶼仔尾洋面趁夜突襲自海澄赴廈門之粵省官兵船隻，與官兵互相格鬥，打傷官兵六人，奪走鳥槍二桿、腰刀三把及番銀二元後逸去。",
+    "howKnown": "申報",
+    "quote": "二十三日酉刻，粵省第二起官兵自海澄縣水路赴廈，內兵丁曾得高等八人，共坐一船。二更時到嶼仔尾地方，即有盜賊二十餘人，駕船二隻來劫。兵丁黑夜驚醒，猝不及防，互相格鬥，受傷者六人，尚非重傷。失去鳥槍二桿，腰刀三把，番銀二元，賊旋逸去。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪於嶼仔尾夜劫赴廈兵船",
+    "whenAr": "1787/05/10",
+    "whenCh": "三月二十三日",
+    "whenKnownCh": "三月二十三日",
+    "where": "嶼仔尾",
+    "who": [
+      "曾得高"
+    ],
+    "who_loc": {
+      "曾得高": "嶼仔尾"
+    },
+    "doc_id": "硃326",
+    "sources": [
+      {
+        "doc_id": "硃326",
+        "quote": "二十三日酉刻，粵省第二起官兵自海澄縣水路赴廈，內兵丁曾得高等八人，共坐一船。二更時到嶼仔尾地方，即有盜賊二十餘人，駕船二隻來劫。兵丁黑夜驚醒，猝不及防，互相格鬥，受傷者六人，尚非重傷。失去鳥槍二桿，腰刀三把，番銀二元，賊旋逸去。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "林小文代表林爽文招集群眾，並與叛軍頭目賴樹、劉長芳等人豎旗起事。",
+    "howKnown": "轉述",
+    "quote": "林小文係代林爽文招集人眾，與賊目賴樹劉長芳等豎旗為逆之犯。",
+    "relations": [
+      {
+        "evidence": "代林爽文招集人眾",
+        "relation": "代為招集",
+        "relation_type": "command",
+        "source": "林小文",
+        "target": "林爽文"
+      },
+      {
+        "evidence": "與賊目賴樹劉長芳等豎旗為逆",
+        "relation": "豎旗為逆",
+        "relation_type": "ally",
+        "source": "林小文",
+        "target": "賴樹"
+      },
+      {
+        "evidence": "與賊目賴樹劉長芳等豎旗為逆",
+        "relation": "豎旗為逆",
+        "relation_type": "ally",
+        "source": "林小文",
+        "target": "劉長芳"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林小文招集人眾豎旗起事",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "三月十八日",
+    "where": "臺灣",
+    "who": [
+      "林小文",
+      "林爽文",
+      "賴樹",
+      "劉長芳"
+    ],
+    "who_loc": {},
+    "doc_id": "硃327",
+    "sources": [
+      {
+        "doc_id": "硃327",
+        "quote": "林小文係代林爽文招集人眾，與賊目賴樹劉長芳等豎旗為逆之犯。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "叛軍頭目林全自海山口汛把總廖攀龍處取得火藥四、五十斤。",
+    "howKnown": "轉述",
+    "quote": "該把總〔係〕曾將火藥四、五十斤送與賊目林全之犯。",
+    "relations": [
+      {
+        "evidence": "曾將火藥四、五十斤送與賊目林全",
+        "relation": "送火藥",
+        "relation_type": "ally",
+        "source": "廖攀龍",
+        "target": "林全"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林全自廖攀龍處獲取火藥",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "三月十八日",
+    "where": "海山口",
+    "who": [
+      "林全",
+      "廖攀龍"
+    ],
+    "who_loc": {
+      "廖攀龍": "海山口"
+    },
+    "doc_id": "硃327",
+    "sources": [
+      {
+        "doc_id": "硃327",
+        "quote": "該把總〔係〕曾將火藥四、五十斤送與賊目林全之犯。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "已革外委何朝英被叛軍頭目沈岸、陳元招入天地會，並在扈尾地區與官兵交戰。",
+    "howKnown": "轉述",
+    "quote": "何朝英係已革外委，被賊目沈岸、陳元招入天地會，在扈尾與官兵打仗之犯。",
+    "relations": [
+      {
+        "evidence": "被賊目沈岸、陳元招入天地會",
+        "relation": "招入天地會",
+        "relation_type": "command",
+        "source": "沈岸",
+        "target": "何朝英"
+      },
+      {
+        "evidence": "被賊目沈岸、陳元招入天地會",
+        "relation": "招入天地會",
+        "relation_type": "command",
+        "source": "陳元",
+        "target": "何朝英"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "何朝英於扈尾與官兵打仗",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "三月十八日",
+    "where": "扈尾",
+    "who": [
+      "何朝英",
+      "沈岸",
+      "陳元"
+    ],
+    "who_loc": {
+      "何朝英": "扈尾"
+    },
+    "doc_id": "硃327",
+    "sources": [
+      {
+        "doc_id": "硃327",
+        "quote": "何朝英係已革外委，被賊目沈岸、陳元招入天地會，在扈尾與官兵打仗之犯。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "蔡綱在擺接地方糾集眾人、執旗起事，並臨陣與官兵交戰。",
+    "howKnown": "轉述",
+    "quote": "蔡綱係在擺接地方糾眾執旗，臨陣之犯。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "蔡綱於擺接糾眾臨陣",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "三月十八日",
+    "where": "擺接",
+    "who": [
+      "蔡綱"
+    ],
+    "who_loc": {
+      "蔡綱": "擺接"
+    },
+    "doc_id": "硃327",
+    "sources": [
+      {
+        "doc_id": "硃327",
+        "quote": "蔡綱係在擺接地方糾眾執旗，臨陣之犯。"
+      }
+    ],
+    "actor": "lin"
   }
 ]

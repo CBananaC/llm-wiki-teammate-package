@@ -1,0 +1,563 @@
+[
+  {
+    "doc_id": "硃56",
+    "evTitle": "林爽文起事攻陷彰化",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "彰化林爽文等人謀為不軌，發動起事並攻占彰化城池。",
+      "howKnown": "探報",
+      "quote": "彰化賊人林爽文等，謀為不軌，攻占城池",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文起事攻陷彰化",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "彰化",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "彰化賊人林爽文等，謀為不軌，攻占城池"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": []
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "叛軍攻占竹塹",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "叛軍勢力蔓延淡北，攻占並占踞竹塹地方。",
+      "howKnown": "轉述",
+      "quote": "竹塹地方亦被賊人占踞",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍攻占竹塹",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十三日",
+      "where": "竹塹",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "竹塹地方亦被賊人占踞"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "竹塹地方亦被賊人占踞",
+            "reporter": "淡水同知程峻之子程必大",
+            "subtitle": "叛軍攻占竹塹",
+            "whenCh": "",
+            "where": "竹塹"
+          },
+          {
+            "quote": "臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞，因飭領兵之海壇鎮總兵郝壯猷，相奪度情形，非於新莊堵禦，即赴南路應援。",
+            "reporter": "淡水同知程峻之子程必大",
+            "subtitle": "常青飭令郝壯猷機宜應援",
+            "whenCh": "十二月十三日",
+            "where": "新莊"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "淡水同知程峻之子程必大",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": "十三日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "圍攻郡城叛軍稍退",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "隨著澎湖與安平官軍陸續帶兵抵達臺灣府城支援，包圍及進攻郡城之叛軍勢力稍有退卻。",
+      "howKnown": "探報",
+      "quote": "蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "圍攻郡城叛軍稍退",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十八日",
+      "where": "臺灣府城",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退",
+            "reporter": "守備林登雲",
+            "subtitle": "圍攻郡城叛軍稍退",
+            "whenCh": "",
+            "where": "臺灣府城"
+          },
+          {
+            "quote": "水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。",
+            "reporter": "守備林登雲",
+            "subtitle": "黃仕簡帶兵乘風東渡臺灣",
+            "whenCh": "十二月十七日",
+            "where": "臺灣"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "守備林登雲",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "惟據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "任承恩帶領官兵開駕赴臺",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "福建陸路提督任承恩受總督常青令加帶官兵，於十二月十四日登舟，十七日乘風開駕前往臺灣鹿耳門進剿。",
+      "howKnown": "親歷",
+      "quote": "臣抵泉後，即與提臣任承恩籌劃，令其加帶官兵，仍由鹿耳門前進。該提臣於十四日登舟，十七日乘風開駕",
+      "relations": [
+        {
+          "evidence": "令其加帶官兵，仍由鹿耳門前進",
+          "relation": "令其加帶官兵",
+          "relation_type": "command",
+          "source": "常青",
+          "target": "任承恩"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "任承恩帶領官兵開駕赴臺",
+      "whenAr": "",
+      "whenCh": "十二月十七日",
+      "whenKnownCh": "",
+      "where": "泉州",
+      "who": [
+        "常青",
+        "任承恩"
+      ],
+      "who_loc": {
+        "任承恩": "泉州",
+        "常青": "泉州"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "臣抵泉後，即與提臣任承恩籌劃，令其加帶官兵，仍由鹿耳門前進。該提臣於十四日登舟，十七日乘風開駕"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣抵泉後，即與提臣任承恩籌劃，令其加帶官兵，仍由鹿耳門前進。該提臣於十四日登舟，十七日乘風開駕",
+            "reporter": "任承恩",
+            "subtitle": "任承恩帶領官兵開駕赴臺",
+            "whenCh": "十二月十七日",
+            "where": "泉州"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "任承恩",
+            "how": "稟報",
+            "inferred": true,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "臣抵泉後，即與提臣任承恩籌劃，令其加帶官兵，仍由鹿耳門前進。該提臣於十四日登舟，十七日乘風開駕",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": "十二月十七日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "常青飭令郝壯猷機宜應援",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "常青接獲淡水同知程峻之子程必大稟報竹塹失守後，飭令海壇鎮總兵郝壯猷相度情形，於新莊堵禦或赴南路應援。",
+      "howKnown": "轉述",
+      "quote": "臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞，因飭領兵之海壇鎮總兵郝壯猷，相奪度情形，非於新莊堵禦，即赴南路應援。",
+      "relations": [
+        {
+          "evidence": "據淡水同知程峻之子程必大稟報",
+          "relation": "稟報",
+          "relation_type": "report",
+          "source": "程必大",
+          "target": "常青"
+        },
+        {
+          "evidence": "因飭領兵之海壇鎮總兵郝壯猷",
+          "relation": "飭令",
+          "relation_type": "command",
+          "source": "常青",
+          "target": "郝壯猷"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "常青飭令郝壯猷機宜應援",
+      "whenAr": "",
+      "whenCh": "十二月十三日",
+      "whenKnownCh": "十二月十三日",
+      "where": "新莊",
+      "who": [
+        "常青",
+        "郝壯猷",
+        "程必大"
+      ],
+      "who_loc": {
+        "常青": "泉州",
+        "郝壯猷": "淡北"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞，因飭領兵之海壇鎮總兵郝壯猷，相奪度情形，非於新莊堵禦，即赴南路應援。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞，因飭領兵之海壇鎮總兵郝壯猷，相奪度情形，非於新莊堵禦，即赴南路應援。",
+            "reporter": "淡水同知程峻之子程必大",
+            "subtitle": "常青飭令郝壯猷機宜應援",
+            "whenCh": "十二月十三日",
+            "where": "新莊"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "淡水同知程峻之子程必大",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞，因飭領兵之海壇鎮總兵郝壯猷，相奪度情形，非於新莊堵禦，即赴南路應援。",
+            "to_person": "常青",
+            "whenAr": "1787/01/31",
+            "whenCh": "十二月十三日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "常青派徐鼎士帶兵配船渡臺",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "常青添派督標、撫標官兵共一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船候風渡臺。",
+      "howKnown": "親歷",
+      "quote": "茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+      "relations": [
+        {
+          "evidence": "檄令原任閩安協副將徐鼎士帶領",
+          "relation": "檄令",
+          "relation_type": "command",
+          "source": "常青",
+          "target": "徐鼎士"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "常青派徐鼎士帶兵配船渡臺",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "省城南臺口",
+      "who": [
+        "常青",
+        "徐鼎士"
+      ],
+      "who_loc": {
+        "常青": "泉州",
+        "徐鼎士": "省城南臺口"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+            "reporter": "閩浙總督常青",
+            "subtitle": "常青派徐鼎士帶兵配船渡臺",
+            "whenCh": "",
+            "where": "省城南臺口"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "閩浙總督常青",
+            "how": "親歷",
+            "inferred": false,
+            "layer": 1,
+            "place": "省城南臺口",
+            "quote": "茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。",
+            "to_person": "閩浙總督常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "常青調延山帶兵白石口配船",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "常青調集福寧、桐山、羅源等營官兵共一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船候風渡臺。",
+      "howKnown": "親歷",
+      "quote": "又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各各該處出口候風，直渡過臺。",
+      "relations": [
+        {
+          "evidence": "檄令福寧右營遊擊延山帶領",
+          "relation": "檄令",
+          "relation_type": "command",
+          "source": "常青",
+          "target": "延山"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "常青調延山帶兵白石口配船",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "福安縣白石口",
+      "who": [
+        "常青",
+        "延山"
+      ],
+      "who_loc": {
+        "常青": "泉州",
+        "延山": "福安縣白石口"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各各該處出口候風，直渡過臺。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。",
+            "reporter": "閩浙總督臣常青",
+            "subtitle": "常青調延山帶兵白石口配船",
+            "whenCh": "十二月二十日",
+            "where": "福安縣白石口"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "閩浙總督臣常青",
+            "how": "奏",
+            "inferred": false,
+            "layer": 1,
+            "place": "泉州",
+            "quote": "又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。...所有加調官兵赴剿緣由，理合恭摺馳奏。",
+            "to_person": "乾隆帝",
+            "whenAr": "1787/02/07",
+            "whenCh": "十二月二十日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "常青預挑各營兵丁隨時策應",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "常青於福建各營兵丁內預先挑備預備兵力，以便視機宜隨時增援策應臺灣軍情。",
+      "howKnown": "親歷",
+      "quote": "臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "常青預挑各營兵丁隨時策應",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "福建",
+      "who": [
+        "常青"
+      ],
+      "who_loc": {
+        "常青": "泉州"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應",
+            "reporter": "常青",
+            "subtitle": "常青預挑各營兵丁隨時策應",
+            "whenCh": "",
+            "where": "福建"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "常青",
+            "how": "親歷",
+            "inferred": false,
+            "layer": 1,
+            "place": "福建",
+            "quote": "臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃56",
+    "evTitle": "黃仕簡帶兵乘風東渡臺灣",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "水師提督黃仕簡帶領孫遊擊等官兵於十二月十五日開船，因風大退回，至十七日乘風東渡臺灣。",
+      "howKnown": "探報",
+      "quote": "水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。",
+      "relations": [
+        {
+          "evidence": "水師黃提臺於十五日帶孫遊擊領兵開船",
+          "relation": "帶領",
+          "relation_type": "command",
+          "source": "黃仕簡",
+          "target": "孫遊擊"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "黃仕簡帶兵乘風東渡臺灣",
+      "whenAr": "",
+      "whenCh": "十二月十七日",
+      "whenKnownCh": "",
+      "where": "臺灣",
+      "who": [
+        "黃仕簡",
+        "孫遊擊"
+      ],
+      "who_loc": {
+        "孫遊擊": "海面",
+        "黃仕簡": "海面"
+      },
+      "doc_id": "硃56",
+      "sources": [
+        {
+          "doc_id": "硃56",
+          "quote": "水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。",
+            "reporter": "守備林登雲",
+            "subtitle": "黃仕簡帶兵乘風東渡臺灣",
+            "whenCh": "十二月十七日",
+            "where": "臺灣"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "守備林登雲",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。又水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  }
+]
