@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal and sample tools
-- Formal review editor: none
+- Formal review editor: none (Codex recovery complete; human validation next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -40,31 +40,6 @@ adjustment, append one entry to the bottom of the change log.
 - If this file becomes unwieldy, choose an archive location then and leave a link here.
 
 ## Change log
-
-### 2026-07-20 19:28 — Codex — Added pair-grounded official-loop proxy contracts
-
-Summary: Defined the official-document-centred review loop and added Gemini-proxy modes that analyze existing pair edges without re-searching the corpus.
-
-Changed:
-- Added `confirmed_yu_response` to explain how an official document answers already-confirmed earlier 上諭.
-- Added `combined_emperor_actions` to merge equivalent 硃批 and paired-上諭 expressions into multi-source emperor actions and compare them with earlier emperor actions.
-- Added a `confirmed_pairs_only` path to the existing official-response mode.
-- Added canonical skill specifications for the new loop and its two new analysis stages.
-
-Files:
-- `tool/proxy/gemini-proxy/main.py`
-- `tool/skills md/confirmed-yu-response-analysis.md`
-- `tool/skills md/combine-confirmed-emperor-actions.md`
-- `tool/skills md/official-document-review-loop.md`
-- `tool/skills md/official-response.md`
-
-Verified:
-- `main.py` passes Python bytecode compilation.
-- Confirmed-pair data provides the required `official_reply_to_yu` and `yu_source` graph directions.
-- Runtime endpoint smoke testing remains pending because the local workspace runtime does not currently include the proxy's Flask/Google dependencies.
-
-Remaining:
-- Wire the new graph-grounded stages into both review UIs, add the one-click official-document loop, update the workflow map, and run browser/JavaScript parity checks.
 
 ### 2026-07-17 — Codex — Created the reorganized project
 
@@ -159,26 +134,6 @@ Files:
 Verified:
 - The moved FYP document has the same SHA-256 hash as the original location.
 - No active documentation outside this historical log refers to `docs/` or `manuscript/`.
-
-Remaining:
-- None.
-
-### 2026-07-20 18:45 HKT — Codex — Unhid the click-network settings button
-
-Summary: Moved `點擊後顯示範圍` out of the closed Tools popover and into the
-always-visible main toolbar in both formal and sample UIs. It still opens the
-same lane-first network settings panel, while the connection opacity sliders
-remain under Tools.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
-
-Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- Each HTML file has exactly one network-settings button in the main toolbar.
-- `git diff --check` passed.
 
 Remaining:
 - None.
@@ -1555,118 +1510,49 @@ Remaining:
   no dots are clickable here) — asked the user for a screenshot of the
   broken state to pin down the actual cause rather than guessing further.
 
-### 2026-07-20 16:31 HKT — Codex — Replace document-info summary/table filters with reviewed AI-output labels (formal + sample)
+### 2026-07-20 08:20 HKT — Claude — Surface pipeline repeat-report flags in output cards (formal + sample)
 
-Summary:
-- Replaced the document-info filter's legacy embedded-summary collector with a collector over saved, quoted AI-chat output, covering event extraction categories, source chains, official responses, timing checks, 硃批／上諭 outputs, information sources, consolidation, 上諭 review-loop outputs, emperor actions, and document-pair evidence.
-- Added Traditional Chinese filter labels, including `清軍事：已執行`, `清軍事：待執行`, `清方：非軍事`, `上諭回應的奏折`, `回應的先前上諭`, and `回應的先前硃批`; removed the old 摘要 label path and the document-info table/AI-original toggles.
-- Applied the equivalent change to both HTML tools and preserved the document metadata table and raw source data.
+Summary: The repeat-report dedup pass in run_mass_prompt_chain_test.py writes
+same_as / earliest_report / repeat_candidates onto lin/qing/emperor cards in
+the bundle (verified: the newest bundle zhu-first-10-official-loop carries 16
+林 / 34 清 / 35 皇帝 flags, exactly matching the run log). But the website never
+read those fields: applyLocalSkillBundle -> normalizeSkillEventItem dropped
+them, and linkBundleReports recomputed repeats purely client-side via
+matchCandidateInRegistry (a title/quote heuristic). A stale in-code comment
+even says "the terminal script has no way to flag that an extracted event was
+already reported" — no longer true. The heuristic misses what the LLM pass
+caught, so flagged repeats never appeared as the output card's 「先前已回報」
+(⚠) note + 併入既有事件 / 仍獨立加入 buttons.
 
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+Fix (three edits, applied identically to both files):
+1. normalizeSkillEventItem now preserves card_id / same_as / earliest_report /
+   repeat_candidates onto the ingested item.
+2. extractRegistryEntry now carries cardId (it.card_id||it.id) so an
+   earliest_report id can be resolved back to a registry entry.
+3. linkBundleReports: when its own heuristic finds no match for an extract
+   card, it falls back to the pipeline's same_as / earliest_report.id, resolves
+   that earlier report in the registry by card id, and reuses the exact same
+   __matchReg shape + downstream merge/commit path. registryEntryAllowedFor-
+   Candidate still guards self / same-document / later-dated, so a flagged
+   earlier report only surfaces when genuinely valid.
 
-Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed.
-- Browser-loaded both local pages, opened a document panel in each, and confirmed no legacy table, page toggle, AI-original toggle, overall-summary pane, summary table, or old visible pair labels; browser error logs were empty.
+Scope of this fix = CROSS-document repeats (what the output card's re-report
+note is designed for). Verified end-to-end by serving the real bundle + data
+through server.py in headless Chromium, loading it via 載入技能輸出, and
+inspecting the ingested items: every cross-document flagged 林 card and the
+cross-document 清 cards that resolve now carry a correct __matchReg (which the
+existing, unchanged render path turns into the ⚠ note).
 
-Remaining:
-- Human confirmation of the final Chinese label wording and visual grouping in the real research workflow.
-
-### 2026-07-20 16:35 HKT — Codex — Expanded header search results with matching excerpts (formal + sample)
-
-Summary:
-- Removed the 60-result render cap and the old 「僅顯示前 60 筆」 notice; the dropdown now renders the complete matching set and keeps the copy-all action over all matches.
-- Added a second, centered source-text line for every result. It shows the first matching occurrence, highlights the query in red, and appends the document-level occurrence count.
-- Added a readable original-source index while preserving the existing lowercase search index, so timeline filtering behavior remains unchanged.
-
-Files:
-- review-tools/(1) formal/index.html
-- review-tools/(2) sample/index.html
-- PROJECT_LOG.md
-
-Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- git diff --check passed.
-- Browser-tested both local pages with 常: each rendered 256 result rows, no old limit notice, a second excerpt line, red .search-hit text, and a scrollable dropdown containing all rows.
-- Formal and sample search-dropdown blocks are identical.
-
-Remaining:
-- Human confirmation of the excerpt wording and spacing in the real research workflow.
-
-### 2026-07-20 16:47 HKT — Codex — Simplify document-info body and segmented-part presentation (formal + sample)
-
-Summary:
-- Made the saved division view the only active document-info body filter by default when divisions exist; other annotation groups remain available through the filter control.
-- Renamed both plain and segmented body headings to `原文` and removed the separate bottom `硃批 rescript` block.
-- Removed the segmented-part left rail and its green hover behavior, made the outer body surface transparent, and gave each part its own surface with 28px spacing.
-- Reduced the default segmented-part subtitle size to 12px.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
-
-Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed.
-- Browser-loaded both local pages, opened document panels, confirmed `原文` is the only body heading, confirmed no separate rescript block or legacy summary/table panes, and found no browser console errors.
-- Confirmed the renderer/CSS rules are synchronized in both files for the default division state, independent part surfaces, removed hover rail, larger inter-part spacing, and smaller subtitles.
-
-Remaining:
-- Human confirmation of the segmented-card spacing in a saved-division document with the research data loaded.
-
-### 2026-07-20 16:52 HKT — Codex — Scope pair filters by document type (formal + sample)
-
-Summary:
-- Hid `上諭回應的奏折` AI-output filters from official documents (`硃批` and `上奏`).
-- Hid `回應的先前上諭` from 上諭 documents, where that response relationship is not applicable.
-- Kept the underlying saved AI-chat output intact; this change only controls document-info filter visibility and highlights.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
-
-Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed before the log update.
-- Browser-loaded both local pages, opened document panels, confirmed no pair labels appeared in the available blank preview state, and found no browser console errors.
-- Confirmed the same document-type filtering rules are present in both HTML files.
-
-Remaining:
-- Human confirmation with the full saved AI pair outputs loaded in the research workflow.
-
-### 2026-07-20 17:03 HKT — Codex — Refine document-type filter visibility for AI/event projections (formal + sample)
-
-Summary:
-- For `硃批` and `上奏`, hid `相關上諭`, `回應時效`, `事件整合`, and `皇帝行動` filter groups, in addition to the previously hidden 上諭-pair group.
-- For 上諭, hid `事件整合` and `回應的先前上諭`, while retaining `皇帝行動` items whose source is the 上諭.
-- Applied the visibility rule after combining saved AI items and event projections, so excluded groups cannot reappear through either path.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
-
-Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed.
-- Browser-loaded both local pages, opened document panels, confirmed the new logic produced no runtime errors, and found no forbidden pair labels in the available blank preview state.
-- Confirmed the same final-list visibility rules are present in both HTML files.
-
-Remaining:
-- Human confirmation with the complete saved AI/event outputs loaded in the research workflow.
-
-### 2026-07-20 17:03 HKT — Codex — Refined header people/search filters and result controls (formal + sample)
-
-Summary:
-- Removed the （等） suffix from every 人物 option and normalized filtering so the bare-name options still match the underlying records.
-- Changed header search and timeline filtering to search field values only; serialized JSON property names such as volume are no longer searchable.
-- Moved the result count and controls above the full result list, added a document-type filter, and changed 複製全部編號 to a copy-symbol button that copies the currently filtered results.
-- Kept only the first matching excerpt and now show the occurrence count when a document has more than one match.
+NOT yet covered (need product decisions, see user):
+- Same-document repeats: the majority of the 清 flags (~52 of 68 in the test)
+  are two extracted actions WITHIN one 硃批 that report the same event. The
+  card's re-report note is cross-document by design (invalidMatchRegForCandidate
+  blocks same-doc), so these need a distinct indicator, not the existing note.
+- Emperor-action cards: combined-emperor-actions.json ingests as kind
+  'edictmatch' (em-item render), a different card type from the lin/qing
+  extract cards; its same_as_event_id flags aren't surfaced yet.
+- A few cross-doc flags don't resolve because their earliest card isn't in the
+  loaded bundle set (committed in an earlier run / different bundle).
 
 Files:
 - review-tools/(1) formal/index.html
@@ -1674,293 +1560,693 @@ Files:
 - PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- git diff --check passed.
-- Browser-tested both pages: 人物 options contain no （等）; volume returns 0 筆符合; 常 shows the top result header, all document types, red hits, and multi-match counts; selecting 硃批 shows 110 rows and only 硃 badges.
-- Formal and sample search blocks are identical.
+- Both files' embedded JS parsed; formal/sample edited regions identical.
+- Real-data headless load of zhu-first-10-official-loop: flagged cross-doc
+  cards receive a valid __matchReg; same-document flags correctly excluded by
+  the existing cross-doc guard.
 
-Remaining:
-- Human confirmation of the final header spacing and labels in the full research workflow.
+### 2026-07-20 08:45 HKT — Claude — Same-document + emperor-card repeat notes (formal + sample)
 
-### 2026-07-20 17:13 HKT — Codex — Added reviewed summary card above 原文 (formal + sample)
+Summary: Follow-up to the cross-document repeat surfacing. The user asked to
+also see the two repeat kinds the first pass deliberately left out. Both now
+surface; verified end-to-end so that EVERY pipeline-flagged repeat produces a
+note (no silently-dropped flags).
 
-Summary:
-- Added a separate 摘要 card at the top of each document-info body, before 原文.
-- The card reads saved reviewed summary output (`overallAdj` first, then structured 摘要 output or saved summary responses) and does not use the legacy embedded `r.summary` table.
-- Kept the card out of the filter chips and hid it when no reviewed summary output exists.
+(1) Same-document repeats: when the pipeline flags a card as repeating an
+earlier report in the SAME document, the cross-document ⚠ note (and the whole
+__matchReg / merge machinery) intentionally excludes it. These now get a
+distinct informational marker `.cx-samedocnote` ("↻ 本文書稍早已回報此事件：
+<title>，<date>"), jump-enabled only when the earlier report resolves to a
+committed event.
+(2) Registry-miss cross-document repeats: many flagged earliest reports are a
+committed EVENT id (evmrXX, not a bundle card id) or an older card that
+predates card_id, so the registry can't resolve a *mergeable* target. Rather
+than drop these, linkBundleReports now falls back to the pipeline's own
+earliest_report record and emits a note-only cross-doc marker (`.cx-matchnote`,
+no merge buttons, `xdocNoteHtml`), jump-enabled when the event id resolves.
+(3) Emperor-action cards: combined-emperor-actions loads as kind 'edictmatch'
+(em-item render), a different card type carrying same_as / earliest_report on
+each point straight from the bundle (no normalize step strips them). Added
+`emRepeatNoteHtml(pt)` rendered inside each em-item ("↻ 此諭令先前已於 <doc>／
+<title>，<date> 下達（同一皇帝行動）").
+
+All three notes reuse the existing cx-jumpreport hover/click handler (hover =
+highlight the earlier dot on the timeline, click = open its event card), which
+no-ops safely when it can't resolve a dot, so nothing new can throw.
 
 Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified (headless, real zhu-first-10-official-loop bundle + server.py, empty
+edits so counts are clean):
+- linqing flags: 26 cross-doc mergeable (⚠+merge) / 27 same-doc (↻) / 4
+  cross-doc note-only (⚠) / 0 with no surface at all — every flag now shows.
+- All 35 emperor repeat points carry earliest_report and render the note.
+- DOM check on 硃22: 12 .cx-samedocnote + 20 .cx-matchnote rendered with real
+  text; on 硃21: 40 .em-repeatnote rendered ("↻ 此諭令先前已於 硃25／…").
+- Both files' embedded JS parsed; formal/sample edited regions identical.
+
+Remaining:
+- A page reload (not a fresh 載入技能輸出) drops these notes, same as the
+  pre-existing __matchReg — they are recomputed only at bundle-load time. Not
+  changed here; flag if persistence across reloads is wanted.
+
+### 2026-07-22 15:23 HKT — Codex — Restored typed click-network focus (formal + sample)
+
+Summary: Reconnected the explicit four click-type network rules to the existing
+timeline renderer without removing Claude's configurable reach UI or document
+and emperor-card changes. Focused network lines now dim unrelated pair links,
+connected endpoint dots remain visible, and Yu-source focus preserves the green
+third-line Zhu ring. Clicking a Zhu-sourced emperor action no longer recurses
+into unrelated response chains.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Both embedded HTML scripts parse successfully.
+- Formal/sample typed-network helper and render sections are identical.
+- Relationship smoke test covers a Yu, two responding Zhu documents, field
+  events, and emperor actions; expected focus sets were produced.
+- git diff --check passes.
+
+Remaining:
+- The in-app browser refused to reload the local file URL for visual
+  verification; no browser workaround was used.
+
+### 2026-07-22 15:45 HKT — Codex — Keep chart context visible during typed focus (formal + sample)
+
+Summary: Kept the deterministic typed click-network focus and changed its
+visual treatment so normally visible non-selected document dots, event dots,
+and relationship lines remain rendered with dim transparency instead of being
+omitted. Focused endpoints and the Yu-source Zhu green ring remain emphasized.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Both embedded HTML scripts parse successfully.
+- Formal/sample typed renderer sections are identical.
+- git diff --check passes; AGENTS.md and CLAUDE.md remain identical.
+
+Remaining:
+- The in-app browser still refuses to reload the local file URL for visual
+  verification; no browser workaround was used.
+
+### 2026-07-22 16:03 HKT — Codex — Corrected emperor-action origin rendering (formal + sample)
+
+Summary: Fixed typed emperor-action focus and provenance rendering for saved
+events whose source references use aliases such as 天13 while chart records use
+canonical 諭13 IDs. Alias-aware, quote-aware resolution now finds the correct
+Yu/Zhu source, the selected action's own source line remains visible and hot,
+and Zhu-origin actions do not expand through an unrelated memorial. Yu-to-
+memorial, response, pair, and information-source lookups use the same resolver.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Both embedded HTML scripts parse successfully.
+- Formal/sample typed renderer sections are identical.
+- All 179 saved emperor actions have resolvable origin aliases.
+- git diff --check passes; AGENTS.md and CLAUDE.md remain identical.
+
+Remaining:
+- The in-app browser still refuses to reload the local file URL for visual
+  verification; no browser workaround was used.
+
+### 2026-07-22 15:37 HKT — Codex — Restored AI-loop Qing labels and stage order (formal + sample)
+
+Summary: Preserved the `category` returned by 清方行動（三類合一）, rendered its
+已執行軍事／待執行軍事／非軍事 badge in saved and live output, added a dedicated
+回應先前上諭 card, and sorted bundle stages as 林方行動 → 清方行動 → 回應先前上諭
+→ 皇帝行動 → 官員回應. Empty source-chain cards are hidden after their chains are
+attached to action cards.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Both embedded HTML scripts parse successfully.
+- Both panels pass the expected stage-order and Qing-category mapping smoke tests.
+- The saved prior-Yu renderer includes both quotations and linked document IDs.
+- git diff --check passes.
+
+Remaining:
+- The in-app browser refused to reload the local file URL for visual verification; no browser workaround was used.
+
+### 2026-07-22 16:03 HKT — Codex — Corrected repeat-report chronology
+
+Summary: Fixed repeat labels to use the reporting document's send date rather
+than an extracted event date. Same-document matches are now excluded from the
+terminal dedup candidate pool, stale repeat annotations are cleared before a
+rerun, and the formal/sample live registry uses each source document's send
+date for eligibility, ordering, and displayed labels. Existing bundles whose
+repeat stage was already marked done are automatically rechecked once via a
+repeat-report version marker.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
 - `review-tools/(1) formal/index.html`
 - `review-tools/(2) sample/index.html`
 - `PROJECT_LOG.md`
 
 Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
+- Python compilation passed.
+- Embedded JavaScript in formal and sample parsed successfully.
+- Synthetic case confirmed 硃25 (1786/12/10) receives no warning while 硃26
+  (1786/12/12) points to 硃25 as the earliest report.
+- Synthetic same-document verified-dot case produced no repeat warning.
 - `git diff --check` passed.
-- Browser-tested both local pages, opened document panels, confirmed the `ix-summary` container precedes `ix-cols`, the body label is 原文, and no separate 硃批/rescript block is rendered; no browser errors were reported.
 
 Remaining:
-- Human confirmation with the complete saved reviewed-summary outputs loaded in the research workflow.
+- Resume the existing bundle with `--skip-done`; its old repeat stage will be
+  rerun automatically, then reload the bundle in the website.
 
-### 2026-07-20 17:20 HKT — Codex — Center search excerpts and preserve visible match counts (formal + sample)
+### 2026-07-22 15:41 HKT — Codex — Limited Qing category badges to Qing event cards
 
-Summary:
-- Replaced the fixed search excerpt radius with a responsive excerpt limit based on the dropdown width and interface font size.
-- Kept early matches in a balanced clause-sized excerpt, so searching 二 now shows 為奏聞事。本年十二月初九日接提臣黃仕簡 with the match centered rather than starting at the document header.
-- Moved multi-match counts outside the clipped excerpt text so counts such as (9) remain visible whenever a document has more than one match.
+Summary: Added an actor guard to the AI event-card category badge so 已執行軍事、
+待執行軍事、非軍事 appear only on cards whose actor is 清方. 林方 cards no longer
+display a Qing category even if stale category metadata is present in a saved item.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed.
-- Browser-tested both pages with 二: 363 rows, centered target excerpt, visible (9), and identical output.
-- Rechecked volume as 0 筆符合, 常 as 256 筆符合 with 138 multi-match counts and red hits, and no browser console errors.
-- Confirmed the search JavaScript and CSS blocks remain identical between formal and sample.
+- Both embedded HTML scripts parse successfully.
+- Actor-guard smoke check passes in formal and sample.
+- git diff --check passes.
 
 Remaining:
-- Human confirmation of final search excerpt spacing in the full research workflow.
+- The in-app browser refused to reload the local file URL for visual verification; no browser workaround was used.
 
-### 2026-07-20 17:25 HKT — Codex — Avoid forced centering at excerpt boundaries (formal + sample)
+### 2026-07-22 15:38 HKT — Codex — Excluded AI-loop diagnostic files from panel loading
 
-Summary:
-- Center the first matching word only when the responsive excerpt window has enough source text before and after it.
-- Keep matches near the beginning or end anchored naturally to the available text instead of forcing a centered clause.
+Summary: Prevented underscore-prefixed bundle diagnostics such as `_run-status.json`
+and `_source-chain-raw.json` from becoming generic AI messages. Only review-stage
+JSON files now enter the ordered panel output.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed.
-- Browser-tested both pages with 二: the early 硃26 match is naturally anchored at the beginning, while a separate result still centers when both sides have enough text; multi-match counts remain visible.
-- Rechecked volume as 0 筆符合 in both pages and found no browser console errors.
+- Both embedded HTML scripts parse successfully.
+- git diff --check passes.
 
 Remaining:
-- Human confirmation of the final boundary behavior in the full research workflow.
+- The in-app browser refused to reload the local file URL for visual verification; no browser workaround was used.
 
-### 2026-07-20 17:31 HKT — Codex — Lighten search example sentences (formal + sample)
+### 2026-07-22 15:34 HKT — Codex — Made typed click networks deterministic (formal + sample)
 
-Summary:
-- Changed the search dropdown's second-line sentence to a lighter theme-aware colour.
-- Preserved the red matching word and readable multi-match count styling.
+Summary: Replaced the typed-network highlight overlay with a visibility
+projection. When a dot is selected, only the allowed document sides, event
+dots, pair lines, event-source lines, response lines, and Yu-to-memorial lines
+for that click type are rendered. The old configurable reach walk remains
+available when no typed network is selected, and Claude's surrounding UI/data
+adjustments remain intact.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully: 5 scripts in formal and 6 in sample.
-- `git diff --check` passed.
-- Browser-tested both pages with 二: 363 rows, lighter sentence text, red hit, visible counts, and no browser console errors.
+- Both embedded HTML scripts parse successfully.
+- Formal/sample typed helper and renderer sections are identical.
+- Four-case relationship smoke test passes for event, official document, Yu,
+  and emperor-action clicks.
+- git diff --check passes; AGENTS.md and CLAUDE.md remain identical.
 
 Remaining:
-- Human confirmation of the final search text contrast in the full research workflow.
+- The in-app browser refused to reload the local file URL for visual
+  verification; no browser workaround was used.
 
-### 2026-07-20 17:23 HKT — Codex — Made 原文 editing inline (formal + sample)
+### 2026-07-22 16:00 HKT — Codex — Restored complete existing emperor-action cards
 
-Summary:
-- Replaced the old click-to-textarea original-text editor with an inline `contenteditable` editor at the exact 原文 location.
-- Wrapped each divided source segment in its own inline editor while keeping division titles and summaries as their existing inline editors.
-- Saved edited source text on focusout, excluding annotation notes and generated superscript numbers from the stored body text.
+Summary: Normalized nested `combined-emperor-actions.json` point lists when rendering
+皇帝行動（既有配對） cards. Existing saved cards now expand their wrapper item into
+the complete per-action list, while editing, adding, retrying, and official-response
+linking continue to target the normalized points. New bundle output already uses the
+same flat point shape.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- `git diff --check` passed.
-- Browser-tested both local pages: each document panel has a `contenteditable` `.body-inline-edit`, no `.ip-bodyedit` textarea is created, and no browser warnings or errors were reported.
+- Both embedded HTML files parse successfully.
+- The real Zhu22 nested bundle payload normalizes to all 7 emperor-action points in both tools.
+- git diff --check passes.
 
 Remaining:
-- Human confirmation of caret placement and editing feel with the complete saved research state.
+- The in-app browser refused to reload the local file URL for visual verification; no browser workaround was used.
 
-### 2026-07-20 17:31 HKT — Codex — Matched document-panel headings and division-card styling
+### 2026-07-22 16:39 HKT — Codex — Restricted repeats to cross-document reports and scoped emperor actions to the selected memorial
 
-Summary:
-- Matched the `摘要` and `原文` headings in font family, size, weight, line height, letter spacing, colour, and alignment in both review UIs.
-- Changed each division-of-part card to a white surface with only the thin brown border used by the summary card; removed the card shadow and hover border variation.
-- Preserved a readable light-gold heading colour in dark mode.
+Summary: Changed repeat-report processing and both review UIs so same-document
+repeat candidates and remainder labels are suppressed; only cross-document
+repeats are sent to semantic review and shown. Tightened 皇帝行動 extraction so
+an existing `yu_source` link only supplies an eligible 上諭 source, not every
+imperial command in that 上諭. Each action now requires a verbatim
+`memorial_anchor` in the selected memorial, and the runner drops unanchored
+上諭-only actions. Versioned derived stages replace stale emperor rows and
+stale official-response rows when an existing bundle is rerun with
+`--skip-done`.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- tool/proxy/gemini-proxy/main.py
+- tool/skills md/emperor-actions-confirmed-zhu-yu.md
+- tool/skills md/combine-confirmed-emperor-actions.md
+- tool/skills md/repeat-report-dedup.md
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
+- Python compilation passed for the runner and proxy.
+- All embedded formal/sample HTML scripts parsed successfully.
+- Cross-document repeat smoke test passed: same-document candidates were
+  excluded, and the earlier sent document was selected as the canonical report.
+- 硃25 relevance smoke test retained the 黃仕簡-supported action and rejected
+  unanchored 任承恩／常青 actions.
 - `git diff --check` passed.
-- Browser-tested the document-panel styling path and finalized the browser check without console errors.
 
 Remaining:
-- Human confirmation of the final visual treatment in the full saved research state.
+- The changed proxy code must be deployed before a remote Gemini proxy run can
+  use its new output schema. Rerun the affected bundle with `--skip-done` so
+  硃25／硃26 receive the new emperor-action extraction and downstream cards.
 
-### 2026-07-20 17:35 HKT — Codex — Enlarged division subtitles
+### 2026-07-22 16:51 HKT — Codex — Replaced exact memorial-anchor filtering with semantic direct-response filtering
 
-Summary:
-- Increased the subtitle text beneath each division-of-part title from its compact default to `14px` with a more readable line height.
-- Applied the same rule to the formal and sample review UIs.
+Summary: Revised the previous 皇帝行動 relevance rule after review. An exact
+verbatim memorial anchor was too restrictive because a valid action from the
+existing `yu_source` network may respond semantically without repeating the
+same wording. The prompt and proxy now classify each action as `direct`,
+`contextual`, or `unrelated`; only `direct` actions are emitted. `contextual`
+means the action is genuinely part of the same incident or 上諭 network but
+responds to another memorial, official, or problem, such as an action about
+任承恩／常青 not raised by 硃25. The runner keeps optional exact quote support
+when available but no longer requires it.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- tool/proxy/gemini-proxy/main.py
+- tool/skills md/emperor-actions-confirmed-zhu-yu.md
+- tool/skills md/combine-confirmed-emperor-actions.md
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
+- Python compilation passed for the runner and proxy.
+- All embedded formal/sample HTML scripts parsed successfully.
+- Semantic-gate smoke test retained a direct Yu-only action without an exact
+  quote, retained the current 硃批 action, and rejected a contextual
+  任承恩／上諭 action and a routine 尾批.
 - `git diff --check` passed.
-- Browser smoke check completed for both local pages without console errors.
 
 Remaining:
-- Human confirmation of the subtitle size in the full saved research state.
+- Deploy the updated proxy before rerunning the remote bundle. The stage
+  version was bumped so `--skip-done` regenerates emperor actions and their
+  dependent merge/repeat/official-response stages.
 
-### 2026-07-20 17:39 HKT — Codex — Aligned summary and division-card geometry
+### 2026-07-22 17:01 HKT — Codex — Fixed emperor-action scope, subtitles, repeats, and add controls
 
-Summary:
-- Standardized the summary card's inner padding to match each division card's `14px` horizontal inset.
-- Kept the `摘要` heading aligned to the shared outer edge while aligning summary text and division subtitles to the same inner text start.
+Summary: Reworked the emperor-action loop/UI path so a linked 上諭 is not treated
+as one undifferentiated action. The runner now requires a direct, verbatim anchor
+in the selected memorial, derives a point-specific subtitle when a model returns
+the whole 上諭 title, and versions the affected stage for `--skip-done` reruns.
+The formal and sample bundle loaders now honor `merge_group`/`merge_title`, show
+one primary card per merged action, repair legacy nested/flat cards, and keep
+the repeat notice directly under the point subtitle with the wording
+「此皇帝行動先前已出現於較早文書：…」. Emperor-action cards now have both a
+whole-card batch-add button and an individual point-level add button, matching
+the 林／清 event workflow. The canonical prompt also explicitly requires
+point-specific titles.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- tool/skills md/emperor-actions-confirmed-zhu-yu.md
+- tool/skills md/combine-confirmed-emperor-actions.md
+- tool/skills md/official-document-review-loop.md
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- `git diff --check` passed.
-- Browser-loaded the sample UI and confirmed the alignment rules are present; no populated document was selected in the smoke view.
+- Python compilation passed for the runner.
+- All embedded formal/sample HTML scripts parsed successfully.
+- A saved-bundle smoke check found 59 emperor points, 23 merge groups, 13
+  multi-point groups, and 4 legacy whole-wrapper titles that now receive
+  point-specific fallbacks.
+- A fake-proxy relevance smoke test retained only the directly anchored action,
+  rejected an unanchored direct-labelled action and a contextual action, and
+  produced the specific point subtitle.
+- The latest ten-document runner dry run completed without proxy calls.
+- `git diff --check` passed; formal editor remains unset and no formal/sample
+  saved-state data was edited.
 
 Remaining:
-- Human confirmation of the final visual alignment in the full saved research state.
+- The existing bundle JSON is preserved as evidence and was not regenerated in
+  this turn. Deploy the current proxy/prompt changes, then rerun the bundle with
+  `--skip-done` so the new relevance filter and point titles replace stale
+  emperor-action and downstream rows.
 
-### 2026-07-20 17:41 HKT — Codex — Rebalanced division title and summary sizes
+### 2026-07-22 17:46 HKT — Codex — Diagnosed empty non-event bundle stages and enforced SVO subtitles
 
-Summary:
-- Made each division title moderately larger (`16px`) so it is the largest text within its part.
-- Reduced the summary line below it to a still-readable `12.5px`, keeping the main source text between the two sizes.
-- Applied the same hierarchy to formal and sample UIs.
+Summary: Reviewed `zhu-first-10-official-loop2`. The bundle loader correctly
+recognizes the stage filenames, but `combined-emperor-actions.json` and
+`official-response.json` contain zero rows; the missing AI cards are therefore
+an upstream empty-output/resume problem, not a card-rendering filename problem.
+The runner now accepts a semantically `direct` emperor action from an existing
+`yu_source` 上諭 even when the wording has no exact verbatim memorial anchor,
+while continuing to reject `contextual` and `unrelated` actions. If emperor
+actions are regenerated, merge, repeat-report, and official-response stages are
+automatically invalidated and rerun. Event and source-chain subtitles are
+normalized to complete subject–verb–object/action labels, and both event prompts
+now require that form.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- tool/proxy/gemini-proxy/main.py
+- tool/skills md/extract-lin-actions.md
+- tool/skills md/extract-qing-actions-all.md
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
+- Python compilation passed for the runner and proxy.
+- All embedded formal/sample HTML scripts parsed successfully.
+- SVO smoke cases produce `林爽文攻陷彰化縣城`, `林爽文殺害俞峻`, and
+  `黃仕簡委令邱維揚帶兵渡臺`.
 - `git diff --check` passed.
-- Browser-loaded the sample UI and confirmed the final `.seg-label`/`.seg-summary` rules are present.
 
 Remaining:
-- Human confirmation of the final text hierarchy in the full saved research state.
+- The reviewed bundle remains unchanged as source evidence. Rerun it with
+  `--skip-done` after deploying the updated remote proxy so the empty emperor
+  and official-response files are regenerated.
 
-### 2026-07-20 17:44 HKT — Codex — Reduced division summaries and padded 摘要 heading
+### 2026-07-22 17:52 HKT — Codex — Versioned SVO refresh and preserved 硃批 position evidence
 
-Summary:
-- Reduced each division summary line to `12px` so it remains the smallest text in the part without becoming too small.
-- Removed the negative left offset from `摘要`, restoring the card's normal inner padding so the heading no longer touches the border.
+Summary: Added an `svo-v1` event-stage version so `--skip-done` refreshes old
+Lin/Qing event and source-chain JSON instead of leaving short legacy subtitles
+in the raw bundle. Re-running an event stage now replaces that document's old
+rows and source chains before rebuilding downstream stages. The combined-action
+path also retains 硃批 `夾批`／`尾批` and the quoted memorial context for the
+existing card UI.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
+- Python compilation and embedded formal/sample HTML parsing passed.
+- Runner version/SVO smoke test passed.
 - `git diff --check` passed.
 
 Remaining:
-- Human confirmation of the final spacing and text hierarchy in the full saved research state.
+- Run the resume command after the remote proxy is deployed; this will refresh
+  the affected event/source-chain, emperor-action, merge/repeat, and official-
+  response outputs in the selected bundle.
 
-### 2026-07-20 17:46 HKT — Codex — Aligned 原文 with the summary subtitle inset
+### 2026-07-22 18:13 HKT — Codex — Explicit 硃批 position and evidence order in emperor-action cards
 
-Summary:
-- Added the same `14px` left inset to the `原文` heading used by the summary subtitle and division subtitles.
-- Applied the adjustment to both formal and sample UIs.
+Summary: Fixed emperor-action cards whose source is a 硃批 so they identify the
+source as `夾批` or `尾批`. For an interlinear `夾批`, the card now shows the
+label and the exact memorial sentence being annotated before showing the
+`硃批` label and imperial quotation. The runner infers this documentary
+metadata from the original source text, so old bundles whose model output did
+not include the fields can still render correctly in the website.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- `git diff --check` passed.
+- `硃26` quote `更好` infers `夾批` and `仍飭不動聲色，不得稍有張皇`.
+- `硃25` quote `仍以調養為要，勿過勞` infers `夾批` and the preceding
+  `奴才於初十日帶領官兵登舟候風放洋飛渡之際` clause.
+- A trailing `已有旨了。` quote infers `尾批`.
+- Python compilation, both formal/sample embedded-script parsing, UI
+  render-order smoke tests, agent-doc synchronization, and `git diff --check`
+  passed.
 
 Remaining:
-- Human confirmation of the final heading alignment in the full saved research state.
+- Reload the reviewed bundle in the website to see the corrected card order;
+  rerun the loop only if regenerated JSON evidence is also needed.
 
-### 2026-07-20 18:21 HKT — Codex — Exported verified sample 上諭—奏折 data
+### 2026-07-22 18:19 HKT — Codex — Simplified emperor-action evidence labels
 
-Summary: Exported all verified `yu_source` 上諭—奏折 records from the sample
-state into the requested `review-tools/(2) sample/yu-source.json` file. The
-export contains 213 records, all with relation `yu_source`.
+Summary: Replaced the crowded emperor-action card labels with the requested
+short labels. The card now uses only `奏摺`, `夾批`／`尾批`, and `上諭`; the
+previous `回應奏摺`, `硃批`, and `上諭回應` labels are no longer rendered in
+this combined-action evidence block. The quotation order and clickable source
+links remain unchanged.
 
 Files:
-- `review-tools/(2) sample/yu-source.json`
-- `review-tools/shared data/review-bundles/yu-source-sample-verified/`
-- `PROJECT_LOG.md`
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Exported pair keys exactly match the 213 verified `__docPairs` source pairs
-  in `review-tools/(2) sample/sample_all.data`.
-- No records are missing or extra; all 213 source documents were found in the
-  canonical corpus.
-- The generated review bundle also contains 213 pairs.
-- `git diff --check` passed.
+- Formal and sample UI smoke tests show `夾批`, `奏摺`, the memorial context,
+  the imperial quotation, and no obsolete labels.
+- All embedded HTML scripts parsed, Python compilation passed, agent docs
+  remain identical, and `git diff --check` passed.
 
 Remaining:
-- None for this export.
+- Reload the current bundle in the website to view the simplified labels.
 
-### 2026-07-20 18:36 HKT — Codex — Grouped relationship prompts in the AI-chat menu
+### 2026-07-22 18:25 HKT — Codex — Suppress routine 已有旨了 tail comments
 
-Summary: Added a section boundary after the four relationship prompts—回應的先前上諭、回應的先前上諭（無引文）、上諭回應的奏折、回應的先前硃批—so they form one individual part before 摘要／分段 in both review UIs.
+Summary: Prevented routine tail formulas such as `已有旨了。欽此。` from
+being represented as emperor actions. The runner now removes routine 硃批
+sources before building an action; a point with no substantive paired 上諭 is
+dropped, while an action with a real 上諭 source keeps that source without the
+routine Zhu quote. Both website views apply the same cleanup retroactively to
+already saved bundles. The combined-action stage version is now `v8`, and the
+proxy prompt explicitly tells the model not to list routine formulas as
+sources.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- tool/scripts py/run_mass_prompt_chain_test.py
+- tool/proxy/gemini-proxy/main.py
+- tool/skills md/combine-confirmed-emperor-actions.md
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Confirmed both menus keep the four requested prompts together and place the separator immediately before 摘要／分段.
-- Parsed all embedded scripts in both HTML files successfully.
-- `git diff --check` passed.
+- `已有旨了。欽此。` is removed as a runner source and as a UI-only point.
+- A substantive 上諭 paired with that routine Zhu source remains visible with
+  the 上諭 source only.
+- Python compilation, formal/sample embedded-script parsing, runner/UI smoke
+  tests, agent-doc synchronization, and `git diff --check` passed.
 
 Remaining:
-- Human confirmation of the new AI-chat menu grouping.
+- Reload the bundle; rerun with `--skip-done` if regenerated JSON should also
+  remove the routine source from the saved output.
 
-### 2026-07-20 18:39 HKT — Codex — Replaced global click-network reach controls with lane-first profiles
+### 2026-07-22 18:36 HKT — Codex — Show repeat-report flags in loaded AI cards
 
-Summary:
-- Replaced the old relationship-type depth controls for normal dot clicks with four source-lane sections, each containing four target-lane depth controls (`0`-`4` and `∞`).
-- Rebuilt normal click traversal as a mixed dot-to-dot graph covering event sources, event responses, document pairs, 硃批 send/receive endpoints, matched 上諭—奏摺 links, and emperor-action information sources.
-- Preserved the clicked 硃批 endpoint side and kept selected network endpoint dots visible even when their ordinary dot filter is off. The separate event-line/show-network path remains independent.
-- Added persisted presets and opened the new panel from the header Tools > 連線 group in both formal and sample UIs.
+Summary: Fixed the review-bundle card renderer so cross-document repeat notices
+are derived directly from each saved card's `same_as` and `earliest_report`
+fields. The notice now survives an incomplete browser-side extraction registry,
+uses the earliest reporting document date supplied by the loop, and continues
+to suppress same-document repeats. The formal and sample renderers remain in
+sync.
 
 Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- `git diff --check` passed.
-- Browser smoke-tested the formal and sample pages: the new panel renders 4 source sections and 16 target rows; changing 第一線 → 第二線 to `0` reduced the clicked event network to the seed event; a document click highlighted the selected 硃批 send/receive pair.
+- The latest test bundle's 4 林 and 3 清 pipeline flags each produce a visible
+  cross-document warning; 皇帝 remains at 0.
+- A same-document annotation produces no warning.
+- Legacy `__xdocRepeat` records still render, both embedded HTML scripts parse,
+  Python compilation passes, and `git diff --check` passes.
 
 Remaining:
-- Human confirmation of the default lane depths and final visual grouping.
+- Refresh the website and load the bundle again so the updated renderer is used.
 
-### 2026-07-20 18:41 HKT — Codex — Defined the AI loop process
+### 2026-07-22 18:39 HKT — Codex — Stack emperor-action source evidence into rows
 
-Summary: Documented the end-to-end AI loop from terminal model execution to
-human review and chart integration.
+Summary: Reworked the combined 皇帝行動 evidence block so each available
+source is a complete horizontal row: `奏摺` context, `夾批`／`尾批` quotation,
+and `上諭` quotation. This removes the previous CSS-grid placement that put
+the labels for two different sources on the same line and made the quotations
+appear under the wrong headings.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- A 夾批 with memorial context and 上諭 renders in the order `奏摺` → `夾批`
+  → `上諭`, one row per source.
+- Formal/sample source-render blocks are identical, both embedded HTML scripts
+  parse, and `git diff --check` passes.
+
+Remaining:
+- Refresh the website and reload the bundle to see the three-row layout.
+
+### 2026-07-22 18:45 HKT — Codex — Expand short 夾批 memorial context quotations
+
+Summary: Fixed short `奏摺` evidence such as `首報加以重賞` on a 夾批 card.
+The runner now recovers the complete sentence immediately before the inline
+硃批 marker and replaces a shorter model-supplied context when necessary. The
+proxy and saved prompt now explicitly require a complete sentence or clause
+with enough context to identify the subject, action, and object. The website
+also expands already-saved short context quotations at render time, so old
+bundles do not require regeneration to display the clearer evidence.
+
+Files:
+- tool/scripts py/run_mass_prompt_chain_test.py
+- tool/proxy/gemini-proxy/main.py
+- tool/skills md/emperor-actions-confirmed-zhu-yu.md
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- 硃26 `是` now displays `臣密飭該道、府明白曉諭各地保族、鄰人等，或有竄回原籍，立即捕拿，首報加以重賞`.
+- Existing short saved context is expanded by the formal and sample UIs.
+- The combined-action stage version is `v9`, both UI script sets parse, Python
+  compilation passes, and `git diff --check` passes.
+
+Remaining:
+- Refresh the website and reload the bundle; rerun the loop with `--skip-done`
+  if the longer quotation also needs to be written into regenerated JSON.
+
+### 2026-07-22 19:06 HKT — Codex — Correct emperor-action source and response metadata
+
+Summary: Fixed the 皇帝行動 card renderer to use each point's actual verified
+source list instead of the item-level 上諭 fallback. Zhu-only actions now show
+`📜 硃批` and open the 硃批 source; points with both sources show the memorial
+and 上諭 quotations as separate evidence groups with a divider before 上諭.
+The `↩ 回應` line now resolves the earliest confirmed reply document from the
+existing pair network, so the 諭13 network displays 硃94 rather than the selected
+memorial or a fabricated 上諭 citation.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Formal and sample embedded HTML scripts parse.
+- A Zhu-only 硃26 point renders `📜 硃批`, no `📜 上諭`, and resolves `硃94`.
+- `git diff --check` passes.
+
+Remaining:
+- Refresh the website and reload the affected review bundle to see the corrected cards.
+
+### 2026-07-22 19:26 HKT — Codex — Deduplicate emperor-action metadata rows
+
+Summary: Cleaned the 皇帝行動 card metadata for combined Zhu/Yu actions. The
+quotation area still preserves the separate 奏摺／夾批／上諭 evidence, while the
+metadata area now keeps one canonical source row—the linked 上諭—followed by its
+date. Duplicate 上諭 rows, the extra 硃批 metadata row, and the distracting
+↩ 回應 row are no longer shown on this card.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- The 硃25 item `指示常青等嚴飭沿海巡防以防餘匪內渡` renders exactly one
+  `📜 上諭` row for 諭13 and the 1786-12-27 date, with no duplicate source or
+  response metadata.
+- A Zhu-only point still renders its actual `📜 硃批` source.
+- Formal and sample embedded HTML scripts parse, and `git diff --check` passes.
+
+Remaining:
+- Refresh the website and reload the bundle to see the cleaned card.
+
+### 2026-07-22 19:27 HKT — Codex — Correct AI-loop elapsed dates and official-response receipt dates
+
+Summary: Updated the formal and sample AI-loop card renderers so existing
+皇帝行動 cards put the memorial-to-上諭 elapsed interval on the 上諭 date
+line, while 官員回應 cards show the response send-to-receipt interval on the
+canonical source dates. The 硃94 example now resolves to `1787/01/10（14 日）`
+and `1787/01/22（12 日）`; the 諭13／硃21 pairing resolves to a 15-day
+interval. Adding a response event now stores the source record's actual
+皇帝收到日期. Also fixed two out-of-scope helpers that prevented the latest
+bundle from completing its emperor-action and response-linking load path.
+
+Files:
+- review-tools/(1) formal/index.html
+- review-tools/(2) sample/index.html
+- PROJECT_LOG.md
+
+Verified:
+- Both embedded HTML script sets parse (5 formal blocks; 6 sample blocks).
+- `git diff --check` passes.
+- Date arithmetic confirms 15, 14, and 12 days for the requested links.
+- Browser-level check of `zhu-first-10-official-loop` rendered the official
+  response card with the corrected 硃94 send and receipt dates and retained the
+  `加入為官員回應事件` action.
+
+Remaining:
+- Reload the affected bundle in the user's browser if the current tab has not
+  yet been refreshed after this final source-date change.
+
+## 2026-07-23 08:21 HKT — Codex
+
+Current state:
+- Ran the 28 `硃批` documents sent in 1786/12 in
+  `zhu-december-official-loop`; all per-document extraction stages completed
+  and the bundle was written.
+- The recovery pass completed cross-document repeat detection with
+  `林 36`, `清 39`, and `皇帝 14` flagged rows.
+- The recovery pass was stopped at the user's request during
+  `official-response`; 76 rows are present and 21 still have `responseError`,
+  mostly remote disconnects in `硃41`, `硃42`, and `硃56`.
+- No 1787/01 documents have been run.
+
+Files changed:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `review-tools/shared data/review-bundles/zhu-december-official-loop/`
+- `PROJECT_LOG.md`
+
+Verification:
+- `python3 -m py_compile "tool/scripts py/run_mass_prompt_chain_test.py"`
+  passed.
+- December bundle manifest and output files exist.
+- The runner was patched so `--skip-done` retries rows with `responseError`
+  instead of treating them as complete.
+
+Remaining:
+- Resume December `official-response` with the recovery command in the handoff
+  message, then start the separate 1787/01 bundle month by month.
+
+### 2026-07-23 11:05 HKT — Codex — Added local checkpoint rule
+
+Summary: Documented the requirement to create local Git checkpoints after
+coherent edits while keeping pushes separate and optional.
 
 Files:
 - `AGENTS.md`
@@ -1968,21 +2254,22 @@ Files:
 - `PROJECT_LOG.md`
 
 Verified:
-- The AI loop is defined as a chained run of saved prompts and/or skills
-  using a specified AI model on two or more original documents from the
-  terminal.
-- The definition requires JSON output and a review bundle loaded into the
-  website's AI chat for user review and editing before chart addition.
-- The definition was added identically to both agent instruction files.
+- Both instruction files require staging only the current edit's files and
+  creating a local commit after each coherent edit.
+- The rule distinguishes local commits from `git push` and preserves unrelated
+  pre-existing worktree changes.
 
 Remaining:
-- None.
+- Commit the two instruction-file changes without staging unrelated changes.
 
-### 2026-07-20 18:49 HKT — Codex — Scaled the visible network button with 介面字級
+### 2026-07-23 11:44 HKT — Codex — Recovered paired formal/sample UI and network source paths
 
-Summary: Applied the `--ui-fs` interface-font scale to the visible
-`點擊後顯示範圍` button's text, horizontal padding, and toolbar height in both
-formal and sample UIs.
+Summary: Recovered the logged newer review-tool adjustments into both HTML
+surfaces without replacing the current explicit typed click-network renderer.
+Static `yu-source.json` pairs now enter the relationship graph, the normalized
+人物/search controls and reviewed AI-output projection are restored, and the
+document panel no longer renders the retired 標註／表格／AI原版 toggles. BODY
+editing remains inline.
 
 Files:
 - `review-tools/(1) formal/index.html`
@@ -1990,101 +2277,11 @@ Files:
 - `PROJECT_LOG.md`
 
 Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- The button's font and geometry reference `--ui-fs` in both HTML files.
-- `git diff --check` passed.
+- All embedded HTML script blocks parse in both files.
+- `git diff --check` passes.
+- Both static Yu-source files contain 213 usable pairs, and the recovered
+  formal/sample sections are equivalent after route-name normalization.
+- The current typed click-network function remains present once per file.
 
 Remaining:
-- None.
-
-### 2026-07-20 18:51 HKT — Codex — Hid the click-network settings button
-
-Summary: Hid the visible `點擊後顯示範圍` toolbar control in both formal and
-sample UIs while preserving the existing lane-first panel logic and handler.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `PROJECT_LOG.md`
-
-Verified:
-- Embedded JavaScript parsed successfully in both HTML files.
-- The network-settings control is hidden by CSS in both HTML files.
-- `git diff --check` passed.
-
-Remaining:
-- None.
-
-### 2026-07-20 19:54 HKT — Codex — Implemented the official-document-first AI loop
-
-Summary: Added a one-click official-document-centred sequence to formal and
-sample review tools, updated the workflow map, and made confirmed pair JSON the
-authoritative graph for all relationship-following stages.
-
-Changed:
-- The loop now runs summary, division, 林方 extraction, and combined three-class
-  清方 extraction before relationship analysis.
-- Event extraction reuses simultaneous source-chain tracing and cross-document
-  duplicate detection; earliest matches are ordered by report date and retain
-  merge-versus-separate controls.
-- Existing `official_reply_to_yu` pairs feed response-focused earlier-上諭 cards
-  without another corpus search or pair judgement.
-- The selected document's 硃批 and confirmed `yu_source` 上諭 feed combined,
-  multi-source emperor-action cards with repeated-action review controls.
-- Every confirmed `yu_source` 上諭 is followed through confirmed
-  `official_reply_to_yu` edges to later official responses, even if the model
-  does not retain that 上諭 in an emperor-action card.
-- The workflow source viewer now exposes the new specifications and Gemini
-  proxy implementation.
-
-Files:
-- `review-tools/(1) formal/index.html`
-- `review-tools/(2) sample/index.html`
-- `review-tools/(4) workflow/index.html`
-- `review-tools/(4) workflow/app.js`
-- `review-tools/(4) workflow/README.md`
-- `review-tools/server.py`
-- `tool/skills md/official-document-review-loop.md`
-- `PROJECT_LOG.md`
-
-Verified:
-- Formal and sample official-loop implementation blocks match.
-- Embedded JavaScript parses in both review HTML files; workflow JavaScript and
-  modified Python files compile.
-- All 24 visible workflow nodes have English and Traditional Chinese detail
-  records; relevant pair files remain valid JSON.
-- Formal, sample, and workflow routes returned HTTP 200 on a temporary local
-  server; `/api/workflow-sources` returned HTTP 200 and exposed all four new
-  loop/proxy sources.
-- `git diff --check` passed.
-
-Remaining:
-- Run a live Gemini request and human-review the generated cards when the proxy
-  runtime dependencies and credentials are available.
-
-### 2026-07-20 20:20 HKT — Codex — Added end-of-run spending table to mass prompt runner
-
-Summary: Added per-loop-stage token and USD spending accounting for the
-Gemini 3.5 Flash mass runner, including an all-stage total.
-
-Changed:
-- Grouped calls under the loop stages used by `run_mass_prompt_chain_test.py`.
-- Added standard Gemini model rates, command-line price overrides, and a
-  serializable `cost-summary.json` beside each generated bundle.
-- Marked costs as approximate when the proxy does not return usage metadata;
-  exact usage is used automatically if the proxy supplies it.
-
-Files:
-- `tool/scripts py/run_review_bundle_test.py`
-- `tool/scripts py/run_mass_prompt_chain_test.py`
-- `PROJECT_LOG.md`
-
-Verified:
-- Both runner files pass Python bytecode compilation.
-- `git diff --check` passed.
-- Offline replay of the supplied 硃25 token lines produced a total of
-  approximately `$1.101750` at the standard Gemini 3.5 Flash rates.
-
-Remaining:
-- The current deployed proxy still returns no usage metadata, so the live
-  table will remain estimated until that proxy is redeployed with usage data.
+- Human browser refresh and visual confirmation of the formal and sample tools.
