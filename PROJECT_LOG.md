@@ -2482,3 +2482,24 @@ Verified:
 Remaining:
 - Human review of the 13-day 台951 example, the 24.86/45-day project
   statistics, and all pending page-level citations before publication.
+
+### 2026-07-23 14:31 HKT — Codex — Drafted the visualization section
+
+Summary: Wrote the Traditional Chinese section explaining why visualizing
+time, actors, places, actions, and document relationships is necessary for
+studying 奏折 and 上諭. The section connects the 林爽文 research example and
+the historical use of war maps to the website's evidence-aware chart design.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used the local FYP research draft and 林加豐's article PDF before drafting.
+- Applied full in-text bibliographic citations and marked the FYP draft's
+  missing author/year as unresolved rather than inventing them.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the FYP page reference and final alignment with the actual
+  four-lane chart labels before publication.
