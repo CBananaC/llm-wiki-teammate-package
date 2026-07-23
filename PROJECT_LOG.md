@@ -2661,6 +2661,30 @@ Remaining:
 - Final editorial review of the complete outline, exact UI lane names, internal
   statistics, and missing FYP author/year metadata before publication.
 
+### 2026-07-23 18:05 HKT — Codex — Revised the Qing document introduction
+
+Summary: Revised the opening website section to introduce 奏折、硃批 and 上諭 as
+three connected but distinct layers of Qing imperial communication. The revision
+defines 奏折 as the upward official memorial, 硃批 as the emperor's vermilion
+reply that may be absent, and 上諭 as an imperial instruction. It also separates
+上諭 from 廷寄, explains that the communication chain is not automatic, and adds
+a 林爽文 case example based on奏折 and 上諭 used alongside battle maps.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Consulted and visually checked the local 王劍 PDF, and read the relevant local
+  宋希斌 and 李泰翰 source extracts.
+- Added full in-text citations and marked the 宋希斌 page number as pending where
+  the local excerpt does not expose a reliable book page.
+- `git diff --check` passes.
+
+Remaining:
+- Human verification of the exact 宋希斌 book pages, 李泰翰 PDF page references,
+  and the final project field names for 奏折、硃批、上諭 and 廷寄.
+
 ### 2026-07-23 16:00 HKT — Codex — Added merge controls for repeated emperor actions
 
 Summary: Repeated 皇帝行動 cards now resolve stable `same_as` / `card_id` references to the earlier committed emperor-action dot. An uncommitted repeat offers both merge and standalone-add choices; an already separate repeat keeps its open button and offers a merge action.
