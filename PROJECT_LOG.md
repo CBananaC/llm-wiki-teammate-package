@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (header dropdown handlers restored; human refresh next)
+- Formal review editor: none (原文 label alignment complete; human refresh next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -2369,3 +2369,22 @@ Verified:
 Remaining:
 - The in-app browser refused to reload these local `file://` pages under its
   local-file policy; human refresh and click confirmation are still needed.
+
+### 2026-07-23 13:08 HKT — Codex — Aligned 原文 with 摘要 text
+
+Summary: Matched the divided 原文 heading's left inset to the 摘要 text
+inset. Single-part original cards retain their existing card padding so the
+heading is not indented twice.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All embedded HTML script blocks parse in both files.
+- The alignment CSS block is identical in formal and sample.
+- `git diff --check` passes.
+
+Remaining:
+- Human browser refresh and visual confirmation of the horizontal alignment.

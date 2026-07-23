@@ -13008,6 +13008,15 @@ body .ix-text .blk-label, body.dark-mode .ix-text .blk-label {
   font-weight:700 !important; color:var(--accent) !important;
   text-transform:none !important; letter-spacing:0 !important;
 }
+/* Keep the 原文 heading on the same inner text column as 摘要. */
+body .ix-text .blk.has-divisions .blk-label,
+body.dark-mode .ix-text .blk.has-divisions .blk-label {
+  margin-left:16px !important;
+}
+body .ix-text .blk.single-part .blk-label,
+body.dark-mode .ix-text .blk.single-part .blk-label {
+  margin-left:0 !important;
+}
 body .ix-summary-text, body.dark-mode .ix-summary-text {
   margin:0 !important; line-height:1.75 !important; color:var(--ink) !important;
 }
