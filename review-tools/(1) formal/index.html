@@ -7569,6 +7569,46 @@
         if(mr.whenAr) return {dateAr:mr.whenAr, whenCh:mr.whenCh||'', title:mr.title||''};
         return null;
       }
+      // Resolve the earlier committed emperor-action point behind a combined-emperor-actions repeat.
+      // The pipeline's same_as value is usually a stable card id (for example
+      // 硃25#emperor#16), not the browser-generated event id, so search saved chat turns for the
+      // matching point and then follow its __evId to the existing fourth-line dot.
+      function emperorRepeatRefs(pt){
+        const refs=new Set();
+        [pt&&pt.same_as,pt&&pt.same_as_event_id,pt&&pt.card_id,pt&&pt.merge_group,
+          pt&&pt.earliest_report&&pt.earliest_report.id].forEach(id=>{ id=String(id||'').trim(); if(id) refs.add(id); });
+        return refs;
+      }
+      function emperorRepeatTarget(pt){
+        if(!pt) return null;
+        const refs=emperorRepeatRefs(pt);
+        if(!refs.size) return null;
+        const targetRefs=new Set();
+        [pt.same_as,pt.same_as_event_id,pt.earliest_report&&pt.earliest_report.id].forEach(id=>{ id=String(id||'').trim(); if(id) targetRefs.add(id); });
+        for(const id of targetRefs){ const direct=typeof eventById==='function'?eventById(id):null; if(direct&&direct.actor==='emperor') return {event:direct, point:null, item:null}; }
+        let found=null; const seenStores=new Set();
+        const inspectStore=(store,storeId)=>{
+          if(found||!store||typeof store!=='object'||seenStores.has(store)) return;
+          seenStores.add(store);
+          chatArr(store).forEach(turn=>{
+            if(found||!turn||turn.kind!=='edictmatch') return;
+            (turn.items||[]).forEach(item=>{
+              if(found||!item) return;
+              ensureEmperorPoints(item).forEach(candidate=>{
+                if(found||!candidate||candidate===pt) return;
+                const ids=[candidate.card_id,candidate.merge_group]
+                  .map(id=>String(id||'').trim()).filter(Boolean);
+                if(!ids.some(id=>targetRefs.has(id))) return;
+                const ev=candidate.__evId&&typeof eventById==='function'?eventById(candidate.__evId):null;
+                if(ev&&ev.actor==='emperor') found={event:ev,point:candidate,item,storeId};
+              });
+            });
+          });
+        };
+        Object.keys(EDITS||{}).filter(id=>id&&!id.startsWith('__')).forEach(id=>inspectStore(EDITS[id],id));
+        Object.keys(workspaceGroups()).forEach(id=>inspectStore(workspaceGroups()[id],'group:'+id));
+        return found;
+      }
       // Cross-document repeat note for an emperor-action POINT (combined-emperor-actions carries the
       // pipeline's same_as / earliest_report straight through -- no normalize step strips them).
       // Reuses the cx-jumpreport hover/click handler (data-doc + data-title), which no-ops when it
@@ -7580,7 +7620,8 @@
         if(!repeatId && !er.doc_id && !er.title) return '';
         if(er.doc_id && candidateDocIds(pt).has(String(er.doc_id))) return '';
         let docId=String(er.doc_id||''), title=String(er.title||''), date=String(er.date||'');
-        const prior=(repeatId&&typeof eventById==='function')?eventById(repeatId):null;
+        const match=emperorRepeatTarget(pt);
+        const prior=(match&&match.event)||((repeatId&&typeof eventById==='function')?eventById(repeatId):null);
         if(prior){
           const src=(prior.sources||[])[0]||{};
           docId=docId||String(src.doc_id||''); title=title||evTitle(prior); date=date||String(prior.dateAr||'');
@@ -7589,6 +7630,21 @@
         const ref=[docId, title].filter(Boolean).join('\uff0f')+(date?('，'+date):'');
         if(!ref) return '';
         return `<div class="cx-matchnote em-repeatnote cx-jumpreport" data-doc="${esc(docId)}" data-evid="${esc(prior&&prior.id||'')}" data-title="${esc(title)}" title="游標移上：在事件線上標示；點擊：開啟該事件">\u21bb <b>此皇帝行動先前已出現於較早文書：${esc(ref)}</b></div>`;
+      }
+      function emperorRepeatActionButtons(pt,it,m,i,j,k){
+        const match=emperorRepeatTarget(pt), target=match&&match.event;
+        const base=`data-i="${i}" data-j="${j}" data-k="${k}"`;
+        if(!target || (pt.__evId&&String(pt.__evId)===String(target.id))){
+          return pt.__added?emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k}):`<button class="cx-add em-addact" ${base} type="button">加入為皇帝行動</button>`;
+        }
+        if(pt.__added){
+          const doneId=pt.__mergedInto||pt.__evId;
+          const done=pt.__mergedInto
+            ?`<button class="cx-done ea-goto" data-evid="${esc(doneId||'')}" type="button">✓ 已加入並併入（開啟）</button>`
+            :emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k});
+          return done+(!pt.__mergedInto?`<button class="cx-addmention em-repeat-merge" ${base} data-target-evid="${esc(target.id)}" type="button" title="將此皇帝行動併入既有皇帝行動點">＋併入既有皇帝行動</button>`:'');
+        }
+        return `<button class="cx-addmention em-repeat-merge" ${base} data-target-evid="${esc(target.id)}" type="button" title="將此重複皇帝行動併入既有皇帝行動點">加入（併入既有皇帝行動）</button><button class="cx-addstandalone em-repeat-standalone" ${base} type="button" title="保留為獨立的皇帝行動點，不併入「${esc(evTitle(target))}」">仍獨立加入（不合併）</button>`;
       }
       function matchNoteHtml(it){
         const mr=it.__matchReg; if(!mr) return '';
@@ -8645,7 +8701,7 @@
               }
               return `<div class="em-group">${overview}`
                 + pts.map((pt,k)=>{
-                    const addBtn=pt.__added?emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k}):`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" data-k="${k}" type="button">加入為皇帝行動</button>`;
+                    const addBtn=emperorRepeatActionButtons(pt,it,m,i,j,k);
                     const infoBtn=pt.__added&&pt.__evId?infoSourceFollowupHtml(pt.__evId):'';
                     const memorialHtml=emperorMemorialQuoteHtml(pt,it,m);
                     const yuSource=emperorActionSources(pt,it,m).find(s=>s.type==='上諭'&&s.quote);
@@ -8986,6 +9042,37 @@
             st2.textContent='已建立「'+subtitle+'」，但來源文書缺少可判讀的日期，暫未能標示在時間軸第四線上——可點按「已建立但未能定位」開啟事件卡片手動補上日期。';
           }
         }
+        function commitEdictPointReview(it, pt, m){
+          const result=buildEdictPointCommit(it, pt, m), ev=result.ev;
+          const source=emperorPrimarySource(pt,it,m)||{};
+          markAIReviewDocId(source.doc_id||it.edict_id||it.memDoc, 'emperor-action', 'R');
+          if(pt.__pendingResponses&&pt.__pendingResponses.length) patchEvent(ev.id,{__suggestedResponses:pt.__pendingResponses});
+          delete pt.__pendingResponses;
+          if(pt.__pendingInfoSources&&pt.__pendingInfoSources.length) patchEvent(ev.id,{__suggestedInfoSources:pt.__pendingInfoSources.map(s=>Object.assign({include:true},s))});
+          delete pt.__pendingInfoSources;
+          pt.__added=true; pt.__evId=ev.id;
+          return result;
+        }
+        function mergeEmperorRepeatPoint(it, pt, m, targetId){
+          const target=eventById(targetId)||((emperorRepeatTarget(pt)||{}).event); if(!target) return null;
+          let from=pt.__evId?eventById(pt.__evId):null, result=null;
+          if(!from){ result=commitEdictPointReview(it,pt,m); from=result&&result.ev; }
+          if(from&&from.id!==target.id) mergeEvents(target.id,from.id);
+          pt.__added=true; pt.__evId=target.id; pt.__mergedInto=target.id;
+          return {ev:target, subtitle:(result&&result.subtitle)||edictPointSubtitle(pt,it)};
+        }
+        log.querySelectorAll('.em-repeat-standalone').forEach(b=>b.onclick=()=>{
+          const m=chatArr(curStore())[+b.dataset.i], it=m&&m.items&&m.items[+b.dataset.j]; if(!it) return;
+          const pt=ensureEmperorPoints(it)[+b.dataset.k]; if(!pt||pt.__added) return;
+          const result=commitEdictPointReview(it,pt,m); saveEdits(); renderLog({preserve:true}); reportCommit(result.ev,result.subtitle);
+        });
+        log.querySelectorAll('.em-repeat-merge').forEach(b=>b.onclick=()=>{
+          const m=chatArr(curStore())[+b.dataset.i], it=m&&m.items&&m.items[+b.dataset.j]; if(!it) return;
+          const pt=ensureEmperorPoints(it)[+b.dataset.k]; if(!pt) return;
+          const result=mergeEmperorRepeatPoint(it,pt,m,b.dataset.targetEvid); if(!result) return;
+          saveEdits(); renderLog({preserve:true}); reportCommit(result.ev,result.subtitle);
+          st2.textContent='已將「'+result.subtitle+'」併入既有皇帝行動點。';
+        });
         log.querySelectorAll('.em-addact').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it) return;
           if(b.dataset.k!=null){
             const pt=ensureEmperorPoints(it)[+b.dataset.k]; if(!pt||pt.__added) return;
@@ -9111,13 +9198,13 @@
         // Re-reported candidate (carries __matchReg, see runExtract/matchNoteHtml): "加入" here never
         // creates an independent second dot -- see commitMatchedCandidate for the two paths (extend
         // an already-committed event's mentions, or commit both mentions together for the first time).
-        log.querySelectorAll('.cx-addmention').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitMatchedCandidate(it); if(!ev) return; const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:(ev.__suggestedChains||[]).concat(it.__traceChains)}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已將此回報併入既有事件「'+(ev.subtitle||'')+'」。'; });
+        log.querySelectorAll('.cx-addmention:not(.em-repeat-merge)').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitMatchedCandidate(it); if(!ev) return; const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:(ev.__suggestedChains||[]).concat(it.__traceChains)}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已將此回報併入既有事件「'+(ev.subtitle||'')+'」。'; });
         // Override the AI's duplicate match on user's own judgement: commit this candidate as its own
         // independent dot via the plain commitProposal path (same as a non-matched candidate), never
         // touching commitMatchedCandidate's merge logic, even though it still carries __matchReg (kept
         // intact so the match note / later manual "＋加入來源到" merge option both stay available if
         // the user changes their mind after all).
-        log.querySelectorAll('.cx-addstandalone').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); if(!ev) return; const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:it.__traceChains}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已以獨立事件加入「'+(ev.subtitle||'')+'」，未併入既有事件。'; });
+        log.querySelectorAll('.cx-addstandalone:not(.em-repeat-standalone)').forEach(b=>b.onclick=()=>{ const m=chatArr(curStore())[+b.dataset.i]; const it=m&&m.items&&m.items[+b.dataset.j]; if(!it||it.__added) return; const ev=commitProposal(it); if(!ev) return; const s=(it.sources||[])[0]||{}; if(s.doc_id) markAIReviewDocId(s.doc_id, 'extract', 'L'); it.__added=true; it.__evId=ev.id; if(it.__traceChains&&it.__traceChains.length) patchEvent(ev.id,{__suggestedChains:it.__traceChains}); delete it.__traceChains; saveEdits(); renderLog({preserve:true}); st2.textContent='已以獨立事件加入「'+(ev.subtitle||'')+'」，未併入既有事件。'; });
         // Manual "add source" for an already-added candidate that turned out to duplicate another,
         // already-committed event (see matchedEarlierEventId): adds THIS document's own quote/
         // subtitle/description/where/when/who into the OTHER event's 回報記錄 mentions list, exactly

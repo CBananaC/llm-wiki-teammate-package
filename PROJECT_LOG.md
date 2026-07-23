@@ -2660,3 +2660,21 @@ Verified:
 Remaining:
 - Final editorial review of the complete outline, exact UI lane names, internal
   statistics, and missing FYP author/year metadata before publication.
+
+### 2026-07-23 16:00 HKT — Codex — Added merge controls for repeated emperor actions
+
+Summary: Repeated 皇帝行動 cards now resolve stable `same_as` / `card_id` references to the earlier committed emperor-action dot. An uncommitted repeat offers both merge and standalone-add choices; an already separate repeat keeps its open button and offers a merge action.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files parse all inline scripts successfully.
+- The persisted sample point `硃34#emperor#28` resolves to `evmrx6mkh6qw4`.
+- Live sample-server UI shows `＋併入既有皇帝行動` for the requested card and both merge/standalone buttons for uncommitted repeat cards.
+- `git diff --check` passes.
+
+Remaining:
+- No button was clicked during verification because doing so would alter the saved research state; the rendered handlers and data targets were inspected without mutation.
