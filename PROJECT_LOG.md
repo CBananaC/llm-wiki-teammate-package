@@ -2550,3 +2550,24 @@ Verified:
 Remaining:
 - Human review of the 台852／台951 source details and the page numbers for
   李智君 and 李泰翰 before publication.
+
+### 2026-07-23 14:52 HKT — Codex — Drafted the AI-human review design section
+
+Summary: Wrote the Traditional Chinese section defining the core design
+principle「AI 提出，人作判斷」. It explains skills, structured AI output, the
+AI chat panel, source verification, review states, and the rule that only
+human-confirmed results enter the four-lane chart.
+
+Files:
+- `intro Website/outline.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Used the local 韓秀英 research text and the project's documented AI workflow.
+- Applied full in-text citation and distinguished historical-method evidence
+  from the website's own system design.
+- `git diff --check` passes.
+
+Remaining:
+- Human review of the 韓秀英 page range and final alignment with the actual
+  skill output schema, chat-panel controls, and chart status labels.
