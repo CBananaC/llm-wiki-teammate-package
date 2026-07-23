@@ -54,6 +54,12 @@ layer that consumes human-reviewed results.
 6. At handoff, clear the formal editor field when applicable and record the next concrete action.
 7. When asked for an end-of-day summary, review all progress entries recorded for that date, summarize the complete day's progress, and append the summary as another timestamped entry in `PROJECT_LOG.md`. Preserve the individual progress entries.
 
+## Local checkpoints
+
+- After every coherent edit, run `git add` on only the files changed by that edit and create a local `git commit` with a concise message. Include the corresponding `PROJECT_LOG.md` update when it can be committed without absorbing unrelated pre-existing changes.
+- A local commit is a recovery checkpoint on this computer; it does not upload anything.
+- Do not run `git push` automatically. Pushing is a separate, optional action governed by the GitHub push protocol.
+
 ## Formal/sample isolation
 
 - When editing either `review-tools/(1) formal/index.html` or
