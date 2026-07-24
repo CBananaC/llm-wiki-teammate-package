@@ -2862,3 +2862,26 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; no
   state-mutating UI click was performed.
+
+### 2026-07-24 17:21 HKT — Codex — Simplified combined emperor-action cards
+
+Summary: Updated the paired `皇帝行動` renderer for existing Zhu/Yu matches.
+The card now uses one concise header, hides the overview block and action-type
+label, shows `奏摺原文` before its 夾批 quotation, uses `夾批` / `尾批` labels,
+and places separators between complete quotation/source-information units
+instead of between a quotation and its own metadata.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All 5 formal and 6 sample inline scripts parsed successfully with Node.
+- Targeted renderer checks passed for the concise header, hidden overview and
+  action-type label, memorial quotation ordering, and position labels.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; no
+  state-mutating UI click was performed.

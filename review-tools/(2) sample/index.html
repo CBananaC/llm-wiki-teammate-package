@@ -7919,7 +7919,7 @@
               const infoBtn=it.__added&&it.__evId?infoSourceFollowupHtml(it.__evId):'';
               return `<div class="cx-ev em-item">
                 <div class="em-aspect">${esc(it.subtitle||'皇帝行動')}</div>
-                ${(it.aspect||it.source)?`<div class="em-meta">${esc([it.aspect,it.source].filter(Boolean).join('・'))}</div>`:''}
+                ${it.source?`<div class="em-meta">${esc(it.source)}</div>`:''}
                 <div class="em-detail"><span class="l">${esc(it.source||'御筆')}</span><div class="cx-q" data-doc="${doc}" title="點按在原文中顯示">「${esc(it.quote||'')}」</div></div>
                 ${it.description?`<div class="em-how">${esc(it.description)}</div>`:''}
                 ${emperorActionDocInfo(it)}
@@ -7979,7 +7979,7 @@
         const pos=zhupiPositionLabel(it);
         if(pos!=='夾批') return it.responds_to?`<div class="zp-detail"><span class="l">回應</span><div class="v em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="responds_to">${esc(it.responds_to)}</div></div>`:'';
         const quote=String(it.responds_to||'').trim();
-        return `<div class="zp-detail zp-context"><span class="l">夾批所批奏摺原文</span>${quote?`<div class="cx-q" data-doc="${doc}" title="點按在奏摺原文顯示">「${esc(quote)}」</div>`:'<div class="record-empty">未提供夾批所批奏摺原文。</div>'}</div>`;
+        return `<div class="zp-detail zp-context"><span class="l">奏摺原文</span>${quote?`<div class="cx-q" data-doc="${doc}" title="點按在奏摺原文顯示">「${esc(quote)}」</div>`:'<div class="record-empty">未提供奏摺原文。</div>'}</div>`;
       }
       function respDocInfo(it){
         const rec=(typeof recByDocId2==='function'?recByDocId2(it.doc_id):null)||{};
@@ -8082,12 +8082,13 @@
           const rank=t=>t==='硃批'?0:(t==='奏摺'?1:(t==='上諭'?2:3));
           return rank(ta)-rank(tb)||a.index-b.index;
         });
-        return ordered.map(({s})=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=pos&&pos!=='硃批'?`${typ}（${esc(pos)}）`:typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
-          const context=(typ==='硃批'&&pos==='夾批'&&meta.context_quote)?`<div class="em-detail zp-context"><span class="l">夾批所批奏摺原文</span><div class="cx-q cx-q-off" data-doc="${esc(s.doc_id||'')}" title="點按在奏摺原文顯示">「${esc(meta.context_quote)}」</div></div>`:'';
+        return ordered.map(({s})=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=typ==='硃批'?(pos&&pos!=='硃批'?pos:'尾批'):typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
+          const context=(typ==='硃批'&&pos==='夾批'&&meta.context_quote)?`<div class="em-detail zp-context"><span class="l">奏摺原文</span><div class="cx-q cx-q-off" data-doc="${esc(s.doc_id||'')}" title="點按在奏摺原文顯示">「${esc(meta.context_quote)}」</div></div>`:'';
           // When the 奏摺 quote IS the document under review, its own source info is redundant.
           const suppress=isOfficial && memDoc && String(s.doc_id||'')===String(memDoc);
           const info=suppress?'':`<dl class="em-srcinfo"><dt>${esc(typeLabel)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
-          return `<div class="em-source-block"><div class="em-detail"><span class="l">${esc(typeLabel)}</span>${s.quote?`<div class="cx-q ${qcls}" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」</div>`:''}</div>${context}${info}</div>`; }).join('');
+          const quoteBlock=s.quote?`<div class="em-detail"><span class="l">${esc(typeLabel)}</span><div class="cx-q ${qcls}" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」</div></div>`:'';
+          return `<div class="em-source-block">${context}${quoteBlock}${info}</div>`; }).join('');
       }
       function combinedEmperorZhupiMeta(source){
         const out={position:source&&source.position||'',context_quote:source&&source.context_quote||''};
@@ -8117,25 +8118,24 @@
         return it&&it.edict_id||'';
       }
       function edictHtml(m,i){ const items=m.items||[];
-        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.combinedEmperor?'皇帝行動（硃批／上諭；既有配對）':'相關上諭'}${m.marker?'（'+esc(m.marker)+'）':''}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
+        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.combinedEmperor?'皇帝行動':'相關上諭'}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(items.length? items.map((it,j)=>{ const dd=edictItemDetectedDate(it);
               const pts=it.points||[];
               const pairedYuId=m.combinedEmperor?combinedEmperorYuDocId(it,pts):(it.edict_id||'');
-              const overview=it.summary?`<div class="em-overview"><span class="l">概述</span><div class="ov-t em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="summary">${esc(it.summary)}</div></div>`:'';
               // no points returned for this edict: keep a single fallback card, add-action stays
               // item-level since there's no per-point content to anchor it to
               if(!pts.length){
                 const addBtn=it.__added?emperorActionDoneBtn(it.__evId,{kind:'edict-item',i,j}):`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" type="button">加入為皇帝行動</button>`;
                 const infoBtn=it.__added&&it.__evId?infoSourceFollowupHtml(it.__evId):'';
-                return `<div class="em-group">${overview}<div class="cx-ev em-item"><div class="record-empty">未提供逐點比對內容。</div>${edictSourceLine(it,dd)}<div class="cx-acts">${addBtn}${pairedYuId?`<button class="em-open" data-doc="${esc(pairedYuId)}" type="button">開啟上諭</button>`:''}${infoBtn}</div></div>`;
+                return `<div class="em-group"><div class="cx-ev em-item"><div class="record-empty">未提供逐點比對內容。</div>${edictSourceLine(it,dd)}<div class="cx-acts">${addBtn}${pairedYuId?`<button class="em-open" data-doc="${esc(pairedYuId)}" type="button">開啟上諭</button>`:''}${infoBtn}</div></div>`;
               }
-              return `<div class="em-group">${overview}`
+              return `<div class="em-group">`
                 + pts.map((pt,k)=>{
                     const repeat=repeatPointerForItem(pt), prior=(pt.same_as_event_id&&eventById(pt.same_as_event_id))||(repeat&&repeat.evId&&eventById(repeat.evId));
                     const addBtn=pt.__added?emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k}):((prior||repeat)?`<button class="cx-add em-mergeact" data-i="${i}" data-j="${j}" data-k="${k}" type="button"${prior?'':' disabled'} title="${prior?'將此皇帝行動併入較早的既有事件':'較早事件尚未載入，暫不能併入；可獨立加入'}">併入已有事件</button><button class="cx-addstandalone em-addstandalone-action" data-i="${i}" data-j="${j}" data-k="${k}" type="button">獨立加入</button>`:`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" data-k="${k}" type="button">加入為皇帝行動</button>`);
                     const infoBtn=pt.__added&&pt.__evId?infoSourceFollowupHtml(pt.__evId):'';
                     return `<div class="cx-ev em-item">
-                    ${pt.title?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="title">${esc(pt.title)}</span></div>${pt.aspect?`<div class="em-meta em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="aspect">${esc(pt.aspect)}</div>`:''}`:(pt.aspect?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="aspect">${esc(pt.aspect)}</span></div>`:'')}
+                    ${pt.title?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="title">${esc(pt.title)}</span></div>`:''}
                     ${m.combinedEmperor?combinedEmperorSourcesHtml(pt.sources, it.memDoc||m.memDoc||''):`<div class="em-detail">${pt.memorial_quote?`<span class="l">奏摺</span><div class="cx-q" data-doc="${esc(it.memDoc||m.memDoc||'')}" title="點按在奏摺原文顯示">「${esc(pt.memorial_quote)}」</div>`:''}${pt.edict_quote?`<span class="l">上諭回應</span><div class="cx-q" data-doc="${esc(it.edict_id||'')}" title="點按在上諭原文顯示">「${esc(pt.edict_quote)}」</div>`:''}</div>`}
                     ${pt.how?`<div class="em-how em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="how">${esc(pt.how)}</div>`:''}
                     ${repeat?matchNoteHtml(pt):(prior?`<div class="cx-matchnote" title="可併入最早的既有皇帝行動，或保留為獨立行動"><b>此皇帝行動先前已見於 ${esc(evTitle(prior))}${prior.dateAr?'（'+esc(prior.dateAr)+'）':''}</b></div>`:'')}
@@ -11816,11 +11816,12 @@ body .chat-log .zp-item .ea-infosrc, body.dark-mode .chat-log .zp-item .ea-infos
 .chat-log .em-aspect{ font-size:calc(14px*var(--fs,1)) !important; font-weight:700 !important; color:var(--ink) !important; margin:0 0 4px !important; }
 .chat-log .em-item .em-meta{ color:var(--muted) !important; font-size:calc(12px*var(--fs,1)) !important; margin:0 0 8px !important; }
 .chat-log .em-detail{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:start; margin:12px 0; }
-.chat-log .em-source-block + .em-source-block{ border-top:1px dashed #e2d8c4; padding-top:8px; }
+.chat-log .em-source-block{ padding:0 0 14px; margin:0 0 16px; }
+.chat-log .em-source-block + .em-source-block{ border-top:1px dashed #e2d8c4; padding-top:16px; }
 .chat-log .em-detail .l{ color:var(--faint); white-space:nowrap; font-size:calc(12px*var(--fs,1)); padding-top:8px; }
 .chat-log .em-detail .cx-q{ margin:0 !important; }
 .chat-log .em-how{ font-size:calc(13px*var(--fs,1)); color:var(--ink); line-height:1.8; margin:14px 0; }
-.chat-log .em-srcinfo{ margin:14px 0 0; padding:10px 0 0; border-top:1px dashed var(--line); }
+.chat-log .em-srcinfo{ margin:14px 0 0; padding:0; border-top:0; }
 .chat-log .em-srctitle{ font-size:calc(12.5px*var(--fs,1)); color:var(--muted); line-height:1.6; }
 .chat-log .em-srcmeta{ font-size:calc(11.5px*var(--fs,1)); color:var(--faint); margin-top:4px; }
 .chat-log .em-item .cx-acts{ gap:8px !important; flex-wrap:wrap; margin-top:16px !important; }
