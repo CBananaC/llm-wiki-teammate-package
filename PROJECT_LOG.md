@@ -2816,3 +2816,26 @@ Verified:
 Remaining:
 - Human visual confirmation remains pending because the in-app browser still
   refuses to reload the local file URL.
+
+### 2026-07-24 16:17 HKT — Codex — Focused the active document card
+
+Summary: Added a separate reading-card state to both review tools. When more
+than one document card is open, the card being read now has a thin orange
+outline. Clicking a card expands it, folds the other cards in the same panel,
+and moves the reading state to the clicked card. Ctrl/⌘ multi-selection and
+editing controls retain their existing behavior.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' inline JavaScript parsed successfully.
+- `git diff --check` passes.
+- The live formal tool opened a 53-card panel; clicking one card left exactly
+  that card expanded and reading while the other 52 cards folded.
+- The computed reading outline uses the orange theme color.
+
+Remaining:
+- Human confirmation at the user's exact window size, if desired.

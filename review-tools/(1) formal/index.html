@@ -705,6 +705,7 @@
     box-shadow:0 3px 12px rgba(60,44,20,.13); display:flex; flex-direction:column; overflow:hidden; flex:0 0 auto; }
   .card.pinned { box-shadow:0 3px 12px rgba(60,44,20,.13), 0 0 0 2px #c79a52; }
   .card.wsel { box-shadow:0 3px 12px rgba(60,44,20,.13), 0 0 0 3px #4f8f70; }
+  body .ws-list.multi > .card.reading { box-shadow:var(--sh-1), 0 0 0 2px var(--reply) !important; }
   .card.dragging { opacity:.45; }
   .card.folded .ip-body { display:none; }
   .card .ip-body { display:flex; flex-direction:column; min-height:0; max-height:64vh; }
@@ -3046,6 +3047,20 @@
   }
   function foldCard(api){ api.el.classList.add('folded'); api.folded=true; api.el.querySelector('.ip-min').innerHTML=IC.restore; }
   function expandCard(api){ api.el.classList.remove('folded'); api.folded=false; api.el.querySelector('.ip-min').innerHTML=IC.minimize; if(api.buildBody) api.buildBody(); }
+  function setReadingCard(api){
+    if(!api || !cards.includes(api)) return;
+    activeList=api.list;
+    window.__activeCard=api;
+    cards.filter(c=>c.list===api.list).forEach(c=>c.el.classList.toggle('reading', c===api));
+  }
+  function activateCardOnClick(api){
+    if(!api || !cards.includes(api)) return;
+    setReadingCard(api);
+    cards.filter(c=>c.list===api.list && c!==api).forEach(foldCard);
+    expandCard(api);
+    if(api.el.scrollIntoView) api.el.scrollIntoView({block:'nearest'});
+    if(window.__floatRefresh) window.__floatRefresh();
+  }
   function destroyCard(api){ api.el.remove(); cards=cards.filter(x=>x!==api); if(typeof clearQuoteFlash==='function') clearQuoteFlash(); }
   function closeCard(api){ floats=floats.filter(x=>x!==api.el); destroyCard(api); if(typeof clearQuoteFlash==='function') clearQuoteFlash(); cleanupEmptyColumns(); if(window.__activeCard===api) window.__activeCard=cards[cards.length-1]||null; if(!cards.length) selRid=null; if(window.__floatRefresh) window.__floatRefresh(); render(); }
   // shared header detail level: number of metadata rows shown across ALL cards (whole rows hide/show)
@@ -3082,7 +3097,12 @@
     el.dataset.cardKey=api.key;
     const titles=el.querySelector('.ip-titles'), bodyEl=el.querySelector('.ip-body');
     el.addEventListener('mousedown',()=>{ activeList=api.list; window.__activeCard=api; if(window.__floatRefresh) window.__floatRefresh(); });
-    el.addEventListener('click',e=>{ if(window.__floatCardClick) window.__floatCardClick(api,e); });
+    el.addEventListener('click',e=>{
+      if(window.__floatCardClick) window.__floatCardClick(api,e);
+      if(e.metaKey||e.ctrlKey) return;
+      if(e.target.closest('button,input,textarea,select,label,mark.hl,.ed,.inote,.hl-editor,.hdr-ed,[contenteditable="true"]')) return;
+      activateCardOnClick(api);
+    });
     el.querySelector('.ip-close').onclick=()=>closeCard(api);
     const minB=el.querySelector('.ip-min');
     minB.onclick=()=>{ if(el.classList.contains('folded')) expandCard(api); else foldCard(api); };
@@ -3105,7 +3125,7 @@
     if((opts||{}).fold) foldCard(api);
     if(!(opts||{}).defer) api.buildBody();
     cards.push(api);
-    window.__activeCard=api;
+    setReadingCard(api);
     return api;
   }
 
