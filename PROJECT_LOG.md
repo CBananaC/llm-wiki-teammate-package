@@ -29,7 +29,7 @@ adjustment, append one entry to the bottom of the change log.
 
 ## Known cautions
 
-- The formal and sample HTML files still embed source/timeline data inherited from the original implementation.
+- The formal and sample HTML files retain an embedded projection only as a `file://`/offline fallback; server-backed pages overlay original text from `review-tools/shared data/stage1_original_text.json`.
 - Some scripts and skill notes still refer to paths in the original project.
 - Only one human or agent should edit `review-tools/(1) formal/formal_all.data` at a time.
 - `Competition Info/2026 PolyU AI X Digital Humanities Awards_AI_Classics(v.1).docx` is a bilingual public draft with unresolved placeholders and visible table/formatting inconsistencies; verify official rules before publishing dates, weights, links, or contacts.
@@ -2760,3 +2760,31 @@ Verified:
 
 Remaining:
 - No state-mutating browser click was performed; visual browser verification remains when a usable local browser session is available.
+
+### 2026-07-24 15:51 HKT — Codex — Made Stage 1 JSON the live original-text source
+
+Summary: Confirmed that both HTML files contain an embedded `DUAL` presentation
+projection, while the previous JSON request only populated search indexing. Both
+tools now load the canonical Stage 1 JSON at runtime and overlay matching
+document bodies, rescripts, metadata, authors, and dates before rebuilding the
+timeline. Reviewed AI summaries remain separate; the embedded projection is
+kept only as a `file://`/offline fallback.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' inline JavaScript parsed successfully.
+- `git diff --check` passes.
+- The project server loaded `/formal` and the shared JSON route at
+  `http://127.0.0.1:8899`.
+- The opened formal card for `硃65` matched the canonical JSON body exactly
+  (873 characters), confirming the live card uses the shared source.
+
+Remaining:
+- Reload the website after editing `stage1_original_text.json`; existing open
+  cards are refreshed automatically after the initial source load.
+- The pre-existing formal-editor entry for emperor-action work remains unchanged
+  in the current-state section.
