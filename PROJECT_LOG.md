@@ -2863,6 +2863,28 @@ Remaining:
 - Browser visual verification was unavailable in this environment; no
   state-mutating UI click was performed.
 
+### 2026-07-24 17:30 HKT — Codex — Hid empty trace cards and clarified emperor sources
+
+Summary: Removed empty `追溯來源` result cards when no source chains are
+returned. Refined the paired `皇帝行動` source layout so each source's
+quotation and metadata stay together, while a stronger divider separates the
+next source.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All 5 formal and 6 sample inline scripts parsed successfully with Node.
+- Targeted checks passed for empty trace suppression, source-info border reset,
+  and the inter-source divider in both tools.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; no
+  state-mutating UI click was performed.
+
 ### 2026-07-24 17:21 HKT — Codex — Simplified combined emperor-action cards
 
 Summary: Updated the paired `皇帝行動` renderer for existing Zhu/Yu matches.

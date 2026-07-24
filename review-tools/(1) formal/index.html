@@ -7524,7 +7524,7 @@
           +(items.length?`<div class="cx-foot"><button class="cx-tracesrc" data-i="${i}" type="button" title="若已勾選加入部分事件則只搜尋那些，否則搜尋全部擷取事件">⌕ 搜尋這些事件的來源鏈</button></div>`:'')
           +(leftover.length?`<div class="cx-foot-chains"><div class="src-head">其餘來源鏈（未對應到任何已擷取事件，${leftover.length}）</div>${leftover.map((ch,k)=>chainStandaloneHtml(ch,i,k,m.actor)).join('')}</div>`:'')
           +`</div>`; }
-      function traceHtml(m,i){ const chains=m.items||[];
+      function traceHtml(m,i){ const chains=m.items||[]; if(!chains.length) return '';
         return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI 追溯來源：${esc(m.evTitle||'事件')}（${chains.length} 條來源鏈）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(chains.length? chains.map((ch,j)=>{ const committed=!!ch.__committed;
@@ -11649,15 +11649,15 @@ body .chat-log .zp-item .ea-infosrc, body.dark-mode .chat-log .zp-item .ea-infos
 .chat-log .em-overview .l{ color:var(--faint); font-weight:700; white-space:nowrap; font-size:calc(12.5px*var(--fs,1)); }
 .chat-log .em-overview .ov-t{ color:var(--ink); line-height:1.8; font-size:calc(13px*var(--fs,1)); }
 .chat-log .em-item{ padding:14px 4px 4px !important; }
-.chat-log .em-source-block{ padding:0 0 14px; margin:0 0 16px; }
-.chat-log .em-source-block + .em-source-block{ border-top:1px dashed #e2d8c4; padding-top:16px; }
+.chat-log .em-source-block{ padding:0 0 18px; margin:0 0 18px; }
+.chat-log .em-source-block + .em-source-block{ border-top:2px solid var(--line); padding-top:20px; }
 .chat-log .em-aspect{ font-size:calc(14px*var(--fs,1)) !important; font-weight:700 !important; color:var(--ink) !important; margin:0 0 4px !important; }
 .chat-log .em-item .em-meta{ color:var(--muted) !important; font-size:calc(12px*var(--fs,1)) !important; margin:0 0 8px !important; }
 .chat-log .em-detail{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:start; margin:12px 0; }
 .chat-log .em-detail .l{ color:var(--faint); white-space:nowrap; font-size:calc(12px*var(--fs,1)); padding-top:8px; }
 .chat-log .em-detail .cx-q{ margin:0 !important; }
 .chat-log .em-how{ font-size:calc(13px*var(--fs,1)); color:var(--ink); line-height:1.8; margin:14px 0; }
-.chat-log .em-srcinfo{ margin:14px 0 0; padding:0; border-top:0; }
+.chat-log .em-source-block .em-srcinfo{ margin:14px 0 0 !important; padding:0 !important; border-top:0 !important; }
 .chat-log .em-srctitle{ font-size:calc(12.5px*var(--fs,1)); color:var(--muted); line-height:1.6; }
 .chat-log .em-srcmeta{ font-size:calc(11.5px*var(--fs,1)); color:var(--faint); margin-top:4px; }
 .chat-log .em-item .cx-acts{ gap:8px !important; flex-wrap:wrap; margin-top:16px !important; }
