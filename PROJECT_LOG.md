@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (原文 label alignment complete; human refresh next)
+- Formal review editor: none (emperor-action origin placement checkpoint complete; human visual refresh next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -2788,3 +2788,31 @@ Remaining:
   cards are refreshed automatically after the initial source load.
 - The pre-existing formal-editor entry for emperor-action work remains unchanged
   in the current-state section.
+
+### 2026-07-24 15:58 HKT — Codex — Anchored AI-loop emperor actions to their source document
+
+Summary: Combined official-document/Yu emperor actions now carry an explicit
+visual origin. Yu-origin actions use the 上諭's announce date and link only to
+that Yu dot; Zhu-origin actions use the 硃批's receive date and link only to
+that Zhu dot. Older outputs without origin metadata use the Yu-first, Zhu-
+fallback rule, while all additional source quotations remain available as
+evidence in the review card.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `tool/skills md/combine-confirmed-emperor-actions.md`
+- `tool/proxy/gemini-proxy/main.py`
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' inline JavaScript parsed successfully.
+- Synthetic mixed-source checks passed for explicit Yu, explicit Zhu, and
+  legacy Zhu fallback placement dates in both tools.
+- Python syntax passed for the proxy and terminal AI-loop runner.
+- `git diff --check` passed.
+
+Remaining:
+- Human visual confirmation remains pending because the in-app browser still
+  refuses to reload the local file URL.

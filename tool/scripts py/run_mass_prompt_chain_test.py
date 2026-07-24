@@ -124,6 +124,13 @@ def doc_id_of(record: dict[str, Any]) -> str:
     return str(record.get("doc_id") or record.get("id") or "")
 
 
+def is_excluded_doc_id(doc_id: str) -> bool:
+    """奏-prefixed documents are duplicate copies of the 硃-prefixed memorials (the
+    same奏摺 held in a different archive series); they must not be loaded as
+    responders or candidates, or the same reply gets counted twice."""
+    return str(doc_id or "").startswith("奏")
+
+
 def body_of(record: dict[str, Any]) -> str:
     return str(record.get("body") or "")
 
@@ -520,14 +527,43 @@ def normalize_action_sources(
         if key in seen:
             continue
         seen.add(key)
-        out.append({
+        entry = {
             "doc_id": sid,
             "source_type": stype,
             "quote": quote,
             "title": raw.get("title") or record.get("title") or "",
             "date": raw.get("date") or imperial_date(record) or primary_date(record),
-        })
+        }
+        if stype == "硃批":
+            position, context = zhupi_position(record, quote)
+            entry["position"] = position
+            if context:
+                entry["context_quote"] = context
+        out.append(entry)
     return out
+
+
+def zhupi_position(record: dict[str, Any], quote: str) -> tuple[str, str]:
+    """Classify a 硃批 quote as 尾批 (the document's end rescript) or 夾批 (an
+    interlinear （硃批：…） annotation in the body), and for a 夾批 return the body
+    clause it annotates. The 尾批 lives in the rescript field; 夾批 live inline in
+    the body wrapped in （硃批：…）."""
+    q = re.sub(r"\s+", "", quote or "")
+    resc = re.sub(r"\s+", "", rescript_of(record) or "")
+    if q and resc and q in resc:
+        return "尾批", ""
+    body = body_of(record) or ""
+    for mo in re.finditer(r"[（(](?:硃批|朱批)\s*[：:]([^）)]*)[）)]", body):
+        inner = re.sub(r"\s+", "", mo.group(1) or "")
+        if q and inner and (q in inner or inner in q):
+            start = mo.start()
+            cut = max(
+                body.rfind("。", 0, start), body.rfind("\n", 0, start),
+                body.rfind("）", 0, start), body.rfind(")", 0, start),
+            )
+            context = body[cut + 1:start].strip()
+            return "夾批", context
+    return "尾批", ""
 
 
 def _relevant_previous_actions(previous, doc, top_k=20, max_desc=240):
@@ -610,9 +646,28 @@ def combined_action_rows(
             same = ""
         prior = next((row for row in previous if row.get("event_id") == same), None)
         description = str(raw.get("description") or raw.get("how") or "")
-        title = str(raw.get("title") or "皇帝行動")
-        if prior and prior.get("title"):
-            title = str(prior["title"])
+        origin_doc_id = str(
+            raw.get("origin_doc_id")
+            or raw.get("originDocId")
+            or raw.get("primary_source_doc_id")
+            or raw.get("primarySourceDocId")
+            or ""
+        )
+        if origin_doc_id not in allowed:
+            origin_doc_id = ""
+        origin_type = str(
+            raw.get("origin_type")
+            or raw.get("originType")
+            or raw.get("primary_source_type")
+            or raw.get("primarySourceType")
+            or ""
+        )
+        if origin_type not in {"硃批", "上諭"}:
+            origin_type = ""
+        # Keep this run's own SVO title even for a repeat -- the earliest action's title may be an
+        # older, vaguer phrasing, and the "previously seen" note already flags the merge. (same_as
+        # still links them; merging on the website adopts the target event's identity.)
+        title = str(raw.get("title") or (prior.get("title") if prior else "") or "皇帝行動")
         point = {
             "title": title,
             "aspect": raw.get("action_type") or "",
@@ -625,6 +680,10 @@ def combined_action_rows(
             "who": raw.get("who") if isinstance(raw.get("who"), list) else [],
             "whoLoc": raw.get("who_loc") or raw.get("whoLoc") or {},
             "relations": raw.get("relations") if isinstance(raw.get("relations"), list) else [],
+            "origin_doc_id": origin_doc_id,
+            "origin_type": origin_type,
+            "origin_quote": str(raw.get("origin_quote") or raw.get("originQuote") or ""),
+            "origin_date": str(raw.get("origin_date") or raw.get("originDate") or ""),
             "same_as_event_id": same,
             "sources": sources,
         }
@@ -718,6 +777,11 @@ def official_response_rows_for_actions(
                     for pair in response_pairs_for_source(sid, skind, pairs):
                         rid = pair_reply_doc_id(pair)
                         if rid == did:
+                            continue
+                        if is_excluded_doc_id(rid):
+                            # 奏-prefixed docs are duplicate copies of the 硃-prefixed memorials
+                            # (same document, other archive series); drop them so responders aren't
+                            # double-counted -- the 硃 twin already carries the same response.
                             continue
                         source_pairs.append(pair)
                         if rid and rid not in candidate_ids:

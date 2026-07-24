@@ -2351,8 +2351,10 @@
     }
     allEvs.forEach(e=>{
       const en=eventNode(e); addNode(en);
-      (e.sources||[]).forEach(sc=>{ const r=sc&&recByDocId[String(sc.doc_id)]; if(r) link(en,docNodeForRecord(r,e.actor==='emperor'?'imperial':'official'),'source'); });
-      if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=recByDocId[String(e.emperorDetail.memDoc)]; if(r) link(en,docNodeForRecord(r,'official'),'source'); }
+      const sourceEntries=e.actor==='emperor'?emperorActionSourceEntries(e):(e.sources||[]);
+      sourceEntries.forEach(sc=>{ const r=sc&&(recByDocId[String(sc.doc_id)]||recByDocId2(sc.doc_id,sourceQuote(sc))); if(r) link(en,docNodeForRecord(r,e.actor==='emperor'?'imperial':'official'),'source'); });
+      const origin=e.actor==='emperor'?emperorActionOriginForEvent(e):null;
+      if(e.emperorDetail&&e.emperorDetail.memDoc && (!origin||!sameDocReference(origin.doc_id,e.emperorDetail.memDoc))){ const r=recByDocId[String(e.emperorDetail.memDoc)]||recByDocId2(e.emperorDetail.memDoc); if(r) link(en,docNodeForRecord(r,'official'),'source'); }
       if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)){ e.emperorDetail.infoSources.forEach(sc=>{ const r=sc&&recByDocId[String(sc.doc_id)]; if(r) link(en,docNodeForRecord(r,'official'),'info-source'); }); }
       const targets=[e.respondsToEventId,...(e.alsoRespondsToEventIds||[])].filter(Boolean);
       targets.forEach(id=>{ const t=graphEventsById.get(String(id)); if(t) link(en,eventNode(t),'response'); });
@@ -2364,8 +2366,8 @@
     recs.forEach(r=>{ if(r.type==='zhupi') link(docNodeForLane(r,'official'),docNodeForLane(r,'imperial'),'endpoint'); });
     allEvs.forEach(e=>{
       if(!(e.emperorDetail&&e.emperorDetail.kind==='edict'&&e.emperorDetail.memDoc)) return;
-      const edictId=(e.sources&&e.sources[0]&&e.sources[0].doc_id)||e.emperorDetail.edict_id;
-      const edict=recByDocId[String(edictId)], memorial=recByDocId[String(e.emperorDetail.memDoc)];
+      const origin=emperorActionOriginForEvent(e); if(origin.type!=='上諭'||!origin.doc_id) return;
+      const edict=origin.record||recByDocId[String(origin.doc_id)]||recByDocId2(origin.doc_id,origin.quote), memorial=recByDocId[String(e.emperorDetail.memDoc)]||recByDocId2(e.emperorDetail.memDoc);
       if(edict&&memorial) link(docNodeForRecord(edict,'imperial'),docNodeForRecord(memorial,'official'),'pair');
     });
     const hlEvent=hlEventId ? (graphEventsById.get(String(hlEventId))||eventById(hlEventId)) : null;
@@ -2413,8 +2415,9 @@
     const yuFocusReplyEventIds=new Set();
     if(yuFocus){
       allEvs.forEach(e=>{
-        const fromReplyZhu=(e.sources||[]).some(sc=>{
-          const r=recByDocId[String(sc&&sc.doc_id)];
+        const sourceEntries=e.actor==='emperor'?emperorActionSourceEntries(e):(e.sources||[]);
+        const fromReplyZhu=sourceEntries.some(sc=>{
+          const r=recByDocId[String(sc&&sc.doc_id)]||recByDocId2(sc&&sc.doc_id,sourceQuote(sc));
           return r&&yuFocusReplyRids.has(r._rid);
         }) || (e.emperorDetail&&yuFocusReplyRids.has((recByDocId[String(e.emperorDetail.memDoc)]||{})._rid))
           || (e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)&&e.emperorDetail.infoSources.some(sc=>{
@@ -2477,6 +2480,7 @@
     return {active:!!seed,hlEvent,hlDocRec,hlRids,chainEventIds,siblingEventIds,hlPairKeys,docFocusPairKeys,yuFocus,yuFocusReplyRids,spreadMemberIds,allEvs,stats};
   }
   function render(){
+    repairCombinedEmperorActionPlacement();
     const H = padTop + totalDays*pxPerDay + padBot;
     curBaseH = H;
     svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
@@ -2606,9 +2610,9 @@
     eventsArr().forEach(e=>{
       if(!chartFilterOn('line','emperor-reply')) return;
       if(!(e.emperorDetail && e.emperorDetail.kind==='edict' && e.emperorDetail.memDoc)) return;
-      const edictDocId=(e.sources&&e.sources[0]&&e.sources[0].doc_id)||e.emperorDetail.edict_id; if(!edictDocId) return;
+      const origin=emperorActionOriginForEvent(e); const edictDocId=origin.type==='上諭'&&origin.doc_id; if(!edictDocId) return;
       const key=String(edictDocId)+'|'+String(e.emperorDetail.memDoc); if(yuPairs.has(key)) return; yuPairs.add(key);
-      const er=recByDocId[String(edictDocId)], mr=recByDocId[String(e.emperorDetail.memDoc)]; if(!er||!mr||!docLineVisible(er)||!docLineVisible(mr)) return;
+      const er=origin.record||recByDocId[String(edictDocId)]||recByDocId2(edictDocId,origin.quote), mr=recByDocId[String(e.emperorDetail.memDoc)]||recByDocId2(e.emperorDetail.memDoc); if(!er||!mr||!docLineVisible(er)||!docLineVisible(mr)) return;
       if(yuFocus&&clickNetworkState.yuFocusReplyRids.has(mr._rid)) return;
       const replySide=coord[mr._rid+'L']?'L':'R';
       const a=coord[er._rid+'R'], b=coord[mr._rid+replySide]; if(!a||!b) return;
@@ -2623,7 +2627,8 @@
     evs.forEach(e=>{ const ec=ecoord[e.id]; if(!ec||!eventLineVisible(e)) return;
       const isClicked = chainEventIds.has(e.id), isDirectEvent=!!(hlEvent&&String(hlEvent.id)===String(e.id));
       const isSibling = siblingEventIds.has(e.id), isIndirectNetworkEvent=chainOn&&isClicked&&!isDirectEvent;
-      (e.sources||[]).forEach(sc=>{ const r=recByDocId[String(sc.doc_id)]; if(!r||!docLineVisible(r)) return;
+      const sourceEntries=e.actor==='emperor'?emperorActionSourceEntries(e):(e.sources||[]);
+      sourceEntries.forEach(sc=>{ const r=recByDocId[String(sc.doc_id)]||recByDocId2(sc.doc_id,sourceQuote(sc)); if(!r||!docLineVisible(r)) return;
         if(isIndirectNetworkEvent&&!hlRids.has(r._rid)) return;
         // Field events (lin/qing) connect ONLY to the officials-line dot (never straight to the
         // emperor dot); for a 硃批 source, the existing L<->R "dline" below carries the chain the
@@ -2651,14 +2656,14 @@
       const targets=[e.respondsToEventId, ...(e.alsoRespondsToEventIds||[])].filter(Boolean);
       targets.forEach(tid=>{
         const sourceCoord=(ev, side)=>{
-          const sc=(ev.sources||[])[0]; if(!sc) return null;
-          const r=recByDocId[String(sc.doc_id)]; if(!r||!docLineVisible(r)) return null;
+          const sc=(ev.actor==='emperor'?emperorActionSourceEntries(ev):(ev.sources||[]))[0]; if(!sc) return null;
+          const r=recByDocId[String(sc.doc_id)]||recByDocId2(sc.doc_id,sourceQuote(sc)); if(!r||!docLineVisible(r)) return null;
           return side==='emperor' ? (coord[r._rid+'R']||coord[r._rid+'L']) : (coord[r._rid+'L']||coord[r._rid+'R']);
         };
         const targetEv=eventById(tid);
         if(targetEv && (!eventDotVisible(targetEv)||!eventLineVisible(targetEv))) return;
-        const targetSource=targetEv&&targetEv.sources&&targetEv.sources[0];
-        const targetRec=targetSource&&recByDocId[String(targetSource.doc_id)];
+        const targetSource=targetEv&&(targetEv.actor==='emperor'?emperorActionSourceEntries(targetEv):(targetEv.sources||[]))[0];
+        const targetRec=targetSource&&(recByDocId[String(targetSource.doc_id)]||recByDocId2(targetSource.doc_id,sourceQuote(targetSource)));
         const targetKind=(targetEv&&targetEv.emperorDetail&&targetEv.emperorDetail.kind)||'';
         const responsePairKey=targetKind==='edict'||(targetRec&&targetRec.type==='shangyu')?'reply-yu':(targetKind==='zhupi'||(targetRec&&targetRec.type==='zhupi')?'reply-zhu':'');
         if(responsePairKey&&!chartFilterOn('line',responsePairKey)) return;
@@ -5498,6 +5503,69 @@
   }
   function sourceQuote(s){ return (s&&String(s.quote||s.quotation||s.source_quote||s.sourceQuotation||s.evidence_quote||s.evidence||'').trim())||''; }
   function sourceDocId(s, fallback){ return String((s&&(s.doc_id||s.docId||s.source_doc_id||s.sourceDocId||s.id))||fallback||''); }
+  // A combined AI-loop point can cite several documents, but only one document
+  // is the action's visual origin. Prefer an explicit origin from newer output;
+  // for older bundles, prefer the substantive 上諭 and then 硃批 source rather
+  // than choosing whichever source happens to have the earliest date.
+  function emperorSourceType(source, rec){
+    const raw=String(source&&(source.source_type||source.sourceType||source.howKnown||source.how_known||source.source||'')||'').trim();
+    if(raw.indexOf('上諭')===0 || (rec&&rec.type==='shangyu')) return '上諭';
+    if(raw.indexOf('硃批')===0 || raw.indexOf('朱批')===0 || (rec&&rec.type==='zhupi')) return '硃批';
+    if(raw==='奏摺'||raw==='上奏'||(rec&&rec.type==='shangzou')) return '奏摺';
+    return raw;
+  }
+  function sameDocReference(a,b){
+    if(!a||!b) return false;
+    const ar=recByDocId2(a), br=recByDocId2(b);
+    return ar&&br ? String(ar._rid)===String(br._rid) : String(a)===String(b);
+  }
+  function emperorActionOrigin(sources, fallbackDocId, detail){
+    detail=detail||{};
+    const raw=Array.isArray(sources)?sources.filter(Boolean):[];
+    const explicitId=String(detail.origin_doc_id||detail.originDocId||detail.primary_source_doc_id||detail.primarySourceDocId||'').trim();
+    const explicitType=String(detail.origin_type||detail.originType||detail.primary_source_type||detail.primarySourceType||'').trim();
+    let chosen=explicitId ? raw.find(s=>sameDocReference(sourceDocId(s,''),explicitId)) : null;
+    if(!chosen && explicitId) chosen={doc_id:explicitId, source_type:explicitType, quote:detail.origin_quote||detail.originQuote||'', date:detail.origin_date||detail.originDate||''};
+    if(!chosen && explicitType) chosen=raw.find(s=>emperorSourceType(s,recByDocId2(sourceDocId(s,'')))===emperorSourceType({source_type:explicitType},null));
+    if(!chosen) chosen=raw.find(s=>emperorSourceType(s,recByDocId2(sourceDocId(s,'')))==='上諭');
+    if(!chosen) chosen=raw.find(s=>emperorSourceType(s,recByDocId2(sourceDocId(s,'')))==='硃批');
+    if(!chosen) chosen=raw[0]||((fallbackDocId||explicitId)?{doc_id:fallbackDocId||explicitId}:null);
+    if(!chosen) return {doc_id:'',type:'',quote:'',dateAr:'',dateCh:'',side:'R',lane:'imperial',record:null};
+    const docId=sourceDocId(chosen, fallbackDocId||explicitId);
+    const rec=recByDocId2(docId, sourceQuote(chosen));
+    const type=explicitId&&sameDocReference(docId,explicitId)&&explicitType ? explicitType : emperorSourceType(chosen,rec);
+    const dateAr=(type==='上諭' ? (rec&&(rec.annAr||rec.sendAr||rec.recvAr)) : type==='硃批' ? (rec&&(rec.recvAr||rec.sendAr||rec.annAr)) : (rec&&(rec.sendAr||rec.recvAr||rec.annAr))) || chosen.date || detail.origin_date || detail.originDate || '';
+    const dateCh=(type==='上諭' ? (rec&&(rec.annCh||rec.sendCh||rec.recvCh)) : type==='硃批' ? (rec&&(rec.recvCh||rec.sendCh||rec.annCh)) : (rec&&(rec.sendCh||rec.recvCh||rec.annCh))) || chosen.whenCh || detail.origin_when_ch || detail.originWhenCh || '';
+    const imperial=type==='上諭'||type==='硃批';
+    return {doc_id:docId,type,quote:sourceQuote(chosen)||detail.origin_quote||detail.originQuote||'',dateAr:normArDate(dateAr)||dateAr,dateCh,side:imperial?'R':'L',lane:imperial?'imperial':'official',record:rec};
+  }
+  function emperorActionOriginForEvent(ev){
+    const d=ev&&ev.emperorDetail||{};
+    const fallback=d.origin_doc_id||d.originDocId||d.edict_id||d.doc_id||((ev&&ev.sources||[])[0]&&sourceDocId((ev.sources||[])[0],''))||'';
+    return emperorActionOrigin(ev&&ev.sources||[],fallback,d);
+  }
+  function emperorActionSourceEntries(ev){
+    if(!ev||ev.actor!=='emperor') return ev&&ev.sources||[];
+    const origin=emperorActionOriginForEvent(ev);
+    if(!origin.doc_id) return ev.sources||[];
+    const found=(ev.sources||[]).find(s=>sameDocReference(sourceDocId(s,''),origin.doc_id));
+    return [{...(found||{}),doc_id:origin.doc_id,source_type:origin.type,quote:sourceQuote(found)||origin.quote||''}];
+  }
+  function repairCombinedEmperorActionPlacement(){
+    let changed=false;
+    eventsArr().forEach(ev=>{
+      const d=ev&&ev.emperorDetail||{};
+      const combined=!!(d.combined || (d.kind==='edict'&&((Array.isArray(d.sources)&&d.sources.length>1)||(Array.isArray(ev.sources)&&ev.sources.length>1))));
+      if(!combined||ev.actor!=='emperor') return;
+      const origin=emperorActionOriginForEvent(ev); if(!origin.doc_id) return;
+      if(d.origin_doc_id!==origin.doc_id){ d.origin_doc_id=origin.doc_id; changed=true; }
+      if(d.origin_type!==origin.type){ d.origin_type=origin.type; changed=true; }
+      if(origin.quote&&d.origin_quote!==origin.quote){ d.origin_quote=origin.quote; changed=true; }
+      if(origin.dateAr&&ev.dateAr!==origin.dateAr){ ev.dateAr=origin.dateAr; changed=true; }
+      if(origin.dateCh&&ev.whenCh!==origin.dateCh){ ev.whenCh=origin.dateCh; changed=true; }
+    });
+    if(changed&&typeof saveEdits==='function') saveEdits();
+  }
   function candidateSources(c){
     const nested=Array.isArray(c.sources)?c.sources:(Array.isArray(c.source)?c.source:null);
     const raw=nested&&nested.length?nested:[c];
@@ -5720,6 +5788,29 @@
     const ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonical.subtitle||canonical.what, what:canonical.subtitle||canonical.what, description:canonical.description||'',
       where:canonical.where||'', who:canonical.who||[], whoLoc:canonical.whoLoc||{}, relations:canonical.relations||[], whenCh:canonical.whenCh||'', dateAr:d?fmt(d):null,
       sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonical.subtitle||canonical.what||'', aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
+    candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other))); });
+    earlier.__added=true; earlier.__evId=ev.id;
+    return ev;
+  }
+  // Saved AI-loop bundles may retain repeat metadata without a live __matchReg pointer.
+  // Resolve that metadata to the existing dot, or commit the two pending mentions together.
+  function commitRepeatMergedCandidate(p, target){
+    if(!p) return null;
+    const prior=target&&target.event;
+    if(prior){
+      candidateSources(p).forEach(s=>{ addEventMention(prior.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:prior.subtitle||prior.what||''}, mentionOwnFields(p))); });
+      return prior;
+    }
+    const earlier=target&&target.item;
+    if(!earlier||earlier===p) return commitProposal(p);
+    if(earlier.__added&&earlier.__evId){
+      const ev=eventById(earlier.__evId); if(!ev) return commitProposal(p);
+      candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p))); });
+      return ev;
+    }
+    const pD=parseD(proposalRefAr(p)), eD=parseD(proposalRefAr(earlier));
+    const canonical=!(pD&&eD&&pD<eD)?earlier:p, other=canonical===earlier?p:earlier;
+    const ev=commitProposal(canonical); if(!ev) return null;
     candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other))); });
     earlier.__added=true; earlier.__evId=ev.id;
     return ev;
@@ -7163,6 +7254,74 @@
       // resolve which OTHER already-committed event it should really be a mention of, if any. Returns
       // null if there's nothing to merge into (no match, match unresolved, or it's already the same
       // event / already merged).
+      function eventRepeatRefs(it){
+        const refs=new Set(), add=v=>{ v=String(v||'').trim(); if(v) refs.add(v); };
+        if(!it) return refs;
+        const er=it.earliest_report&&typeof it.earliest_report==='object'?it.earliest_report:{}, xr=it.__xdocRepeat&&typeof it.__xdocRepeat==='object'?it.__xdocRepeat:{}, mr=it.__matchReg||{};
+        [it.same_as_event_id,it.same_as,it.card_id,it.merge_group,er.id,xr.evId,xr.card_id,mr.evId,mr.card_id].forEach(add);
+        (Array.isArray(it.repeat_candidates)?it.repeat_candidates:[]).forEach(x=>{ if(x&&typeof x==='object') [x.id,x.card_id,x.same_as,x.event_id].forEach(add); else add(x); });
+        return refs;
+      }
+      function eventRepeatTarget(it){
+        if(!it) return null;
+        const actor=String(it.actor||'').toLowerCase();
+        const isOtherEvent=ev=>ev&&(!actor||!ev.actor||String(ev.actor).toLowerCase()===actor)&&(!it.__evId||String(ev.id)!==String(it.__evId));
+        let pending=null;
+        const remember=(item,source)=>{ if(item&&item!==it&&!pending) pending={event:null,item,source}; };
+        const mr=it.__matchReg;
+        if(mr){
+          const earlier=resolveMatchRegItem(mr);
+          if(earlier&&earlier!==it){
+            const ev=earlier.__added&&earlier.__evId?eventById(earlier.__evId):null;
+            if(isOtherEvent(ev)) return {event:ev,item:earlier,source:'match'};
+            remember(earlier,'match');
+          }
+          const direct=mr.evId&&eventById(mr.evId); if(isOtherEvent(direct)) return {event:direct,item:null,source:'match'};
+        }
+        const refs=eventRepeatRefs(it); if(!refs.size) return pending;
+        const nonSelf=[...refs].some(id=>!it.__evId||String(id)!==String(it.__evId)); if(!nonSelf&&!pending) return null;
+        for(const id of refs){ const direct=eventById(id); if(isOtherEvent(direct)) return {event:direct,item:null,source:'saved',ref:id}; }
+        const er=it.earliest_report&&typeof it.earliest_report==='object'?it.earliest_report:{}, xr=it.__xdocRepeat&&typeof it.__xdocRepeat==='object'?it.__xdocRepeat:{}, preferredDoc=String(er.doc_id||xr.doc_id||'').trim();
+        let preferredAdded=null, fallbackAdded=null, preferredPending=null, fallbackPending=null;
+        const inspectStore=(store,storeId)=>{
+          if(!store||typeof store!=='object'||preferredAdded) return;
+          chatArr(store).forEach((turn,turnIndex)=>{
+            if(!turn||!Array.isArray(turn.items)) return;
+            (turn.items||[]).forEach((candidate,itemIndex)=>{
+              if(!candidate||candidate===it||candidate.__skip) return;
+              if(actor&&candidate.actor&&String(candidate.actor).toLowerCase()!==actor) return;
+              const ids=eventRepeatRefs(candidate); [candidate.card_id,candidate.id,candidate.__evId].forEach(v=>{ v=String(v||'').trim(); if(v) ids.add(v); });
+              if(![...ids].some(id=>refs.has(id))) return;
+              const preferred=!preferredDoc||candidateDocIds(candidate).has(preferredDoc), ev=candidate.__added&&candidate.__evId?eventById(candidate.__evId):null, entry={event:ev,item:candidate,source:'saved',storeId,turnIndex,itemIndex};
+              if(ev){ if(preferred&&!preferredAdded) preferredAdded=entry; else if(!preferred&&!fallbackAdded) fallbackAdded=entry; }
+              else if(!candidate.__added){ if(preferred&&!preferredPending) preferredPending=entry; else if(!preferred&&!fallbackPending) fallbackPending=entry; }
+            });
+          });
+        };
+        Object.keys(EDITS||{}).filter(id=>id&&!id.startsWith('__')).forEach(id=>inspectStore(EDITS[id],id));
+        const groups=typeof workspaceGroups==='function'?workspaceGroups():{}; Object.keys(groups||{}).forEach(id=>inspectStore(groups[id],'group:'+id));
+        return preferredAdded||fallbackAdded||preferredPending||fallbackPending||pending||{event:null,item:null,source:'saved',ref:[...refs][0]};
+      }
+      function eventRepeatTargetLabel(it,target){
+        const ev=target&&target.event, item=target&&target.item, er=it&&it.earliest_report&&typeof it.earliest_report==='object'?it.earliest_report:{}, xr=it&&it.__xdocRepeat&&typeof it.__xdocRepeat==='object'?it.__xdocRepeat:{};
+        return String((ev&&evTitle(ev))||(item&&(item.subtitle||item.what))||er.title||xr.title||'既有事件');
+      }
+      function eventRepeatActionButtons(it,i,j){
+        if(!it) return '';
+        const er=it.earliest_report&&typeof it.earliest_report==='object'?it.earliest_report:{}, xr=it.__xdocRepeat&&typeof it.__xdocRepeat==='object'?it.__xdocRepeat:{}, mr=it.__matchReg||{};
+        const isRepeat=!!(it.__matchReg||Object.keys(er).length||Object.keys(xr).length||it.same_as||it.same_as_event_id||it.repeat_candidates||it.repeat_verdict);
+        const isSimilar=String(mr.verdict||it.repeat_verdict||'').toLowerCase()==='similar';
+        if(!isRepeat||isSimilar) return '';
+        const repeatDoc=String(er.doc_id||xr.doc_id||mr.doc_id||'').trim(); if(repeatDoc&&candidateDocIds(it).has(repeatDoc)) return '';
+        const target=eventRepeatTarget(it), title=eventRepeatTargetLabel(it,target), targetId=target&&target.event&&target.event.id||'', base=`data-i="${i}" data-j="${j}"`, canMerge=!!(target&&(target.event||(target.item&&!target.item.__added))), disabled=canMerge?'':' disabled', targetAttr=targetId?` data-target-evid="${esc(targetId)}"`:'';
+        if(it.__added){
+          if(it.__mergedInto) return '<span class="cx-done">✓ 已加入並併入來源</span>';
+          const merge=target?`<button class="cx-mergesrc cx-repeat-merge" ${base}${targetAttr}${disabled} type="button" title="將此文書加入「${esc(title)}」的回報記錄">＋加入來源到「${esc(title)}」</button>`:'';
+          return '<span class="cx-done">✓ 已加入</span>'+merge+'<button class="cx-addstandalone cx-repeat-standalone-state" type="button" disabled title="此事件已保留為獨立事件">✓ 獨立加入</button>';
+        }
+        const mergeLabel=canMerge?'併入已有事件':'併入已有事件（未載入）';
+        return `<button class="cx-addmention cx-repeat-merge" ${base}${targetAttr}${disabled} type="button" title="將此回報併入「${esc(title)}」">${mergeLabel}</button><button class="cx-addstandalone cx-repeat-standalone" ${base} type="button" title="保留為獨立事件，不併入「${esc(title)}」">獨立加入</button>`;
+      }
       function matchedEarlierEventId(it){
         if(!it.__matchReg || it.__matchReg.verdict==='similar' || it.__mergedInto) return null;
         const earlier=resolveMatchRegItem(it.__matchReg); if(!earlier || !earlier.__evId) return null;
@@ -7623,16 +7782,16 @@
       // quote/response/source layout as the chat card that created it, instead of one flattened
       // description string. Shared by fresh commits and by the auto-repair pass in renderLog().
       function zhupiEmperorDetail(it){
-        return { kind:'zhupi', position:it.position||'', text:it.text||'', responds_to:it.responds_to||'', opinion:it.opinion||'', marker:it.marker||'', doc_id:it.doc_id||'' };
+        return { kind:'zhupi', position:it.position||'', text:it.text||'', responds_to:it.responds_to||'', opinion:it.opinion||'', marker:it.marker||'', doc_id:it.doc_id||'', origin_doc_id:it.doc_id||'', origin_type:'硃批', origin_quote:it.text||it.marker||'' };
       }
       function edictPointEmperorDetail(it, pt, m){
         return { kind:'edict', aspect:pt.aspect||'', edict_title:it.title||'', edict_id:it.edict_id||'', date:it.date||'',
           memorial_quote:pt.memorial_quote||'', edict_quote:pt.edict_quote||'', how:pt.how||'',
-          memDoc:it.memDoc||(m&&m.memDoc)||'', memTitle:it.memTitle||'' };
+          memDoc:it.memDoc||(m&&m.memDoc)||'', memTitle:it.memTitle||'', origin_doc_id:it.edict_id||'', origin_type:'上諭', origin_quote:pt.edict_quote||'' };
       }
       function edictItemEmperorDetail(it, m){
         return { kind:'edict', edict_title:it.title||'', edict_id:it.edict_id||'', date:it.date||'', summary:it.summary||'',
-          memDoc:it.memDoc||(m&&m.memDoc)||'', memTitle:it.memTitle||'' };
+          memDoc:it.memDoc||(m&&m.memDoc)||'', memTitle:it.memTitle||'', origin_doc_id:it.edict_id||'', origin_type:'上諭' };
       }
       function buildZhupiCommit(it){
         const dd=zhupiItemDetectedDate(it); const subtitle=zhupiItemSubtitle(it);
@@ -7641,13 +7800,14 @@
       }
       function buildEdictPointCommit(it, pt, m){
         if(m&&m.combinedEmperor&&Array.isArray(pt.sources)&&pt.sources.length){
-          const dated=pt.sources.map(s=>{ const r=recByDocId2(s.doc_id); return {s,r,date:(r&&(s.source_type==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr)))||s.date||''}; })
-            .sort((a,b)=>{ const da=parseD(a.date),db=parseD(b.date); return da&&db?da-db:(da?-1:(db?1:0)); });
-          const first=dated[0]||{s:pt.sources[0],r:null,date:pt.whenAr||''};
           const subtitle=pt.title||pt.aspect||'皇帝行動';
-          const detail={kind:'edict', combined:true, action_type:pt.action_type||pt.aspect||'', sources:pt.sources, memDoc:it.memDoc||(m&&m.memDoc)||'', memTitle:it.memTitle||'', how:pt.how||pt.description||''};
-          const ev=commitEmperorAction(subtitle, pt.how||pt.description||'', {whenAr:first.date||pt.whenAr||'',whenCh:pt.whenCh||''}, first.s.doc_id, first.s.quote||'', '硃批／上諭', detail, relPayloadFromItem(pt));
-          ev.sources=pt.sources.map(s=>({doc_id:s.doc_id||'',quote:s.quote||'',label:subtitle,aiFilterLabel:AI_FILTER_LABELS.edict,howKnown:s.source_type||'御筆'})).filter(s=>s.doc_id);
+          const fallbackDocId=it.memDoc||(m&&m.memDoc)||'';
+          const rawDetail={kind:'edict', combined:true, action_type:pt.action_type||pt.aspect||'', sources:pt.sources, memDoc:fallbackDocId, memTitle:it.memTitle||'', how:pt.how||pt.description||'', origin_doc_id:pt.origin_doc_id||pt.originDocId||pt.primary_source_doc_id||pt.primarySourceDocId||'', origin_type:pt.origin_type||pt.originType||pt.primary_source_type||pt.primarySourceType||'', origin_quote:pt.origin_quote||pt.originQuote||'', origin_date:pt.origin_date||pt.originDate||''};
+          const origin=emperorActionOrigin(pt.sources,fallbackDocId,rawDetail);
+          const detail=Object.assign({},rawDetail,{origin_doc_id:origin.doc_id||rawDetail.origin_doc_id||'',origin_type:origin.type||rawDetail.origin_type||'',origin_quote:origin.quote||rawDetail.origin_quote||'',origin_date:origin.dateAr||rawDetail.origin_date||'',origin_when_ch:origin.dateCh||''});
+          const sourceDoc=origin.doc_id||(pt.sources[0]&&pt.sources[0].doc_id)||fallbackDocId;
+          const ev=commitEmperorAction(subtitle, pt.how||pt.description||'', {whenAr:origin.dateAr||pt.whenAr||'',whenCh:origin.dateCh||pt.whenCh||''}, sourceDoc, origin.quote||((pt.sources[0]||{}).quote||''), '硃批／上諭', detail, relPayloadFromItem(pt));
+          ev.sources=pt.sources.map(s=>({doc_id:s.doc_id||'',quote:s.quote||'',label:subtitle,aiFilterLabel:AI_FILTER_LABELS.edict,howKnown:s.source_type||'御筆',source_type:s.source_type||'',position:s.position||'',context_quote:s.context_quote||'',title:s.title||'',date:s.date||''})).filter(s=>s.doc_id);
           return {ev,subtitle};
         }
         const dd=edictItemDetectedDate(it);
@@ -7801,7 +7961,7 @@
       }
       function emperorActionDetail(it){
         return { kind:'emperor_action', source:it.source||'', aspect:it.aspect||'', doc_id:it.doc_id||'', quote:it.quote||'',
-          responds_to:it.responds_to||'', subtitle:it.subtitle||'', description:it.description||'' };
+          responds_to:it.responds_to||'', subtitle:it.subtitle||'', description:it.description||'', origin_doc_id:it.doc_id||'', origin_type:it.source||'', origin_quote:it.quote||'' };
       }
       function buildEmperorActionCommit(it){
         const dd={whenAr:it.whenAr||'', whenCh:it.whenCh||''};
@@ -9111,9 +9271,9 @@
           const allowed=new Set([memId,...edicts.map(e=>String(e.id))]); const previous=officialLoopPreviousEmperorActions(allowed); const previousIds=new Set(previous.map(x=>String(x.event_id)));
           st2.textContent='AI 合併硃批與既有配對上諭為皇帝行動…（'+memId+'）';
           try{ const data=await callProxy({mode:'combined_emperor_actions',model:getGeminiModel(),memorial:{id:memId,author:mem.author_name||'',date:mem.recvAr||mem.sendAr||'',title:mem.title||'',body:recordBody(mem),rescript:mem.rescript||''},edicts,previous_actions:previous,question:ctx.question||''});
-            const points=(Array.isArray(data.actions)?data.actions:[]).map(a=>{ const sources=(Array.isArray(a.sources)?a.sources:[]).map(s=>{ const did=String(s.doc_id||''); if(!allowed.has(did)) return null; const r=recByDocId2(did)||{}; return {doc_id:did,source_type:s.source_type||(r.type==='shangyu'?'上諭':'硃批'),position:s.position||'',quote:s.quote||'',context_quote:s.context_quote||'',title:s.title||r.title||'',date:s.date||((r.type==='shangyu')?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||''}; }).filter(s=>s&&s.doc_id&&s.quote);
+            const points=(Array.isArray(data.actions)?data.actions:[]).map(a=>{ const sources=(Array.isArray(a.sources)?a.sources:[]).map(s=>{ const did=String(s.doc_id||''); if(!allowed.has(did)) return null; const r=recByDocId2(did)||{}; const stype=s.source_type||(r.type==='shangyu'?'上諭':r.type==='zhupi'?'硃批':r.type==='shangzou'?'奏摺':''); return {doc_id:did,source_type:stype,position:s.position||'',quote:s.quote||'',context_quote:s.context_quote||'',title:s.title||r.title||'',date:s.date||((r.type==='shangyu')?(r.annAr||r.sendAr||r.recvAr):(r.type==='zhupi'?(r.recvAr||r.sendAr||r.annAr):(r.sendAr||r.recvAr||r.annAr)))||''}; }).filter(s=>s&&s.doc_id&&s.quote);
               if(!sources.length) return null; let same=String(a.same_as_event_id||''); if(!previousIds.has(same)||!eventById(same)) same='';
-              const prior=same&&eventById(same); const pt={title:prior?evTitle(prior):(a.title||'皇帝行動'),aspect:a.action_type||'',action_type:a.action_type||'',how:a.description||'',description:a.description||'',whenCh:a.whenCh||'',whenAr:a.whenAr||'',where:a.where||'',who:Array.isArray(a.who)?a.who:[],whoLoc:a.who_loc||a.whoLoc||{},relations:a.relations||[],sources,same_as_event_id:same,report_doc_id:memId,doc_id:memId,memDoc:memId}; normalizeRelLoc(pt); return pt; }).filter(Boolean);
+              const prior=same&&eventById(same); const originDocId=String(a.origin_doc_id||a.originDocId||a.primary_source_doc_id||a.primarySourceDocId||''); const pt={title:prior?evTitle(prior):(a.title||'皇帝行動'),aspect:a.action_type||'',action_type:a.action_type||'',how:a.description||'',description:a.description||'',whenCh:a.whenCh||'',whenAr:a.whenAr||'',where:a.where||'',who:Array.isArray(a.who)?a.who:[],whoLoc:a.who_loc||a.whoLoc||{},relations:a.relations||[],sources,same_as_event_id:same,origin_doc_id:allowed.has(originDocId)?originDocId:'',origin_type:a.origin_type||a.originType||a.primary_source_type||a.primarySourceType||'',origin_quote:a.origin_quote||a.originQuote||'',origin_date:a.origin_date||a.originDate||'',report_doc_id:memId,doc_id:memId,memDoc:memId}; normalizeRelLoc(pt); return pt; }).filter(Boolean);
             if(!points.length) continue; const firstYu=edicts[0]||{}; const item={edict_id:firstYu.id||'',title:firstYu.title||'硃批／配對上諭',date:firstYu.date||mem.recvAr||'',memDoc:memId,memTitle:mem.title||'',summary:'只保留皇帝自己的評論、答覆或命令；同義硃批與上諭合為一項。',points}; const liveTurn={kind:'edictmatch',combinedEmperor:true,memDoc:memId,items:[item]}; const repeatRegistry=buildRepeatRegistry('emperor'); points.forEach((pt,pi)=>repeatRegistry.push(repeatRegistryEntry({kind:'edictpoint',bucketKey:'__current__',turn:liveTurn,turnIndex:0,itemIndex:0,pointIndex:pi,item:pt,parentItem:item,actor:'emperor',report_doc_id:memId,source_doc_ids:(pt.sources||[]).map(s=>s.doc_id).filter(Boolean)}))); for(const pt of points){ try{ await annotateRepeatCandidate(pt,'emperor',repeatRegistry); }catch(e){ console.warn('emperor repeat_report failed',e); } }
             const c=chatArr(curStore()); c.push({kind:'edictmatch',combinedEmperor:true,marker:'既有配對',memDoc:memId,items:[item],at:nowStr(),model:getGeminiModel()}); points.forEach(pt=>refs.push({mem,point:pt})); made+=points.length; markAIReview('emperor-action',[mem]);
           }catch(e){}

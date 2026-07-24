@@ -39,6 +39,14 @@ then offers either:
 Cards use the existing `相關上諭` layout and preserve a clickable quotation and
 document citation for every `硃批` and `上諭` source.
 
+Each action must also include `origin_doc_id` and `origin_type`. The origin is
+the one supplied emperor document in which the substantive action is expressed:
+use `上諭` when the action originates in the imperial edict and `硃批` when it
+originates in the vermilion rescript. If both sources describe one combined
+action, choose the document carrying the primary imperial wording, not the
+document with the earliest date. A `奏摺` may remain a supporting source but
+must never be the action origin.
+
 Each returned `title` is the subtitle of one concrete action, not the title of
 the whole linked 上諭. If one 上諭 contains several commands, give every point
 its own specific title naming its object and action; never repeat a generic
@@ -64,6 +72,8 @@ for an exact same action, not merely the same 上諭, official, or broad topic.
       "who": [],
       "who_loc": {},
       "relations": [],
+      "origin_doc_id": "諭…",
+      "origin_type": "上諭",
       "same_as_event_id": "",
       "sources": [
         {"doc_id": "硃…", "source_type": "硃批", "quote": "", "title": "", "date": ""},
