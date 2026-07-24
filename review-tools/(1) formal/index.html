@@ -7937,9 +7937,9 @@
       function combinedEmperorSourcesHtml(sources, memDoc){
         // Order: the official report being answered (奏摺) first, then the emperor's own words
         // (硃批, then 上諭). 奏摺 = cool-blue backdrop (official doc); 上諭／硃批 = warm-gold (emperor).
-        const ord={'硃批':0,'奏摺':1,'上諭':2};
+        const ord={'奏摺':0,'硃批':1,'上諭':2};
         const arr=(sources||[]).slice().sort((a,b)=>((ord[a.source_type]==null?9:ord[a.source_type])-(ord[b.source_type]==null?9:ord[b.source_type])));
-        return arr.map(s=>{ const r=recByDocId2(s.doc_id)||{}; const raw=s.source_type||'御筆';
+        const blocks=arr.map(s=>{ const r=recByDocId2(s.doc_id)||{}; const raw=s.source_type||'御筆';
           const isOfficial=(raw==='奏摺');
           const qcls=isOfficial?'cx-q-off':'cx-q-emp';
           let typ=raw, pos='';
@@ -7955,10 +7955,13 @@
           const context=(raw==='硃批'&&pos==='夾批'&&s.context_quote)?`<div class="em-detail zp-context"><span class="l">奏摺原文</span><div class="cx-q cx-q-off" data-doc="${esc(s.doc_id||'')}" title="點按在奏摺原文顯示">「${esc(s.context_quote)}」</div></div>`:'';
           // When the 奏摺 quote IS the document under review, its own source info is redundant.
           const suppress=isOfficial && memDoc && String(s.doc_id||'')===String(memDoc);
-          const info=suppress?'':`<dl class="em-srcinfo"><dt>${esc(typ)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
+          const info=suppress?'':typ==='上諭'
+            ?`<div class="em-srcinfo em-srcinfo-yu"><div>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</div>${date?`<div>${esc(date)}</div>`:''}</div>`
+            :`<dl class="em-srcinfo"><dt>${esc(typ)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
           const quoteBlock=quoteHtml?`<div class="em-detail"><span class="l">${esc(typ)}</span>${quoteHtml}</div>`:'';
           return `<div class="em-source-block">${context}${quoteBlock}${info}</div>`;
         }).join('');
+        return blocks?`<div class="em-source-group">${blocks}</div>`:'';
       }
       function edictHtml(m,i){ const items=m.items||[];
         return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.combinedEmperor?'皇帝行動':'相關上諭'}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
@@ -11649,6 +11652,8 @@ body .chat-log .zp-item .ea-infosrc, body.dark-mode .chat-log .zp-item .ea-infos
 .chat-log .em-overview .l{ color:var(--faint); font-weight:700; white-space:nowrap; font-size:calc(12.5px*var(--fs,1)); }
 .chat-log .em-overview .ov-t{ color:var(--ink); line-height:1.8; font-size:calc(13px*var(--fs,1)); }
 .chat-log .em-item{ padding:14px 4px 4px !important; }
+.chat-log .em-source-group{ margin:16px 0 20px; padding:14px 16px 2px; border:1px solid var(--line); border-radius:10px; background:var(--panel); }
+.chat-log .em-source-group .em-source-block:last-child{ padding-bottom:4px; margin-bottom:0; }
 .chat-log .em-source-block{ padding:0 0 18px; margin:0 0 18px; }
 .chat-log .em-source-block + .em-source-block{ border-top:2px solid var(--line); padding-top:20px; }
 .chat-log .em-aspect{ font-size:calc(14px*var(--fs,1)) !important; font-weight:700 !important; color:var(--ink) !important; margin:0 0 4px !important; }
@@ -11680,6 +11685,8 @@ body .chat-log .em-item .em-open, body.dark-mode .chat-log .em-item .em-open{
   font-size:calc(12px*var(--fs,1)); }
 .chat-log .em-srcinfo dt{ color:var(--faint); white-space:nowrap; margin:0; }
 .chat-log .em-srcinfo dd{ margin:0; color:var(--muted); line-height:1.6; }
+.chat-log .em-srcinfo.em-srcinfo-yu{ display:flex !important; flex-direction:column !important; grid-template-columns:none !important; gap:3px !important; margin:14px 0 0 !important; padding:0 !important; border-top:0 !important; }
+.chat-log .em-srcinfo.em-srcinfo-yu > div{ color:var(--muted); line-height:1.6; }
 /* ── global: larger quotation text + more air between parts ── */
 body .chat-log .cx-q{ font-size:calc(13.5px*var(--fs,1)) !important; line-height:1.72 !important; padding:9px 13px !important; }
 .chat-log .cx-ev{ padding-top:16px !important; }

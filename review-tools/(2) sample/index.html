@@ -8079,16 +8079,19 @@
           const ra=recByDocId2(a.s.doc_id)||{}, rb=recByDocId2(b.s.doc_id)||{};
           const ta=a.s.source_type||(ra.type==='zhupi'?'硃批':ra.type==='shangyu'?'上諭':'御筆');
           const tb=b.s.source_type||(rb.type==='zhupi'?'硃批':rb.type==='shangyu'?'上諭':'御筆');
-          const rank=t=>t==='硃批'?0:(t==='奏摺'?1:(t==='上諭'?2:3));
+          const rank=t=>t==='奏摺'?0:(t==='硃批'?1:(t==='上諭'?2:3));
           return rank(ta)-rank(tb)||a.index-b.index;
         });
-        return ordered.map(({s})=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=typ==='硃批'?(pos&&pos!=='硃批'?pos:'尾批'):typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
+        const blocks=ordered.map(({s})=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=typ==='硃批'?(pos&&pos!=='硃批'?pos:'尾批'):typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
           const context=(typ==='硃批'&&pos==='夾批'&&meta.context_quote)?`<div class="em-detail zp-context"><span class="l">奏摺原文</span><div class="cx-q cx-q-off" data-doc="${esc(s.doc_id||'')}" title="點按在奏摺原文顯示">「${esc(meta.context_quote)}」</div></div>`:'';
           // When the 奏摺 quote IS the document under review, its own source info is redundant.
           const suppress=isOfficial && memDoc && String(s.doc_id||'')===String(memDoc);
-          const info=suppress?'':`<dl class="em-srcinfo"><dt>${esc(typeLabel)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
+          const info=suppress?'':typ==='上諭'
+            ?`<div class="em-srcinfo em-srcinfo-yu"><div>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</div>${date?`<div>${esc(date)}</div>`:''}</div>`
+            :`<dl class="em-srcinfo"><dt>${esc(typeLabel)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
           const quoteBlock=s.quote?`<div class="em-detail"><span class="l">${esc(typeLabel)}</span><div class="cx-q ${qcls}" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」</div></div>`:'';
           return `<div class="em-source-block">${context}${quoteBlock}${info}</div>`; }).join('');
+        return blocks?`<div class="em-source-group">${blocks}</div>`:'';
       }
       function combinedEmperorZhupiMeta(source){
         const out={position:source&&source.position||'',context_quote:source&&source.context_quote||''};
@@ -11816,6 +11819,8 @@ body .chat-log .zp-item .ea-infosrc, body.dark-mode .chat-log .zp-item .ea-infos
 .chat-log .em-aspect{ font-size:calc(14px*var(--fs,1)) !important; font-weight:700 !important; color:var(--ink) !important; margin:0 0 4px !important; }
 .chat-log .em-item .em-meta{ color:var(--muted) !important; font-size:calc(12px*var(--fs,1)) !important; margin:0 0 8px !important; }
 .chat-log .em-detail{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:start; margin:12px 0; }
+.chat-log .em-source-group{ margin:16px 0 20px; padding:14px 16px 2px; border:1px solid var(--line); border-radius:10px; background:var(--panel); }
+.chat-log .em-source-group .em-source-block:last-child{ padding-bottom:4px; margin-bottom:0; }
 .chat-log .em-source-block{ padding:0 0 18px; margin:0 0 18px; }
 .chat-log .em-source-block + .em-source-block{ border-top:2px solid var(--line); padding-top:20px; }
 .chat-log .em-detail .l{ color:var(--faint); white-space:nowrap; font-size:calc(12px*var(--fs,1)); padding-top:8px; }
@@ -11844,6 +11849,8 @@ body .chat-log .em-item .em-open, body.dark-mode .chat-log .em-item .em-open{
   font-size:calc(12px*var(--fs,1)); }
 .chat-log .em-srcinfo dt{ color:var(--faint); white-space:nowrap; margin:0; }
 .chat-log .em-srcinfo dd{ margin:0; color:var(--muted); line-height:1.6; }
+.chat-log .em-srcinfo.em-srcinfo-yu{ display:flex !important; flex-direction:column !important; grid-template-columns:none !important; gap:3px !important; margin:14px 0 0 !important; padding:0 !important; border-top:0 !important; }
+.chat-log .em-srcinfo.em-srcinfo-yu > div{ color:var(--muted); line-height:1.6; }
 /* ── global: larger quotation text + more air between parts ── */
 body .chat-log .cx-q{ font-size:calc(13.5px*var(--fs,1)) !important; line-height:1.72 !important; padding:9px 13px !important; }
 .chat-log .cx-ev{ padding-top:16px !important; }

@@ -2863,6 +2863,29 @@ Remaining:
 - Browser visual verification was unavailable in this environment; no
   state-mutating UI click was performed.
 
+### 2026-07-24 17:43 HKT — Codex — Grouped responding Yu and Zhu evidence
+
+Summary: Kept the responding `上諭` and its related `硃批` evidence inside one
+bordered source group in the combined `皇帝行動` card. Individual source units
+still have clear separators, explicit 奏摺-first ordering, and each 上諭 source
+now shows only its title and date without the redundant `上諭` and `日期`
+metadata labels.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All 5 formal and 6 sample inline scripts parsed successfully with Node.
+- Synthetic formal/sample source renders passed for grouped Zhu/Yu output,
+  奏摺-first ordering, and unlabeled 上諭 metadata.
+- `git diff --check` passed for both HTML files.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; no
+  state-mutating UI click was performed.
+
 ### 2026-07-24 17:30 HKT — Codex — Hid empty trace cards and clarified emperor sources
 
 Summary: Removed empty `追溯來源` result cards when no source chains are
