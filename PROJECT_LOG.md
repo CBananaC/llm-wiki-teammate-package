@@ -2839,3 +2839,26 @@ Verified:
 
 Remaining:
 - Human confirmation at the user's exact window size, if desired.
+
+### 2026-07-24 17:14 HKT — Codex — Removed pictograms from AI panel cards
+
+Summary: Refined the paired AI-panel renderer so combined Qing extraction cards
+display `清廷行動`, Qing category badges remain Qing-only, and repeated reports
+retain the `併入已有事件` / `獨立加入` choices. Removed pictographic markers
+from event facts, source metadata, response cards, and related panel labels while
+keeping the underlying text and controls unchanged.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All 5 formal and 6 sample inline scripts parsed successfully with Node.
+- Targeted checks passed for `清廷行動`, Qing-only categories, repeat controls,
+  and the absence of pictographic emoji code points.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; no
+  state-mutating UI click was performed.
