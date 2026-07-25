@@ -3906,24 +3906,26 @@
   // Disk-backed backup via the local review-tools server (review-tools/server.py, GET/POST
   // /api/edits-sample -> review-tools/(2) sample/sample_all.data). Disk has no meaningful size
   // cap the way localStorage does, so this is now the durable copy; localStorage stays as a
-  // fast local cache and the only copy available when the page is opened as file:// (no server).
+  // debounced local cache and the only copy available when the page is opened as file:// (no server).
   // Fire-and-forget + silently no-ops if unreachable, so nothing changes for a file:// setup.
   let __edSaveTimer=null;
+  let __localSaveTimer=null;
+  let __edSavePayload=null;
+  function editsPayload(){ if(__edSavePayload==null) __edSavePayload=JSON.stringify(slimEditsForSave()); return __edSavePayload; }
   function syncEditsToServer(){
     clearTimeout(__edSaveTimer);
     // small debounce: saveEdits() fires on nearly every click/keystroke-blur, and POSTing the
     // whole (possibly large) EDITS blob on every single one would be wasteful network chatter.
     __edSaveTimer=setTimeout(()=>{
-      fetch('/api/edits-sample', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(slimEditsForSave())})
+      fetch('/api/edits-sample', {method:'POST', headers:{'Content-Type':'application/json'}, body:editsPayload()})
         .then(r=>{ if(r.ok) __serverSyncConfirmed=true; })
         .catch(()=>{});   // no server (e.g. file://) or offline -- localStorage/backup remain the fallback
     }, 800);
   }
-  function saveEdits(){
-    window.__edDirty=true;
-    syncEditsToServer();
-    if(__localStorageFull) return;   // already confirmed full this session -- don't keep re-throwing on every save
-    try{ localStorage.setItem(EDIT_KEY, JSON.stringify(slimEditsForSave())); return; }
+  function writeLocalEdits(){
+    if(__localSaveTimer){ clearTimeout(__localSaveTimer); __localSaveTimer=null; }
+    if(__localStorageFull) return;
+    try{ localStorage.setItem(EDIT_KEY, editsPayload()); return; }
     catch(e){
       if(!(e && (e.name==='QuotaExceededError' || e.code===22))){ return; }
       __localStorageFull=true;
@@ -3935,6 +3937,13 @@
       if(!__saveEditsQuotaWarned){ __saveEditsQuotaWarned=true;
         alert('瀏覽器儲存空間（localStorage）已滿，本機快取沒有更新，且尚未確認本機 review-tools 伺服器有在運作。\n請確認已執行 review-tools/server.py，或立即匯出/備份目前資料，否則這次變更可能遺失。'); }
     }
+  }
+  function saveEdits(){
+    window.__edDirty=true;
+    __edSavePayload=null;
+    syncEditsToServer();
+    clearTimeout(__localSaveTimer);
+    __localSaveTimer=setTimeout(()=>{ __localSaveTimer=null; writeLocalEdits(); },250);
   }
   // Boot-time: prefer the server's disk copy over localStorage's, since -- once localStorage has
   // hit quota -- its copy is stale by definition (missing everything since the cap was hit) while
@@ -8371,49 +8380,53 @@
       }
       function renderLog(opts){ opts=opts||{};
         const c=chatArr(curStore());
-        let cleanedBadMatch=false;
-        c.forEach(m=>{ if(m&&m.kind==='extract'&&m.actor&&Array.isArray(m.items)){
-          m.items.forEach(it=>{ if(invalidMatchRegForCandidate(it, it&&it.__matchReg)){ delete it.__matchReg; cleanedBadMatch=true; } normalizeProposalDate(it); });
-          const kept=m.items.filter(it=>it.__added||it.__skip||wantedEvent(it,m.actor)); if(kept.length!==m.items.length){ m.items=kept; saveEdits(); }
-        } });
-        if(cleanedBadMatch) saveEdits();
-        let repairedEmperor=false;
-        c.forEach(m=>{
-          if(!m||!Array.isArray(m.items)) return;
-          if(m.kind==='zhupi'){
-            m.items.forEach(it=>{
-              if(!it||!it.__added||!it.__evId) return;
-              const dd=zhupiItemDetectedDate(it), subtitle=zhupiItemSubtitle(it);
-              const description=[it.responds_to?('回應：'+it.responds_to):'', it.opinion?('御意：'+it.opinion):''].filter(Boolean).join('\n')||(it.text||'');
-              if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.text||it.marker||'', howKnown:'硃批', subtitle, description, detail:zhupiEmperorDetail(it)})) repairedEmperor=true;
-            });
-          } else if(m.kind==='emperoraction'){
-            m.items.forEach(it=>{
-              if(!it||!it.__added||!it.__evId) return;
-              const dd={whenAr:it.whenAr||'', whenCh:it.whenCh||''};
-              if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.quote||'', howKnown:it.source||'御筆', subtitle:it.subtitle, description:it.description, detail:emperorActionDetail(it)})) repairedEmperor=true;
-            });
-          } else if(m.kind==='edictmatch'){
-            m.items.forEach(it=>{
-              if(!it) return;
-              const dd=edictItemDetectedDate(it);
-              if(it.__added&&it.__evId){
-                const subtitle=it.title||'上諭回應';
-                const pts=it.points||[];
-                const description=[it.summary||'', pts.map(pt=>[pt.aspect,pt.how].filter(Boolean).join('：')).filter(Boolean).join('\n')].filter(Boolean).join('\n');
-                const quote=(pts.find(pt=>pt.edict_quote)||{}).edict_quote||'';
-                if(repairEmperorActionEvent(it.__evId,{dd, docId:it.edict_id, quote, howKnown:'上諭', subtitle, description, detail:edictItemEmperorDetail(it,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
-              }
-              (it.points||[]).forEach(pt=>{
-                if(!pt||!pt.__added||!pt.__evId) return;
-                const subtitle=edictPointSubtitle(pt, it);
-                const description=[pt.how||'', it.summary||''].filter(Boolean).join('\n');
-                if(repairEmperorActionEvent(pt.__evId,{dd, docId:it.edict_id, quote:pt.edict_quote||'', howKnown:'上諭', subtitle, description, detail:edictPointEmperorDetail(it,pt,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
+        // Button actions only need the affected chat data rebuilt. Defer the global cleanup and
+        // emperor-event repair scan to full refreshes so a click does not walk every saved item.
+        if(!opts.preserve && !opts.fast){
+          let cleanedBadMatch=false;
+          c.forEach(m=>{ if(m&&m.kind==='extract'&&m.actor&&Array.isArray(m.items)){
+            m.items.forEach(it=>{ if(invalidMatchRegForCandidate(it, it&&it.__matchReg)){ delete it.__matchReg; cleanedBadMatch=true; } normalizeProposalDate(it); });
+            const kept=m.items.filter(it=>it.__added||it.__skip||wantedEvent(it,m.actor)); if(kept.length!==m.items.length){ m.items=kept; saveEdits(); }
+          } });
+          if(cleanedBadMatch) saveEdits();
+          let repairedEmperor=false;
+          c.forEach(m=>{
+            if(!m||!Array.isArray(m.items)) return;
+            if(m.kind==='zhupi'){
+              m.items.forEach(it=>{
+                if(!it||!it.__added||!it.__evId) return;
+                const dd=zhupiItemDetectedDate(it), subtitle=zhupiItemSubtitle(it);
+                const description=[it.responds_to?('回應：'+it.responds_to):'', it.opinion?('御意：'+it.opinion):''].filter(Boolean).join('\n')||(it.text||'');
+                if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.text||it.marker||'', howKnown:'硃批', subtitle, description, detail:zhupiEmperorDetail(it)})) repairedEmperor=true;
               });
-            });
-          }
-        });
-        if(repairedEmperor){ saveEdits(); render(); }
+            } else if(m.kind==='emperoraction'){
+              m.items.forEach(it=>{
+                if(!it||!it.__added||!it.__evId) return;
+                const dd={whenAr:it.whenAr||'', whenCh:it.whenCh||''};
+                if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.quote||'', howKnown:it.source||'御筆', subtitle:it.subtitle, description:it.description, detail:emperorActionDetail(it)})) repairedEmperor=true;
+              });
+            } else if(m.kind==='edictmatch'){
+              m.items.forEach(it=>{
+                if(!it) return;
+                const dd=edictItemDetectedDate(it);
+                if(it.__added&&it.__evId){
+                  const subtitle=it.title||'上諭回應';
+                  const pts=it.points||[];
+                  const description=[it.summary||'', pts.map(pt=>[pt.aspect,pt.how].filter(Boolean).join('：')).filter(Boolean).join('\n')].filter(Boolean).join('\n');
+                  const quote=(pts.find(pt=>pt.edict_quote)||{}).edict_quote||'';
+                  if(repairEmperorActionEvent(it.__evId,{dd, docId:it.edict_id, quote, howKnown:'上諭', subtitle, description, detail:edictItemEmperorDetail(it,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
+                }
+                (it.points||[]).forEach(pt=>{
+                  if(!pt||!pt.__added||!pt.__evId) return;
+                  const subtitle=edictPointSubtitle(pt, it);
+                  const description=[pt.how||'', it.summary||''].filter(Boolean).join('\n');
+                  if(repairEmperorActionEvent(pt.__evId,{dd, docId:it.edict_id, quote:pt.edict_quote||'', howKnown:'上諭', subtitle, description, detail:edictPointEmperorDetail(it,pt,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
+                });
+              });
+            }
+          });
+          if(repairedEmperor){ saveEdits(); render(); }
+        }
         log.innerHTML=c.length?c.map((m,i)=> m.kind==='docpair'?docPairHtml(m,i):(m.kind==='shangyuloop'?shangyuLoopHtml(m,i):(m.kind==='extract'?extractHtml(m,i):(m.kind==='trace'?traceHtml(m,i):(m.kind==='officialresponse'?officialResponseHtml(m,i):(m.kind==='zhupi'?zhupiHtml(m,i):(m.kind==='edictmatch'?edictHtml(m,i):(m.kind==='infosource'?infoSourceHtml(m,i):(m.kind==='dedupe'?dedupeHtml(m,i):(m.kind==='daysum'?daySumHtml(m,i):(m.kind==='consolidate'?consolidateHtml(m,i):(m.kind==='situfit'?situFitHtml(m,i):(m.kind==='emperoraction'?emperorActionHtml(m,i):turnHtml(m,i)))))))))))))).join(''):'<div class="record-empty">尚無對話。在下方輸入即可開始。</div>';
         (function dpRunHeaders(){ let lastRid=null;
           log.querySelectorAll('.dp-card[data-logi]').forEach(card=>{ const idx=+card.dataset.logi; const mm=c[idx]; if(!mm) return; const rid=mm.__skillRunId||('at:'+(mm.at||idx));
@@ -8466,11 +8479,6 @@
         function reportCommit(ev, subtitle){
           if(ev.dateAr){
             st2.textContent='';
-            // the chart renders at full native width by default and a resizable column is very
-            // often narrower than that, so the new 4th (emperor-action) lane sitting far to the
-            // right can be scrolled out of view even though the dot was drawn correctly -- without
-            // this the freshly created dot looked indistinguishable from "nothing got created".
-            requestAnimationFrame(()=>{ if(window.__focusEventDot) window.__focusEventDot(ev.id); });
           } else {
             st2.textContent='已建立「'+subtitle+'」，但來源文書缺少可判讀的日期，暫未能標示在時間軸第四線上——可點按「已建立但未能定位」開啟事件卡片手動補上日期。';
           }
@@ -8552,7 +8560,7 @@
           m.__evId=ev.id; m.__committed=true;
           if(m.memDoc) markAIReviewDocId(m.memDoc, 'emperor-action', 'R');
           saveEdits(); renderLog({preserve:true}); render();
-          if(ev.dateAr){ st2.textContent='已加入紅色皇帝行動點「'+subtitle+'」（'+ev.dateAr+'）。'; requestAnimationFrame(()=>{ if(window.__focusEventDot) window.__focusEventDot(ev.id); }); }
+          if(ev.dateAr){ st2.textContent='已加入紅色皇帝行動點「'+subtitle+'」（'+ev.dateAr+'）。'; }
           else st2.textContent='已建立「'+subtitle+'」，但缺少可定位日期。';
         });
         // 已建立但未能定位 -> 重試: drop the stale dateless event and re-run the SAME builder used by
@@ -10653,6 +10661,7 @@
   scroll.addEventListener('wheel', e=>{
     // Ctrl+wheel (Windows/Linux) or Command/Ctrl+wheel (macOS) zooms;
     // an unmodified wheel remains a normal pan/scroll gesture.
+  window.addEventListener('pagehide',()=>writeLocalEdits());
     if(!(e.ctrlKey||e.metaKey)) return;
     e.preventDefault();
     const rect=scroll.getBoundingClientRect();

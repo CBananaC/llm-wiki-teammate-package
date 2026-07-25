@@ -3280,3 +3280,21 @@ Verified:
 
 Remaining:
 - Unrelated sample state, review-bundle, proxy, and script changes remain unstaged.
+
+### 2026-07-25 16:43 HKT — Codex — Reduced AI chat panel button lag
+
+Summary: Debounced the large localStorage cache write and reused one serialized edit payload for server and local persistence, with a pagehide flush for exit safety. Button-triggered AI chat refreshes now skip the global candidate cleanup and emperor-event repair scan; those checks still run on full refreshes. Removed the remaining chart auto-focus after emperor-action buttons so clicks do not reposition the visible chart.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both embedded HTML script sets parsed successfully.
+- `git diff --check` passed.
+- The formal and sample implementations contain the same fast-refresh and debounced-persistence behavior.
+
+Remaining:
+- Unrelated sample state, review-bundle, proxy, and script changes remain unstaged.
+- Interactive timing should be rechecked in the running website with a large AI output bundle.
