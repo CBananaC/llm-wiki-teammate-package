@@ -3088,3 +3088,20 @@ Verified:
 
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
+### 2026-07-25 13:55 HKT — Codex — Removed outer emperor-action quotation border
+
+Summary: Removed the outer box, border, background, and inset padding around the combined quotation group in `皇帝行動` cards while retaining the individual quotation panels and source separators.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- The shared emperor-action quotation-group style was reset consistently in formal and sample.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
