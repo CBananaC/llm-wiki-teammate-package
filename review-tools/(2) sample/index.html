@@ -8088,14 +8088,39 @@
         if(it.memTitle) h+=`<dt>↩ 回應</dt><dd>${respTxt}</dd>`;
         return h+'</dl>';
       }
-      function combinedEmperorSourcesHtml(sources, memDoc){
-        // Order: the official report being answered (奏摺) first, then the emperor's own words
-        // (硃批, then 上諭). 奏摺 = cool-blue backdrop (official doc); 上諭／硃批 = warm-gold (emperor).
-        const ordered=(sources||[]).map((s,index)=>({s,index})).sort((a,b)=>{
+      function combinedEmperorFallbackQuote(record, point){
+        const direct=String(point&&point.edict_quote||'').trim(); if(direct) return direct;
+        if(!record) return '';
+        const focus=String((point&&point.title)||'')+' '+String((point&&point.how)||'');
+        const body=String(record.body||'').replace(/\s+/g,' ').trim();
+        const termWeights={'張皇':5,'鎮定':5,'親自渡臺':4,'重臣':4,'督辦':4,'調遣':4,'沿海口岸':4,'巡防':4,'偷越內渡':4,'撫恤':4,'議恤':4,'加恩':4,'渡臺':1,'剿捕':1};
+        const terms=Object.keys(termWeights).filter(t=>focus.indexOf(t)>=0);
+        let best='', bestScore=0;
+        body.split(/[。！？]/).forEach(part=>{
+          const text=part.trim(); if(!text) return;
+          const score=terms.reduce((n,t)=>n+(text.indexOf(t)>=0?termWeights[t]:0),0);
+          if(score>bestScore){ best=text+'。'; bestScore=score; }
+        });
+        if(best) return best;
+        let summary=null; try{ summary=typeof getSummary==='function'?getSummary(record):record.summary; }catch(e){}
+        const candidates=[summary&&summary.emperor_command&&summary.emperor_command.quotation,summary&&summary.emperor_opinion&&summary.emperor_opinion.quotation];
+        return candidates.find(q=>String(q||'').trim())||'';
+      }
+      function combinedEmperorSourcesHtml(sources, memDoc, fallback){
+        // Keep the report and the imperial response together: 奏摺, then the responding 上諭,
+        // with any separate 硃批 after them. 奏摺 = cool-blue; 上諭／硃批 = warm-gold.
+        const arr=(sources||[]).map(s=>Object.assign({},s)); fallback=fallback||{};
+        const yuId=String((fallback.point&&fallback.point.edict_id)||(fallback.item&&fallback.item.edict_id)||'');
+        const yuRecord=yuId?recByDocId2(yuId):null;
+        const yuQuote=combinedEmperorFallbackQuote(yuRecord,fallback.point);
+        const existingYu=arr.find(s=>s&&(s.source_type==='上諭'||((recByDocId2(s.doc_id)||{}).type==='shangyu')));
+        if(existingYu&&yuQuote&&!String(existingYu.quote||'').trim()) existingYu.quote=yuQuote;
+        else if(!existingYu&&yuId&&yuQuote) arr.push({doc_id:yuId,source_type:'上諭',quote:yuQuote,title:(fallback.item&&fallback.item.title)|| (yuRecord&&yuRecord.title)||yuId,date:(fallback.item&&fallback.item.date)|| (yuRecord&&(yuRecord.annAr||yuRecord.sendAr||yuRecord.recvAr))||''});
+        const ordered=arr.map((s,index)=>({s,index})).sort((a,b)=>{
           const ra=recByDocId2(a.s.doc_id)||{}, rb=recByDocId2(b.s.doc_id)||{};
           const ta=a.s.source_type||(ra.type==='zhupi'?'硃批':ra.type==='shangyu'?'上諭':'御筆');
           const tb=b.s.source_type||(rb.type==='zhupi'?'硃批':rb.type==='shangyu'?'上諭':'御筆');
-          const rank=t=>t==='奏摺'?0:(t==='硃批'?1:(t==='上諭'?2:3));
+          const rank=t=>t==='奏摺'?0:(t==='上諭'?1:(t==='硃批'?2:3));
           return rank(ta)-rank(tb)||a.index-b.index;
         });
         const blocks=ordered.map(({s})=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=typ==='硃批'?(pos&&pos!=='硃批'?pos:'尾批'):typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
@@ -8155,7 +8180,7 @@
                     const infoBtn=pt.__added&&pt.__evId?infoSourceFollowupHtml(pt.__evId):'';
                     return `<div class="cx-ev em-item">
                     ${pt.title?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="title">${esc(pt.title)}</span></div>`:''}
-                    ${m.combinedEmperor?combinedEmperorSourcesHtml(pt.sources, it.memDoc||m.memDoc||''):`<div class="em-detail">${pt.memorial_quote?`<span class="l">奏摺</span><div class="cx-q" data-doc="${esc(it.memDoc||m.memDoc||'')}" title="點按在奏摺原文顯示">「${esc(pt.memorial_quote)}」</div>`:''}${pt.edict_quote?`<span class="l">上諭回應</span><div class="cx-q" data-doc="${esc(it.edict_id||'')}" title="點按在上諭原文顯示">「${esc(pt.edict_quote)}」</div>`:''}</div>`}
+                    ${m.combinedEmperor?combinedEmperorSourcesHtml(pt.sources, it.memDoc||m.memDoc||'', {item:it,point:pt}):`<div class="em-detail">${pt.memorial_quote?`<span class="l">奏摺</span><div class="cx-q" data-doc="${esc(it.memDoc||m.memDoc||'')}" title="點按在奏摺原文顯示">「${esc(pt.memorial_quote)}」</div>`:''}${pt.edict_quote?`<span class="l">上諭回應</span><div class="cx-q" data-doc="${esc(it.edict_id||'')}" title="點按在上諭原文顯示">「${esc(pt.edict_quote)}」</div>`:''}</div>`}
                     ${pt.how?`<div class="em-how em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="how">${esc(pt.how)}</div>`:''}
                     ${repeat?matchNoteHtml(pt):(prior?`<div class="cx-matchnote" title="可併入最早的既有皇帝行動，或保留為獨立行動"><b>此皇帝行動先前已見於 ${esc(evTitle(prior))}${prior.dateAr?'（'+esc(prior.dateAr)+'）':''}</b></div>`:'')}
                     ${m.combinedEmperor?'':edictSourceLine(it,dd)}

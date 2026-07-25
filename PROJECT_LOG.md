@@ -3223,3 +3223,20 @@ Verified:
 
 Remaining:
 - The local Git index is read-only in this environment, so the required local checkpoint commit could not be created.
+
+### 2026-07-25 15:01 HKT — Codex — Repaired Zhu 22 emperor-action source pairing
+
+Summary: Updated the formal and sample 皇帝行動 renderers for `zhu-december-rerun-g36`. A responding 上諭 now follows its related 奏摺 quote before any separate 尾批, and a missing 上諭 quote is recovered from the identified 上諭 record only when the bundle source list omits it.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The Zhu 22 first point renders in 奏摺 → 上諭 → 尾批 order.
+- The second point renders the exact 諭13 sentence containing「跡涉張皇」.
+- Both embedded HTML script sets parsed, the bundle-specific renderer check passed, and `git diff --check` passed.
+
+Remaining:
+- The local Git index is read-only in this environment, so the required local checkpoint commit still needs to be created when index write access is available.
