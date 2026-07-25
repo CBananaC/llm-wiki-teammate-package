@@ -8116,14 +8116,16 @@
         const existingYu=arr.find(s=>s&&(s.source_type==='上諭'||((recByDocId2(s.doc_id)||{}).type==='shangyu')));
         if(existingYu&&yuQuote&&!String(existingYu.quote||'').trim()) existingYu.quote=yuQuote;
         else if(!existingYu&&yuId&&yuQuote) arr.push({doc_id:yuId,source_type:'上諭',quote:yuQuote,title:(fallback.item&&fallback.item.title)|| (yuRecord&&yuRecord.title)||yuId,date:(fallback.item&&fallback.item.date)|| (yuRecord&&(yuRecord.annAr||yuRecord.sendAr||yuRecord.recvAr))||''});
+        const sourceType=s=>{ const r=recByDocId2(s&&s.doc_id)||{}; return s&&s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); };
         const ordered=arr.map((s,index)=>({s,index})).sort((a,b)=>{
-          const ra=recByDocId2(a.s.doc_id)||{}, rb=recByDocId2(b.s.doc_id)||{};
-          const ta=a.s.source_type||(ra.type==='zhupi'?'硃批':ra.type==='shangyu'?'上諭':'御筆');
-          const tb=b.s.source_type||(rb.type==='zhupi'?'硃批':rb.type==='shangyu'?'上諭':'御筆');
+          const ta=sourceType(a.s), tb=sourceType(b.s);
           const rank=t=>t==='奏摺'?0:(t==='上諭'?1:(t==='硃批'?2:3));
           return rank(ta)-rank(tb)||a.index-b.index;
         });
-        const blocks=ordered.map(({s})=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=typ==='硃批'?(pos&&pos!=='硃批'?pos:'尾批'):typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
+        const sourceGroups=[]; let currentGroup=[];
+        ordered.forEach(({s})=>{ if(sourceType(s)==='奏摺'&&currentGroup.length){ sourceGroups.push(currentGroup); currentGroup=[]; } currentGroup.push(s); });
+        if(currentGroup.length) sourceGroups.push(currentGroup);
+        const blocks=sourceGroups.map(group=>`<div class="em-source-pair">${group.map(s=>{ const meta=combinedEmperorZhupiMeta(s); const r=recByDocId2(s.doc_id)||{}; const typ=sourceType(s); const isOfficial=(typ==='奏摺'); const qcls=isOfficial?'cx-q-off':'cx-q-emp'; let inferredPosition=meta.position||''; if(typ==='硃批'&&!inferredPosition){ inferredPosition=meta.context_quote?'夾批':'尾批'; } const pos=typ==='硃批'?zhupiPositionLabel({position:inferredPosition}):''; const typeLabel=typ==='硃批'?(pos&&pos!=='硃批'?pos:'尾批'):typ; const title=s.title||r.title||s.doc_id||''; const date=s.date||(typ==='上諭'?(r.annAr||r.sendAr||r.recvAr):(r.recvAr||r.annAr||r.sendAr))||'';
           const context=(typ==='硃批'&&pos==='夾批'&&meta.context_quote)?`<div class="em-detail zp-context"><span class="l">奏摺原文</span><div class="cx-q cx-q-off" data-doc="${esc(s.doc_id||'')}" title="點按在奏摺原文顯示">「${esc(meta.context_quote)}」</div></div>`:'';
           // When the 奏摺 quote IS the document under review, its own source info is redundant.
           const suppress=isOfficial && memDoc && String(s.doc_id||'')===String(memDoc);
@@ -8131,7 +8133,7 @@
             ?`<div class="em-srcinfo em-srcinfo-yu"><div>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</div>${date?`<div>${esc(date)}</div>`:''}</div>`
             :`<dl class="em-srcinfo"><dt>${esc(typeLabel)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
           const quoteBlock=s.quote?`<div class="em-detail"><span class="l">${esc(typeLabel)}</span><div class="cx-q ${qcls}" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」</div></div>`:'';
-          return `<div class="em-source-block">${context}${quoteBlock}${info}</div>`; }).join('');
+          return `<div class="em-source-block">${context}${quoteBlock}${info}</div>`; }).join('')}</div>`).join('');
         return blocks?`<div class="em-source-group">${blocks}</div>`:'';
       }
       function combinedEmperorZhupiMeta(source){
@@ -11868,9 +11870,11 @@ body .chat-log .zp-item .ea-infosrc, body.dark-mode .chat-log .zp-item .ea-infos
 .chat-log .em-item .em-meta{ color:var(--muted) !important; font-size:calc(12px*var(--fs,1)) !important; margin:0 0 8px !important; }
 .chat-log .em-detail{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:start; margin:12px 0; }
 .chat-log .em-source-group{ margin:16px 0 20px; padding:0; border:0; border-radius:0; background:transparent; }
-.chat-log .em-source-group .em-source-block:last-child{ padding-bottom:4px; margin-bottom:0; }
-.chat-log .em-source-block{ padding:0 0 18px; margin:0 0 18px; }
-.chat-log .em-source-block + .em-source-block{ border-top:2px solid var(--line); padding-top:20px; }
+.chat-log .em-source-pair{ padding:0 0 18px; margin:0 0 18px; }
+.chat-log .em-source-pair + .em-source-pair{ border-top:2px solid var(--line); padding-top:20px; }
+.chat-log .em-source-pair:last-child{ padding-bottom:4px; margin-bottom:0; }
+.chat-log .em-source-block{ padding:0; margin:0; }
+.chat-log .em-source-block + .em-source-block{ margin-top:18px; }
 .chat-log .em-detail .l{ color:var(--faint); white-space:nowrap; font-size:calc(12px*var(--fs,1)); padding-top:8px; }
 .chat-log .em-detail .cx-q{ margin:0 !important; }
 .chat-log .em-how{ font-size:calc(13px*var(--fs,1)); color:var(--ink); line-height:1.8; margin:14px 0; }

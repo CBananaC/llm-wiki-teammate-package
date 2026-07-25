@@ -7995,9 +7995,13 @@
         const existingYu=arr.find(s=>s&&(s.source_type==='上諭'||((recByDocId2(s.doc_id)||{}).type==='shangyu')));
         if(existingYu&&yuQuote&&!String(existingYu.quote||'').trim()) existingYu.quote=yuQuote;
         else if(!existingYu&&yuId&&yuQuote) arr.push({doc_id:yuId,source_type:'上諭',quote:yuQuote,title:(fallback.item&&fallback.item.title)|| (yuRecord&&yuRecord.title)||yuId,date:(fallback.item&&fallback.item.date)|| (yuRecord&&(yuRecord.annAr||yuRecord.sendAr||yuRecord.recvAr))||''});
+        const sourceType=s=>{ const r=recByDocId2(s&&s.doc_id)||{}; return s&&s.source_type||(r.type==='zhupi'?'硃批':r.type==='shangyu'?'上諭':'御筆'); };
         const ord={'奏摺':0,'上諭':1,'硃批':2};
-        arr.sort((a,b)=>((ord[a.source_type]==null?9:ord[a.source_type])-(ord[b.source_type]==null?9:ord[b.source_type])));
-        const blocks=arr.map(s=>{ const r=recByDocId2(s.doc_id)||{}; const raw=s.source_type||'御筆';
+        arr.sort((a,b)=>((ord[sourceType(a)]==null?9:ord[sourceType(a)])-(ord[sourceType(b)]==null?9:ord[sourceType(b)])));
+        const sourceGroups=[]; let currentGroup=[];
+        arr.forEach(s=>{ if(sourceType(s)==='奏摺'&&currentGroup.length){ sourceGroups.push(currentGroup); currentGroup=[]; } currentGroup.push(s); });
+        if(currentGroup.length) sourceGroups.push(currentGroup);
+        const blocks=sourceGroups.map(group=>`<div class="em-source-pair">${group.map(s=>{ const r=recByDocId2(s.doc_id)||{}; const raw=sourceType(s);
           const isOfficial=(raw==='奏摺');
           const qcls=isOfficial?'cx-q-off':'cx-q-emp';
           let typ=raw, pos='';
@@ -8018,7 +8022,7 @@
             :`<dl class="em-srcinfo"><dt>${esc(typ)}</dt><dd>${esc(title)}${s.doc_id?'（'+esc(s.doc_id)+'）':''}</dd>${date?`<dt>日期</dt><dd>${esc(date)}</dd>`:''}</dl>`;
           const quoteBlock=quoteHtml?`<div class="em-detail"><span class="l">${esc(typ)}</span>${quoteHtml}</div>`:'';
           return `<div class="em-source-block">${context}${quoteBlock}${info}</div>`;
-        }).join('');
+        }).join('')}</div>`).join('');
         return blocks?`<div class="em-source-group">${blocks}</div>`:'';
       }
       function edictHtml(m,i){ const items=m.items||[];
@@ -11730,9 +11734,11 @@ body .chat-log .zp-item .ea-infosrc, body.dark-mode .chat-log .zp-item .ea-infos
 .chat-log .em-overview .ov-t{ color:var(--ink); line-height:1.8; font-size:calc(13px*var(--fs,1)); }
 .chat-log .em-item{ padding:14px 4px 4px !important; }
 .chat-log .em-source-group{ margin:16px 0 20px; padding:0; border:0; border-radius:0; background:transparent; }
-.chat-log .em-source-group .em-source-block:last-child{ padding-bottom:4px; margin-bottom:0; }
-.chat-log .em-source-block{ padding:0 0 18px; margin:0 0 18px; }
-.chat-log .em-source-block + .em-source-block{ border-top:2px solid var(--line); padding-top:20px; }
+.chat-log .em-source-pair{ padding:0 0 18px; margin:0 0 18px; }
+.chat-log .em-source-pair + .em-source-pair{ border-top:2px solid var(--line); padding-top:20px; }
+.chat-log .em-source-pair:last-child{ padding-bottom:4px; margin-bottom:0; }
+.chat-log .em-source-block{ padding:0; margin:0; }
+.chat-log .em-source-block + .em-source-block{ margin-top:18px; }
 .chat-log .em-aspect{ font-size:calc(14px*var(--fs,1)) !important; font-weight:700 !important; color:var(--ink) !important; margin:0 0 4px !important; }
 .chat-log .em-item .em-meta{ color:var(--muted) !important; font-size:calc(12px*var(--fs,1)) !important; margin:0 0 8px !important; }
 .chat-log .em-detail{ display:grid; grid-template-columns:auto 1fr; gap:10px 12px; align-items:start; margin:12px 0; }

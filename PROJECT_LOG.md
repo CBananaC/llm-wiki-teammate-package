@@ -3247,3 +3247,20 @@ Summary: Created local commit `e127027` for the paired Zhu 22 emperor-action ren
 
 Verified:
 - Only the two HTML files and `PROJECT_LOG.md` were included; unrelated saved bundle changes remain unstaged.
+
+### 2026-07-25 15:17 HKT — Codex — Grouped responding sources in emperor-action cards
+
+Summary: Changed the formal and sample 皇帝行動 source renderers so each 奏摺 and its responding 上諭／硃批 sources render inside one response group. Separators now appear only between independent source groups, not between a quotation and its response.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The `zhu-december-rerun-g36` Zhu 22 first point renders its 奏摺 quote before the responding 上諭 and keeps all three source blocks inside one group.
+- A synthetic multi-source case creates separate groups at the next 奏摺 boundary.
+- Both embedded HTML script sets parsed and `git diff --check` passed.
+
+Remaining:
+- Unrelated sample state and review-bundle changes remain unstaged.
