@@ -3105,3 +3105,20 @@ Verified:
 
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
+### 2026-07-25 14:01 HKT — Codex — Restored all open-document AI chat output
+
+Summary: Decoupled the AI chat display from the current clicked-document target. The panel now shows saved AI turns from all open document stores and matching multi-document groups, while new prompts continue to use the clicked document as their active target.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- The all-chat view and current-store write bridge passed targeted structural checks.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.

@@ -6871,6 +6871,22 @@
       // read a bad store and throw "undefined is not an object" during extraction.
       const panelDocIds=selectedApis().map(a=>a&&a.rec&&a.rec.id).filter(Boolean).map(String);
       const curStore=()=>{ let a=panelDocIds.length&&typeof cards!=='undefined' ? cards.filter(c=>c.rec&&panelDocIds.includes(String(c.rec.id))) : []; if(!a.length) a=selectedApis(); return a.length===1 ? docEdits(a[0].rec.id) : groupStore(a); };
+      const readChatArr=s=>globalThis.chatArr(s);
+      const viewChatArray=()=>{
+        const refs=[], seen=new Set(), openIds=new Set((cards||[]).map(a=>String(a.rec.id)));
+        const addStore=(store, kind)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)) return; seen.add(turn); refs.push({turn,store,index,kind}); }); };
+        (cards||[]).forEach(a=>addStore(docEdits(a.rec.id),'doc'));
+        Object.values(workspaceGroups()).forEach(store=>{
+          const ids=(store.doc_ids||[]).map(String);
+          if(!ids.length||ids.every(id=>openIds.has(id))) addStore(store,'group');
+        });
+        refs.sort((a,b)=>{ const da=Date.parse(String(a.turn.at||'').replace(' ','T'))||0, db=Date.parse(String(b.turn.at||'').replace(' ','T'))||0; return da-db||a.index-b.index; });
+        const out=refs.map(r=>r.turn);
+        out.push=function(...turns){ const target=readChatArr(curStore()); return target.push(...turns); };
+        out.splice=function(start,count){ const removed=refs.slice(start,start+count); removed.slice().reverse().forEach(r=>readChatArr(r.store).splice(r.index,1)); return removed.map(r=>r.turn); };
+        return out;
+      };
+      const chatArr=()=>viewChatArray();
       const composerFolded=aiComposerFolded();
       const providerNow=getAIProvider(), modelListId=uid('aimodel');
       const modelOptions=aiModelListHtml(providerNow).map(m=>`<option value="${esc(m)}"></option>`).join('');
