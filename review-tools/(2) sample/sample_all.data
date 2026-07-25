@@ -1799,6 +1799,529 @@
       "hidden": false,
       "category": "nonmil",
       "aiFilterLabel": "清方：非軍事"
+    },
+    {
+      "id": "evmrzzo235xrw",
+      "actor": "emperor",
+      "subtitle": "指示福建水師提督黃仕簡抵臺後督率臺灣鎮道官兵分路堵剿盡力撲滅賊匪",
+      "description": "乾隆帝針對福建水師提督黃仕簡奏報親自帶兵由鹿耳門及郡城南路進兵會督夾攻等部署，命令其抵臺後應督率臺灣鎮道等官員分路堵剿，務將匪黨盡力撲滅。",
+      "what": "指示福建水師提督黃仕簡抵臺後督率臺灣鎮道官兵分路堵剿盡力撲滅賊匪",
+      "where": "北京",
+      "who": [
+        "乾隆帝",
+        "黃仕簡"
+      ],
+      "whoLoc": {},
+      "relations": [
+        {
+          "from": "乾隆帝",
+          "to": "黃仕簡",
+          "type": "君臣"
+        }
+      ],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月二十七日",
+      "dateAr": "1786/12/27",
+      "sources": [
+        {
+          "doc_id": "諭13",
+          "quote": "黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+          "label": "指示福建水師提督黃仕簡抵臺後督率臺灣鎮道官兵分路堵剿盡力撲滅賊匪",
+          "aiFilterLabel": "相關上諭",
+          "howKnown": "上諭"
+        }
+      ],
+      "hidden": false,
+      "aiFilterLabel": "相關上諭",
+      "emperorDetail": {
+        "kind": "edict",
+        "combined": true,
+        "action_type": "command",
+        "sources": [
+          {
+            "doc_id": "諭13",
+            "source_type": "上諭",
+            "quote": "黃仕簡到彼，督率該鎮道路夾攻，盡力堵剿，無難立就撲滅。",
+            "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+            "date": "1786/12/27"
+          },
+          {
+            "doc_id": "硃25",
+            "source_type": "奏摺",
+            "quote": "奴才直由鹿耳門、郡城南路進兵，會督夾攻。",
+            "title": "為奏彰化失陷已調兵赴臺事",
+            "date": "1786/12/27"
+          }
+        ],
+        "memDoc": "硃25",
+        "memTitle": "為奏彰化失陷已調兵赴臺事",
+        "how": "乾隆帝針對福建水師提督黃仕簡奏報親自帶兵由鹿耳門及郡城南路進兵會督夾攻等部署，命令其抵臺後應督率臺灣鎮道等官員分路堵剿，務將匪黨盡力撲滅。"
+      }
+    },
+    {
+      "id": "evmrzzp6o20qy",
+      "actor": "lin",
+      "subtitle": "賊匪攻破彰化縣城",
+      "description": "臺灣賊匪滋事攻打並攻陷彰化縣城。",
+      "what": "賊匪攻破彰化縣城",
+      "where": "彰化縣城",
+      "who": [
+        "賊匪"
+      ],
+      "whoLoc": {
+        "賊匪": "彰化縣城"
+      },
+      "relations": [],
+      "provenance": [
+        {
+          "id": "pvcmrzzph8t1w8",
+          "hops": [
+            {
+              "doc_id": "硃23",
+              "from_person": "水師提臣黃仕簡",
+              "how": "札達",
+              "inferred": false,
+              "layer": 1,
+              "place": "",
+              "quote": "臣先於十二月初八日接到水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城",
+              "to_person": "任承恩",
+              "whenAr": "",
+              "whenCh": "",
+              "id": "pvmrzzph8t3vq"
+            }
+          ],
+          "events": [
+            {
+              "quote": "臺灣又有賊匪滋攻破彰化縣城",
+              "reporter": "水師提臣黃仕簡",
+              "subtitle": "賊匪攻破彰化縣城",
+              "whenCh": "",
+              "where": "彰化縣城"
+            }
+          ]
+        }
+      ],
+      "whenCh": "乾隆五十一年十二月十日",
+      "dateAr": "1786/11/29",
+      "sources": [
+        {
+          "doc_id": "硃23",
+          "quote": "臺灣又有賊匪滋攻破彰化縣城",
+          "label": "賊匪攻破彰化縣城",
+          "aiFilterLabel": "林方行動",
+          "howKnown": "",
+          "whenKnown": "",
+          "ownSubtitle": "賊匪攻破彰化縣城",
+          "ownDescription": "臺灣賊匪滋事攻打並攻陷彰化縣城。",
+          "ownWhere": "彰化縣城",
+          "ownWhenAr": "1786/12/10",
+          "ownWhenCh": "乾隆五十一年十二月十日",
+          "ownWho": [
+            "賊匪"
+          ],
+          "ownWhoLoc": {
+            "賊匪": "彰化縣城"
+          },
+          "ownRelations": []
+        }
+      ],
+      "hidden": false,
+      "category": "done",
+      "aiFilterLabel": "林方行動"
+    },
+    {
+      "id": "evmrzzpruc0w1",
+      "actor": "qing",
+      "subtitle": "黃仕簡囑咐任承恩一體留心防範。",
+      "description": "福建水師提督黃仕簡正調備兵船，預計接獲確信後即親往臺灣辦理剿匪事宜，並囑咐任承恩一體留心防範。",
+      "what": "黃仕簡囑咐任承恩一體留心防範。",
+      "where": "臺灣",
+      "who": [
+        "黃仕簡",
+        "任承恩"
+      ],
+      "whoLoc": {},
+      "relations": [
+        {
+          "evidence": "囑令臣一體留心",
+          "relation": "囑令",
+          "relation_type": "command",
+          "source": "黃仕簡",
+          "target": "任承恩"
+        }
+      ],
+      "provenance": [
+        {
+          "id": "pvcmrzzpzopsa4",
+          "hops": [
+            {
+              "doc_id": "硃23",
+              "from_person": "福建水師提督黃仕簡",
+              "how": "札達",
+              "inferred": false,
+              "layer": 1,
+              "place": "",
+              "quote": "臣先於十二月初八日接到水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城，現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
+              "to_person": "任承恩",
+              "whenAr": "",
+              "whenCh": "",
+              "id": "pvmrzzpzopklk"
+            }
+          ],
+          "events": [
+            {
+              "quote": "現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
+              "reporter": "福建水師提督黃仕簡",
+              "subtitle": "黃仕簡調備兵船擬赴臺辦理",
+              "whenCh": "",
+              "where": "臺灣"
+            }
+          ]
+        }
+      ],
+      "whenCh": "乾隆五十一年十二月十日",
+      "dateAr": "1786/12/08",
+      "sources": [
+        {
+          "doc_id": "硃23",
+          "quote": "現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
+          "label": "黃仕簡囑咐任承恩一體留心防範。",
+          "aiFilterLabel": "清軍事：待執行",
+          "howKnown": "",
+          "whenKnown": "",
+          "ownSubtitle": "黃仕簡囑咐任承恩一體留心防範。",
+          "ownDescription": "福建水師提督黃仕簡正調備兵船，預計接獲確信後即親往臺灣辦理剿匪事宜，並囑咐任承恩一體留心防範。",
+          "ownWhere": "臺灣",
+          "ownWhenAr": "",
+          "ownWhenCh": "",
+          "ownWho": [
+            "黃仕簡",
+            "任承恩"
+          ],
+          "ownWhoLoc": {},
+          "ownRelations": [
+            {
+              "evidence": "囑令臣一體留心",
+              "relation": "囑令",
+              "relation_type": "command",
+              "source": "黃仕簡",
+              "target": "任承恩"
+            }
+          ]
+        }
+      ],
+      "hidden": false,
+      "category": "plan",
+      "aiFilterLabel": "清軍事：待執行"
+    },
+    {
+      "id": "evms00blsqh7i",
+      "actor": "lin",
+      "subtitle": "林爽文攻陷彰化縣城",
+      "description": "乾隆五十一年十一月二十七日，林爽文部眾結黨抗官，在大墩地方殺害前往查拿匪徒的彰化知縣俞峻與北路副將赫朝梁，並於同日早攻陷且佔據彰化縣城。",
+      "what": "林爽文攻陷彰化縣城",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文",
+        "俞知縣",
+        "赫副將"
+      ],
+      "whoLoc": {
+        "俞知縣": "大墩",
+        "林爽文": "彰化縣城",
+        "赫副將": "大墩"
+      },
+      "relations": [
+        {
+          "evidence": "俞在大墩地方拿匪遇害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞知縣"
+        },
+        {
+          "evidence": "赫副將與俞知縣在大墩地方拿匪，同時被害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "赫副將"
+        }
+      ],
+      "provenance": [
+        {
+          "id": "pvcms00bo8kqnh",
+          "hops": [
+            {
+              "doc_id": "硃22",
+              "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+              "how": "稟報",
+              "inferred": false,
+              "layer": 1,
+              "place": "",
+              "quote": "臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱，本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
+              "to_person": "任承恩",
+              "whenAr": "",
+              "whenCh": "",
+              "id": "pvms00bo8k3mt"
+            },
+            {
+              "doc_id": "硃22",
+              "from_person": "淡屬大甲社通事",
+              "how": "轉述",
+              "inferred": true,
+              "layer": 2,
+              "place": "",
+              "quote": "並有彰邑大肚社番字寄淡屬大甲社通事據稱，此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
+              "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
+              "whenAr": "",
+              "whenCh": "",
+              "id": "pvms00bo8k4cb"
+            },
+            {
+              "doc_id": "硃22",
+              "from_person": "彰邑大肚社番",
+              "how": "字寄",
+              "inferred": false,
+              "layer": 3,
+              "place": "",
+              "quote": "十一月二十九日，該番忽將原文帶回，並有彰邑大肚社番字寄淡屬大甲社通事據稱，此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
+              "to_person": "淡屬大甲社通事",
+              "whenAr": "1786/11/29",
+              "whenCh": "十一月二十九日",
+              "id": "pvms00bo8pznx"
+            }
+          ],
+          "events": [
+            {
+              "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
+              "reporter": "彰邑大肚社番",
+              "subtitle": "林爽文攻陷彰化縣城",
+              "whenCh": "十一月二十七日",
+              "where": "彰化縣城"
+            }
+          ]
+        },
+        {
+          "id": "pvcms00br9zp1h",
+          "hops": [
+            {
+              "doc_id": "硃22",
+              "from_person": "差役楊添",
+              "how": "口述",
+              "inferred": false,
+              "layer": 1,
+              "place": "",
+              "quote": "當即傳喚該差楊添進署，面加詢問……復據該差楊添口稱：小的起身在路上時，聞得傳說北路赫副將與俞知縣在大墩地方拿匪，同時被害",
+              "to_person": "任承恩",
+              "whenAr": "1786/12/09",
+              "whenCh": "十二月初九日",
+              "id": "pvms00bra0m0g"
+            }
+          ],
+          "events": [
+            {
+              "quote": "復據該差楊添口稱：小的起身在路上時，聞得傳說北路赫副將與俞知縣在大墩地方拿匪，同時被害",
+              "reporter": "差役楊添",
+              "subtitle": "林爽文攻陷彰化縣城",
+              "whenCh": "十一月二十七日",
+              "where": "大墩地方"
+            }
+          ]
+        }
+      ],
+      "whenCh": "十一月二十七日",
+      "dateAr": "1786/11/27",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "十一月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷……北路赫副將與俞知縣在大墩地方拿匪，同時被害……彰化既為匪徒竊踞",
+          "label": "林爽文攻陷彰化縣城",
+          "aiFilterLabel": "林方行動",
+          "howKnown": "",
+          "whenKnown": "",
+          "ownSubtitle": "林爽文攻陷彰化縣城",
+          "ownDescription": "乾隆五十一年十一月二十七日，林爽文部眾結黨抗官，在大墩地方殺害前往查拿匪徒的彰化知縣俞峻與北路副將赫朝梁，並於同日早攻陷且佔據彰化縣城。",
+          "ownWhere": "彰化縣城",
+          "ownWhenAr": "1786/11/27",
+          "ownWhenCh": "十一月二十七日",
+          "ownWho": [
+            "林爽文",
+            "俞知縣",
+            "赫副將"
+          ],
+          "ownWhoLoc": {
+            "俞知縣": "大墩",
+            "林爽文": "彰化縣城",
+            "赫副將": "大墩"
+          },
+          "ownRelations": [
+            {
+              "evidence": "俞在大墩地方拿匪遇害",
+              "relation": "殺害",
+              "relation_type": "conflict",
+              "source": "林爽文",
+              "target": "俞知縣"
+            },
+            {
+              "evidence": "赫副將與俞知縣在大墩地方拿匪，同時被害",
+              "relation": "殺害",
+              "relation_type": "conflict",
+              "source": "林爽文",
+              "target": "赫副將"
+            }
+          ]
+        }
+      ],
+      "hidden": false,
+      "category": "done",
+      "aiFilterLabel": "林方行動"
+    },
+    {
+      "id": "evms00c0incjj",
+      "actor": "qing",
+      "subtitle": "任承恩密飭沿海各營嚴防",
+      "description": "福建陸路提督任承恩密飭沿海各口隘將弁嚴加防守，防範匪徒蔓延。",
+      "what": "任承恩密飭沿海各營嚴防",
+      "where": "福建沿海",
+      "who": [
+        "任承恩"
+      ],
+      "whoLoc": {
+        "任承恩": "福建"
+      },
+      "relations": [],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月十日",
+      "dateAr": "1786/12/10",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "臣除一面將沿海口隘，密飭各營將弁嚴加防守",
+          "label": "任承恩密飭沿海各營嚴防",
+          "aiFilterLabel": "清軍事：待執行",
+          "howKnown": "",
+          "whenKnown": "",
+          "ownSubtitle": "任承恩密飭沿海各營嚴防",
+          "ownDescription": "福建陸路提督任承恩密飭沿海各口隘將弁嚴加防守，防範匪徒蔓延。",
+          "ownWhere": "福建沿海",
+          "ownWhenAr": "1786/12/10",
+          "ownWhenCh": "乾隆五十一年十二月十日",
+          "ownWho": [
+            "任承恩"
+          ],
+          "ownWhoLoc": {
+            "任承恩": "福建"
+          },
+          "ownRelations": []
+        }
+      ],
+      "hidden": false,
+      "category": "plan",
+      "aiFilterLabel": "清軍事：待執行"
+    },
+    {
+      "id": "evms00cbeeu0s",
+      "actor": "qing",
+      "subtitle": "任承恩整頓軍器聽候調遣",
+      "description": "福建陸路提督任承恩派撥官兵、整頓軍火器械並雇備船隻，馳商督臣聽候調遣渡臺。",
+      "what": "任承恩整頓軍器聽候調遣",
+      "where": "福建",
+      "who": [
+        "任承恩"
+      ],
+      "whoLoc": {
+        "任承恩": "福建"
+      },
+      "relations": [],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月十日",
+      "dateAr": "1786/12/10",
+      "sources": [
+        {
+          "doc_id": "硃22",
+          "quote": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外",
+          "label": "任承恩整頓軍器聽候調遣",
+          "aiFilterLabel": "清軍事：待執行",
+          "howKnown": "",
+          "whenKnown": "",
+          "ownSubtitle": "任承恩整頓軍器聽候調遣",
+          "ownDescription": "福建陸路提督任承恩派撥官兵、整頓軍火器械並雇備船隻，馳商督臣聽候調遣渡臺。",
+          "ownWhere": "福建",
+          "ownWhenAr": "1786/12/10",
+          "ownWhenCh": "乾隆五十一年十二月十日",
+          "ownWho": [
+            "任承恩"
+          ],
+          "ownWhoLoc": {
+            "任承恩": "福建"
+          },
+          "ownRelations": []
+        }
+      ],
+      "hidden": false,
+      "category": "plan",
+      "aiFilterLabel": "清軍事：待執行"
+    },
+    {
+      "id": "evms00cvtwemi",
+      "actor": "emperor",
+      "subtitle": "命任承恩與常青嚴飭沿海口岸官員實力巡防以防賊匪餘黨偷越內渡",
+      "description": "乾隆帝針對任承恩奏報已密飭沿海各營嚴加防守一事，指示現駐蚶江之常青與任承恩，務必嚴加督飭沿海口岸文武官員實力巡防，嚴防潰散賊匪偷越內渡。",
+      "what": "命任承恩與常青嚴飭沿海口岸官員實力巡防以防賊匪餘黨偷越內渡",
+      "where": "蚶江、沿海口岸",
+      "who": [
+        "乾隆帝",
+        "任承恩",
+        "常青"
+      ],
+      "whoLoc": {},
+      "relations": [],
+      "provenance": [],
+      "whenCh": "乾隆五十一年十二月二十七日",
+      "dateAr": "1786/12/27",
+      "sources": [
+        {
+          "doc_id": "諭13",
+          "quote": "常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
+          "label": "命任承恩與常青嚴飭沿海口岸官員實力巡防以防賊匪餘黨偷越內渡",
+          "aiFilterLabel": "相關上諭",
+          "howKnown": "上諭"
+        }
+      ],
+      "hidden": false,
+      "aiFilterLabel": "相關上諭",
+      "emperorDetail": {
+        "kind": "edict",
+        "combined": true,
+        "action_type": "command",
+        "sources": [
+          {
+            "doc_id": "諭13",
+            "source_type": "上諭",
+            "quote": "常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
+            "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
+            "date": "1786/12/27"
+          },
+          {
+            "doc_id": "硃22",
+            "source_type": "奏摺",
+            "quote": "臣除一面將沿海口隘，密飭各營將弁嚴加防守",
+            "title": "為奏林爽文攻陷彰化已備兵聽候調遣事",
+            "date": "1786/12/27"
+          },
+          {
+            "doc_id": "硃22",
+            "source_type": "硃批",
+            "quote": "已有旨了。欽此。",
+            "title": "為奏林爽文攻陷彰化已備兵聽候調遣事",
+            "date": "1786/12/27",
+            "position": "尾批"
+          }
+        ],
+        "memDoc": "硃22",
+        "memTitle": "為奏林爽文攻陷彰化已備兵聽候調遣事",
+        "how": "乾隆帝針對任承恩奏報已密飭沿海各營嚴加防守一事，指示現駐蚶江之常青與任承恩，務必嚴加督飭沿海口岸文武官員實力巡防，嚴防潰散賊匪偷越內渡。"
+      }
     }
   ],
   "__workspaceGroups": {
@@ -44356,7 +44879,12 @@
             ]
           }
         },
-        "prompt": "上諭回應的奏折"
+        "prompt": "上諭回應的奏折",
+        "subtitle": "賊匪攻破彰化縣城",
+        "description": "臺灣賊匪滋事攻打並攻陷彰化縣城。",
+        "where": "彰化縣城",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -44563,7 +45091,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡調備兵船擬赴臺辦理",
+        "description": "福建水師提督黃仕簡正調備兵船，預計接獲確信後即親往臺灣辦理剿匪事宜，並囑咐任承恩一體留心防範。",
+        "where": "臺灣",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -48314,83 +48847,9 @@
                 "whenKnown": ""
               }
             ],
-            "__traceChains": [
-              {
-                "events": [
-                  {
-                    "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
-                    "reporter": "彰邑大肚社番",
-                    "subtitle": "林爽文攻陷彰化縣城",
-                    "whenCh": "十一月二十七日",
-                    "where": "彰化縣城"
-                  }
-                ],
-                "hops": [
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
-                    "how": "稟報",
-                    "inferred": false,
-                    "layer": 1,
-                    "place": "",
-                    "quote": "臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱，本年十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。",
-                    "to_person": "任承恩",
-                    "whenAr": "",
-                    "whenCh": ""
-                  },
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "淡屬大甲社通事",
-                    "how": "轉述",
-                    "inferred": true,
-                    "layer": 2,
-                    "place": "",
-                    "quote": "並有彰邑大肚社番字寄淡屬大甲社通事據稱，此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
-                    "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
-                    "whenAr": "",
-                    "whenCh": ""
-                  },
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "彰邑大肚社番",
-                    "how": "字寄",
-                    "inferred": false,
-                    "layer": 3,
-                    "place": "",
-                    "quote": "十一月二十九日，該番忽將原文帶回，並有彰邑大肚社番字寄淡屬大甲社通事據稱，此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
-                    "to_person": "淡屬大甲社通事",
-                    "whenAr": "1786/11/29",
-                    "whenCh": "十一月二十九日"
-                  }
-                ]
-              },
-              {
-                "events": [
-                  {
-                    "quote": "復據該差楊添口稱：小的起身在路上時，聞得傳說北路赫副將與俞知縣在大墩地方拿匪，同時被害",
-                    "reporter": "差役楊添",
-                    "subtitle": "林爽文攻陷彰化縣城",
-                    "whenCh": "十一月二十七日",
-                    "where": "大墩地方"
-                  }
-                ],
-                "hops": [
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "差役楊添",
-                    "how": "口述",
-                    "inferred": false,
-                    "layer": 1,
-                    "place": "",
-                    "quote": "當即傳喚該差楊添進署，面加詢問……復據該差楊添口稱：小的起身在路上時，聞得傳說北路赫副將與俞知縣在大墩地方拿匪，同時被害",
-                    "to_person": "任承恩",
-                    "whenAr": "1786/12/09",
-                    "whenCh": "十二月初九日"
-                  }
-                ]
-              }
-            ],
-            "__repeatId": "硃22#lin#candidate"
+            "__repeatId": "硃22#lin#candidate",
+            "__added": true,
+            "__evId": "evms00blsqh7i"
           }
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzzhanj",
@@ -48497,8 +48956,8 @@
             "subtitle": "任承恩密飭沿海各營嚴防",
             "description": "福建陸路提督任承恩密飭沿海各口隘將弁嚴加防守，防範匪徒蔓延。",
             "where": "福建沿海",
-            "whenCh": "",
-            "whenAr": "",
+            "whenCh": "乾隆五十一年十二月十日",
+            "whenAr": "1786/12/10",
             "who": [
               "任承恩"
             ],
@@ -48515,70 +48974,9 @@
               }
             ],
             "__qcat": "plan",
-            "__traceChains": [
-              {
-                "events": [
-                  {
-                    "quote": "臣除一面將沿海口隘，密飭各營將弁嚴加防守",
-                    "reporter": "差役楊添",
-                    "subtitle": "任承恩密飭沿海各營嚴防",
-                    "whenCh": "十二月初九日",
-                    "where": "福建沿海"
-                  }
-                ],
-                "hops": [
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "彰邑大肚社番",
-                    "how": "字寄",
-                    "inferred": false,
-                    "layer": 4,
-                    "place": "",
-                    "quote": "十一月二十九日，該番忽將原文帶回，並有彰邑大肚社番字寄淡屬大甲社通事據稱",
-                    "to_person": "淡屬大甲社通事",
-                    "whenAr": "1786/11/29",
-                    "whenCh": "十一月二十九日"
-                  },
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "淡屬大甲社通事",
-                    "how": "轉述",
-                    "inferred": true,
-                    "layer": 3,
-                    "place": "淡水",
-                    "quote": "淡屬大甲社通事據稱，此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷",
-                    "to_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
-                    "whenAr": "",
-                    "whenCh": ""
-                  },
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "署臺灣府淡水同知程峻、竹塹營守備董得魁",
-                    "how": "派差馳稟",
-                    "inferred": false,
-                    "layer": 2,
-                    "place": "淡水",
-                    "quote": "臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱",
-                    "to_person": "差役楊添",
-                    "whenAr": "",
-                    "whenCh": ""
-                  },
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "差役楊添",
-                    "how": "投稟",
-                    "inferred": false,
-                    "layer": 1,
-                    "place": "泉州",
-                    "quote": "本年十二月初九日亥刻，臣接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱",
-                    "to_person": "福建陸路提督任承恩",
-                    "whenAr": "1786/12/09",
-                    "whenCh": "十二月初九日"
-                  }
-                ]
-              }
-            ],
-            "__repeatId": "硃22#qing#candidate"
+            "__repeatId": "硃22#qing#candidate",
+            "__added": true,
+            "__evId": "evms00c0incjj"
           }
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzzhanj",
@@ -48598,8 +48996,8 @@
             "subtitle": "任承恩整頓軍器聽候調遣",
             "description": "福建陸路提督任承恩派撥官兵、整頓軍火器械並雇備船隻，馳商督臣聽候調遣渡臺。",
             "where": "福建",
-            "whenCh": "",
-            "whenAr": "",
+            "whenCh": "乾隆五十一年十二月十日",
+            "whenAr": "1786/12/10",
             "who": [
               "任承恩"
             ],
@@ -48616,34 +49014,9 @@
               }
             ],
             "__qcat": "plan",
-            "__traceChains": [
-              {
-                "events": [
-                  {
-                    "quote": "一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外",
-                    "reporter": "福建陸路提督臣任承恩",
-                    "subtitle": "任承恩整頓軍器聽候調遣",
-                    "whenCh": "",
-                    "where": "福建"
-                  }
-                ],
-                "hops": [
-                  {
-                    "doc_id": "硃22",
-                    "from_person": "福建陸路提督臣任承恩",
-                    "how": "恭摺馳驛奏聞",
-                    "inferred": false,
-                    "layer": 1,
-                    "place": "福建",
-                    "quote": "臣除一面將沿海口隘，密飭各營將弁嚴加防守，一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外，再思臺地重洋遠隔，文報不能依期即至，事關海疆，臣並應專差妥弁，飛渡該地。將近日切實情形，一體確查，到日另容奏報外，合先恭摺馳驛奏聞，伏乞皇上睿鑒。",
-                    "to_person": "皇上",
-                    "whenAr": "1786/12/10",
-                    "whenCh": "乾隆五十一年十二月初十日"
-                  }
-                ]
-              }
-            ],
-            "__repeatId": "硃22#qing#candidate"
+            "__repeatId": "硃22#qing#candidate",
+            "__added": true,
+            "__evId": "evms00cbeeu0s"
           }
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzzhanj",
@@ -48802,333 +49175,9 @@
                     "position": "尾批"
                   }
                 ],
-                "__pendingResponses": [
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  },
-                  {
-                    "action_quote": "著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
-                    "doc_id": "硃105",
-                    "how": "常青遵旨嚴飭沿海口岸地方文武官員實力巡查防範匪徒偷越。同時稟報漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，現已飭令提訊確究，並表示內地各境均鎮靜辦理防範。",
-                    "receive_date": "乾隆五十二年正月十一日",
-                    "relations": [
-                      {
-                        "evidence": "嚴飭文武員弁，實力巡查",
-                        "relation": "嚴飭",
-                        "relation_type": "command",
-                        "source": "常青",
-                        "target": "羅澤坤"
-                      },
-                      {
-                        "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
-                        "relation": "盤獲",
-                        "relation_type": "conflict",
-                        "source": "羅澤坤",
-                        "target": "陳樵"
-                      }
-                    ],
-                    "response_date": "乾隆五十二年正月十二日",
-                    "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
-                    "subtitle": "常青嚴飭沿海口岸實力巡查並報漳浦縣盤獲匪犯陳樵確究",
-                    "where": "漳浦縣",
-                    "who": [
-                      "常青",
-                      "羅澤坤",
-                      "陳樵"
-                    ],
-                    "who_loc": {
-                      "常青": "泉州",
-                      "羅澤坤": "漳浦縣",
-                      "陳樵": "漳浦縣"
-                    }
-                  }
-                ],
-                "__repeatId": "諭13#emperor#candidate"
+                "__repeatId": "諭13#emperor#candidate",
+                "__added": true,
+                "__evId": "evms00cvtwemi"
               },
               {
                 "title": "嚴厲申飭任承恩等人張皇失措並駁斥其欲親自渡臺與請派重臣督辦之議",
@@ -49331,11 +49380,11 @@
           }
         },
         "prompt": "上諭回應的奏折",
-        "subtitle": "林爽文王芬等聚眾攻劫營盤",
-        "description": "彰化縣屬大里杙等莊奸民林爽文、王芬等聚匪截路、攻劫營盤，謀為不軌。",
-        "where": "大里杙",
-        "whenCh": "十一月",
-        "whenAr": "1786/11/27"
+        "subtitle": "賊匪攻破彰化縣城",
+        "description": "臺灣賊匪滋事攻打並攻陷彰化縣城。",
+        "where": "彰化縣城",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -49465,11 +49514,11 @@
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
         "__skillBundleDocs": 28,
-        "subtitle": "賊匪攻陷彰化縣城",
-        "description": "十一月二十八日夜下雨時分，數千賊匪圍攻並攻破彰化縣城，都司王化龍等人被害。",
-        "where": "彰化縣城",
-        "whenCh": "十一月二十八日",
-        "whenAr": "1786/11/28"
+        "subtitle": "黃仕簡調備兵船擬赴臺辦理",
+        "description": "福建水師提督黃仕簡正調備兵船，預計接獲確信後即親往臺灣辦理剿匪事宜，並囑咐任承恩一體留心防範。",
+        "where": "臺灣",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -49563,7 +49612,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "匪徒於大墩殺害官員",
+        "description": "乾隆五十一年十一月二十七日夜，彰化縣官員俞在大墩地方查拿匪徒時遭害。",
+        "where": "大墩",
+        "whenCh": "十一月二十七日夜",
+        "whenAr": "1786/11/27"
       },
       {
         "at": "2026-07-25 05:38",
@@ -49674,11 +49728,11 @@
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
         "__skillBundleDocs": 28,
-        "subtitle": "柴大紀等派兵防守羅漢門",
-        "description": "因羅漢門有山路可通往臺灣府城，柴大紀等命令守備李步雲嚴加防範，並調撥水師兵丁一百名協力截拿。",
-        "where": "羅漢門",
-        "whenCh": "乾隆五十一年十二月四日",
-        "whenAr": "1786/12/04"
+        "subtitle": "林爽文等攻陷彰化縣城",
+        "description": "乾隆五十一年十一月二十九日辰刻，林爽文等匪徒結黨攻打彰化縣城，至午刻陷城，文武官員生死不知。",
+        "where": "彰化縣城",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
       },
       {
         "at": "2026-07-25 05:38",
@@ -49799,11 +49853,11 @@
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
         "__skillBundleDocs": 28,
-        "subtitle": "柴大紀飛調楊起麟後應",
-        "description": "柴大紀等緊急飛調臺協遊擊楊起麟率領兵丁三百名趕來，作為後續應援。",
-        "where": "鐵線橋",
-        "whenCh": "乾隆五十一年十二月四日",
-        "whenAr": "1786/12/04"
+        "subtitle": "黃仕簡派邱維揚帶兵渡臺",
+        "description": "黃仕簡委令提標右營遊擊邱維揚率兵二百名先行渡海赴臺，查明匪徒起事緣由並協助追捕逃匪。",
+        "where": "臺灣",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
       },
       {
         "at": "2026-07-25 05:38",
@@ -49899,11 +49953,11 @@
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
         "__skillBundleDocs": 28,
-        "subtitle": "柴大紀等請水陸提督赴臺",
-        "description": "因臺灣地方遼闊、防兵不足，柴大紀與永福已向水陸提督諮請迅速帶兵渡臺接應。",
-        "where": "臺灣",
-        "whenCh": "乾隆五十一年十二月四日",
-        "whenAr": "1786/12/02"
+        "subtitle": "黃仕簡點驗挑選兵丁軍械",
+        "description": "黃仕簡挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，並備齊商哨船隻完成點驗。",
+        "where": "廈門",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -49954,7 +50008,12 @@
         "items": [],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡率領官兵登舟候風",
+        "description": "黃仕簡於十二月初十日帶領官兵登舟候風，準備放洋飛渡臺灣進行剿捕。",
+        "where": "廈門",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:38",
@@ -50085,7 +50144,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "程峻等募集鄉勇分頭堵禦",
+        "description": "署淡水同知程峻與守備董得魁整齊槍炮，募集鄉勇社番於扼要處所分頭堵禦救援。",
+        "where": "淡水",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -50127,7 +50191,12 @@
         "items": [],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡擬調官兵兩路夾攻",
+        "description": "黃仕簡規劃續調水陸官兵，由鹿耳門與淡水南北兩路夾攻臺灣匪徒。",
+        "where": "臺灣",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:38",
@@ -50234,7 +50303,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygi3g",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡計劃由鹿耳門進兵",
+        "description": "黃仕簡計劃由鹿耳門及郡城南路進兵，會同北路援軍夾攻匪徒。",
+        "where": "鹿耳門",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:55",
@@ -50397,7 +50471,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygi3g",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡札請羅英笈彈壓廈門",
+        "description": "黃仕簡札請督臣檄委金門鎮總兵羅英笈前往廈門就近彈壓照應後方。",
+        "where": "廈門",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:55",
@@ -50527,7 +50606,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygi3g",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡飛札各官嚴緝口岸",
+        "description": "黃仕簡飛札撫臣、陸路提臣及文武各官，嚴飭各營縣於口岸要隘堵緝盤拿，防賊竄逃內地。",
+        "where": "福建",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:55",
@@ -51031,7 +51115,9 @@
                     "date": "1786/12/27"
                   }
                 ],
-                "__repeatId": "諭13#emperor#candidate"
+                "__repeatId": "諭13#emperor#candidate",
+                "__added": true,
+                "__evId": "evmrzzo235xrw"
               }
             ]
           }
@@ -227866,7 +227952,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "賊匪攻破彰化縣城",
+        "description": "臺灣賊匪滋事攻打並攻陷彰化縣城。",
+        "where": "彰化縣城",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -227949,7 +228040,12 @@
         "items": [],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡調備兵船擬赴臺辦理",
+        "description": "福建水師提督黃仕簡正調備兵船，預計接獲確信後即親往臺灣辦理剿匪事宜，並囑咐任承恩一體留心防範。",
+        "where": "臺灣",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:38",
@@ -228018,7 +228114,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "匪徒於大墩殺害官員",
+        "description": "乾隆五十一年十一月二十七日夜，彰化縣官員俞在大墩地方查拿匪徒時遭害。",
+        "where": "大墩",
+        "whenCh": "十一月二十七日夜",
+        "whenAr": "1786/11/27"
       },
       {
         "at": "2026-07-25 05:38",
@@ -228046,7 +228147,12 @@
         "response": "{\n  \"doc_id\": \"硃23\",\n  \"summary\": true,\n  \"divide\": true,\n  \"lin-events\": true,\n  \"source-chain-lin\": true,\n  \"qing-actions-all\": true,\n  \"source-chain-qing\": true,\n  \"confirmed-yu-response\": true,\n  \"combined-emperor-actions\": true\n}",
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzxunb3",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "林爽文等攻陷彰化縣城",
+        "description": "乾隆五十一年十一月二十九日辰刻，林爽文等匪徒結黨攻打彰化縣城，至午刻陷城，文武官員生死不知。",
+        "where": "彰化縣城",
+        "whenCh": "十一月二十九日",
+        "whenAr": "1786/11/29"
       },
       {
         "at": "2026-07-25 05:55",
@@ -228182,7 +228288,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygi3g",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡派邱維揚帶兵渡臺",
+        "description": "黃仕簡委令提標右營遊擊邱維揚率兵二百名先行渡海赴臺，查明匪徒起事緣由並協助追捕逃匪。",
+        "where": "臺灣",
+        "whenCh": "十二月初五日",
+        "whenAr": "1786/12/05"
       },
       {
         "at": "2026-07-25 05:55",
@@ -228204,7 +228315,12 @@
         "items": [],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygi3g",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡點驗挑選兵丁軍械",
+        "description": "黃仕簡挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，並備齊商哨船隻完成點驗。",
+        "where": "廈門",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:55",
@@ -228281,7 +228397,12 @@
         "items": [],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygi3g",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡率領官兵登舟候風",
+        "description": "黃仕簡於十二月初十日帶領官兵登舟候風，準備放洋飛渡臺灣進行剿捕。",
+        "where": "廈門",
+        "whenCh": "十二月初十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:55",
@@ -228354,7 +228475,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygozn",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "程峻等募集鄉勇分頭堵禦",
+        "description": "署淡水同知程峻與守備董得魁整齊槍炮，募集鄉勇社番於扼要處所分頭堵禦救援。",
+        "where": "淡水",
+        "whenCh": "",
+        "whenAr": ""
       },
       {
         "at": "2026-07-25 05:55",
@@ -228437,7 +228563,12 @@
         "items": [],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygozn",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡擬調官兵兩路夾攻",
+        "description": "黃仕簡規劃續調水陸官兵，由鹿耳門與淡水南北兩路夾攻臺灣匪徒。",
+        "where": "臺灣",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:55",
@@ -228506,7 +228637,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygozn",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡計劃由鹿耳門進兵",
+        "description": "黃仕簡計劃由鹿耳門及郡城南路進兵，會同北路援軍夾攻匪徒。",
+        "where": "鹿耳門",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 05:55",
@@ -228534,7 +228670,12 @@
         "response": "{\n  \"doc_id\": \"硃23\",\n  \"summary\": true,\n  \"divide\": true,\n  \"lin-events\": true,\n  \"source-chain-lin\": true,\n  \"qing-actions-all\": true,\n  \"source-chain-qing\": true,\n  \"confirmed-yu-response\": true,\n  \"combined-emperor-actions\": true\n}",
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzygozn",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡札請羅英笈彈壓廈門",
+        "description": "黃仕簡札請督臣檄委金門鎮總兵羅英笈前往廈門就近彈壓照應後方。",
+        "where": "廈門",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 06:04",
@@ -228670,7 +228811,12 @@
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzyrvaj",
         "__skillBundleName": "zhu-december-rerun-g36",
-        "__skillBundleDocs": 28
+        "__skillBundleDocs": 28,
+        "subtitle": "黃仕簡飛札各官嚴緝口岸",
+        "description": "黃仕簡飛札撫臣、陸路提臣及文武各官，嚴飭各營縣於口岸要隘堵緝盤拿，防賊竄逃內地。",
+        "where": "福建",
+        "whenCh": "乾隆五十一年十二月十日",
+        "whenAr": "1786/12/10"
       },
       {
         "at": "2026-07-25 06:04",
@@ -228793,8 +228939,8 @@
             "subtitle": "賊匪攻破彰化縣城",
             "description": "臺灣賊匪滋事攻打並攻陷彰化縣城。",
             "where": "彰化縣城",
-            "whenCh": "",
-            "whenAr": "",
+            "whenCh": "乾隆五十一年十二月十日",
+            "whenAr": "1786/12/10",
             "who": [
               "賊匪"
             ],
@@ -228810,34 +228956,9 @@
                 "whenKnown": ""
               }
             ],
-            "__traceChains": [
-              {
-                "events": [
-                  {
-                    "quote": "臺灣又有賊匪滋攻破彰化縣城",
-                    "reporter": "水師提臣黃仕簡",
-                    "subtitle": "賊匪攻破彰化縣城",
-                    "whenCh": "",
-                    "where": "彰化縣城"
-                  }
-                ],
-                "hops": [
-                  {
-                    "doc_id": "硃23",
-                    "from_person": "水師提臣黃仕簡",
-                    "how": "札達",
-                    "inferred": false,
-                    "layer": 1,
-                    "place": "",
-                    "quote": "臣先於十二月初八日接到水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城",
-                    "to_person": "任承恩",
-                    "whenAr": "",
-                    "whenCh": ""
-                  }
-                ]
-              }
-            ],
-            "__repeatId": "硃23#lin#candidate"
+            "__repeatId": "硃23#lin#candidate",
+            "__added": true,
+            "__evId": "evmrzzp6o20qy"
           }
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzzhanj",
@@ -228854,11 +228975,11 @@
           {
             "actor": "qing",
             "category": "plan",
-            "subtitle": "黃仕簡調備兵船擬赴臺辦理",
+            "subtitle": "黃仕簡囑咐任承恩一體留心防範。",
             "description": "福建水師提督黃仕簡正調備兵船，預計接獲確信後即親往臺灣辦理剿匪事宜，並囑咐任承恩一體留心防範。",
             "where": "臺灣",
-            "whenCh": "",
-            "whenAr": "",
+            "whenCh": "乾隆五十一年十二月十日",
+            "whenAr": "1786/12/10",
             "who": [
               "黃仕簡",
               "任承恩"
@@ -228878,38 +228999,14 @@
                 "doc_id": "硃23",
                 "quote": "現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
                 "howKnown": "",
-                "whenKnown": ""
+                "whenKnown": "",
+                "label": "黃仕簡囑咐任承恩一體留心防範。"
               }
             ],
             "__qcat": "plan",
-            "__traceChains": [
-              {
-                "events": [
-                  {
-                    "quote": "現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
-                    "reporter": "福建水師提督黃仕簡",
-                    "subtitle": "黃仕簡調備兵船擬赴臺辦理",
-                    "whenCh": "",
-                    "where": "臺灣"
-                  }
-                ],
-                "hops": [
-                  {
-                    "doc_id": "硃23",
-                    "from_person": "福建水師提督黃仕簡",
-                    "how": "札達",
-                    "inferred": false,
-                    "layer": 1,
-                    "place": "",
-                    "quote": "臣先於十二月初八日接到水師提臣黃仕簡札達，訪聞得臺灣又有賊匪滋攻破彰化縣城，現在調備兵船，俟一有確信，即當親往辦理，囑令臣一體留心",
-                    "to_person": "任承恩",
-                    "whenAr": "",
-                    "whenCh": ""
-                  }
-                ]
-              }
-            ],
-            "__repeatId": "硃23#qing#candidate"
+            "__repeatId": "硃23#qing#candidate",
+            "__added": true,
+            "__evId": "evmrzzpruc0w1"
           }
         ],
         "__skillRunId": "bundle:zhu-december-rerun-g36:mrzzhanj",

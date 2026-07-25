@@ -1,0 +1,534 @@
+[
+  {
+    "doc_id": "硃71",
+    "evTitle": "賊匪糾眾攻打彰化縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "臺灣匪徒糾集眾人攻打彰化縣城，肆行悖逆，引發福建水師提督黃仕簡擬率兵赴臺督剿。",
+      "howKnown": "訪聞",
+      "quote": "臺灣彰化縣被賊匪糾眾攻城",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "賊匪糾眾攻打彰化縣城",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "彰化縣",
+      "who": [
+        "賊匪"
+      ],
+      "who_loc": {
+        "賊匪": "彰化縣"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "臺灣彰化縣被賊匪糾眾攻城"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臺灣彰化縣被賊匪糾眾攻城",
+            "reporter": "福建水師提臣黃仕簡",
+            "subtitle": "賊匪糾眾攻打彰化縣城",
+            "whenCh": "",
+            "where": "彰化縣"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署提臣彭承堯",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "竊臣現接署提臣彭承堯咨會",
+            "to_person": "兩廣總督臣孫士毅",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "南澳鎮臣六廷柱",
+            "how": "轉據",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "准南澳鎮臣六廷柱轉據福建水師提臣黃仕簡咨開",
+            "to_person": "署提臣彭承堯",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "福建水師提臣黃仕簡",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 3,
+            "place": "",
+            "quote": "福建水師提臣黃仕簡咨開：訪得臺灣彰化縣被賊匪糾眾攻城，現擬親率本標官弁，帶領備戰兵一千名前赴督剿，恐有不敷分撥，飛移該鎮",
+            "to_person": "南澳鎮臣六廷柱",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅飛飭沿海文武嚴防",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "兩廣總督孫士毅飛飭粵東沿海文武官員，率領員弁兵役於水陸要隘嚴密巡防，如有匪徒逃竄入境立即擒拿。",
+      "howKnown": "親歷",
+      "quote": "臣現飛飭沿海文武，督率員弁兵役，於水陸要隘嚴密巡防。如有匪徒逃竄入境，立即擒拿辦理。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅飛飭沿海文武嚴防",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "粵東沿海",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "臣現飛飭沿海文武，督率員弁兵役，於水陸要隘嚴密巡防。如有匪徒逃竄入境，立即擒拿辦理。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣現飛飭沿海文武，督率員弁兵役，於水陸要隘嚴密巡防。如有匪徒逃竄入境，立即擒拿辦理。",
+            "reporter": "署提臣彭承堯",
+            "subtitle": "孫士毅飛飭沿海文武嚴防",
+            "whenCh": "",
+            "where": "粵東沿海"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署提臣彭承堯",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "竊臣現接署提臣彭承堯咨會",
+            "to_person": "孫士毅",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "南澳鎮臣六廷柱",
+            "how": "轉據",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "准南澳鎮臣六廷柱轉據",
+            "to_person": "署提臣彭承堯",
+            "whenAr": "",
+            "whenCh": ""
+          },
+          {
+            "from_person": "福建水師提臣黃仕簡",
+            "how": "咨開",
+            "inferred": false,
+            "layer": 3,
+            "place": "",
+            "quote": "福建水師提臣黃仕簡咨開：訪得臺灣彰化縣被賊匪糾眾攻城，現擬親率本標官弁，帶領備戰兵一千名前赴督剿，恐有不敷分撥，飛移該鎮，於左營預先派定戰兵三百名，以備移調",
+            "to_person": "南澳鎮臣六廷柱",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅密派弁員改裝巡查",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "孫士毅密派妥幹弁員於沿海各隘口及商船漁艇往來處改裝易服巡查，嚴防閩省奸徒潛入探聽消息。",
+      "howKnown": "親歷",
+      "quote": "臣已密派妥幹弁員，於各隘口商船漁艇往來處所，改裝易服，梭織游巡，不露圭角，遇有形跡可疑之人，立即盤詰究辦",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅密派弁員改裝巡查",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "沿海隘口",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "臣已密派妥幹弁員，於各隘口商船漁艇往來處所，改裝易服，梭織游巡，不露圭角，遇有形跡可疑之人，立即盤詰究辦"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣已密派妥幹弁員，於各隘口商船漁艇往來處所，改裝易服，梭織游巡，不露圭角，遇有形跡可疑之人，立即盤詰究辦",
+            "reporter": "兩廣總督孫士毅",
+            "subtitle": "孫士毅密派弁員改裝巡查",
+            "whenCh": "乾隆五十一年十二月二十四日",
+            "where": "沿海隘口"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "兩廣總督孫士毅",
+            "how": "馳奏",
+            "inferred": false,
+            "layer": 1,
+            "place": "省城",
+            "quote": "臣已密派妥幹弁員，於各隘口商船漁艇往來處所，改裝易服，梭織游巡，不露圭角，遇有形跡可疑之人，立即盤詰究辦",
+            "to_person": "乾隆帝",
+            "whenAr": "1787/02/11",
+            "whenCh": "乾隆五十一年十二月二十四日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅挑選水師預備策應",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "孫士毅於碣石、澄海、海門等鎮協營內挑選水師戰兵一千名，配定戰艦軍火與口糧，並派得力將備，隨時準備起程策應。",
+      "howKnown": "親歷",
+      "quote": "臣現於該營及附近閩省之碣石、澄海、海門等處鎮、協、營內，共挑選水師戰兵一千名，配定戰艦，備足軍火器械，裹帶一月口糧，並派撥得力之統領將備員弁，一一料理停妥，設有徵調，便於立即起程，以資策應",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅挑選水師預備策應",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "碣石",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "臣現於該營及附近閩省之碣石、澄海、海門等處鎮、協、營內，共挑選水師戰兵一千名，配定戰艦，備足軍火器械，裹帶一月口糧，並派撥得力之統領將備員弁，一一料理停妥，設有徵調，便於立即起程，以資策應"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣現於該營及附近閩省之碣石、澄海、海門等處鎮、協、營內，共挑選水師戰兵一千名，配定戰艦，備足軍火器械，裹帶一月口糧，並派撥得力之統領將備員弁，一一料理停妥，設有徵調，便於立即起程，以資策應",
+            "reporter": "孫士毅",
+            "subtitle": "孫士毅挑選水師預備策應",
+            "whenCh": "",
+            "where": "碣石"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "孫士毅",
+            "how": "馳奏",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "兩廣總督臣孫士毅跪奏，為奏聞事...臣現於該營及附近閩省之碣石、澄海、海門等處鎮、協、營內，共挑選水師戰兵一千名，配定戰艦，備足軍火器械，裹帶一月口糧，並派撥得力之統領將備員弁，一一料理停妥，設有徵調，便於立即起程，以資策應",
+            "to_person": "乾隆帝",
+            "whenAr": "",
+            "whenCh": "十二月二十四日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅預挑兵丁二千名備調",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "孫士毅預計再於戰兵內挑選水師五百名、陸路一千五百名，共二千名預備調遣。",
+      "howKnown": "親歷",
+      "quote": "此外再於戰兵內挑選水師五百名，陸路一千五百名，共二千名，預備調遣。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅預挑兵丁二千名備調",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "粵東",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "此外再於戰兵內挑選水師五百名，陸路一千五百名，共二千名，預備調遣。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "此外再於戰兵內挑選水師五百名，陸路一千五百名，共二千名，預備調遣。",
+            "reporter": "孫士毅",
+            "subtitle": "孫士毅預挑兵丁二千名備調",
+            "whenCh": "",
+            "where": "粵東"
+          },
+          {
+            "quote": "臣將督、撫兩署事務於數日內略為料理，即專摺馳奏，親赴潮州駐紮，以便遇有防範徵調事宜，即可就近辦理，以期迅速。",
+            "reporter": "孫士毅",
+            "subtitle": "孫士毅擬親赴潮州駐紮",
+            "whenCh": "數日內",
+            "where": "潮州府"
+          },
+          {
+            "quote": "省會現有將軍都統同城，臣令藩、臬兩司隨同督查，足資料理。",
+            "reporter": "孫士毅",
+            "subtitle": "孫士毅令藩臬兩司督查省城",
+            "whenCh": "乾隆五十一年十二月二十四日",
+            "where": "廣州府"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "孫士毅",
+            "how": "親歷",
+            "inferred": false,
+            "layer": 1,
+            "place": "粵東",
+            "quote": "此外再於戰兵內挑選水師五百名，陸路一千五百名，共二千名，預備調遣。",
+            "to_person": "孫士毅",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅知會彭承堯赴潮州",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "孫士毅知會署廣東陸路提督彭承堯先行前往潮州府稽查彈壓。",
+      "howKnown": "親歷",
+      "quote": "除知會署提臣彭承堯先赴潮州稽查彈壓",
+      "relations": [
+        {
+          "evidence": "知會署提臣彭承堯先赴潮州稽查彈壓",
+          "relation": "知會",
+          "relation_type": "command",
+          "source": "孫士毅",
+          "target": "彭承堯"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "孫士毅知會彭承堯赴潮州",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "潮州府",
+      "who": [
+        "孫士毅",
+        "彭承堯"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府",
+        "彭承堯": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "除知會署提臣彭承堯先赴潮州稽查彈壓"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "除知會署提臣彭承堯先赴潮州稽查彈壓",
+            "reporter": "兩廣總督孫士毅",
+            "subtitle": "孫士毅知會彭承堯赴潮州",
+            "whenCh": "",
+            "where": "潮州府"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "兩廣總督孫士毅",
+            "how": "知會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "除知會署提臣彭承堯先赴潮州稽查彈壓",
+            "to_person": "署提臣彭承堯",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅擬親赴潮州駐紮",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "孫士毅打算於數日內料理督撫兩署事務後，專摺馳奏並親赴潮州府駐紮，以便就近辦理防範與徵調事宜。",
+      "howKnown": "親歷",
+      "quote": "臣將督、撫兩署事務於數日內略為料理，即專摺馳奏，親赴潮州駐紮，以便遇有防範徵調事宜，即可就近辦理，以期迅速。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅擬親赴潮州駐紮",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "潮州府",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "臣將督、撫兩署事務於數日內略為料理，即專摺馳奏，親赴潮州駐紮，以便遇有防範徵調事宜，即可就近辦理，以期迅速。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣將督、撫兩署事務於數日內略為料理，即專摺馳奏，親赴潮州駐紮，以便遇有防範徵調事宜，即可就近辦理，以期迅速。",
+            "reporter": "孫士毅",
+            "subtitle": "孫士毅擬親赴潮州駐紮",
+            "whenCh": "數日內",
+            "where": "潮州府"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "孫士毅",
+            "how": "自述",
+            "inferred": false,
+            "layer": 1,
+            "place": "廣州府",
+            "quote": "臣將督、撫兩署事務於數日內略為料理，即專摺馳奏，親赴潮州駐紮，以便遇有防範徵調事宜，即可就近辦理，以期迅速。",
+            "to_person": "孫士毅",
+            "whenAr": "1787/02/11",
+            "whenCh": "乾隆五十一年十二月二十四日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃71",
+    "evTitle": "孫士毅令藩臬兩司督查省城",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "孫士毅指令布政使與按察使兩司隨同同城將軍都統督查廣州省城事務。",
+      "howKnown": "親歷",
+      "quote": "省會現有將軍都統同城，臣令藩、臬兩司隨同督查，足資料理。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅令藩臬兩司督查省城",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "廣州府",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "廣州府"
+      },
+      "doc_id": "硃71",
+      "sources": [
+        {
+          "doc_id": "硃71",
+          "quote": "省會現有將軍都統同城，臣令藩、臬兩司隨同督查，足資料理。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "省會現有將軍都統同城，臣令藩、臬兩司隨同督查，足資料理。",
+            "reporter": "孫士毅",
+            "subtitle": "孫士毅令藩臬兩司督查省城",
+            "whenCh": "乾隆五十一年十二月二十四日",
+            "where": "廣州府"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "孫士毅",
+            "how": "下令",
+            "inferred": false,
+            "layer": 1,
+            "place": "廣州府",
+            "quote": "省會現有將軍都統同城，臣令藩、臬兩司隨同督查，足資料理。",
+            "to_person": "孫士毅",
+            "whenAr": "",
+            "whenCh": "乾隆五十一年十二月二十四日"
+          }
+        ]
+      }
+    ]
+  }
+]

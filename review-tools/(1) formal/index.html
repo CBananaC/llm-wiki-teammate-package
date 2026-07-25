@@ -5679,9 +5679,15 @@
   function repeatPointerForItem(item){
     if(!item) return null;
     if(item.__matchReg) return invalidMatchRegForCandidate(item,item.__matchReg)?null:item.__matchReg;
-    const er=item.earliest_report, verdict=String(item.repeat_verdict||'').toLowerCase();
+    const er=item.earliest_report, storedSame=String(item.same_as||''), rawVerdict=String(item.repeat_verdict||'').toLowerCase();
+    // Terminal bundles produced by the first repeat-report implementation
+    // stored same_as/earliest_report but omitted repeat_verdict. Treat that
+    // exact same_as pointer as an exact repeat so existing bundles still show
+    // the warning card and merge controls.
+    const verdict=rawVerdict||(storedSame?'same':'');
     if(!er||!er.doc_id||(verdict!=='same'&&verdict!=='similar')) return null;
-    const ev=er.id&&eventById(er.id);
+    const pointerId=storedSame||er.id||'';
+    const ev=pointerId&&eventById(pointerId);
     return {kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title:er.title||'',reporter:er.reporter||'',doc_id:er.doc_id,report_doc_id:er.doc_id,whenAr:er.date||'',whenCh:'',report_date:er.date||'',committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||''};
   }
   // Commit a NEW candidate (`p`, already tagged with __matchReg by runExtract) that re-reports an

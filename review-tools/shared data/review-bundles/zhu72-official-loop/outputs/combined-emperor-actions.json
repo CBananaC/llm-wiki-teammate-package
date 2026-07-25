@@ -1,0 +1,55 @@
+[
+  {
+    "doc_id": "硃72",
+    "memDoc": "硃72",
+    "memTitle": "為調兵赴臺情形事（附片）",
+    "combinedEmperor": true,
+    "marker": "既有配對",
+    "items": [
+      {
+        "edict_id": "硃72",
+        "title": "為調兵赴臺情形事（附片）",
+        "date": "1787/01/13",
+        "memDoc": "硃72",
+        "memTitle": "為調兵赴臺情形事（附片）",
+        "summary": "只保留皇帝自己的評論、答覆或命令；同義硃批與上諭合為一項。",
+        "points": [
+          {
+            "title": "乾隆帝下旨知悉福建巡撫徐嗣曾奏報調派督撫標兵渡臺會剿及救援淡水等軍事部署",
+            "aspect": "reply",
+            "action_type": "reply",
+            "how": "乾隆帝針對福建巡撫徐嗣曾奏報預調兵丁赴臺會剿、派兵救援淡水及派遣小船往來探報等軍事部署情形，批示「知道了」。",
+            "description": "乾隆帝針對福建巡撫徐嗣曾奏報預調兵丁赴臺會剿、派兵救援淡水及派遣小船往來探報等軍事部署情形，批示「知道了」。",
+            "whenCh": "乾隆五十二年正月十三日",
+            "whenAr": "1787/01/13",
+            "where": "",
+            "who": [
+              "乾隆帝",
+              "徐嗣曾"
+            ],
+            "whoLoc": {
+              "乾隆帝": "",
+              "徐嗣曾": "福建巡撫"
+            },
+            "relations": [],
+            "origin_doc_id": "",
+            "origin_type": "",
+            "origin_quote": "",
+            "origin_date": "",
+            "same_as_event_id": "",
+            "sources": [
+              {
+                "doc_id": "硃72",
+                "source_type": "硃批",
+                "quote": "知道了。欽此。",
+                "title": "為調兵赴臺情形事（附片）",
+                "date": "1787/01/13",
+                "position": "尾批"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

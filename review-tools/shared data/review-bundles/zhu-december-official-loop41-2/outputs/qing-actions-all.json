@@ -1,0 +1,368 @@
+[
+  {
+    "category": "done",
+    "description": "臺灣鎮柴大紀與臺灣道永福聞變後，隨即嚴加命令標下遊擊李中揚、千總蘇明耀、魏大鵬等人率領官兵飛馳前往諸羅縣剿捕匪徒。",
+    "howKnown": "轉述",
+    "quote": "職道等隨嚴飭本標遊擊李中揚、千總蘇明耀、魏大鵬等飛馳諸羅剿捕。",
+    "relations": [
+      {
+        "evidence": "職道等隨嚴飭本標遊擊李中揚",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "李中揚"
+      },
+      {
+        "evidence": "嚴飭本標遊擊李中揚、千總蘇明耀",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "蘇明耀"
+      },
+      {
+        "evidence": "嚴飭...魏大鵬等飛馳諸羅剿捕",
+        "relation": "嚴飭",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "魏大鵬"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀等派兵飛馳諸羅剿捕",
+    "whenAr": "",
+    "whenCh": "十二月初",
+    "whenKnownCh": "十二月十六日",
+    "where": "諸羅",
+    "who": [
+      "柴大紀",
+      "永福",
+      "李中揚",
+      "蘇明耀",
+      "魏大鵬"
+    ],
+    "who_loc": {
+      "李中揚": "諸羅",
+      "柴大紀": "臺灣府城",
+      "永福": "臺灣府城",
+      "蘇明耀": "諸羅",
+      "魏大鵬": "諸羅"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "職道等隨嚴飭本標遊擊李中揚、千總蘇明耀、魏大鵬等飛馳諸羅剿捕。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "因羅漢門山路可通往府城東邊，柴大紀等命令守備李步雲嚴加防禦，並調撥臺協水師兵丁協助地方民眾截拿匪徒。",
+    "howKnown": "轉述",
+    "quote": "又東邊山路，可由羅漢門通達府城，亦即飭該守備李步雲嚴加防範，並撥臺協水師兵丁協民截拿。",
+    "relations": [
+      {
+        "evidence": "亦即飭該守備李步雲嚴加防範",
+        "relation": "飭",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "李步雲"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀等派兵嚴防羅漢門",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十六日",
+    "where": "羅漢門",
+    "who": [
+      "柴大紀",
+      "永福",
+      "李步雲"
+    ],
+    "who_loc": {
+      "李步雲": "羅漢門",
+      "柴大紀": "臺灣府城",
+      "永福": "臺灣府城"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "又東邊山路，可由羅漢門通達府城，亦即飭該守備李步雲嚴加防範，並撥臺協水師兵丁協民截拿。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "鐵線橋為諸羅與笨港通往府城之要衝，柴大紀與永福率帶本標兵丁，督同臺協遊擊林光玉前往該地駐紮以備應援。",
+    "howKnown": "轉述",
+    "quote": "又鐵線橋地方係諸邑並笨港兩路通府總口，職道等帶本標兵丁督同臺協遊擊林光玉前赴駐紮，以便應援。",
+    "relations": [
+      {
+        "evidence": "職道等帶本標兵丁督同臺協遊擊林光玉前赴駐紮",
+        "relation": "督同",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "林光玉"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀率兵駐紮鐵線橋",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十六日",
+    "where": "鐵線橋",
+    "who": [
+      "柴大紀",
+      "永福",
+      "林光玉"
+    ],
+    "who_loc": {
+      "林光玉": "鐵線橋",
+      "柴大紀": "鐵線橋",
+      "永福": "鐵線橋"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "又鐵線橋地方係諸邑並笨港兩路通府總口，職道等帶本標兵丁督同臺協遊擊林光玉前赴駐紮，以便應援。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "柴大紀等緊急調派遣調臺協遊擊楊起麟率帶兵丁前來，作為後續支援部隊。",
+    "howKnown": "轉述",
+    "quote": "又飛調臺協遊擊楊起麟帶兵前來，以為後應。",
+    "relations": [
+      {
+        "evidence": "又飛調臺協遊擊楊起麟帶兵前來",
+        "relation": "飛調",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "楊起麟"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀等飛調楊起麟帶兵後應",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十六日",
+    "where": "臺灣府城",
+    "who": [
+      "柴大紀",
+      "永福",
+      "楊起麟"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣府城",
+      "楊起麟": "臺灣府城",
+      "永福": "臺灣府城"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "又飛調臺協遊擊楊起麟帶兵前來，以為後應。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "柴大紀等傳飭府城內文武官員嚴加防守，並調派臺協右營遊擊鄭嵩移駐府城彈壓防範。",
+    "howKnown": "轉述",
+    "quote": "府城為全臺根本，亦經飭在城文武嚴守，並飭臺協右營遊擊鄭嵩移駐彈壓。",
+    "relations": [
+      {
+        "evidence": "並飭臺協右營遊擊鄭嵩移駐彈壓",
+        "relation": "飭",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "鄭嵩"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀等嚴守臺灣府城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十六日",
+    "where": "臺灣府城",
+    "who": [
+      "柴大紀",
+      "永福",
+      "鄭嵩"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣府城",
+      "永福": "臺灣府城",
+      "鄭嵩": "臺灣府城"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "府城為全臺根本，亦經飭在城文武嚴守，並飭臺協右營遊擊鄭嵩移駐彈壓。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "柴大紀率兵於離府城十里的三坎店堵截叛軍，臺灣道永福則在府城召募鄉勇緊守城池。",
+    "howKnown": "轉述",
+    "quote": "柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇，緊守府城。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "柴大紀堵三坎店與永福募勇",
+    "whenAr": "",
+    "whenCh": "十二月初",
+    "whenKnownCh": "十二月十五日",
+    "where": "三坎店",
+    "who": [
+      "柴大紀",
+      "永福"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店",
+      "永福": "臺灣府城"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇，緊守府城。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "nonmil",
+    "description": "因戰事急迫，臺灣道永福派典史易鳳翔攜帶臺灣道印照同家人二人，於十二月初七日夜間乘船出洋至廈門請救兵。",
+    "howKnown": "轉述",
+    "quote": "初七夜，臺道因事勢迫急，令該典史同家人二名來廈請救。",
+    "relations": [
+      {
+        "evidence": "令該典史同家人二名來廈請救",
+        "relation": "令",
+        "relation_type": "command",
+        "source": "永福",
+        "target": "易鳳翔"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "永福派易鳳翔赴廈門請救",
+    "whenAr": "",
+    "whenCh": "十二月初七日",
+    "whenKnownCh": "十二月十五日",
+    "where": "臺灣府城",
+    "who": [
+      "永福",
+      "易鳳翔"
+    ],
+    "who_loc": {
+      "易鳳翔": "廈門",
+      "永福": "臺灣府城"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "初七夜，臺道因事勢迫急，令該典史同家人二名來廈請救。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "總兵柴大紀率軍於十二月十一日與叛軍交戰，大施火砲攻擊，成功使叛軍攻勢稍微退卻。",
+    "howKnown": "轉述",
+    "quote": "並聞得十一日，柴鎮與賊打仗，大施火炮，賊勢稍退。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "柴大紀開砲擊退叛軍攻勢",
+    "whenAr": "",
+    "whenCh": "十二月十一日",
+    "whenKnownCh": "十二月十五日",
+    "where": "三坎店",
+    "who": [
+      "柴大紀"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "並聞得十一日，柴鎮與賊打仗，大施火炮，賊勢稍退。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "水師提督黃仕簡於十二月十五日率兵自廈門放洋渡臺；陸路提督任承恩於十四日登舟、十七日乘風開駕渡臺進剿。",
+    "howKnown": "親歷",
+    "quote": "水師提臣黃仕簡於十五日自廈門放洋，陸路提臣任承恩十四日登舟，十七日乘風開駕",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡與任承恩率兵放洋渡臺",
+    "whenAr": "",
+    "whenCh": "十二月十五日至十七日",
+    "whenKnownCh": "十二月十七日",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "廈門",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "水師提臣黃仕簡於十五日自廈門放洋，陸路提臣任承恩十四日登舟，十七日乘風開駕"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "閩浙總督常青與提督黃仕簡、任承恩面商議定，渡臺後視賊情由鹿港進攻或由鹿耳門入口，隨機應變進剿。",
+    "howKnown": "親歷",
+    "quote": "並與臣面為議定，或竟由鹿港進攻，或由鹿耳門入口，統聽該提臣察探賊情，隨機應變",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡等計畫隨機擇口登陸進攻",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月十七日",
+    "where": "廈門",
+    "who": [
+      "常青",
+      "黃仕簡",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "廈門",
+      "常青": "福州",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "並與臣面為議定，或竟由鹿港進攻，或由鹿耳門入口，統聽該提臣察探賊情，隨機應變"
+      }
+    ],
+    "actor": "qing"
+  }
+]

@@ -142,6 +142,19 @@ def rescript_of(record: dict[str, Any]) -> str:
     return str(record.get("rescript_text") or record.get("rescript") or "")
 
 
+def is_routine_know_ack(text: Any) -> bool:
+    """Return true only for the routine 知道了／覽 acknowledgment.
+
+    This is intentionally narrow: substantive 硃批, including other short
+    rescripts such as 覽 or 已有旨, must still reach 皇帝行動 processing.
+    """
+    compact = re.sub(r"[\s　。．.!！?？；;：:,，、「」『』（）()]+", "", str(text or ""))
+    return compact in {
+        "知道了欽此", "硃批知道了欽此", "朱批知道了欽此",
+        "覽", "覽欽此", "硃批覽", "硃批覽欽此", "朱批覽", "朱批覽欽此",
+    }
+
+
 def author_name(record: dict[str, Any]) -> str:
     author = record.get("author")
     if isinstance(author, dict):
@@ -821,6 +834,10 @@ def repeat_report_events(
         if not isinstance(original, dict):
             continue
         original["same_as"] = earliest.get("id") or ""
+        # `same_ids` is the runner's exact-match response shape. Persist the
+        # verdict explicitly as well so the website can render the repeat note
+        # without having to infer it from the pointer fields.
+        original["repeat_verdict"] = "same"
         original["earliest_report"] = {
             "id": earliest.get("id") or "",
             "doc_id": earliest.get("doc_id") or "",
@@ -1019,6 +1036,16 @@ def combined_action_rows(
 ) -> list[dict[str, Any]]:
     did = doc_id_of(doc)
     imperial_sources = selected_emperor_sources(doc, selected_pairs, by_id)
+    raw_rescript = rescript_of(doc)
+    inline_all = re.findall(r"(?:硃批|朱批)\s*[:：]\s*[^)）\n]+", body_of(doc))
+    inline_substantive = [text for text in inline_all if not is_routine_know_ack(text)]
+    rescript_substantive = bool(raw_rescript.strip()) and not is_routine_know_ack(raw_rescript)
+    skip_zhu_source = not rescript_substantive and not inline_substantive
+    if skip_zhu_source:
+        # Do not process a bare routine acknowledgment as an emperor action source.
+        # Keep linked 上諭 sources: they may still contain substantive actions
+        # that are relevant to this memorial.
+        imperial_sources = [source for source in imperial_sources if source["id"] != did]
     if not imperial_sources:
         return []
     allowed = {did: doc}
@@ -1027,10 +1054,8 @@ def combined_action_rows(
             allowed[payload["id"]] = by_id[payload["id"]]
     previous = _relevant_previous_actions(earlier_emperor_actions(set(allowed), by_id), doc)
     previous_ids = {str(row.get("event_id") or "") for row in previous}
-    zhu_text = rescript_of(doc)
-    inline = re.findall(r"(?:硃批|朱批)\s*[:：]\s*[^)）\n]+", body_of(doc))
-    if inline:
-        zhu_text = (zhu_text + "\n" if zhu_text else "") + "\n".join(inline)
+    zhu_parts = ([raw_rescript] if rescript_substantive else []) + inline_substantive
+    zhu_text = "\n".join(zhu_parts)
     payload = {
         "mode": "combined_emperor_actions",
         "model": model,
@@ -1041,7 +1066,7 @@ def combined_action_rows(
             "date": imperial_date(doc) or primary_date(doc),
             "title": doc.get("title") or "",
             "body": body_of(doc),
-            "rescript": rescript_of(doc),
+            "rescript": raw_rescript if rescript_substantive else "",
             "zhupi_text": zhu_text,
         },
         "edicts": imperial_sources[1:] if imperial_sources and imperial_sources[0]["id"] == did else imperial_sources,

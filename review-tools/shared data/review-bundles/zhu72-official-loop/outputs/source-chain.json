@@ -1,0 +1,101 @@
+[
+  {
+    "doc_id": "硃72",
+    "evTitle": "本機來源鏈（6 個事件，合併為 3 條鏈）",
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "賊匪雖暫奔竄，現在復聚暗坑仔等處",
+            "reporter": "都司易連",
+            "subtitle": "叛軍奔竄並復聚暗坑仔",
+            "whenCh": "",
+            "where": "暗坑仔"
+          },
+          {
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。",
+            "reporter": "都司易連",
+            "subtitle": "易連率領義民奮勇殺賊",
+            "whenCh": "",
+            "where": "新莊"
+          },
+          {
+            "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。",
+            "reporter": "都司易連",
+            "subtitle": "徐嗣曾派徐鼎士帶兵救援",
+            "whenCh": "",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "都司易連",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。賊匪雖暫奔竄，現在復聚暗坑仔等處，請速發兵進剿。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "臣即照督臣咨會，於督標內派兵六百名，臣標內派兵四百名，備齊船隻，由南臺開行，至閩安候風放洋。",
+            "reporter": "督臣",
+            "subtitle": "徐嗣曾派督撫標兵赴閩安",
+            "whenCh": "",
+            "where": "南臺"
+          },
+          {
+            "quote": "其延、建兵到齊之時，即留省城駐紮。",
+            "reporter": "督臣",
+            "subtitle": "官軍計畫留延建兵駐省城",
+            "whenCh": "",
+            "where": "省城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "督臣",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "旋准督臣咨會，於督、撫標派兵一千名，令延平協副將林天洛帶領，由南臺配船至閩安出口，前抵鹿耳門會剿。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "臣仍另遣熟諳路徑之小舡，往來探報",
+            "reporter": "徐嗣曾",
+            "subtitle": "徐嗣曾派小船往來探報",
+            "whenCh": "",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "徐嗣曾",
+            "how": "親歷",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣仍另遣熟諳路徑之小舡，往來探報",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  }
+]

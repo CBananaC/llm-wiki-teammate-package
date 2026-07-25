@@ -1,0 +1,1086 @@
+[
+  {
+    "doc_id": "硃83",
+    "evTitle": "叛軍攻陷彰化諸羅兩邑",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文與王芬等人謀反起事，分路攻陷諸羅縣城與彰化縣城。",
+      "howKnown": "轉述",
+      "quote": "竊照彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+      "relations": [
+        {
+          "evidence": "彰匪林爽文、王芬等謀為不軌",
+          "relation": "夥同",
+          "relation_type": "ally",
+          "source": "林爽文",
+          "target": "王芬"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "叛軍攻陷彰化諸羅兩邑",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "十二月十四日",
+      "where": "彰化、諸羅",
+      "who": [
+        "林爽文",
+        "王芬"
+      ],
+      "who_loc": {
+        "林爽文": "彰化",
+        "王芬": "彰化"
+      },
+      "doc_id": "硃83",
+      "sources": [
+        {
+          "doc_id": "硃83",
+          "quote": "竊照彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑"
+        }
+      ],
+      "actor": "lin",
+      "card_id": "硃83#lin#0"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "竊照彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+            "reporter": "臺灣道永福",
+            "subtitle": "叛軍攻陷彰化諸羅兩邑",
+            "whenCh": "",
+            "where": "諸羅、彰化"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "十二月三十日戌刻，接據臺灣道永福十二月十四日來稟，內稱：竊照彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": "十二月十四日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃83",
+    "evTitle": "賊匪直攻攻陷鳳山縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十二月十三日天明，兩千餘名賊匪直攻鳳山縣城，趁清軍追擊之隙由龜山北門撲入城內攻陷縣署，導致鳳山知縣湯大奎拔劍自刎。",
+      "howKnown": "轉述",
+      "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落。等語又據逃回鳳邑跟丁稟稱：賊人進入縣署，該縣湯大奎情急拔劍自刎。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "賊匪直攻攻陷鳳山縣城",
+      "whenAr": "",
+      "whenCh": "十二月十三日",
+      "whenKnownCh": "十二月十四日",
+      "where": "鳳山縣城",
+      "who": [
+        "瑚參將",
+        "湯大奎"
+      ],
+      "who_loc": {
+        "湯大奎": "鳳山縣署",
+        "瑚參將": "鳳山縣城外"
+      },
+      "doc_id": "硃83",
+      "sources": [
+        {
+          "doc_id": "硃83",
+          "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落。等語又據逃回鳳邑跟丁稟稱：賊人進入縣署，該縣湯大奎情急拔劍自刎。"
+        }
+      ],
+      "actor": "lin",
+      "card_id": "硃83#lin#1",
+      "same_as": "zhu-december-official-loop::硃77#lin#62",
+      "earliest_report": {
+        "id": "zhu-december-official-loop::硃77#lin#62",
+        "doc_id": "硃77",
+        "date": "1786/12/24",
+        "title": "南路賊匪攻陷鳳山縣城"
+      },
+      "repeat_candidates": [
+        "zhu-december-rerun-g36::硃77#lin#52",
+        "saved-prompt-chain-batch97::台83#lin#57",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台83#lin#48",
+        "zhu-december-official-loop::硃77#lin#62",
+        "test-tai83-90-155-156-full-chain-gemini35::台83#lin#2",
+        "test-tai83-90-155-156-full-chain-gemini35::台83#lin#1",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台47#lin#2",
+        "test-tai83-90-155-156-full-chain::台83#lin#1",
+        "saved-prompt-chain-batch97::台83#lin#58",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台47#lin#3",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台51#lin#11",
+        "saved-prompt-chain-batch97::台155#lin#144"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落。",
+            "reporter": "南路兵丁劉茂光",
+            "subtitle": "賊匪直攻攻陷鳳山縣城",
+            "whenCh": "十二月十三日",
+            "where": "鳳山縣城"
+          },
+          {
+            "quote": "鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追",
+            "reporter": "南路兵丁劉茂光",
+            "subtitle": "瑚參將帶兵禦賊並追擊",
+            "whenCh": "十二月十二日、十二月十三日",
+            "where": "鳳山縣城外"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "接據臺灣道永福十二月十四日來稟",
+            "to_person": "閩浙總督常青",
+            "whenAr": "",
+            "whenCh": "十二月十四日"
+          },
+          {
+            "from_person": "南路兵丁劉茂光",
+            "how": "回稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "茲於十二月十三日亥刻，據南路兵丁劉茂光回稱：鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落。",
+            "to_person": "臺灣道永福",
+            "whenAr": "",
+            "whenCh": "十二月十三日亥刻"
+          }
+        ]
+      },
+      {
+        "events": [
+          {
+            "quote": "賊人進入縣署，該縣湯大奎情急拔劍自刎。",
+            "reporter": "逃回鳳邑跟丁",
+            "subtitle": "賊匪直攻攻陷鳳山縣城",
+            "whenCh": "十二月十三日",
+            "where": "鳳山縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣道永福",
+            "how": "稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "接據臺灣道永福十二月十四日來稟",
+            "to_person": "閩浙總督常青",
+            "whenAr": "",
+            "whenCh": "十二月十四日"
+          },
+          {
+            "from_person": "逃回鳳邑跟丁",
+            "how": "稟稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "又據逃回鳳邑跟丁稟稱：賊人進入縣署，該縣湯大奎情急拔劍自刎。",
+            "to_person": "臺灣道永福",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃83",
+    "evTitle": "瑚參將帶兵禦賊並追擊",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "鳳山協參將瑚帶領兵丁三百名於鳳山縣城外紮營防禦，於十二月十三日施放槍炮擊退攻城賊匪，復放馬追擊。",
+      "howKnown": "轉述",
+      "quote": "鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "瑚參將帶兵禦賊並追擊",
+      "whenAr": "1787/01/20、1787/01/21",
+      "whenCh": "十二月十二日、十二月十三日",
+      "whenKnownCh": "十二月十三日亥刻",
+      "where": "鳳山縣城外",
+      "who": [
+        "瑚"
+      ],
+      "who_loc": {
+        "瑚": "鳳山縣"
+      },
+      "doc_id": "硃83",
+      "sources": [
+        {
+          "doc_id": "硃83",
+          "quote": "鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃83#qing#0"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追",
+            "reporter": "南路兵丁劉茂光",
+            "subtitle": "瑚參將帶兵禦賊並追擊",
+            "whenCh": "十二月十二日、十二月十三日",
+            "where": "鳳山縣城外"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "臺灣道永福",
+            "how": "來稟",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "接據臺灣道永福十二月十四日來稟，內稱：……茲於十二月十三日亥刻，據南路兵丁劉茂光回稱：鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追",
+            "to_person": "閩浙總督常青",
+            "whenAr": "",
+            "whenCh": "十二月十四日"
+          },
+          {
+            "from_person": "南路兵丁劉茂光",
+            "how": "回稱",
+            "inferred": false,
+            "layer": 2,
+            "place": "",
+            "quote": "茲於十二月十三日亥刻，據南路兵丁劉茂光回稱：鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追",
+            "to_person": "臺灣道永福",
+            "whenAr": "",
+            "whenCh": "十二月十三日"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃83",
+    "evTitle": "鹿港義民合力保守地方",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "鹿仔港一帶義民互相聯合，共同保守地方，以接應官軍並壯聲援。",
+      "howKnown": "轉述",
+      "quote": "鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "鹿港義民合力保守地方",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "鹿港",
+      "who": [],
+      "who_loc": {},
+      "doc_id": "硃83",
+      "sources": [
+        {
+          "doc_id": "硃83",
+          "quote": "鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃83#qing#1"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。",
+            "reporter": "署守備陳邦光",
+            "subtitle": "鹿港義民合力保守地方",
+            "whenCh": "",
+            "where": "鹿港"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "署守備陳邦光",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "且接據署守備陳邦光稟報，鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃83",
+    "evTitle": "黃仕簡率水師放洋赴臺",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "水師提督黃仕簡自金門收泊料羅後，於十二月二十八日放洋渡海，前往鹿耳門支援郡城。",
+      "howKnown": "轉述",
+      "quote": "水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "黃仕簡率水師放洋赴臺",
+      "whenAr": "1787/02/05",
+      "whenCh": "十二月二十八日",
+      "whenKnownCh": "十二月三十日戌刻前",
+      "where": "料羅",
+      "who": [
+        "黃仕簡"
+      ],
+      "who_loc": {
+        "黃仕簡": "料羅"
+      },
+      "doc_id": "硃83",
+      "sources": [
+        {
+          "doc_id": "硃83",
+          "quote": "水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃83#qing#2",
+      "same_as": "evmrd8qehqp5n",
+      "earliest_report": {
+        "id": "evmrd8qehqp5n",
+        "doc_id": "奏48",
+        "date": "1787/01/02",
+        "title": "黃仕簡率兵放洋赴臺"
+      },
+      "repeat_candidates": [
+        "saved-prompt-chain-batch97::台83#qing#89",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台83#qing#97",
+        "test-tai83-90-155-156-full-chain-gemini35::台83#qing#2",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台47#qing#7",
+        "test-tai83-90-155-156-full-chain::台83#qing#18",
+        "test-tai83-90-155-156-full-chain::台83#qing#8",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::天51#qing#306",
+        "qian52-01-sent-shangzou-zhupi-shangyu-full-chain::台48#qing#13",
+        "saved-prompt-chain-台45-plus98-182b6f1d-20260708-063700::台48#qing#8",
+        "saved-prompt-chain-batch97::天51#qing#339",
+        "evmrd8qehqp5n",
+        "saved-prompt-chain-batch97::台48#qing#7"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。",
+            "reporter": "廈門同知",
+            "subtitle": "黃仕簡率水師放洋赴臺",
+            "whenCh": "十二月二十八日",
+            "where": "料羅"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "廈門同知",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "今據廈門同知稟報，水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃83",
+    "evTitle": "任承恩帶兵寄泊臭塗澳",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "陸路提督任承恩率兵自蚶江放洋渡海，因風雨驟作暫時寄泊於臭塗澳外，俟風定直達鹿仔港。",
+      "howKnown": "轉述",
+      "quote": "陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "任承恩帶兵寄泊臭塗澳",
+      "whenAr": "1787/02/05",
+      "whenCh": "十二月二十八日",
+      "whenKnownCh": "十二月三十日戌刻前",
+      "where": "蚶江、臭塗澳",
+      "who": [
+        "任承恩"
+      ],
+      "who_loc": {
+        "任承恩": "臭塗澳"
+      },
+      "doc_id": "硃83",
+      "sources": [
+        {
+          "doc_id": "硃83",
+          "quote": "陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃83#qing#3"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。",
+            "reporter": "蚶江通判",
+            "subtitle": "任承恩帶兵寄泊臭塗澳",
+            "whenCh": "十二月二十八日",
+            "where": "蚶江、臭塗澳"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "蚶江通判",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃90",
+    "evTitle": "賊匪攻陷鳳山縣城",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "臺灣南路民變賊匪攻陷鳳山縣城，致使臺灣郡城形勢危急、望救孔急。",
+      "howKnown": "轉述",
+      "quote": "南路鳳山縣亦被賊匪攻陷，臺灣郡城望救孔急",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "賊匪攻陷鳳山縣城",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十二年正月初一日",
+      "where": "鳳山縣",
+      "who": [
+        "林爽文",
+        "賊匪"
+      ],
+      "who_loc": {
+        "賊匪": "鳳山縣"
+      },
+      "doc_id": "硃90",
+      "sources": [
+        {
+          "doc_id": "硃90",
+          "quote": "南路鳳山縣亦被賊匪攻陷，臺灣郡城望救孔急"
+        }
+      ],
+      "actor": "lin",
+      "card_id": "硃90#lin#2"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "南路鳳山縣亦被賊匪攻陷，臺灣郡城望救孔急",
+            "reporter": "督臣常青",
+            "subtitle": "賊匪攻陷鳳山縣城",
+            "whenCh": "",
+            "where": "鳳山縣"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "督臣常青",
+            "how": "行文",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "復接督臣來文。茲據臺報，南路鳳山縣亦被賊匪攻陷，臺灣郡城望救孔急",
+            "to_person": "普吉保",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃90",
+    "evTitle": "常青前往蚶江察看情形",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "閩浙總督常青於乾隆五十一年十二月十一日自福建省城起程，前往蚶江察看臺灣民變防剿情形。",
+      "howKnown": "公文轉述",
+      "quote": "督臣常青於十二月十一日自省起程，前赴蚶江察看情形",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "常青前往蚶江察看情形",
+      "whenAr": "1787/01/29",
+      "whenCh": "十二月十一日",
+      "whenKnownCh": "十二月二十日",
+      "where": "蚶江",
+      "who": [
+        "常青"
+      ],
+      "who_loc": {
+        "常青": "蚶江"
+      },
+      "doc_id": "硃90",
+      "sources": [
+        {
+          "doc_id": "硃90",
+          "quote": "督臣常青於十二月十一日自省起程，前赴蚶江察看情形"
+        }
+      ],
+      "actor": "qing",
+      "card_id": "硃90#qing#7",
+      "same_as": "evmr3ggkd5t4y",
+      "earliest_report": {
+        "id": "evmr3ggkd5t4y",
+        "doc_id": "硃21",
+        "date": "1786/12/12",
+        "title": "常青親赴泉州調度防務"
+      },
+      "repeat_candidates": [
+        "saved-prompt-chain-batch97::台90#qing#101",
+        "test-tai83-90-155-156-full-chain-gemini35::台90#qing#6",
+        "zhu-official-loop-gemini35::硃26#qing#5",
+        "zhu-official-review-gemini35::硃26#qing#8",
+        "zhu26-official-loop-gemini35::硃26#qing#0",
+        "zhu-december-official-loop::硃26#qing#27",
+        "zhu-december-rerun-g36::硃26#qing#18",
+        "zhu-date-fix-review::硃26#qing#8",
+        "zhu-official-loop-v2::硃26#qing#8",
+        "zhu-official-loop-v3-retry::硃26#qing#8",
+        "zhu-first-10-official-loop::硃26#qing#24"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "經督臣常青於十二月十一日自省起程，前赴蚶江察看情形",
+            "reporter": "撫臣",
+            "subtitle": "常青前往蚶江察看情形",
+            "whenCh": "十二月十一日",
+            "where": "蚶江"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "撫臣",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "接到撫臣來咨，近有臺灣賊匪林爽文等肆擾，經督臣常青於十二月十一日自省起程，前赴蚶江察看情形",
+            "to_person": "普吉保",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃79",
+    "evTitle": "林爽文等糾眾滋擾",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文等於臺灣彰化地方糾集民眾滋擾作亂。",
+      "howKnown": "上諭轉述",
+      "quote": "現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾一案",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文等糾眾滋擾",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "正月初二日",
+      "where": "臺灣彰化",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "臺灣彰化"
+      },
+      "doc_id": "硃79",
+      "sources": [
+        {
+          "doc_id": "硃79",
+          "quote": "現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾一案"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": []
+  },
+  {
+    "doc_id": "硃89",
+    "evTitle": "攻破大墩營盤",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "乾隆五十一年十一月二十七日拂曉，林爽文率領大里杙莊眾及天地會眾千餘人，持器械攻破官兵於大墩紮立之營盤，殺害知縣俞峻、副將赫朝卿、遊擊耿世階等官兵。",
+      "howKnown": "審訊供詞",
+      "quote": "二十七日天將亮時，各拿器械攻破大墩營盤，小的拿半斬刀同往，殺死一人，又殺傷一人，不知是官是兵。那時知縣、副將、遊擊都被殺害",
+      "relations": [
+        {
+          "evidence": "知縣、副將、遊擊都被殺害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "俞峻"
+        },
+        {
+          "evidence": "知縣、副將、遊擊都被殺害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "赫朝卿"
+        },
+        {
+          "evidence": "知縣、副將、遊擊都被殺害",
+          "relation": "殺害",
+          "relation_type": "conflict",
+          "source": "林爽文",
+          "target": "耿世階"
+        },
+        {
+          "evidence": "糾合同會內各人...小的拿半斬刀同往",
+          "relation": "隨同攻打",
+          "relation_type": "ally",
+          "source": "高文麟",
+          "target": "林爽文"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "攻破大墩營盤",
+      "whenAr": "",
+      "whenCh": "十一月二十七日",
+      "whenKnownCh": "",
+      "where": "大墩",
+      "who": [
+        "林爽文",
+        "高文麟",
+        "楊軒",
+        "俞峻",
+        "赫朝卿",
+        "耿世階"
+      ],
+      "who_loc": {
+        "俞峻": "大墩",
+        "林爽文": "大墩",
+        "楊軒": "大墩",
+        "耿世階": "大墩",
+        "赫朝卿": "大墩",
+        "高文麟": "大墩"
+      },
+      "doc_id": "硃89",
+      "sources": [
+        {
+          "doc_id": "硃89",
+          "quote": "二十七日天將亮時，各拿器械攻破大墩營盤，小的拿半斬刀同往，殺死一人，又殺傷一人，不知是官是兵。那時知縣、副將、遊擊都被殺害"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "二十七日天將亮時，各拿器械攻破大墩營盤，小的拿半斬刀同往，殺死一人，又殺傷一人，不知是官是兵。那時知縣、副將、遊擊都被殺害",
+            "reporter": "高文麟",
+            "subtitle": "攻破大墩營盤",
+            "whenCh": "十一月二十七日",
+            "where": "大墩"
+          },
+          {
+            "quote": "在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。",
+            "reporter": "高文麟",
+            "subtitle": "分路進攻諸羅淡水",
+            "whenCh": "",
+            "where": "諸羅"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "高文麟",
+            "how": "口述",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "問據高文麟供：小的三十歲，原籍漳州府龍溪縣人...二十七日天將亮時，各拿器械攻破大墩營盤，小的拿半斬刀同往，殺死一人，又殺傷一人，不知是官是兵。那時知縣、副將、遊擊都被殺害",
+            "to_person": "具奏官員",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃89",
+    "evTitle": "分路進攻諸羅淡水",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文攻佔彰化後，留數百人據守縣城，自己親自帶領部隊分路前往攻打諸羅與淡水等處。",
+      "howKnown": "審訊供詞",
+      "quote": "在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。",
+      "relations": [
+        {
+          "evidence": "留了幾百人守住彰化...留小的與高文麟們踞守彰化",
+          "relation": "留守",
+          "relation_type": "command",
+          "source": "林爽文",
+          "target": "高文麟"
+        }
+      ],
+      "side": "lin",
+      "subtitle": "分路進攻諸羅淡水",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "諸羅",
+      "who": [
+        "林爽文",
+        "高文麟",
+        "楊振國",
+        "楊軒"
+      ],
+      "who_loc": {
+        "林爽文": "諸羅",
+        "楊振國": "彰化縣城",
+        "楊軒": "彰化縣城",
+        "高文麟": "彰化縣城"
+      },
+      "doc_id": "硃89",
+      "sources": [
+        {
+          "doc_id": "硃89",
+          "quote": "在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。",
+            "reporter": "高文麟",
+            "subtitle": "分路進攻諸羅淡水",
+            "whenCh": "",
+            "where": "諸羅"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "高文麟",
+            "how": "具供",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "問據高文麟供：小的三十歲，原籍漳州府龍溪縣人，早年過臺住居彰化縣犁頭莊...在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。",
+            "to_person": "具奏官員",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃89",
+    "evTitle": "俞峻等率兵進駐大墩紮營",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "彰化縣知縣俞峻會同副將赫朝卿、遊擊耿世傑帶領幾百名兵役直抵大墩紮營，諭令大里杙莊居民獻出林爽文及逃犯張烈等。",
+      "howKnown": "轉述",
+      "quote": "十一月二十日，彰化俞知縣訪聞林爽文結會滋事，並查有竊藏諸羅縣楊光勳結會案內逸犯張烈們，會同赫副將、耿遊擊帶領兵役幾百名，到大墩紮立營盤，離大里杙有六里路，諭令大里杙人獻出林爽文並諸羅縣逃犯。",
+      "relations": [
+        {
+          "evidence": "會同赫副將",
+          "relation": "會同",
+          "relation_type": "ally",
+          "source": "俞峻",
+          "target": "赫朝卿"
+        },
+        {
+          "evidence": "會同赫副將、耿遊擊",
+          "relation": "會同",
+          "relation_type": "ally",
+          "source": "俞峻",
+          "target": "耿世傑"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "俞峻等率兵進駐大墩紮營",
+      "whenAr": "",
+      "whenCh": "十一月二十日",
+      "whenKnownCh": "",
+      "where": "大墩",
+      "who": [
+        "俞峻",
+        "赫朝卿",
+        "耿世傑"
+      ],
+      "who_loc": {
+        "俞峻": "大墩",
+        "耿世傑": "大墩",
+        "赫朝卿": "大墩"
+      },
+      "doc_id": "硃89",
+      "sources": [
+        {
+          "doc_id": "硃89",
+          "quote": "十一月二十日，彰化俞知縣訪聞林爽文結會滋事，並查有竊藏諸羅縣楊光勳結會案內逸犯張烈們，會同赫副將、耿遊擊帶領兵役幾百名，到大墩紮立營盤，離大里杙有六里路，諭令大里杙人獻出林爽文並諸羅縣逃犯。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "十一月二十日，彰化俞知縣訪聞林爽文結會滋事，並查有竊藏諸羅縣楊光勳結會案內逸犯張烈們，會同赫副將、耿遊擊帶領兵役幾百名，到大墩紮立營盤，離大里杙有六里路，諭令大里杙人獻出林爽文並諸羅縣逃犯。",
+            "reporter": "高文麟",
+            "subtitle": "俞峻等率兵進駐大墩紮營",
+            "whenCh": "十一月二十日",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "高文麟",
+            "how": "供稱",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "問據高文麟供：小的三十歲，原籍漳州府龍溪縣人，早年過臺住居彰化縣犁頭莊，祖、父俱故，現有祖母蔡氏，母親黃氏，娶妻郭氏已死，並無兒子，只有一女六歲。林爽文住居彰化大里杙莊，素與小的熟識，他平日原是作賊竊賊，得來銀錢肯幫助人，因此人多服他。本年三月內，林爽文來糾小的入會，說有事大家相幫，不怕人家欺侮，也不怕官役拘拿。凡入會的人，要對天跪地立誓，故此取名天地會。因怕官府查拿，隨約定會內的人，彼此遇見各舉大手指為暗號，並不寫帖立簿。那大里杙一莊，共有二、三千人丁，林爽文究於何時起會，實在會內有若干人，小的不知詳細，這是要問林爽文的。十一月二十日，彰化俞知縣訪聞林爽文結會滋事，並查有竊藏諸羅縣楊光勳結會案內逸犯張烈們，會同赫副將、耿遊擊帶領兵役幾百名，到大墩紮立營盤，離大里杙有六里路，諭令大里杙人獻出林爽文並諸羅縣逃犯。",
+            "to_person": "奏摺作者",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃89",
+    "evTitle": "俞峻審訊處置送出之會匪",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "彰化知縣俞峻在大墩審明莊民送出之會匪五名，將其中二名杖斃，其餘三名收禁。",
+      "howKnown": "轉述",
+      "quote": "經俞知縣審明杖斃二名，解回收禁三名，內有一犯名叫侯老",
+      "relations": [
+        {
+          "evidence": "解回收禁三名，內有一犯名叫侯老",
+          "relation": "收禁",
+          "relation_type": "conflict",
+          "source": "俞峻",
+          "target": "侯老"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "俞峻審訊處置送出之會匪",
+      "whenAr": "",
+      "whenCh": "十一月二十日",
+      "whenKnownCh": "",
+      "where": "大墩",
+      "who": [
+        "俞峻",
+        "侯老"
+      ],
+      "who_loc": {
+        "侯老": "彰化縣",
+        "俞峻": "大墩"
+      },
+      "doc_id": "硃89",
+      "sources": [
+        {
+          "doc_id": "硃89",
+          "quote": "經俞知縣審明杖斃二名，解回收禁三名，內有一犯名叫侯老"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "經俞知縣審明杖斃二名，解回收禁三名，內有一犯名叫侯老",
+            "reporter": "原任彰化縣典史李爾和",
+            "subtitle": "俞峻審訊處置送出之會匪",
+            "whenCh": "十一月二十日",
+            "where": "大墩"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "原任彰化縣典史李爾和",
+            "how": "口供",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "問據原任彰化縣典史李爾和供：... 聞說也曾送出會匪五名，經俞知縣審明杖斃二名，解回收禁三名，內有一犯名叫侯老，其餘都不知他姓名。",
+            "to_person": "具奏官員",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃87",
+    "evTitle": "林爽文起意劫大墩營盤",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文因彰化文武官員至大墩圍捕逸犯並揚言燒莊，遂起意糾集多人攻劫大墩營盤，並殺害文武官員。",
+      "howKnown": "審訊供詞",
+      "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "林爽文起意劫大墩營盤",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十二年正月初六日",
+      "where": "大墩",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "大墩"
+      },
+      "doc_id": "硃87",
+      "sources": [
+        {
+          "doc_id": "硃87",
+          "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員",
+            "reporter": "楊詠、楊軒",
+            "subtitle": "林爽文起意劫大墩營盤",
+            "whenCh": "",
+            "where": "大墩"
+          },
+          {
+            "quote": "無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+            "reporter": "楊詠、楊軒",
+            "subtitle": "叛軍攻陷彰化分攻諸羅",
+            "whenCh": "",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "楊詠、楊軒",
+            "how": "供稱",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣將逆匪楊振國即楊詠等研訊之後，恐有不實不盡，率同司道再四詰問。據楊詠、楊軒同供：",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃87",
+    "evTitle": "叛軍攻陷彰化分攻諸羅",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "林爽文叛軍因殺害文武官員無處逃罪，遂攻取彰化縣城，分派偽官，並分兵前往攻取諸羅等各處地方。",
+      "howKnown": "審訊供詞",
+      "quote": "無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍攻陷彰化分攻諸羅",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十二年正月初六日",
+      "where": "彰化縣城",
+      "who": [
+        "林爽文"
+      ],
+      "who_loc": {
+        "林爽文": "彰化縣城"
+      },
+      "doc_id": "硃87",
+      "sources": [
+        {
+          "doc_id": "硃87",
+          "quote": "無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+            "reporter": "楊詠、楊軒",
+            "subtitle": "叛軍攻陷彰化分攻諸羅",
+            "whenCh": "",
+            "where": "彰化縣城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "楊詠、楊軒",
+            "how": "口供",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣將逆匪楊振國即楊詠等研訊之後，恐有不實不盡，率同司道再四詰問。據楊詠、楊軒同供：今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員，無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+            "to_person": "常青",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  }
+]

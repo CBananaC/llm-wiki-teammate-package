@@ -1,0 +1,29 @@
+[
+  {
+    "category": "done",
+    "description": "淡水、新莊一帶叛軍遭清軍都司易連率義民擊退後暫時奔竄，隨後又重新聚集於暗坑仔等處。",
+    "howKnown": "轉述",
+    "quote": "賊匪雖暫奔竄，現在復聚暗坑仔等處",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍奔竄並復聚暗坑仔",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "暗坑仔",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "暗坑仔"
+    },
+    "doc_id": "硃72",
+    "sources": [
+      {
+        "doc_id": "硃72",
+        "quote": "賊匪雖暫奔竄，現在復聚暗坑仔等處"
+      }
+    ],
+    "actor": "lin"
+  }
+]

@@ -1,0 +1,86 @@
+[
+  {
+    "doc_id": "硃79",
+    "memDoc": "硃79",
+    "pairs": [
+      {
+        "yu_doc_id": "諭27",
+        "reply_doc_id": "硃79",
+        "relation": "official_reply_to_yu",
+        "match_level": "high",
+        "confirmed_at": "2026-07-11 09:22",
+        "evidence": {
+          "marker": "奉上諭",
+          "quote_in_reply": "乾隆五十二年正月初八日寅刻，接乾隆五十二年正月初二日奉上諭：「現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾一案，藍元枚即行馳驛迅速前往泉州，署理福建陸路提督。」等因。欽此",
+          "matched_yu_span": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。……藍元枚……即行驛迅速前往泉州，署理福建陸路提督",
+          "issue_date": "乾隆五十二年正月初二日",
+          "receive_date": "乾隆五十二年正月初八日",
+          "date_note": "奏摺中「彰＂」應為「彰化」之抄錄或避諱缺筆。"
+        },
+        "yu": {
+          "id": "諭27",
+          "title": "諭兩江總督李世傑等著藍元枚署理福建陸路提督即駐蚶江",
+          "type": "shangyu",
+          "doc_type": "上諭",
+          "author": "李世傑",
+          "recipients": [
+            "李世傑",
+            "藍元枚"
+          ],
+          "issue_date": "1787/01/02",
+          "send_date": null,
+          "receive_date": null
+        },
+        "reply": {
+          "id": "硃79",
+          "title": "為奏聞起程接任署福建陸路提督",
+          "type": "zhupi",
+          "doc_type": "硃批",
+          "author": "藍元枚",
+          "recipients": [],
+          "issue_date": null,
+          "send_date": "1787/01/08",
+          "receive_date": "1787/01/14"
+        }
+      }
+    ],
+    "items": [
+      {
+        "description": "上諭命藍元枚接旨後迅速前往泉州署理福建陸路提督，駐紮蚶江一帶幫同常青調度接應。藍元枚奏報已將江南提督印信交署中軍參將德浩暫行看管，並於正月初八日巳刻自松江起程馳驛前往蚶江，會同常青辦理接應事宜。",
+        "matched_yu_span": "著傳諭藍元枚接奉此旨，即行驛迅速前往泉州，署理福建陸路提督，即駐紮蚶江一帶，幫同常調度接應一切事宜，以期迅速蕆事。",
+        "quote_in_reply": "臣奉到上諭，隨將印信等項，交署中軍參將德浩看管。俟兩江督臣李世傑委員到松接受，臣即於本日巳刻自松起程，馳驛前往蚶江，會同督臣常青調度接應以期迅速蕆事外",
+        "relation_note": "諭命藍元枚迅速前往泉州署理陸路提督並駐紮蚶江 → 藍元枚答覆已交接印信並於初八日巳刻起程赴蚶江。",
+        "relations": [
+          {
+            "evidence": "隨將印信等項，交署中軍參將德浩看管",
+            "relation": "將印信交其看管",
+            "relation_type": "command",
+            "source": "藍元枚",
+            "target": "德浩"
+          },
+          {
+            "evidence": "會同督臣常青調度接應以期迅速蕆事",
+            "relation": "會同調度接應",
+            "relation_type": "other",
+            "source": "藍元枚",
+            "target": "常青"
+          }
+        ],
+        "response_type": "done",
+        "subtitle": "遵旨交卸印務並起程馳赴蚶江接任",
+        "where": "松",
+        "who": [
+          "藍元枚",
+          "德浩",
+          "李世傑",
+          "常青"
+        ],
+        "who_loc": {
+          "德浩": "松",
+          "藍元枚": "松"
+        },
+        "yu_doc_id": "諭27"
+      }
+    ]
+  }
+]

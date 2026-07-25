@@ -1,0 +1,147 @@
+[
+  {
+    "category": "done",
+    "description": "巡撫徐嗣曾依照總督咨會，自督標挑派兵六百名、撫標挑派兵四百名，備齊船隻由南臺開行至閩安候風放洋，準備赴臺會剿。",
+    "howKnown": "親歷",
+    "quote": "臣即照督臣咨會，於督標內派兵六百名，臣標內派兵四百名，備齊船隻，由南臺開行，至閩安候風放洋。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾派督撫標兵赴閩安",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月二十八日",
+    "where": "南臺",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃72",
+    "sources": [
+      {
+        "doc_id": "硃72",
+        "quote": "臣即照督臣咨會，於督標內派兵六百名，臣標內派兵四百名，備齊船隻，由南臺開行，至閩安候風放洋。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "巡撫徐嗣曾規劃待延平、建寧兩鎮營調派之官兵全數到齊後，將其留在福州省城駐紮防守。",
+    "howKnown": "親歷",
+    "quote": "其延、建兵到齊之時，即留省城駐紮。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "官軍計畫留延建兵駐省城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月二十八日",
+    "where": "省城",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃72",
+    "sources": [
+      {
+        "doc_id": "硃72",
+        "quote": "其延、建兵到齊之時，即留省城駐紮。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "都司易連在淡水、新莊等處率領並激勵義民奮勇禦賊殺賊。",
+    "howKnown": "稟報",
+    "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "易連率領義民奮勇殺賊",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月二十八日",
+    "where": "新莊",
+    "who": [
+      "易連"
+    ],
+    "who_loc": {
+      "易連": "新莊"
+    },
+    "doc_id": "硃72",
+    "sources": [
+      {
+        "doc_id": "硃72",
+        "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "巡撫徐嗣曾派調閩安協副將徐鼎士帶領官兵一千五百名及隨行兵丁，前後進發前往淡水救援。",
+    "howKnown": "親歷",
+    "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。",
+    "relations": [
+      {
+        "evidence": "臣所派調閩安協副將徐鼎士",
+        "relation": "派調",
+        "relation_type": "command",
+        "source": "徐嗣曾",
+        "target": "徐鼎士"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "徐嗣曾派徐鼎士帶兵救援",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月二十八日",
+    "where": "淡水",
+    "who": [
+      "徐嗣曾",
+      "徐鼎士"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州",
+      "徐鼎士": "福州"
+    },
+    "doc_id": "硃72",
+    "sources": [
+      {
+        "doc_id": "硃72",
+        "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "巡撫徐嗣曾派遣熟諳水路途徑之小船往來海峽，傳遞與探報軍情。",
+    "howKnown": "親歷",
+    "quote": "臣仍另遣熟諳路徑之小舡，往來探報",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "徐嗣曾派小船往來探報",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月二十八日",
+    "where": "淡水",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "硃72",
+    "sources": [
+      {
+        "doc_id": "硃72",
+        "quote": "臣仍另遣熟諳路徑之小舡，往來探報"
+      }
+    ],
+    "actor": "qing"
+  }
+]

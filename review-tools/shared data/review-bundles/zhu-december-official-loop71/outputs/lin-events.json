@@ -1,0 +1,29 @@
+[
+  {
+    "category": "done",
+    "description": "臺灣匪徒糾集眾人攻打彰化縣城，肆行悖逆，引發福建水師提督黃仕簡擬率兵赴臺督剿。",
+    "howKnown": "訪聞",
+    "quote": "臺灣彰化縣被賊匪糾眾攻城",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪糾眾攻打彰化縣城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "彰化縣",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "彰化縣"
+    },
+    "doc_id": "硃71",
+    "sources": [
+      {
+        "doc_id": "硃71",
+        "quote": "臺灣彰化縣被賊匪糾眾攻城"
+      }
+    ],
+    "actor": "lin"
+  }
+]

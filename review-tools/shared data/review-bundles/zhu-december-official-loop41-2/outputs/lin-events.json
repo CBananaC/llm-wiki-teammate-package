@@ -1,0 +1,108 @@
+[
+  {
+    "category": "done",
+    "description": "乾隆五十一年十一月二十七日夜，林爽文、王芬等率領眾多民變人群攻劫遊擊耿世文於大墩的營盤。",
+    "howKnown": "面稟",
+    "quote": "奸民林爽文、王芬等聚眾劫營，謀為不軌...十一月二十七夜，賊匪眾多，攻劫營盤",
+    "relations": [
+      {
+        "evidence": "奸民林爽文、王芬等聚眾劫營",
+        "relation": "協同",
+        "relation_type": "ally",
+        "source": "林爽文",
+        "target": "王芬"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文等聚眾攻劫大墩營盤",
+    "whenAr": "1787/01/16",
+    "whenCh": "十一月二十七日夜",
+    "whenKnownCh": "十二月初三日",
+    "where": "大墩",
+    "who": [
+      "林爽文",
+      "王芬"
+    ],
+    "who_loc": {
+      "林爽文": "大墩",
+      "王芬": "大墩"
+    },
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "奸民林爽文、王芬等聚眾劫營，謀為不軌...十一月二十七夜，賊匪眾多，攻劫營盤"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "十一月二十八日夜，數千名叛軍圍攻彰化縣城並將其攻破，殺害都司王愈大等人。",
+    "howKnown": "轉述",
+    "quote": "有賊匪數千圍攻城池，於二十八夜將縣城攻破。王都司被害",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍圍攻並攻陷彰化縣城",
+    "whenAr": "1787/01/17",
+    "whenCh": "十一月二十八日夜",
+    "whenKnownCh": "十二月初三日",
+    "where": "彰化縣城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "有賊匪數千圍攻城池，於二十八夜將縣城攻破。王都司被害"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "十二月初六日卯時，叛軍攻破諸羅縣城。",
+    "howKnown": "轉述",
+    "quote": "十二月初六日卯時，攻破諸羅。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍攻破諸羅縣城",
+    "whenAr": "1787/01/24",
+    "whenCh": "十二月初六日卯時",
+    "whenKnownCh": "十二月十五日",
+    "where": "諸羅縣城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "十二月初六日卯時，攻破諸羅。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "十二月十一日，叛軍於距離府城十里之三坎店與柴大紀官軍打仗，遭官軍大施火炮後稍微後退。",
+    "howKnown": "轉述",
+    "quote": "十一日，柴鎮與賊打仗，大施火炮，賊勢稍退。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍於三坎店與官軍交戰",
+    "whenAr": "1787/01/29",
+    "whenCh": "十二月十一日",
+    "whenKnownCh": "十二月十五日",
+    "where": "三坎店",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃41",
+    "sources": [
+      {
+        "doc_id": "硃41",
+        "quote": "十一日，柴鎮與賊打仗，大施火炮，賊勢稍退。"
+      }
+    ],
+    "actor": "lin"
+  }
+]

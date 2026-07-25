@@ -1,0 +1,381 @@
+[
+  {
+    "doc_id": "硃72",
+    "evTitle": "叛軍奔竄並復聚暗坑仔",
+    "actor": "lin",
+    "event": {
+      "category": "done",
+      "description": "淡水、新莊一帶叛軍遭清軍都司易連率義民擊退後暫時奔竄，隨後又重新聚集於暗坑仔等處。",
+      "howKnown": "轉述",
+      "quote": "賊匪雖暫奔竄，現在復聚暗坑仔等處",
+      "relations": [],
+      "side": "lin",
+      "subtitle": "叛軍奔竄並復聚暗坑仔",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "暗坑仔",
+      "who": [
+        "賊匪"
+      ],
+      "who_loc": {
+        "賊匪": "暗坑仔"
+      },
+      "doc_id": "硃72",
+      "sources": [
+        {
+          "doc_id": "硃72",
+          "quote": "賊匪雖暫奔竄，現在復聚暗坑仔等處"
+        }
+      ],
+      "actor": "lin"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "賊匪雖暫奔竄，現在復聚暗坑仔等處",
+            "reporter": "都司易連",
+            "subtitle": "叛軍奔竄並復聚暗坑仔",
+            "whenCh": "",
+            "where": "暗坑仔"
+          },
+          {
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。",
+            "reporter": "都司易連",
+            "subtitle": "易連率領義民奮勇殺賊",
+            "whenCh": "",
+            "where": "新莊"
+          },
+          {
+            "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。",
+            "reporter": "都司易連",
+            "subtitle": "徐嗣曾派徐鼎士帶兵救援",
+            "whenCh": "",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "都司易連",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。賊匪雖暫奔竄，現在復聚暗坑仔等處，請速發兵進剿。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃72",
+    "evTitle": "徐嗣曾派督撫標兵赴閩安",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "巡撫徐嗣曾依照總督咨會，自督標挑派兵六百名、撫標挑派兵四百名，備齊船隻由南臺開行至閩安候風放洋，準備赴臺會剿。",
+      "howKnown": "親歷",
+      "quote": "臣即照督臣咨會，於督標內派兵六百名，臣標內派兵四百名，備齊船隻，由南臺開行，至閩安候風放洋。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "徐嗣曾派督撫標兵赴閩安",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十一年十二月二十八日",
+      "where": "南臺",
+      "who": [
+        "徐嗣曾"
+      ],
+      "who_loc": {
+        "徐嗣曾": "福州"
+      },
+      "doc_id": "硃72",
+      "sources": [
+        {
+          "doc_id": "硃72",
+          "quote": "臣即照督臣咨會，於督標內派兵六百名，臣標內派兵四百名，備齊船隻，由南臺開行，至閩安候風放洋。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣即照督臣咨會，於督標內派兵六百名，臣標內派兵四百名，備齊船隻，由南臺開行，至閩安候風放洋。",
+            "reporter": "督臣",
+            "subtitle": "徐嗣曾派督撫標兵赴閩安",
+            "whenCh": "",
+            "where": "南臺"
+          },
+          {
+            "quote": "其延、建兵到齊之時，即留省城駐紮。",
+            "reporter": "督臣",
+            "subtitle": "官軍計畫留延建兵駐省城",
+            "whenCh": "",
+            "where": "省城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "督臣",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "旋准督臣咨會，於督、撫標派兵一千名，令延平協副將林天洛帶領，由南臺配船至閩安出口，前抵鹿耳門會剿。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃72",
+    "evTitle": "官軍計畫留延建兵駐省城",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "巡撫徐嗣曾規劃待延平、建寧兩鎮營調派之官兵全數到齊後，將其留在福州省城駐紮防守。",
+      "howKnown": "親歷",
+      "quote": "其延、建兵到齊之時，即留省城駐紮。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "官軍計畫留延建兵駐省城",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十一年十二月二十八日",
+      "where": "省城",
+      "who": [
+        "徐嗣曾"
+      ],
+      "who_loc": {
+        "徐嗣曾": "福州"
+      },
+      "doc_id": "硃72",
+      "sources": [
+        {
+          "doc_id": "硃72",
+          "quote": "其延、建兵到齊之時，即留省城駐紮。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "其延、建兵到齊之時，即留省城駐紮。",
+            "reporter": "督臣",
+            "subtitle": "官軍計畫留延建兵駐省城",
+            "whenCh": "",
+            "where": "省城"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "督臣",
+            "how": "咨會",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "旋准督臣咨會，於督、撫標派兵一千名，令延平協副將林天洛帶領，由南臺配船至閩安出口，前抵鹿耳門會剿。建、延官兵即留於省城駐紮。等因。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃72",
+    "evTitle": "易連率領義民奮勇殺賊",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "都司易連在淡水、新莊等處率領並激勵義民奮勇禦賊殺賊。",
+      "howKnown": "稟報",
+      "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "易連率領義民奮勇殺賊",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十一年十二月二十八日",
+      "where": "新莊",
+      "who": [
+        "易連"
+      ],
+      "who_loc": {
+        "易連": "新莊"
+      },
+      "doc_id": "硃72",
+      "sources": [
+        {
+          "doc_id": "硃72",
+          "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。",
+            "reporter": "都司易連",
+            "subtitle": "易連率領義民奮勇殺賊",
+            "whenCh": "",
+            "where": "新莊"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "都司易連",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃72",
+    "evTitle": "徐嗣曾派徐鼎士帶兵救援",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "巡撫徐嗣曾派調閩安協副將徐鼎士帶領官兵一千五百名及隨行兵丁，前後進發前往淡水救援。",
+      "howKnown": "親歷",
+      "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。",
+      "relations": [
+        {
+          "evidence": "臣所派調閩安協副將徐鼎士",
+          "relation": "派調",
+          "relation_type": "command",
+          "source": "徐嗣曾",
+          "target": "徐鼎士"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "徐嗣曾派徐鼎士帶兵救援",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十一年十二月二十八日",
+      "where": "淡水",
+      "who": [
+        "徐嗣曾",
+        "徐鼎士"
+      ],
+      "who_loc": {
+        "徐嗣曾": "福州",
+        "徐鼎士": "福州"
+      },
+      "doc_id": "硃72",
+      "sources": [
+        {
+          "doc_id": "硃72",
+          "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣所派調閩安協副將徐鼎士，帶兵前後進發。",
+            "reporter": "都司易連",
+            "subtitle": "徐嗣曾派徐鼎士帶兵救援",
+            "whenCh": "",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "都司易連",
+            "how": "稟報",
+            "inferred": false,
+            "layer": 1,
+            "place": "淡水",
+            "quote": "現又據都司易連稟：率勵義民，奮勇殺賊。賊匪雖暫奔竄，現在復聚暗坑仔等處，請速發兵進剿。等情。",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃72",
+    "evTitle": "徐嗣曾派小船往來探報",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "巡撫徐嗣曾派遣熟諳水路途徑之小船往來海峽，傳遞與探報軍情。",
+      "howKnown": "親歷",
+      "quote": "臣仍另遣熟諳路徑之小舡，往來探報",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "徐嗣曾派小船往來探報",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "乾隆五十一年十二月二十八日",
+      "where": "淡水",
+      "who": [
+        "徐嗣曾"
+      ],
+      "who_loc": {
+        "徐嗣曾": "福州"
+      },
+      "doc_id": "硃72",
+      "sources": [
+        {
+          "doc_id": "硃72",
+          "quote": "臣仍另遣熟諳路徑之小舡，往來探報"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "臣仍另遣熟諳路徑之小舡，往來探報",
+            "reporter": "徐嗣曾",
+            "subtitle": "徐嗣曾派小船往來探報",
+            "whenCh": "",
+            "where": "淡水"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "徐嗣曾",
+            "how": "親歷",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "臣仍另遣熟諳路徑之小舡，往來探報",
+            "to_person": "徐嗣曾",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  }
+]

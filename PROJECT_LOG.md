@@ -3189,3 +3189,37 @@ Verified:
 
 Remaining:
 - Formal-page visual verification was not repeated because the helper was already present there; formal/sample parity is confirmed by the paired source check.
+
+### 2026-07-25 14:27 HKT — Codex — Restored repeat labels for legacy loop bundles
+
+Summary: Made the formal and sample AI panels recognize the existing `same_as` and `earliest_report` fields written by earlier terminal repeat-report runs, even when those bundles lack the newer `repeat_verdict` field. Future terminal runs now persist `repeat_verdict: same` for exact matches.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- The `zhu83-official-loop` bundle contains one 林 and five 清 cross-document repeat annotations.
+- Python compilation, both embedded HTML-script syntax checks, and `git diff --check` passed.
+
+Remaining:
+- Reload the bundle in the website AI panel to visually confirm the warning labels; no browser session was available in this check.
+
+### 2026-07-25 14:31 HKT — Codex — Skipped routine 硃批 acknowledgments in 皇帝行動
+
+Summary: The terminal official-document loop now excludes standalone routine rescripts `知道了。欽此。`, `覽`, and `覽。欽此。` from the combined emperor-action source set. Existing linked 上諭 sources remain eligible for substantive emperor actions, and a substantive 夾批 in the same document is preserved.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `tool/skills md/emperor-actions-confirmed-zhu-yu.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- Routine-acknowledgment cases passed, while `已有旨了。欽此。` and `好` remain eligible.
+- `git diff --check` passed.
+
+Remaining:
+- The local Git index is read-only in this environment, so the required local checkpoint commit could not be created.
