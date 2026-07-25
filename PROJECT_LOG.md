@@ -2982,6 +2982,23 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
 
+### 2026-07-25 13:30 HKT — Codex — Refined source-chain completion and composer feedback
+
+Summary: Moved `✓ 已加入來源鏈` to the bottom action area of committed source-chain cards, removed the per-event `▸ 搜尋來源` control, and suppressed add-success messages from the AI composer so the typing area stays clear.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- Committed source-chain status placement and removal of the per-event source-search control passed targeted structural checks.
+- `git diff --check` passed for the touched files.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
 ### 2026-07-25 13:25 HKT — Codex — Unified header button typeface
 
 Summary: Made every button in the header toolbar inherit the same typeface as the left-side filter controls in both formal and sample tools.
