@@ -11,10 +11,12 @@ matters most for the `上諭` loop: the memorials a 上諭 was drawn from are us
 reviewed and committed BEFORE the 上諭 itself, so the 上諭's re-report of those
 same events would otherwise create duplicate dots.
 
-For each new card the runner pre-filters earlier cards (this run + committed
-`formal_all.data`) by cheap topic overlap, sends the shortlist to the proxy
-`repeat_report` mode (which judges sameness by MEANING), names the earliest
-report by send date, and annotates the card with `same_as` + `earliest_report`.
+For each new card the runner pre-filters earlier cards (this run, earlier
+official-loop bundles, and committed `formal_all.data`) by cheap topic overlap,
+sends the shortlist to the proxy `repeat_report` mode (which judges sameness by
+MEANING), names the earliest report by the reporting document's send date, and
+annotates the card with `same_as` + `earliest_report`. The official-document
+loop applies this pass to 林方 and 清方 cards across documents only.
 Nothing is merged — the website turns the annotation into a 合併／保留 choice.
 
 ## Sameness rule
@@ -32,7 +34,9 @@ object AND the same concrete comment/command.
 
 ## Used By
 
-- Terminal: `tool/scripts py/run_yu_loop.py` (dedup pass over 林/清/皇帝/回應).
+- Terminal: `tool/scripts py/run_mass_prompt_chain_test.py` (cross-document
+  dedup pass over 林/清) and `tool/scripts py/run_yu_loop.py` (dedup pass over
+  林/清/皇帝/回應).
 - Proxy: `tool/proxy/gemini-proxy/main.py`, `mode: "repeat_report"`.
 
 ## Output (added to each card)

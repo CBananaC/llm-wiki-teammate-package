@@ -2982,6 +2982,34 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
 
+### 2026-07-25 13:46 HKT — Codex — Restored official-loop cross-document repeat detection
+
+Summary: Reintroduced the `repeat-report` stage in the official-document loop.
+The stage now sends 林方 and 清方 cards to the Gemini `repeat_report` mode for
+meaning-based sameness decisions, compares against current-run cards, earlier
+official-loop bundle cards, and verified events in `formal_all.data`, and writes
+the earliest reporting document's sent date into `earliest_report`. Same-document
+matches and 皇帝行動 are excluded; nothing is merged automatically.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `tool/skills md/repeat-report-dedup.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `python3 -m py_compile "tool/scripts py/run_mass_prompt_chain_test.py"`
+  passed.
+- `git diff --check` passed.
+- Dry-run completed for 硃64 without proxy calls.
+- A mocked repeat-report test produced `same_as` and `earliest_report` only for
+  the later cross-document card.
+- The bundle chain and manifest now declare the in-loop `repeat-report` stage.
+
+Remaining:
+- Run a real small two-document bundle with Gemini, inspect the 林/清 cards in
+  the website, then run the December/January/February/March batches with the
+  restored stage.
+
 ### 2026-07-25 13:36 HKT — Codex — Simplified AI current-card scope control
 
 Summary: Removed the `單一／部分／全部` scope dropdown from the AI typing area. The composer now displays the document dot currently selected on the chart, and a normal chart-card click resets the AI context to that document.
