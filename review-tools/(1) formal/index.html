@@ -11963,6 +11963,8 @@ body .cb-pop.is-viewport{
   font-size:calc(16px * var(--ui-fs,1)) !important;
 }
 .dual-toolbar .pl, .dual-toolbar .zoom-btn.wide{ font-size:calc(15px * var(--ui-fs,1)) !important; }
+/* Keep every header button on the same inherited typeface as the left filters. */
+body .dual-toolbar button{ font-family:inherit !important; }
 body .dual-toolbar > #click-network-settings{
   display:none !important;
   height:calc(48px * var(--ui-fs,1)) !important;

@@ -2981,3 +2981,20 @@ Verified:
 
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
+### 2026-07-25 13:25 HKT — Codex — Unified header button typeface
+
+Summary: Made every button in the header toolbar inherit the same typeface as the left-side filter controls in both formal and sample tools.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- Header font rule was found exactly once in each page.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
