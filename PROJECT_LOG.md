@@ -2982,6 +2982,23 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
 
+### 2026-07-25 14:10 HKT — Codex — Matched the Tools icon to the document-panel gear
+
+Summary: Replaced the header Tools control with the exact document-panel `IC.gear` SVG and removed the dropdown arrow. The control remains icon-only with its `工具` accessibility label and dropdown behavior.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- Header gear paths match the document-panel gear exactly; no caret remains.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
 ### 2026-07-25 13:31 HKT — Codex — Replaced the Tools label with a settings icon
 
 Summary: Replaced the visible 工具 text in the formal and sample header buttons with an inline settings SVG. The dropdown caret, behavior, title, and accessible label remain unchanged.
@@ -3139,3 +3156,20 @@ Verified:
 
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
+### 2026-07-25 14:15 HKT — Codex — Restored saved AI output from all workspace groups
+
+Summary: Expanded the AI panel's read-only history to include every persisted workspace group, including multi-document AI-loop runs whose source cards are not currently open. New prompts still write to the clicked document's active store.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script syntax parsing.
+- Live formal-tool verification rendered 602 AI output cards with visible scroll content and confirmed saved outputs including 硃25, 硃71, and 諭43.
+- `git diff --check` passed for the touched UI and log patch.
+
+Remaining:
+- Browser visual verification used the live formal tool; the sample page still has only static paired-file checks.
