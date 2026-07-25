@@ -2964,3 +2964,20 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; no
   state-mutating UI click was performed.
+
+### 2026-07-25 13:21 HKT — Codex — Kept edit-dot access on right-click and widened connection controls
+
+Summary: Removed the 編輯圓點 action group from the Tools dropdown while retaining its hidden action targets for the timeline right-click menu. Made the 連線 and 時間軸 slider cards and tracks span the full dropdown width, using the header 介面字級 scale for their labels and values.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- Hidden edit-dot targets and full-width connection rules passed targeted structural checks.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.

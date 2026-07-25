@@ -1673,6 +1673,14 @@
       <button class="zoom-btn" id="d-zoomIn" type="button">+</button>
       <button class="zoom-btn" id="d-zoomFit" type="button">適合</button>
     </span>
+    <span class="tb-editpop" id="tb-editpop" style="display:none" aria-hidden="true">
+      <button class="zoom-btn wide" id="d-editdots" type="button" title="編輯圓點：點圓點可編輯／移動／隱藏">編輯圓點</button>
+      <button class="zoom-btn wide" id="d-adddot" type="button" title="新增圓點：點此後再點時間軸上的日期">＋圓點</button>
+      <button class="zoom-btn wide" id="d-linkdots" type="button" title="連線：點兩個圓點，建立自訂連線">連線</button>
+      <button class="zoom-btn wide" id="d-clearlot" type="button" title="清除所有自訂圓點連線">清連線</button>
+      <button class="zoom-btn wide" id="d-addevt" type="button" title="新增戰場事件：點此後再點時間軸上的日期">＋事件</button>
+      <button class="zoom-btn wide" id="d-hidden" type="button" title="檢視／復原已隱藏的圓點">隱藏清單</button>
+    </span>
     <span class="tb-tools">
       <button class="zoom-btn wide" id="tb-toolsbtn" type="button">工具 <svg class="svgic dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
       <div class="tb-toolspop" id="tb-toolspop" style="display:none">
@@ -1692,14 +1700,6 @@
         <div class="ttg"><div class="tth">連線</div><div class="ttr tb-sliders">
           <label>實線透明度 <input id="tl-solid-opacity" type="range" min="0.05" max="1" step="0.01"><output id="tl-solid-opacity-v"></output></label>
           <label>虛線透明度 <input id="tl-dashed-opacity" type="range" min="0.05" max="1" step="0.01"><output id="tl-dashed-opacity-v"></output></label>
-        </div></div>
-        <div class="ttg"><div class="tth">編輯圓點</div><div class="ttr">
-          <button class="zoom-btn wide" id="d-editdots" type="button" title="編輯圓點：點圓點可編輯／移動／隱藏">編輯圓點</button>
-          <button class="zoom-btn wide" id="d-adddot" type="button" title="新增圓點：點此後再點時間軸上的日期">＋圓點</button>
-          <button class="zoom-btn wide" id="d-linkdots" type="button" title="連線：點兩個圓點，建立自訂連線">連線</button>
-          <button class="zoom-btn wide" id="d-clearlot" type="button" title="清除所有自訂圓點連線">清連線</button>
-          <button class="zoom-btn wide" id="d-addevt" type="button" title="新增戰場事件：點此後再點時間軸上的日期">＋事件</button>
-          <button class="zoom-btn wide" id="d-hidden" type="button" title="檢視／復原已隱藏的圓點">隱藏清單</button>
         </div></div>
         <div class="ttg"><div class="tth">時間軸</div><div class="ttr tb-sliders">
           <label>圓點大小 <input id="tl-dot-size" type="range" min="0.6" max="2.4" step="0.1"><output id="tl-dot-size-v"></output></label>
@@ -12041,6 +12041,12 @@ body .tb-type{ position:relative; z-index:12000; display:inline-flex; padding:0 
 .tb-toolspop .tb-sliders input[type=range]{ display:block; min-width:150px; width:100%; }
 .tb-toolspop .ttg:last-child{ grid-column:1 / -1; }
 .tb-toolspop .tb-sliders{ min-width:0; }
+/* Connection and timeline controls use the full dropdown width and header scale. */
+body .tb-toolspop .ttg:has(.tb-sliders){ grid-column:1 / -1; }
+body .tb-toolspop .tb-sliders{ width:100%; min-width:0; }
+body .tb-toolspop .tb-sliders label{ grid-template-columns:max-content minmax(0,1fr) max-content; font-size:calc(15px * var(--ui-fs,1)); }
+body .tb-toolspop .tb-sliders input[type=range]{ min-width:0; width:100%; }
+body .tb-toolspop .tb-sliders output{ min-width:4em; font-size:inherit; }
 
 /* ===== Claude: retire the redundant outer column bar; unify 總摘要 / 原文 BODY section styling =====
    The outer .ws-list-bar / .ws-tools bar duplicates the card's or tool's own header when a column
