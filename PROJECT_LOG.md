@@ -3010,6 +3010,33 @@ Remaining:
   the website, then run the December/January/February/March batches with the
   restored stage.
 
+### 2026-07-25 13:53 HKT — Codex — Suppressed source chains for author-self-reported events
+
+Summary: Changed the official-document extraction path so an event reported by
+the memorial's own author is treated as direct testimony. The terminal loop no
+longer calls source-chain tracing for those events, and both formal and sample
+UIs hide stale or newly generated source-chain blocks and source-search controls
+for them. The event's own quotation remains visible as the primary evidence.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- All embedded JavaScript blocks parsed: 5 formal, 6 sample.
+- `git diff --check` passed.
+- Detection tests passed for an author-named relation source, explicit
+  `親歷`, and a report sourced to another official.
+- Resuming an older bundle removes stale author-self source-chain rows before
+  writing the cleaned `source-chain.json`.
+
+Remaining:
+- Human visual confirmation in both review tools, especially for mixed cards
+  containing both direct author reports and earlier-source events.
+
 ### 2026-07-25 13:36 HKT — Codex — Simplified AI current-card scope control
 
 Summary: Removed the `單一／部分／全部` scope dropdown from the AI typing area. The composer now displays the document dot currently selected on the chart, and a normal chart-card click resets the AI context to that document.

@@ -6407,7 +6407,22 @@
     });
     byDoc.forEach((g, docId)=>{
       if(!g.extract.length || !g.trace.length) return;
-      const allChains=[]; g.trace.forEach(t=>(t.items||[]).forEach(ch=>allChains.push(ch)));
+      const allChains=[];
+      g.trace.forEach(t=>{
+        const kept=[];
+        (t.items||[]).forEach(ch=>{
+          // Older bundles may contain a source chain for an event that was
+          // authored and directly reported by the memorialist. Remove that
+          // stale chain before it can appear as a standalone or inline source.
+          const events=(ch.events||[]).filter(ev=>!isAuthorSelfReportCandidate({
+            doc_id:docId, reporter:ev&&ev.reporter, quote:ev&&ev.quote, subtitle:ev&&ev.subtitle
+          }, recByDocId2(docId)));
+          if((ch.events||[]).length&&!events.length) return;
+          const clean=events.length===(ch.events||[]).length?ch:Object.assign({},ch,{events});
+          kept.push(clean); allChains.push(clean);
+        });
+        t.items=kept;
+      });
       if(!allChains.length) return;
       const usedSigs=new Set();
       g.extract.forEach(t=>{
@@ -7514,9 +7529,9 @@
               <dl class="cx-meta cx-facts"><dt>地點</dt><dd class="loc"><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="where">${esc(it.where||'？')}</span></dd>${(it.who&&it.who.length)?`<dt>人物</dt><dd class="who">${esc(it.who.join('、'))}</dd>`:''}<dt>發生日期</dt><dd><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenCh">${esc(it.whenCh||'')}</span>（<span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenAr">${esc(it.whenAr||'')}</span>）${(!dateArIsFull(it.whenAr)&&repeatPointerForItem(it))?(()=>{ const fd=firstReportDate(it); return fd?` <button class="cx-usefirstdate" data-i="${i}" data-j="${j}" type="button" title="此回報日期不完整，套用首次回報「${esc(fd.title||'')}」的事件日期">用首次回報日期 ${esc(fd.dateAr)}</button>`:''; })():''}</dd></dl>
               <div class="cx-acts">${it.__added?(it.__mergedInto?'<span class="cx-done">✓ 已加入並併入來源</span>':(()=>{ const mid=matchedEarlierEventId(it); const mev=mid&&eventById(mid); return '<span class="cx-done">✓ 已加入</span>'+(mev?`<button class="cx-mergesrc" data-i="${i}" data-j="${j}" type="button" title="此事件其實是「${esc(evTitle(mev))}」的重複回報，將此文書的引文／資訊加入該事件的回報記錄">＋加入來源到「${esc(evTitle(mev))}」</button>`:''); })())+sendDateBtn(it,j):(repeatPointerForItem(it)?`${repeatActionButtons(it,i,j)}${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`:`<button class="cx-add" data-i="${i}" data-j="${j}" type="button">加入</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`)}</div>
               ${it.__added&&it.__evId?yuUpstreamSourcesHtml(eventById(it.__evId)):''}
-              ${it.__added&&it.__evId?suggestedChainsHtml(eventById(it.__evId)):''}
+              ${it.__added&&it.__evId&&!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id))?suggestedChainsHtml(eventById(it.__evId)):''}
             </div>`).join('') : '<div class="record-empty">沒有擷取到事件。</div>')
-          +(items.length?`<div class="cx-foot"><button class="cx-tracesrc" data-i="${i}" type="button" title="若已勾選加入部分事件則只搜尋那些，否則搜尋全部擷取事件">⌕ 搜尋這些事件的來源鏈</button></div>`:'')
+          +(items.some(it=>!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id)))?`<div class="cx-foot"><button class="cx-tracesrc" data-i="${i}" type="button" title="若已勾選加入部分事件則只搜尋那些，否則搜尋全部擷取事件">⌕ 搜尋這些事件的來源鏈</button></div>`:'')
           +(leftover.length?`<div class="cx-foot-chains"><div class="src-head">其餘來源鏈（未對應到任何已擷取事件，${leftover.length}）</div>${leftover.map((ch,k)=>chainStandaloneHtml(ch,i,k,m.actor)).join('')}</div>`:'')
           +`</div>`; }
       function traceHtml(m,i){ const chains=m.items||[]; if(!chains.length) return '';
@@ -8710,6 +8725,27 @@
               <div class="cs-members">${(it.members||[]).map((mm,k)=>groupedMemberHtml(mm,{checkbox:{i,j,k,checked:mm.include!==false, excluded:mm.include===false}})).join('')}</div>
               <div class="cx-acts">${it.__added?'<span class="cx-done">✓ 已加入合併圓點</span>'+(it.__evId?`<button class="cs-open" data-i="${i}" data-j="${j}" type="button">開啟合併圓點</button>`:''):`<button class="cs-commit" data-i="${i}" data-j="${j}" type="button" ${nIncl<2?'disabled title="至少需勾選兩個成員"':''}>加入合併圓點</button>`}</div>
             </div>`; }).join('') : '<div class="record-empty">沒有找到可信度足夠的重複事件分組。</div>')+`</div>`; }
+      // An author-self-reported event has no earlier information document to
+      // trace. Keep the event's own quotation as evidence, but do not create or
+      // display a provenance chain for it. This mirrors the terminal loop's
+      // source-chain suppression and also covers author actions classified as
+      // 訪聞 when the relation source is the memorialist himself.
+      function isAuthorSelfReportCandidate(p, rec){
+        p=p||{}; rec=rec||{};
+        const known=String(p.howKnown||p.how_known||'').trim();
+        if(['親歷','第一手','本官親歷','作者親歷','自報','本官自報'].includes(known)||/(親歷|第一手|自報)/.test(known)) return true;
+        let author=rec.author_name||rec.authorName||rec.author||'';
+        if(author&&typeof author==='object') author=author.name||author.full_name||'';
+        const compact=v=>String(v||'').replace(/[\s　（）()、，,。；：:等]/g,'');
+        const same=(a,b)=>{a=compact(a); b=compact(b); return !!(a&&b&&Math.min(a.length,b.length)>=2&&(a.indexOf(b)>=0||b.indexOf(a)>=0));};
+        const reporters=[];
+        ['reporter','reported_by','source_actor','source_author','source_official'].forEach(k=>{ const v=p[k]; if(Array.isArray(v)) reporters.push(...v); else if(v) reporters.push(v); });
+        (p.relations||[]).forEach(r=>{ if(r&&r.source) reporters.push(r.source); });
+        if(reporters.some(r=>same(author,r))) return true;
+        let quote=String(p.quote||'');
+        (p.sources||[]).forEach(s=>{ if(s) quote+='\n'+String(s.quote||''); });
+        return !!author && /(奴才|臣|本官)/.test(quote) && same(author,quote);
+      }
       async function runExtract(actor, ctx){
         ctx=ctx||{};
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先點選圖上的文書圓點。'; return; }
@@ -8743,7 +8779,15 @@
           // already returns every chain on that document together with which events each one
           // reports, in a single call, so this covers however many candidates a document produced
           // without re-querying it.
-          const docIds=[...new Set(props.flatMap(p=>(p.sources||[]).map(s=>String(s.doc_id||'')).filter(Boolean)))];
+          const propIsDirectSelf=p=>(p.sources||[]).some(s=>isAuthorSelfReportCandidate(p, recByDocId2(String(s.doc_id||''))));
+          const traceProps=props.filter(p=>!propIsDirectSelf(p));
+          const directTitlesByDoc=new Map();
+          props.filter(propIsDirectSelf).forEach(p=>(p.sources||[]).forEach(s=>{
+            const did=String(s.doc_id||''); if(!did) return;
+            const arr=directTitlesByDoc.get(did)||[]; const title=p.subtitle||p.what||'';
+            if(title&&!arr.includes(title)) arr.push(title); directTitlesByDoc.set(did,arr);
+          }));
+          const docIds=[...new Set(traceProps.flatMap(p=>(p.sources||[]).map(s=>String(s.doc_id||'')).filter(Boolean)))];
           const chainsByDoc=new Map(); let traced=0;
           for(const did of docIds){
             traced++; st2.textContent='AI 追溯來源中…（'+traced+'/'+docIds.length+'）';
@@ -8754,20 +8798,24 @@
             // independently-worded way (e.g. "林爽文等攻陷彰化縣城" vs "彰化城失陷"), and the
             // subtitle match below would fail to connect a chain to its candidate even though both
             // are clearly about the same thing.
-            const knownTitles=[...new Set(props.filter(p=>(p.sources||[]).some(s=>String(s.doc_id)===did)).map(p=>p.subtitle||p.what).filter(Boolean))];
+            const knownTitles=[...new Set(traceProps.filter(p=>(p.sources||[]).some(s=>String(s.doc_id)===did)).map(p=>p.subtitle||p.what).filter(Boolean))];
             const baseTraceRule='若某事件的資訊並沒有更早的文書來源——即出於本文書作者本人親歷（第一手），或僅為一般傳聞／訪聞，而未引用任何更早的奏、諭、稟、咨等文書——請不要為它虛構來源鏈；該事件回傳空的來源鏈（不列任何 hop）即可，作者本人的親歷或傳聞不算一條來源。';
             const hint=(knownTitles.length?('已知本文書已擷取出以下事件標題：'+knownTitles.map(t=>'「'+t+'」').join('、')+'。描述每條來源鏈的 events[].subtitle 時，若對應到上述某一事件，請直接沿用該事件標題的原文字（逐字），不要另擬新標題。'):'')+baseTraceRule;
             try{
               const data=await callProxy({mode:'trace', model:getGeminiModel(), actor, doc_id:did, doc_type:r.doc_type, title:r.title, body:recordBody(r), rescript:r.rescript||'', summary:getSummary(r), question:hint});
               let cs=data.chains; if(!cs && data.text){ try{ cs=(JSON.parse(stripFences(data.text))||{}).chains; }catch(e2){} }
-              chainsByDoc.set(did, normalizeChains(cs, did));
+              const directTitles=directTitlesByDoc.get(did)||[];
+              const chains=normalizeChains(cs, did).map(ch=>Object.assign({}, ch, {
+                events:(ch.events||[]).filter(ev=>!directTitles.some(title=>subtitlesLikelySame(ev.subtitle,title)))
+              })).filter(ch=>(ch.events||[]).length||!directTitles.length);
+              chainsByDoc.set(did, chains);
             }catch(e2){ chainsByDoc.set(did, []); }
           }
           // Attach each chain to every candidate it actually reports on, using the same
           // hint-assisted-but-still-fuzzy subtitle match as everywhere else this session (see
           // subtitlesLikelySame). A chain can attach to more than one candidate since it may report
           // several events.
-          props.forEach(p=>{
+          traceProps.forEach(p=>{
             const pTitle=p.subtitle||p.what||''; if(!normWhere(pTitle)) return;
             const bySig=new Map();
             (p.sources||[]).forEach(s=>{ (chainsByDoc.get(String(s.doc_id))||[]).forEach(ch=>{
@@ -8793,7 +8841,7 @@
           markAIReview('extract', apis);
           const warning=failures.length?'；另有 '+failures.length+' 份文書失敗（'+failures.map(x=>x.doc_id).join('、')+'）':'';
           st2.textContent=props.length
-            ? '完成：擷取 '+props.length+' 個事件'+warning+'，請於下方逐一「加入」（來源鏈已預先找好，加入後會自動顯示）。'
+            ? '完成：擷取 '+props.length+' 個事件'+warning+'，請於下方逐一「加入」（作者自報不追溯來源鏈）。'
             : '完成：AI 逐句重試後仍未找到符合此分類的事件。可改選其他事件分類交叉檢查。';
           renderLog({focusIndex:c.length-1});
         }catch(e){ st2.textContent='擷取失敗：'+e.message; }
@@ -9422,6 +9470,7 @@
       // trace the information-transmission chain behind ONE event (scans its source docs, falls back to selected docs)
       async function runTrace(evId, ctx){ ctx=ctx||{};
         const e=eventById(evId); if(!e){ st2.textContent='找不到事件。'; return; }
+        if((e.sources||[]).some(s=>isAuthorSelfReportCandidate(Object.assign({},e,{sources:[s],doc_id:s&&s.doc_id}),recByDocId2(s&&s.doc_id)))){ st2.textContent='作者自報事件不需追溯來源鏈。'; return; }
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         let docs=(e.sources||[]).map(s=>recByDocId2(s.doc_id)).filter(Boolean);
         if(!docs.length) docs=selectedApis().map(a=>a.rec);
@@ -9588,7 +9637,7 @@
       // (if any were added/clicked, only those; otherwise all extracted), consolidated into one turn
       async function runTraceExtractItems(m){
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
-        const items=(m.items||[]).filter(it=>!it.__skip);
+        const items=(m.items||[]).filter(it=>!it.__skip&&!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id)));
         const added=items.filter(it=>it.__added);
         const targets=added.length?added:items;
         if(!targets.length){ st2.textContent='沒有可搜尋的事件。'; return; }

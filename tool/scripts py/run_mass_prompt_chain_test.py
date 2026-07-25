@@ -371,6 +371,53 @@ def run_events(
     return rows
 
 
+_DIRECT_SELF_REPORT_LABELS = {"親歷", "第一手", "本官親歷", "作者親歷", "自報", "本官自報"}
+
+
+def _compact_person_name(value: Any) -> str:
+    return re.sub(r"[\s　（）()、，,。；：:等]+", "", str(value or ""))
+
+
+def _person_matches(left: Any, right: Any) -> bool:
+    a, b = _compact_person_name(left), _compact_person_name(right)
+    return bool(a and b and len(min(a, b)) >= 2 and (a in b or b in a))
+
+
+def is_author_self_report(item: dict[str, Any], doc: dict[str, Any]) -> bool:
+    """Whether the extracted event has no earlier information source.
+
+    `親歷`/`第一手` is the explicit model classification. We also inspect the
+    event's named relation source and quote because an author may report his
+    own action as `訪聞` after hearing the wider situation, as in `硃44`.
+    """
+    known = str(item.get("howKnown") or item.get("how_known") or "").strip()
+    if known in _DIRECT_SELF_REPORT_LABELS or any(label in known for label in ("親歷", "第一手", "自報")):
+        return True
+    author = author_name(doc)
+    if not author:
+        return False
+    reporters: list[str] = []
+    for key in ("reporter", "reported_by", "source_actor", "source_author", "source_official"):
+        value = item.get(key)
+        if isinstance(value, list):
+            reporters.extend(str(v) for v in value)
+        elif value:
+            reporters.append(str(value))
+    for relation in item.get("relations") or []:
+        if isinstance(relation, dict) and relation.get("source"):
+            reporters.append(str(relation.get("source")))
+    if any(_person_matches(author, reporter) for reporter in reporters):
+        return True
+    quote = str(item.get("quote") or "")
+    for source in item.get("sources") or []:
+        if isinstance(source, dict):
+            quote += "\n" + str(source.get("quote") or "")
+    # Require a self-reporting marker as well as the author's name in the
+    # quotation, so merely being mentioned as a person does not suppress a
+    # genuine earlier-source chain.
+    return bool(any(marker in quote for marker in ("奴才", "臣", "本官")) and _person_matches(author, quote))
+
+
 def trace_event(
     proxy: str,
     model: str,
@@ -1333,6 +1380,21 @@ def main() -> None:
         write_json(files["source_raw"], source_raw)
         write_json(files["source"], merge_source_chains_by_signature(source_raw))
 
+    # If an older bundle is resumed, remove source-chain rows that were created
+    # before the author-self-report rule existed. This keeps --skip-done from
+    # re-exposing a stale chain in the website.
+    if args.skip_done and source_raw:
+        retained_sources = []
+        for trace_row in source_raw:
+            event = trace_row.get("event") if isinstance(trace_row, dict) else None
+            trace_doc = by_id.get(doc_id_of(trace_row), {}) if isinstance(trace_row, dict) else {}
+            if isinstance(event, dict) and is_author_self_report(event, trace_doc):
+                continue
+            retained_sources.append(trace_row)
+        if len(retained_sources) != len(source_raw):
+            source_raw[:] = retained_sources
+            flush_sources()
+
     for index, doc in enumerate(docs, 1):
         did = doc_id_of(doc)
         print(f"[{index}/{len(docs)}] {did} {doc.get('doc_type')} {doc.get('title')}")
@@ -1358,8 +1420,11 @@ def main() -> None:
                 write_json(files["lin"], lin_rows)
                 mark(did, "lin-events")
             if not done(did, "source-chain-lin"):
-                print(f"    - 林方來源鏈 ×{len(lin_items)}（並行 {args.workers}）")
-                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, lin_items, "lin", args.timeout, args.retries, args.retry_sleep, args.workers))
+                trace_items = [item for item in lin_items if not is_author_self_report(item, doc)]
+                skipped = len(lin_items) - len(trace_items)
+                suffix = f"；略過作者自報 {skipped}" if skipped else ""
+                print(f"    - 林方來源鏈 ×{len(trace_items)}（並行 {args.workers}）{suffix}")
+                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, trace_items, "lin", args.timeout, args.retries, args.retry_sleep, args.workers))
                 flush_sources()
                 mark(did, "source-chain-lin")
 
@@ -1372,8 +1437,11 @@ def main() -> None:
                 write_json(files["qing"], qing_rows)
                 mark(did, "qing-actions-all")
             if not done(did, "source-chain-qing"):
-                print(f"    - 清方來源鏈 ×{len(qing_items)}（並行 {args.workers}）")
-                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, qing_items, "qing", args.timeout, args.retries, args.retry_sleep, args.workers))
+                trace_items = [item for item in qing_items if not is_author_self_report(item, doc)]
+                skipped = len(qing_items) - len(trace_items)
+                suffix = f"；略過作者自報 {skipped}" if skipped else ""
+                print(f"    - 清方來源鏈 ×{len(trace_items)}（並行 {args.workers}）{suffix}")
+                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, trace_items, "qing", args.timeout, args.retries, args.retry_sleep, args.workers))
                 flush_sources()
                 mark(did, "source-chain-qing")
 

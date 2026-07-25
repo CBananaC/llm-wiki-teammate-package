@@ -7554,9 +7554,9 @@
               <dl class="cx-meta cx-facts"><dt>地點</dt><dd class="loc"><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="where">${esc(it.where||'？')}</span></dd>${(it.who&&it.who.length)?`<dt>人物</dt><dd class="who">${esc(it.who.join('、'))}</dd>`:''}<dt>發生日期</dt><dd><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenCh">${esc(it.whenCh||'')}</span>（<span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenAr">${esc(it.whenAr||'')}</span>）${(!dateArIsFull(it.whenAr)&&repeatPointerForItem(it)&&repeatPointerForItem(it).verdict!=='similar')?(()=>{ const fd=firstReportDate(it); return fd?` <button class="cx-usefirstdate" data-i="${i}" data-j="${j}" type="button" title="此回報日期不完整，套用首次回報「${esc(fd.title||'')}」的事件日期">用首次回報日期 ${esc(fd.dateAr)}</button>`:''; })():''}</dd></dl>
               <div class="cx-acts">${it.__added?(it.__mergedInto?'<span class="cx-done">✓ 已加入並併入來源</span>':(()=>{ const mid=matchedEarlierEventId(it); const mev=mid&&eventById(mid); return '<span class="cx-done">✓ 已加入</span>'+(mev?`<button class="cx-mergesrc" data-i="${i}" data-j="${j}" type="button" title="此事件其實是「${esc(evTitle(mev))}」的重複回報，將此文書的引文／資訊加入該事件的回報記錄">＋加入來源到「${esc(evTitle(mev))}」</button>`:''); })())+sendDateBtn(it,j):(repeatPointerForItem(it)?`${repeatActionButtons(it,i,j)}${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`:`<button class="cx-add" data-i="${i}" data-j="${j}" type="button">加入</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`)}</div>
               ${it.__added&&it.__evId?yuUpstreamSourcesHtml(eventById(it.__evId)):''}
-              ${it.__added&&it.__evId?suggestedChainsHtml(eventById(it.__evId)):''}
+              ${it.__added&&it.__evId&&!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id))?suggestedChainsHtml(eventById(it.__evId)):''}
             </div>`).join('') : '<div class="record-empty">沒有擷取到事件。</div>')
-          +(items.length?`<div class="cx-foot"><button class="cx-tracesrc" data-i="${i}" type="button" title="若已勾選加入部分事件則只搜尋那些，否則搜尋全部擷取事件">⌕ 搜尋這些事件的來源鏈</button></div>`:'')
+          +(items.some(it=>!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id)))?`<div class="cx-foot"><button class="cx-tracesrc" data-i="${i}" type="button" title="若已勾選加入部分事件則只搜尋那些，否則搜尋全部擷取事件">⌕ 搜尋這些事件的來源鏈</button></div>`:'')
           +(leftover.length?`<div class="cx-foot-chains"><div class="src-head">其餘來源鏈（未對應到任何已擷取事件，${leftover.length}）</div>${leftover.map((ch,k)=>chainStandaloneHtml(ch,i,k,m.actor)).join('')}</div>`:'')
           +`</div>`; }
       function traceHtml(m,i){ const chains=m.items||[]; if(!chains.length) return '';
@@ -9600,6 +9600,7 @@
       // trace the information-transmission chain behind ONE event (scans its source docs, falls back to selected docs)
       async function runTrace(evId, ctx){ ctx=ctx||{};
         const e=eventById(evId); if(!e){ st2.textContent='找不到事件。'; return; }
+        if((e.sources||[]).some(s=>isAuthorSelfReportCandidate(Object.assign({},e,{sources:[s],doc_id:s&&s.doc_id}),recByDocId2(s&&s.doc_id)))){ st2.textContent='作者自報事件不需追溯來源鏈。'; return; }
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         let docs=(e.sources||[]).map(s=>recByDocId2(s.doc_id)).filter(Boolean);
         if(!docs.length) docs=selectedApis().map(a=>a.rec);
@@ -9766,7 +9767,7 @@
       // (if any were added/clicked, only those; otherwise all extracted), consolidated into one turn
       async function runTraceExtractItems(m){
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
-        const items=(m.items||[]).filter(it=>!it.__skip);
+        const items=(m.items||[]).filter(it=>!it.__skip&&!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id)));
         const added=items.filter(it=>it.__added);
         const targets=added.length?added:items;
         if(!targets.length){ st2.textContent='沒有可搜尋的事件。'; return; }
