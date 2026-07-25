@@ -2863,6 +2863,23 @@ Remaining:
 - Browser visual verification was unavailable in this environment; no
   state-mutating UI click was performed.
 
+### 2026-07-25 13:13 HKT — Codex — Removed the header 編輯圓點 trigger
+
+Summary: Removed the visible `編輯圓點` header button in both review tools and moved its six existing actions into `工具 > 編輯圓點`, preserving edit, add-dot, link, clear-links, add-event, and hidden-dot functionality.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both embedded UIs parsed successfully with Node.
+- The header contains no `tb-editbtn` or `tb-editpop`; each of the six edit action IDs remains exactly once inside the Tools dropdown.
+- `git diff --check` passed.
+
+Remaining:
+- Human visual confirmation of the revised Tools dropdown in both review tools.
+
 ### 2026-07-25 13:10 HKT — Codex — Simplified the Tools dropdown
 
 Summary: Replaced `清快取` with `載入技能輸出`, removed the Skills and Bundles buttons and the Display group, and renamed the font-size group to `字級` in both review tools. Removed the obsolete cache handler and guarded the removed Display handlers so the pages remain error-free.
