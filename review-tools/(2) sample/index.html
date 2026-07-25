@@ -1687,18 +1687,9 @@
           <button class="zoom-btn wide" id="ed-export-all" type="button" title="完整備份（單一檔案，可用「匯入」還原）">匯出</button>
           <button class="zoom-btn wide" id="ed-export-split" type="button" title="依 AI 技能／提示分類，匯出多個檔案">分項匯出</button>
           <label class="zoom-btn wide" style="display:inline-flex;align-items:center;cursor:pointer">匯入<input id="ed-import-all" type="file" accept=".data,.json,application/json" hidden></label>
-          <button class="zoom-btn wide" id="ed-clear-cache" type="button" title="清除本頁 localStorage 快取並重新載入">清快取</button>
-        </div></div>
-        <div class="ttg"><div class="tth">技能與組包</div><div class="ttr">
-          <button class="zoom-btn wide tb-acc" id="tb-skills" type="button" title="檢視／編輯本機 LLM Wiki 技能">Skills</button>
-          <button class="zoom-btn wide tb-acc" id="tb-bundles" type="button" title="檢視 review bundles">Bundles</button>
           <button class="zoom-btn wide" id="ed-load-skills" type="button" title="載入本機 LLM Wiki review-bundle 的最新 skills 輸出">載入技能輸出</button>
         </div></div>
-        <div class="ttg"><div class="tth">顯示</div><div class="ttr">
-          <button class="zoom-btn wide" id="d-togglechart" type="button" title="隱藏/顯示時間軸">隱藏圖</button>
-          <button class="zoom-btn wide" id="theme-toggle" type="button" title="切換深色模式">深色</button>
-        </div></div>
-        <div class="ttg"><div class="tth">介面字級</div><div class="ttr">
+        <div class="ttg"><div class="tth">字級</div><div class="ttr">
           <button class="zoom-btn" id="ui-fs-dn" type="button" title="縮小時間軸介面文字">A−</button>
           <button class="zoom-btn" id="ui-fs-up" type="button" title="放大時間軸介面文字">A+</button>
         </div><div class="tb-subcontrol"><span>正文</span><div class="ttr">
@@ -3343,7 +3334,8 @@
   }
 
   // chart hide / show
-  document.getElementById('d-togglechart').addEventListener('click',function(){
+  const chartToggle=document.getElementById('d-togglechart');
+  if(chartToggle) chartToggle.addEventListener('click',function(){
     const hidden=ws.classList.toggle('chart-hidden'); this.textContent=hidden?'顯示圖':'隱藏圖';
     if(!hidden){ requestAnimationFrame(()=>{ applyScale(); updateRuler(); }); }
   });
@@ -3379,7 +3371,8 @@
     try{ localStorage.setItem('timelineTheme', theme); }catch(e){}
   }
   applyTheme(initialTheme());
-  document.getElementById('theme-toggle').addEventListener('click',()=>{
+  const themeToggle=document.getElementById('theme-toggle');
+  if(themeToggle) themeToggle.addEventListener('click',()=>{
     applyTheme(document.body.classList.contains('dark-mode')?'light':'dark');
   });
 
@@ -5967,7 +5960,7 @@
       addButton(menu,'隱藏清單',()=>{closeMenu();openHiddenList();}); divider();
       addButton(menu,labelOf('d-togglechart','隱藏圖'),()=>clickControl('d-togglechart'));
       const more=document.createElement('div');more.className='tcm-more';const mb=document.createElement('button');mb.type='button';mb.setAttribute('role','menuitem');mb.innerHTML='<span>更多</span><span aria-hidden="true">›</span>';more.appendChild(mb);
-      const sub=document.createElement('div');sub.className='tcm-submenu';sub.setAttribute('role','menu');[['ed-export-all','匯出'],['ed-export-split','分項匯出'],['ed-import-all','匯入'],['ed-load-skills','載入技能輸出'],['ed-clear-cache','清快取'],['theme-toggle','切換主題']].forEach(([id,f])=>{if(document.getElementById(id))addButton(sub,labelOf(id,f),()=>clickControl(id));});more.appendChild(sub);menu.appendChild(more);document.body.appendChild(menu);
+      const sub=document.createElement('div');sub.className='tcm-submenu';sub.setAttribute('role','menu');[['ed-export-all','匯出'],['ed-export-split','分項匯出'],['ed-import-all','匯入'],['ed-load-skills','載入技能輸出'],['theme-toggle','切換主題']].forEach(([id,f])=>{if(document.getElementById(id))addButton(sub,labelOf(id,f),()=>clickControl(id));});more.appendChild(sub);menu.appendChild(more);document.body.appendChild(menu);
       const r=menu.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(e.clientX,innerWidth-r.width-8))+'px';menu.style.top=Math.max(8,Math.min(e.clientY,innerHeight-r.height-8))+'px';if(e.clientX+r.width+220>innerWidth)menu.classList.add('open-left');if(more.getBoundingClientRect().top+215>innerHeight)more.classList.add('submenu-up');const first=menu.querySelector('button');if(first)first.focus({preventScroll:true});
     }
     wsChart.addEventListener('contextmenu',openMenu);document.addEventListener('pointerdown',e=>{if(menu&&!menu.contains(e.target))closeMenu();},true);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});window.addEventListener('blur',closeMenu);window.addEventListener('resize',closeMenu);scroll.addEventListener('scroll',closeMenu,{passive:true});
@@ -10583,13 +10576,6 @@
       if(typeof __localStorageFull!=='undefined' && __localStorageFull) alert('已匯入（事件 '+nEv+' 筆），已顯示於畫面。\n但檔案較大，超過瀏覽器儲存上限，重新整理後可能不會保留。\n如需持久還原，請保留並重新匯入 review-tools/(2) sample/sample_all.data。');
       else alert('已匯入（事件 '+nEv+' 筆）。'); }catch(e){ alert('匯入失敗：'+e.message); } }; rd.readAsText(f); });
   document.getElementById('ed-load-skills').addEventListener('click',()=>{ loadLocalSkillOutputs().catch(e=>alert('載入技能輸出失敗：'+e.message)); });
-  document.getElementById('ed-clear-cache').addEventListener('click',()=>{
-    if(!confirm('清除本頁快取會刪除已儲存的標註、事件、筆記、AI 記錄與版面設定。建議先匯出。確定清除？')) return;
-    const keys=['llmwiki.timeline.edits.v1','metaRows','wsFs','timelineTheme','noteMode','geminiProxyUrl','geminiModel','geminiPrompts','floatToolPos','floatPanelPos'];
-    try{ Object.keys(localStorage).forEach(k=>{ if(keys.includes(k)||k.startsWith('aiDraft:')) localStorage.removeItem(k); }); }catch(e){}
-    window.__edDirty=false;
-    location.reload();
-  });
   window.addEventListener('beforeunload',e=>{ if(window.__edDirty){ e.preventDefault(); e.returnValue=''; } });
   document.getElementById('d-zoomIn').addEventListener('click',()=>{ zoomTo(scale*1.25, null, null); });
   document.getElementById('d-zoomOut').addEventListener('click',()=>{ zoomTo(scale/1.25, null, null); });
