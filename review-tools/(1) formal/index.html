@@ -871,7 +871,7 @@
   .exi-ins { background:#eef6f1; border-color:#b9d0c4; color:#1f4a3a; }
   .exi-tag { font-size:calc(11px * var(--fs,1)); color:#1f4a3a; }
   /* AI chat */
-  .chat-log { flex:1 1 auto; min-height:120px; overflow:auto; display:flex; flex-direction:column; gap:9px; padding:4px 2px 8px; }
+  .chat-log { flex:1 1 auto; min-height:120px; overflow:auto; overflow-anchor:none; display:flex; flex-direction:column; gap:9px; padding:4px 2px 8px; }
   .chat-turn { display:flex; flex-direction:column; gap:3px; }
   .bub { border-radius:11px; padding:7px 11px; font-size:calc(13px * var(--fs,1)); line-height:1.6; white-space:pre-wrap; max-width:92%; }
   .bub.user { align-self:flex-end; background:#e8efe9; border:1px solid #cfdfd4; }
@@ -8230,15 +8230,7 @@
           el.addEventListener('click', ()=>{ const t=jumpReportTarget(el.dataset.doc, el.dataset.evid, el.dataset.title); if(t&&t.ev){ openEventCard(t.ev); return; } });
         });
       }
-      function renderLog(opts){ opts=opts||{}; const keepTop=log.scrollTop;
-        // Scroll-anchoring: clicking a button re-renders the whole log, and the passes below can
-        // change the height of cards ABOVE the one you clicked (skipped items pruned, emperor cards
-        // repaired). Restoring the raw scrollTop then makes your card visibly jump. Instead, remember
-        // the top-most currently-visible card and, after re-render, put THAT card back at the same
-        // spot -- so the card you're looking at doesn't move when nothing needs to move.
-        let __anchor=null;
-        if(opts.preserve){ const els=log.querySelectorAll('[data-logi]');
-          for(let x=0;x<els.length;x++){ const el=els[x]; if(el.offsetTop+el.offsetHeight > keepTop+2){ __anchor={logi:el.getAttribute('data-logi'), delta:el.offsetTop-keepTop}; break; } } }
+      function renderLog(opts){ opts=opts||{};
         const c=chatArr(curStore());
         let cleanedBadMatch=false;
         c.forEach(m=>{ if(m&&m.kind==='extract'&&m.actor&&Array.isArray(m.items)){
@@ -8579,9 +8571,6 @@
           let idx=null; if(li>=0){ for(let k=li+1;k<c.length;k++){ if(c[k]&&c[k].kind==='docpair'){ idx=k; break; } } }
           if(idx==null) idx=latestOutputRunFirstIndex(c);
           const t=idx!=null?log.querySelector('[data-logi="'+idx+'"]'):null; if(t) log.scrollTop=Math.max(0,t.offsetTop-8); }
-        else if(opts.preserve){ let done=false;
-          if(__anchor){ const el=log.querySelector('[data-logi="'+__anchor.logi+'"]'); if(el){ log.scrollTop=Math.max(0, el.offsetTop-__anchor.delta); done=true; } }
-          if(!done) log.scrollTop=keepTop; }
       }
       renderLog({focusAfterMarked:true});
       window.__aiRunTrace=(evId,ctx)=>runTrace(evId,ctx); window.__aiRunTraceBatch=(side,ctx)=>runTraceBatch(side,ctx); window.__aiRunChainScan=(ctx)=>runChainScan(ctx);

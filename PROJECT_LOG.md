@@ -3264,3 +3264,19 @@ Verified:
 
 Remaining:
 - Unrelated sample state and review-bundle changes remain unstaged.
+
+### 2026-07-25 16:14 HKT — Codex — Removed AI chat panel auto-repositioning
+
+Summary: Removed the shared chat-log scroll-anchor restoration that ran after panel buttons re-rendered AI output, including `用文書發送日` and source-chain add actions. Browser scroll anchoring is also disabled on the chat log so the panel keeps the user's current viewport without delayed movement.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both embedded HTML script sets parsed and `git diff --check` passed.
+- The local sample preview opened the AI panel with `overflow-anchor: none`, and the legacy `__anchor` restoration code was absent.
+
+Remaining:
+- Unrelated sample state, review-bundle, proxy, and script changes remain unstaged.
