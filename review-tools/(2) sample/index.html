@@ -1679,7 +1679,7 @@
       <button class="zoom-btn wide" id="d-hidden" type="button" title="檢視／復原已隱藏的圓點">隱藏清單</button>
     </span>
     <span class="tb-tools">
-      <button class="zoom-btn wide" id="tb-toolsbtn" type="button">工具 <svg class="svgic dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></button>
+      <button class="zoom-btn wide" id="tb-toolsbtn" type="button" aria-label="工具" title="工具"><svg class="svgic settings-ic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .34 1.88l.06.06-1.7 1.7-.06-.06a1.7 1.7 0 0 0-1.88-.34 1.7 1.7 0 0 0-1.03 1.56V20h-2.4v-.2a1.7 1.7 0 0 0-1.03-1.56 1.7 1.7 0 0 0-1.88.34l-.06.06-1.7-1.7.06-.06A1.7 1.7 0 0 0 8.46 15a1.7 1.7 0 0 0-1.56-1.03H6.7v-2.4h.2A1.7 1.7 0 0 0 8.46 10a1.7 1.7 0 0 0-.34-1.88l-.06-.06 1.7-1.7.06.06a1.7 1.7 0 0 0 1.88.34 1.7 1.7 0 0 0 1.03-1.56V5h2.4v.2a1.7 1.7 0 0 0 1.03 1.56 1.7 1.7 0 0 0 1.88-.34l.06-.06 1.7 1.7-.06.06A1.7 1.7 0 0 0 19.4 10a1.7 1.7 0 0 0 1.56 1.03h.2v2.4h-.2A1.7 1.7 0 0 0 19.4 15Z"/></svg><svg class="svgic dd-caret" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><polyline points="6 9 12 15 18 9"/></svg></button>
       <div class="tb-toolspop" id="tb-toolspop" style="display:none">
         <div class="ttg"><div class="tth">資料</div><div class="ttr">
           <button class="zoom-btn wide" id="ed-export-all" type="button" title="完整備份（單一檔案，可用「匯入」還原）">匯出</button>
@@ -6057,6 +6057,7 @@
   function notesArr(s){ if(!s.notesList){ s.notesList = (s.notes&&String(s.notes).trim())? [{id:uid('n'), body:String(s.notes), exchanges:[], at:nowStr(), updated:nowStr()}] : []; } return s.notesList; }
   // chat thread of {prompt,response,at,model,memory}; migrate legacy `answers`
   function chatArr(s){ if(!s || typeof s!=='object') return []; if(!Array.isArray(s.chat)){ s.chat = (Array.isArray(s.answers)&&s.answers.length)? s.answers.map(a=>({prompt:a.prompt||'', response:a.text||'', at:a.at||'', model:a.model||a.mode||'', memory:false})) : []; } return s.chat; }
+  const readChatStoreArr=chatArr;
   function first10(t){ const w=String(t||'').trim().replace(/\s+/g,' ').split(' ').filter(Boolean); const cn=String(t||'').trim(); if(/^[一-鿿]/.test(cn)&&w.length<=1){ const s=cn.replace(/\s+/g,''); return s.slice(0,18)+(s.length>18?'…':''); } return w.slice(0,10).join(' ')+(w.length>10?'…':''); }
   function noteTitle(t){ const line=String(t||'').split(/\r?\n/).map(s=>s.trim()).find(Boolean)||''; return line || '（空白筆記）'; }
   function recordBody(r){ const e=docEditsRead(r.id); return e.body!=null? e.body : (r.body||''); }
@@ -6871,7 +6872,7 @@
       // read a bad store and throw "undefined is not an object" during extraction.
       const panelDocIds=selectedApis().map(a=>a&&a.rec&&a.rec.id).filter(Boolean).map(String);
       const curStore=()=>{ let a=panelDocIds.length&&typeof cards!=='undefined' ? cards.filter(c=>c.rec&&panelDocIds.includes(String(c.rec.id))) : []; if(!a.length) a=selectedApis(); return a.length===1 ? docEdits(a[0].rec.id) : groupStore(a); };
-      const readChatArr=s=>globalThis.chatArr(s);
+      const readChatArr=s=>readChatStoreArr(s);
       const viewChatArray=()=>{
         const refs=[], seen=new Set(), openIds=new Set((cards||[]).map(a=>String(a.rec.id)));
         const addStore=(store, kind)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)) return; seen.add(turn); refs.push({turn,store,index,kind}); }); };

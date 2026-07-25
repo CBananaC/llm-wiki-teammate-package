@@ -2982,6 +2982,23 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
 
+### 2026-07-25 13:31 HKT — Codex — Replaced the Tools label with a settings icon
+
+Summary: Replaced the visible 工具 text in the formal and sample header buttons with an inline settings SVG. The dropdown caret, behavior, title, and accessible label remain unchanged.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- Both header buttons contain the settings icon and retain `aria-label="工具"`.
+- `git diff --check` passed.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
 ### 2026-07-25 13:46 HKT — Codex — Restored official-loop cross-document repeat detection
 
 Summary: Reintroduced the `repeat-report` stage in the official-document loop.
