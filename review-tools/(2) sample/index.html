@@ -8901,6 +8901,27 @@
               <div class="cs-members">${(it.members||[]).map((mm,k)=>groupedMemberHtml(mm,{checkbox:{i,j,k,checked:mm.include!==false, excluded:mm.include===false}})).join('')}</div>
               <div class="cx-acts">${it.__added?'<span class="cx-done">✓ 已加入合併圓點</span>'+(it.__evId?`<button class="cs-open" data-i="${i}" data-j="${j}" type="button">開啟合併圓點</button>`:''):`<button class="cs-commit" data-i="${i}" data-j="${j}" type="button" ${nIncl<2?'disabled title="至少需勾選兩個成員"':''}>加入合併圓點</button>`}</div>
             </div>`; }).join('') : '<div class="record-empty">沒有找到可信度足夠的重複事件分組。</div>')+`</div>`; }
+      // An author-self-reported event has no earlier information document to
+      // trace. Keep the event's own quotation as evidence, but do not create or
+      // display a provenance chain for it. This mirrors the terminal loop's source-chain
+      // suppression and also covers author actions classified as 訪聞 when the relation
+      // source is the memorialist himself.
+      function isAuthorSelfReportCandidate(p, rec){
+        p=p||{}; rec=rec||{};
+        const known=String(p.howKnown||p.how_known||'').trim();
+        if(['親歷','第一手','本官親歷','作者親歷','自報','本官自報'].includes(known)||/(親歷|第一手|自報)/.test(known)) return true;
+        let author=rec.author_name||rec.authorName||rec.author||'';
+        if(author&&typeof author==='object') author=author.name||author.full_name||'';
+        const compact=v=>String(v||'').replace(/[\s　（）()、，,。；：:等]/g,'');
+        const same=(a,b)=>{a=compact(a); b=compact(b); return !!(a&&b&&Math.min(a.length,b.length)>=2&&(a.indexOf(b)>=0||b.indexOf(a)>=0));};
+        const reporters=[];
+        ['reporter','reported_by','source_actor','source_author','source_official'].forEach(k=>{ const v=p[k]; if(Array.isArray(v)) reporters.push(...v); else if(v) reporters.push(v); });
+        (p.relations||[]).forEach(r=>{ if(r&&r.source) reporters.push(r.source); });
+        if(reporters.some(r=>same(author,r))) return true;
+        let quote=String(p.quote||'');
+        (p.sources||[]).forEach(s=>{ if(s) quote+='\n'+String(s.quote||''); });
+        return !!author && /(奴才|臣|本官)/.test(quote) && same(author,quote);
+      }
       async function runExtract(actor, ctx){
         ctx=ctx||{};
         const apis=selectedApis(); if(!apis.length){ st2.textContent='請先點選圖上的文書圓點。'; return; }

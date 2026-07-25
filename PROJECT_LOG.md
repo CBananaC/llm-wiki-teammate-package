@@ -3173,3 +3173,19 @@ Verified:
 
 Remaining:
 - Browser visual verification used the live formal tool; the sample page still has only static paired-file checks.
+
+### 2026-07-25 14:21 HKT — Codex — Fixed sample AI panel render exception
+
+Summary: Restored the missing `isAuthorSelfReportCandidate` helper in the sample tool so extract cards can render their source-chain controls without aborting the entire AI chat panel.
+
+Files:
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script syntax parsing.
+- Reproduced the sample AI-panel interaction against the local server: 214 output cards rendered and the browser captured no errors.
+- `git diff --check` passed.
+
+Remaining:
+- Formal-page visual verification was not repeated because the helper was already present there; formal/sample parity is confirmed by the paired source check.
