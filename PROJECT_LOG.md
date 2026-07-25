@@ -2982,6 +2982,24 @@ Verified:
 Remaining:
 - Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
 
+### 2026-07-25 13:36 HKT — Codex — Simplified AI current-card scope control
+
+Summary: Removed the `單一／部分／全部` scope dropdown from the AI typing area. The composer now displays the document dot currently selected on the chart, and a normal chart-card click resets the AI context to that document.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both paired HTML files passed embedded-script parsing.
+- AI typing-area scope dropdown markup and old scope-choice error text are absent.
+- Normal chart-card click resets to one current document; draft flushing occurs before the context switch.
+- `git diff --check` passed for the touched files.
+
+Remaining:
+- Browser visual verification was unavailable in this environment; human visual confirmation is still needed.
+
 ### 2026-07-25 13:30 HKT — Codex — Refined source-chain completion and composer feedback
 
 Summary: Moved `✓ 已加入來源鏈` to the bottom action area of committed source-chain cards, removed the per-event `▸ 搜尋來源` control, and suppressed add-success messages from the AI composer so the typing area stays clear.

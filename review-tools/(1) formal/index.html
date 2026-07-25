@@ -907,6 +907,7 @@
   .cb-chip .gx-model { width:150px; }
   .cb-chip { display:inline-flex; align-items:center; gap:4px; border:1px solid #cbbba5; background:#fffaf1; border-radius:999px;
     padding:3px 10px; font:inherit; font-size:calc(12px * var(--fs,1)); cursor:pointer; color:var(--ink); white-space:nowrap; }
+  .cb-current-card { cursor:default; }
   .cb-chip:hover { background:#f6efe1; }
   .cb-chip .cb-ic { line-height:1; }
   .cb-chip select { border:none; background:transparent; font:inherit; font-size:calc(12px * var(--fs,1)); cursor:pointer; padding:0; }
@@ -6599,9 +6600,13 @@
     window.__floatCardClick=(api,e)=>{
       if(e.target.closest('button,input,textarea,select,label,mark.hl,.ed,.inote,.hl-editor,.hdr-ed,[contenteditable="true"]')) return;
       if(e.metaKey||e.ctrlKey){ e.preventDefault(); e.stopPropagation(); window.__multiPick(api); return; }
-      if(!selectable()) return;
-      if(scope==='single'){ selectedKeys.clear(); selectedKeys.add(api.key); }
-      else { if(selectedKeys.has(api.key)) selectedKeys.delete(api.key); else selectedKeys.add(api.key); }
+      if(!openBoxes().length) return;
+      const alreadyCurrent=scope==='single'&&selectedKeys.size===1&&selectedKeys.has(api.key);
+      if(!alreadyCurrent){ flushNoteTool(); flushAITool(); }
+      scope='single';
+      selectedKeys.clear(); selectedKeys.add(api.key);
+      window.__activeCard=api;
+      if(!alreadyCurrent) renderAllTools();
       syncCards(); }
     function scopeHtml(){ return `<div class="fp-row2 fp-scope">範圍：
       <label><input type="radio" name="fpscope" value="single" ${scope==='single'?'checked':''}>單一</label>
@@ -6844,10 +6849,9 @@
         <div class="chat-log"></div>
         <div class="chat-box">
           <div class="cb-chiprow">
-            <button class="cb-chip" data-pop="scope" type="button" title="套用範圍"><span class="cb-chip-txt"><span class="ci-lbl">…</span></span> ▾</button>
+            <span class="cb-chip cb-current-card" title="目前卡片；點選圖上文書圓點以切換"><span class="cb-chip-txt"><span class="ci-lbl">…</span></span></span>
             <button class="cb-chip" data-pop="act" type="button" title="功能"><span class="cb-chip-txt">功能</span> ▾</button>
             <button class="cb-chip cb-gear cb-icon-only" data-pop="cfg" type="button" title="設定：AI 服務／模型／記憶／代理網址"><span class="cb-ic">${IC.gear}</span></button>
-            <div class="cb-pop" data-for="scope" style="display:none">${scopeHtml()}</div>
             <div class="cb-pop" data-for="act" style="display:none"></div>
             <div class="cb-pop cb-pop-cfg" data-for="cfg" style="display:none">
               <div class="gx-cfgrow"><span>AI 服務</span><select class="ai-provider">${aiProviderOptions()}</select></div>
@@ -6942,8 +6946,9 @@
         pop.style.setProperty('left',Math.max(margin,left)+'px','important');
         pop.style.setProperty('top',Math.max(margin,top)+'px','important');
       }
-      function updateScopeChip(){ const lbl=body.querySelector('.cb-chip[data-pop="scope"] .ci-lbl'); if(!lbl) return; const apis=selectedApis();
-        lbl.textContent=(scope==='all'?'全部':(apis.length?(apis.length>1?apis.length+' 張卡片':apis[0].rec.id):(scope==='some'?'未選卡片':'目前卡片'))); }
+      function updateCurrentCardChip(){ const lbl=body.querySelector('.cb-current-card .ci-lbl'); if(!lbl) return; const apis=selectedApis();
+        const active=window.__activeCard&&cards.includes(window.__activeCard)?window.__activeCard:null;
+        lbl.textContent=apis.length===1?idLabelOf(apis[0].rec):(active?idLabelOf(active.rec):(apis.length?apis.length+' 張卡片':'請點選文書')); }
       function insertAtToken(label){
         const raw=input.value, pos=input.selectionStart==null?raw.length:input.selectionStart;
         const at=raw.lastIndexOf('@', pos-1);
@@ -7149,7 +7154,7 @@
       if(window.__aiPopClose) document.removeEventListener('click', window.__aiPopClose);
       window.__aiPopClose=(e)=>{ if(!e.target.closest('.cb-chiprow') && !e.target.closest('.chat-toprow')) closePops(); };
       document.addEventListener('click', window.__aiPopClose);
-      updateScopeChip();
+      updateCurrentCardChip();
       function turnHtml(m,i){ if(m&&m.model==='local skill output') return ''; return `<div class="chat-turn v2" data-logi="${i}">${m.prompt?`<div class="turn-blk user"><div class="turn-head"><span class="role-chip user">問</span><span class="turn-meta">${esc(m.at||'')}</span><span class="turn-acts"><button class="save-p" data-i="${i}" type="button" title="複製提示文字">⧉ 複製</button></span></div><div class="bub user ed" contenteditable="true" data-i="${i}" data-f="prompt">${esc(m.prompt)}</div></div>`:''}<div class="turn-blk ai"><div class="turn-head"><span class="role-chip ai">AI</span><span class="turn-meta">${esc(m.model||'')}${m.memory?' · 記憶':''} · ${esc(m.at||'')}</span><span class="turn-acts"><button class="reply-msg" data-i="${i}" type="button">↩ 回覆</button><button class="add-note" data-i="${i}" type="button">＋ 筆記</button><button class="turn-del" data-i="${i}" type="button" title="刪除">✕</button></span></div><div class="bub ai ed" contenteditable="true" data-i="${i}" data-f="response">${esc(m.response||'')}</div></div></div>`; }
       // A leftover chain (see runExtract) that never matched any extracted candidate is rendered
       // the same way a standalone trace-turn's chain is -- table + quotes + which events it reports
@@ -8707,7 +8712,7 @@
             </div>`; }).join('') : '<div class="record-empty">沒有找到可信度足夠的重複事件分組。</div>')+`</div>`; }
       async function runExtract(actor, ctx){
         ctx=ctx||{};
-        const apis=selectedApis(); if(!apis.length){ st2.textContent='請先選擇要分析的卡片（範圍：單一／部分／全部，或 ⌘點選圓點）。'; return; }
+        const apis=selectedApis(); if(!apis.length){ st2.textContent='請先點選圖上的文書圓點。'; return; }
         if(!getAIProxyUrl()){ st2.textContent='請先設定代理網址。'; return; }
         st2.textContent='AI 擷取中…（0/'+apis.length+'）';
         try{ let props, failures;
@@ -9467,7 +9472,7 @@
       // saved prompts (擷取硃批／查相關上諭 etc.) -- finds every emperor-action event already sourced
       // from those doc(s) and runs the search for each.
       async function runOfficialResponseForSelected(ctx){ ctx=ctx||{};
-        const apis0=selectedApis(); if(!apis0.length){ st2.textContent='請先選擇要搜尋的卡片（範圍：單一／部分／全部）。'; return; }
+        const apis0=selectedApis(); if(!apis0.length){ st2.textContent='請先點選圖上的文書圓點。'; return; }
         const docIds=new Set(apis0.map(a=>String(a.rec._baseId||a.rec.id)));
         const targets=eventsArr().filter(e=>e.actor==='emperor' && (e.sources||[]).some(s=>docIds.has(String(s.doc_id))));
         if(!targets.length){ st2.textContent='目前開啟／選取的文書中找不到皇帝行動事件（硃批／諭）。請先「擷取硃批」或建立皇帝行動事件。'; return; }
