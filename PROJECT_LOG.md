@@ -3298,3 +3298,20 @@ Verified:
 Remaining:
 - Unrelated sample state, review-bundle, proxy, and script changes remain unstaged.
 - Interactive timing should be rechecked in the running website with a large AI output bundle.
+
+### 2026-07-25 16:54 HKT — Codex — Removed automatic AI chat scroll restoration
+
+Summary: Removed the remaining AI-chat viewport restoration paths in formal and sample. Quote clicks no longer capture and restore the AI card/panel position, AI output refreshes no longer jump to the latest result, and the note editor no longer snaps its AI log to the bottom. Explicit user navigation such as the table of contents and 最近卡片 remains available.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both embedded HTML script sets parsed successfully.
+- `git diff --check` passed.
+- No `captureAIQuoteAnchor`, `restoreAIQuoteAnchor`, or AI-log `log.scrollTop` restoration remains.
+
+Remaining:
+- Unrelated sample state, review-bundle, proxy, script, and earlier unstaged HTML changes remain untouched.

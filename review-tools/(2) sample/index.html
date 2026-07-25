@@ -4319,33 +4319,10 @@
     (window.__quoteFlashMarks||[]).forEach(m=>{ if(m&&m.parentNode){ const t=document.createTextNode(m.textContent); m.parentNode.replaceChild(t,m); } });
     window.__quoteFlashMarks=[];
   }
-  // Opening a quote source can create/reflow document columns and the later
-  // scrollIntoView calls can also scroll the workspace. When the click came
-  // from the AI chat, pin both that tool column and the exact review card.
-  function captureAIQuoteAnchor(originEl){
-    const box=originEl&&originEl.closest&&originEl.closest('.tool-box[data-kind="ai"]'); if(!box) return null;
-    const log=originEl.closest('.chat-log'), card=originEl.closest('[data-logi]'), col=box.closest('.ws-tools');
-    return {box:box, log:log, logi:card&&card.getAttribute('data-logi'),
-      cardDelta:(log&&card)?card.offsetTop-log.scrollTop:null,
-      boxLeft:box.getBoundingClientRect().left, col:col, colTop:col?col.scrollTop:0};
-  }
-  function restoreAIQuoteAnchor(state){
-    if(!state||!state.box||!document.body.contains(state.box)) return;
-    // Counter any horizontal workspace scroll/reflow so the AI panel remains
-    // where the researcher left it while the source panel opens beside it.
-    const nowLeft=state.box.getBoundingClientRect().left, dx=nowLeft-state.boxLeft;
-    if(isFinite(dx)&&Math.abs(dx)>.5&&ws) ws.scrollLeft+=dx;
-    if(state.col&&document.body.contains(state.col)) state.col.scrollTop=state.colTop;
-    if(state.log&&document.body.contains(state.log)){
-      const card=state.logi!=null?state.log.querySelector('[data-logi="'+state.logi+'"]'):null;
-      if(card&&state.cardDelta!=null) state.log.scrollTop=Math.max(0,card.offsetTop-state.cardDelta);
-    }
-  }
   function flashQuoteInDoc(docId, quote, originEl){
     if(!docId||!quote) return;
-    const aiAnchor=captureAIQuoteAnchor(originEl);
     clearQuoteFlash();
-    const card=ensureQuoteDocCard(docId, originEl, quote); restoreAIQuoteAnchor(aiAnchor);
+    const card=ensureQuoteDocCard(docId, originEl, quote);
     if(!card){ flashQuoteMsg('找不到來源文書（'+docId+'）', originEl); return; }
     if(card.cardApi&&typeof card.cardApi.focusQuote==='function') card.cardApi.focusQuote(quote);
     setTimeout(()=>{
@@ -4357,14 +4334,14 @@
       if(ixPane && !ixPane.classList.contains('active')) host.querySelectorAll('.ip-pane').forEach(p=>p.classList.toggle('active', p===ixPane));
       const textEl=(ixPane&&ixPane.querySelector('.ix-text'))||host.querySelector('.ix-text')||host.querySelector('.body-text'); if(!textEl) return;
       const ranges=findQuoteRanges(textEl, quote);
-      if(!ranges.length){ if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center',behavior:'smooth'}); restoreAIQuoteAnchor(aiAnchor); flashQuoteMsg('已開啟文書，但找不到相符或相近的原文', originEl); return; }
+      if(!ranges.length){ if(host&&host.scrollIntoView) host.scrollIntoView({block:'center',behavior:'smooth'}); flashQuoteMsg('已開啟文書，但找不到相符或相近的原文', originEl); return; }
       const first=ranges[0];
       const anchor=(first.startContainer.nodeType===3?first.startContainer.parentElement:first.startContainer)||textEl;
       // For clicks outside AI, retain the old whole-workspace centering. For an
       // AI quote, center only inside the new source panel; outer scrolling would
       // move the chat away from the card that was clicked.
-      if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center', behavior:'smooth'});
-      if(!aiAnchor&&anchor&&anchor.scrollIntoView) anchor.scrollIntoView({block:'center', behavior:'smooth'});
+      if(host&&host.scrollIntoView) host.scrollIntoView({block:'center', behavior:'smooth'});
+      if(anchor&&anchor.scrollIntoView) anchor.scrollIntoView({block:'center', behavior:'smooth'});
       // scrollIntoView alone can center the outer card while leaving the matched text below
       // the document's real viewport. .ip-body is only a flex wrapper; .ip-scroll is the
       // element that actually scrolls in a single-card column.
@@ -4373,9 +4350,8 @@
         if(inner&&inner.scrollHeight>inner.clientHeight+1){ const rr=first.getBoundingClientRect(), ir=inner.getBoundingClientRect(); inner.scrollTop += rr.top-(ir.top+ir.height/2)+rr.height/2; }
         const list=host.closest('.ws-list,.ws-tools'); if(list){ const rr=first.getBoundingClientRect(), lr=list.getBoundingClientRect(); if(rr.top<lr.top||rr.bottom>lr.bottom) list.scrollTop += rr.top-(lr.top+lr.height/2)+rr.height/2; }
       }catch(e){} };
-      requestAnimationFrame(()=>{ centerRange(); restoreAIQuoteAnchor(aiAnchor); });
-      setTimeout(()=>{ centerRange(); restoreAIQuoteAnchor(aiAnchor); },180);
-      setTimeout(()=>restoreAIQuoteAnchor(aiAnchor),320);
+      requestAnimationFrame(()=>{ centerRange(); });
+      setTimeout(()=>{ centerRange(); },180);
       try{ if(window.Highlight && window.CSS && CSS.highlights){
         const exact=ranges.filter(r=>!r.__approx), approx=ranges.filter(r=>r.__approx);
         if(exact.length) CSS.highlights.set('quoteflash', new Highlight(...exact)); else CSS.highlights.delete('quoteflash');
@@ -6853,7 +6829,6 @@
         log.querySelectorAll('.ed').forEach(el=>el.addEventListener('blur',()=>{ ex[+el.dataset.i][el.dataset.f]=el.textContent; saveEdits(); }));
         log.querySelectorAll('.exi-ins').forEach(b=>b.onclick=()=>{ const x=ex[+b.dataset.i]; ctx.value=(ctx.value?ctx.value+'\n\n':'')+x.response; note.body=ctx.value; note.updated=nowStr(); x.adopted=true; saveEdits(); saved.textContent='已插入'; renderLog(); });
         log.querySelectorAll('.turn-del').forEach(b=>b.onclick=()=>{ ex.splice(+b.dataset.i,1); saveEdits(); renderLog(); });
-        log.scrollTop=log.scrollHeight;
       }
       renderLog();
       async function run(prefix, custom){
@@ -8728,12 +8703,6 @@
           const respEv=addEvent({ actor:'qing', subtitle:respSub, what:respSub, description:it.how||'', where:rp.where, who:rp.who, whoLoc:rp.whoLoc, relations:rp.relations, whenCh:'', dateAr:officialResponseDateAr(it, refAr),
             sources:[{doc_id:it.doc_id||'', quote:it.response_quote||'', label:'回應', howKnown:''}], respondsToEventId:targetId, respondsToQuote:it.action_quote||'', receiveDate:it.receive_date||'' });
           it.__committed=true; if(targetId) m.evId=targetId; saveEdits(); renderLog({preserve:true}); st2.textContent='已加入官員回應事件「'+respSub+'」'+(targetId?'，並連到皇帝行動點。':'，但未能找到皇帝行動點可連線。'); });
-        if(opts.focusIndex!=null){ const target=log.querySelector('[data-logi="'+opts.focusIndex+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }
-        else if(opts.focusLatestOutput){ const idx=latestOutputRunFirstIndex(c); const target=idx==null?null:log.querySelector('[data-logi="'+idx+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }
-        else if(opts.focusAfterMarked){ let li=-1; for(let k=0;k<c.length;k++){ if(c[k]&&c[k].kind==='docpair'&&c[k].pair&&c[k].pair.__added) li=k; }
-          let idx=null; if(li>=0){ for(let k=li+1;k<c.length;k++){ if(c[k]&&c[k].kind==='docpair'){ idx=k; break; } } }
-          if(idx==null) idx=latestOutputRunFirstIndex(c);
-          const t=idx!=null?log.querySelector('[data-logi="'+idx+'"]'):null; if(t) log.scrollTop=Math.max(0,t.offsetTop-8); }
       }
       renderLog({focusAfterMarked:true});
       window.__aiRunTrace=(evId,ctx)=>runTrace(evId,ctx); window.__aiRunTraceBatch=(side,ctx)=>runTraceBatch(side,ctx); window.__aiRunChainScan=(ctx)=>runChainScan(ctx);
