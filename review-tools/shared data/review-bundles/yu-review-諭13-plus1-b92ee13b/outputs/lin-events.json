@@ -1,0 +1,196 @@
+[
+  {
+    "category": "done",
+    "description": "彰化縣匪徒林爽文等結黨滋事，騷擾地方，並於十一月二十九日攻陷彰化縣城，將其竊踞。",
+    "edict_quote": "臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。... 彰化縣城被匪徒竊踞。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。... 本日早彰城失陷，路途梗塞，不能前進... 現在彰化既為匪徒竊踞",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。... 本日早彰城失陷，路途梗塞，不能前遞... 現在彰化既為匪徒竊踞",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。... 彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。... 本日早彰城失陷，路途梗塞，不能前遞... 彰化已為匪徒竊據",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "臺匪林爽文等在彰化地方滋事不法... 彰化縣城官兵被害之事",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "林爽文等結黨滋事並竊踞彰化縣城",
+    "whenAr": "1786-12-19",
+    "whenCh": "乾隆五十一年十一月二十九日",
+    "where": "臺灣彰化縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣彰化縣"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "臺灣彰化縣匪徒林爽文等，結黨滋事，騷擾地方。... 彰化縣城被匪徒竊踞。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "十一月初間，聞有彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。... 本日早彰城失陷，路途梗塞，不能前進... 現在彰化既為匪徒竊踞",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃22",
+        "quote": "十一月間，卑職等聞彰化縣匪徒林爽文結黨肆虐，騷擾地方，文武官員擒捕未獲。... 本日早彰城失陷，路途梗塞，不能前遞... 現在彰化既為匪徒竊踞",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。... 彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "彰化縣匪徒林爽文等結黨肆虐，擾害地方，文武官員擒捕未獲。... 本日早彰城失陷，路途梗塞，不能前遞... 彰化已為匪徒竊據",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "臺匪林爽文等在彰化地方滋事不法... 彰化縣城官兵被害之事",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ]
+  },
+  {
+    "category": "done",
+    "description": "彰化知縣俞峻會同副將前往大墩搜捕賊匪，因防範不嚴，於十一月二十七日夜遭散而復聚之數千賊匪襲擊被害。",
+    "edict_quote": "知縣俞駿（峻）拿匪被害，... 該縣於搜捕賊匪後，不能嚴密防範，雖失之疏懈，但帶兵緝犯，事屬因公，倉猝被害",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃22",
+        "source_official": "任承恩",
+        "source_quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "彰化知縣俞峻大墩拿匪被害",
+    "whenAr": "1786-12-17",
+    "whenCh": "乾隆五十一年十一月二十七日夜",
+    "where": "大墩",
+    "who": [
+      "俞峻"
+    ],
+    "who_loc": {
+      "俞峻": "大墩"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "知縣俞駿（峻）拿匪被害，... 該縣於搜捕賊匪後，不能嚴密防範，雖失之疏懈，但帶兵緝犯，事屬因公，倉猝被害",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃22",
+        "quote": "此月二十七日夜，本縣俞在大墩地方拿匪遇害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "本月二十七日夜，本縣俞在大墩地方拿匪被害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "二十七夜，彰化縣俞知縣在大墩地方拿匪被害。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。二十八日辰刻，忽聞二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/27"
+      }
+    ]
+  }
+]

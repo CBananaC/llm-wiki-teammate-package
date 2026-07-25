@@ -3797,26 +3797,24 @@
   // Disk-backed backup via the local review-tools server (review-tools/server.py, GET/POST
   // /api/edits-formal -> review-tools/(1) formal/formal_all.data). Disk has no meaningful size
   // cap the way localStorage does, so this is now the durable copy; localStorage stays as a
-  // debounced local cache and the only copy available when the page is opened as file:// (no server).
+  // fast local cache and the only copy available when the page is opened as file:// (no server).
   // Fire-and-forget + silently no-ops if unreachable, so nothing changes for a file:// setup.
   let __edSaveTimer=null;
-  let __localSaveTimer=null;
-  let __edSavePayload=null;
-  function editsPayload(){ if(__edSavePayload==null) __edSavePayload=JSON.stringify(slimEditsForSave()); return __edSavePayload; }
   function syncEditsToServer(){
     clearTimeout(__edSaveTimer);
     // small debounce: saveEdits() fires on nearly every click/keystroke-blur, and POSTing the
     // whole (possibly large) EDITS blob on every single one would be wasteful network chatter.
     __edSaveTimer=setTimeout(()=>{
-      fetch('/api/edits-formal', {method:'POST', headers:{'Content-Type':'application/json'}, body:editsPayload()})
+      fetch('/api/edits-formal', {method:'POST', headers:{'Content-Type':'application/json'}, body:JSON.stringify(slimEditsForSave())})
         .then(r=>{ if(r.ok) __serverSyncConfirmed=true; })
         .catch(()=>{});   // no server (e.g. file://) or offline -- localStorage/backup remain the fallback
     }, 800);
   }
-  function writeLocalEdits(){
-    if(__localSaveTimer){ clearTimeout(__localSaveTimer); __localSaveTimer=null; }
-    if(__localStorageFull) return;
-    try{ localStorage.setItem(EDIT_KEY, editsPayload()); return; }
+  function saveEdits(){
+    window.__edDirty=true;
+    syncEditsToServer();
+    if(__localStorageFull) return;   // already confirmed full this session -- don't keep re-throwing on every save
+    try{ localStorage.setItem(EDIT_KEY, JSON.stringify(slimEditsForSave())); return; }
     catch(e){
       if(!(e && (e.name==='QuotaExceededError' || e.code===22))){ return; }
       __localStorageFull=true;
@@ -3828,13 +3826,6 @@
       if(!__saveEditsQuotaWarned){ __saveEditsQuotaWarned=true;
         alert('瀏覽器儲存空間（localStorage）已滿，本機快取沒有更新，且尚未確認本機 review-tools 伺服器有在運作。\n請確認已執行 review-tools/server.py，或立即匯出/備份目前資料，否則這次變更可能遺失。'); }
     }
-  }
-  function saveEdits(){
-    window.__edDirty=true;
-    __edSavePayload=null;
-    syncEditsToServer();
-    clearTimeout(__localSaveTimer);
-    __localSaveTimer=setTimeout(()=>{ __localSaveTimer=null; writeLocalEdits(); },250);
   }
   // Boot-time: prefer the server's disk copy over localStorage's, since -- once localStorage has
   // hit quota -- its copy is stale by definition (missing everything since the cap was hit) while
@@ -4210,10 +4201,33 @@
     (window.__quoteFlashMarks||[]).forEach(m=>{ if(m&&m.parentNode){ const t=document.createTextNode(m.textContent); m.parentNode.replaceChild(t,m); } });
     window.__quoteFlashMarks=[];
   }
+  // Opening a quote source can create/reflow document columns and the later
+  // scrollIntoView calls can also scroll the workspace. When the click came
+  // from the AI chat, pin both that tool column and the exact review card.
+  function captureAIQuoteAnchor(originEl){
+    const box=originEl&&originEl.closest&&originEl.closest('.tool-box[data-kind="ai"]'); if(!box) return null;
+    const log=originEl.closest('.chat-log'), card=originEl.closest('[data-logi]'), col=box.closest('.ws-tools');
+    return {box:box, log:log, logi:card&&card.getAttribute('data-logi'),
+      cardDelta:(log&&card)?card.offsetTop-log.scrollTop:null,
+      boxLeft:box.getBoundingClientRect().left, col:col, colTop:col?col.scrollTop:0};
+  }
+  function restoreAIQuoteAnchor(state){
+    if(!state||!state.box||!document.body.contains(state.box)) return;
+    // Counter any horizontal workspace scroll/reflow so the AI panel remains
+    // where the researcher left it while the source panel opens beside it.
+    const nowLeft=state.box.getBoundingClientRect().left, dx=nowLeft-state.boxLeft;
+    if(isFinite(dx)&&Math.abs(dx)>.5&&ws) ws.scrollLeft+=dx;
+    if(state.col&&document.body.contains(state.col)) state.col.scrollTop=state.colTop;
+    if(state.log&&document.body.contains(state.log)){
+      const card=state.logi!=null?state.log.querySelector('[data-logi="'+state.logi+'"]'):null;
+      if(card&&state.cardDelta!=null) state.log.scrollTop=Math.max(0,card.offsetTop-state.cardDelta);
+    }
+  }
   function flashQuoteInDoc(docId, quote, originEl){
     if(!docId||!quote) return;
+    const aiAnchor=captureAIQuoteAnchor(originEl);
     clearQuoteFlash();
-    const card=ensureQuoteDocCard(docId, originEl, quote);
+    const card=ensureQuoteDocCard(docId, originEl, quote); restoreAIQuoteAnchor(aiAnchor);
     if(!card){ flashQuoteMsg('找不到來源文書（'+docId+'）', originEl); return; }
     if(card.cardApi&&typeof card.cardApi.focusQuote==='function') card.cardApi.focusQuote(quote);
     setTimeout(()=>{
@@ -4225,14 +4239,14 @@
       if(ixPane && !ixPane.classList.contains('active')) host.querySelectorAll('.ip-pane').forEach(p=>p.classList.toggle('active', p===ixPane));
       const textEl=(ixPane&&ixPane.querySelector('.ix-text'))||host.querySelector('.ix-text')||host.querySelector('.body-text'); if(!textEl) return;
       const ranges=findQuoteRanges(textEl, quote);
-      if(!ranges.length){ if(host&&host.scrollIntoView) host.scrollIntoView({block:'center',behavior:'smooth'}); flashQuoteMsg('已開啟文書，但找不到相符或相近的原文', originEl); return; }
+      if(!ranges.length){ if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center',behavior:'smooth'}); restoreAIQuoteAnchor(aiAnchor); flashQuoteMsg('已開啟文書，但找不到相符或相近的原文', originEl); return; }
       const first=ranges[0];
       const anchor=(first.startContainer.nodeType===3?first.startContainer.parentElement:first.startContainer)||textEl;
       // For clicks outside AI, retain the old whole-workspace centering. For an
       // AI quote, center only inside the new source panel; outer scrolling would
       // move the chat away from the card that was clicked.
-      if(host&&host.scrollIntoView) host.scrollIntoView({block:'center', behavior:'smooth'});
-      if(anchor&&anchor.scrollIntoView) anchor.scrollIntoView({block:'center', behavior:'smooth'});
+      if(!aiAnchor&&host&&host.scrollIntoView) host.scrollIntoView({block:'center', behavior:'smooth'});
+      if(!aiAnchor&&anchor&&anchor.scrollIntoView) anchor.scrollIntoView({block:'center', behavior:'smooth'});
       // scrollIntoView alone can center the outer card while leaving the matched text below
       // the document's real viewport. .ip-body is only a flex wrapper; .ip-scroll is the
       // element that actually scrolls in a single-card column.
@@ -4241,8 +4255,9 @@
         if(inner&&inner.scrollHeight>inner.clientHeight+1){ const rr=first.getBoundingClientRect(), ir=inner.getBoundingClientRect(); inner.scrollTop += rr.top-(ir.top+ir.height/2)+rr.height/2; }
         const list=host.closest('.ws-list,.ws-tools'); if(list){ const rr=first.getBoundingClientRect(), lr=list.getBoundingClientRect(); if(rr.top<lr.top||rr.bottom>lr.bottom) list.scrollTop += rr.top-(lr.top+lr.height/2)+rr.height/2; }
       }catch(e){} };
-      requestAnimationFrame(()=>{ centerRange(); });
-      setTimeout(()=>{ centerRange(); },180);
+      requestAnimationFrame(()=>{ centerRange(); restoreAIQuoteAnchor(aiAnchor); });
+      setTimeout(()=>{ centerRange(); restoreAIQuoteAnchor(aiAnchor); },180);
+      setTimeout(()=>restoreAIQuoteAnchor(aiAnchor),320);
       try{ if(window.Highlight && window.CSS && CSS.highlights){
         const exact=ranges.filter(r=>!r.__approx), approx=ranges.filter(r=>r.__approx);
         if(exact.length) CSS.highlights.set('quoteflash', new Highlight(...exact)); else CSS.highlights.delete('quoteflash');
@@ -6320,17 +6335,33 @@
       // Bundle-loaded official responses are useful in two ways: visible review cards in the
       // source document's chat, and pending suggestions attached to matching 硃批/上諭 candidates
       // so adding an emperor action carries the response into that event panel.
+      // One row per emperor action, and most of them find nothing: in zhu83-official-loop2, 10 of
+      // 17 rows came back with items:[] . Pushing a card for each buried every document's panel
+      // under near-identical empty 官員回應 cards. Rows WITH replies keep their own card; the
+      // empty ones are folded into a single "查無回應" summary card per document.
+      const emptyRespByDoc=new Map();
       arrify(data).forEach(o=>{
         const id=docIdOf(o)||o.memDoc||o.doc_id||'';
         if(!id) return;
-        const t=pushSkillChatTurn(id,{kind:'officialresponse', evTitle:o.evTitle||'', addressee:o.addressee||'', action_doc_ids:o.action_doc_ids||o.source_doc_ids||[], source_doc_ids:o.source_doc_ids||o.action_doc_ids||[], confirmedPairsOnly:!!o.confirmedPairsOnly, prompt:'（本機技能輸出：'+rel+'）', items:o.items||[]});
-        if(t) n++;
+        const respItems=Array.isArray(o.items)?o.items:[];
+        if(!respItems.length){
+          if(!emptyRespByDoc.has(id)) emptyRespByDoc.set(id,[]);
+          emptyRespByDoc.get(id).push(o);
+        } else {
+          const t=pushSkillChatTurn(id,{kind:'officialresponse', evTitle:o.evTitle||'', addressee:o.addressee||'', action_doc_ids:o.action_doc_ids||o.source_doc_ids||[], source_doc_ids:o.source_doc_ids||o.action_doc_ids||[], confirmedPairsOnly:!!o.confirmedPairsOnly, prompt:'（本機技能輸出：'+rel+'）', items:respItems});
+          if(t) n++;
+        }
         if(collector) collector.push({kind:'officialresponse', docId:id, row:o});
         const sourceId=String(o.doc_id||'');
         if(sourceId && sourceId!==String(id) && collector) collector.push({kind:'officialresponse', docId:sourceId, row:o});
         (Array.isArray(o.source_doc_ids)?o.source_doc_ids:(Array.isArray(o.action_doc_ids)?o.action_doc_ids:[])).forEach(sourceId=>{
           sourceId=String(sourceId||''); if(sourceId && collector) collector.push({kind:'officialresponse', docId:sourceId, row:o});
         });
+      });
+      emptyRespByDoc.forEach((rows,id)=>{
+        const t=pushSkillChatTurn(id,{kind:'officialresponse', evTitle:'', addressee:'', action_doc_ids:[], source_doc_ids:[], confirmedPairsOnly:rows.every(r=>!!r.confirmedPairsOnly), prompt:'（本機技能輸出：'+rel+'）', items:[],
+          noResponseFor:rows.map(r=>({evTitle:r.evTitle||'', addressee:r.addressee||'', noConfirmedPairs:!!r.noConfirmedPairs}))});
+        if(t) n++;
       });
       return n;
     }
@@ -6805,6 +6836,7 @@
         log.querySelectorAll('.ed').forEach(el=>el.addEventListener('blur',()=>{ ex[+el.dataset.i][el.dataset.f]=el.textContent; saveEdits(); }));
         log.querySelectorAll('.exi-ins').forEach(b=>b.onclick=()=>{ const x=ex[+b.dataset.i]; ctx.value=(ctx.value?ctx.value+'\n\n':'')+x.response; note.body=ctx.value; note.updated=nowStr(); x.adopted=true; saveEdits(); saved.textContent='已插入'; renderLog(); });
         log.querySelectorAll('.turn-del').forEach(b=>b.onclick=()=>{ ex.splice(+b.dataset.i,1); saveEdits(); renderLog(); });
+        log.scrollTop=log.scrollHeight;
       }
       renderLog();
       async function run(prefix, custom){
@@ -7562,7 +7594,8 @@
       // becoming its own qing-side event (see .resp-commit binding below / commitSuggestedResponse
       // for the event-panel equivalent of the same add action).
       function officialResponseHtml(m,i){ const items=m.items||[];
-        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.confirmedPairsOnly?'分析既有配對中的官員回應':'搜尋官員回應'}：${items.length} 筆<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
+        const noResp=Array.isArray(m.noResponseFor)?m.noResponseFor:[];
+        return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.confirmedPairsOnly?'分析既有配對中的官員回應':'搜尋官員回應'}：${noResp.length&&!items.length?(noResp.length+' 項查無回應'):(items.length+' 筆')}<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(m.evTitle?`<div class="resp-topic"><span class="l">回應對象</span><div class="v">${esc(m.evTitle)}</div></div>`:'')
           +(items.length? items.map((it,j)=>{
@@ -7590,7 +7623,11 @@
                 ${(it.subtitle&&it.how)?`<div class="zp-op resp-desc">${esc(it.how)}</div>`:''}
                 ${respDocInfo(it)}
                 <div class="cx-acts">${committed&&!needsRelink?`<span class="cx-done">${doneLabel}</span>`:`<button class="resp-commit" data-i="${i}" data-j="${j}" data-evid="${esc(targetId)}" type="button">${needsRelink?'修正連到皇帝行動點':'加入為官員回應事件'}</button>`}</div>
-              </div>`; }).join('') : `<div class="record-empty">${m.confirmedPairsOnly?'既有配對文書未產生可顯示的回應分析。':'30日內未找到官員回應。可在輸入框補充線索後用 @官員回應 重試。'}</div>`)+`</div>`; }
+              </div>`; }).join('') : (noResp.length
+              // folded "no reply found" summary: name the emperor actions that were checked, so the
+              // card still says which ones came back empty instead of N identical blank cards.
+              ? `<div class="resp-none"><div class="record-empty">${m.confirmedPairsOnly?'下列皇帝行動在既有配對文書中查無官員回應：':'下列皇帝行動於 30 日內查無官員回應：'}</div><ul class="resp-none-list" style="margin:4px 0 0 1.2em;padding:0">${noResp.map(r=>`<li>${esc(r.evTitle||'（無標題）')}${r.noConfirmedPairs?'<span class="l">（無既有配對）</span>':''}</li>`).join('')}</ul></div>`
+              : `<div class="record-empty">${m.confirmedPairsOnly?'既有配對文書未產生可顯示的回應分析。':'30日內未找到官員回應。可在輸入框補充線索後用 @官員回應 重試。'}</div>`))+`</div>`; }
       // Emperor-action date detection: 硃批/上諭 items don't carry an AI-extracted date the way
       // event proposals do, but each item always belongs to a specific document that already HAS
       // one (the rescript's own receive date, or the edict's own announce date) -- so "detect the
@@ -7973,9 +8010,15 @@
         // Keep the report and the imperial response together: 奏摺, then the responding 上諭,
         // with any separate 硃批 after them. 奏摺 = cool-blue; 上諭／硃批 = warm-gold.
         const arr=(sources||[]).map(s=>Object.assign({},s)); fallback=fallback||{};
-        const yuId=String((fallback.point&&fallback.point.edict_id)||(fallback.item&&fallback.item.edict_id)||'');
-        const yuRecord=yuId?recByDocId2(yuId):null;
-        const yuQuote=combinedEmperorFallbackQuote(yuRecord,fallback.point);
+        const yuIdRaw=String((fallback.point&&fallback.point.edict_id)||(fallback.item&&fallback.item.edict_id)||'');
+        // 硃79-style self-edict: edict_id points back at the memorial itself (no paired 上諭 was
+        // found, so the loop fell back to the 硃批 record). Synthesising a 上諭 source from a
+        // 硃批 document would invent a citation that does not exist -- refuse it.
+        const yuRecRaw=yuIdRaw?recByDocId2(yuIdRaw):null;
+        const yuSelf=!!yuIdRaw&&(yuIdRaw===String(memDoc||'')||!!(yuRecRaw&&yuRecRaw.type&&yuRecRaw.type!=='shangyu'));
+        const yuId=yuSelf?'':yuIdRaw;
+        const yuRecord=yuId?yuRecRaw:null;
+        const yuQuote=yuId?combinedEmperorFallbackQuote(yuRecord,fallback.point):String((fallback.point&&fallback.point.edict_quote)||'').trim();
         const existingYu=arr.find(s=>s&&(s.source_type==='上諭'||((recByDocId2(s.doc_id)||{}).type==='shangyu')));
         if(existingYu&&yuQuote&&!String(existingYu.quote||'').trim()) existingYu.quote=yuQuote;
         else if(!existingYu&&yuId&&yuQuote) arr.push({doc_id:yuId,source_type:'上諭',quote:yuQuote,title:(fallback.item&&fallback.item.title)|| (yuRecord&&yuRecord.title)||yuId,date:(fallback.item&&fallback.item.date)|| (yuRecord&&(yuRecord.annAr||yuRecord.sendAr||yuRecord.recvAr))||''});
@@ -8009,29 +8052,49 @@
         }).join('')}</div>`).join('');
         return blocks?`<div class="em-source-group">${blocks}</div>`:'';
       }
+      function combinedEmperorYuDocId(it, pts){
+        for(const pt of (Array.isArray(pts)?pts:[])) for(const s of (Array.isArray(pt.sources)?pt.sources:[])){
+          const r=recByDocId2(s.doc_id)||{};
+          if(s.doc_id&&(s.source_type==='上諭'||r.type==='shangyu')) return s.doc_id;
+        }
+        // 硃79-style self-edict: when no paired 上諭 exists the loop falls back to the memorial's
+        // OWN 硃批 record, so it.edict_id === memDoc. That is not an edict -- show no 開啟上諭
+        // button rather than one that just reopens the memorial we are already reading.
+        const fb=String(it&&it.edict_id||''); if(!fb) return '';
+        if(String(it&&it.memDoc||'')===fb) return '';
+        const fr=recByDocId2(fb)||{};
+        if(fr.type&&fr.type!=='shangyu') return '';
+        return fb;
+      }
       function edictHtml(m,i){ const items=m.items||[];
         return `<div class="chat-extract" data-logi="${i}"><div class="cx-head">AI ${m.combinedEmperor?'皇帝行動':'相關上諭'}（${items.length}）<button class="reply-msg" data-i="${i}" type="button">回覆</button><button class="turn-del-x" data-i="${i}" type="button" title="移除此訊息">×</button></div>`
           +(items.length? items.map((it,j)=>{ const dd=edictItemDetectedDate(it);
               const pts=it.points||[];
+              const pairedYuId=m.combinedEmperor?combinedEmperorYuDocId(it,pts):(it.edict_id||'');
               // no points returned for this edict: keep a single fallback card, add-action stays
               // item-level since there's no per-point content to anchor it to
               if(!pts.length){
                 const addBtn=it.__added?emperorActionDoneBtn(it.__evId,{kind:'edict-item',i,j}):`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" type="button">加入為皇帝行動</button>`;
                 const infoBtn=it.__added&&it.__evId?infoSourceFollowupHtml(it.__evId):'';
-                return `<div class="em-group"><div class="cx-ev em-item"><div class="record-empty">未提供逐點比對內容。</div>${edictSourceLine(it,dd)}<div class="cx-acts">${addBtn}<button class="em-open" data-doc="${esc(it.edict_id||'')}" type="button">開啟上諭</button>${infoBtn}</div></div>`;
+                return `<div class="em-group"><div class="cx-ev em-item"><div class="record-empty">未提供逐點比對內容。</div>${edictSourceLine(it,dd)}<div class="cx-acts">${addBtn}${pairedYuId?`<button class="em-open" data-doc="${esc(pairedYuId)}" type="button">開啟上諭</button>`:''}${infoBtn}</div></div>`;
               }
               return `<div class="em-group">`
                 + pts.map((pt,k)=>{
                     const repeat=repeatPointerForItem(pt), prior=pt.same_as_event_id&&eventById(pt.same_as_event_id)||(repeat&&repeat.evId&&eventById(repeat.evId));
                     const addBtn=pt.__added?emperorActionDoneBtn(pt.__evId,{kind:'edict-point',i,j,k}):((prior||repeat)?`<button class="cx-add em-mergeact" data-i="${i}" data-j="${j}" data-k="${k}" type="button"${prior?'':' disabled'} title="${prior?'將此皇帝行動併入較早的既有事件':'較早事件尚未載入，暫不能併入；可獨立加入'}">併入已有事件</button><button class="cx-addstandalone em-addstandalone-action" data-i="${i}" data-j="${j}" data-k="${k}" type="button">獨立加入</button>`:`<button class="cx-add em-addact" data-i="${i}" data-j="${j}" data-k="${k}" type="button">加入為皇帝行動</button>`);
                     const infoBtn=pt.__added&&pt.__evId?infoSourceFollowupHtml(pt.__evId):'';
+                    // 開啟上諭 is per-point, not per-item: within one memorial different points
+                    // can answer different edicts (硃83 pt.2 cites 諭52, not the item's 諭51), and a
+                    // 硃批-only point answers no edict at all -- then show no button.
+                    const ptYuId=m.combinedEmperor?((pt.sources||[]).filter(s=>s&&s.doc_id&&(s.source_type==='上諭'||(recByDocId2(s.doc_id)||{}).type==='shangyu')).map(s=>s.doc_id)[0]||''):(it.edict_id||'');
                     return `<div class="cx-ev em-item">
                     ${pt.title?`<div class="em-aspect"><span class="em-num">${(k+1)}.</span> <span class="em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="title">${esc(pt.title)}</span></div>`:''}
                     ${m.combinedEmperor?combinedEmperorSourcesHtml(pt.sources, it.memDoc||m.memDoc||'', {item:it,point:pt}):`<div class="em-detail">${pt.memorial_quote?`<span class="l">奏摺</span><div class="cx-q" data-doc="${esc(it.memDoc||m.memDoc||'')}" title="點按在奏摺原文顯示">「${esc(pt.memorial_quote)}」</div>`:''}${pt.edict_quote?`<span class="l">上諭回應</span><div class="cx-q" data-doc="${esc(it.edict_id||'')}" title="點按在上諭原文顯示">「${esc(pt.edict_quote)}」</div>`:''}</div>`}
                     ${pt.how?`<div class="em-how em-ed" contenteditable="true" data-i="${i}" data-j="${j}" data-k="${k}" data-f="how">${esc(pt.how)}</div>`:''}
+                    ${pt.missing_emperor_quote?`<div class="cx-matchnote em-noquote" style="border-left:3px solid #c0392b;color:#8e2b1f" title="本項的 sources 中沒有任何 上諭／硃批 的皇帝逐字原話，只有奏摺引文；可能實為官員作為或 AI 推論，請人工核對後再加入"><b>⚠ 未附皇帝原話（上諭／硃批）引文，請先人工核對</b></div>`:''}
                     ${repeat?matchNoteHtml(pt):(prior?`<div class="cx-matchnote" title="可併入最早的既有皇帝行動，或保留為獨立行動"><b>此皇帝行動先前已見於 ${esc(evTitle(prior))}${prior.dateAr?'（'+esc(prior.dateAr)+'）':''}</b></div>`:'')}
                     ${m.combinedEmperor?'':edictSourceLine(it,dd)}
-                    <div class="cx-acts">${addBtn}${it.edict_id?`<button class="em-open" data-doc="${esc(it.edict_id)}" type="button">開啟上諭</button>`:''}${infoBtn}</div>
+                    <div class="cx-acts">${addBtn}${ptYuId?`<button class="em-open" data-doc="${esc(ptYuId)}" type="button">開啟上諭</button>`:''}${infoBtn}</div>
                   </div>`; }).join('')
                 + `</div>`;
             }).join('') : '<div class="record-empty">±3 日內查無回應此奏摺的上諭。</div>')+`</div>`; }
@@ -8215,54 +8278,54 @@
         });
       }
       function renderLog(opts){ opts=opts||{};
+        // Every commit button re-renders by replacing log.innerHTML, which resets scrollTop to 0 --
+        // so clicking anything threw you back to the first card of the panel. `preserve:true`
+        // (already passed by every one of those handlers) now actually restores the position.
+        const keepScroll=opts.preserve?log.scrollTop:null;
         const c=chatArr(curStore());
-        // Button actions only need the affected chat data rebuilt. Defer the global cleanup and
-        // emperor-event repair scan to full refreshes so a click does not walk every saved item.
-        if(!opts.preserve && !opts.fast){
-          let cleanedBadMatch=false;
-          c.forEach(m=>{ if(m&&m.kind==='extract'&&m.actor&&Array.isArray(m.items)){
-            m.items.forEach(it=>{ if(invalidMatchRegForCandidate(it, it&&it.__matchReg)){ delete it.__matchReg; cleanedBadMatch=true; } normalizeProposalDate(it); });
-            const kept=m.items.filter(it=>it.__added||it.__skip||wantedEvent(it,m.actor)); if(kept.length!==m.items.length){ m.items=kept; saveEdits(); }
-          } });
-          if(cleanedBadMatch) saveEdits();
-          let repairedEmperor=false;
-          c.forEach(m=>{
-            if(!m||!Array.isArray(m.items)) return;
-            if(m.kind==='zhupi'){
-              m.items.forEach(it=>{
-                if(!it||!it.__added||!it.__evId) return;
-                const dd=zhupiItemDetectedDate(it), subtitle=zhupiItemSubtitle(it);
-                const description=[it.responds_to?('回應：'+it.responds_to):'', it.opinion?('御意：'+it.opinion):''].filter(Boolean).join('\n')||(it.text||'');
-                if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.text||it.marker||'', howKnown:'硃批', subtitle, description, detail:zhupiEmperorDetail(it)})) repairedEmperor=true;
+        let cleanedBadMatch=false;
+        c.forEach(m=>{ if(m&&m.kind==='extract'&&m.actor&&Array.isArray(m.items)){
+          m.items.forEach(it=>{ if(invalidMatchRegForCandidate(it, it&&it.__matchReg)){ delete it.__matchReg; cleanedBadMatch=true; } normalizeProposalDate(it); });
+          const kept=m.items.filter(it=>it.__added||it.__skip||wantedEvent(it,m.actor)); if(kept.length!==m.items.length){ m.items=kept; saveEdits(); }
+        } });
+        if(cleanedBadMatch) saveEdits();
+        let repairedEmperor=false;
+        c.forEach(m=>{
+          if(!m||!Array.isArray(m.items)) return;
+          if(m.kind==='zhupi'){
+            m.items.forEach(it=>{
+              if(!it||!it.__added||!it.__evId) return;
+              const dd=zhupiItemDetectedDate(it), subtitle=zhupiItemSubtitle(it);
+              const description=[it.responds_to?('回應：'+it.responds_to):'', it.opinion?('御意：'+it.opinion):''].filter(Boolean).join('\n')||(it.text||'');
+              if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.text||it.marker||'', howKnown:'硃批', subtitle, description, detail:zhupiEmperorDetail(it)})) repairedEmperor=true;
+            });
+          } else if(m.kind==='emperoraction'){
+            m.items.forEach(it=>{
+              if(!it||!it.__added||!it.__evId) return;
+              const dd={whenAr:it.whenAr||'', whenCh:it.whenCh||''};
+              if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.quote||'', howKnown:it.source||'御筆', subtitle:it.subtitle, description:it.description, detail:emperorActionDetail(it)})) repairedEmperor=true;
+            });
+          } else if(m.kind==='edictmatch'){
+            m.items.forEach(it=>{
+              if(!it) return;
+              const dd=edictItemDetectedDate(it);
+              if(it.__added&&it.__evId){
+                const subtitle=it.title||'上諭回應';
+                const pts=it.points||[];
+                const description=[it.summary||'', pts.map(pt=>[pt.aspect,pt.how].filter(Boolean).join('：')).filter(Boolean).join('\n')].filter(Boolean).join('\n');
+                const quote=(pts.find(pt=>pt.edict_quote)||{}).edict_quote||'';
+                if(repairEmperorActionEvent(it.__evId,{dd, docId:it.edict_id, quote, howKnown:'上諭', subtitle, description, detail:edictItemEmperorDetail(it,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
+              }
+              (it.points||[]).forEach(pt=>{
+                if(!pt||!pt.__added||!pt.__evId) return;
+                const subtitle=edictPointSubtitle(pt, it);
+                const description=[pt.how||'', it.summary||''].filter(Boolean).join('\n');
+                if(repairEmperorActionEvent(pt.__evId,{dd, docId:it.edict_id, quote:pt.edict_quote||'', howKnown:'上諭', subtitle, description, detail:edictPointEmperorDetail(it,pt,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
               });
-            } else if(m.kind==='emperoraction'){
-              m.items.forEach(it=>{
-                if(!it||!it.__added||!it.__evId) return;
-                const dd={whenAr:it.whenAr||'', whenCh:it.whenCh||''};
-                if(repairEmperorActionEvent(it.__evId,{dd, docId:it.doc_id, quote:it.quote||'', howKnown:it.source||'御筆', subtitle:it.subtitle, description:it.description, detail:emperorActionDetail(it)})) repairedEmperor=true;
-              });
-            } else if(m.kind==='edictmatch'){
-              m.items.forEach(it=>{
-                if(!it) return;
-                const dd=edictItemDetectedDate(it);
-                if(it.__added&&it.__evId){
-                  const subtitle=it.title||'上諭回應';
-                  const pts=it.points||[];
-                  const description=[it.summary||'', pts.map(pt=>[pt.aspect,pt.how].filter(Boolean).join('：')).filter(Boolean).join('\n')].filter(Boolean).join('\n');
-                  const quote=(pts.find(pt=>pt.edict_quote)||{}).edict_quote||'';
-                  if(repairEmperorActionEvent(it.__evId,{dd, docId:it.edict_id, quote, howKnown:'上諭', subtitle, description, detail:edictItemEmperorDetail(it,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
-                }
-                (it.points||[]).forEach(pt=>{
-                  if(!pt||!pt.__added||!pt.__evId) return;
-                  const subtitle=edictPointSubtitle(pt, it);
-                  const description=[pt.how||'', it.summary||''].filter(Boolean).join('\n');
-                  if(repairEmperorActionEvent(pt.__evId,{dd, docId:it.edict_id, quote:pt.edict_quote||'', howKnown:'上諭', subtitle, description, detail:edictPointEmperorDetail(it,pt,m), wrongSubtitleIfEquals:it.title})) repairedEmperor=true;
-                });
-              });
-            }
-          });
-          if(repairedEmperor){ saveEdits(); render(); }
-        }
+            });
+          }
+        });
+        if(repairedEmperor){ saveEdits(); render(); }
         log.innerHTML=c.length?c.map((m,i)=> m.kind==='docpair'?docPairHtml(m,i):(m.kind==='shangyuloop'?shangyuLoopHtml(m,i):(m.kind==='extract'?extractHtml(m,i):(m.kind==='trace'?traceHtml(m,i):(m.kind==='officialresponse'?officialResponseHtml(m,i):(m.kind==='zhupi'?zhupiHtml(m,i):(m.kind==='edictmatch'?edictHtml(m,i):(m.kind==='infosource'?infoSourceHtml(m,i):(m.kind==='dedupe'?dedupeHtml(m,i):(m.kind==='daysum'?daySumHtml(m,i):(m.kind==='consolidate'?consolidateHtml(m,i):(m.kind==='situfit'?situFitHtml(m,i):(m.kind==='emperoraction'?emperorActionHtml(m,i):turnHtml(m,i)))))))))))))).join(''):'<div class="record-empty">尚無對話。在下方輸入即可開始。</div>';
         (function dpRunHeaders(){ let lastRid=null;
           log.querySelectorAll('.dp-card[data-logi]').forEach(card=>{ const idx=+card.dataset.logi; const mm=c[idx]; if(!mm) return; const rid=mm.__skillRunId||('at:'+(mm.at||idx));
@@ -8315,6 +8378,11 @@
         function reportCommit(ev, subtitle){
           if(ev.dateAr){
             st2.textContent='';
+            // the chart renders at full native width by default and a resizable column is very
+            // often narrower than that, so the new 4th (emperor-action) lane sitting far to the
+            // right can be scrolled out of view even though the dot was drawn correctly -- without
+            // this the freshly created dot looked indistinguishable from "nothing got created".
+            requestAnimationFrame(()=>{ if(window.__focusEventDot) window.__focusEventDot(ev.id); });
           } else {
             st2.textContent='已建立「'+subtitle+'」，但來源文書缺少可判讀的日期，暫未能標示在時間軸第四線上——可點按「已建立但未能定位」開啟事件卡片手動補上日期。';
           }
@@ -8388,7 +8456,7 @@
           m.__evId=ev.id; m.__committed=true;
           if(m.memDoc) markAIReviewDocId(m.memDoc, 'emperor-action', 'R');
           saveEdits(); renderLog({preserve:true}); render();
-          if(ev.dateAr){ st2.textContent='已加入紅色皇帝行動點「'+subtitle+'」（'+ev.dateAr+'）。'; }
+          if(ev.dateAr){ st2.textContent='已加入紅色皇帝行動點「'+subtitle+'」（'+ev.dateAr+'）。'; requestAnimationFrame(()=>{ if(window.__focusEventDot) window.__focusEventDot(ev.id); }); }
           else st2.textContent='已建立「'+subtitle+'」，但缺少可定位日期。';
         });
         // 已建立但未能定位 -> 重試: drop the stale dateless event and re-run the SAME builder used by
@@ -8548,6 +8616,13 @@
           const respEv=addEvent({ actor:'qing', subtitle:respSub, what:respSub, description:it.how||'', where:rp.where, who:rp.who, whoLoc:rp.whoLoc, relations:rp.relations, whenCh:'', dateAr:officialResponseDateAr(it, refAr),
             sources:[{doc_id:it.doc_id||'', quote:it.response_quote||'', label:'回應', howKnown:''}], respondsToEventId:targetId, respondsToQuote:it.action_quote||'', receiveDate:it.receive_date||'' });
           it.__committed=true; if(targetId) m.evId=targetId; saveEdits(); renderLog({preserve:true}); st2.textContent='已加入官員回應事件「'+respSub+'」'+(targetId?'，並連到皇帝行動點。':'，但未能找到皇帝行動點可連線。'); });
+        if(keepScroll!=null) log.scrollTop=keepScroll;
+        if(opts.focusIndex!=null){ const target=log.querySelector('[data-logi="'+opts.focusIndex+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }
+        else if(opts.focusLatestOutput){ const idx=latestOutputRunFirstIndex(c); const target=idx==null?null:log.querySelector('[data-logi="'+idx+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }
+        else if(opts.focusAfterMarked){ let li=-1; for(let k=0;k<c.length;k++){ if(c[k]&&c[k].kind==='docpair'&&c[k].pair&&c[k].pair.__added) li=k; }
+          let idx=null; if(li>=0){ for(let k=li+1;k<c.length;k++){ if(c[k]&&c[k].kind==='docpair'){ idx=k; break; } } }
+          if(idx==null) idx=latestOutputRunFirstIndex(c);
+          const t=idx!=null?log.querySelector('[data-logi="'+idx+'"]'):null; if(t) log.scrollTop=Math.max(0,t.offsetTop-8); }
       }
       renderLog({focusAfterMarked:true});
       window.__aiRunTrace=(evId,ctx)=>runTrace(evId,ctx); window.__aiRunTraceBatch=(side,ctx)=>runTraceBatch(side,ctx); window.__aiRunChainScan=(ctx)=>runChainScan(ctx);
@@ -10506,7 +10581,6 @@
 
   // Drag to pan (Google-Maps style). Click without drag still selects dots.
   let panning=false, panX=0, panY=0, panSL=0, panST=0, moved=false;
-  window.addEventListener('pagehide',()=>writeLocalEdits());
   scroll.addEventListener('mousedown', e=>{
     if(e.button!==0) return;
     panning=true; moved=false; panX=e.clientX; panY=e.clientY;

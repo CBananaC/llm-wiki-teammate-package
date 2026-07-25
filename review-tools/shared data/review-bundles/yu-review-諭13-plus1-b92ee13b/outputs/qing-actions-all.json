@@ -1,0 +1,228 @@
+[
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡甫經病癒，聞知彰化匪徒滋事，隨即帶兵由廈門渡臺進剿。",
+    "edict_quote": "黃仕簡已帶兵渡臺剿捕，... 至黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃25",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。... 奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/10"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門，隨後又有官兵繼進策應。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "水師提督黃仕簡帶兵渡臺剿捕",
+    "whenAr": "1786-12-30",
+    "whenCh": "乾隆五十一年十二月初十日",
+    "where": "廈門至臺灣",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "黃仕簡已帶兵渡臺剿捕，... 至黃仕簡甫經病癒，一聞匪犯滋事之信，即帶兵渡臺，殊屬奮勉可嘉。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃25",
+        "quote": "奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。... 奴才於初十日帶領官兵登舟候風放洋飛渡之際",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "現在提臣黃仕簡已帶兵由要）。廈門出口，飛渡鹿耳門，隨後又有官兵繼進策應。",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      }
+    ]
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青與陸路提督任承恩親往泉州、蚶江一帶，就近彈壓並調度兵力。",
+    "edict_quote": "常青同任承恩親往泉州、蚶江彈壓調度等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃21",
+        "source_official": "常青",
+        "source_quote": "臣於十一日自省起程，親赴泉州一帶，沿途迎探。... 臣即於泉州駐扎，會同陸路提臣任承恩居中調度",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃26",
+        "source_official": "徐嗣曾",
+        "source_quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "總督常青與提督任承恩親往泉州蚶江彈壓調度",
+    "whenAr": "1786-12-31",
+    "whenCh": "乾隆五十一年十二月十一日",
+    "where": "泉州、蚶江",
+    "who": [
+      "常青",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "泉州",
+      "常青": "泉州"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "常青同任承恩親往泉州、蚶江彈壓調度等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃21",
+        "quote": "臣於十一日自省起程，親赴泉州一帶，沿途迎探。... 臣即於泉州駐扎，會同陸路提臣任承恩居中調度",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃26",
+        "quote": "督臣常青與臣面商，於十一日自省起程，前赴蚶江，就近察看情形，相機調度。",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "督臣常青亦已駐紮蚶江，與陸路提臣任承恩會商，調發官兵，由蚶江對渡鹿仔港",
+        "howKnown": "他報佐證",
+        "whenKnown": "1786/12/27"
+      }
+    ]
+  },
+  {
+    "category": "done",
+    "description": "傳聞賊匪前往諸羅縣攻城，被當地官兵奮力剿殺二千餘人。",
+    "edict_quote": "接蚶江通判陳惇稟稱，昨據船戶黃斌供，有傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。又... 賊匪率衆擾諸羅，即被官兵殺死二千餘名。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "十三日午刻，據蚶江通判陳惇稟稱，初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：... 又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "諸羅官兵剿殺攻城賊匪二千餘人",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月二十九日後",
+    "where": "臺灣諸羅縣",
+    "who": [
+      "陳惇",
+      "黃斌"
+    ],
+    "who_loc": {
+      "陳惇": "蚶江",
+      "黃斌": "鹿仔港"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "接蚶江通判陳惇稟稱，昨據船戶黃斌供，有傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。又... 賊匪率衆擾諸羅，即被官兵殺死二千餘名。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "十三日午刻，據蚶江通判陳惇稟稱，初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：... 又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/27"
+      }
+    ]
+  },
+  {
+    "category": "done",
+    "description": "傳聞臺灣鎮總兵與臺灣道官兵已於十二月初六日抵達彰化縣城，以大炮擊死賊匪，賊匪四散逃避。",
+    "edict_quote": "又鎮道已抵彰城，賊匪俱被殺死等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃24",
+        "source_official": "徐嗣曾",
+        "source_quote": "本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死，亦有逃避者。鎮、道皆紮住彰城",
+        "source_receive_date": "1786/12/27",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "傳聞鎮道官兵抵達彰城擊散賊匪",
+    "whenAr": "1787-01-24",
+    "whenCh": "乾隆五十一年十二月初六日",
+    "where": "彰化縣城",
+    "who": [
+      "柴大紀",
+      "永福"
+    ],
+    "who_loc": {
+      "柴大紀": "彰化縣城",
+      "永福": "彰化縣城"
+    },
+    "doc_id": "諭13",
+    "sources": [
+      {
+        "doc_id": "諭13",
+        "quote": "又鎮道已抵彰城，賊匪俱被殺死等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃24",
+        "quote": "本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死，亦有逃避者。鎮、道皆紮住彰城",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/27"
+      }
+    ]
+  }
+]

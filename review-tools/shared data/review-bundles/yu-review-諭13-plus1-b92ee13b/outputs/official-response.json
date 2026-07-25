@@ -1,0 +1,119 @@
+[
+  {
+    "doc_id": "諭13",
+    "yu_doc_id": "諭13",
+    "evTitle": "褒獎諸羅官兵防剿有功並命黃仕簡查明報請加恩",
+    "addressee": "黃仕簡",
+    "items": [],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false
+  },
+  {
+    "doc_id": "諭13",
+    "yu_doc_id": "諭13",
+    "evTitle": "評彰化知縣俞峻遇害並命督撫查明以憑議恤",
+    "addressee": "常青、徐嗣曾",
+    "items": [
+      {
+        "action_quote": "並著該督撫查明該縣，如平日並無別項劣跡及激變情事，即據實奏聞，候朕降旨交部議恤。",
+        "doc_id": "硃105",
+        "how": "閩浙總督常青遵旨查明，彰化知縣俞峻於上年十月甫抵任，確實是因為緝拿賊匪而被害，平日並無其他劣跡，因此特於奏摺中併同陳明，以憑朝廷議恤。",
+        "receive_date": "1787/01/11",
+        "relations": [
+          {
+            "evidence": "查彰化縣俞峻，係上年十月甫經抵任，實因緝拿賊匪，致被戕害，並無別項劣跡，合並陳明",
+            "relation": "查明並陳明其無劣跡",
+            "relation_type": "report",
+            "source": "常青",
+            "target": "俞峻"
+          }
+        ],
+        "response_date": "1787/01/12",
+        "response_quote": "再，查彰化縣俞峻，係上年十月甫經抵任，實因緝拿賊匪，致被戕害，並無別項劣跡，合並陳明，伏乞皇上睿鑒。",
+        "subtitle": "常青查明彰化知縣俞峻並無劣跡並奏請議恤",
+        "where": "彰化縣",
+        "who": [
+          "常青",
+          "俞峻"
+        ],
+        "who_loc": {
+          "俞峻": "彰化縣",
+          "常青": "泉州"
+        }
+      }
+    ],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false
+  },
+  {
+    "doc_id": "諭13",
+    "yu_doc_id": "諭13",
+    "evTitle": "命常青與任承恩嚴防沿海口岸以防餘匪內渡",
+    "addressee": "常青、任承恩",
+    "items": [
+      {
+        "action_quote": "但恐餘黨四散逸，或偷越內渡。常青、任承恩現住蚶江一帶，著嚴飭沿海口岸地方文武員，實力巡防。如有竄逸餘匪，即行擒獲審辦，最爲緊要。",
+        "doc_id": "硃105",
+        "how": "閩浙總督常青遵旨嚴防沿海口岸，嚴飭沿海文武員弁實力巡查以防臺灣賊匪偷越內渡。隨後，漳浦縣知縣羅澤坤已盤獲匪犯陳樵一名，常青已飭令提解確究，以防範餘匪漏網。",
+        "receive_date": "1787/01/11",
+        "relations": [
+          {
+            "evidence": "其餘沿海口岸，嚴飭文武員弁，實力巡查",
+            "relation": "嚴飭",
+            "relation_type": "command",
+            "source": "常青",
+            "target": "羅澤坤"
+          },
+          {
+            "evidence": "已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名",
+            "relation": "盤獲",
+            "relation_type": "conflict",
+            "source": "羅澤坤",
+            "target": "陳樵"
+          },
+          {
+            "evidence": "已據漳浦縣羅澤坤稟報",
+            "relation": "稟報",
+            "relation_type": "report",
+            "source": "羅澤坤",
+            "target": "常青"
+          }
+        ],
+        "response_date": "1787/01/12",
+        "response_quote": "其餘沿海口岸，嚴飭文武員弁，實力巡查，已據漳浦縣羅澤坤稟報，盤獲匪犯陳樵一名，現在飭提確究，臣唯有鎮靜辦理，不敢過涉張皇，以仰副聖主諄切訓誡之至意。",
+        "subtitle": "常青嚴飭沿海口岸文武實力巡查並盤獲匪犯陳樵",
+        "where": "漳浦縣",
+        "who": [
+          "常青",
+          "羅澤坤",
+          "陳樵"
+        ],
+        "who_loc": {
+          "常青": "泉州",
+          "羅澤坤": "漳浦縣",
+          "陳樵": "漳浦縣"
+        }
+      }
+    ],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false
+  },
+  {
+    "doc_id": "諭13",
+    "yu_doc_id": "諭13",
+    "evTitle": "戒飭督撫處以鎮定避免內地民人心生疑駭",
+    "addressee": "常青、徐嗣曾",
+    "items": [],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false
+  },
+  {
+    "doc_id": "諭13",
+    "yu_doc_id": "諭13",
+    "evTitle": "命迅速由六百里加緊復奏剿捕及獲犯情形",
+    "addressee": "常青、黃仕簡、任承恩、徐嗣曾",
+    "items": [],
+    "confirmedPairsOnly": true,
+    "noConfirmedPairs": false
+  }
+]

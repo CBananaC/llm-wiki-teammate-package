@@ -1,11 +1,17 @@
 {
   "name": "zhu83-official-loop",
-  "created_at": "2026-07-25T14:20:09",
+  "created_at": "2026-07-25T14:57:20",
   "source": "outputs/attempt-002/stage1_original_text.json",
   "model": "gemini-3.6-flash",
   "doc_ids": [
+    "硃79",
     "硃83",
-    "硃90"
+    "硃89",
+    "硃87",
+    "硃88",
+    "硃90",
+    "硃94",
+    "硃97"
   ],
   "chain": [
     "summary",

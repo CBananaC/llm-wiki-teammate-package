@@ -1,0 +1,762 @@
+[
+  {
+    "category": "done",
+    "description": "林爽文等賊匪在福建臺灣彰化地方糾集民眾，起事滋擾。",
+    "howKnown": "轉述",
+    "quote": "現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文等糾眾滋擾",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十二年正月初二日",
+    "where": "福建臺灣彰化",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "福建臺灣彰化"
+    },
+    "doc_id": "硃79",
+    "sources": [
+      {
+        "doc_id": "硃79",
+        "quote": "現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "林爽文、王芬等人謀為不軌，起兵攻陷諸羅縣與彰化縣城。",
+    "howKnown": "臺灣道永福來稟",
+    "quote": "彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑",
+    "relations": [
+      {
+        "evidence": "彰匪林爽文、王芬等謀為不軌",
+        "relation": "結黨謀不軌",
+        "relation_type": "ally",
+        "source": "林爽文",
+        "target": "王芬"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文等攻陷諸彰兩縣",
+    "whenAr": "",
+    "whenCh": "十二月",
+    "whenKnownCh": "十二月三十日",
+    "where": "諸羅縣、彰化縣",
+    "who": [
+      "林爽文",
+      "王芬"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣",
+      "王芬": "彰化縣"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "十二月十三日天明，賊匪二千餘名直攻鳳山縣城，後趁官兵追擊之隙由龜山北門撲入城內擊潰官兵，並進入縣署，致鳳山縣知縣湯大奎情急拔劍自刎。",
+    "howKnown": "南路逃回兵丁劉茂光及跟丁稟報轉述",
+    "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散...賊人進入縣署，該縣湯大奎情急拔劍自刎",
+    "relations": [
+      {
+        "evidence": "有賊匪二千餘名直攻縣城。瑚參將施放槍炮",
+        "relation": "直攻",
+        "relation_type": "conflict",
+        "source": "賊匪",
+        "target": "瑚參將"
+      },
+      {
+        "evidence": "賊人進入縣署，該縣湯大奎情急拔劍自刎",
+        "relation": "闖入縣署逼迫",
+        "relation_type": "conflict",
+        "source": "賊匪",
+        "target": "湯大奎"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "賊匪攻陷鳳山縣城",
+    "whenAr": "",
+    "whenCh": "十二月十三日",
+    "whenKnownCh": "十二月三十日",
+    "where": "鳳山縣",
+    "who": [
+      "賊匪",
+      "瑚參將",
+      "湯大奎"
+    ],
+    "who_loc": {
+      "湯大奎": "鳳山縣署",
+      "瑚參將": "鳳山縣",
+      "賊匪": "鳳山縣"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散...賊人進入縣署，該縣湯大奎情急拔劍自刎"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr4hwi3sccw",
+    "repeat_of_title": "賊匪攻陷鳳山縣城"
+  },
+  {
+    "category": "done",
+    "description": "十一月二十七日拂曉，林爽文率領大里杙莊眾及天地會會眾千餘人進攻大墩營盤，將其攻破，並殺害彰化知縣俞峻、赫副將及耿遊擊等人。",
+    "howKnown": "審訊供詞",
+    "quote": "二十七日天將亮時，各拿器械攻破大墩營盤，小的拿半斬刀同往，殺死一人，又殺傷一人... 那時知縣、副將、遊擊都被殺害",
+    "relations": [
+      {
+        "evidence": "糾合同會內各人，並他大里杙莊眾約有千餘人",
+        "relation": "糾合",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "高文麟"
+      },
+      {
+        "evidence": "知縣、副將、遊擊都被殺害",
+        "relation": "殺害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞峻"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "攻破大墩營盤",
+    "whenAr": "",
+    "whenCh": "十一月二十七日",
+    "whenKnownCh": "",
+    "where": "大墩",
+    "who": [
+      "林爽文",
+      "高文麟",
+      "楊軒",
+      "俞峻",
+      "赫副將",
+      "耿遊擊"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "林爽文": "大墩",
+      "楊軒": "大墩",
+      "耿遊擊": "大墩",
+      "赫副將": "大墩",
+      "高文麟": "大墩"
+    },
+    "doc_id": "硃89",
+    "sources": [
+      {
+        "doc_id": "硃89",
+        "quote": "二十七日天將亮時，各拿器械攻破大墩營盤，小的拿半斬刀同往，殺死一人，又殺傷一人... 那時知縣、副將、遊擊都被殺害"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmrdbmxir3uv",
+    "repeat_of_title": "大墩營盤拒官起事",
+    "same_as_event_ids": [
+      "evmrdbmxir3uv",
+      "evmr0n9b69n1a",
+      "evmr1tnaeutyx",
+      "evmr3h91ubu4b",
+      "evmr626bugwdm",
+      "evmr1tc3ksqu1",
+      "evmr8r5wb97w1",
+      "evmr0liujo73b",
+      "evmrgjtqro9rm",
+      "evmrljszhitiw"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "十一月二十九日，林爽文率眾數千人砍破刺竹圍牆攻入彰化縣城，殺害知府孫景燧、同知劉亨基、同知長庚、都司王坦、典史馮啟宗等官員，並開釋監犯、搶劫倉庫，佔領縣城。",
+    "howKnown": "審訊供詞",
+    "quote": "二十九日林爽文取了營盤內器械，率領眾人... 走到彰化城外... 就砍開竹圍進城，眾人搶到倉庫，並把知府、同知、都司、典史們殺害，又打開監獄，放出監犯。",
+    "relations": [
+      {
+        "evidence": "並把知府、同知、都司、典史們殺害",
+        "relation": "殺害",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "孫景燧"
+      },
+      {
+        "evidence": "林爽文許他做副帥，據守彰化縣城",
+        "relation": "許做副帥",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "楊振國"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "攻陷彰化縣城",
+    "whenAr": "",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文",
+      "高文麟",
+      "楊振國",
+      "楊軒",
+      "孫景燧",
+      "劉亨基",
+      "長庚",
+      "王坦",
+      "馮啟宗"
+    ],
+    "who_loc": {
+      "劉亨基": "彰化縣城",
+      "孫景燧": "彰化縣城",
+      "林爽文": "彰化縣城",
+      "楊振國": "彰化縣城",
+      "楊軒": "彰化縣城",
+      "王坦": "彰化縣城",
+      "長庚": "彰化縣城",
+      "馮啟宗": "彰化縣城",
+      "高文麟": "彰化縣城"
+    },
+    "doc_id": "硃89",
+    "sources": [
+      {
+        "doc_id": "硃89",
+        "quote": "二十九日林爽文取了營盤內器械，率領眾人... 走到彰化城外... 就砍開竹圍進城，眾人搶到倉庫，並把知府、同知、都司、典史們殺害，又打開監獄，放出監犯。"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmrdbngebe72",
+    "repeat_of_title": "攻陷彰化縣城",
+    "same_as_event_ids": [
+      "evmrdbngebe72",
+      "evmr1tbd1qrzj"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "林爽文在彰化建立偽職並部署留守兵力後，親率叛軍主力分兵兩路，分別前往進攻諸羅與淡水等地。",
+    "howKnown": "審訊供詞",
+    "quote": "在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。",
+    "relations": [
+      {
+        "evidence": "留小的與高文麟們踞守彰化",
+        "relation": "留守",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "楊振國"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "分路進攻諸羅與淡水",
+    "whenAr": "",
+    "whenCh": "十二月",
+    "whenKnownCh": "",
+    "where": "彰化",
+    "who": [
+      "林爽文",
+      "高文麟",
+      "楊振國",
+      "楊軒"
+    ],
+    "who_loc": {
+      "林爽文": "彰化",
+      "楊振國": "彰化",
+      "楊軒": "彰化",
+      "高文麟": "彰化"
+    },
+    "doc_id": "硃89",
+    "sources": [
+      {
+        "doc_id": "硃89",
+        "quote": "在彰化住了幾日，林爽文們領人分路去攻諸羅、淡水，留了幾百人守住彰化。"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmrdbnor8wga",
+    "repeat_of_title": "建號設官分路進攻"
+  },
+  {
+    "category": "done",
+    "description": "因彰化文武官員前往大墩圍捕林爽文及楊光勳案內逸犯並欲燒莊，林爽文遂起意糾集眾人劫掠大墩營盤，並殺害文武官員。",
+    "howKnown": "審訊供詞",
+    "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文糾眾劫大墩營盤",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十二年正月初六日",
+    "where": "大墩",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "大墩"
+    },
+    "doc_id": "硃87",
+    "sources": [
+      {
+        "doc_id": "硃87",
+        "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr3h91ubu4b",
+    "repeat_of_title": "大墩營盤遇襲與彰城失陷",
+    "same_as_event_ids": [
+      "evmr3h91ubu4b",
+      "evmrdbmxir3uv",
+      "evmr0n9b69n1a",
+      "evmr8r5wb97w1",
+      "evmr0liujo73b",
+      "evmr1tnaeutyx",
+      "evmr1zhgzx5cp",
+      "evmrgjtqro9rm"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "林爽文等叛軍於殺害文武官員後攻取彰化縣城，並分派偽官前往攻取諸羅各處。",
+    "howKnown": "審訊供詞",
+    "quote": "攻取彰化縣城，分派偽官，去取諸羅各處的",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "攻陷彰化縣城並分派偽官取諸羅",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十二年正月初六日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城"
+    },
+    "doc_id": "硃87",
+    "sources": [
+      {
+        "doc_id": "硃87",
+        "quote": "攻取彰化縣城，分派偽官，去取諸羅各處的"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "林爽文因官府圍捕，遂糾集會眾與莊眾千餘人，於十一月二十七日夜攻破大墩營盤，殺害彰化知縣俞峻、副將赫生額、遊擊耿世文及兵役多人。",
+    "howKnown": "審訊",
+    "quote": "糾合同會並莊眾千餘人，於二十七夜攻破大墩營盤，殺害知縣、副將、遊擊、兵役多人。",
+    "relations": [
+      {
+        "evidence": "攻破大墩營盤，殺害知縣、副將、遊擊、兵役多人",
+        "relation": "攻殺",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "俞峻"
+      },
+      {
+        "evidence": "攻破大墩營盤，殺害知縣、副將、遊擊、兵役多人",
+        "relation": "攻殺",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "赫生額"
+      },
+      {
+        "evidence": "攻破大墩營盤，殺害知縣、副將、遊擊、兵役多人",
+        "relation": "攻殺",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "耿世文"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文攻破大墩營盤",
+    "whenAr": "1786/12/17",
+    "whenCh": "十一月二十七日夜",
+    "whenKnownCh": "十二月二十八日",
+    "where": "大墩",
+    "who": [
+      "林爽文",
+      "俞峻",
+      "耿世文",
+      "赫生額"
+    ],
+    "who_loc": {
+      "俞峻": "大墩",
+      "林爽文": "大墩",
+      "耿世文": "大墩",
+      "赫生額": "大墩"
+    },
+    "doc_id": "硃88",
+    "sources": [
+      {
+        "doc_id": "硃88",
+        "quote": "糾合同會並莊眾千餘人，於二十七夜攻破大墩營盤，殺害知縣、副將、遊擊、兵役多人。"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr0n9b69n1a",
+    "repeat_of_title": "賊匪攻劫大墩營盤",
+    "same_as_event_ids": [
+      "evmr0n9b69n1a",
+      "evmr626bugwdm",
+      "evmr1tnaeutyx",
+      "evmr3h91ubu4b",
+      "evmr1tc3ksqu1",
+      "evmr0liujo73b",
+      "evmr8r5wb97w1",
+      "evmrgjtqro9rm",
+      "evmrljszhitiw"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "林爽文糾集三四千人於十一月二十九日攻打彰化縣城，砍破竹牆擁入，搶劫倉庫槍炮器械，縱放監犯，並殺害知府孫景燧、同知劉亨基與長庚、都司王宗武、典史馮啟宗等多名官員。",
+    "howKnown": "審訊",
+    "quote": "於十一月二十九日往攻彰化縣城，知府孫景燧、都司王宗武、同知長庚、俸滿同知劉亨基督率署典史馮啟宗、原任典史李爾和、外委許瑪等，率領兵役居民設法防禦。因存城兵少，而縣城又係栽竹為牆，被賊眾砍破擁入，搶劫倉庫槍炮器械，縱放監犯。典史李爾和、外委許瑪均各受傷知府孫景燧、同知劉亨基、長庚、都司王宗武、典史馮啟宗等，俱被殺害。",
+    "relations": [
+      {
+        "evidence": "於十一月二十九日往攻彰化縣城...知府孫景燧、同知劉亨基、長庚、都司王宗武、典史馮啟宗等，俱被殺害",
+        "relation": "攻殺",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "孫景燧"
+      },
+      {
+        "evidence": "知府孫景燧、同知劉亨基、長庚、都司王宗武、典史馮啟宗等，俱被殺害",
+        "relation": "攻殺",
+        "relation_type": "conflict",
+        "source": "林爽文",
+        "target": "劉亨基"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文攻陷彰化縣城",
+    "whenAr": "1786/12/19",
+    "whenCh": "十一月二十九日",
+    "whenKnownCh": "十二月二十八日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文",
+      "孫景燧",
+      "劉亨基",
+      "長庚",
+      "王宗武",
+      "馮啟宗",
+      "李爾和",
+      "許瑪"
+    ],
+    "who_loc": {
+      "劉亨基": "彰化縣城",
+      "孫景燧": "彰化縣城",
+      "李爾和": "彰化縣城",
+      "林爽文": "彰化縣城",
+      "王宗武": "彰化縣城",
+      "許瑪": "彰化縣城",
+      "長庚": "彰化縣城",
+      "馮啟宗": "彰化縣城"
+    },
+    "doc_id": "硃88",
+    "sources": [
+      {
+        "doc_id": "硃88",
+        "quote": "於十一月二十九日往攻彰化縣城，知府孫景燧、都司王宗武、同知長庚、俸滿同知劉亨基督率署典史馮啟宗、原任典史李爾和、外委許瑪等，率領兵役居民設法防禦。因存城兵少，而縣城又係栽竹為牆，被賊眾砍破擁入，搶劫倉庫槍炮器械，縱放監犯。典史李爾和、外委許瑪均各受傷知府孫景燧、同知劉亨基、長庚、都司王宗武、典史馮啟宗等，俱被殺害。"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr1tbd1qrzj",
+    "repeat_of_title": "林爽文等攻陷彰化縣城"
+  },
+  {
+    "category": "done",
+    "description": "林爽文攻佔彰化縣城後，自稱盟主大元帥，搶奪店鋪綢布，豎立「順天」旗號，並委任陳奉先為軍師、楊詠為副元帥、高文麟為總爺、楊軒委辦軍務等偽職。",
+    "howKnown": "審訊",
+    "quote": "林爽文既得縣城，自稱盟主大元帥，並搶奪店鋪綢布，豎立旗號，書寫順天字樣。以賊黨陳奉先為軍師，侯老為謀士，王芬為將軍，林與為先鋒，劉賢士、林光為同知，劉四為彰化縣官，劉升為北路協，林倉管理軍糧。並有林瓦等十餘人共為羽翼。其現獲之楊詠，林爽文念其從前賣放之情，許為副元帥。高文麟許為總爺，楊軒委辦軍務。",
+    "relations": [
+      {
+        "evidence": "以賊黨陳奉先為軍師",
+        "relation": "委任",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "陳奉先"
+      },
+      {
+        "evidence": "許為副元帥",
+        "relation": "許為",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "楊詠"
+      },
+      {
+        "evidence": "高文麟許為總爺",
+        "relation": "許為",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "高文麟"
+      },
+      {
+        "evidence": "楊軒委辦軍務",
+        "relation": "委辦",
+        "relation_type": "command",
+        "source": "林爽文",
+        "target": "楊軒"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "林爽文建號稱王並分封偽職",
+    "whenAr": "",
+    "whenCh": "十一月二十九日後",
+    "whenKnownCh": "十二月二十八日",
+    "where": "彰化縣城",
+    "who": [
+      "林爽文",
+      "陳奉先",
+      "侯老",
+      "王芬",
+      "林與",
+      "劉賢士",
+      "林光",
+      "劉四",
+      "劉升",
+      "林倉",
+      "楊詠",
+      "高文麟",
+      "楊軒"
+    ],
+    "who_loc": {
+      "林爽文": "彰化縣城",
+      "楊詠": "彰化縣城",
+      "楊軒": "彰化縣城",
+      "陳奉先": "彰化縣城",
+      "高文麟": "彰化縣城"
+    },
+    "doc_id": "硃88",
+    "sources": [
+      {
+        "doc_id": "硃88",
+        "quote": "林爽文既得縣城，自稱盟主大元帥，並搶奪店鋪綢布，豎立旗號，書寫順天字樣。以賊黨陳奉先為軍師，侯老為謀士，王芬為將軍，林與為先鋒，劉賢士、林光為同知，劉四為彰化縣官，劉升為北路協，林倉管理軍糧。並有林瓦等十餘人共為羽翼。其現獲之楊詠，林爽文念其從前賣放之情，許為副元帥。高文麟許為總爺，楊軒委辦軍務。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "叛軍分路前往攻打諸羅與淡水，並留下高文麟、楊詠、楊軒、陳高等人率領匪黨數百人保守彰化縣城。",
+    "howKnown": "審訊",
+    "quote": "各賊即分路往攻諸羅、淡水，留高文麟、楊詠、楊軒、陳高等帶同匪黨數百人保守彰化。",
+    "relations": [
+      {
+        "evidence": "留高文麟、楊詠、楊軒、陳高等帶同匪黨數百人保守彰化",
+        "relation": "協同留守",
+        "relation_type": "ally",
+        "source": "高文麟",
+        "target": "楊詠"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "叛軍分攻諸羅淡水並留守彰化",
+    "whenAr": "",
+    "whenCh": "十一月二十九日後",
+    "whenKnownCh": "十二月二十八日",
+    "where": "彰化縣城",
+    "who": [
+      "高文麟",
+      "楊詠",
+      "楊軒",
+      "陳高"
+    ],
+    "who_loc": {
+      "楊詠": "彰化縣城",
+      "楊軒": "彰化縣城",
+      "陳高": "彰化縣城",
+      "高文麟": "彰化縣城"
+    },
+    "doc_id": "硃88",
+    "sources": [
+      {
+        "doc_id": "硃88",
+        "quote": "各賊即分路往攻諸羅、淡水，留高文麟、楊詠、楊軒、陳高等帶同匪黨數百人保守彰化。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "臺灣南路民變賊匪發動進攻，攻陷鳳山縣城，致使臺灣郡城危急求援。",
+    "howKnown": "轉述",
+    "quote": "南路鳳山縣亦被賊匪攻陷，臺灣郡城望救孔急",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪攻陷鳳山縣城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "正月初一日",
+    "where": "鳳山縣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "鳳山縣"
+    },
+    "doc_id": "硃90",
+    "sources": [
+      {
+        "doc_id": "硃90",
+        "quote": "南路鳳山縣亦被賊匪攻陷，臺灣郡城望救孔急"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr4lfqnug4u",
+    "repeat_of_title": "賊匪攻陷鳳山縣城"
+  },
+  {
+    "category": "done",
+    "description": "林爽文等賊匪於彰化滋事起兵後，隨即擴大戰端，接續攻搶諸羅、淡水及鳳山等處地界。",
+    "howKnown": "查報",
+    "quote": "賊匪自彰化滋事之後，雖又攻搶諸羅、淡水、鳳山",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪攻搶諸羅淡水鳳山",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "諸羅",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {},
+    "doc_id": "硃94",
+    "sources": [
+      {
+        "doc_id": "硃94",
+        "quote": "賊匪自彰化滋事之後，雖又攻搶諸羅、淡水、鳳山"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "賊匪分兵南、北兩路攻犯臺灣郡城，並於十二月二十五日夜間自北路發動攻擊，隨後遭官兵放炮擊退。",
+    "howKnown": "稟報",
+    "quote": "差探賊分南、北二路，攻犯臺灣郡城。...二十五日夜，賊自北路來攻，該鎮督同護安平協林光玉等，施放大炮，賊俱退避。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪分南北路攻犯郡城",
+    "whenAr": "1787/02/12",
+    "whenCh": "十二月二十五日夜",
+    "whenKnownCh": "正月初九日",
+    "where": "臺灣郡城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃94",
+    "sources": [
+      {
+        "doc_id": "硃94",
+        "quote": "差探賊分南、北二路，攻犯臺灣郡城。...二十五日夜，賊自北路來攻，該鎮督同護安平協林光玉等，施放大炮，賊俱退避。"
+      }
+    ],
+    "actor": "lin"
+  },
+  {
+    "category": "done",
+    "description": "賊匪駕駛數百隻小船浮水前來攻襲，被官兵放炮打沉數十隻後，其餘船隻向外遠逃。",
+    "howKnown": "轉述",
+    "quote": "有賊匪小船數百隻浮水而來，被炮打沉數十隻，餘船遠逃之語。",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "賊匪駕小船數百隻浮水來襲",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "臺灣郡城水路",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃94",
+    "sources": [
+      {
+        "doc_id": "硃94",
+        "quote": "有賊匪小船數百隻浮水而來，被炮打沉數十隻，餘船遠逃之語。"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr3ipn85zsa",
+    "repeat_of_title": "叛軍船隻由海路進攻鹽埕"
+  },
+  {
+    "category": "done",
+    "description": "臺灣北路奸民林爽文、王芬等人謀為不軌，率眾起事攻陷彰化城池。",
+    "howKnown": "轉述",
+    "quote": "訪聞臺灣北路奸民攻陷彰化城池...咨據報奸民林爽文、王芬等謀為不軌",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文等攻陷彰化城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月十二日",
+    "where": "彰化",
+    "who": [
+      "林爽文",
+      "王芬"
+    ],
+    "who_loc": {
+      "林爽文": "彰化",
+      "王芬": "彰化"
+    },
+    "doc_id": "硃97",
+    "sources": [
+      {
+        "doc_id": "硃97",
+        "quote": "訪聞臺灣北路奸民攻陷彰化城池...咨據報奸民林爽文、王芬等謀為不軌"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmrd6kim0uhi",
+    "repeat_of_title": "起事攻陷諸彰兩邑",
+    "same_as_event_ids": [
+      "evmrd6kim0uhi",
+      "evmr4edw1uoil",
+      "evmr4qeh688w2",
+      "evmr1zhigjmz5",
+      "evmr1tbd1qrzj",
+      "evmrdawcs99df"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "林爽文等民變匪徒起事猖獗，進一步攻陷諸羅城池。",
+    "howKnown": "轉述",
+    "quote": "匪徒猖獗，諸羅城又陷",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍攻陷諸羅城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "乾隆五十一年十二月二十二日",
+    "where": "諸羅",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "硃97",
+    "sources": [
+      {
+        "doc_id": "硃97",
+        "quote": "匪徒猖獗，諸羅城又陷"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr4dve5smq6",
+    "repeat_of_title": "叛軍攻陷諸羅縣城",
+    "same_as_event_ids": [
+      "evmr4dve5smq6",
+      "evmr4ebxv00ct"
+    ]
+  }
+]

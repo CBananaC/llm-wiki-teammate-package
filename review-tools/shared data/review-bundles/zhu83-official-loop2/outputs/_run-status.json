@@ -1,0 +1,101 @@
+{
+  "硃79": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃83": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃89": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃87": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃88": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃90": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃94": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "硃97": {
+    "summary": true,
+    "divide": true,
+    "lin-events": true,
+    "source-chain-lin": true,
+    "dedup-lin": true,
+    "qing-actions-all": true,
+    "source-chain-qing": true,
+    "dedup-qing": true,
+    "confirmed-yu-response": true,
+    "combined-emperor-actions": true
+  },
+  "__global__": {
+    "official-response": true
+  }
+}

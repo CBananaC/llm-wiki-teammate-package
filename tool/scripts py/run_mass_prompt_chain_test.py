@@ -6,14 +6,12 @@ search all 上諭 by date and it does not run the old 回應時效/situfit stage
 
   summary -> division -> 林方 events + per-event source chains
   -> 清方 three-in-one events + per-event source chains
-  -> cross-document 林/清 repeat-report check (LLM judged)
   -> confirmed prior-上諭 response -> combined emperor actions
   -> confirmed official responses for each emperor action.
 
 The bundle is written directly to the shared review-bundle directory used by
-the website. The repeat-report pass annotates 林/清 cards with the earliest
-cross-document report; the website supplies the merge/separate choice when the
-bundle is loaded.
+the website. Existing UI code supplies cross-document repeat-report matching
+and the merge/separate choice when the bundle is loaded.
 """
 
 from __future__ import annotations
@@ -63,9 +61,9 @@ LOOP_CHAIN = [
     "divide",
     "lin-events+source",
     "qing-actions-all+source",
-    "repeat-report",
     "confirmed-yu-response",
     "combined-emperor-actions",
+    "repeat-report-dedup (global, post-loop)",
     "official-response",
 ]
 
@@ -134,25 +132,70 @@ def is_excluded_doc_id(doc_id: str) -> bool:
     return str(doc_id or "").startswith("奏")
 
 
+def _norm_name(value: str) -> str:
+    """Strip titles/offices so 「陸路提督黃仕簡」 and 「黃仕簡」 compare equal."""
+    s = re.sub(r"\s+", "", str(value or ""))
+    s = re.sub(r"^(?:奴才|臣|署|護理|署理|欽差|大臣|前|原)+", "", s)
+    for office in ("閩浙總督", "陸路提督", "水師提督", "福建巡撫", "臺灣鎮總兵",
+                   "臺灣道", "總兵", "提督", "巡撫", "總督", "將軍", "副將", "參將",
+                   "都司", "守備", "同知", "知縣", "知府", "道員"):
+        s = s.replace(office, "")
+    return s
+
+
+def is_self_reported_event(doc: dict[str, Any], item: dict[str, Any]) -> bool:
+    """True when the card describes the memorialist's OWN act, reported first-hand.
+
+    Such an action has no upstream informant chain -- the author is the source.
+    Tracing it anyway produces either a degenerate 親歷 self-loop hop
+    (黃仕簡 --親歷--> 黃仕簡) or, worse, borrows an unrelated informant chain from a
+    neighbouring reported event and mis-attributes it (e.g. 黃仕簡擬赴臺由南路會剿
+    wrongly credited to 柴大紀、永福 之咨會)."""
+    if str(item.get("actor") or item.get("side") or "qing") == "lin":
+        return False
+    how = re.sub(r"\s+", "", str(item.get("howKnown") or ""))
+    if how not in {"親歷", "親報", "官員親報", "自述"}:
+        return False
+    author = _norm_name(author_name(doc))
+    if not author:
+        return False
+    who = item.get("who") if isinstance(item.get("who"), list) else []
+    names = {_norm_name(w) for w in who if w}
+    if not names:
+        return False
+    return any(n and (n in author or author in n) for n in names)
+
+
+def strip_degenerate_hops(chains: list[Any]) -> list[dict[str, Any]]:
+    """Drop hops whose informant and recipient are the same person (親歷 self-loops):
+    they carry no information and render as a bogus source line on the website.
+    A chain left with no hops is dropped entirely."""
+    out: list[dict[str, Any]] = []
+    for chain in chains or []:
+        if not isinstance(chain, dict):
+            continue
+        hops = [
+            h for h in (chain.get("hops") or [])
+            if isinstance(h, dict)
+            and not (
+                _norm_name(h.get("from_person"))
+                and _norm_name(h.get("from_person")) == _norm_name(h.get("to_person"))
+            )
+        ]
+        if not hops:
+            continue
+        chain = dict(chain)
+        chain["hops"] = hops
+        out.append(chain)
+    return out
+
+
 def body_of(record: dict[str, Any]) -> str:
     return str(record.get("body") or "")
 
 
 def rescript_of(record: dict[str, Any]) -> str:
     return str(record.get("rescript_text") or record.get("rescript") or "")
-
-
-def is_routine_know_ack(text: Any) -> bool:
-    """Return true only for the routine 知道了／覽 acknowledgment.
-
-    This is intentionally narrow: substantive 硃批, including other short
-    rescripts such as 覽 or 已有旨, must still reach 皇帝行動 processing.
-    """
-    compact = re.sub(r"[\s　。．.!！?？；;：:,，、「」『』（）()]+", "", str(text or ""))
-    return compact in {
-        "知道了欽此", "硃批知道了欽此", "朱批知道了欽此",
-        "覽", "覽欽此", "硃批覽", "硃批覽欽此", "朱批覽", "朱批覽欽此",
-    }
 
 
 def author_name(record: dict[str, Any]) -> str:
@@ -384,53 +427,6 @@ def run_events(
     return rows
 
 
-_DIRECT_SELF_REPORT_LABELS = {"親歷", "第一手", "本官親歷", "作者親歷", "自報", "本官自報"}
-
-
-def _compact_person_name(value: Any) -> str:
-    return re.sub(r"[\s　（）()、，,。；：:等]+", "", str(value or ""))
-
-
-def _person_matches(left: Any, right: Any) -> bool:
-    a, b = _compact_person_name(left), _compact_person_name(right)
-    return bool(a and b and len(min(a, b)) >= 2 and (a in b or b in a))
-
-
-def is_author_self_report(item: dict[str, Any], doc: dict[str, Any]) -> bool:
-    """Whether the extracted event has no earlier information source.
-
-    `親歷`/`第一手` is the explicit model classification. We also inspect the
-    event's named relation source and quote because an author may report his
-    own action as `訪聞` after hearing the wider situation, as in `硃44`.
-    """
-    known = str(item.get("howKnown") or item.get("how_known") or "").strip()
-    if known in _DIRECT_SELF_REPORT_LABELS or any(label in known for label in ("親歷", "第一手", "自報")):
-        return True
-    author = author_name(doc)
-    if not author:
-        return False
-    reporters: list[str] = []
-    for key in ("reporter", "reported_by", "source_actor", "source_author", "source_official"):
-        value = item.get(key)
-        if isinstance(value, list):
-            reporters.extend(str(v) for v in value)
-        elif value:
-            reporters.append(str(value))
-    for relation in item.get("relations") or []:
-        if isinstance(relation, dict) and relation.get("source"):
-            reporters.append(str(relation.get("source")))
-    if any(_person_matches(author, reporter) for reporter in reporters):
-        return True
-    quote = str(item.get("quote") or "")
-    for source in item.get("sources") or []:
-        if isinstance(source, dict):
-            quote += "\n" + str(source.get("quote") or "")
-    # Require a self-reporting marker as well as the author's name in the
-    # quotation, so merely being mentioned as a person does not suppress a
-    # genuine earlier-source chain.
-    return bool(any(marker in quote for marker in ("奴才", "臣", "本官")) and _person_matches(author, quote))
-
-
 def trace_event(
     proxy: str,
     model: str,
@@ -441,6 +437,11 @@ def trace_event(
     retries: int,
     retry_sleep: int,
 ) -> dict[str, Any]:
+    if is_self_reported_event(doc, {**item, "actor": side}):
+        # the memorialist's own act: the author IS the source, so there is no chain to trace.
+        print(f"      source-chain skipped (作者親歷): {item.get('subtitle') or '(untitled)'}")
+        return {"doc_id": doc_id_of(doc), "evTitle": item.get("subtitle") or "", "actor": side,
+                "event": item, "chains": [], "selfReported": True}
     payload = record_payload(doc, "trace", model)
     payload.update({
         "side": side,
@@ -462,6 +463,7 @@ def trace_event(
         with accounting_step("lin-source-chain" if side == "lin" else "qing-source-chain"):
             data = post_json(proxy, payload, timeout, retries, retry_sleep)
         chains = data.get("chains", []) if isinstance(data.get("chains"), list) else []
+        chains = strip_degenerate_hops(chains)
         return {"doc_id": doc_id_of(doc), "evTitle": item.get("subtitle") or "", "actor": side, "event": item, "chains": chains}
     except Exception as exc:  # a trace failure should not discard extracted events
         print(f"      source-chain failed for {item.get('subtitle') or '(untitled)'}: {exc}")
@@ -479,377 +481,18 @@ def trace_events_parallel(proxy, model, doc, items, side, timeout, retries, retr
         return list(ex.map(lambda it: trace_event(proxy, model, doc, it, side, timeout, retries, retry_sleep), items))
 
 
-# ---- cross-document repeat-report dedup ------------------------------------
-# This is deliberately an LLM-verdict pass. The local overlap score below is
-# only a high-recall candidate retriever, so different wording can still reach
-# Gemini; it is never used to decide that two events are the same.
-_REPEAT_EVENT_FILES = {
-    "lin": ("lin-events.json",),
-    "qing": (
-        "qing-actions-all.json",
-        # Older official-document bundles used three separate Qing files.
-        "qing-events-done.json",
-        "qing-events-plan.json",
-        "qing-events-nonmil.json",
-    ),
+_ACTOR_ALIASES = {
+    "emperor": {"emperor", "皇帝"},
+    "lin": {"lin", "林", "林方"},
+    "qing": {"qing", "清", "清方"},
 }
-_REPEAT_FORMAL: dict[str, Any] | None = None
 
 
-def _repeat_formal_state() -> dict[str, Any]:
-    global _REPEAT_FORMAL
-    if _REPEAT_FORMAL is None:
-        raw = read_json(FORMAL_STATE_PATH, {})
-        _REPEAT_FORMAL = raw if isinstance(raw, dict) else {}
-    return _REPEAT_FORMAL
-
-
-def _repeat_send_date(doc_id: str, by_id: dict[str, dict[str, Any]]) -> str:
-    record = by_id.get(str(doc_id), {})
-    # Repeat labels must use the reporting document's sent date, never the
-    # event's historical occurrence date extracted by the model.
-    return date_pair_value(record, "send_date") or record_date(record)
-
-
-def _repeat_doc_ids(card: dict[str, Any]) -> list[str]:
-    ids: list[str] = []
-    for value in card.get("source_doc_ids") or []:
-        value = str(value or "")
-        if value and value not in ids:
-            ids.append(value)
-    for source in card.get("sources") or []:
-        if isinstance(source, dict):
-            value = str(source.get("doc_id") or source.get("source_doc_id") or "")
-        else:
-            value = str(source or "")
-        if value and value not in ids:
-            ids.append(value)
-    value = str(card.get("doc_id") or "")
-    if value and value not in ids:
-        ids.insert(0, value)
-    return ids
-
-
-def _repeat_quote(card: dict[str, Any]) -> str:
-    quote = card.get("quote") or card.get("quotation") or ""
-    if quote:
-        return str(quote)
-    for source in card.get("sources") or []:
-        if isinstance(source, dict):
-            quote = source.get("quote") or source.get("quotation") or source.get("source_quote") or ""
-            if quote:
-                return str(quote)
-    return ""
-
-
-def _repeat_view(
-    card: dict[str, Any],
-    actor: str,
-    by_id: dict[str, dict[str, Any]],
-    card_id: str,
-    original: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    source_ids = _repeat_doc_ids(card)
-    doc_id = source_ids[0] if source_ids else str(card.get("doc_id") or "")
-    earlier = card.get("earliest_report") if isinstance(card.get("earliest_report"), dict) else {}
-    return {
-        "id": card_id,
-        "title": str(card.get("subtitle") or card.get("title") or card.get("what") or ""),
-        "description": str(card.get("description") or ""),
-        "quote": _repeat_quote(card),
-        "doc_id": doc_id,
-        "source_doc_ids": source_ids,
-        "date": _repeat_send_date(doc_id, by_id) if doc_id else "",
-        "actor": actor,
-        "_orig": original,
-        # A prior unverified bundle may already have an earliest pointer. Keep
-        # that pointer as a root candidate when a later run compares against it.
-        "_earliest_report": earlier,
-    }
-
-
-def _repeat_committed_cards(actor: str, by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
-    events = _repeat_formal_state().get("__events", [])
-    out: list[dict[str, Any]] = []
-    if not isinstance(events, list):
-        return out
-    for event in events:
-        if not isinstance(event, dict):
-            continue
-        raw_actor = str(event.get("actor") or "").lower()
-        normalized_actor = "emperor" if raw_actor in {"emperor", "皇帝"} else raw_actor
-        if normalized_actor != actor:
-            continue
-        event_id = str(event.get("id") or "")
-        if not event_id:
-            continue
-        source_ids: list[str] = []
-        quote = ""
-        for source in event.get("sources") or []:
-            if isinstance(source, str):
-                source = {"doc_id": source}
-            if not isinstance(source, dict):
-                continue
-            sid = str(source.get("doc_id") or "")
-            if sid and sid not in source_ids:
-                source_ids.append(sid)
-            if not quote:
-                quote = str(source.get("quote") or source.get("quotation") or "")
-        if not source_ids:
-            continue
-        view = _repeat_view(
-            {
-                "doc_id": source_ids[0],
-                "source_doc_ids": source_ids,
-                "subtitle": event.get("subtitle") or event.get("what") or "",
-                "description": event.get("description") or "",
-                "quote": quote,
-            },
-            actor,
-            by_id,
-            event_id,
-        )
-        view["date"] = _repeat_send_date(source_ids[0], by_id) or str(event.get("dateAr") or event.get("whenAr") or "")
-        out.append(view)
-    return out
-
-
-def _repeat_historical_cards(
-    actor: str,
-    by_id: dict[str, dict[str, Any]],
-    current_bundle: str,
-) -> list[dict[str, Any]]:
-    """Read unverified event cards from earlier official-loop bundles.
-
-    These cards are candidates only; they are never mutated. Exact duplicates
-    from rerun bundles are collapsed, while differently worded cards from the
-    same document remain available for the LLM to assess.
-    """
-    seen_exact: set[tuple[str, str, str, str]] = set()
-    out: list[dict[str, Any]] = []
-    for bundle_dir in sorted(BUNDLES_DIR.iterdir(), key=lambda p: p.name):
-        if not bundle_dir.is_dir() or bundle_dir.name == current_bundle:
-            continue
-        manifest = read_json(bundle_dir / "manifest.json", {})
-        chain = manifest.get("chain", []) if isinstance(manifest, dict) else []
-        if not isinstance(chain, list):
-            chain = []
-        has_official_event_chain = (
-            "lin-events+source" in chain or
-            "qing-actions-all+source" in chain or
-            any(str(item).startswith("qing-events-") for item in chain)
-        )
-        if manifest and not has_official_event_chain:
-            continue
-        for filename in _REPEAT_EVENT_FILES[actor]:
-            rows = read_json(bundle_dir / "outputs" / filename, [])
-            if not isinstance(rows, list):
-                continue
-            for index, row in enumerate(rows):
-                if not isinstance(row, dict) or row.get("__skip"):
-                    continue
-                source_ids = _repeat_doc_ids(row)
-                if not source_ids:
-                    continue
-                title = str(row.get("subtitle") or row.get("title") or row.get("what") or "")
-                description = str(row.get("description") or "")
-                quote = _repeat_quote(row)
-                exact_key = (source_ids[0], title, description, quote)
-                if exact_key in seen_exact:
-                    continue
-                seen_exact.add(exact_key)
-                card_id = str(row.get("card_id") or f"{source_ids[0]}#{actor}#{index}")
-                # Bundle-qualify historical ids because old reruns reused the
-                # same doc#actor#index card id.
-                out.append(_repeat_view(row, actor, by_id, f"{bundle_dir.name}::{card_id}"))
-    return out
-
-
-def _repeat_text(card: dict[str, Any]) -> str:
-    return "\n".join((card.get("title") or "", card.get("description") or "", card.get("quote") or ""))
-
-
-def _repeat_bigrams(text: str) -> set[str]:
-    text = re.sub(r"\s+", "", str(text or ""))
-    return {text[index:index + 2] for index in range(len(text) - 1)}
-
-
-def _repeat_retrieval_score(left: dict[str, Any], right: dict[str, Any]) -> float:
-    a, b = _repeat_bigrams(_repeat_text(left)), _repeat_bigrams(_repeat_text(right))
-    return len(a & b) / len(a | b) if a and b else 0.0
-
-
-def _repeat_rank(card: dict[str, Any]) -> tuple[Any, str, str]:
-    raw = str(card.get("date") or "").replace("/", "-")
-    parsed = parse_date(raw)
-    if parsed is None:
-        month = re.fullmatch(r"(\d{4})-(\d{1,2})", raw)
-        if month:
-            try:
-                parsed = datetime(int(month.group(1)), int(month.group(2)), 1).date()
-            except ValueError:
-                parsed = None
-    return (parsed or datetime.max.date(), str(card.get("doc_id") or ""), str(card.get("id") or ""))
-
-
-def _repeat_trim(card: dict[str, Any]) -> dict[str, Any]:
-    return {
-        "id": str(card.get("id") or ""),
-        "title": str(card.get("title") or "")[:90],
-        "description": str(card.get("description") or "")[:180],
-        "quote": str(card.get("quote") or "")[:100],
-        "doc_id": str(card.get("doc_id") or ""),
-        "date": str(card.get("date") or ""),
-    }
-
-
-def _repeat_root(card: dict[str, Any]) -> dict[str, Any]:
-    earlier = card.get("_earliest_report")
-    if isinstance(earlier, dict) and earlier.get("id") and earlier.get("doc_id"):
-        return {
-            "id": str(earlier.get("id") or ""),
-            "title": str(earlier.get("title") or card.get("title") or ""),
-            "doc_id": str(earlier.get("doc_id") or ""),
-            "source_doc_ids": [str(earlier.get("doc_id") or "")],
-            "date": str(earlier.get("date") or ""),
-        }
-    return card
-
-
-def repeat_report_events(
-    proxy: str,
-    model: str,
-    actor: str,
-    cards: list[dict[str, Any]],
-    by_id: dict[str, dict[str, Any]],
-    current_bundle: str,
-    timeout: int,
-    retries: int,
-    retry_sleep: int,
-    workers: int = 6,
-    top_k: int = 12,
-    min_overlap: float = 0.04,
-) -> tuple[int, int, int]:
-    """Annotate current 林/清 cards with earlier cross-document repeats.
-
-    Returns (annotations, failed_llm_calls, candidate_jobs). Same-document
-    matches are intentionally excluded, even when the two cards describe the
-    same occurrence.
-    """
-    views: list[dict[str, Any]] = []
-    for index, card in enumerate(cards):
-        if not isinstance(card, dict) or card.get("__skip"):
-            continue
-        # A rerun must not preserve an old verdict produced by a different
-        # candidate pool or model.
-        for key in ("same_as", "earliest_report", "repeat_candidates", "repeat_verdict", "repeat_reason"):
-            card.pop(key, None)
-        did = str(card.get("doc_id") or "")
-        card_id = str(card.get("card_id") or f"{did}#{actor}#{index}")
-        card["card_id"] = card_id
-        views.append(_repeat_view(card, actor, by_id, card_id, original=card))
-    if not views:
-        return 0, 0, 0
-
-    committed = _repeat_committed_cards(actor, by_id)
-    historical = _repeat_historical_cards(actor, by_id, current_bundle)
-    current = [dict(view, _orig=None) for view in views]
-    pool = committed + historical + current
-
-    jobs: list[tuple[dict[str, Any], list[dict[str, Any]]]] = []
-    for view in views:
-        own_docs = set(view.get("source_doc_ids") or [])
-        candidates = [
-            candidate for candidate in pool
-            if candidate.get("id") != view.get("id")
-            and own_docs.isdisjoint(set(candidate.get("source_doc_ids") or ([candidate.get("doc_id")] if candidate.get("doc_id") else [])))
-        ]
-        scored = sorted(
-            ((_repeat_retrieval_score(view, candidate), candidate) for candidate in candidates),
-            key=lambda pair: pair[0],
-            reverse=True,
-        )
-        shortlist = [candidate for score, candidate in scored if score >= min_overlap][:top_k]
-        if shortlist:
-            jobs.append((view, shortlist))
-
-    if not jobs:
-        return 0, 0, 0
-
-    def call(job: tuple[dict[str, Any], list[dict[str, Any]]]) -> tuple[str, list[str], bool]:
-        view, shortlist = job
-        payload = {
-            "mode": "repeat_report",
-            "model": model,
-            "actor": actor,
-            "card": _repeat_trim(view),
-            "candidates": [_repeat_trim(candidate) for candidate in shortlist],
-            "question": skill_prompt("repeat-report"),
-        }
-        try:
-            data = post_json(proxy, payload, timeout, retries, retry_sleep)
-        except Exception as exc:
-            print(f"    repeat-report failed for {view.get('title') or '(untitled)'}: {exc}")
-            return view["id"], [], False
-        allowed = {str(candidate.get("id") or "") for candidate in shortlist}
-        raw_ids = data.get("same_ids") if isinstance(data, dict) else []
-        if not isinstance(raw_ids, list):
-            raw_ids = [raw_ids] if raw_ids else []
-        same_ids = [str(value) for value in raw_ids if str(value) in allowed]
-        return view["id"], same_ids, True
-
-    same_by_id: dict[str, list[str]] = {}
-    failed = 0
-    with accounting_step("repeat-report"):
-        if workers > 1 and len(jobs) > 1:
-            from concurrent.futures import ThreadPoolExecutor
-            with ThreadPoolExecutor(max_workers=min(workers, len(jobs))) as executor:
-                for view_id, same_ids, ok in executor.map(call, jobs):
-                    same_by_id[view_id] = same_ids
-                    failed += 0 if ok else 1
-        else:
-            for job in jobs:
-                view_id, same_ids, ok = call(job)
-                same_by_id[view_id] = same_ids
-                failed += 0 if ok else 1
-
-    pool_by_id = {str(candidate.get("id") or ""): candidate for candidate in pool}
-    annotated = 0
-    for view in sorted(views, key=_repeat_rank):
-        matched = [pool_by_id[candidate_id] for candidate_id in same_by_id.get(view["id"], []) if candidate_id in pool_by_id]
-        if not matched:
-            continue
-        own_docs = set(view.get("source_doc_ids") or [])
-        roots = [
-            _repeat_root(candidate)
-            for candidate in matched
-            if own_docs.isdisjoint(set(candidate.get("source_doc_ids") or ([candidate.get("doc_id")] if candidate.get("doc_id") else [])))
-        ]
-        if not roots:
-            continue
-        earliest = min(roots + [view], key=_repeat_rank)
-        if str(earliest.get("id") or "") == str(view.get("id") or ""):
-            continue
-        original = view.get("_orig")
-        if not isinstance(original, dict):
-            continue
-        original["same_as"] = earliest.get("id") or ""
-        # `same_ids` is the runner's exact-match response shape. Persist the
-        # verdict explicitly as well so the website can render the repeat note
-        # without having to infer it from the pointer fields.
-        original["repeat_verdict"] = "same"
-        original["earliest_report"] = {
-            "id": earliest.get("id") or "",
-            "doc_id": earliest.get("doc_id") or "",
-            "date": earliest.get("date") or "",
-            "title": earliest.get("title") or "",
-        }
-        original["repeat_candidates"] = same_by_id.get(view["id"], [])
-        annotated += 1
-    return annotated, failed, len(jobs)
-
-
-def earlier_emperor_actions(exclude_ids: set[str], by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+def earlier_committed_events(actor_key: str, exclude_ids: set[str]) -> list[dict[str, Any]]:
+    """Already-committed cards of one actor from formal_all.data, earliest first,
+    with same-title duplicates collapsed. Shared by the emperor-action prompt and the
+    lin/qing repeat-report dedup stage."""
+    wanted = _ACTOR_ALIASES.get(actor_key, {actor_key})
     state = read_json(FORMAL_STATE_PATH, {})
     events = state.get("__events", []) if isinstance(state, dict) else []
     out: list[dict[str, Any]] = []
@@ -857,7 +500,7 @@ def earlier_emperor_actions(exclude_ids: set[str], by_id: dict[str, dict[str, An
         if not isinstance(event, dict):
             continue
         actor = str(event.get("actor") or "").lower()
-        if actor not in {"emperor", "皇帝"}:
+        if actor not in wanted:
             continue
         sources = []
         for src in event.get("sources") or []:
@@ -895,6 +538,132 @@ def earlier_emperor_actions(exclude_ids: set[str], by_id: dict[str, dict[str, An
     return unique
 
 
+def earlier_emperor_actions(exclude_ids: set[str], by_id: dict[str, dict[str, Any]]) -> list[dict[str, Any]]:
+    return earlier_committed_events("emperor", exclude_ids)
+
+
+def _run_card_id(row: dict[str, Any], index: int) -> str:
+    """Stable in-run id for a freshly-extracted card, so cards from this run can be
+    offered to repeat_report as candidates for each other."""
+    return "run:%s:%d" % (doc_id_of(row) or "?", index)
+
+
+def dedup_event_rows_global(
+    proxy: str,
+    model: str,
+    rows: list[dict[str, Any]],
+    actor: str,
+    by_id: dict[str, dict[str, Any]],
+    timeout: int,
+    retries: int,
+    retry_sleep: int,
+    top_k: int = 12,
+) -> int:
+    """Cross-document repeat-report pass over EVERY extracted card of one side.
+
+    Runs once, after all documents have been processed, so a card can be matched
+    against cards extracted from later documents in the same run as well as against
+    already-committed events -- a per-document pass can only ever look backwards and
+    would miss the repeat that arrives two documents on.
+
+    Cards are compared in reporting-date order; each is judged against the already-seen
+    cards of this run plus the committed registry, and the earliest equivalent wins, so
+    `same_as_event_id` always points at the first report of the occurrence. Writes
+    `same_as_event_id` / `repeat_of_title` in place for the website to merge on."""
+    if not rows:
+        return 0
+    committed = earlier_committed_events(actor, set())
+    order = sorted(
+        range(len(rows)),
+        key=lambda i: (
+            parse_date(
+                imperial_date(by_id.get(doc_id_of(rows[i]), {}))
+                or primary_date(by_id.get(doc_id_of(rows[i]), {}))
+                or ""
+            ) or datetime.max.date(),
+            doc_id_of(rows[i]),
+            i,
+        ),
+    )
+    seen: list[dict[str, Any]] = list(committed)
+    flagged = 0
+    for position, i in enumerate(order, 1):
+        item = rows[i]
+        did = doc_id_of(item)
+        rec = by_id.get(did, {})
+        card_text = str(item.get("subtitle") or "") + str(item.get("description") or "")
+        candidates = _relevant_previous_actions(seen, {"title": card_text}, top_k=top_k) if seen else []
+        # A repeat report is by definition cross-document: the SAME memorial listing three
+        # distinct acts of 藍元枚 (交印、起程、赴蚶江) is three events, not one reported thrice.
+        # Drop same-document candidates so the model can never collapse them into each other.
+        candidates = [
+            c for c in candidates
+            if str(((c.get("sources") or [{}])[0]).get("doc_id", "")) != str(did)
+        ]
+        # register this card as a candidate for the ones that follow, whether or not it
+        # is itself a repeat (a later card may match it and inherit its `same_as` target).
+        seen.append({
+            "event_id": _run_card_id(item, i),
+            "date": imperial_date(rec) or primary_date(rec) or "",
+            "title": item.get("subtitle") or "",
+            "description": item.get("description") or "",
+            "sources": [{"doc_id": did, "quote": item.get("quote") or ""}],
+        })
+        if not candidates:
+            continue
+        payload = {
+            "mode": "repeat_report",
+            "model": model,
+            "actor": actor,
+            "question": skill_prompt("repeat-report"),
+            "card": {
+                "title": item.get("subtitle") or "",
+                "description": item.get("description") or "",
+                "quote": item.get("quote") or "",
+                "doc_id": did,
+                "date": imperial_date(rec) or primary_date(rec) or "",
+            },
+            "candidates": [
+                {
+                    "id": c.get("event_id") or "",
+                    "doc_id": (c.get("sources") or [{}])[0].get("doc_id", ""),
+                    "date": c.get("date") or "",
+                    "title": c.get("title") or "",
+                    "description": c.get("description") or "",
+                    "quote": (c.get("sources") or [{}])[0].get("quote", ""),
+                }
+                for c in candidates
+            ],
+        }
+        try:
+            with accounting_step("repeat-report"):
+                data = post_json(proxy, payload, timeout, retries, retry_sleep)
+        except Exception as exc:  # dedup is advisory; never lose an extracted card over it
+            print(f"    repeat-report failed for {item.get('subtitle') or '(untitled)'}: {exc}")
+            continue
+        same_ids = data.get("same_ids") if isinstance(data.get("same_ids"), list) else []
+        same_ids = [str(i2) for i2 in same_ids if str(i2)]
+        if not same_ids:
+            continue
+        by_event = {str(c.get("event_id") or ""): c for c in candidates}
+        target = same_ids[0]
+        matched = by_event.get(target) or {}
+        # if the match is another card from this run that was itself flagged as a repeat,
+        # follow the link so every copy points at the single earliest report.
+        for other_index, other in enumerate(rows):
+            if _run_card_id(other, other_index) == target and other.get("same_as_event_id"):
+                target = str(other.get("same_as_event_id"))
+                matched = {"title": other.get("repeat_of_title") or other.get("subtitle") or ""}
+                break
+        item["same_as_event_id"] = target
+        item["repeat_of_title"] = str(matched.get("title") or "")
+        if len(same_ids) > 1:
+            item["same_as_event_ids"] = same_ids
+        flagged += 1
+        print(f"    [{position}/{len(order)}] 重複：{item.get('subtitle') or ''} → {item['repeat_of_title']}")
+    return flagged
+
+
 def source_type(record: dict[str, Any]) -> str:
     return "上諭" if record.get("doc_type") == "上諭" else "硃批"
 
@@ -925,6 +694,25 @@ def selected_emperor_sources(
         seen.add(payload["id"])
         out.append(payload)
     return out
+
+
+# Routine acknowledgement rescripts. They mark that the memorial was seen and that a
+# separate 上諭 carries the substance; on their own they are not an emperor action and
+# must never stand as the quotation for one.
+_BOILERPLATE_ZHUPI = (
+    "已有旨了", "已有旨", "另有旨", "即有旨", "尋有旨", "有旨", "有旨諭", "有旨寄諭",
+    "已有旨諭", "另有旨諭", "即有旨諭", "尋有旨諭", "已有旨了欽遵", "已有旨遵行",
+    "知道了", "覽", "覽奏俱悉", "覽奏欣悉", "覽奏均悉", "俱悉", "已悉", "知道",
+    "該部知道", "該部議奏", "依議", "是",
+)
+
+
+def is_boilerplate_zhupi(quote: str) -> bool:
+    q = re.sub(r"[\s，。、；：:,.！!？?「」『』（）()]", "", str(quote or ""))
+    q = re.sub(r"(欽此|奉硃批|奉朱批|硃批|朱批)", "", q)
+    if not q:
+        return True
+    return q in _BOILERPLATE_ZHUPI
 
 
 def normalize_action_sources(
@@ -968,6 +756,9 @@ def normalize_action_sources(
             "date": raw.get("date") or imperial_date(record) or primary_date(record),
         }
         if stype == "硃批":
+            if is_boilerplate_zhupi(quote):
+                # 「已有旨了。欽此。」 and friends are acknowledgement 套語, not an emperor action.
+                continue
             position, context = zhupi_position(record, quote)
             entry["position"] = position
             if context:
@@ -1036,16 +827,6 @@ def combined_action_rows(
 ) -> list[dict[str, Any]]:
     did = doc_id_of(doc)
     imperial_sources = selected_emperor_sources(doc, selected_pairs, by_id)
-    raw_rescript = rescript_of(doc)
-    inline_all = re.findall(r"(?:硃批|朱批)\s*[:：]\s*[^)）\n]+", body_of(doc))
-    inline_substantive = [text for text in inline_all if not is_routine_know_ack(text)]
-    rescript_substantive = bool(raw_rescript.strip()) and not is_routine_know_ack(raw_rescript)
-    skip_zhu_source = not rescript_substantive and not inline_substantive
-    if skip_zhu_source:
-        # Do not process a bare routine acknowledgment as an emperor action source.
-        # Keep linked 上諭 sources: they may still contain substantive actions
-        # that are relevant to this memorial.
-        imperial_sources = [source for source in imperial_sources if source["id"] != did]
     if not imperial_sources:
         return []
     allowed = {did: doc}
@@ -1054,8 +835,10 @@ def combined_action_rows(
             allowed[payload["id"]] = by_id[payload["id"]]
     previous = _relevant_previous_actions(earlier_emperor_actions(set(allowed), by_id), doc)
     previous_ids = {str(row.get("event_id") or "") for row in previous}
-    zhu_parts = ([raw_rescript] if rescript_substantive else []) + inline_substantive
-    zhu_text = "\n".join(zhu_parts)
+    zhu_text = rescript_of(doc)
+    inline = re.findall(r"(?:硃批|朱批)\s*[:：]\s*[^)）\n]+", body_of(doc))
+    if inline:
+        zhu_text = (zhu_text + "\n" if zhu_text else "") + "\n".join(inline)
     payload = {
         "mode": "combined_emperor_actions",
         "model": model,
@@ -1066,7 +849,7 @@ def combined_action_rows(
             "date": imperial_date(doc) or primary_date(doc),
             "title": doc.get("title") or "",
             "body": body_of(doc),
-            "rescript": raw_rescript if rescript_substantive else "",
+            "rescript": rescript_of(doc),
             "zhupi_text": zhu_text,
         },
         "edicts": imperial_sources[1:] if imperial_sources and imperial_sources[0]["id"] == did else imperial_sources,
@@ -1082,29 +865,21 @@ def combined_action_rows(
         sources = normalize_action_sources(raw.get("sources"), allowed)
         if not sources:
             continue
+        # An emperor action must be grounded in the emperor's OWN words. A 奏摺 source is only
+        # the memorial passage being answered, so a point carrying nothing but that is either a
+        # recital of the official's report or an action whose imperial quote the model failed to
+        # cite. The prompt now forbids it; flag any that still slip through so the card is
+        # visibly incomplete on the website rather than silently reading as a 奏摺-only action.
+        missing_emperor_quote = not any(
+            source.get("source_type") in {"上諭", "硃批"} for source in sources
+        )
+        if missing_emperor_quote:
+            print(f"      ⚠ emperor action without 上諭／硃批 quote: {raw.get('title') or '(untitled)'}")
         same = str(raw.get("same_as_event_id") or "")
         if same not in previous_ids:
             same = ""
         prior = next((row for row in previous if row.get("event_id") == same), None)
         description = str(raw.get("description") or raw.get("how") or "")
-        origin_doc_id = str(
-            raw.get("origin_doc_id")
-            or raw.get("originDocId")
-            or raw.get("primary_source_doc_id")
-            or raw.get("primarySourceDocId")
-            or ""
-        )
-        if origin_doc_id not in allowed:
-            origin_doc_id = ""
-        origin_type = str(
-            raw.get("origin_type")
-            or raw.get("originType")
-            or raw.get("primary_source_type")
-            or raw.get("primarySourceType")
-            or ""
-        )
-        if origin_type not in {"硃批", "上諭"}:
-            origin_type = ""
         # Keep this run's own SVO title even for a repeat -- the earliest action's title may be an
         # older, vaguer phrasing, and the "previously seen" note already flags the merge. (same_as
         # still links them; merging on the website adopts the target event's identity.)
@@ -1121,13 +896,11 @@ def combined_action_rows(
             "who": raw.get("who") if isinstance(raw.get("who"), list) else [],
             "whoLoc": raw.get("who_loc") or raw.get("whoLoc") or {},
             "relations": raw.get("relations") if isinstance(raw.get("relations"), list) else [],
-            "origin_doc_id": origin_doc_id,
-            "origin_type": origin_type,
-            "origin_quote": str(raw.get("origin_quote") or raw.get("originQuote") or ""),
-            "origin_date": str(raw.get("origin_date") or raw.get("originDate") or ""),
             "same_as_event_id": same,
             "sources": sources,
         }
+        if missing_emperor_quote:
+            point["missing_emperor_quote"] = True
         rows.append(point)
     if not rows:
         return []
@@ -1329,7 +1102,7 @@ def main() -> None:
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--retry-sleep", type=int, default=15)
     ap.add_argument("--skip-done", action="store_true")
-    ap.add_argument("--workers", type=int, default=6, help="Concurrent proxy calls for source chains, repeat-report, and official-response")
+    ap.add_argument("--workers", type=int, default=6, help="Concurrent proxy calls for source-chain traces and official-response")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--input-price-per-million", type=float, default=None)
     ap.add_argument("--output-price-per-million", type=float, default=None)
@@ -1405,21 +1178,6 @@ def main() -> None:
         write_json(files["source_raw"], source_raw)
         write_json(files["source"], merge_source_chains_by_signature(source_raw))
 
-    # If an older bundle is resumed, remove source-chain rows that were created
-    # before the author-self-report rule existed. This keeps --skip-done from
-    # re-exposing a stale chain in the website.
-    if args.skip_done and source_raw:
-        retained_sources = []
-        for trace_row in source_raw:
-            event = trace_row.get("event") if isinstance(trace_row, dict) else None
-            trace_doc = by_id.get(doc_id_of(trace_row), {}) if isinstance(trace_row, dict) else {}
-            if isinstance(event, dict) and is_author_self_report(event, trace_doc):
-                continue
-            retained_sources.append(trace_row)
-        if len(retained_sources) != len(source_raw):
-            source_raw[:] = retained_sources
-            flush_sources()
-
     for index, doc in enumerate(docs, 1):
         did = doc_id_of(doc)
         print(f"[{index}/{len(docs)}] {did} {doc.get('doc_type')} {doc.get('title')}")
@@ -1445,11 +1203,8 @@ def main() -> None:
                 write_json(files["lin"], lin_rows)
                 mark(did, "lin-events")
             if not done(did, "source-chain-lin"):
-                trace_items = [item for item in lin_items if not is_author_self_report(item, doc)]
-                skipped = len(lin_items) - len(trace_items)
-                suffix = f"；略過作者自報 {skipped}" if skipped else ""
-                print(f"    - 林方來源鏈 ×{len(trace_items)}（並行 {args.workers}）{suffix}")
-                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, trace_items, "lin", args.timeout, args.retries, args.retry_sleep, args.workers))
+                print(f"    - 林方來源鏈 ×{len(lin_items)}（並行 {args.workers}）")
+                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, lin_items, "lin", args.timeout, args.retries, args.retry_sleep, args.workers))
                 flush_sources()
                 mark(did, "source-chain-lin")
 
@@ -1462,11 +1217,8 @@ def main() -> None:
                 write_json(files["qing"], qing_rows)
                 mark(did, "qing-actions-all")
             if not done(did, "source-chain-qing"):
-                trace_items = [item for item in qing_items if not is_author_self_report(item, doc)]
-                skipped = len(qing_items) - len(trace_items)
-                suffix = f"；略過作者自報 {skipped}" if skipped else ""
-                print(f"    - 清方來源鏈 ×{len(trace_items)}（並行 {args.workers}）{suffix}")
-                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, trace_items, "qing", args.timeout, args.retries, args.retry_sleep, args.workers))
+                print(f"    - 清方來源鏈 ×{len(qing_items)}（並行 {args.workers}）")
+                source_raw.extend(trace_events_parallel(args.proxy, args.model, doc, qing_items, "qing", args.timeout, args.retries, args.retry_sleep, args.workers))
                 flush_sources()
                 mark(did, "source-chain-qing")
 
@@ -1511,47 +1263,18 @@ def main() -> None:
             print(f"  !! {did} failed ({exc}); rerun with --skip-done to continue")
             continue
 
-    # Repeat detection runs after all selected documents have contributed their
-    # 林/清 cards, so an earlier/later document in the selected set can be
-    # compared in either input order. It is cross-document only and does not
-    # touch 皇帝行動 or same-document repeats.
-    if not done("__global__", "repeat-report"):
-        print("- repeat-report dedup for 林方／清方（跨文書，LLM 判斷；僅標註不合併）")
-        lin_annotated, lin_failed, lin_jobs = repeat_report_events(
-            args.proxy,
-            args.model,
-            "lin",
-            lin_rows,
-            by_id,
-            bundle_name,
-            args.timeout,
-            args.retries,
-            args.retry_sleep,
-            workers=args.workers,
-        )
-        qing_annotated, qing_failed, qing_jobs = repeat_report_events(
-            args.proxy,
-            args.model,
-            "qing",
-            qing_rows,
-            by_id,
-            bundle_name,
-            args.timeout,
-            args.retries,
-            args.retry_sleep,
-            workers=args.workers,
-        )
+    # Repeat-report dedup is a single GLOBAL pass, deliberately after every document has
+    # been processed: a card extracted from 硃79 may be the same occurrence as one extracted
+    # from 硃97, and a per-document pass could never see it.
+    if not done("__global__", "dedup"):
+        print("- 重複回報檢查（全域，所有文書擷取完畢後執行）")
+        n_lin = dedup_event_rows_global(args.proxy, args.model, lin_rows, "lin", by_id, args.timeout, args.retries, args.retry_sleep)
+        print(f"  林方：{n_lin}/{len(lin_rows)} 判為重複")
         write_json(files["lin"], lin_rows)
+        n_qing = dedup_event_rows_global(args.proxy, args.model, qing_rows, "qing", by_id, args.timeout, args.retries, args.retry_sleep)
+        print(f"  清方：{n_qing}/{len(qing_rows)} 判為重複")
         write_json(files["qing"], qing_rows)
-        total_failed = lin_failed + qing_failed
-        print(
-            f"  repeats flagged -- 林 {lin_annotated}, 清 {qing_annotated} "
-            f"({lin_jobs + qing_jobs} LLM comparison calls)"
-        )
-        if total_failed:
-            print(f"  repeat-report had {total_failed} failed call(s); rerun with --skip-done to retry")
-        else:
-            mark("__global__", "repeat-report")
+        mark("__global__", "dedup")
 
     # Official response is intentionally post-loop so each action can be built
     # from the complete combined-emperor-actions output. Each action gets one
@@ -1593,7 +1316,7 @@ def main() -> None:
         "doc_ids": wanted,
         "chain": LOOP_CHAIN,
         "pair_files": [str(YU_SOURCE_PATH.relative_to(ROOT)), str(CONFIRMED_PAIRS_PATH.relative_to(ROOT))],
-        "deduplication": "in-loop LLM repeat_report annotates cross-document 林/清 cards with same_as/earliest_report; website offers merge/keep",
+        "deduplication": "existing bundle loader matchCandidateInRegistry; earliest report plus merge/separate choice",
         "excluded_stages": ["edict-match", "info-source", "situfit", "date-window official-response search"],
     }
     write_json(out_root / "manifest.json", manifest)

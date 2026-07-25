@@ -1,0 +1,383 @@
+[
+  {
+    "category": "done",
+    "description": "福建水師提督黃仕簡與陸路提督任承恩分別具奏，各率帶兵丁先後渡海前往臺灣進行剿捕。",
+    "edict_quote": "前據黃仕簡、任承恩各奏，俱帶兵先後臺進剿等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "奴才業將辦理赴剿，於十二月初十日登舟候風飛渡等緣由，恭摺具奏在案",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "奴才當即恭摺於初十日馳奏...登舟飛渡臺灣，協同黃仕簡戮力剿除",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "黃仕簡與任承恩各奏帶兵赴臺進剿",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "福建",
+    "who": [
+      "黃仕簡",
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "福建",
+      "黃仕簡": "福建"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "前據黃仕簡、任承恩各奏，俱帶兵先後臺進剿等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃34",
+        "quote": "奴才業將辦理赴剿，於十二月初十日登舟候風飛渡等緣由，恭摺具奏在案",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃31",
+        "quote": "奴才當即恭摺於初十日馳奏...登舟飛渡臺灣，協同黃仕簡戮力剿除",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭28#qing#0"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青奏報，水師提督黃仕簡於十二月十五日自廈門放洋，陸路提督任承恩於十七日登舟開航，共同率兵赴臺進剿。",
+    "edict_quote": "黃仕簡於十二月十五日自廈門放洋，任承恩於十七日登舟開行，會同進剿等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "水師提臣黃仕簡於十五日自廈門放洋，陸路提臣任承恩十四日登舟，十七日乘風開駕",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      }
+    ],
+    "subtitle": "黃仕簡與任承恩登舟開航渡臺",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十五日、十七日",
+    "where": "廈門",
+    "who": [
+      "黃仕簡",
+      "任承恩",
+      "常青"
+    ],
+    "who_loc": {
+      "任承恩": "廈門",
+      "常青": "泉州",
+      "黃仕簡": "廈門"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "黃仕簡於十二月十五日自廈門放洋，任承恩於十七日登舟開行，會同進剿等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "水師提臣黃仕簡於十五日自廈門放洋，陸路提臣任承恩十四日登舟，十七日乘風開駕",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭28#qing#1",
+    "same_as": "諭28#qing#0",
+    "earliest_report": {
+      "id": "諭28#qing#0",
+      "doc_id": "諭28",
+      "date": "1787/01/03",
+      "title": "黃仕簡與任承恩各奏帶兵赴臺進剿"
+    },
+    "repeat_candidates": [
+      "諭28#qing#0"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "總兵柴大紀帶兵堵守離臺灣府城十里的三坎店，臺灣道招募鄉勇嚴密緊守臺灣府城。",
+    "edict_quote": "總兵柴大紀帶兵堵住離府城十里之三坎店，召募鄉勇，緊守府城。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇，緊守府城。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "柴大紀堵守三坎店及臺灣道防守府城",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "三坎店、臺灣府城",
+    "who": [
+      "柴大紀",
+      "永福"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店",
+      "永福": "臺灣府城"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "總兵柴大紀帶兵堵住離府城十里之三坎店，召募鄉勇，緊守府城。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇，緊守府城。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭28#qing#2",
+    "same_as": "evmr4e1a6vnvx",
+    "earliest_report": {
+      "id": "evmr4e1a6vnvx",
+      "doc_id": "硃41",
+      "date": "1786/12/17",
+      "title": "柴總兵堵剿與府城募勇"
+    },
+    "repeat_candidates": [
+      "evmr4e1a6vnvx",
+      "evmr4efgd0l0m",
+      "evmr4efjjniyc"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "總兵柴大紀於十二月十一日與叛軍交戰，大施火砲，致使賊勢稍退。",
+    "edict_quote": "十一日與賊打仗，大施火炮，賊勢稍退等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "並聞得十一日，柴鎮與賊打仗，大施火炮，賊勢稍退。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "又據稱，在澎聞得十一日柴鎮與賊打仗，大施火炮，賊勢稍退。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "柴大紀砲擊退敵",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十一日",
+    "where": "三坎店",
+    "who": [
+      "柴大紀"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "十一日與賊打仗，大施火炮，賊勢稍退等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "並聞得十一日，柴鎮與賊打仗，大施火炮，賊勢稍退。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "又據稱，在澎聞得十一日柴鎮與賊打仗，大施火炮，賊勢稍退。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭28#qing#3",
+    "same_as": "evmr4e1d30bi1",
+    "earliest_report": {
+      "id": "evmr4e1d30bi1",
+      "doc_id": "硃41",
+      "date": "1786/12/17",
+      "title": "三坎店戰鬥擊退賊匪"
+    },
+    "repeat_candidates": [
+      "evmr4e1d30bi1"
+    ]
+  },
+  {
+    "category": "plan",
+    "description": "閩浙總督常青奏報加調官兵二千名，檄令副將徐鼎士等帶領，由各口渡臺交水師提督黃仕簡調度，並於各營挑備兵丁隨時策應。",
+    "edict_quote": "據常青奏加調官兵二千名，檄令副將徐鼎士等帶領，俱從各該處出口渡臺，交與黃仕簡，聽其調度。仍於各營兵丁內，預爲酌備，酌量機宜，隨時策應。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃56",
+        "source_official": "常青",
+        "source_quote": "茲臣複添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。經由鹿耳門進口，交與水師提臣黃仕簡，聽其調度，俾軍容益昭壯盛，賊匪聞風膽落，自可克期殄滅。臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應所有加調官兵赴剿緣由，理合恭摺馳奏。",
+        "source_receive_date": "1787/01/07",
+        "source_send_date": "1786/12/20"
+      }
+    ],
+    "subtitle": "常青加調官兵二千名渡臺並挑備後援",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月二十日",
+    "where": "臺灣",
+    "who": [
+      "常青",
+      "徐鼎士",
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "常青": "泉州",
+      "徐鼎士": "省城南臺口"
+    },
+    "doc_id": "諭31",
+    "sources": [
+      {
+        "doc_id": "諭31",
+        "quote": "據常青奏加調官兵二千名，檄令副將徐鼎士等帶領，俱從各該處出口渡臺，交與黃仕簡，聽其調度。仍於各營兵丁內，預爲酌備，酌量機宜，隨時策應。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃56",
+        "quote": "茲臣複添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船。又調福寧並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。經由鹿耳門進口，交與水師提臣黃仕簡，聽其調度，俾軍容益昭壯盛，賊匪聞風膽落，自可克期殄滅。臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應所有加調官兵赴剿緣由，理合恭摺馳奏。",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/07"
+      }
+    ],
+    "card_id": "諭31#qing#4"
+  },
+  {
+    "category": "plan",
+    "description": "浙江巡撫覺羅琅玕奏報接準福建督撫咨會，於附近水師營內揀派練習戰兵三千名，配齊器械糧餉，於閩浙交界處駐紮以資策應。",
+    "edict_quote": "又據琅玕奏，接準省督撫會，於附近水師營內，酌撥備戰兵三千名，配齊器械，持帶糧餉，整備妥協，在於本境交界之處駐紮，以資策應各等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃57",
+        "source_official": "覺羅琅玕",
+        "source_quote": "即於提標同溫州、黃巖二鎮標所屬營內，各揀派練習兵一千名，共足三千名之數，配齊器械，攜帶糧餉，整備妥協，在於本境交界之處駐紮，以資策應。",
+        "source_receive_date": "1787/01/07",
+        "source_send_date": "1786/12/28"
+      }
+    ],
+    "subtitle": "琅玕於浙省水師營酌撥戰兵三千駐紮交界",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月二十八日",
+    "where": "閩浙交界處",
+    "who": [
+      "覺羅琅玕"
+    ],
+    "who_loc": {
+      "覺羅琅玕": "浙江省城"
+    },
+    "doc_id": "諭31",
+    "sources": [
+      {
+        "doc_id": "諭31",
+        "quote": "又據琅玕奏，接準省督撫會，於附近水師營內，酌撥備戰兵三千名，配齊器械，持帶糧餉，整備妥協，在於本境交界之處駐紮，以資策應各等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃57",
+        "quote": "即於提標同溫州、黃巖二鎮標所屬營內，各揀派練習兵一千名，共足三千名之數，配齊器械，攜帶糧餉，整備妥協，在於本境交界之處駐紮，以資策應。",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/07"
+      }
+    ],
+    "card_id": "諭31#qing#5"
+  },
+  {
+    "category": "done",
+    "description": "常青採探得澎湖兵於十二月十四日抵達臺灣郡城，安平林遊擊亦帶兵赴援，臺灣郡城賊勢稍退。",
+    "edict_quote": "至常青折內稱探得澎湖兵於十四日到臺郡，安平林遊擊亦帶兵赴援，現在賊勢稍退等語。",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃56",
+        "source_official": "常青",
+        "source_quote": "據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。",
+        "source_receive_date": "1787/01/07",
+        "source_send_date": "1786/12/20"
+      }
+    ],
+    "subtitle": "澎湖及安平官兵赴援臺灣郡城賊勢稍退",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十四日",
+    "where": "臺灣郡城",
+    "who": [
+      "蔡遊擊",
+      "林遊擊"
+    ],
+    "who_loc": {
+      "林遊擊": "臺灣郡城",
+      "蔡遊擊": "臺灣郡城"
+    },
+    "doc_id": "諭31",
+    "sources": [
+      {
+        "doc_id": "諭31",
+        "quote": "至常青折內稱探得澎湖兵於十四日到臺郡，安平林遊擊亦帶兵赴援，現在賊勢稍退等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃56",
+        "quote": "據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/07"
+      }
+    ],
+    "card_id": "諭31#qing#6"
+  }
+]

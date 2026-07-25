@@ -1,0 +1,67 @@
+[
+  {
+    "description": "臺灣匪首林爽文等聚眾滋事，攻陷縣城並劫害官員。",
+    "edict_quote": "閩省臺灣賊匪林爽文等，聚衆滋事，劫縣官一事",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "聞報臺灣匪犯攻陷彰化縣城殺官",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "彰化縣城被賊匪攻陷，殺害官員",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "林爽文等聚眾攻陷縣城滋事",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "臺灣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "閩省臺灣賊匪林爽文等，聚衆滋事，劫縣官一事",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃34",
+        "quote": "聞報臺灣匪犯攻陷彰化縣城殺官",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃31",
+        "quote": "彰化縣城被賊匪攻陷，殺害官員",
+        "howKnown": "轉述",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭28#lin#0",
+    "same_as": "evmr1tkyye8s7",
+    "earliest_report": {
+      "id": "evmr1tkyye8s7",
+      "doc_id": "硃23",
+      "date": "1786/12/10",
+      "title": "賊匪攻破彰化縣城"
+    },
+    "repeat_candidates": [
+      "evmr1tkyye8s7"
+    ]
+  }
+]

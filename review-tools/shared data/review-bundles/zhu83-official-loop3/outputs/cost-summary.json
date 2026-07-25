@@ -1,0 +1,115 @@
+{
+  "model": "gemini-3.6-flash",
+  "pricing_basis": "standard online token rates",
+  "input_usd_per_million_tokens": null,
+  "output_usd_per_million_tokens": null,
+  "estimated": true,
+  "calls": 74,
+  "prompt_tokens": 184654,
+  "completion_tokens": 30644,
+  "input_cost_usd": null,
+  "output_cost_usd": null,
+  "cost_usd": null,
+  "rows": [
+    {
+      "step": "summary",
+      "calls": 4,
+      "prompt_tokens": 5576,
+      "completion_tokens": 660,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "divide",
+      "calls": 4,
+      "prompt_tokens": 5700,
+      "completion_tokens": 6291,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "lin-events",
+      "calls": 4,
+      "prompt_tokens": 6056,
+      "completion_tokens": 2188,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "lin-source-chain",
+      "calls": 8,
+      "prompt_tokens": 17562,
+      "completion_tokens": 3206,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "qing-actions-all",
+      "calls": 4,
+      "prompt_tokens": 7240,
+      "completion_tokens": 4316,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "confirmed-yu-response",
+      "calls": 1,
+      "prompt_tokens": 771,
+      "completion_tokens": 706,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "combined-emperor-actions",
+      "calls": 4,
+      "prompt_tokens": 36304,
+      "completion_tokens": 4729,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "qing-source-chain",
+      "calls": 10,
+      "prompt_tokens": 30969,
+      "completion_tokens": 3600,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "repeat-report",
+      "calls": 29,
+      "prompt_tokens": 52318,
+      "completion_tokens": 3256,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    },
+    {
+      "step": "official-response",
+      "calls": 6,
+      "prompt_tokens": 22158,
+      "completion_tokens": 1692,
+      "exact_tokens": false,
+      "input_cost_usd": null,
+      "output_cost_usd": null,
+      "cost_usd": null
+    }
+  ]
+}
