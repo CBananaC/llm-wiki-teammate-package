@@ -5679,16 +5679,25 @@
   function repeatPointerForItem(item){
     if(!item) return null;
     if(item.__matchReg) return invalidMatchRegForCandidate(item,item.__matchReg)?null:item.__matchReg;
-    const er=item.earliest_report, storedSame=String(item.same_as||''), rawVerdict=String(item.repeat_verdict||'').toLowerCase();
+    const er=item.earliest_report||{}, storedSame=String(item.same_as||''), rawVerdict=String(item.repeat_verdict||'').toLowerCase();
     // Terminal bundles produced by the first repeat-report implementation
     // stored same_as/earliest_report but omitted repeat_verdict. Treat that
     // exact same_as pointer as an exact repeat so existing bundles still show
     // the warning card and merge controls.
-    const verdict=rawVerdict||(storedSame?'same':'');
-    if(!er||!er.doc_id||(verdict!=='same'&&verdict!=='similar')) return null;
-    const pointerId=storedSame||er.id||'';
-    const ev=pointerId&&eventById(pointerId);
-    return {kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title:er.title||'',reporter:er.reporter||'',doc_id:er.doc_id,report_doc_id:er.doc_id,whenAr:er.date||'',whenCh:'',report_date:er.date||'',committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||''};
+    const eventIds=[storedSame,item.same_as_event_id].concat(Array.isArray(item.same_as_event_ids)?item.same_as_event_ids:[]).map(String).filter(Boolean);
+    const pointerId=eventIds[0]||String(er.id||'');
+    const evId=eventIds.find(id=>eventById(id));
+    const ev=evId?eventById(evId):null;
+    const verdict=rawVerdict||(eventIds.length||item.repeat_of_title?'same':'');
+    if((!er.doc_id&&!item.repeat_of_title&&!eventIds.length)||(verdict!=='same'&&verdict!=='similar')) return null;
+    const evSources=ev&&Array.isArray(ev.sources)?ev.sources:[];
+    const evDoc=ev&&((ev.emperorDetail&&ev.emperorDetail.memDoc)||((evSources[0]||{}).doc_id)||'');
+    const evDate=ev&&((evSources[0]||{}).whenKnown||ev.dateAr||'');
+    const reportDoc=er.doc_id||item.repeat_report_doc_id||item.repeat_doc_id||item.report_doc_id||evDoc||'';
+    const reportDate=er.date||item.repeat_report_date||item.repeat_date||evDate||'';
+    const title=er.title||item.repeat_of_title||(ev&&evTitle(ev))||'';
+    const reporter=er.reporter||item.repeat_reporter||'';
+    return {kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title,reporter,doc_id:reportDoc,report_doc_id:reportDoc,whenAr:reportDate,whenCh:'',report_date:reportDate,committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||'',sourceId:pointerId};
   }
   // Commit a NEW candidate (`p`, already tagged with __matchReg by runExtract) that re-reports an
   // earlier extraction candidate's SAME real-world event. This must only ever point to ONE dot:
@@ -6076,7 +6085,19 @@
       who: Array.isArray(raw.who)?raw.who:String(raw.who||raw.people||raw.actor_name||'').split(/[、,，；;]/).map(s=>s.trim()).filter(Boolean),
       whoLoc: raw.whoLoc||raw.who_loc||{},
       relations: Array.isArray(raw.relations)?raw.relations:(Array.isArray(raw.relationships)?raw.relationships:[]),
-      sources: srcs.map(s=>({doc_id:s.doc_id||raw.doc_id||'', quote:s.quote||s.excerpt||raw.quote||raw.excerpt||'', howKnown:s.howKnown||s.how_known||s.source_type||'', whenKnown:s.whenKnown||s.when_known||''}))
+      sources: srcs.map(s=>({doc_id:s.doc_id||raw.doc_id||'', quote:s.quote||s.excerpt||raw.quote||raw.excerpt||'', howKnown:s.howKnown||s.how_known||s.source_type||'', whenKnown:s.whenKnown||s.when_known||''})),
+      // Keep terminal repeat-report annotations so loaded bundle cards can show the same
+      // warning and merge controls as candidates annotated in the browser.
+      same_as: raw.same_as||'',
+      same_as_event_id: raw.same_as_event_id||'',
+      same_as_event_ids: Array.isArray(raw.same_as_event_ids)?raw.same_as_event_ids.slice():[],
+      repeat_of_title: raw.repeat_of_title||'',
+      repeat_report_bundle: raw.repeat_report_bundle||'',
+      repeat_report_doc_id: raw.repeat_report_doc_id||'',
+      repeat_report_date: raw.repeat_report_date||'',
+      repeat_verdict: raw.repeat_verdict||'',
+      repeat_reason: raw.repeat_reason||'',
+      earliest_report: raw.earliest_report||null
     };
     if(item.actor==='qing' && item.category) item.__qcat=qingCategoryCode(item.category);
     normalizeProposalDate(item);
@@ -7264,7 +7285,7 @@
         if(invalidMatchRegForCandidate(it, mr)) return '';
         const earlierRef=[mr.doc_id, mr.title].filter(Boolean).join('／')+(mr.whenAr||mr.whenCh?'，'+(mr.whenAr||mr.whenCh):'')||'較早文書';
         const verdict=String(mr.verdict||it.repeat_verdict||'same').toLowerCase();
-        const reporter=mr.reporter||((it.who&&it.who.length)?it.who[0]:'');
+        const reporter=mr.reporter||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
         const note=verdict==='similar'
           ? `可能與 ${esc(earlierRef)} 相似（AI 尚未判定為同一事件）`
           : (reporter?`已由 ${esc(reporter)} 於 ${esc(earlierRef)} 回報過`:`已於 ${esc(earlierRef)} 回報過`);
