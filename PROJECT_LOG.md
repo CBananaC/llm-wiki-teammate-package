@@ -3391,3 +3391,21 @@ Verified:
 Remaining:
 - Interactive verification with the full `zhu83-official-loop` bundle remains limited because the local browser state was not modified with the bundle during this check.
 - Unrelated sample state, review-bundle, proxy, and script changes remain unstaged.
+
+### 2026-07-27 00:42 HKT — Codex — Repaired incomplete 硃97 repeat labels
+
+Summary: AI cards now enrich an incomplete `__matchReg` pointer from its linked earlier candidate before rendering the repeat notice. This prevents 硃97 from falling back to the generic `已於 較早文書 回報過` text when the earlier title, source document, or reporter was present in the linked card but missing from the pointer snapshot.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML implementations parsed successfully.
+- A fixture with an empty repeat pointer recovered the earlier title `常青親赴泉州調度防務`, source `硃21`, and reporter `常青` in both tools.
+- `git diff --check` passed.
+
+Remaining:
+- The full 硃97 bundle was not reloaded into the browser during this check; the reproduced pointer path was verified directly against both renderers.
+- Unrelated project, sample-state, review-bundle, proxy, and script changes remain untouched.

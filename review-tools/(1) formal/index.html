@@ -5676,9 +5676,27 @@
   function resolveMatchRegItem(mr){
     const ctx=resolveMatchRegContext(mr); if(!ctx)return null; if(ctx.verified)return Object.assign({},ctx.point,{__added:true,__evId:ctx.point.id}); return ctx.point;
   }
+  function enrichRepeatPointer(mr){
+    if(!mr) return null;
+    const ctx=resolveMatchRegContext(mr), prior=ctx&&ctx.point;
+    if(!prior) return mr;
+    const src=(Array.isArray(prior.sources)?prior.sources:[])[0]||{};
+    const title=mr.title||prior.subtitle||prior.what||prior.title||'';
+    const doc=mr.doc_id||mr.report_doc_id||(prior.emperorDetail&&prior.emperorDetail.memDoc)||prior.report_doc_id||prior.doc_id||src.doc_id||'';
+    const whenAr=mr.whenAr||mr.report_date||prior.report_date||prior.whenAr||prior.dateAr||'';
+    const whenCh=mr.whenCh||prior.whenCh||'';
+    const reporter=mr.reporter||((Array.isArray(prior.who)&&prior.who.length)?prior.who[0]:'');
+    if(title) mr.title=title;
+    if(doc){ mr.doc_id=doc; mr.report_doc_id=mr.report_doc_id||doc; }
+    if(whenAr){ mr.whenAr=whenAr; mr.report_date=mr.report_date||whenAr; }
+    if(whenCh) mr.whenCh=whenCh;
+    if(reporter) mr.reporter=reporter;
+    if(title||doc||whenAr||whenCh||reporter) mr.sourceId=mr.sourceId||'linked';
+    return mr;
+  }
   function repeatPointerForItem(item){
     if(!item) return null;
-    if(item.__matchReg) return invalidMatchRegForCandidate(item,item.__matchReg)?null:item.__matchReg;
+    if(item.__matchReg){ const mr=enrichRepeatPointer(item.__matchReg); return invalidMatchRegForCandidate(item,mr)?null:mr; }
     const er=item.earliest_report||{}, storedSame=String(item.same_as||''), rawVerdict=String(item.repeat_verdict||'').toLowerCase();
     // Terminal bundles produced by the first repeat-report implementation
     // stored same_as/earliest_report but omitted repeat_verdict. Treat that
