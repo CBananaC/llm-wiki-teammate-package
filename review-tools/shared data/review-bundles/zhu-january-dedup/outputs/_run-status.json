@@ -1,0 +1,16 @@
+{
+  "__global__": {
+    "dedup": true,
+    "source_doc_ids": [
+      "硃90",
+      "硃94",
+      "硃97",
+      "硃99",
+      "硃101"
+    ],
+    "comparison_bundles": [
+      "zhu-december-rerun-g36",
+      "zhu-january-dedup"
+    ]
+  }
+}

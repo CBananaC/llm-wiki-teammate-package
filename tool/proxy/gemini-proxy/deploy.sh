@@ -2,10 +2,10 @@
 # Deploy the multi-provider AI proxy to Cloud Run. Run from this folder: bash deploy.sh
 set -euo pipefail
 
-PROJECT="${PROJECT:-delta-entry-496910-e7}"
+PROJECT="${PROJECT:-project-c9468478-3aaa-4bbc-b9a}"
 REGION="${REGION:-asia-east1}"
 SERVICE="${SERVICE:-gemini-proxy}"
-MODEL="${MODEL:-deepseek-v3.2-maas}"
+MODEL="${MODEL:-gemini-3.5-flash}"
 # Vertex location for the model. "global" matches the existing summarization script.
 VERTEX_LOCATION="${VERTEX_LOCATION:-global}"
 # Lock this down to your own origin if you serve the page from a known URL.

@@ -1,0 +1,21 @@
+{
+  "name": "zhu-january-dedup",
+  "created_at": "2026-07-27T00:23:07",
+  "source_bundle": "zhu83-official-loop",
+  "source": "outputs/attempt-002/stage1_original_text.json",
+  "model": "gemini-3.6-flash",
+  "doc_ids": [
+    "硃90",
+    "硃94",
+    "硃97",
+    "硃99",
+    "硃101"
+  ],
+  "comparison_bundles": [
+    "zhu-december-rerun-g36",
+    "zhu-january-dedup"
+  ],
+  "chain": [
+    "repeat-report-dedup (global, post-loop)"
+  ]
+}

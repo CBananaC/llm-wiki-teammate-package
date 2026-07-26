@@ -181,7 +181,9 @@
       }
     ],
     "actor": "qing",
-    "card_id": "硃83#qing#4"
+    "card_id": "硃83#qing#4",
+    "same_as_event_id": "evmrd9see7hs5",
+    "repeat_of_title": "調遣建延水師兵渡臺"
   },
   {
     "category": "plan",
@@ -851,7 +853,10 @@
         "quote": "孫知府隨即商同王都司、長同知督率卑職，同署典史馮啟宗率領營兵衙役，傳集百姓們設法防禦...到二十九日辰時，賊眾果來攻城。縣城原是栽種刺竹為牆，官兵竭力堵禦"
       }
     ],
-    "actor": "qing"
+    "actor": "qing",
+    "same_as_event_id": "bundle:zhu-december-rerun-g36:qing:88",
+    "repeat_of_title": "彰化縣調集熟番守禦城池",
+    "repeat_report_bundle": "zhu-december-rerun-g36"
   },
   {
     "category": "done",
@@ -1639,8 +1644,7 @@
     "repeat_of_title": "黃仕簡率水師放洋渡臺",
     "same_as_event_ids": [
       "evmrd78y8jack",
-      "run:硃83:2",
-      "evmrd8qehqp5n"
+      "run:硃83:2"
     ]
   },
   {
@@ -2168,11 +2172,7 @@
     ],
     "actor": "qing",
     "same_as_event_id": "run:硃97:51",
-    "repeat_of_title": "六廷柱檄調署澄海協抵澳",
-    "same_as_event_ids": [
-      "run:硃97:51",
-      "evmrdb80qvd8m"
-    ]
+    "repeat_of_title": "六廷柱檄調署澄海協抵澳"
   },
   {
     "category": "done",

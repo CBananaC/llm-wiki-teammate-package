@@ -16,8 +16,10 @@ adjustment, append one entry to the bottom of the change log.
 - Research memory: `wiki/index.md`
 - Student-facing deliverable: a dynamic introduction and teaching website for the review system
 - Context folders: `2nd Material & FYP/` and `Competition Info/`
-- Google Cloud CLI/ADC account: `jhdgshhjs@gmail.com`
-- Google Cloud billing account: `billingAccounts/010AE1-070B25-1144FD`
+- Active Google Cloud CLI/ADC account: `myzhangrose@gmail.com`
+- Active Gemini proxy project: `project-c9468478-3aaa-4bbc-b9a`
+- Active Gemini proxy billing account: `billingAccounts/010B91-23E657-2A0942`
+- Previous Gemini proxy project remains available at `delta-entry-496910-e7` until its service is retired.
 
 ## Next priorities
 
@@ -103,6 +105,8 @@ Changed:
 
 Files:
 - `PROJECT_LOG.md`
+- `tool/proxy/gemini-proxy/deploy.sh`
+- `tool/proxy/PROXY_WEBSITES.md`
 - `AGENTS.md`
 - `CLAUDE.md`
 - `README.md`
@@ -3224,6 +3228,37 @@ Verified:
 Remaining:
 - The local Git index is read-only in this environment, so the required local checkpoint commit could not be created.
 
+### 2026-07-26 23:42 HKT — Codex — Added December provisional cards to terminal deduplication
+
+Summary: The global 林方／清方 repeat-report stage now automatically loads extracted cards from `zhu-december-rerun-g36` as an unverified historical candidate pool. It compares current-run cards against those cards and formal verified events, orders candidates by reporting-document send date, and records the historical bundle when it supplies the matched repeat title.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- The December bundle contributes 70 林方 and 173 清方 provisional candidates.
+- A mocked repeat-report call confirmed that a December candidate is sent to the LLM comparison stage.
+- Python compilation and `git diff --check` passed.
+
+Remaining:
+- The existing Git index is read-only here, so no local checkpoint commit was created.
+
+### 2026-07-27 00:12 HKT — Codex — Separated dedup output and made official responses document-scoped
+
+Summary: The terminal loop now writes 林方／清方 dedup results to a separate bundle, compares them with `zhu-december-rerun-g36` and that dedup bundle's previous output, and tracks the dedup completion marker with its source document IDs. Official-response now runs after the emperor-action stage for each document, so an old global completion marker cannot suppress newly added documents.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Dry-run confirmed the comparison bundles are `zhu-december-rerun-g36` and `zhu-january-dedup`.
+- Python compilation and `git diff --check` passed.
+
+Remaining:
+- The existing Git index is read-only here, so no local checkpoint commit was created.
+
 ### 2026-07-25 15:01 HKT — Codex — Repaired Zhu 22 emperor-action source pairing
 
 Summary: Updated the formal and sample 皇帝行動 renderers for `zhu-december-rerun-g36`. A responding 上諭 now follows its related 奏摺 quote before any separate 尾批, and a missing 上諭 quote is recovered from the identified 上諭 record only when the bundle source list omits it.
@@ -3315,3 +3350,44 @@ Verified:
 
 Remaining:
 - Unrelated sample state, review-bundle, proxy, script, and earlier unstaged HTML changes remain untouched.
+
+### 2026-07-27 00:05 HKT — Codex — Redeployed Gemini proxy under myzhangrose billing
+
+Summary: Authenticated `myzhangrose@gmail.com`, enabled the required Google Cloud services in its project, and redeployed the Gemini proxy so Vertex AI usage runs through that project and its billing account.
+
+Files:
+- `PROJECT_LOG.md`
+
+External deployment:
+- Project: `project-c9468478-3aaa-4bbc-b9a`
+- Billing account: `billingAccounts/010B91-23E657-2A0942` (`我的结算账号`)
+- Cloud Run service: `gemini-proxy`
+- Service URL: `https://gemini-proxy-bxtckyrt7q-de.a.run.app`
+- Runtime model: `gemini-3.5-flash`
+
+Verified:
+- Cloud Run creator and last modifier are `myzhangrose@gmail.com`.
+- The health endpoint returned `ok: true` and the target project.
+- The target project was confirmed billing-enabled before deployment; a final billing API read hit a temporary Google Cloud quota limit.
+
+Remaining:
+- Update the timeline panel's AI settings to use the new service URL.
+- Retire the old service only after the new URL is confirmed in the website.
+
+### 2026-07-27 00:21 HKT — Codex — Restored repeat labels from terminal AI bundles
+
+Summary: Preserved repeat-report fields when loading 林方／清方 event cards and taught both AI-chat renderers to read `same_as_event_id`, `same_as_event_ids`, and `repeat_of_title` in addition to the older `same_as`／`earliest_report` shape. Provisional bundle IDs now resolve to a loaded earlier event when possible; bundle-only matches still show the repeat warning and independent-add control.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The zhu83 bundle contains repeat annotations on 12/18 林方 cards and 21/61 清方 cards.
+- Both HTML implementations passed fixtures for bundle-only repeats and provisional IDs with a loaded alternate event ID.
+- Both embedded HTML script sets parsed successfully, the formal tool reloaded without console errors, and `git diff --check` passed.
+
+Remaining:
+- Interactive verification with the full `zhu83-official-loop` bundle remains limited because the local browser state was not modified with the bundle during this check.
+- Unrelated sample state, review-bundle, proxy, and script changes remain unstaged.

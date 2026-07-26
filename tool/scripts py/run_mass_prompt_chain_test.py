@@ -51,6 +51,7 @@ from run_review_bundle_test import (  # noqa: E402
 
 DEFAULT_DOC_IDS = "台83,台90,台155,台156"
 DEFAULT_MODEL = "gemini-3.5-flash"
+DEFAULT_DEDUP_BUNDLES = "zhu-december-rerun-g36"
 PAIR_DIR = ROOT / "review-tools" / "(1) formal"
 YU_SOURCE_PATH = PAIR_DIR / "yu-source.json"
 CONFIRMED_PAIRS_PATH = PAIR_DIR / "confirmed-pairs.json"
@@ -548,6 +549,70 @@ def _run_card_id(row: dict[str, Any], index: int) -> str:
     return "run:%s:%d" % (doc_id_of(row) or "?", index)
 
 
+def _dedup_report_date(doc_id: str, by_id: dict[str, dict[str, Any]], fallback: str = "") -> str:
+    record = by_id.get(str(doc_id or ""), {})
+    # Repeat labels are ordered by when the reporting document was sent, not by
+    # the event's occurrence date or by when a 硃批 was received.
+    return (
+        date_pair_value(record, "send_date")
+        or record_date(record)
+        or imperial_date(record)
+        or primary_date(record)
+        or str(fallback or "")
+    )
+
+
+def historical_dedup_candidates(
+    actor: str,
+    bundle_names: list[str],
+    by_id: dict[str, dict[str, Any]],
+) -> list[dict[str, Any]]:
+    """Load provisional extracted cards from earlier review bundles.
+
+    These are intentionally kept separate from formal_all.data: the user has
+    not necessarily verified them yet, but they are still valid LLM candidates
+    for cross-document repeat detection.
+    """
+    filename = "lin-events.json" if actor == "lin" else "qing-actions-all.json"
+    out: list[dict[str, Any]] = []
+    seen_ids: set[str] = set()
+    for bundle_name in bundle_names:
+        bundle_name = str(bundle_name or "").strip()
+        if not bundle_name:
+            continue
+        path = BUNDLES_DIR / bundle_name / "outputs" / filename
+        rows = read_json(path, []) if path.exists() else []
+        if not isinstance(rows, list):
+            continue
+        for index, item in enumerate(rows):
+            if not isinstance(item, dict):
+                continue
+            did = doc_id_of(item)
+            if not did:
+                continue
+            sources = item.get("sources") if isinstance(item.get("sources"), list) else []
+            source_rows = [source for source in sources if isinstance(source, dict)]
+            quote = str(item.get("quote") or (source_rows[0].get("quote") if source_rows else "") or "")
+            event_id = f"bundle:{bundle_name}:{actor}:{index}"
+            if event_id in seen_ids:
+                continue
+            seen_ids.add(event_id)
+            title = str(item.get("subtitle") or item.get("title") or item.get("what") or "")
+            canonical_id = str(item.get("same_as_event_id") or event_id)
+            canonical_title = str(item.get("repeat_of_title") or title)
+            out.append({
+                "event_id": event_id,
+                "canonical_id": canonical_id,
+                "canonical_title": canonical_title,
+                "date": _dedup_report_date(did, by_id, item.get("whenAr") or item.get("dateAr") or ""),
+                "title": title,
+                "description": str(item.get("description") or item.get("how") or ""),
+                "sources": [{"doc_id": did, "quote": quote}],
+                "history_bundle": bundle_name,
+            })
+    return out
+
+
 def dedup_event_rows_global(
     proxy: str,
     model: str,
@@ -557,6 +622,7 @@ def dedup_event_rows_global(
     timeout: int,
     retries: int,
     retry_sleep: int,
+    history_bundles: list[str] | None = None,
     top_k: int = 12,
 ) -> int:
     """Cross-document repeat-report pass over EVERY extracted card of one side.
@@ -568,29 +634,30 @@ def dedup_event_rows_global(
 
     Cards are compared in reporting-date order; each is judged against the already-seen
     cards of this run plus the committed registry, and the earliest equivalent wins, so
-    `same_as_event_id` always points at the first report of the occurrence. Writes
-    `same_as_event_id` / `repeat_of_title` in place for the website to merge on."""
+    `same_as_event_id` always points at the first report of the occurrence. The
+    historical bundle pool contains provisional cards and is not treated as
+    verified chart state. Writes `same_as_event_id` / `repeat_of_title` in place
+    for the website to merge on."""
     if not rows:
         return 0
     committed = earlier_committed_events(actor, set())
+    historical = historical_dedup_candidates(actor, history_bundles or [], by_id)
     order = sorted(
         range(len(rows)),
         key=lambda i: (
-            parse_date(
-                imperial_date(by_id.get(doc_id_of(rows[i]), {}))
-                or primary_date(by_id.get(doc_id_of(rows[i]), {}))
-                or ""
-            ) or datetime.max.date(),
+            parse_date(_dedup_report_date(doc_id_of(rows[i]), by_id, rows[i].get("whenAr") or rows[i].get("dateAr") or ""))
+            or datetime.max.date(),
             doc_id_of(rows[i]),
             i,
         ),
     )
-    seen: list[dict[str, Any]] = list(committed)
+    seen: list[dict[str, Any]] = list(committed) + historical
     flagged = 0
     for position, i in enumerate(order, 1):
         item = rows[i]
         did = doc_id_of(item)
         rec = by_id.get(did, {})
+        current_date = parse_date(_dedup_report_date(did, by_id, item.get("whenAr") or item.get("dateAr") or ""))
         card_text = str(item.get("subtitle") or "") + str(item.get("description") or "")
         candidates = _relevant_previous_actions(seen, {"title": card_text}, top_k=top_k) if seen else []
         # A repeat report is by definition cross-document: the SAME memorial listing three
@@ -599,12 +666,17 @@ def dedup_event_rows_global(
         candidates = [
             c for c in candidates
             if str(((c.get("sources") or [{}])[0]).get("doc_id", "")) != str(did)
+            and (
+                not current_date
+                or not parse_date(c.get("date") or "")
+                or parse_date(c.get("date") or "") < current_date
+            )
         ]
         # register this card as a candidate for the ones that follow, whether or not it
         # is itself a repeat (a later card may match it and inherit its `same_as` target).
         seen.append({
             "event_id": _run_card_id(item, i),
-            "date": imperial_date(rec) or primary_date(rec) or "",
+            "date": _dedup_report_date(did, by_id, item.get("whenAr") or item.get("dateAr") or ""),
             "title": item.get("subtitle") or "",
             "description": item.get("description") or "",
             "sources": [{"doc_id": did, "quote": item.get("quote") or ""}],
@@ -621,7 +693,7 @@ def dedup_event_rows_global(
                 "description": item.get("description") or "",
                 "quote": item.get("quote") or "",
                 "doc_id": did,
-                "date": imperial_date(rec) or primary_date(rec) or "",
+                "date": _dedup_report_date(did, by_id, item.get("whenAr") or item.get("dateAr") or ""),
             },
             "candidates": [
                 {
@@ -655,8 +727,10 @@ def dedup_event_rows_global(
                 target = str(other.get("same_as_event_id"))
                 matched = {"title": other.get("repeat_of_title") or other.get("subtitle") or ""}
                 break
-        item["same_as_event_id"] = target
-        item["repeat_of_title"] = str(matched.get("title") or "")
+        item["same_as_event_id"] = str(matched.get("canonical_id") or target)
+        item["repeat_of_title"] = str(matched.get("canonical_title") or matched.get("title") or "")
+        if matched.get("history_bundle"):
+            item["repeat_report_bundle"] = matched["history_bundle"]
         if len(same_ids) > 1:
             item["same_as_event_ids"] = same_ids
         flagged += 1
@@ -1098,10 +1172,16 @@ def main() -> None:
     ap.add_argument("--model", default=os.environ.get("GEMINI_MODEL", DEFAULT_MODEL))
     ap.add_argument("--doc-ids", default=DEFAULT_DOC_IDS, help="Comma-separated source document ids")
     ap.add_argument("--bundle", default="", help="Short semantic review-bundle name")
+    ap.add_argument("--dedup-bundle", default="", help="Separate bundle for 林／清 cross-document dedup output")
     ap.add_argument("--timeout", type=int, default=240)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--retry-sleep", type=int, default=15)
     ap.add_argument("--skip-done", action="store_true")
+    ap.add_argument(
+        "--dedup-bundles",
+        default=DEFAULT_DEDUP_BUNDLES,
+        help="Comma-separated earlier review bundles whose provisional 林/清 cards join cross-document dedup",
+    )
     ap.add_argument("--workers", type=int, default=6, help="Concurrent proxy calls for source-chain traces and official-response")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--input-price-per-million", type=float, default=None)
@@ -1116,21 +1196,30 @@ def main() -> None:
         raise SystemExit("Missing doc_id(s): " + ", ".join(missing))
     docs = [by_id[did] for did in wanted]
     pairs = load_existing_pairs()
+    dedup_bundles = split_csv(args.dedup_bundles)
 
     if args.bundle:
         bundle_name = args.bundle
     else:
         digest = hashlib.sha1("-".join(wanted).encode("utf-8")).hexdigest()[:8]
         bundle_name = f"official-review-{wanted[0]}-plus{len(wanted) - 1}-{digest}"
+    dedup_bundle_name = args.dedup_bundle or f"{bundle_name}-dedup"
+    dedup_compare_bundles = list(dict.fromkeys(dedup_bundles + [dedup_bundle_name]))
     out_root = BUNDLES_DIR / bundle_name
     out_dir = out_root / "outputs"
     out_dir.mkdir(parents=True, exist_ok=True)
     (out_root / "human-edits").mkdir(parents=True, exist_ok=True)
+    dedup_root = BUNDLES_DIR / dedup_bundle_name
+    dedup_dir = dedup_root / "outputs"
+    dedup_dir.mkdir(parents=True, exist_ok=True)
+    (dedup_root / "human-edits").mkdir(parents=True, exist_ok=True)
 
     if args.dry_run:
         print(f"DRY RUN -- bundle: {out_root.relative_to(ROOT)}")
         print(f"model: {args.model}")
         print(f"existing pair rows: {len(pairs)}")
+        print(f"dedup comparison bundles: {', '.join(dedup_compare_bundles) or 'none'}")
+        print(f"dedup output bundle: {dedup_bundle_name}")
         for doc in docs:
             did = doc_id_of(doc)
             print(f"\n[{did}] {doc.get('doc_type')} {doc.get('title')}")
@@ -1157,6 +1246,8 @@ def main() -> None:
     }
     status_path = out_dir / "_run-status.json"
     status = read_json(status_path, {}) if args.skip_done else {}
+    dedup_status_path = dedup_dir / "_run-status.json"
+    dedup_status = read_json(dedup_status_path, {}) if args.skip_done else {}
 
     def done(did: str, step: str) -> bool:
         return bool(args.skip_done and status.get(did, {}).get(step))
@@ -1164,6 +1255,23 @@ def main() -> None:
     def mark(did: str, step: str) -> None:
         status.setdefault(did, {})[step] = True
         write_json(status_path, status)
+
+    def dedup_done() -> bool:
+        marker = dedup_status.get("__global__", {})
+        return bool(
+            args.skip_done
+            and marker.get("dedup")
+            and sorted(marker.get("source_doc_ids") or []) == sorted(wanted)
+            and list(marker.get("comparison_bundles") or []) == dedup_compare_bundles
+        )
+
+    def mark_dedup() -> None:
+        dedup_status["__global__"] = {
+            "dedup": True,
+            "source_doc_ids": wanted,
+            "comparison_bundles": dedup_compare_bundles,
+        }
+        write_json(dedup_status_path, dedup_status)
 
     summaries = read_json(files["summary"], []) if args.skip_done else []
     divisions = read_json(files["divide"], []) if args.skip_done else []
@@ -1263,37 +1371,61 @@ def main() -> None:
             print(f"  !! {did} failed ({exc}); rerun with --skip-done to continue")
             continue
 
-    # Repeat-report dedup is a single GLOBAL pass, deliberately after every document has
-    # been processed: a card extracted from 硃79 may be the same occurrence as one extracted
-    # from 硃97, and a per-document pass could never see it.
-    if not done("__global__", "dedup"):
-        print("- 重複回報檢查（全域，所有文書擷取完畢後執行）")
-        n_lin = dedup_event_rows_global(args.proxy, args.model, lin_rows, "lin", by_id, args.timeout, args.retries, args.retry_sleep)
-        print(f"  林方：{n_lin}/{len(lin_rows)} 判為重複")
-        write_json(files["lin"], lin_rows)
-        n_qing = dedup_event_rows_global(args.proxy, args.model, qing_rows, "qing", by_id, args.timeout, args.retries, args.retry_sleep)
-        print(f"  清方：{n_qing}/{len(qing_rows)} 判為重複")
-        write_json(files["qing"], qing_rows)
-        mark("__global__", "dedup")
+    # Repeat-report dedup has its own bundle and status. The current extracted
+    # rows are compared with both the configured prior bundles and the previous
+    # output of this dedup bundle (when it exists).
+    if not dedup_done():
+        print("- 重複回報檢查（獨立 bundle；全域，所有文書擷取完畢後執行）")
+        print(f"  dedup comparison bundles: {', '.join(dedup_compare_bundles) or 'none'}")
+        dedup_lin_rows = [dict(row) for row in lin_rows if isinstance(row, dict)]
+        dedup_qing_rows = [dict(row) for row in qing_rows if isinstance(row, dict)]
+        for row in dedup_lin_rows + dedup_qing_rows:
+            for key in ("same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle"):
+                row.pop(key, None)
+        n_lin = dedup_event_rows_global(args.proxy, args.model, dedup_lin_rows, "lin", by_id, args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles)
+        print(f"  林方：{n_lin}/{len(dedup_lin_rows)} 判為重複")
+        n_qing = dedup_event_rows_global(args.proxy, args.model, dedup_qing_rows, "qing", by_id, args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles)
+        print(f"  清方：{n_qing}/{len(dedup_qing_rows)} 判為重複")
+        write_json(dedup_dir / "lin-events.json", dedup_lin_rows)
+        write_json(dedup_dir / "qing-actions-all.json", dedup_qing_rows)
+        write_json(dedup_root / "manifest.json", {
+            "name": dedup_bundle_name,
+            "created_at": datetime.now().isoformat(timespec="seconds"),
+            "source_bundle": bundle_name,
+            "source": str(SOURCE.relative_to(ROOT)),
+            "model": args.model,
+            "doc_ids": wanted,
+            "comparison_bundles": dedup_compare_bundles,
+            "chain": ["repeat-report-dedup (global, post-loop)"],
+        })
+        if not (dedup_root / "human-edits" / "notes.json").exists():
+            write_json(dedup_root / "human-edits" / "notes.json", [])
+        mark_dedup()
 
-    # Official response is intentionally post-loop so each action can be built
-    # from the complete combined-emperor-actions output. Each action gets one
-    # union of fixed pair edges, not a separate 30-day candidate search.
-    if not done("__global__", "official-response"):
-        print(f"- official-response for each extracted emperor action (existing pairs only; parallel {args.workers}, incremental save)")
-        existing_keys = {(str(row.get("doc_id") or ""), str(row.get("evTitle") or ""), tuple(row.get("source_doc_ids") or [])) for row in official_rows}
+    # Official response runs after the combined-emperor-actions output for each
+    # document, with a per-document status. An old global completion marker must
+    # not suppress newly added documents in --skip-done mode.
+    print(f"- official-response per document (existing pairs only; parallel {args.workers}, incremental save)")
+    existing_keys = {(str(row.get("doc_id") or ""), str(row.get("evTitle") or ""), tuple(row.get("source_doc_ids") or [])) for row in official_rows}
 
-        def _save_official(row):
-            # incremental save: each completed response is written immediately, so
-            # stopping the run never loses responses already found.
-            official_rows.append(row)
-            write_json(files["official"], official_rows)
+    def _save_official(row):
+        # incremental save: each completed response is written immediately, so
+        # stopping the run never loses responses already found.
+        official_rows.append(row)
+        existing_keys.add((str(row.get("doc_id") or ""), str(row.get("evTitle") or ""), tuple(row.get("source_doc_ids") or [])))
+        write_json(files["official"], official_rows)
 
+    for doc in docs:
+        did = doc_id_of(doc)
+        if done(did, "official-response"):
+            continue
+        doc_emperor_rows = [row for row in emperor_rows if str(row.get("doc_id") or row.get("memDoc") or "") == did]
+        print(f"  - official-response {did} ({len(doc_emperor_rows)} emperor-action card(s))")
         official_response_rows_for_actions(
             args.proxy,
             args.model,
-            docs,
-            emperor_rows,
+            [doc],
+            doc_emperor_rows,
             pairs,
             by_id,
             args.timeout,
@@ -1303,7 +1435,7 @@ def main() -> None:
             workers=args.workers,
             on_row=_save_official,
         )
-        mark("__global__", "official-response")
+        mark(did, "official-response")
 
     if source_raw:
         flush_sources()
@@ -1314,9 +1446,11 @@ def main() -> None:
         "source": str(SOURCE.relative_to(ROOT)),
         "model": args.model,
         "doc_ids": wanted,
+        "dedup_bundle": dedup_bundle_name,
+        "dedup_history_bundles": dedup_compare_bundles,
         "chain": LOOP_CHAIN,
         "pair_files": [str(YU_SOURCE_PATH.relative_to(ROOT)), str(CONFIRMED_PAIRS_PATH.relative_to(ROOT))],
-        "deduplication": "existing bundle loader matchCandidateInRegistry; earliest report plus merge/separate choice",
+        "deduplication": f"separate bundle {dedup_bundle_name}; LLM cross-document comparison with prior and own dedup outputs",
         "excluded_stages": ["edict-match", "info-source", "situfit", "date-window official-response search"],
     }
     write_json(out_root / "manifest.json", manifest)

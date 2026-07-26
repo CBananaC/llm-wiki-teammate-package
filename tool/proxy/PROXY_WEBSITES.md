@@ -1,14 +1,16 @@
 # Proxy Websites and Redeployment
 
-Use this file when the source-chain prompts or other proxy code changes. All
-services use the same Google Cloud project and region:
+Use this file when the source-chain prompts or other proxy code changes. The
+Gemini proxy now uses the target account's project; the other existing proxy
+services remain in the previous project:
 
 ```text
-PROJECT=delta-entry-496910-e7
+GEMINI_PROJECT=project-c9468478-3aaa-4bbc-b9a
+OTHER_PROXY_PROJECT=delta-entry-496910-e7
 REGION=asia-east1
 ```
 
-Last verified against Google Cloud Run on 2026-07-17.
+Last verified against Google Cloud Run on 2026-07-27.
 
 ## Source repository
 
@@ -24,7 +26,7 @@ posts tasks to the selected URL's `/chat` route.
 
 | Proxy | Cloud Run website | Service | Key requirement |
 |---|---|---|---|
-| Gemini / multi-provider | https://gemini-proxy-v2ewrxq4sq-de.a.run.app | `gemini-proxy` | Vertex AI uses the Cloud Run service account; no key required for the default Gemini/managed DeepSeek route |
+| Gemini / multi-provider | https://gemini-proxy-bxtckyrt7q-de.a.run.app | `gemini-proxy` | Project `project-c9468478-3aaa-4bbc-b9a`; Vertex AI uses the Cloud Run service account; no key required for the default Gemini route |
 | ChatGPT / TokenRouter | https://chatgpt-proxy-v2ewrxq4sq-de.a.run.app | `chatgpt-proxy` | `TOKENROUTER_API_KEY` |
 | DeepSeek MaaS / Vertex | https://deepseek-proxy-v2ewrxq4sq-de.a.run.app | `deepseek-proxy` | No DeepSeek key; Cloud Run service account needs `roles/aiplatform.user` |
 | GLM / TokenRouter | https://glm-proxy-v2ewrxq4sq-de.a.run.app | `glm-proxy` | `GLM_API_KEY` or `TOKENROUTER_API_KEY` |

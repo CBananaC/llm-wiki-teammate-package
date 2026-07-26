@@ -2224,5 +2224,324 @@
         ]
       }
     ]
+  },
+  {
+    "doc_id": "硃99",
+    "evTitle": "碣石鎮水師起程赴閩",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "廣東碣石鎮標水師五百名分作兩起，已於正月初五日及初七日自該營起程前進，準備前往福建廈門聽候調遣。",
+      "howKnown": "親歷",
+      "quote": "查碣石鎮標水師五百名，分作兩起，間一日行走，已於正月初五、初七兩日，自該營起程。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "碣石鎮水師起程赴閩",
+      "whenAr": "",
+      "whenCh": "正月初五日",
+      "whenKnownCh": "正月初九日",
+      "where": "碣石鎮",
+      "who": [
+        "碣石鎮標水師"
+      ],
+      "who_loc": {
+        "碣石鎮標水師": "碣石鎮"
+      },
+      "doc_id": "硃99",
+      "sources": [
+        {
+          "doc_id": "硃99",
+          "quote": "查碣石鎮標水師五百名，分作兩起，間一日行走，已於正月初五、初七兩日，自該營起程。"
+        }
+      ],
+      "actor": "qing",
+      "same_as_event_id": "evmrdcuzon322",
+      "repeat_of_title": "碣石鎮水師起程赴閩"
+    },
+    "chains": []
+  },
+  {
+    "doc_id": "硃99",
+    "evTitle": "彭承堯顧聲雷赴黃崗彈壓",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "署廣東提督彭承堯與護惠潮道顧聲雷於正月初八日先行前往黃崗地方，負責稽查彈壓維護治安。",
+      "howKnown": "親歷",
+      "quote": "署提臣彭承堯、護惠潮道顧聲雷，已於正月初八日先赴黃崗地方，稽查彈壓。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "彭承堯顧聲雷赴黃崗彈壓",
+      "whenAr": "",
+      "whenCh": "正月初八日",
+      "whenKnownCh": "正月初九日",
+      "where": "黃崗",
+      "who": [
+        "彭承堯",
+        "顧聲雷"
+      ],
+      "who_loc": {
+        "彭承堯": "黃崗",
+        "顧聲雷": "黃崗"
+      },
+      "doc_id": "硃99",
+      "sources": [
+        {
+          "doc_id": "硃99",
+          "quote": "署提臣彭承堯、護惠潮道顧聲雷，已於正月初八日先赴黃崗地方，稽查彈壓。"
+        }
+      ],
+      "actor": "qing",
+      "same_as_event_id": "evmrdcvb1fccd",
+      "repeat_of_title": "彭承堯與顧聲雷赴黃崗稽查"
+    },
+    "chains": []
+  },
+  {
+    "doc_id": "硃99",
+    "evTitle": "孫士毅赴交界督送兵丁",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "兩廣總督孫士毅於正月初九日親赴閩粵交界處，督率照料並點送水師兵丁出境，同時面加鼓勵。",
+      "howKnown": "親歷",
+      "quote": "臣即於正月初九日親赴閩粵交界處，督率照料，點送出境，並面加鼓勵",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅赴交界督送兵丁",
+      "whenAr": "",
+      "whenCh": "正月初九日",
+      "whenKnownCh": "正月初九日",
+      "where": "閩粵交界處",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "閩粵交界處"
+      },
+      "doc_id": "硃99",
+      "sources": [
+        {
+          "doc_id": "硃99",
+          "quote": "臣即於正月初九日親赴閩粵交界處，督率照料，點送出境，並面加鼓勵"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [],
+    "selfReported": true
+  },
+  {
+    "doc_id": "硃99",
+    "evTitle": "廣東水師預定行抵廈門",
+    "actor": "qing",
+    "event": {
+      "category": "plan",
+      "description": "廣東派遣之水師頭起官兵預計於正月初十日進入福建詔安縣境，再行五、六日直抵廈門聽候閩浙總督常青調遣。",
+      "howKnown": "親歷",
+      "quote": "計頭起官兵正月初十日即可入閩省詔安境。過五、六日即可直抵廈門。",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "廣東水師預定行抵廈門",
+      "whenAr": "",
+      "whenCh": "正月初十日",
+      "whenKnownCh": "正月初九日",
+      "where": "詔安縣",
+      "who": [
+        "廣東水師官兵"
+      ],
+      "who_loc": {},
+      "doc_id": "硃99",
+      "sources": [
+        {
+          "doc_id": "硃99",
+          "quote": "計頭起官兵正月初十日即可入閩省詔安境。過五、六日即可直抵廈門。"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": []
+  },
+  {
+    "doc_id": "硃99",
+    "evTitle": "孫士毅發放行糧與兵餉",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "孫士毅令出境兵丁每名自帶一月口糧以備緩急，並由廣東藩庫支項發給水師一千名出兵分例銀兩。",
+      "howKnown": "親歷",
+      "quote": "每名令其裏帶一月口糧，以備緩急應用。其水師一千名，應得出兵分例，臣於藩庫內支項酌給",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅發放行糧與兵餉",
+      "whenAr": "",
+      "whenCh": "正月初九日",
+      "whenKnownCh": "正月初九日",
+      "where": "潮州",
+      "who": [
+        "孫士毅"
+      ],
+      "who_loc": {
+        "孫士毅": "潮州"
+      },
+      "doc_id": "硃99",
+      "sources": [
+        {
+          "doc_id": "硃99",
+          "quote": "每名令其裏帶一月口糧，以備緩急應用。其水師一千名，應得出兵分例，臣於藩庫內支項酌給"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [],
+    "selfReported": true
+  },
+  {
+    "doc_id": "硃101",
+    "evTitle": "陸廷柱馳赴廈門聽調",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "南澳鎮總兵陸廷柱自願赴臺剿賊，未接改委文行即於正月初六日馳赴廈門聽候調遣。",
+      "howKnown": "轉述",
+      "quote": "即於正月初六日馳赴廈門聽調",
+      "relations": [
+        {
+          "evidence": "復准署提臣彭承堯咨調領兵之文",
+          "relation": "咨調",
+          "relation_type": "command",
+          "source": "彭承堯",
+          "target": "陸廷柱"
+        }
+      ],
+      "side": "qing",
+      "subtitle": "陸廷柱馳赴廈門聽調",
+      "whenAr": "",
+      "whenCh": "正月初六日",
+      "whenKnownCh": "正月初八日",
+      "where": "廈門",
+      "who": [
+        "陸廷柱",
+        "彭承堯"
+      ],
+      "who_loc": {
+        "陸廷柱": "廈門"
+      },
+      "doc_id": "硃101",
+      "sources": [
+        {
+          "doc_id": "硃101",
+          "quote": "即於正月初六日馳赴廈門聽調"
+        }
+      ],
+      "actor": "qing",
+      "same_as_event_id": "run:硃97:52",
+      "repeat_of_title": "六廷柱登舟前往廈門",
+      "same_as_event_ids": [
+        "run:硃97:52",
+        "evmrdb80qvd8m"
+      ]
+    },
+    "chains": [
+      {
+        "events": [
+          {
+            "quote": "即於正月初六日馳赴廈門聽調",
+            "reporter": "陸廷柱",
+            "subtitle": "陸廷柱馳赴廈門聽調",
+            "whenCh": "正月初六日",
+            "where": "廈門"
+          }
+        ],
+        "hops": [
+          {
+            "from_person": "陸廷柱",
+            "how": "呈報",
+            "inferred": false,
+            "layer": 1,
+            "place": "",
+            "quote": "茲於正月初八日申刻，接據該鎮六廷柱呈報，先已稟知閩浙督臣，自願赴臺剿賊。復准署提臣彭承堯咨調領兵之文，即於正月初六日馳赴廈門聽調。等語",
+            "to_person": "孫士毅",
+            "whenAr": "",
+            "whenCh": ""
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "doc_id": "硃101",
+    "evTitle": "廖光宇前往南澳代理營務",
+    "actor": "qing",
+    "event": {
+      "category": "nonmil",
+      "description": "因南澳鎮總兵陸廷柱前往廈門，清廷指派署澄海協廖光宇前往南澳代理營務。",
+      "howKnown": "親歷",
+      "quote": "南澳營務現有署澄海協廖光宇前往代理",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "廖光宇前往南澳代理營務",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "南澳",
+      "who": [
+        "廖光宇"
+      ],
+      "who_loc": {
+        "廖光宇": "南澳"
+      },
+      "doc_id": "硃101",
+      "sources": [
+        {
+          "doc_id": "硃101",
+          "quote": "南澳營務現有署澄海協廖光宇前往代理"
+        }
+      ],
+      "actor": "qing",
+      "same_as_event_id": "run:硃97:51",
+      "repeat_of_title": "六廷柱檄調署澄海協抵澳",
+      "same_as_event_ids": [
+        "run:硃97:51",
+        "evmrdb80qvd8m"
+      ]
+    },
+    "chains": []
+  },
+  {
+    "doc_id": "硃101",
+    "evTitle": "孫士毅等往來潮州彈壓",
+    "actor": "qing",
+    "event": {
+      "category": "done",
+      "description": "閩浙總督孫士毅與署提督彭承堯往來於潮州、黃崗、澄海等處巡查彈壓，以維持沿海地方治安。",
+      "howKnown": "親歷",
+      "quote": "臣與署提臣往來潮州、黃崗、澄海等處，距南澳不遠，足資彈壓",
+      "relations": [],
+      "side": "qing",
+      "subtitle": "孫士毅等往來潮州彈壓",
+      "whenAr": "",
+      "whenCh": "",
+      "whenKnownCh": "",
+      "where": "潮州",
+      "who": [
+        "孫士毅",
+        "彭承堯"
+      ],
+      "who_loc": {
+        "孫士毅": "潮州",
+        "彭承堯": "潮州"
+      },
+      "doc_id": "硃101",
+      "sources": [
+        {
+          "doc_id": "硃101",
+          "quote": "臣與署提臣往來潮州、黃崗、澄海等處，距南澳不遠，足資彈壓"
+        }
+      ],
+      "actor": "qing"
+    },
+    "chains": [],
+    "selfReported": true
   }
 ]

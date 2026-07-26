@@ -1,33 +1,35 @@
 {
   "name": "zhu83-official-loop",
-  "created_at": "2026-07-25T14:57:20",
+  "created_at": "2026-07-27T00:23:19",
   "source": "outputs/attempt-002/stage1_original_text.json",
   "model": "gemini-3.6-flash",
   "doc_ids": [
-    "硃79",
-    "硃83",
-    "硃89",
-    "硃87",
-    "硃88",
     "硃90",
     "硃94",
-    "硃97"
+    "硃97",
+    "硃99",
+    "硃101"
+  ],
+  "dedup_bundle": "zhu-january-dedup",
+  "dedup_history_bundles": [
+    "zhu-december-rerun-g36",
+    "zhu-january-dedup"
   ],
   "chain": [
     "summary",
     "divide",
     "lin-events+source",
     "qing-actions-all+source",
-    "repeat-report",
     "confirmed-yu-response",
     "combined-emperor-actions",
+    "repeat-report-dedup (global, post-loop)",
     "official-response"
   ],
   "pair_files": [
     "review-tools/(1) formal/yu-source.json",
     "review-tools/(1) formal/confirmed-pairs.json"
   ],
-  "deduplication": "in-loop LLM repeat_report annotates cross-document 林/清 cards with same_as/earliest_report; website offers merge/keep",
+  "deduplication": "separate bundle zhu-january-dedup; LLM cross-document comparison with prior and own dedup outputs",
   "excluded_stages": [
     "edict-match",
     "info-source",
