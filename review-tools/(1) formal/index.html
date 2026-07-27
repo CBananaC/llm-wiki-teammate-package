@@ -12883,7 +12883,7 @@ body .ix-text .seg:hover, body.dark-mode .ix-text .seg:hover {
         var label=button.getAttribute('data-tip')||'';
         if(!label){ hide(); return; }
         tip.textContent=label; tip.classList.add('is-visible'); tip.setAttribute('aria-hidden','false'); place();
-      },600);
+      },400);
     }
     document.addEventListener('mouseover',function(e){
       var button=e.target.closest&&e.target.closest('button[data-tip]');

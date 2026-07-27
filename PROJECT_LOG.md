@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (tooltip layering checkpoint complete; human visual refresh next)
+- Formal review editor: none (tooltip delay checkpoint complete; human visual refresh next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -3681,6 +3681,21 @@ Verified:
 
 Remaining:
 - Human visual confirmation after reopening both review tools remains useful, especially for tooltips inside open drawers and dropdowns.
+
+### 2026-07-27 13:45 HKT — Codex — Shortened button tooltip delay
+
+Summary: Reduced the shared hover-tooltip delay from 600ms to 400ms in both review tools.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files use the same 400ms tooltip delay.
+
+Remaining:
+- Human visual confirmation after reopening both review tools remains useful.
 
 ### 2026-07-27 13:39 HKT — Codex — Added parallel repeat-report dedup workers
 
