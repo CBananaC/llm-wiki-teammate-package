@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (tooltip delay checkpoint complete; human visual refresh next)
+- Formal review editor: none (canonical Stage 1 source-loader checkpoint complete; human visual refresh next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -31,7 +31,7 @@ adjustment, append one entry to the bottom of the change log.
 
 ## Known cautions
 
-- The formal and sample HTML files retain an embedded projection only as a `file://`/offline fallback; server-backed pages overlay original text from `review-tools/shared data/stage1_original_text.json`.
+- The active formal and sample HTML files no longer embed original Stage 1 records; server-backed pages fetch `review-tools/shared data/stage1_original_text.json`. Their remaining inline document projection contains only derived AI review summaries and recipient projections.
 - Some scripts and skill notes still refer to paths in the original project.
 - Only one human or agent should edit `review-tools/(1) formal/formal_all.data` at a time.
 - `Competition Info/2026 PolyU AI X Digital Humanities Awards_AI_Classics(v.1).docx` is a bilingual public draft with unresolved placeholders and visible table/formatting inconsistencies; verify official rules before publishing dates, weights, links, or contacts.
@@ -3904,3 +3904,21 @@ Verified:
 
 Remaining:
 - The unrelated pre-existing working-tree changes remain unstaged.
+
+### 2026-07-27 18:04 HKT — Codex — Removed embedded original-source payloads from the active review tools
+
+Summary: The formal and sample review pages now fetch their original document records from the canonical Stage 1 JSON at runtime. The large embedded `DUAL` and `TIMELINE` source-data payloads were removed; the main timeline keeps only the derived AI review projection and rebuilds document metadata, original text, and rescripts from the fetched source.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both active pages fetched and rendered the canonical source in the live review server: 363 document records, 393 dual-line dots, and overview totals of 279 official / 160 reply / 74 上諭 entries.
+- The live 硃40 panel displayed its source body, while no original body prefix remained in either HTML file.
+- Both HTML files' inline scripts parsed successfully, browser console error logs were empty, and `git diff --check` passed.
+- No embedded `const DUAL = [...]` or `const TIMELINE = {...}` source payload remains in either active page.
+
+Remaining:
+- The archival `review-tools/(1) formal/sample_1.html` was not changed; the active server routes use the formal and sample `index.html` files above.
