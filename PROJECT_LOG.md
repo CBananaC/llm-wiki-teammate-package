@@ -3940,3 +3940,42 @@ Verified:
 
 Remaining:
 - The draft still needs the project-specific screenshots, repository/API links, final citations, and any confirmed author or affiliation information before it becomes the final website manuscript.
+
+### 2026-07-27 18:26 HKT — Codex — Added a contents page to the website-content draft
+
+Summary:
+- Added a two-page contents section after the cover of `網站內容草稿_第三稿.docx`.
+- The contents lists the introduction, platform workflow, communication reconstruction,奏摺／上諭 analysis branches, AI processing loop, human verification, reuse tutorial, and 林爽文示範 sections.
+- Kept the contents as a draft navigation aid; the final website can convert it into linked interactive navigation.
+
+Files:
+- `intro Website/網站內容草稿_第三稿.docx`
+- `PROJECT_LOG.md`
+
+Verified:
+- The updated DOCX rendered to 13 pages.
+- Visually inspected the cover, both contents pages, the opening of the main draft, and the final pages; Chinese glyphs, headings, spacing, and page breaks rendered correctly.
+
+Remaining:
+- Add final website links and interactive page anchors when the website implementation is ready.
+
+### 2026-07-27 18:34 HKT — Codex — Preserved existing events during repeat-source merges
+
+Summary:
+- Changed repeat merging in both review tools to reuse a live event dot that already carries the earlier report, even when the registry candidate itself is not marked as added.
+- Removed destructive fuzzy duplicate removal from the repeat-source attachment path; adding a repeated report no longer deletes the previously added event.
+- Coalesced the chart/document redraw into the next animation frame so the merge button is not blocked by a full timeline render.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `review-tools/(1) formal/formal_all.data`
+- `PROJECT_LOG.md`
+
+Verified:
+- Parsed all embedded scripts in both HTML files successfully.
+- Tested the `硃156` repeat card for `賊兵攻陷彰化縣城`: the existing event `evmr8qwl3e4r0` remained visible as one event and gained `硃156` as an additional source; no second matching event was created.
+- `git diff --check` passed.
+
+Remaining:
+- Human confirmation of additional repeat targets, especially cases with non-identical titles, remains advisable.
