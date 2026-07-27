@@ -1730,12 +1730,34 @@
 <div class="dtooltip" id="dTooltip"></div>
 
 <!-- ===== DUAL TIMELINE SCRIPT ===== -->
+<script id="review-embed-file-data">
+(function(){
+  if(location.protocol !== 'file:' || new URLSearchParams(location.search).get('embed') !== '1') return;
+  window.__reviewEmbedStage1Docs = [{
+    doc_id:'硃83',
+    series:'明清台灣檔案匯編',
+    doc_type:'硃批',
+    subtype:null,
+    compiled_in:{book:30,volume:30,page:188},
+    author:{position:'閩浙總督',name:'常青'},
+    title:'為奏聞鳳山失陷援兵渡海赴臺事',
+    send_date:['乾隆五十二年一月二日','1787/01/02'],
+    receive_date:['乾隆五十二年一月十五日','1787/01/15'],
+    archive_reference:30,
+    body:'閩浙總督臣常青跪奏，為飛摺奏聞事十二月三十日戌刻，接據臺灣道永福十二月十四日來稟，內稱：竊照彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑，業經職道將官弁被害並督率兵丁分路救援各緣由，馳稟在案。職道以臺鎮雖經調遣將兵往救諸羅，並四處堵禦，而大兵未到，郡城兵少堪虞。正在嚴督實力守禦，一面會同柴鎮設法剿捕間，茲於十二月十三日亥刻，據南路兵丁劉茂光回稱：鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落。等語又據逃回鳳邑跟丁稟稱：賊人進入縣署，該縣湯大奎情急拔劍自刎。等情。查賊匪恃眾猖獗四處潛聚，乘隙攻陷。臺屬兵少勢孤，顧此又虞失彼，郡城遼闊兵單，實難防守抵敵，事在危急，相應飛稟迅撥大兵來臺，以便克期進剿，恢復諸、彰等邑，不勝惶悚待命之至。等情到臣。臣接閱之下，驚駭憤懣，恨不親自奮飛殲此惡孽。但水、陸二提臣俱經臣派撥官兵，早令統率前往，因守風待渡，又經屢次發令嚴催。今據廈門同知稟報，水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。查該處與鹿仔港相對，一俟風定，即可揚帆直達。且接據署守備陳邦光稟報，鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。惟是賊情猖獗，到處蔓延，自澎湖至鹿耳門，係屬臺郡咽喉，尤宜厚集兵力。臣前經續調督撫標兵一千名，原令由南臺出口，前往鹿耳，以備策應第恐海道行回，風汛難定，適預備之延、建兵一千名，亦已分起前來。因令督、撫標兵，仍駐省城防守。將延、建兵一千名派委延平協副將林天洛管帶，由陸路兼程赴廈，並派先經調來之汀州鎮總兵普吉保統率登舟；又於水師提標五營內，預備兵丁六百名，派令興化協副將格繃額帶領，亦從廈門配船飛渡，均由鹿耳赴臺，隨同水師提臣協力進剿。至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進，並一面飛咨水陸兩提臣上緊援剿外，臣不勝憂憤急迫之至。合將據報鳳山被賊情形恭摺馳奏。再，漳、泉二郡，民俗凶悍，誠恐賊匪潛通勾結，臣俱密為防範。並往來泉、廈各海口嚴加督察，務保無虞。合並陳明，伏祈皇上睿鑒。謹奏。\\n\\n乾隆五十二年正月初二日\\n乾隆五十二年正月十五日奉硃批：此時惟以鎮靜為要，毋得張皇失措，餘有旨諭。欽此。〔本文原收錄於軍錄】'
+  }];
+  window.__reviewEmbedStage1Docs[0].body = window.__reviewEmbedStage1Docs[0].body.replace(/\\n/g, '\n');
+})();
+</script>
+
 <script>
 (async function(){
   const STAGE1_SOURCE_PATH = '/shared/stage1_original_text.json';
-  const stage1Response = await fetch(STAGE1_SOURCE_PATH, {cache:'no-store'});
-  if(!stage1Response.ok) throw new Error('canonical Stage 1 source unavailable');
-  const stage1Payload = await stage1Response.json();
+  const stage1Payload = window.__reviewEmbedStage1Docs || await (async()=>{
+    const stage1Response = await fetch(STAGE1_SOURCE_PATH, {cache:'no-store'});
+    if(!stage1Response.ok) throw new Error('canonical Stage 1 source unavailable');
+    return stage1Response.json();
+  })();
   const stage1Docs = Array.isArray(stage1Payload)
     ? stage1Payload
     : (stage1Payload && Array.isArray(stage1Payload.documents) ? stage1Payload.documents : []);
@@ -11355,6 +11377,7 @@
   <div class="tooltip" id="tooltip"></div>
   <script>
       (async function(){
+    if(location.protocol === 'file:' && new URLSearchParams(location.search).get('embed') === '1') return;
     const STAGE1_SOURCE_PATH = '/shared/stage1_original_text.json';
     const stage1Response = await fetch(STAGE1_SOURCE_PATH, {cache:'no-store'});
     if(!stage1Response.ok) throw new Error('canonical Stage 1 source unavailable');

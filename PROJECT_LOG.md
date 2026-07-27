@@ -4137,3 +4137,23 @@ Verified:
 
 Remaining:
 - Live local `file://` verification remains limited by the in-app browser security restriction; the sample review tool may require its normal local server because it loads the canonical source through `/shared/stage1_original_text.json`.
+
+### 2026-07-27 20:18 HKT — Codex — Added a file-mode source fallback for the embedded sample tool
+
+Summary:
+- Added a synchronized `file://` fallback to the formal and sample review-tool HTML files for the embedded 硃83 demonstration.
+- The fallback contains the canonical 硃83 metadata and full original body, allowing the actual review-tool UI to initialise without a cross-origin `fetch`.
+- Kept the normal `/shared/stage1_original_text.json` fetch for server-hosted use; only the embedded file-mode overview loader is skipped because the StoryMap displays the AI and original-document panels rather than the overview chart.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Parsed all embedded JavaScript in both HTML files successfully.
+- Confirmed the fallback body exactly matches the canonical Stage 1 硃83 body in both files.
+- Confirmed the fallback blocks are identical and `git diff --check` passed.
+
+Remaining:
+- Reload the StoryMap `file://` page to confirm the in-app browser renders the embedded panels after this fallback is applied.
