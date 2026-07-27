@@ -385,7 +385,9 @@
   .ix-chip .dotc { width:11px; height:11px; border-radius:50%; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
   .ix-chip.on { box-shadow:0 0 0 2px rgba(45,38,29,.35) inset; font-weight:600; }
   .ix-chip-type { font-size:calc(10.5px * var(--fs,1)); color:var(--muted); font-weight:500; }
-  .ix-chip-title { font-size:calc(12.5px * var(--fs,1)); color:var(--ink); font-weight:600; }
+  .ix-chip-count { font-size:calc(11px * var(--fs,1)); color:var(--ink); font-weight:650; }
+  .inote .hl-filter-type, .ix-note .hl-filter-type { font-size:calc(10.5px * var(--fs,1)); color:var(--muted); font-weight:500; }
+  .inote .hl-event-title, .ix-note .hl-event-title { color:var(--ink); font-weight:650; }
   .ix-cols { position:relative; display:flex; gap:14px; align-items:flex-start; }
   .ix-text { flex:1 1 60%; white-space:pre-wrap; font-size:calc(13.5px * var(--fs,1)); line-height:2.0;
     background:#fbf6ec; padding:14px 16px; border-radius:8px; }
@@ -3477,7 +3479,7 @@
     const setBtn=host.querySelector('.ip-settingsbtn'); if(setBtn){ setBtn.onclick=()=>{ filterDock.classList.toggle('setopen'); setBtn.classList.toggle('on', filterDock.classList.contains('setopen')); }; }
 
     function groupLabel(it){ return it.label||AI_FILTER_LABELS.manual; }
-    function labelGroups(){ const g={}; ITEMS.forEach(it=>{ const key=groupLabel(it)+'::'+(it.eventTitle||''); (g[key]=g[key]||[]).push(it); }); return g; }
+    function labelGroups(){ const g={}; ITEMS.forEach(it=>{ const key=groupLabel(it); (g[key]=g[key]||[]).push(it); }); return g; }
     function renderSummary(){
       const text=reviewedSummaryTextFor(r);
       ixSummary.innerHTML='';
@@ -3492,13 +3494,13 @@
       filterBtn.querySelector('.filter-label').textContent='篩選';
       let h=`<span class="ix-chip allc${allOn?' on':''}" data-all="1">全部</span>`;
       if(divisions) h+=`<span class="ix-chip divc${showDiv?' on':''}" data-div="1">分段</span>`;
-      Object.keys(g).forEach(groupKey=>{ const arr=g[groupKey], lab=groupLabel(arr[0]), title=arr[0].eventTitle||'', on=arr.every(it=>active.has(it.key)), us=arr[0].src==='user';
-        h+=`<span class="ix-chip${on?' on':''}${us?' userc':''}" data-lab="${esc(groupKey)}"><span class="dotc" style="background:${arr[0].color}"></span><span class="ix-chip-type">${esc(lab)}</span>${title?`<span class="ix-chip-title">${esc(title)}</span>`:''}</span>`; });
+      Object.keys(g).forEach(lab=>{ const arr=g[lab], on=arr.every(it=>active.has(it.key)), us=arr[0].src==='user';
+        h+=`<span class="ix-chip${on?' on':''}${us?' userc':''}" data-lab="${esc(lab)}"><span class="dotc" style="background:${arr[0].color}"></span><span class="ix-chip-type">${esc(lab)}</span><span class="ix-chip-count">${arr.length}</span></span>`; });
       chipbar.innerHTML=h;
       chipbar.querySelectorAll('.ix-chip').forEach(ch=>ch.onclick=()=>{
         if(ch.dataset.all){ const on=ITEMS.every(it=>active.has(it.key)); active.clear(); if(!on) ITEMS.forEach(it=>active.add(it.key)); }
         else if(ch.dataset.div){ showDiv=!showDiv; }
-        else { const arr=labelGroups()[ch.dataset.lab]||[], on=arr.every(it=>active.has(it.key)); arr.forEach(it=>{ if(on) active.delete(it.key); else active.add(it.key); }); const ev=arr[0]&&arr[0].evId?eventById(arr[0].evId):null; if(ev&&typeof openEventCard==='function') openEventCard(ev,{keepOpen:true}); }
+        else { const arr=labelGroups()[ch.dataset.lab]||[], on=arr.every(it=>active.has(it.key)); arr.forEach(it=>{ if(on) active.delete(it.key); else active.add(it.key); }); }
         renderChips(); renderText();
       });
     }
@@ -3532,9 +3534,14 @@
       if(fs.length) return fs.map((f,fi)=>`<span class="ifld"><b>${esc(f.name)}</b>：<span class="item-edit ed" contenteditable="true" data-item-key="${esc(it.key)}" data-item-field="field:${fi}">${esc(f.val)}</span></span>`).join('');
       return `<span class="isum item-edit ed" contenteditable="true" data-item-key="${esc(it.key)}" data-item-field="summary">${esc(it.summary||it.label||'')}</span>`;
     }
+    function highlightLabel(it, editable){
+      const type=it.label||AI_FILTER_LABELS.manual, title=it.eventTitle||'';
+      const typeHtml=editable?`<span class="hl-filter-type item-edit ed" contenteditable="true" data-item-key="${esc(it.key)}" data-item-field="label">${esc(type)}</span>`:`<span class="hl-filter-type">${esc(type)}</span>`;
+      return `<span class="ilab">${typeHtml}${title?` <span class="hl-event-title">${esc(title)}</span>`:''}</span>`;
+    }
     function inlineNote(it){
       const label=it.label||'';
-      return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}" style="border-left-color:${it.color}"><span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${label?`<span class="ilab item-edit ed" contenteditable="true" data-item-key="${esc(it.key)}" data-item-field="label">${esc(label)}</span> `:''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
+      return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}"${it.evId?` data-event-id="${esc(it.evId)}"`:''} style="border-left-color:${it.color}"><span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${label?highlightLabel(it,true)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
     }
     function buildRuns(text, cov, from, to, firstSeen, zmask){
       let s='', c=from;
@@ -3611,7 +3618,7 @@
         }
         saveEdits(); ITEMS=items(); renderChips(); renderText(); if(typeof render==='function') render();
       }));
-      textEl.querySelectorAll('.inote[data-inote]').forEach(n=>n.onclick=e=>{ if(e.target.closest('.item-edit')) return; e.stopPropagation(); toggleNote(n.dataset.inote); });
+      textEl.querySelectorAll('.inote[data-inote]').forEach(n=>n.onclick=e=>{ if(e.target.closest('.item-edit')) return; e.stopPropagation(); const ev=n.dataset.eventId?eventById(n.dataset.eventId):null; if(ev&&typeof openEventCard==='function'){ openEventCard(ev,{keepOpen:true}); return; } toggleNote(n.dataset.inote); });
     }
     function toggleNote(key){ if(!key) return; if(openNotes.has(key)) openNotes.delete(key); else openNotes.add(key); renderText(); }
     function placeNotes(){
@@ -3632,8 +3639,8 @@
       ITEMS.forEach((it,idx)=>{ if(!active.has(it.key)) return;
         const mk=textEl.querySelector(`mark.hl[data-i="${idx}"]`);
         const note=document.createElement('div'); note.className='ix-note'+(openNotes.has(it.key)?' open':''); note.dataset.inote=it.key; note.style.borderLeftColor=it.color;
-        note.innerHTML=`<span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${it.label?`<span class="ilab">${esc(it.label)}</span> `:''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}`;
-        note.onclick=e=>{ if(e.target.closest('.ed')) return; e.stopPropagation(); toggleNote(it.key); };
+        note.innerHTML=`<span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${it.label?highlightLabel(it,false)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}`;
+        note.onclick=e=>{ if(e.target.closest('.ed')) return; e.stopPropagation(); const ev=it.evId?eventById(it.evId):null; if(ev&&typeof openEventCard==='function'){ openEventCard(ev,{keepOpen:true}); return; } toggleNote(it.key); };
         placeNote(note, mk?mk.offsetTop-baseTop:0); });
       marginEl.style.minHeight=(Math.max(40,...used.map(u=>u.bottom+8),0))+'px';
     }
@@ -11562,8 +11569,7 @@ body .ix-chip, body.dark-mode .ix-chip {
   color:var(--muted); box-shadow:none;
 }
 body .ix-chip:hover { border-color:var(--line-strong); color:var(--ink); }
-body .ix-chip.on .ix-chip-type { color:var(--muted); font-weight:500; }
-body .ix-chip.on .ix-chip-title { color:var(--accent); font-weight:650; }
+  body .ix-chip.on .ix-chip-type { color:var(--muted); font-weight:500; }
 body .ix-chip.on, body.dark-mode .ix-chip.on, body.dark-mode .ix-chip.allc.on,
 body.dark-mode .ix-chip.divc.on {
   background:var(--accent-soft) !important; border-color:var(--accent) !important;

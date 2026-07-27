@@ -3750,3 +3750,21 @@ Verified:
 
 Remaining:
 - Existing unrelated working-tree changes and saved sample state were left untouched.
+
+### 2026-07-27 13:55 HKT — Codex — Separated filter counts from highlight subtitles
+
+Summary: Corrected the document-panel filter presentation. The dropdown now groups highlights by filter type and shows only the filter plus its count, such as `林方行動 3`; event subtitles are no longer repeated in the dropdown. The document highlight area now shows each highlight's filter type together with its event subtitle, and clicking an event highlight opens its information card beside the document panel.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- Live sample dropdown showed `林方行動 3`, `清軍事：已執行 6`, `清軍事：待執行 1`, and `來源鏈 5` without event titles.
+- Live sample highlight markup showed filter type plus event subtitle, and clicking a highlight opened an event card in the column left of the document card.
+
+Remaining:
+- Existing unrelated working-tree changes remain untouched.
