@@ -4157,3 +4157,20 @@ Verified:
 
 Remaining:
 - Reload the StoryMap `file://` page to confirm the in-app browser renders the embedded panels after this fallback is applied.
+
+### 2026-07-27 20:31 HKT — Codex — Started HTTP serving for the intro website
+
+Summary:
+- Started a static project-root server at `http://127.0.0.1:8765` for the intro StoryMap website.
+- Kept the review-tool/API server running at `http://127.0.0.1:8766`.
+- Updated the StoryMap review iframe to use the running sample review server when the StoryMap is opened over HTTP, while retaining its local relative path for direct `file://` use.
+
+Files:
+- `intro Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The HTTP StoryMap URL and the embedded sample URL both returned HTTP 200.
+
+Remaining:
+- Open the HTTP StoryMap URL in the browser instead of the old `file://` tab.
