@@ -4095,3 +4095,24 @@ Verified:
 
 Remaining:
 - Live interaction testing remains limited because the in-app browser blocks reloads of the local `file://` prototype; the source/data and interaction structure were statically verified.
+
+### 2026-07-27 19:43 HKT — Codex — Converted the StoryMap review example to a customizable iframe
+
+Summary:
+- Added `intro Website/review-tool-embed.html` as a self-contained iframe version of the sample review UI.
+- Updated the StoryMap review section to load the iframe with `doc=硃83&panels=ai,original`, showing only the AI panel and original-document panel.
+- Added query-parameter handling so the embed can later switch documents and visible panels without changing the StoryMap layout.
+- Kept the exact canonical 硃83 body and sample extraction data in the embed, including quotation highlighting and `加入`／`略過` review actions.
+
+Files:
+- `intro Website/storymap-example.html`
+- `intro Website/review-tool-embed.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the iframe is present in the StoryMap review section and the embed reads `doc` and `panels` URL parameters.
+- Confirmed the iframe body exactly matches the canonical Stage 1 硃83 body.
+- Parsed JavaScript in both HTML files successfully and `git diff --check` passed.
+
+Remaining:
+- Live browser reload testing remains limited by the in-app browser's local `file://` security restriction; local static validation passed.
