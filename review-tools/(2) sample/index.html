@@ -2613,7 +2613,9 @@
         const hot = isClicked ? 'hotline' : (isSibling ? 'siblingline' : '');
         const dim = (chainOn && !isClicked && !isSibling) ? 'dim' : '';
         if(isClicked){ markNetworkEvent(e.id); markNetworkDoc(r._rid,e.actor==='emperor'?(coord[r._rid+'R']?'R':'L'):(coord[r._rid+'L']?'L':'R')); }
-        elinks+=`<line class="elink ${hot} ${dim}" data-line-filters="${esc(e.actor||'lin')}" x1="${ec.x.toFixed(1)}" y1="${ec.y.toFixed(1)}" x2="${oc.x.toFixed(1)}" y2="${oc.y.toFixed(1)}"/>`;
+        const sourceDocId=String(sc&&sc.doc_id||'');
+        const sourceTitle=r.title?`〈${r.title}〉`:'';
+        elinks+=`<line class="elink ${hot} ${dim}" data-evid="${esc(e.id)}" data-source-doc="${esc(sourceDocId)}" data-source-rid="${esc(r._rid)}" data-line-filters="${esc(e.actor||'lin')}" aria-label="${esc(`${evTitle(e)}：${sourceDocId}${sourceTitle}`)}" x1="${ec.x.toFixed(1)}" y1="${ec.y.toFixed(1)}" x2="${oc.x.toFixed(1)}" y2="${oc.y.toFixed(1)}"><title>${esc(`${evTitle(e)} ↔ ${sourceDocId}${sourceTitle}`)}</title></line>`;
       });
     });
     s+=elinks;
@@ -2876,7 +2878,7 @@
     svg.querySelectorAll('.edot').forEach(el=>{
       const ev=eventById(el.dataset.evid);
       const isGroup=ev&&Array.isArray(ev.groupedFrom)&&ev.groupedFrom.length;
-      el.addEventListener('mouseenter', e=>{ if(!ev) return; const srcs=(ev.sources||[]).map(s=>s.doc_id).join('、');
+      el.addEventListener('mouseenter', e=>{ if(!ev) return; const srcs=(ev.sources||[]).map(s=>{ const docId=String(s&&s.doc_id||''); const rec=docId?(recByDocId[docId]||((typeof recByDocId2==='function')?recByDocId2(docId):null)):null; return rec&&rec.title?`${docId}〈${rec.title}〉`:docId; }).filter(Boolean).join('、');
         tip.innerHTML=`<b>${esc(EVENT_LABEL[ev.actor]||'事件')}・${esc(ev.dateAr||'')}</b><br>${esc(ev.what||'')}${ev.where?'　@'+esc(ev.where):''}`+(srcs?`<br>來源：${esc(srcs)}`:'<br><i>未連結來源</i>')+(isGroup?`<br><i>⧉ 合併自 ${ev.groupedFrom.length} 個事件（點按開啟資訊卡；Alt+點按 展開／收合原始事件）</i>`:''); tip.style.opacity=1; });
       el.addEventListener('mousemove', e=>{ tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY+14)+'px'; });
       el.addEventListener('mouseleave', ()=>{ tip.style.opacity=0; });
@@ -5857,7 +5859,7 @@
     if(earlier.__added && earlier.__evId){
       const ev=eventById(earlier.__evId);
       if(!ev) return commitProposal(p);
-      candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p))); });
+      candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p)), {render:false}); });
       consolidateRepeatEventDots(ev.id,mr.doc_id,mr.title);
       return eventById(ev.id)||ev;
     }
@@ -5876,7 +5878,7 @@
     const ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonicalSubtitle, what:canonicalSubtitle, description:canonical.description||'',
       where:canonical.where||'', who:canonical.who||[], whoLoc:canonical.whoLoc||{}, relations:canonical.relations||[], whenCh:canonical.whenCh||'', dateAr:d?fmt(d):null,
       sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonicalSubtitle, aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
-    candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other))); });
+    candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other)), {render:false}); });
     earlier.__added=true; earlier.__evId=ev.id;
     consolidateRepeatEventDots(ev.id,mr.doc_id,mr.title);
     return eventById(ev.id)||ev;
@@ -5896,7 +5898,7 @@
     if(ownRelations && ownRelations.length){ e.relations=e.relations||[];
       ownRelations.forEach(r=>{ const sig=(r.source||'')+'|'+(r.target||'')+'|'+(r.relation||''); if(!e.relations.some(x=>((x.source||'')+'|'+(x.target||'')+'|'+(x.relation||''))===sig)) e.relations.push(r); }); }
   }
-  function addEventMention(id, docId, info){
+  function addEventMention(id, docId, info, options){
     const e=eventById(id); if(!e||!docId) return;
     e.sources=e.sources||[];
     const ex=e.sources.find(s=>String(s.doc_id)===String(docId));
@@ -5910,7 +5912,8 @@
       ownSubtitle:info.ownSubtitle||'', ownDescription:info.ownDescription||'', ownWhere:info.ownWhere||'', ownWhenAr:info.ownWhenAr||'', ownWhenCh:info.ownWhenCh||'', ownWho:info.ownWho||[],
       ownWhoLoc:info.ownWhoLoc||{}, ownRelations:info.ownRelations||[]});
     mergeMentionIntoCanonical(e, info.ownWhoLoc, info.ownRelations);
-    saveEdits(); render(); refreshOpenDocsForEvent(id);
+    saveEdits();
+    if(!options || options.render!==false){ render(); refreshOpenDocsForEvent(id); }
   }
   // ===== field events (overlay): things that actually happened, linked to the officials who reported them =====
   function eventsArr(){ return EDITS.__events || (EDITS.__events=[]); }
@@ -5963,11 +5966,16 @@
       && (e.actor||'')===(target.actor||'')
       && eventSourceHasDoc(e,priorDoc)
       && eventTitleMatches(e,title));
-    if(!matches.length) return target;
-    matches.forEach(e=>absorbEventData(target,e));
-    const removed=new Set(matches.map(e=>e.id));
-    EDITS.__events=eventsArr().filter(e=>!removed.has(e.id));
-    return target;
+    if(matches.length){
+      matches.forEach(e=>absorbEventData(target,e));
+      const removed=new Set(matches.map(e=>e.id));
+      EDITS.__events=eventsArr().filter(e=>!removed.has(e.id));
+    }
+    // The source mention is added before duplicate dots are consolidated. Redraw
+    // only after both mutations so the chart tooltip and source line describe the
+    // same surviving event, instead of a stale pre-merge SVG node.
+    saveEdits(); render(); refreshOpenDocsForEvent(target.id);
+    return eventById(target.id)||target;
   }
   function patchEvent(id, patch){ const e=eventById(id); if(e){ Object.assign(e, patch);
     if('subtitle' in patch) e.what=patch.subtitle; if('what' in patch && !('subtitle' in patch)) e.subtitle=patch.what;

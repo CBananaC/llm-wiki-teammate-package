@@ -3870,3 +3870,19 @@ Verified:
 
 Remaining:
 - Human confirmation of other repeat targets with different event titles remains advisable before bulk-cleaning saved event data.
+
+### 2026-07-27 17:47 HKT — Codex — Redrew merged repeat events with complete source links
+
+Summary: Fixed the repeat-merge render order in both review tools. The new source mention and duplicate-dot consolidation now finish before the chart redraw, so the surviving event's black tooltip and event-to-document line use the same source list. Event tooltips now identify source IDs with their document titles, and source lines carry explicit event/source metadata for `硃83` verification.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal `evmr4lfqnug4u` renders with one `.edot` and one `.elink[data-source-doc="硃83"]` after reload.
+- Both HTML files' embedded scripts parsed successfully and `git diff --check` passed.
+
+Remaining:
+- The current sample saved state has no `硃83` event source to display; the sample renderer is updated in parity with formal.
