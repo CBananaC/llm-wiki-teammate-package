@@ -87,6 +87,34 @@
     .mini-line { height: 7px; margin: 10px 0; background: #d3dcd4; }
     .mini-line.short { width: 66%; }
 
+    .review-backdrop { display: grid; place-items: center; padding: 5vh 4vw; background: #e3dbcc; }
+    .review-backdrop::after { display: none; }
+    .review-window { width: min(1240px, 92vw); height: min(700px, 84vh); overflow: hidden; background: #f8f5ed; border: 1px solid rgba(23,59,63,.2); box-shadow: 0 24px 65px rgba(23,59,63,.2); }
+    .review-window-head { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; color: #f8f5ed; background: #173b3f; font-size: 11px; letter-spacing: .09em; }
+    .review-window-head .source-label { color: #f0a08d; }
+    .review-body { display: grid; grid-template-columns: minmax(250px, .9fr) minmax(290px, 1.1fr); height: calc(100% - 46px); }
+    .ai-review-panel, .original-doc-panel { min-width: 0; overflow: auto; padding: 24px; }
+    .ai-review-panel { background: #f0eadf; border-right: 1px solid rgba(23,59,63,.14); }
+    .panel-label { margin: 0 0 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; }
+    .ai-output-card { padding: 20px; background: #fbf8f0; border: 1px solid rgba(23,59,63,.17); box-shadow: 0 10px 25px rgba(23,59,63,.08); }
+    .ai-output-card .skill-tag { display: inline-block; padding: 5px 8px; color: #8a422f; background: #f7dfd1; font-size: 10px; letter-spacing: .08em; }
+    .ai-output-card h3 { margin: 14px 0 8px; color: var(--ink); font: 600 22px/1.25 var(--serif); }
+    .ai-output-card p { margin: 0; color: #466366; font: 14px/1.65 var(--serif); }
+    .quote-button { width: 100%; margin-top: 18px; padding: 14px 15px; color: #5c574c; background: #eee5d4; border: 1px solid #d4c3a7; text-align: left; font: italic 15px/1.6 var(--serif); cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
+    .quote-button:hover, .quote-button:focus-visible { background: #f5d98a; border-color: #c69e45; outline: 2px solid rgba(199,84,63,.35); outline-offset: 2px; }
+    .quote-button.is-selected { background: #ffd966; border-color: #c58f32; transform: translateY(-1px); }
+    .quote-button::before { content: "點擊以回到原文 →"; display: block; margin-bottom: 6px; color: #9a6b25; font: 10px/1.3 var(--sans); font-style: normal; letter-spacing: .08em; }
+    .result-meta { display: grid; grid-template-columns: 70px 1fr; gap: 7px 10px; margin-top: 18px; color: #537073; font-size: 11px; }
+    .result-meta strong { color: var(--ink); font-weight: 500; }
+    .original-doc-panel { background: #fbf8f0; }
+    .doc-meta { padding-bottom: 15px; border-bottom: 1px solid rgba(23,59,63,.15); }
+    .doc-meta h3 { margin: 0 0 8px; color: var(--ink); font: 600 21px/1.25 var(--serif); }
+    .doc-meta p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
+    .original-text { margin: 20px 0 0; color: #292e2d; font: 18px/2.05 var(--serif); }
+    .quote-target { padding: 2px 0; transition: background .3s, box-shadow .3s; }
+    .quote-target.is-highlighted { background: #ffd966; box-shadow: 4px 0 #ffd966, -4px 0 #ffd966; }
+    .review-status { min-height: 18px; margin: 16px 0 0; color: #9a6b25; font-size: 11px; line-height: 1.5; }
+
     .end { min-height: 76svh; display: grid; place-items: center; padding: 90px 10vw; background: var(--ink); color: #f7f3ea; }
     .end-inner { max-width: 720px; }
     .end h2 { margin: 0 0 20px; font-size: clamp(34px, 6vw, 72px); }
@@ -108,6 +136,11 @@
       .tool-window .tool-body { grid-template-columns: 1fr; }
       .mini-panel { display: none; }
       pre { font-size: 11px; }
+      .review-backdrop { inset: 0 0 38% 0; display: block; padding: 18px 16px; }
+      .review-window { width: 100%; height: 100%; }
+      .review-body { grid-template-columns: 1fr; }
+      .original-doc-panel { display: none; }
+      .ai-review-panel { border-right: 0; }
     }
   </style>
 </head>
@@ -166,6 +199,34 @@
       </article>
     </section>
 
+    <section class="story" id="review-demo" data-tab="平台" data-nav="#platform" style="--card-x: 5vw; --card-y: 14vh; --card-w: 285px;">
+      <div class="backdrop full review-backdrop">
+        <div class="review-window" aria-label="硃83 AI 引文核驗示例">
+          <div class="review-window-head"><span>AI OUTPUT ↔ ORIGINAL DOCUMENT</span><span class="source-label">硃83 · 互動示例</span></div>
+          <div class="review-body">
+            <div class="ai-review-panel">
+              <p class="panel-label">AI ANALYSIS CARD</p>
+              <div class="ai-output-card">
+                <span class="skill-tag">清方行動</span>
+                <h3>常青催令福寧鎮、銅山、羅源等營兵力繼進</h3>
+                <p>人工智能從硃批所對應的奏摺中提取清方軍事行動，並保留原文引文供研究者核對。</p>
+                <button class="quote-button" type="button" data-target="zhu83-quote">至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進</button>
+                <div class="result-meta"><span>文書</span><strong>硃83</strong><span>來源</span><strong>明清台灣檔案匯編 冊30 頁188</strong><span>狀態</span><strong>等待核驗</strong></div>
+                <p class="review-status" id="review-status" aria-live="polite">點擊上方引文，定位原始文書中的對應文字。</p>
+              </div>
+            </div>
+            <div class="original-doc-panel" id="original-doc-panel">
+              <div class="doc-meta">
+                <h3>為奏聞鳳山失陷援兵渡海赴臺事</h3>
+                <p>閩浙總督・常青<br>1787/01/02 上奏・1787/01/15 硃批<br>《明清台灣檔案匯編》冊 30，頁 188・硃83</p>
+              </div>
+              <p class="original-text">延、建兵一千名，亦已分起前來。因令督、撫標兵，仍駐省城防守。將延、建兵一千名派委延平協副將林天洛管帶，由陸路兼程赴廈，並派先經調來之汀州鎮總兵普吉保統率登舟；又於水師提標五營內，預備兵丁六百名，派令興化協副將楊繽額帶領，亦從廈門配船飛渡，均由鹿耳赴臺，隨同水師提臣協力進剿。<span class="quote-target" id="zhu83-quote">至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進</span>，並一面飛咨水陸兩提臣上緊援剿外，臣不勝憂慮急迫之至。合將據報鳳山被賊情形恭摺奏聞。</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <section class="story" id="reuse" data-tab="重用" style="--card-x: 8vw; --card-y: 52vh; --card-w: 390px;">
       <div class="backdrop right" style="background: #526967;">
         <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1600&q=80">
@@ -221,11 +282,24 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting) return;
-        const id = entry.target.id;
-        tabs.forEach((tab) => tab.classList.toggle('active', tab.getAttribute('href') === '#' + id));
+        const target = entry.target.dataset.nav || '#' + entry.target.id;
+        tabs.forEach((tab) => tab.classList.toggle('active', tab.getAttribute('href') === target));
       });
     }, { threshold: 0.55 });
     sections.forEach((section) => observer.observe(section));
+
+    document.querySelectorAll('.quote-button').forEach((button) => {
+      button.addEventListener('click', () => {
+        const target = document.getElementById(button.dataset.target);
+        const status = document.getElementById('review-status');
+        document.querySelectorAll('.quote-button').forEach((item) => item.classList.remove('is-selected'));
+        document.querySelectorAll('.quote-target').forEach((item) => item.classList.remove('is-highlighted'));
+        button.classList.add('is-selected');
+        target.classList.add('is-highlighted');
+        target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        status.textContent = '已定位：原文引文已在右側文書面板標示。';
+      });
+    });
   </script>
 </body>
 </html>
