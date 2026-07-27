@@ -2348,6 +2348,7 @@
   (function(){ const d=clickNetworkDefaultPreset(); if(d) clickNetworkApplyPreset(d); })();
   function buildClickNetworkState(){
     const recByDocId={}; recs.forEach(r=>{ recByDocId[String(r._baseId||r.id)]=r; });
+    const resolveChartRecord=(docId,quote)=>recByDocId[String(docId)]||(typeof recByDocId2==='function'?recByDocId2(docId,quote):null);
     const spreadMemberIds=new Set();
     eventsArr().forEach(e=>{ if(Array.isArray(e.groupedFrom)&&e.groupedFrom.length&&__spreadGroups.has(e.id)){ e.groupedFrom.forEach(g=>{ const gid=typeof g==='object'?g.evId:g; if(gid) spreadMemberIds.add(gid); }); } });
     const allEvs=eventsArr().filter(e=>!e.hidden||spreadMemberIds.has(e.id));
@@ -2373,9 +2374,9 @@
     }
     allEvs.forEach(e=>{
       const en=eventNode(e); addNode(en);
-      (e.sources||[]).forEach(sc=>{ let r=sc&&recByDocId[String(sc.doc_id)]; if(!r) return; if(e.actor!=='emperor'&&sc.howKnown==='上諭所載'&&sc.viaDoc){ const vr=recByDocId[String(sc.viaDoc)]; if(vr) r=vr; } link(en,docNodeForRecord(r,e.actor==='emperor'?'imperial':'official')); });
-      if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=recByDocId[String(e.emperorDetail.memDoc)]; if(r) link(en,docNodeForRecord(r,'official')); }
-      if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)){ e.emperorDetail.infoSources.forEach(sc=>{ const r=sc&&recByDocId[String(sc.doc_id)]; if(r) link(en,docNodeForRecord(r,'official')); }); }
+      (e.sources||[]).forEach(sc=>{ let r=sc&&resolveChartRecord(sc.doc_id,sc.quote); if(!r) return; if(e.actor!=='emperor'&&sc.howKnown==='上諭所載'&&sc.viaDoc){ const vr=resolveChartRecord(sc.viaDoc,sc.quote); if(vr) r=vr; } link(en,docNodeForRecord(r,e.actor==='emperor'?'imperial':'official')); });
+      if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=resolveChartRecord(e.emperorDetail.memDoc); if(r) link(en,docNodeForRecord(r,'official')); }
+      if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)){ e.emperorDetail.infoSources.forEach(sc=>{ const r=sc&&resolveChartRecord(sc.doc_id,sc.quote); if(r) link(en,docNodeForRecord(r,'official')); }); }
       const targets=[e.respondsToEventId,...(e.alsoRespondsToEventIds||[])].filter(Boolean);
       targets.forEach(id=>{ const t=graphEventsById.get(String(id)); if(t) link(en,eventNode(t)); });
     });
@@ -2485,6 +2486,7 @@
     function dimmed(rid){ return !matchedSet.has(rid) && !isSel(rid) && !clickNetworkState.hlRids.has(rid); }
     // ----- field events: layout + highlight chain -----
     const recByDocId={}; recs.forEach(r=>{ recByDocId[String(r._baseId||r.id)]=r; });
+    const resolveChartRecord=(docId,quote)=>recByDocId[String(docId)]||(typeof recByDocId2==='function'?recByDocId2(docId,quote):null);
     // normally-hidden events (folded into a merged/consolidated dot via groupedFrom) still need to
     // render AT THEIR REAL chart position -- but only while the group that hid them is "spread"
     // (see toggleGroupSpread/__spreadGroups); otherwise they stay invisible as before. This is the
@@ -2553,10 +2555,10 @@
     let elinks='';
     evs.forEach(e=>{ const ec=ecoord[e.id]; if(!ec||!eventLineVisible(e)) return;
       const isClicked = chainEventIds.has(e.id), isSibling = siblingEventIds.has(e.id);
-      (e.sources||[]).forEach(sc=>{ let r=recByDocId[String(sc.doc_id)]; if(!r) return;
+      (e.sources||[]).forEach(sc=>{ let r=resolveChartRecord(sc.doc_id,sc.quote); if(!r) return;
         // yu-loop: a 上諭 source on a field event is drawn to the official doc it came through
         // (viaDoc), so the chain reads 上諭 -> 官方文書 -> 事件 (the yu_source pair carries 官方文書 -> 上諭).
-        if(e.actor!=='emperor' && sc.howKnown==='上諭所載' && sc.viaDoc){ const vr=recByDocId[String(sc.viaDoc)]; if(vr) r=vr; }
+        if(e.actor!=='emperor' && sc.howKnown==='上諭所載' && sc.viaDoc){ const vr=resolveChartRecord(sc.viaDoc,sc.quote); if(vr) r=vr; }
         if(!docLineVisible(r)) return;
         // Field events (lin/qing) connect ONLY to the officials-line dot (never straight to the
         // emperor dot); for a 硃批 source, the existing L<->R "dline" below carries the chain the
@@ -2586,13 +2588,13 @@
       targets.forEach(tid=>{
         const sourceCoord=(ev, side)=>{
           const sc=(ev.sources||[])[0]; if(!sc) return null;
-          const r=recByDocId[String(sc.doc_id)]; if(!r||!docLineVisible(r)) return null;
+          const r=resolveChartRecord(sc.doc_id,sc.quote); if(!r||!docLineVisible(r)) return null;
           return side==='emperor' ? (coord[r._rid+'R']||coord[r._rid+'L']) : (coord[r._rid+'L']||coord[r._rid+'R']);
         };
         const targetEv=eventById(tid);
         if(targetEv && (!eventDotVisible(targetEv)||!eventLineVisible(targetEv))) return;
         const targetSource=targetEv&&targetEv.sources&&targetEv.sources[0];
-        const targetRec=targetSource&&recByDocId[String(targetSource.doc_id)];
+        const targetRec=targetSource&&resolveChartRecord(targetSource.doc_id,targetSource.quote);
         const targetKind=(targetEv&&targetEv.emperorDetail&&targetEv.emperorDetail.kind)||'';
         const responsePairKey=targetKind==='edict'||(targetRec&&targetRec.type==='shangyu')?'reply-yu':(targetKind==='zhupi'||(targetRec&&targetRec.type==='zhupi')?'reply-zhu':'');
         if(responsePairKey&&!chartFilterOn('line',responsePairKey)) return;
@@ -2639,7 +2641,7 @@
       if(ec && isrcs.length){
         const drawn=new Set();
         isrcs.forEach(s=>{
-          const r=recByDocId[String(s.doc_id)]; if(!r||!docLineVisible(r)) return;
+          const r=resolveChartRecord(s.doc_id,s.quote); if(!r||!docLineVisible(r)) return;
           if(drawn.has(r._rid)) return; drawn.add(r._rid);
           const oc=coord[r._rid+'L']||coord[r._rid+'R']; if(!oc) return;
           isrclinks+=`<line class="isrclink" data-line-filters="emperor info-source" x1="${ec.x.toFixed(1)}" y1="${ec.y.toFixed(1)}" x2="${oc.x.toFixed(1)}" y2="${oc.y.toFixed(1)}"/>`;
@@ -3507,15 +3509,22 @@
     }
     function inlineNote(it){
       const label=it.label||'';
-      return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}"${it.evId?` data-event-id="${esc(it.evId)}"`:''} style="border-left-color:${it.color}">${label?highlightLabel(it,true)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
+      return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}"${it.evId?` data-event-id="${esc(it.evId)}"`:''} style="--hl-color:${it.color};border-left-color:${it.color}">${label?highlightLabel(it,true)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
     }
-    function buildRuns(text, cov, from, to, firstSeen, zmask){
-      let s='', c=from;
+    function buildRuns(text, cov, from, to, firstSeen, zmask, noteEnds, noteSeen){
+      const noteAt=new Map(), boundaries=[];
+      (noteEnds||new Map()).forEach((end,id)=>{ end=Number(end); if(!Number.isFinite(end)||end<=from||end>to) return;
+        const ids=noteAt.get(end)||[]; ids.push(id); noteAt.set(end,ids); boundaries.push(end); });
+      boundaries.sort((a,b)=>a-b);
+      let bi=0, s='', c=from;
       while(c<to){ const id=cov[c]; let e=c; while(e<to && cov[e]===id) e++;
+        while(bi<boundaries.length && boundaries[bi]<=c) bi++;
+        if(bi<boundaries.length && boundaries[bi]>c && boundaries[bi]<e) e=boundaries[bi];
         const chunk=zhuyiChunk(text,c,e,zmask);
         if(id<0) s+=chunk; else { const it=ITEMS[id]; const first=!firstSeen.has(id); let sup=''; if(first){ firstSeen.add(id); sup=`<sup>${it.n}</sup>`; }
-          s+=`<mark class="hl" data-i="${id}" style="background:${it.color}">${sup}${chunk}</mark>`;
-          if(noteMode==='inline' && first) s+=inlineNote(it); }
+          s+=`<mark class="hl" data-i="${id}" style="--hl-color:${it.color};background:${it.color}">${sup}${chunk}</mark>`;
+        }
+        if(noteMode==='inline') (noteAt.get(e)||[]).forEach(noteId=>{ if(noteSeen.has(noteId)) return; noteSeen.add(noteId); const noteItem=ITEMS[noteId]; if(noteItem) s+=inlineNote(noteItem); });
         c=e; }
       return s;
     }
@@ -3556,15 +3565,16 @@
       blocks().forEach(b=>{
         const cov=new Array(b.text.length).fill(-1);
         const zmask=zhuyiMask(b.text,b.key);
+        const noteEnds=new Map();
         ITEMS.forEach((it,idx)=>{ if(!active.has(it.key)||(it.block||'body')!==b.key) return;
-          it.frags.forEach(f=>{ const pos=b.text.indexOf(f); if(pos>=0){ for(let c=pos;c<pos+f.length;c++) cov[c]=idx; } }); });
-        const firstSeen=new Set();
+          it.frags.forEach(f=>{ const pos=b.text.indexOf(f); if(pos>=0){ const end=pos+f.length; for(let c=pos;c<end;c++) cov[c]=idx; noteEnds.set(idx,Math.max(noteEnds.get(idx)||0,end)); } }); });
+        const firstSeen=new Set(), noteSeen=new Set();
         if(b.isBody && divisions && showDiv){
           let seg=`<div class="blk" data-block="body"><span class="blk-label">原文</span>`;
-          divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+bodyEditorMarkup(buildRuns(b.text,cov,dv.start,dv.end,firstSeen,zmask),di)+`</div></div>`; });
+          divisions.forEach((dv,di)=>{ seg+=`<div class="seg sc${di%4}" data-di="${di}"><div class="seg-head"><span class="seg-num">${dv.n}.</span><span class="seg-label ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</span><div class="seg-summary ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</div></div><div class="seg-text">`+bodyEditorMarkup(buildRuns(b.text,cov,dv.start,dv.end,firstSeen,zmask,noteEnds,noteSeen),di)+`</div></div>`; });
           seg+='</div>'; html+=seg;
         } else {
-          const runs=buildRuns(b.text,cov,0,b.text.length,firstSeen,zmask);
+          const runs=buildRuns(b.text,cov,0,b.text.length,firstSeen,zmask,noteEnds,noteSeen);
           html+=`<div class="blk" data-block="${b.key}"><span class="blk-label">${esc(b.label)}</span>${b.isBody?bodyEditorMarkup(runs):runs}</div>`;
         }
       });
@@ -3603,8 +3613,8 @@
         note.innerHTML=`<span class="nn">${dv.n}.</span><b class="ed" contenteditable="true" data-di="${di}" data-f="label">${esc(dv.label)}</b><br><span class="ed" contenteditable="true" data-di="${di}" data-f="summary">${esc(dv.summary||'')}</span>`;
         placeNote(note, segEl?segEl.offsetTop-baseTop:0); }); }
       ITEMS.forEach((it,idx)=>{ if(!active.has(it.key)) return;
-        const mk=textEl.querySelector(`mark.hl[data-i="${idx}"]`);
-        const note=document.createElement('div'); note.className='ix-note'+(openNotes.has(it.key)?' open':''); note.dataset.inote=it.key; note.style.borderLeftColor=it.color;
+        const marks=textEl.querySelectorAll(`mark.hl[data-i="${idx}"]`), mk=marks[marks.length-1]||null;
+        const note=document.createElement('div'); note.className='ix-note'+(openNotes.has(it.key)?' open':''); note.dataset.inote=it.key; note.style.setProperty('--hl-color',it.color); note.style.borderLeftColor=it.color;
         note.innerHTML=`${it.label?highlightLabel(it,false)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}`;
         note.onclick=e=>{ if(e.target.closest('.ed')) return; e.stopPropagation(); const ev=it.evId?eventById(it.evId):null; if(ev&&typeof openEventCard==='function'){ openEventCard(ev,{keepOpen:true}); return; } toggleNote(it.key); };
         placeNote(note, mk?mk.offsetTop-baseTop:0); });
@@ -3616,7 +3626,13 @@
     marginEl.addEventListener('focusout',e=>{ const el=e.target; if(el.classList&&el.classList.contains('ed')&&el.dataset.di!==undefined){ saveDivField(+el.dataset.di, el.dataset.f, el.textContent.trim()); } });
 
     // ---- annotation editor ----
-    textEl.addEventListener('mouseup',()=>{
+    let annotationModifierHeld=false, annotationDragMoved=false;
+    textEl.addEventListener('mousedown',e=>{ annotationModifierHeld=!!(e.metaKey||e.ctrlKey); annotationDragMoved=false; });
+    textEl.addEventListener('mousemove',e=>{ if(annotationModifierHeld&&(e.buttons&1)) annotationDragMoved=true; });
+    textEl.addEventListener('mouseleave',()=>{ annotationModifierHeld=false; annotationDragMoved=false; });
+    textEl.addEventListener('mouseup',e=>{
+      const commandDrag=annotationModifierHeld&&annotationDragMoved&&!!(e.metaKey||e.ctrlKey); annotationModifierHeld=false; annotationDragMoved=false;
+      if(!commandDrag) return;
       if(root.querySelector('.hl-editor')) return;          // an editor is open (e.g. reframing) — don't spawn a new one
       const s=window.getSelection(); if(!s||s.isCollapsed) return; const txt=s.toString().trim(); if(txt.length<2) return;
       let node=s.anchorNode; const blk=(node.nodeType===3?node.parentElement:node).closest('.blk'); const block=blk?blk.dataset.block:'body';
@@ -13036,6 +13052,33 @@ body.dark-mode .ix-text .seg.sc1, body.dark-mode .ix-text .seg.sc2,
 body.dark-mode .ix-text .seg.sc3 { background:var(--panel) !important; }
 body .ix-text .seg:hover, body.dark-mode .ix-text .seg:hover {
   border:1px solid var(--line,#e5dacb) !important;
+}
+
+/* Highlight labels stay compact and use the same visual tone as their source mark. */
+body .inote, body .ix-note:not(.div), body.dark-mode .inote, body.dark-mode .ix-note:not(.div) {
+  background:color-mix(in srgb,var(--hl-color,#d6c4a6) 13%,var(--panel)) !important;
+  border-color:color-mix(in srgb,var(--hl-color,#d6c4a6) 46%,var(--line)) !important;
+  border-left-color:var(--hl-color,#d6c4a6) !important;
+}
+body .inote .ilab, body .ix-note:not(.div) .ilab,
+body.dark-mode .inote .ilab, body.dark-mode .ix-note:not(.div) .ilab {
+  display:inline-block; box-sizing:border-box; margin:0 4px 0 0; padding:1px 5px;
+  border:1px solid color-mix(in srgb,var(--hl-color,#d6c4a6) 66%,var(--line-strong)) !important;
+  border-radius:4px;
+  background:color-mix(in srgb,var(--hl-color,#d6c4a6) 22%,var(--panel)) !important;
+  color:color-mix(in srgb,var(--hl-color,#d6c4a6) 56%,var(--ink)) !important;
+  font-family:inherit !important; font-size:calc(11.5px * var(--fs,1)) !important;
+  font-weight:550 !important; line-height:1.35 !important; box-shadow:none !important;
+}
+body .inote .hl-filter-type, body .inote .hl-event-title,
+body .ix-note:not(.div) .hl-filter-type, body .ix-note:not(.div) .hl-event-title,
+body.dark-mode .inote .hl-filter-type, body.dark-mode .inote .hl-event-title,
+body.dark-mode .ix-note:not(.div) .hl-filter-type, body.dark-mode .ix-note:not(.div) .hl-event-title {
+  color:inherit !important; font-family:inherit !important; font-size:inherit !important;
+  font-weight:inherit !important;
+}
+body mark.hl, body.dark-mode mark.hl {
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--hl-color,#d6c4a6) 72%,#594b3b) inset !important;
 }
 </style>
 

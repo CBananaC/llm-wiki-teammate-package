@@ -3979,3 +3979,23 @@ Verified:
 
 Remaining:
 - Human confirmation of additional repeat targets, especially cases with non-identical titles, remains advisable.
+
+### 2026-07-27 18:55 HKT — Codex — Restricted new annotations to modified text drags and retuned highlight labels
+
+Summary:
+- Updated both active review tools so `新增標註` requires an actual text drag with Command on macOS or Ctrl on Windows; ordinary selection and modifier-clicks do not open the editor.
+- Moved inline annotation labels to the end of the complete matched quotation, including quotations split into multiple matched fragments or divisions; margin notes now anchor to the final visible mark.
+- Unified the filter type and event title label typography and gave the label, note border, and highlight barrier a shared highlight-colour tone.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Parsed all embedded scripts in both HTML files successfully and `git diff --check` passed.
+- Reloaded the live formal and sample pages after the edit; both rendered the canonical document view with no browser console errors.
+- Confirmed the final-quote anchoring is applied in both renderers and that both files contain the same interaction/style changes.
+
+Remaining:
+- A human should perform one Mac Command-drag and one Windows Ctrl-drag on an event-bearing document to confirm the input modifier behavior on each platform; the automated coordinate drag test timed out in the narrow review pane and did not change saved data.
