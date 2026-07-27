@@ -3886,3 +3886,21 @@ Verified:
 
 Remaining:
 - The current sample saved state has no `硃83` event source to display; the sample renderer is updated in parity with formal.
+
+### 2026-07-27 18:02 HKT — Codex — Refreshed repeat-event provenance labels
+
+Summary: Fixed the missing redraw when a repeat pointer has no prior document ID. The surviving event now always redraws after its new source mention is added, so its source line and hover label cannot remain stale. Event-dot native labels now include each linked source document's ID, title, and canonical date, and the repeat-report jump label uses the same metadata.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal surviving event `evmr4lfqnug4u` has one dot, source lines for `硃77` and `硃83`, and a native hover title naming both source documents.
+- Formal AI panel opened without console errors after reload.
+- Sample rendered 208 event dots; a sample dot carried the native hover title and no console errors were reported.
+- Both HTML files' embedded scripts parsed successfully and `git diff --check` passed.
+
+Remaining:
+- The unrelated pre-existing working-tree changes remain unstaged.

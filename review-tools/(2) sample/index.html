@@ -2757,7 +2757,8 @@
       const rr=((isHl||lineHot)?6:(isSibling?5.2:4.6))*dotSizeScale;
       const groupCls=isGroup?' gdot':'';
       const evCol=e.color||EVENT_HEX[e.actor]||'#888';
-      s+=`<rect class="edot ${dim} ${hot}${groupCls}" data-dot-key="${esc(e.actor||'lin')}" data-evid="${e.id}" x="${(ec.x-rr).toFixed(1)}" y="${(ec.y-rr).toFixed(1)}" width="${(rr*2).toFixed(1)}" height="${(rr*2).toFixed(1)}" rx="2" fill="${evCol}" fill-opacity="0.92"/>`;
+      const dotTooltip=eventTooltipText(e);
+      s+=`<rect class="edot ${dim} ${hot}${groupCls}" data-dot-key="${esc(e.actor||'lin')}" data-evid="${e.id}" aria-label="${esc(dotTooltip)}" x="${(ec.x-rr).toFixed(1)}" y="${(ec.y-rr).toFixed(1)}" width="${(rr*2).toFixed(1)}" height="${(rr*2).toFixed(1)}" rx="2" fill="${evCol}" fill-opacity="0.92"><title>${esc(dotTooltip)}</title></rect>`;
       if(isGroup) s+=`<rect class="edot-ring" x="${(ec.x-rr-2.6).toFixed(1)}" y="${(ec.y-rr-2.6).toFixed(1)}" width="${(rr*2+5.2).toFixed(1)}" height="${(rr*2+5.2).toFixed(1)}" rx="3" fill="none" stroke="${evCol}" stroke-width="1" stroke-dasharray="2 2"/>`;
       if(isGroup && __spreadGroups.has(e.id)){
         // spread state: reveal each original member dot at its OWN real chart coordinates (its real
@@ -2878,8 +2879,8 @@
     svg.querySelectorAll('.edot').forEach(el=>{
       const ev=eventById(el.dataset.evid);
       const isGroup=ev&&Array.isArray(ev.groupedFrom)&&ev.groupedFrom.length;
-      el.addEventListener('mouseenter', e=>{ if(!ev) return; const srcs=(ev.sources||[]).map(s=>{ const docId=String(s&&s.doc_id||''); const rec=docId?(recByDocId[docId]||((typeof recByDocId2==='function')?recByDocId2(docId):null)):null; return rec&&rec.title?`${docId}〈${rec.title}〉`:docId; }).filter(Boolean).join('、');
-        tip.innerHTML=`<b>${esc(EVENT_LABEL[ev.actor]||'事件')}・${esc(ev.dateAr||'')}</b><br>${esc(ev.what||'')}${ev.where?'　@'+esc(ev.where):''}`+(srcs?`<br>來源：${esc(srcs)}`:'<br><i>未連結來源</i>')+(isGroup?`<br><i>⧉ 合併自 ${ev.groupedFrom.length} 個事件（點按開啟資訊卡；Alt+點按 展開／收合原始事件）</i>`:''); tip.style.opacity=1; });
+      el.addEventListener('mouseenter', e=>{ if(!ev) return;
+        tip.innerHTML=eventTooltipHtml(ev)+(isGroup?`<br><i>⧉ 合併自 ${ev.groupedFrom.length} 個事件（點按開啟資訊卡；Alt+點按 展開／收合原始事件）</i>`:''); tip.style.opacity=1; });
       el.addEventListener('mousemove', e=>{ tip.style.left=(e.clientX+14)+'px'; tip.style.top=(e.clientY+14)+'px'; });
       el.addEventListener('mouseleave', ()=>{ tip.style.opacity=0; });
       if(editMode){
@@ -5966,10 +5967,16 @@
       && (e.actor||'')===(target.actor||'')
       && eventSourceHasDoc(e,priorDoc)
       && eventTitleMatches(e,title));
-    if(matches.length){
-      matches.forEach(e=>absorbEventData(target,e));
-      const removed=new Set(matches.map(e=>e.id));
-      EDITS.__events=eventsArr().filter(e=>!removed.has(e.id));
+    if(priorDoc){
+      const matches=visibleEvents().filter(e=>e.id!==target.id
+        && (e.actor||'')===(target.actor||'')
+        && eventSourceHasDoc(e,priorDoc)
+        && eventTitleMatches(e,title));
+      if(matches.length){
+        matches.forEach(e=>absorbEventData(target,e));
+        const removed=new Set(matches.map(e=>e.id));
+        EDITS.__events=eventsArr().filter(e=>!removed.has(e.id));
+      }
     }
     // The source mention is added before duplicate dots are consolidated. Redraw
     // only after both mutations so the chart tooltip and source line describe the
@@ -5980,6 +5987,24 @@
   function patchEvent(id, patch){ const e=eventById(id); if(e){ Object.assign(e, patch);
     if('subtitle' in patch) e.what=patch.subtitle; if('what' in patch && !('subtitle' in patch)) e.subtitle=patch.what;
     saveEdits(); render(); refreshOpenDocsForEvent(id); } }
+  function eventSourceLabel(s){
+    const docId=String(s&&s.doc_id||'').trim(); if(!docId) return '';
+    const rec=(typeof recByDocId2==='function'&&recByDocId2(docId))||(typeof recByAnyDocId==='function'&&recByAnyDocId(docId))||null;
+    const title=rec&&rec.title?`〈${rec.title}〉`:'';
+    const date=rec&&(rec.sendAr||rec.recvAr||rec.annAr)||'';
+    return docId+title+(date?` (${date})`: '');
+  }
+  function eventTooltipText(e){
+    if(!e) return '';
+    const head=[EVENT_LABEL[e.actor]||'事件',e.dateAr||''].filter(Boolean).join('・');
+    const body=[head,e.what||'',e.where?'@'+e.where:'',((e.sources||[]).map(eventSourceLabel).filter(Boolean).join('、')||'未連結來源')];
+    return body.filter(Boolean).join('\n');
+  }
+  function eventTooltipHtml(e){
+    if(!e) return '';
+    const srcs=(e.sources||[]).map(eventSourceLabel).filter(Boolean).join('、');
+    return `<b>${esc(EVENT_LABEL[e.actor]||'事件')}・${esc(e.dateAr||'')}</b><br>${esc(e.what||'')}${e.where?'　@'+esc(e.where):''}`+(srcs?`<br>來源：${esc(srcs)}`:'<br><i>未連結來源</i>');
+  }
   // when an event changes, re-render any open document card that shows it (keeps text highlights in sync)
   function refreshOpenDocsForEvent(id){ const e=eventById(id); if(!e || typeof cards==='undefined') return;
     const docIds=new Set((e.sources||[]).map(s=>String(s.doc_id)));
@@ -8777,8 +8802,7 @@
         scrollChartPointToCenter(cx, cy, 'auto');
       }
       function labelReportDot(t){ if(!t) return;
-        if(t.ev){ const ev=t.ev, srcs=(ev.sources||[]).map(s=>s.doc_id).join('、');
-          tip.innerHTML=`<b>${esc(EVENT_LABEL[ev.actor]||'事件')}・${esc(ev.dateAr||'')}</b><br>${esc(ev.what||'')}${ev.where?'　@'+esc(ev.where):''}`+(srcs?`<br>來源：${esc(srcs)}`:''); }
+        if(t.ev){ tip.innerHTML=eventTooltipHtml(t.ev); }
         else if(t.rec){ const rec=t.rec, side=t.side, dateStr=side==='L'?fmt(parseD(rec.sendAr)):fmt(parseD(rec.recvAr||rec.annAr)), who=rec.type==='shangyu'?('受文：'+((rec.recipients||[]).join('、')||rec.author_name||'')):(rec.author_name||'');
           tip.innerHTML=`<b>${rec.id}・${TYPE_LABEL[rec.type]}</b><br>${rec.title||''}<br>${who}　${dateStr}`; }
         else return;
