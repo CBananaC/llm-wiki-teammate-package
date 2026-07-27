@@ -1204,7 +1204,12 @@ def main() -> None:
         digest = hashlib.sha1("-".join(wanted).encode("utf-8")).hexdigest()[:8]
         bundle_name = f"official-review-{wanted[0]}-plus{len(wanted) - 1}-{digest}"
     dedup_bundle_name = args.dedup_bundle or f"{bundle_name}-dedup"
-    dedup_compare_bundles = list(dict.fromkeys(dedup_bundles + [dedup_bundle_name]))
+    # The output bundle must never be its own comparison history. Including it
+    # creates self-referential same_as_event_id values on a later rerun.
+    dedup_compare_bundles = [
+        name for name in dict.fromkeys(dedup_bundles)
+        if name and name != dedup_bundle_name
+    ]
     out_root = BUNDLES_DIR / bundle_name
     out_dir = out_root / "outputs"
     out_dir.mkdir(parents=True, exist_ok=True)

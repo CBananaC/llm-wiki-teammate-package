@@ -13,7 +13,6 @@
   ],
   "comparison_bundles": [
     "zhu-december-rerun-g36",
-    "zhu-january-dedup"
   ],
   "chain": [
     "repeat-report-dedup (global, post-loop)"

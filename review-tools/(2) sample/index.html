@@ -1747,7 +1747,9 @@
     move:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>',
     minimize:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>',
     restore:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="5" width="14" height="14" rx="2"/></svg>',
-    close:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>'
+    close:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>',
+    refresh:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 11 20 5 14 5"/><path d="M20 5a8 8 0 1 0 2 7"/></svg>',
+    eye:'<svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg>'
   };
   const TYPE_COLOR = {shangzou:'var(--official)', zhupi:'var(--reply)', shangyu:'var(--order)'};
   const TYPE_HEX   = {shangzou:'#2f75b5', zhupi:'#c46a2b', shangyu:'#7d4ab8'};
@@ -5779,16 +5781,20 @@
     const pointerId=eventIds[0]||String(er.id||'');
     const evId=eventIds.find(id=>eventById(id));
     const ev=evId?eventById(evId):null;
+    const ownDocs=new Set([item.doc_id].concat(Array.isArray(item.sources)?item.sources.map(s=>s&&s.doc_id):[]).filter(Boolean).map(String));
+    const runDoc=eventIds.map(id=>{ const m=/^run:([^:]+):(\d+)$/.exec(id); return m?m[1]:''; }).find(id=>id&&!ownDocs.has(id))||'';
     const verdict=rawVerdict||(eventIds.length||item.repeat_of_title?'same':'');
     if((!er.doc_id&&!item.repeat_of_title&&!eventIds.length)||(verdict!=='same'&&verdict!=='similar')) return null;
     const evSources=ev&&Array.isArray(ev.sources)?ev.sources:[];
     const evDoc=ev&&((ev.emperorDetail&&ev.emperorDetail.memDoc)||((evSources[0]||{}).doc_id)||'');
     const evDate=ev&&((evSources[0]||{}).whenKnown||ev.dateAr||'');
-    const reportDoc=er.doc_id||item.repeat_report_doc_id||item.repeat_doc_id||item.report_doc_id||evDoc||'';
+    const reportDoc=er.doc_id||item.repeat_report_doc_id||item.repeat_doc_id||item.report_doc_id||evDoc||runDoc||'';
     const reportDate=er.date||item.repeat_report_date||item.repeat_date||evDate||'';
     const title=er.title||item.repeat_of_title||(ev&&evTitle(ev))||'';
     const reporter=er.reporter||item.repeat_reporter||'';
-    return {kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title,reporter,doc_id:reportDoc,report_doc_id:reportDoc,whenAr:reportDate,whenCh:'',report_date:reportDate,committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||'',sourceId:pointerId};
+    if(!ev&&!reportDoc) return null;
+    const ptr={kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title,reporter,doc_id:reportDoc,report_doc_id:reportDoc,whenAr:reportDate,whenCh:'',report_date:reportDate,committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||'',sourceId:runDoc||pointerId};
+    return invalidMatchRegForCandidate(item,ptr)?null:ptr;
   }
   // Commit a NEW candidate (`p`, already tagged with __matchReg by runExtract) that re-reports an
   // earlier extraction candidate's SAME real-world event. This must only ever point to ONE dot:
@@ -7030,31 +7036,16 @@
         // Workspace groups retain AI-loop output, but relationship turns are shown
         // only when this panel's document participates in the relationship.
         Object.values(workspaceGroups()).forEach(store=>addStore(store,'group',''));
-        // A standalone repeat-report bundle repeats the original extract cards only
-        // to attach repeat metadata. Merge those annotations into the matching card
-        // from the substantive bundle instead of rendering a second event sequence.
+        // Keep repeat-report output as visible duplicate cards. It is a reviewable
+        // record from the dedup JSON, not disposable metadata. Resolve its target
+        // transiently so the repeat note can identify the earlier source card.
         const canonicalRefs=refs.filter(ref=>!isDedupBundleTurn(ref.turn));
         refs.slice().filter(ref=>isDedupBundleTurn(ref.turn)).forEach(ref=>{
           const items=Array.isArray(ref.turn.items)?ref.turn.items:[], sourceDoc=chatTurnDocId(ref.turn,ref.docId);
           items.forEach(item=>{
-            const key=chatItemKey(item); let targetItem=null;
-            if(key && sourceDoc){
-              for(const candidate of canonicalRefs){
-                if(candidate.turn.kind!=='extract'||candidate.turn.actor!==ref.turn.actor||chatTurnDocId(candidate.turn,candidate.docId)!==sourceDoc) continue;
-                targetItem=(candidate.turn.items||[]).find(existing=>chatItemKey(existing)===key);
-                if(targetItem){
-                  const repeatTarget=repeatTargetForItem(item,sourceDoc,ref.turn.actor);
-                  if(repeatTarget){ mergeRepeatFields(targetItem,item); setRepeatTarget(targetItem,repeatTarget); }
-                  else targetItem=null;
-                  break;
-                }
-              }
-            }
+            const repeatTarget=repeatTargetForItem(item,sourceDoc,ref.turn.actor);
+            if(repeatTarget) setRepeatTarget(item,repeatTarget);
           });
-          // Dedup bundles contain annotations only. Never render an unmatched
-          // item as a fresh event card, because its local bundle pointer is not
-          // evidence that the event was previously reported.
-          const index=refs.indexOf(ref); if(index>=0) refs.splice(index,1);
         });
         refs.forEach((ref,order)=>{ ref.order=order; });
         const bundleOrder=new Map();
@@ -7099,12 +7090,11 @@
             <div class="cb-pop" data-for="act" style="display:none"></div>
             <div class="cb-pop cb-pop-cfg" data-for="cfg" style="display:none">
               <div class="gx-cfgrow"><span>AI 服務</span><select class="ai-provider">${aiProviderOptions()}</select></div>
-              <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><input class="gx-model" list="${modelListId}" value="${esc(getAIModel())}" placeholder="${esc(aiModelPlaceholder(providerNow))}"><datalist id="${modelListId}">${modelOptions}</datalist><button class="ai-model-refresh" type="button" title="重新載入模型">↻</button></div></div>
-              <div class="gx-cfgrow"><span>API Base（上游）</span><input class="ai-base" value="${esc(getAIBaseUrl())}" placeholder="https://api.example.com/v1"></div>
-              <div class="gx-cfgrow"><span>API Key</span><div class="ai-key-wrap"><input class="ai-key" type="password" value="${esc(getAIApiKey())}" autocomplete="off" placeholder="API key（只保留至此分頁關閉）"><button class="ai-key-toggle" type="button" title="顯示或隱藏 API key">◉</button></div></div>
+              <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><input class="gx-model" list="${modelListId}" value="${esc(getAIModel())}" placeholder="${esc(aiModelPlaceholder(providerNow))}"><datalist id="${modelListId}">${modelOptions}</datalist><button class="ai-model-refresh" type="button" title="重新載入模型">${IC.refresh}</button></div></div>
+              <div class="gx-cfgrow"><span>API Base</span><input class="ai-base" value="${esc(getAIBaseUrl())}" placeholder="https://api.example.com/v1"></div>
+              <div class="gx-cfgrow"><span>API Key</span><div class="ai-key-wrap"><input class="ai-key" type="password" value="${esc(getAIApiKey())}" autocomplete="off" placeholder="API key（只保留至此分頁關閉）"><button class="ai-key-toggle" type="button" title="顯示或隱藏 API key">${IC.eye}</button></div></div>
               <div class="gx-cfgrow"><label class="cb-mem2"><input type="checkbox" class="ai-mem"> 記憶對話（跨訊息記住脈絡）</label></div>
-              <div class="ai-bridge-note">可為 GPT、Gemini、DeepSeek 分別設定代理網址；未設定時使用共用的本機服務。</div>
-              <div class="gx-cfgrow ai-proxy-row"><span>代理網址</span><div class="ai-proxy-wrap"><input class="gx-url" value="${esc(getAIProxyUrl(providerNow))}" placeholder="https://your-proxy.example/v1"><button class="ai-proxy-reset" type="button">使用本機</button></div></div>
+              <div class="gx-cfgrow ai-proxy-row"><span>代理網址</span><div class="ai-proxy-wrap"><input class="gx-url" value="${esc(getAIProxyUrl(providerNow))}" placeholder="https://your-proxy.example/v1"></div></div>
               <div class="ai-provider-state"></div>
             </div>
           </div>
@@ -7155,9 +7145,8 @@
       if(!window.__aiCardTrackerBound){ window.__aiCardTrackerBound=true; document.addEventListener('click',e=>{ const card=e.target.closest&&e.target.closest('.tool-box[data-kind="ai"] .chat-log [data-logi]'); if(!card) return; const tb=card.closest('.tool-box'); if(tb) tb.dataset.lastCard=card.dataset.logi; }, true); }
       function setReplyRef(ref){ if(ref) setComposerFolded(false); replyRef=ref; replyBox.classList.toggle('on', !!ref); replyTxt.textContent=ref?('回覆：'+ref.text.slice(0,140)+(ref.text.length>140?'…':'')):''; input.focus(); }
       body.querySelector('.rr-x').onclick=()=>setReplyRef(null);
-      const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), modelList=body.querySelector('#'+modelListId), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), refreshModels=body.querySelector('.ai-model-refresh'), resetProxy=body.querySelector('.ai-proxy-reset'), providerState=body.querySelector('.ai-provider-state');
+      const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), modelList=body.querySelector('#'+modelListId), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), refreshModels=body.querySelector('.ai-model-refresh'), providerState=body.querySelector('.ai-provider-state');
       url.onchange=()=>setAIProxyUrl(url.value.trim(),provider.value);
-      resetProxy.onclick=()=>{ url.value=defaultProxyUrl(); setAIProxyUrl(url.value,provider.value); providerState.textContent='已使用本機 AI 服務'; };
       async function loadModels(){ setAIProxyUrl(url.value.trim(),provider.value); setAIBaseUrl(base.value.trim(),provider.value); setAIApiKey(key.value.trim(),provider.value); providerState.textContent='讀取模型中…'; refreshModels.disabled=true;
         try{ const models=await refreshAIModels(provider.value); modelList.innerHTML=models.map(m=>`<option value="${esc(m)}"></option>`).join(''); if(!model.value&&models.length){ model.value=models[0]; setAIModel(model.value,provider.value); } providerState.textContent=models.length?('已載入 '+models.length+' 個模型'):'未取得模型清單，可直接輸入模型 ID'; }
         catch(e){ providerState.textContent=e.message; } finally{ refreshModels.disabled=false; } }
@@ -7179,20 +7168,21 @@
       function closePops(){ root.querySelectorAll('.cb-pop').forEach(p=>{ p.style.display='none'; p.classList.remove('is-viewport'); ['top','right','bottom','left','width','min-width','max-width','max-height'].forEach(k=>p.style.removeProperty(k)); }); }
       function placePop(ch,pop){
         pop.classList.add('is-viewport'); pop.style.display='block';
-        const margin=8, cr=ch.getBoundingClientRect(), isToc=pop.classList.contains('cb-pop-toc');
+        const margin=8, cr=ch.getBoundingClientRect(), isToc=pop.classList.contains('cb-pop-toc'), isCfg=pop.classList.contains('cb-pop-cfg'), isPanelPop=isToc||isCfg;
         const panel=root.getBoundingClientRect();
-        const wanted=isToc?Math.max(0,panel.width-2):(pop.classList.contains('cb-pop-cfg')?Math.min(380,innerWidth-margin*2):Math.min(340,innerWidth-margin*2));
+        const wanted=isPanelPop?Math.max(0,panel.width-2):Math.min(340,innerWidth-margin*2);
         pop.style.setProperty('width',wanted+'px','important');
-        if(isToc){
+        if(isPanelPop){
           pop.style.setProperty('min-width','0','important'); pop.style.setProperty('max-width','none','important');
           pop.style.setProperty('max-height',Math.max(80,panel.height-margin*2)+'px','important');
         } else pop.style.removeProperty('max-height');
         pop.style.setProperty('right','auto','important'); pop.style.setProperty('bottom','auto','important');
         const pr=pop.getBoundingClientRect();
-        if(isToc){
+        if(isPanelPop){
           const left=panel.left+1, panelTop=panel.top+margin, panelBottom=panel.bottom-margin;
-          let top=cr.bottom+4;
-          if(top+pr.height>panelBottom) top=Math.max(panelTop,panelBottom-pr.height);
+          let top=isToc?cr.bottom+4:cr.top-pr.height-4;
+          if(isToc && top+pr.height>panelBottom) top=Math.max(panelTop,panelBottom-pr.height);
+          if(isCfg && top<panelTop) top=cr.bottom+4;
           top=Math.max(panelTop,Math.min(top,panelBottom-pr.height));
           pop.style.setProperty('left',left+'px','important'); pop.style.setProperty('top',top+'px','important');
         } else {
@@ -7759,7 +7749,7 @@
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(items.length? items.map((it,j)=> it.__skip?'':`<div class="cx-ev${it.__added?' added':''}">
               ${(m.actor==='qing'||it.actor==='qing')&&(it.__qcat||it.category||it.qcat||it.qing_category)?`<div class="cx-qcat qcat-${esc(it.__qcat||qingCategoryCode(it.category||it.qcat||it.qing_category))}">${esc(QCAT_LABEL[it.__qcat||qingCategoryCode(it.category||it.qcat||it.qing_category)]||it.__qcat||it.category||it.qcat||it.qing_category)}</div>`:''}
-              <div class="cx-sub ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="subtitle">${esc((repeatPointerForItem(it)&&repeatPointerForItem(it).verdict!=='similar'?repeatPointerForItem(it).title:(it.subtitle||'')))}</div>
+              <div class="cx-sub ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="subtitle">${esc(it.subtitle||it.what||'')}</div>
               <div class="cx-desc ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="description">${esc(it.description||'')}</div>
               ${matchNoteHtml(it)}
               ${isYuLoopSourceSet(it)
@@ -12236,19 +12226,28 @@ body .cb-chip .cb-ic{ display:none !important; }
   body .cb-chip .cb-chip-txt, body .chat-toprow .cb-chip .cb-chip-txt{ display:none !important; }
 }
 /* ── 設定 menu: cleaner stacked form ── */
-body .cb-pop-cfg{ min-width:290px !important; padding:12px !important; }
+body .cb-pop-cfg{ min-width:0 !important; width:100% !important; max-width:none !important;
+  padding:calc(12px * var(--fs,1)) !important; font-size:calc(13.5px * var(--fs,1)) !important; }
 .cb-pop-cfg .gx-cfgrow{ display:flex !important; flex-direction:column !important; align-items:stretch !important;
-  gap:5px !important; margin-bottom:12px !important; }
+  gap:calc(5px * var(--fs,1)) !important; margin-bottom:calc(12px * var(--fs,1)) !important; }
 .cb-pop-cfg .gx-cfgrow:last-child{ margin-bottom:0 !important; }
 .cb-pop-cfg .gx-cfgrow > span{ width:auto !important; min-width:0 !important; text-align:left !important;
   color:var(--faint) !important; font-weight:700 !important; letter-spacing:.03em;
-  font-size:calc(11.5px*var(--fs,1)) !important; }
+  font-size:calc(13.5px*var(--fs,1)) !important; line-height:1.25; }
 body .cb-pop-cfg .gx-model, body .cb-pop-cfg .gx-url, body .cb-pop-cfg .ai-provider, body .cb-pop-cfg .ai-base, body .cb-pop-cfg .ai-key{ width:100% !important; box-sizing:border-box !important;
   border:1px solid var(--line-strong) !important; border-radius:7px !important;
-  background:var(--panel) !important; color:var(--ink) !important; padding:6px 10px !important; }
-.cb-pop-cfg .cb-mem2{ flex-direction:row !important; align-items:center !important; gap:8px !important; margin:0 !important;
-  padding:2px 0; color:var(--ink) !important; }
-.cb-pop-cfg .cb-mem2 input{ accent-color:var(--accent); }
+  background:var(--panel) !important; color:var(--ink) !important;
+  min-height:calc(38px * var(--fs,1)); padding:calc(7px * var(--fs,1)) calc(10px * var(--fs,1)) !important;
+  font-size:calc(13.5px * var(--fs,1)) !important; line-height:1.25; }
+.cb-pop-cfg .cb-mem2{ flex-direction:row !important; align-items:center !important; gap:calc(8px * var(--fs,1)) !important; margin:0 !important;
+  padding:calc(2px * var(--fs,1)) 0; color:var(--ink) !important;
+  font-size:calc(13.5px * var(--fs,1)) !important; line-height:1.4; }
+.cb-pop-cfg .cb-mem2 input{ width:calc(16px * var(--fs,1)); height:calc(16px * var(--fs,1)); flex:0 0 calc(16px * var(--fs,1)); margin:0; accent-color:var(--accent); }
+.cb-pop-cfg .ai-model-wrap, .cb-pop-cfg .ai-key-wrap{ gap:calc(6px * var(--fs,1)); }
+.cb-pop-cfg .ai-model-refresh, .cb-pop-cfg .ai-key-toggle{ width:calc(36px * var(--fs,1)); height:calc(38px * var(--fs,1)); min-height:calc(38px * var(--fs,1));
+  flex:0 0 calc(36px * var(--fs,1)); display:inline-flex; align-items:center; justify-content:center;
+  padding:calc(7px * var(--fs,1)) !important; font-size:calc(16px * var(--fs,1)) !important; line-height:1; }
+.cb-pop-cfg .ai-model-refresh .svgic, .cb-pop-cfg .ai-key-toggle .svgic{ width:calc(17px * var(--fs,1)); height:calc(17px * var(--fs,1)); display:block; }
 /* ── 套用 (range) menu: wider ── */
 body .cb-pop[data-for="scope"]{ min-width:300px !important; padding:12px !important; }
 .cb-pop[data-for="scope"] .fp-scope{ margin-bottom:10px !important; }
@@ -12393,7 +12392,7 @@ body .chat-log .src-ev .src-open{
 .ai-advanced .gx-url{ flex:1 1 auto; min-width:0; }
 .ai-proxy-wrap{ display:flex; align-items:center; gap:6px; width:100%; min-width:0; }
 .ai-proxy-wrap .gx-url{ flex:1 1 auto; min-width:0; }
-.cb-pop-cfg .ai-proxy-wrap .gx-url{ width:auto !important; }
+.cb-pop-cfg .ai-proxy-wrap .gx-url{ width:100% !important; }
 .ai-proxy-reset{ flex:0 0 auto; white-space:nowrap; }
 .ai-provider-state{ min-height:18px; color:var(--muted); font-size:12px; overflow-wrap:anywhere; }
 /* Timeline right-click menu. */
