@@ -3784,3 +3784,21 @@ Verified:
 
 Remaining:
 - Existing unrelated working-tree changes remain untouched.
+
+### 2026-07-27 14:11 HKT — Codex — Added report dates to repeat labels
+
+Summary: Repeat-report labels now append the referenced report document date after its title and ID, using stored `repeat_report_date` first and the referenced source document date as a fallback. The dedup runner also writes `repeat_report_date` for future bundles and clears stale values before reruns.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- The `天90` fallback record resolves to `1787/01/04`, producing the requested date suffix after `（天90）`.
+- Python compilation and `git diff --check` passed.
+
+Remaining:
+- Human visual confirmation after reloading the formal and sample tools.

@@ -7515,7 +7515,8 @@
         const targetRec=mr.doc_id?(typeof recByAnyDocId==='function'?(recByAnyDocId(mr.doc_id)||{}):(recByDocId2(mr.doc_id)||{})):{};
         const reporter=mr.reporter||it.repeat_report_author||targetRec.author_name||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
         const titleName=mr.title||it.repeat_of_title||it.repeat_report_doc_title||mr.doc_title||targetRec.title||'較早文書';
-        const titleRef=mr.doc_id?`〈${esc(titleName)}〉（${esc(mr.doc_id)}）`:esc(titleName);
+        const reportDate=it.repeat_report_date||docBestAr(targetRec)||'';
+        const titleRef=mr.doc_id?`〈${esc(titleName)}〉（${esc(mr.doc_id)}）${reportDate?` (${esc(reportDate)})`:''}`:esc(titleName);
         const note=verdict==='similar'
           ? `可能與 ${titleRef} 相似（AI 尚未判定為同一事件）`
           : (reporter?`已由 ${esc(reporter)} 於 ${titleRef} 回報過`:`已於 ${titleRef} 回報過`);

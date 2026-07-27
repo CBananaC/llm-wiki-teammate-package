@@ -869,6 +869,7 @@ def dedup_event_rows_global(
         target_record = by_id.get(target_doc_id, {})
         item["repeat_report_author"] = str(matched.get("report_author") or author_name(target_record) or "")
         item["repeat_report_doc_title"] = str(matched.get("report_title") or target_record.get("title") or "")
+        item["repeat_report_date"] = str(matched.get("date") or _dedup_report_date(target_doc_id, by_id, "") or "")
         if matched.get("history_bundle"):
             item["repeat_report_bundle"] = matched["history_bundle"]
         if len(same_ids) > 1:
@@ -892,7 +893,7 @@ def _clear_self_repeat_annotations(rows: list[dict[str, Any]], bundle_name: str,
             and not _repeat_ref_is_same_card(str(ref), bundle_name, actor, index, did)
         ]
         if not refs:
-            for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title"):
+            for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title", "repeat_report_date"):
                 item.pop(key, None)
             continue
         item["same_as_event_id"] = refs[0]
@@ -929,7 +930,7 @@ def rerun_dedup_only(
     if not lin_rows and not qing_rows:
         raise SystemExit(f"No 林／清 output rows for {', '.join(wanted)} in bundle {source_bundle!r}.")
     for row in lin_rows + qing_rows:
-        for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title"):
+        for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title", "repeat_report_date"):
             row.pop(key, None)
 
     def save_progress() -> None:
@@ -1640,7 +1641,7 @@ def main() -> None:
         dedup_lin_rows = [dict(row) for row in lin_rows if isinstance(row, dict)]
         dedup_qing_rows = [dict(row) for row in qing_rows if isinstance(row, dict)]
         for row in dedup_lin_rows + dedup_qing_rows:
-            for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title"):
+            for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title", "repeat_report_date"):
                 row.pop(key, None)
         def _save_dedup_progress():
             write_json(dedup_dir / "lin-events.json", dedup_lin_rows)
