@@ -6930,17 +6930,47 @@
       // rather than freezing the store object -- a frozen/stale panelStore made chatArr(curStore())
       // read a bad store and throw "undefined is not an object" during extraction.
       const panelDocIds=selectedApis().map(a=>a&&a.rec&&a.rec.id).filter(Boolean).map(String);
+      const panelDocSet=new Set(panelDocIds);
       const curStore=()=>{ let a=panelDocIds.length&&typeof cards!=='undefined' ? cards.filter(c=>c.rec&&panelDocIds.includes(String(c.rec.id))) : []; if(!a.length) a=selectedApis(); return a.length===1 ? docEdits(a[0].rec.id) : groupStore(a); };
       const readChatArr=s=>readChatStoreArr(s);
+      const chatTurnVisible=turn=>{
+        if(!turn||turn.kind!=='docpair'||!panelDocIds.length) return true;
+        const pair=turn.pair&&typeof turn.pair==='object' ? turn.pair : turn;
+        return [pair.doc_id,pair.docId,pair.yu_doc_id,pair.zhu_doc_id,pair.reply_doc_id,pair.replyDocId]
+          .map(v=>String(v||'')).some(id=>panelDocSet.has(id));
+      };
+      const bundleTurnId=turn=>String(turn&&turn.__skillRunId||turn&&turn.__skillBundleName||'');
+      const bundleTurnRank=turn=>{
+        if(!turn) return 999;
+        if(turn.kind==='extract'&&turn.actor==='lin') return 10;
+        if(turn.kind==='extract'&&turn.actor==='qing'){
+          const item=Array.isArray(turn.items)&&turn.items.length ? turn.items[0] : {};
+          const category=qingCategoryCode(turn.__qcat||turn.qcat||turn.category||turn.qing_category||item.__qcat||item.qcat||item.category||item.qing_category||'done');
+          return category==='done' ? 20 : category==='plan' ? 30 : 40;
+        }
+        if(['emperoraction','zhupi','edictmatch'].includes(turn.kind)) return 50;
+        if(turn.kind==='officialresponse') return 60;
+        return 70;
+      };
       const viewChatArray=()=>{
         const refs=[], seen=new Set();
-        const addStore=(store, kind)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)) return; seen.add(turn); refs.push({turn,store,index,kind}); }); };
+        const addStore=(store, kind)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)||!chatTurnVisible(turn)) return; seen.add(turn); refs.push({turn,store,index,kind}); }); };
         (cards||[]).forEach(a=>addStore(docEdits(a.rec.id),'doc'));
-        // Workspace groups are persisted AI-loop output, including runs whose source
-        // documents are no longer open. Keep them in the read-only chat history so
-        // opening a single document does not make earlier multi-document output vanish.
+        // Workspace groups retain AI-loop output, but relationship turns are shown
+        // only when this panel's document participates in the relationship.
         Object.values(workspaceGroups()).forEach(store=>addStore(store,'group'));
-        refs.sort((a,b)=>{ const da=Date.parse(String(a.turn.at||'').replace(' ','T'))||0, db=Date.parse(String(b.turn.at||'').replace(' ','T'))||0; return da-db||a.index-b.index; });
+        refs.forEach((ref,order)=>{ ref.order=order; });
+        const bundleOrder=new Map();
+        refs.forEach(ref=>{ const id=bundleTurnId(ref.turn); if(id&&!bundleOrder.has(id)) bundleOrder.set(id,ref.order); });
+        refs.sort((a,b)=>{
+          const ba=bundleTurnId(a.turn), bb=bundleTurnId(b.turn);
+          if(ba&&bb){
+            if(ba===bb) return bundleTurnRank(a.turn)-bundleTurnRank(b.turn)||a.order-b.order;
+            return (bundleOrder.get(ba)||0)-(bundleOrder.get(bb)||0)||a.order-b.order;
+          }
+          const da=Date.parse(String(a.turn.at||'').replace(' ','T'))||0, db=Date.parse(String(b.turn.at||'').replace(' ','T'))||0;
+          return da-db||a.order-b.order;
+        });
         const out=refs.map(r=>r.turn);
         out.push=function(...turns){ const target=readChatArr(curStore()); return target.push(...turns); };
         out.splice=function(start,count){ const removed=refs.slice(start,start+count); removed.slice().reverse().forEach(r=>readChatArr(r.store).splice(r.index,1)); return removed.map(r=>r.turn); };
