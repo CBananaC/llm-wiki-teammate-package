@@ -7224,7 +7224,8 @@
       // don't break that run, they're just invisible filler for grouping purposes.
       function tocIsLocalSkillOutput(m){ return !!(m && typeof m.prompt==='string' && m.prompt.indexOf('（本機技能輸出')===0); }
       function tocGroupKey(m){
-        if(m.__skillRunId) return 'bundle:'+m.__skillRunId;
+        if(m.__skillRunId) return 'bundle:'+m.__skillRunId+':'+tocGroupLabel(m);
+        if(m.kind==='docpair') return 'docpair:'+tocGroupLabel(m);
         // Kind-tagged turns (events/zhupi/edict-match/trace/dedupe) are ALWAYS
         // kept and grouped/counted, whether they came from a live AI run or
         // from loading local skill output -- their label never shows the raw
@@ -7295,8 +7296,8 @@
           const gk=tocGroupKey(c[i]);
           if(gk==='__SKIP__'){ i++; continue; }
           if(gk===null){ rows.push({label:tocGroupLabel(c[i]), index:i, time:tocTime(c[i]), bundle:tocBundleName(c[i])}); i++; continue; }
-          // Group only strictly consecutive turns of the same kind -- a run of
-          // per-item turns produced by ONE action. A __SKIP__ (local-skill-output
+          // Group only strictly consecutive turns with the same displayed label --
+          // a run of per-item turns produced by ONE action. A __SKIP__ (local-skill-output
           // placeholder) turn is hidden from the list but must still END the run:
           // treating it as transparent glue would bridge two unrelated actions
           // (e.g. a bundle load sitting between two separate 擷取 runs done at
@@ -7312,7 +7313,7 @@
             for(let k=firstIndex;k<j;k++){ const m=c[k]||{}, p=m.pair||{}; [p.yu_doc_id,p.zhu_doc_id,p.reply_doc_id,p.doc_id,m.doc_id].forEach(x=>{ if(x) docs.add(String(x)); }); (m.items||[]).forEach(it=>{ [it.doc_id,it.edict_id,it.memDoc].forEach(x=>{ if(x) docs.add(String(x)); }); }); }
             if(docs.size) bundleCount='　·　'+docs.size+' 份文書';
           }
-          rows.push({label:tocGroupLabel(firstTurn), index:firstIndex, time:tocTime(firstTurn), bundle:tocBundleName(firstTurn)});
+          rows.push({label:tocGroupLabel(firstTurn)+(n>1?'（'+n+'）':''), index:firstIndex, time:tocTime(firstTurn), bundle:tocBundleName(firstTurn)});
           i=j;
         }
         pop.innerHTML=rows.length? rows.map(r=>`<button class="cb-mi cb-toc-item" data-toci="${r.index}" type="button"><span class="cb-toc-l">${esc(r.label)}</span>${r.time?`<span class="cb-toc-time">${esc(r.time)}</span>`:''}${r.bundle?`<span class="cb-toc-bundle">${esc(r.bundle)}</span>`:''}</button>`).join('') : '<div class="gx-prow-empty">此對話串尚無訊息。</div>';

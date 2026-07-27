@@ -3409,3 +3409,145 @@ Verified:
 Remaining:
 - The full 硃97 bundle was not reloaded into the browser during this check; the reproduced pointer path was verified directly against both renderers.
 - Unrelated project, sample-state, review-bundle, proxy, and script changes remain untouched.
+
+### 2026-07-27 01:50 HKT — Codex — Enabled incremental dedup-bundle writes
+
+Summary: Cross-document 林方／清方 deduplication now writes its separate bundle after each comparison, including partial progress after a failed comparison, so a long run can resume without waiting for the entire dedup pass to finish.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation and `git diff --check` passed before the January run.
+- January 1787 run completed with 54/54 document statuses, Lin 44/128 repeat classifications, Qing 84/332 repeat classifications, and per-document official-response processing.
+- No `responseError`, traceback, remote-disconnect, or failed-run text was found in the January bundles.
+
+Remaining:
+- January and February 1787 runs are complete. The February bundle has 41/41 document statuses, 51 Lin cards, 184 Qing cards, 32 emperor-action source groups, 66 official-response cards, 12/51 Lin repeats, and 13/184 Qing repeats.
+- The February dedup marker records comparison against `zhu-december-rerun-g36` and `zhu-february-dedup`; no response errors or tracebacks remain.
+- The runner/script edit could not be committed because Git could not create `.git/index.lock` in this environment.
+
+### 2026-07-27 11:49 HKT — Codex — Scoped AI chat pair output and bundle ordering
+
+Summary: Each document AI panel now shows `⇄ 上諭回應的奏折` turns only when the panel's document is one of the relationship documents. Bundle-loaded output is ordered within each bundle as 林方 events, 清方 events (`已執行軍事`、`待執行軍事`、`非軍事`), 皇帝行動, then 官員回應.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal and sample chat-render blocks are identical.
+- Both HTML implementations passed inline-script parsing, pair-scope and bundle-rank fixtures, and `git diff --check`.
+
+Remaining:
+- Full interactive browser verification with a loaded multi-document bundle remains pending.
+
+### 2026-07-27 12:04 HKT — Codex — Collapsed standalone repeat-report cards
+
+Summary: AI panels now treat a standalone `dedup`／repeat-report bundle as annotation data rather than a second event run. Matching 林方／清方 cards are kept once, repeat metadata is transferred to the substantive card, and unmatched dedup candidates remain visible.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The saved 硃137 fixture changed from 15 stored turns to 11 visible turns, with four duplicate extract cards collapsed and the repeat title preserved on the original Qing card.
+- Formal and sample chat-render blocks remained identical; both HTML implementations parsed successfully and `git diff --check` passed.
+
+Remaining:
+- Full interactive browser verification remains unavailable because the local preview server is isolated from the browser process in this environment.
+
+### 2026-07-27 11:54 HKT — Codex — Ran January and February 1787 上諭 loops with Gemini 3.6 Flash
+
+Summary: Ran the January 1787 上諭 set (21 documents) and then the February 1787 上諭 set (34 documents) sequentially through the provided Gemini proxy with `gemini-3.6-flash`. The runner wrote each stage JSON and per-document status incrementally as documents completed.
+
+Files:
+- `review-tools/shared data/review-bundles/yu-1787-01-gemini36-full/`
+- `review-tools/shared data/review-bundles/yu-1787-02-gemini36-full/`
+- `review-tools/shared data/review-bundles/yu-1787-02-repair-116-gemini36/`
+- `PROJECT_LOG.md`
+
+Verified:
+- January and February manifests contain the expected chronological 上諭 IDs and model `gemini-3.6-flash`.
+- All 21 January and 34 February documents have summary, division, reported-events, emperor-action, and official-response status flags; both repeat-report passes completed.
+- January output counts are 21 summaries, 21 divisions, 24 林方 cards, 68 清方 cards, 20 emperor-action rows, and 89 official-response rows.
+- February output counts are 34 summaries, 34 divisions, 37 林方 cards, 107 清方 cards, 32 emperor-action rows, and 121 official-response rows.
+- A January HTTP 502 and a February final-call timeout were recovered automatically. A separate February timeout left one empty `諭116` official-response row; the document was rerun in the repair bundle, and its two recovered response items were integrated into the final February row. Final `諭116` response-item counts are 2, 1, 2, and 2.
+- Final JSON parsing, status checks, action/response row checks, and error-field scans passed for both month bundles.
+
+Remaining:
+- The proxy does not have pricing configured for `gemini-3.6-flash`, so cost summaries report no USD estimate.
+- The final bundles still require human loading/review in the timeline interface.
+
+### 2026-07-27 12:39 HKT — Codex — Normalized AI chat table of contents
+
+Summary: Updated the formal and sample AI-chat TOC dropdowns so entries show only the skill name, with the time and bundle name beneath it as lighter metadata. Removed symbols, document IDs, and result counts from TOC titles, kept each title on one line, and constrained the dropdown to the AI panel bounds.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All embedded script blocks parsed successfully in both HTML files.
+- Formal and sample TOCs rendered with full-width single-line titles and lighter time metadata; bundle metadata appeared when present.
+- Formal and sample dropdown rectangles stayed within their respective AI panel rectangles in the local browser.
+- `git diff --check` passed.
+
+Remaining:
+- No remaining implementation work; human visual confirmation can be done after reloading either review tool if desired.
+
+### 2026-07-27 12:49 HKT — Codex — Resolved dedup bundle pointers in AI cards
+
+Summary: Corrected formal and sample AI-chat loading of repeat-report bundles. Dedup turns now resolve `run:<doc>:<index>` references to the earlier canonical card, retain the repeat marker there, ignore local bundle-only pointers, and never render unmatched dedup annotations as independent events.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- A focused `硃146` fixture resolved to the earlier `硃87` card; a title-only local bundle pointer was rejected.
+- Existing bundle and saved-data files were not edited.
+
+Remaining:
+- Live browser visual confirmation is still needed after reloading the review tool.
+
+### 2026-07-27 12:52 HKT — Codex — Ordered legacy prior-edict pair cards
+
+Summary: Moved `回應先前上諭（既有配對）` docpair turns ahead of the new AI-loop event cards while keeping them immediately after ordinary `上諭回應的奏折` pairs. The loop order now starts with source pairs, then prior-edict analysis, then 林方／清方／皇帝／官員回應 output.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- A focused `硃146` sort fixture produced the requested order.
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+
+Remaining:
+- Live browser visual confirmation is still needed after reloading the review tool.
+
+### 2026-07-27 12:56 HKT — Codex — Collapsed duplicate AI-panel TOC entries
+
+Summary: Updated the formal and sample AI-panel TOCs to group consecutive turns by their visible label, including ordinary source-pair turns and per-label bundle stages. Repeated labels now show a count such as `上諭回應的奏折（6）` or `擷取林方行動（4）`, while single entries remain unchanged.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Synthetic `AAAABCDD` fixture rendered as `A（4） B C D（2）`.
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+
+Remaining:
+- Live browser visual confirmation is still needed after reloading the review tool.
