@@ -6928,13 +6928,56 @@
         if(turn.kind==='officialresponse') return 60;
         return 70;
       };
+      const isDedupBundleTurn=turn=>{
+        const name=String(turn&&turn.__skillBundleName||'').toLowerCase();
+        return /(?:^|[-_])(?:dedup|duplicate)(?:[-_]|$)|repeat.?report.?dedup|重複/.test(name);
+      };
+      const chatTurnDocId=(turn,refDocId)=>{
+        const item=Array.isArray(turn&&turn.items)&&turn.items.length?turn.items[0]:{};
+        const source=Array.isArray(item.sources)&&item.sources.length?item.sources[0]:{};
+        return String(refDocId||turn&&turn.doc_id||turn&&turn.docId||turn&&turn.memDoc||item.doc_id||source.doc_id||'');
+      };
+      const chatItemKey=item=>{
+        const source=Array.isArray(item&&item.sources)&&item.sources.length?item.sources[0]:{};
+        const quote=String(source.quote||item&&item.quote||item&&item.excerpt||'').replace(/\s+/g,'');
+        if(quote) return 'q:'+quote;
+        return 't:'+String(item&&item.subtitle||item&&item.title||item&&item.what||'').replace(/\s+/g,'');
+      };
+      const mergeRepeatFields=(target,source)=>{
+        ['same_as','same_as_event_id','same_as_event_ids','repeat_of_title','repeat_report_bundle','repeat_report_doc_id','repeat_report_date','repeat_verdict','repeat_reason','repeat_candidates','earliest_report'].forEach(key=>{
+          const value=source&&source[key];
+          if(value==null || (Array.isArray(value)?!value.length:!String(value).trim())) return;
+          target[key]=Array.isArray(value)?value.slice():value;
+        });
+        if(source&&source.__qcat) target.__qcat=source.__qcat;
+      };
       const viewChatArray=()=>{
         const refs=[], seen=new Set();
-        const addStore=(store, kind)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)||!chatTurnVisible(turn)) return; seen.add(turn); refs.push({turn,store,index,kind}); }); };
-        (cards||[]).forEach(a=>addStore(docEdits(a.rec.id),'doc'));
+        const addStore=(store, kind, docId)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)||!chatTurnVisible(turn)) return; seen.add(turn); refs.push({turn,store,index,kind,docId:String(docId||'')}); }); };
+        (cards||[]).forEach(a=>addStore(docEdits(a.rec.id),'doc',a.rec.id));
         // Workspace groups retain AI-loop output, but relationship turns are shown
         // only when this panel's document participates in the relationship.
-        Object.values(workspaceGroups()).forEach(store=>addStore(store,'group'));
+        Object.values(workspaceGroups()).forEach(store=>addStore(store,'group',''));
+        // A standalone repeat-report bundle repeats the original extract cards only
+        // to attach repeat metadata. Merge those annotations into the matching card
+        // from the substantive bundle instead of rendering a second event sequence.
+        const canonicalRefs=refs.filter(ref=>!isDedupBundleTurn(ref.turn));
+        refs.slice().filter(ref=>isDedupBundleTurn(ref.turn)).forEach(ref=>{
+          const items=Array.isArray(ref.turn.items)?ref.turn.items:[], sourceDoc=chatTurnDocId(ref.turn,ref.docId), unmatched=[];
+          items.forEach(item=>{
+            const key=chatItemKey(item); let targetItem=null;
+            if(key && sourceDoc){
+              for(const candidate of canonicalRefs){
+                if(candidate.turn.kind!=='extract'||candidate.turn.actor!==ref.turn.actor||chatTurnDocId(candidate.turn,candidate.docId)!==sourceDoc) continue;
+                targetItem=(candidate.turn.items||[]).find(existing=>chatItemKey(existing)===key);
+                if(targetItem){ mergeRepeatFields(targetItem,item); break; }
+              }
+            }
+            if(!targetItem) unmatched.push(item);
+          });
+          if(!unmatched.length){ const index=refs.indexOf(ref); if(index>=0) refs.splice(index,1); }
+          else if(unmatched.length!==items.length) ref.turn=Object.assign({},ref.turn,{items:unmatched});
+        });
         refs.forEach((ref,order)=>{ ref.order=order; });
         const bundleOrder=new Map();
         refs.forEach(ref=>{ const id=bundleTurnId(ref.turn); if(id&&!bundleOrder.has(id)) bundleOrder.set(id,ref.order); });
