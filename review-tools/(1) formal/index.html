@@ -5871,7 +5871,8 @@
     // the researcher already added the earlier report from another card or bundle.
     // Prefer that live chart dot before creating anything new. The old fallback
     // created a new dot and then deleted the existing one during fuzzy cleanup.
-    let ev=earlier&&earlier.__added&&earlier.__evId?eventById(earlier.__evId):null;
+    let ev=mr.evId?eventById(mr.evId):null;
+    if(!ev) ev=earlier&&earlier.__added&&earlier.__evId?eventById(earlier.__evId):null;
     if(!ev && mr.doc_id) ev=findExistingRepeatEvent(mr.doc_id, mr.title, p.actor||earlier&&earlier.actor||'');
     if(ev){
       candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p)), {render:false}); });

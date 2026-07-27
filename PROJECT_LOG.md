@@ -4017,3 +4017,23 @@ Verified:
 
 Remaining:
 - Human visual confirmation on an event-bearing document remains advisable.
+
+### 2026-07-27 19:13 HKT — Codex — Attached repeat reports to the surviving event and document link
+
+Summary:
+- Made repeat-source merging prefer the deduplication pointer's explicit existing event ID before resolving a live extraction candidate or falling back to title matching.
+- Kept the surviving event dot, appended the repeated document as a source mention, and allowed the normal chart renderer to draw the event-to-document link.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `review-tools/(1) formal/formal_all.data`
+- `PROJECT_LOG.md`
+
+Verified:
+- In the formal tool, merged the `硃21` repeated card `民變軍攻陷彰化城` into `evmr8qwl3e4r0` without creating a second event dot.
+- Confirmed the surviving event contains `硃21` as a source and the chart contains one `硃21` event-link; the same state remained after reload.
+- Parsed all embedded scripts in both HTML files successfully and `git diff --check` passed.
+
+Remaining:
+- Human confirmation of another repeat target with a different title remains advisable.
