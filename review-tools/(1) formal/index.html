@@ -5658,11 +5658,11 @@
   // reported by that specific document (the candidate `p` it came from) -- separate from the event's
   // canonical fields (which may differ once a later re-report supplies its own phrasing) -- so the
   // 回報記錄 mentions panel can show each report's own wording, not just the canonical one repeated.
-  function mentionOwnFields(p){ return { ownSubtitle:p.subtitle||p.what||'', ownDescription:p.description||'', ownWhere:p.where||'', ownWhenAr:p.whenAr||'', ownWhenCh:p.whenCh||'', ownWho:p.who||[],
+  function mentionOwnFields(p){ return { ownSubtitle:eventSubtitleOf(p,''), ownDescription:p.description||'', ownWhere:p.where||'', ownWhenAr:p.whenAr||'', ownWhenCh:p.whenCh||'', ownWho:p.who||[],
     ownWhoLoc:p.whoLoc||{}, ownRelations:p.relations||[] }; }
-  function commitProposal(p){ const d=eventDateFromProposal(p); const filterLabel=p.actor==='lin'?AI_FILTER_LABELS.lin:(p.actor==='qing'?qingFilterLabel(p.__qcat||p.qcat||p.category||'done'):eventFilterLabel({actor:p.actor}));
-    return addEvent({actor:p.actor, category:p.__qcat||p.qcat||p.category||'', aiFilterLabel:filterLabel, subtitle:p.subtitle, what:p.subtitle, description:p.description||'', where:p.where, who:p.who||[], whoLoc:p.whoLoc||{}, relations:p.relations||[], whenCh:p.whenCh||'', dateAr:d?fmt(d):null,
-      sources:candidateSources(p).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:s.label||p.subtitle||'', aiFilterLabel:filterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(p)))}); }
+  function commitProposal(p){ const d=eventDateFromProposal(p), subtitle=eventDisplaySubtitle(p); const filterLabel=p.actor==='lin'?AI_FILTER_LABELS.lin:(p.actor==='qing'?qingFilterLabel(p.__qcat||p.qcat||p.category||'done'):eventFilterLabel({actor:p.actor}));
+    return addEvent({actor:p.actor, category:p.__qcat||p.qcat||p.category||'', aiFilterLabel:filterLabel, subtitle, what:subtitle, description:p.description||'', where:p.where, who:p.who||[], whoLoc:p.whoLoc||{}, relations:p.relations||[], whenCh:p.whenCh||'', dateAr:d?fmt(d):null,
+      sources:candidateSources(p).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:s.label||subtitle, aiFilterLabel:filterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(p)))}); }
   // Resolve a __matchReg pointer (bucketKey/turnIndex/itemIndex, see buildExtractRegistry) back to
   // the LIVE earlier candidate item it refers to, so its up-to-date data (it may have been edited,
   // or committed by some other action, since the registry snapshot was taken) can be read/mutated.
@@ -5705,7 +5705,7 @@
     const transient=item.__repeatTarget;
     if(transient&&transient.doc_id){
       const verdict=String(item.repeat_verdict||'same').toLowerCase()==='similar'?'similar':'same';
-      const ptr={kind:transient.evId?'verified':'stored',bucketKey:transient.bucketKey||'',turnIndex:-1,itemIndex:-1,pointIndex:null,title:transient.title||item.repeat_of_title||'',reporter:transient.reporter||'',doc_id:String(transient.doc_id),report_doc_id:String(transient.doc_id),whenAr:transient.whenAr||'',whenCh:transient.whenCh||'',report_date:transient.whenAr||'',committed:!!transient.evId,evId:transient.evId||null,verdict,reason:item.repeat_reason||'',sourceId:transient.sourceId||('run:'+String(transient.doc_id))};
+      const ptr={kind:transient.evId?'verified':'stored',bucketKey:transient.bucketKey||'',turnIndex:-1,itemIndex:-1,pointIndex:null,title:transient.title||item.repeat_of_title||'',doc_title:transient.doc_title||'',reporter:transient.reporter||'',doc_id:String(transient.doc_id),report_doc_id:String(transient.doc_id),whenAr:transient.whenAr||'',whenCh:transient.whenCh||'',report_date:transient.whenAr||'',committed:!!transient.evId,evId:transient.evId||null,verdict,reason:item.repeat_reason||'',sourceId:transient.sourceId||('run:'+String(transient.doc_id))};
       if(invalidMatchRegForCandidate(item,ptr)) return null;
       if(transient.item)try{Object.defineProperty(ptr,'__item',{value:transient.item,enumerable:false,configurable:true});}catch(e){}
       if(transient.parentItem)try{Object.defineProperty(ptr,'__parentItem',{value:transient.parentItem,enumerable:false,configurable:true});}catch(e){}
@@ -5732,9 +5732,11 @@
     const reportDoc=er.doc_id||item.repeat_report_doc_id||item.repeat_doc_id||item.report_doc_id||evDoc||runDoc||'';
     const reportDate=er.date||item.repeat_report_date||item.repeat_date||evDate||'';
     const title=er.title||item.repeat_of_title||(ev&&evTitle(ev))||'';
-    const reporter=er.reporter||item.repeat_reporter||'';
+    const targetRecord=reportDoc?(typeof recByAnyDocId==='function'?(recByAnyDocId(reportDoc)||{}):(recByDocId2(reportDoc)||{})):{};
+    const reporter=er.reporter||item.repeat_report_author||item.repeat_reporter||targetRecord.author_name||'';
+    const docTitle=item.repeat_report_doc_title||targetRecord.title||'';
     if(!ev&&!reportDoc) return null;
-    const ptr={kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title,reporter,doc_id:reportDoc,report_doc_id:reportDoc,whenAr:reportDate,whenCh:'',report_date:reportDate,committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||'',sourceId:runDoc||pointerId};
+    const ptr={kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title,doc_title:docTitle,reporter,doc_id:reportDoc,report_doc_id:reportDoc,whenAr:reportDate,whenCh:'',report_date:reportDate,committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||'',sourceId:runDoc||pointerId};
     return invalidMatchRegForCandidate(item,ptr)?null:ptr;
   }
   // Commit a NEW candidate (`p`, already tagged with __matchReg by runExtract) that re-reports an
@@ -5767,9 +5769,10 @@
     const other = earliestIsPrior ? p : earlier;
     const d=eventDateFromProposal(canonical);
     const canonicalFilterLabel=canonical.actor==='lin'?AI_FILTER_LABELS.lin:(canonical.actor==='qing'?qingFilterLabel(canonical.__qcat||canonical.qcat||canonical.category||'done'):eventFilterLabel({actor:canonical.actor}));
-    const ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonical.subtitle||canonical.what, what:canonical.subtitle||canonical.what, description:canonical.description||'',
+    const canonicalSubtitle=eventDisplaySubtitle(canonical);
+    const ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonicalSubtitle, what:canonicalSubtitle, description:canonical.description||'',
       where:canonical.where||'', who:canonical.who||[], whoLoc:canonical.whoLoc||{}, relations:canonical.relations||[], whenCh:canonical.whenCh||'', dateAr:d?fmt(d):null,
-      sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonical.subtitle||canonical.what||'', aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
+      sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonicalSubtitle, aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
     candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other))); });
     earlier.__added=true; earlier.__evId=ev.id;
     return ev;
@@ -5815,7 +5818,7 @@
     if(b.subtitle && !b.what) ev.what=b.subtitle;             // keep `what` alias in sync
     if(b.what && !b.subtitle) ev.subtitle=b.what;
     eventsArr().push(ev); saveEdits(); render(); refreshOpenDocsForEvent(ev.id); return ev; }
-  function evTitle(e){ return e.subtitle || e.what || ''; }
+  function evTitle(e){ return eventDisplaySubtitle(e); }
   function patchEvent(id, patch){ const e=eventById(id); if(e){ Object.assign(e, patch);
     if('subtitle' in patch) e.what=patch.subtitle; if('what' in patch && !('subtitle' in patch)) e.subtitle=patch.what;
     saveEdits(); render(); refreshOpenDocsForEvent(id); } }
@@ -6023,6 +6026,10 @@
   function aiProviderOptions(){ const cur=getAIProvider(); return Object.entries(AI_PROVIDERS).map(([id,cfg])=>`<option value="${id}"${id===cur?' selected':''}>${esc(cfg.label)}</option>`).join(''); }
   function aiModelPlaceholder(provider){ return provider==='gemini'?'deepseek-v3.2-maas':'使用代理預設模型，或輸入模型 ID'; }
   function aiModelListHtml(provider){ return AI_MODEL_CACHE[provider]||(AI_PROVIDERS[provider]||{}).models||[]; }
+  function aiModelOptionsHtml(provider, selected, models){
+    const values=Array.from(new Set((models==null?aiModelListHtml(provider):models).concat(selected||[]).filter(Boolean)));
+    return values.map(m=>`<option value="${esc(m)}"${m===selected?' selected':''}>${esc(m)}</option>`).join('');
+  }
   async function refreshAIModels(provider){
     const payload={provider,api_base:getAIBaseUrl(provider),api_key:getAIApiKey(provider)};
     if(provider==='gemini'&&!payload.api_key) delete payload.api_base;
@@ -6109,13 +6116,40 @@
       return ac-bc || a.index-b.index;
     }).map(x=>x.item);
   }
+  // Event cards can come from an older saved chat state whose `subtitle` was
+  // accidentally cleared after the loop ran. Recover the original short title
+  // from the linked repeat/trace data before falling back to a neutral label.
+  function eventSubtitleOf(raw, fallback){
+    if(!raw || typeof raw!=='object') return String(fallback||'');
+    const pick=v=>{ const s=String(v==null?'':v).trim(); return s; };
+    const direct=[raw.subtitle,raw.title,raw.event,raw.what,raw.action,raw.aspect,raw.repeat_of_title];
+    for(const v of direct){ const s=pick(v); if(s) return s; }
+    const pointers=[raw.__repeatTarget,raw.__matchReg,raw.earliest_report];
+    for(const p of pointers){
+      if(!p || typeof p!=='object') continue;
+      for(const v of [p.title,p.subtitle,p.event,p.what,p.action]){ const s=pick(v); if(s) return s; }
+    }
+    const chains=raw.__traceChains||raw.traceChains||raw.source_chains||raw.sourceChains;
+    if(Array.isArray(chains)) for(const ch of chains){
+      const events=Array.isArray(ch&&ch.events)?ch.events:[];
+      for(const ev of events){
+        for(const v of [ev&&ev.subtitle,ev&&ev.title,ev&&ev.event,ev&&ev.what,ev&&ev.action]){ const s=pick(v); if(s) return s; }
+      }
+    }
+    const sources=raw.sources||raw.evidence;
+    if(Array.isArray(sources)) for(const src of sources){
+      for(const v of [src&&src.subtitle,src&&src.title,src&&src.event,src&&src.what,src&&src.label]){ const s=pick(v); if(s) return s; }
+    }
+    return pick(fallback);
+  }
+  function eventDisplaySubtitle(raw){ return eventSubtitleOf(raw,'事件'); }
   function normalizeSkillEventItem(raw, actor){
     const sources=raw.sources||raw.evidence||[];
     const srcs=Array.isArray(sources)&&sources.length?sources:[raw];
     const item={
       actor: raw.actor||actor||'lin',
       category: raw.category||raw.qing_category||raw.qcat||'',
-      subtitle: raw.subtitle||raw.title||raw.event||raw.what||raw.action||'事件',
+      subtitle: eventSubtitleOf(raw,''),
       description: raw.description||raw.summary||raw.explanation||raw.text||'',
       where: raw.where||raw.location||raw.place||'',
       whenCh: raw.whenCh||raw.date_chinese||raw.event_date_chinese||raw.chinese_date||'',
@@ -6132,6 +6166,8 @@
       repeat_of_title: raw.repeat_of_title||'',
       repeat_report_bundle: raw.repeat_report_bundle||'',
       repeat_report_doc_id: raw.repeat_report_doc_id||'',
+      repeat_report_author: raw.repeat_report_author||'',
+      repeat_report_doc_title: raw.repeat_report_doc_title||'',
       repeat_report_date: raw.repeat_report_date||'',
       repeat_verdict: raw.repeat_verdict||'',
       repeat_reason: raw.repeat_reason||'',
@@ -6509,7 +6545,7 @@
       const usedSigs=new Set();
       g.extract.forEach(t=>{
         (t.items||[]).forEach(it=>{
-          const title=it.subtitle||it.what||''; if(!normWhere(title)) return;
+          const title=eventSubtitleOf(it,''); if(!normWhere(title)) return;
           const bySig=new Map();
           allChains.forEach(ch=>{
             // source-chain.json is merged one-chain-per-signature, so a shared chain (e.g. 黃仕簡→
@@ -6972,6 +7008,11 @@
         .map(v=>String(v||'')).filter(Boolean);
       const repeatTargetForItem=(item,sourceDoc,actor)=>{
         const ids=repeatRunRefs(item);
+        const explicitDoc=String(item&&item.repeat_report_doc_id||'');
+        if(explicitDoc&&explicitDoc!==String(sourceDoc)){
+          const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(explicitDoc)||{}):(recByDocId2(explicitDoc)||{});
+          return {doc_id:explicitDoc,title:item.repeat_of_title||'',doc_title:item.repeat_report_doc_title||rec.title||'',reporter:item.repeat_report_author||rec.author_name||'',whenAr:item.repeat_report_date||'',sourceId:'stored:'+explicitDoc};
+        }
         // A saved/committed event is already a trustworthy target if it points
         // to a different report document. Local bundle IDs are not targets.
         for(const id of ids){
@@ -6979,7 +7020,8 @@
           const sources=Array.isArray(ev.sources)?ev.sources:[];
           const priorDoc=String((ev.emperorDetail&&ev.emperorDetail.memDoc)||sources.map(s=>s&&s.doc_id).find(d=>d&&String(d)!==String(sourceDoc))||'');
           if(!priorDoc||priorDoc===String(sourceDoc)) continue;
-          return {doc_id:priorDoc,title:evTitle(ev),whenAr:ev.dateAr||'',evId:id,sourceId:id};
+          const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(priorDoc)||{}):(recByDocId2(priorDoc)||{});
+          return {doc_id:priorDoc,title:evTitle(ev),doc_title:rec.title||'',reporter:rec.author_name||'',whenAr:ev.dateAr||'',evId:id,sourceId:id};
         }
         const runRefs=ids.map(id=>{ const m=/^run:([^:]+):(\d+)$/.exec(id); return m?{id,doc_id:m[1],index:+m[2]}:null; }).filter(Boolean);
         for(const run of runRefs){
@@ -6991,14 +7033,14 @@
             const target=indexed&&chatItemDocId(indexed,ref.docId)===run.doc_id?indexed:null;
             const titled=!target&&item&&item.repeat_of_title?list.find(x=>chatItemDocId(x,ref.docId)===run.doc_id&&normWhere(x&& (x.subtitle||x.title||x.what||''))===normWhere(item.repeat_of_title)):null;
             const hit=target||titled;
-            if(hit) return {doc_id:run.doc_id,title:hit.subtitle||hit.title||hit.what||item.repeat_of_title||'',whenAr:hit.whenAr||'',item:hit,turn:ref.turn,sourceId:run.id};
+            if(hit){ const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(run.doc_id)||{}):(recByDocId2(run.doc_id)||{}); return {doc_id:run.doc_id,title:hit.subtitle||hit.title||hit.what||item.repeat_of_title||'',doc_title:rec.title||'',reporter:rec.author_name||'',whenAr:hit.whenAr||'',item:hit,turn:ref.turn,sourceId:run.id}; }
           }
         }
         return null;
       };
       const setRepeatTarget=(item,target)=>{ try{Object.defineProperty(item,'__repeatTarget',{value:target,enumerable:false,configurable:true,writable:true});}catch(e){ item.__repeatTarget=target; } };
       const mergeRepeatFields=(target,source)=>{
-        ['same_as','same_as_event_id','same_as_event_ids','repeat_of_title','repeat_report_bundle','repeat_report_doc_id','repeat_report_date','repeat_verdict','repeat_reason','repeat_candidates','earliest_report'].forEach(key=>{
+        ['same_as','same_as_event_id','same_as_event_ids','repeat_of_title','repeat_report_bundle','repeat_report_doc_id','repeat_report_author','repeat_report_doc_title','repeat_report_date','repeat_verdict','repeat_reason','repeat_candidates','earliest_report'].forEach(key=>{
           const value=source&&source[key];
           if(value==null || (Array.isArray(value)?!value.length:!String(value).trim())) return;
           target[key]=Array.isArray(value)?value.slice():value;
@@ -7043,7 +7085,7 @@
       const chatArr=()=>viewChatArray();
       const composerFolded=aiComposerFolded();
       const providerNow=getAIProvider(), modelListId=uid('aimodel');
-      const modelOptions=aiModelListHtml(providerNow).map(m=>`<option value="${esc(m)}"></option>`).join('');
+      const modelOptions=aiModelOptionsHtml(providerNow,getAIModel(providerNow));
       body.classList.toggle('ai-composer-folded', composerFolded);
       // The 目錄/收合輸入 buttons used to sit in their own bordered row above the chat log, which just
       // ate vertical space that could go to actual content. They get moved into the panel's own
@@ -7066,7 +7108,7 @@
             <div class="cb-pop" data-for="act" style="display:none"></div>
             <div class="cb-pop cb-pop-cfg" data-for="cfg" style="display:none">
               <div class="gx-cfgrow"><span>AI 服務</span><select class="ai-provider">${aiProviderOptions()}</select></div>
-              <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><input class="gx-model" list="${modelListId}" value="${esc(getAIModel())}" placeholder="${esc(aiModelPlaceholder(providerNow))}"><datalist id="${modelListId}">${modelOptions}</datalist><button class="ai-model-refresh" type="button" title="重新載入模型">${IC.refresh}</button></div></div>
+              <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><select class="gx-model" aria-label="模型">${modelOptions}</select></div></div>
               <div class="gx-cfgrow"><span>API Base</span><input class="ai-base" value="${esc(getAIBaseUrl())}" placeholder="https://api.example.com/v1"></div>
               <div class="gx-cfgrow"><span>API Key</span><div class="ai-key-wrap"><input class="ai-key" type="password" value="${esc(getAIApiKey())}" autocomplete="off" placeholder="API key（只保留至此分頁關閉）"><button class="ai-key-toggle" type="button" title="顯示或隱藏 API key">${IC.eye}</button></div></div>
               <div class="gx-cfgrow"><label class="cb-mem2"><input type="checkbox" class="ai-mem"> 記憶對話（跨訊息記住脈絡）</label></div>
@@ -7121,18 +7163,19 @@
       if(!window.__aiCardTrackerBound){ window.__aiCardTrackerBound=true; document.addEventListener('click',e=>{ const card=e.target.closest&&e.target.closest('.tool-box[data-kind="ai"] .chat-log [data-logi]'); if(!card) return; const tb=card.closest('.tool-box'); if(tb) tb.dataset.lastCard=card.dataset.logi; }, true); }
       function setReplyRef(ref){ if(ref) setComposerFolded(false); replyRef=ref; replyBox.classList.toggle('on', !!ref); replyTxt.textContent=ref?('回覆：'+ref.text.slice(0,140)+(ref.text.length>140?'…':'')):''; input.focus(); }
       body.querySelector('.rr-x').onclick=()=>setReplyRef(null);
-      const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), modelList=body.querySelector('#'+modelListId), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), refreshModels=body.querySelector('.ai-model-refresh'), providerState=body.querySelector('.ai-provider-state');
+      const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), providerState=body.querySelector('.ai-provider-state');
       url.onchange=()=>setAIProxyUrl(url.value.trim(),provider.value);
-      async function loadModels(){ setAIProxyUrl(url.value.trim(),provider.value); setAIBaseUrl(base.value.trim(),provider.value); setAIApiKey(key.value.trim(),provider.value); providerState.textContent='讀取模型中…'; refreshModels.disabled=true;
-        try{ const models=await refreshAIModels(provider.value); modelList.innerHTML=models.map(m=>`<option value="${esc(m)}"></option>`).join(''); if(!model.value&&models.length){ model.value=models[0]; setAIModel(model.value,provider.value); } providerState.textContent=models.length?('已載入 '+models.length+' 個模型'):'未取得模型清單，可直接輸入模型 ID'; }
-        catch(e){ providerState.textContent=e.message; } finally{ refreshModels.disabled=false; } }
-      provider.onchange=()=>{ setAIProvider(provider.value); model.value=getAIModel(provider.value); model.placeholder=aiModelPlaceholder(provider.value); base.value=getAIBaseUrl(provider.value); key.value=getAIApiKey(provider.value); url.value=getAIProxyUrl(provider.value);
-        modelList.innerHTML=aiModelListHtml(provider.value).map(m=>`<option value="${esc(m)}"></option>`).join(''); providerState.textContent=''; if(key.value) loadModels(); };
+      function updateModelOptions(models){ const selected=model.value||getAIModel(provider.value); model.innerHTML=aiModelOptionsHtml(provider.value,selected,models); if(selected) model.value=selected; }
+      async function loadModels(){ setAIProxyUrl(url.value.trim(),provider.value); setAIBaseUrl(base.value.trim(),provider.value); setAIApiKey(key.value.trim(),provider.value); providerState.textContent='讀取模型中…';
+        try{ const models=await refreshAIModels(provider.value); updateModelOptions(models); if(!model.value&&models.length){ model.value=models[0]; setAIModel(model.value,provider.value); } providerState.textContent=models.length?('已載入 '+models.length+' 個模型'):'未取得模型清單'; }
+        catch(e){ providerState.textContent=e.message; } }
+      provider.onchange=()=>{ setAIProvider(provider.value); model.value=getAIModel(provider.value); base.value=getAIBaseUrl(provider.value); key.value=getAIApiKey(provider.value); url.value=getAIProxyUrl(provider.value);
+        updateModelOptions(); loadModels(); };
+      provider.addEventListener('focus',()=>{ if(!AI_MODEL_CACHE[provider.value]) loadModels(); });
       model.onchange=()=>setAIModel(model.value,provider.value);
       base.onchange=()=>setAIBaseUrl(base.value.trim(),provider.value);
       key.addEventListener('input',()=>setAIApiKey(key.value.trim(),provider.value));
       keyToggle.onclick=()=>{ key.type=key.type==='password'?'text':'password'; };
-      refreshModels.onclick=loadModels;
       try{ input.value=localStorage.getItem(aiDraftKey())||''; }catch(e){}
       input.addEventListener('input',()=>{ try{ localStorage.setItem(aiDraftKey(), input.value); }catch(e){}
         const pos=input.selectionStart==null?input.value.length:input.selectionStart;
@@ -7429,12 +7472,14 @@
       function matchNoteHtml(it){
         const mr=repeatPointerForItem(it); if(!mr) return '';
         if(invalidMatchRegForCandidate(it, mr)) return '';
-        const earlierRef=[mr.doc_id, mr.title].filter(Boolean).join('／')+(mr.whenAr||mr.whenCh?'，'+(mr.whenAr||mr.whenCh):'')||'較早文書';
         const verdict=String(mr.verdict||it.repeat_verdict||'same').toLowerCase();
-        const reporter=mr.reporter||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
+        const targetRec=mr.doc_id?(typeof recByAnyDocId==='function'?(recByAnyDocId(mr.doc_id)||{}):(recByDocId2(mr.doc_id)||{})):{};
+        const reporter=mr.reporter||it.repeat_report_author||targetRec.author_name||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
+        const titleName=it.repeat_report_doc_title||mr.doc_title||targetRec.title||mr.title||'較早文書';
+        const titleRef=mr.doc_id?`〈${esc(titleName)}〉（${esc(mr.doc_id)}）`:esc(titleName);
         const note=verdict==='similar'
-          ? `可能與 ${esc(earlierRef)} 相似（AI 尚未判定為同一事件）`
-          : (reporter?`已由 ${esc(reporter)} 於 ${esc(earlierRef)} 回報過`:`已於 ${esc(earlierRef)} 回報過`);
+          ? `可能與 ${titleRef} 相似（AI 尚未判定為同一事件）`
+          : (reporter?`已由 ${esc(reporter)} 於 ${titleRef} 回報過`:`已於 ${titleRef} 回報過`);
         return `<div class="cx-matchnote cx-jumpreport" data-verdict="${esc(verdict)}" data-doc="${esc(mr.doc_id||'')}" data-evid="${esc(mr.evId||'')}" data-title="${esc(mr.title||'')}" title="游標移上：在事件線上置中並標示該回報事件的圓點；點擊：開啟該事件的資訊面板"><b>${note}</b>${mr.reason?`<span class="cx-matchreason">（${esc(mr.reason)}）</span>`:''}</div>`;
       }
       function repeatActionButtons(it,i,j){
@@ -7726,7 +7771,7 @@
           +(m.prompt?`<div class="bub user">${esc(m.prompt)}</div>`:'')
           +(items.length? items.map((it,j)=> it.__skip?'':`<div class="cx-ev${it.__added?' added':''}">
               ${(m.actor==='qing'||it.actor==='qing')&&(it.__qcat||it.category||it.qcat||it.qing_category)?`<div class="cx-qcat qcat-${esc(it.__qcat||qingCategoryCode(it.category||it.qcat||it.qing_category))}">${esc(QCAT_LABEL[it.__qcat||qingCategoryCode(it.category||it.qcat||it.qing_category)]||it.__qcat||it.category||it.qcat||it.qing_category)}</div>`:''}
-              <div class="cx-sub ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="subtitle">${esc(it.subtitle||it.what||'')}</div>
+              <div class="cx-sub ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="subtitle">${esc(eventDisplaySubtitle(it))}</div>
               <div class="cx-desc ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="description">${esc(it.description||'')}</div>
               ${matchNoteHtml(it)}
               ${isYuLoopSourceSet(it)
@@ -12106,10 +12151,10 @@ body .cb-pop-cfg .gx-model, body .cb-pop-cfg .gx-url, body .cb-pop-cfg .ai-provi
 .cb-pop-cfg .cb-mem2 input{ width:calc(16px * var(--ui-fs,1)); height:calc(16px * var(--ui-fs,1)); flex:0 0 calc(16px * var(--ui-fs,1)); margin:0; accent-color:var(--accent); }
 .cb-pop-cfg .ai-model-wrap, .cb-pop-cfg .ai-key-wrap{ gap:calc(6px * var(--ui-fs,1)); }
 .cb-pop-cfg .ai-proxy-wrap{ gap:calc(6px * var(--ui-fs,1)); }
-.cb-pop-cfg .ai-model-refresh, .cb-pop-cfg .ai-key-toggle{ width:calc(36px * var(--ui-fs,1)); height:calc(38px * var(--ui-fs,1)); min-height:calc(38px * var(--ui-fs,1));
+.cb-pop-cfg .ai-key-toggle{ width:calc(36px * var(--ui-fs,1)); height:calc(38px * var(--ui-fs,1)); min-height:calc(38px * var(--ui-fs,1));
   flex:0 0 calc(36px * var(--ui-fs,1)); display:inline-flex; align-items:center; justify-content:center;
   padding:calc(7px * var(--ui-fs,1)) !important; font-size:calc(16px * var(--ui-fs,1)) !important; line-height:1; }
-.cb-pop-cfg .ai-model-refresh .svgic, .cb-pop-cfg .ai-key-toggle .svgic{ width:calc(17px * var(--ui-fs,1)); height:calc(17px * var(--ui-fs,1)); display:block; }
+.cb-pop-cfg .ai-key-toggle .svgic{ width:calc(17px * var(--ui-fs,1)); height:calc(17px * var(--ui-fs,1)); display:block; }
 .cb-pop-cfg .ai-provider-state{ min-height:calc(18px * var(--ui-fs,1)); font-size:calc(12px * var(--ui-fs,1)); }
 /* ── 套用 (range) menu: wider ── */
 body .cb-pop[data-for="scope"]{ min-width:300px !important; padding:12px !important; }
