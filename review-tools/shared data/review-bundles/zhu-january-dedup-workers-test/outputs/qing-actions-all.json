@@ -1,0 +1,130 @@
+[
+  {
+    "category": "nonmil",
+    "description": "江南提督藍元枚接獲署理福建陸路提督之上諭後，隨即恭設香案，望闕叩頭謝恩。",
+    "howKnown": "親歷",
+    "quote": "臣隨即恭設香案，望闕叩頭謝恩訖。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "藍元枚設案叩頭謝恩",
+    "whenAr": "1787/02/24",
+    "whenCh": "正月初八日",
+    "whenKnownCh": "正月初八日",
+    "where": "松江",
+    "who": [
+      "藍元枚"
+    ],
+    "who_loc": {
+      "藍元枚": "松江"
+    },
+    "doc_id": "硃79",
+    "sources": [
+      {
+        "doc_id": "硃79",
+        "quote": "臣隨即恭設香案，望闕叩頭謝恩訖。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "nonmil",
+    "description": "藍元枚將提督印信等項交由署中軍參將德浩看管，以待兩江總督李世傑委派之官員前來接交。",
+    "howKnown": "親歷",
+    "quote": "隨將印信等項，交署中軍參將德浩看管。",
+    "relations": [
+      {
+        "evidence": "隨將印信等項，交署中軍參將德浩看管",
+        "relation": "交印信等項予",
+        "relation_type": "other",
+        "source": "藍元枚",
+        "target": "德浩"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "藍元枚移交印信予德浩",
+    "whenAr": "1787/02/24",
+    "whenCh": "正月初八日",
+    "whenKnownCh": "正月初八日",
+    "where": "松江",
+    "who": [
+      "藍元枚",
+      "德浩"
+    ],
+    "who_loc": {
+      "德浩": "松江",
+      "藍元枚": "松江"
+    },
+    "doc_id": "硃79",
+    "sources": [
+      {
+        "doc_id": "硃79",
+        "quote": "隨將印信等項，交署中軍參將德浩看管。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "藍元枚於正月初八日巳刻自松江起程，馳驛前往福建蚶江。",
+    "howKnown": "親歷",
+    "quote": "臣即於本日巳刻自松起程，馳驛前往蚶江",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "藍元枚自松江起程赴蚶江",
+    "whenAr": "1787/02/24",
+    "whenCh": "正月初八日",
+    "whenKnownCh": "正月初八日",
+    "where": "松江",
+    "who": [
+      "藍元枚"
+    ],
+    "who_loc": {
+      "藍元枚": "松江"
+    },
+    "doc_id": "硃79",
+    "sources": [
+      {
+        "doc_id": "硃79",
+        "quote": "臣即於本日巳刻自松起程，馳驛前往蚶江"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "藍元枚計畫抵達福建後，會同閩浙總督常青共同調度接應，以期迅速平定臺灣林爽文起事。",
+    "howKnown": "親歷",
+    "quote": "會同督臣常青調度接應以期迅速蕆事",
+    "relations": [
+      {
+        "evidence": "會同督臣常青調度接應",
+        "relation": "會同",
+        "relation_type": "ally",
+        "source": "藍元枚",
+        "target": "常青"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "藍元枚計畫會同常青調度接應",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "正月初八日",
+    "where": "蚶江",
+    "who": [
+      "藍元枚",
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "",
+      "藍元枚": "松江"
+    },
+    "doc_id": "硃79",
+    "sources": [
+      {
+        "doc_id": "硃79",
+        "quote": "會同督臣常青調度接應以期迅速蕆事"
+      }
+    ],
+    "actor": "qing"
+  }
+]

@@ -1,0 +1,34 @@
+[
+  {
+    "category": "done",
+    "description": "林爽文等人在臺灣彰化地方糾集群眾進行滋擾與不法活動。",
+    "howKnown": "上諭",
+    "quote": "現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾一案",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "林爽文等糾眾滋擾彰化",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "正月初二日",
+    "where": "福建臺灣彰＂",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "福建臺灣彰＂"
+    },
+    "doc_id": "硃79",
+    "sources": [
+      {
+        "doc_id": "硃79",
+        "quote": "現在福建臺灣彰＂地方有賊匪林爽文等糾眾滋擾一案"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmrblh7h7tiv",
+    "repeat_of_title": "臺灣匪徒滋事不法",
+    "repeat_report_doc_id": "天57",
+    "repeat_report_author": "",
+    "repeat_report_doc_title": ""
+  }
+]

@@ -1,0 +1,209 @@
+[
+  {
+    "category": "nonmil",
+    "description": "閩浙總督常青會同司、道官員審明楊振國等四犯起事根由後，因案情重大，將犯人解交刑部確審，並於正月初六日繕摺馳奏。",
+    "howKnown": "親歷",
+    "quote": "經臣督同司、道訊明起事根由，因案關重大，即將該犯等解交刑部，再行確審，業於正月初六日繕摺錄供由六百里馳奏在案。",
+    "relations": [
+      {
+        "evidence": "經臣督同司、道訊明起事根由",
+        "relation": "訊明",
+        "relation_type": "other",
+        "source": "常青",
+        "target": "楊振國"
+      },
+      {
+        "evidence": "即將該犯等解交刑部",
+        "relation": "解交",
+        "relation_type": "other",
+        "source": "常青",
+        "target": "楊振國"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青審訊楊振國並解交刑部",
+    "whenAr": "1787/02/23",
+    "whenCh": "正月初六日",
+    "whenKnownCh": "正月初六日",
+    "where": "泉州",
+    "who": [
+      "常青",
+      "楊振國"
+    ],
+    "who_loc": {
+      "常青": "泉州",
+      "楊振國": "泉州"
+    },
+    "doc_id": "硃146",
+    "sources": [
+      {
+        "doc_id": "硃146",
+        "quote": "經臣督同司、道訊明起事根由，因案關重大，即將該犯等解交刑部，再行確審，業於正月初六日繕摺錄供由六百里馳奏在案。"
+      }
+    ],
+    "actor": "qing",
+    "same_as_event_id": "evmrdbnvavv8t",
+    "repeat_of_title": "解送逆犯至京城審訊",
+    "repeat_report_doc_id": "硃88",
+    "repeat_report_author": "常青",
+    "repeat_report_doc_title": "為擒獲逆犯高文麟等審明解京恭摺具奏事"
+  },
+  {
+    "category": "plan",
+    "description": "由於楊振國等犯之應坐家屬皆在彰化，閩浙總督常青已抄錄供詞諮會提臣，要求嚴行搜捕其家屬。",
+    "howKnown": "親歷",
+    "quote": "至各犯均係生長臺灣，應坐家屬俱在彰化。臣已抄摺諮會提臣，嚴行搜捕。",
+    "relations": [
+      {
+        "evidence": "臣已抄摺諮會提臣，嚴行搜捕",
+        "relation": "諮會",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "提臣"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青諮會提臣搜捕賊犯家屬",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "彰化",
+    "who": [
+      "常青",
+      "提臣"
+    ],
+    "who_loc": {
+      "常青": "泉州"
+    },
+    "doc_id": "硃146",
+    "sources": [
+      {
+        "doc_id": "硃146",
+        "quote": "至各犯均係生長臺灣，應坐家屬俱在彰化。臣已抄摺諮會提臣，嚴行搜捕。"
+      }
+    ],
+    "actor": "qing",
+    "same_as_event_id": "bundle:zhu-december-rerun-g36:qing:43",
+    "repeat_of_title": "常青於泉州親提虞文光訊問",
+    "repeat_report_doc_id": "硃35",
+    "repeat_report_author": "常青",
+    "repeat_report_doc_title": "為奏臺灣北路形勢及酌籌防護郡城事",
+    "repeat_report_bundle": "zhu-december-rerun-g36"
+  },
+  {
+    "category": "done",
+    "description": "鳳山失守後，參將瑚圖里馳赴軍前，臺灣鎮總兵柴大紀飭令其前往桶盤棧營盤，協同遊擊蔡攀龍堵禦賊匪、保護郡城。",
+    "howKnown": "轉述",
+    "quote": "嗣據柴大紀稟報：瑚圖里已馳赴軍前，飭令前往桶盤棧營盤，協同遊擊蔡攀龍堵禦賊匪，保護郡城。",
+    "relations": [
+      {
+        "evidence": "飭令前往桶盤棧營盤",
+        "relation": "飭令",
+        "relation_type": "command",
+        "source": "柴大紀",
+        "target": "瑚圖里"
+      },
+      {
+        "evidence": "協同遊擊蔡攀龍堵禦賊匪",
+        "relation": "協同",
+        "relation_type": "ally",
+        "source": "瑚圖里",
+        "target": "蔡攀龍"
+      },
+      {
+        "evidence": "嗣據柴大紀稟報",
+        "relation": "稟報",
+        "relation_type": "report",
+        "source": "柴大紀",
+        "target": "常青"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "柴大紀飭令瑚圖里協防桶盤棧",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "桶盤棧",
+    "who": [
+      "柴大紀",
+      "瑚圖里",
+      "蔡攀龍"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣府城",
+      "瑚圖里": "桶盤棧",
+      "蔡攀龍": "桶盤棧"
+    },
+    "doc_id": "硃146",
+    "sources": [
+      {
+        "doc_id": "硃146",
+        "quote": "嗣據柴大紀稟報：瑚圖里已馳赴軍前，飭令前往桶盤棧營盤，協同遊擊蔡攀龍堵禦賊匪，保護郡城。"
+      }
+    ],
+    "actor": "qing",
+    "same_as_event_id": "bundle:zhu-december-rerun-g36:qing:167",
+    "repeat_of_title": "柴大紀派蔡攀龍等紮營桶盤棧",
+    "repeat_report_doc_id": "硃128",
+    "repeat_report_author": "柴大紀",
+    "repeat_report_doc_title": "為奏聞調度水陸官兵守禦府城事",
+    "repeat_report_bundle": "zhu-december-rerun-g36"
+  },
+  {
+    "category": "plan",
+    "description": "閩浙總督常青計畫於戰事平定後，查明參將瑚圖里之功罪，並確查陳邦光之殲敵功績、鄉勇義民賞賜及鳳山知縣湯大奎之議恤。",
+    "howKnown": "親歷",
+    "quote": "亦應遵旨於蕆事後查明功罪，據實奏聞。至如陳邦光之殲擒賊眾，奮勇可嘉，鄉勇、義民分別旌賞，及鳳山縣知縣湯大奎應行議恤之處，容臣逐一確查辦理外，合將奏到諭旨緣由，恭摺具奏。",
+    "relations": [
+      {
+        "evidence": "亦應遵旨於蕆事後查明功罪",
+        "relation": "查明功罪",
+        "relation_type": "other",
+        "source": "常青",
+        "target": "瑚圖里"
+      },
+      {
+        "evidence": "至如陳邦光之殲擒賊眾...容臣逐一確查辦理",
+        "relation": "確查辦理",
+        "relation_type": "other",
+        "source": "常青",
+        "target": "陳邦光"
+      },
+      {
+        "evidence": "鳳山縣知縣湯大奎應行議恤之處，容臣逐一確查辦理",
+        "relation": "確查辦理",
+        "relation_type": "other",
+        "source": "常青",
+        "target": "湯大奎"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青擬於事竣後查明官員功罪",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福建",
+    "who": [
+      "常青",
+      "瑚圖里",
+      "陳邦光",
+      "湯大奎"
+    ],
+    "who_loc": {
+      "常青": "泉州"
+    },
+    "doc_id": "硃146",
+    "sources": [
+      {
+        "doc_id": "硃146",
+        "quote": "亦應遵旨於蕆事後查明功罪，據實奏聞。至如陳邦光之殲擒賊眾，奮勇可嘉，鄉勇、義民分別旌賞，及鳳山縣知縣湯大奎應行議恤之處，容臣逐一確查辦理外，合將奏到諭旨緣由，恭摺具奏。"
+      }
+    ],
+    "actor": "qing",
+    "same_as_event_id": "evmr3jsmv3f69",
+    "repeat_of_title": "沿海各口岸加兵駐守",
+    "repeat_report_doc_id": "硃35",
+    "repeat_report_author": "常青",
+    "repeat_report_doc_title": "為奏臺灣北路形勢及酌籌防護郡城事"
+  }
+]

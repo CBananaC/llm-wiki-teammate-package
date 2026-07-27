@@ -1,0 +1,16 @@
+{
+  "name": "repeat-dedup-smoke-mock",
+  "created_at": "2026-07-27T13:23:41",
+  "source_bundle": "zhu-january-official-loop",
+  "source": "outputs/attempt-002/stage1_original_text.json",
+  "model": "gemini-3.6-flash",
+  "doc_ids": [
+    "硃146"
+  ],
+  "comparison_bundles": [
+    "zhu-december-rerun-g36"
+  ],
+  "chain": [
+    "repeat-report-dedup (global, post-loop)"
+  ]
+}

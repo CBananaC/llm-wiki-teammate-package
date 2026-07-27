@@ -1,0 +1,79 @@
+[
+  {
+    "category": "done",
+    "description": "偽官楊振國等賊匪在鹿仔港一帶與清軍署守備陳邦光交戰，隨後楊振國等四人被官軍擒獲。",
+    "howKnown": "轉述",
+    "quote": "署守備陳邦光剿殺賊匪，擒獲楊振國等四犯",
+    "relations": [
+      {
+        "evidence": "署守備陳邦光剿殺賊匪，擒獲楊振國",
+        "relation": "剿殺",
+        "relation_type": "conflict",
+        "source": "陳邦光",
+        "target": "楊振國"
+      }
+    ],
+    "side": "lin",
+    "subtitle": "楊振國等賊匪於鹿仔港抗拒官軍",
+    "whenAr": "1787/01",
+    "whenCh": "乾隆五十一年十二月",
+    "whenKnownCh": "十二月二十八日",
+    "where": "鹿仔港",
+    "who": [
+      "楊振國",
+      "陳邦光"
+    ],
+    "who_loc": {
+      "楊振國": "鹿仔港",
+      "陳邦光": "鹿仔港"
+    },
+    "doc_id": "硃146",
+    "sources": [
+      {
+        "doc_id": "硃146",
+        "quote": "署守備陳邦光剿殺賊匪，擒獲楊振國等四犯"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "bundle:zhu-december-rerun-g36:lin:64",
+    "repeat_of_title": "賊匪出彰城西門迎戰",
+    "repeat_report_doc_id": "硃82",
+    "repeat_report_author": "常青",
+    "repeat_report_doc_title": "為奏聞守備陳邦光攻打彰化擒獲楊振國等緣由事",
+    "repeat_report_bundle": "zhu-december-rerun-g36"
+  },
+  {
+    "category": "done",
+    "description": "林爽文部眾攻陷鳳山縣城，導致知縣湯大奎殉難，參將瑚圖里一度下落不明。",
+    "howKnown": "轉述",
+    "quote": "奏報鳳山失守各摺",
+    "relations": [],
+    "side": "lin",
+    "subtitle": "叛軍攻陷鳳山縣城",
+    "whenAr": "1787/01",
+    "whenCh": "乾隆五十一年十二月",
+    "whenKnownCh": "正月初二日",
+    "where": "鳳山",
+    "who": [
+      "湯大奎",
+      "瑚圖里"
+    ],
+    "who_loc": {
+      "湯大奎": "鳳山",
+      "瑚圖里": "鳳山"
+    },
+    "doc_id": "硃146",
+    "sources": [
+      {
+        "doc_id": "硃146",
+        "quote": "奏報鳳山失守各摺"
+      }
+    ],
+    "actor": "lin",
+    "same_as_event_id": "evmr8qwl3e4r0",
+    "repeat_of_title": "叛軍攻陷彰化縣城",
+    "repeat_report_doc_id": "奏7",
+    "repeat_report_author": "常青",
+    "repeat_report_doc_title": "為飛摺奏聞彰化被陷及調撥進剿事"
+  }
+]
