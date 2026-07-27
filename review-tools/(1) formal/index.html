@@ -7036,13 +7036,9 @@
         .map(v=>String(v||'')).filter(Boolean);
       const repeatTargetForItem=(item,sourceDoc,actor)=>{
         const ids=repeatRunRefs(item);
-        const explicitDoc=String(item&&item.repeat_report_doc_id||'');
-        if(explicitDoc&&explicitDoc!==String(sourceDoc)){
-          const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(explicitDoc)||{}):(recByDocId2(explicitDoc)||{});
-          return {doc_id:explicitDoc,title:item.repeat_of_title||'',doc_title:item.repeat_report_doc_title||rec.title||'',reporter:item.repeat_report_author||rec.author_name||'',whenAr:item.repeat_report_date||'',sourceId:'stored:'+explicitDoc};
-        }
-        // A saved/committed event is already a trustworthy target if it points
-        // to a different report document. Local bundle IDs are not targets.
+        // Prefer a live chart event when the saved repeat pointer already names
+        // one. The report-document fallback below is for targets not loaded in
+        // the current chart and should not disable merging into existing dots.
         for(const id of ids){
           const ev=eventById(id); if(!ev) continue;
           const sources=Array.isArray(ev.sources)?ev.sources:[];
@@ -7050,6 +7046,11 @@
           if(!priorDoc||priorDoc===String(sourceDoc)) continue;
           const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(priorDoc)||{}):(recByDocId2(priorDoc)||{});
           return {doc_id:priorDoc,title:evTitle(ev),doc_title:rec.title||'',reporter:rec.author_name||'',whenAr:ev.dateAr||'',evId:id,sourceId:id};
+        }
+        const explicitDoc=String(item&&item.repeat_report_doc_id||'');
+        if(explicitDoc&&explicitDoc!==String(sourceDoc)){
+          const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(explicitDoc)||{}):(recByDocId2(explicitDoc)||{});
+          return {doc_id:explicitDoc,title:item.repeat_of_title||'',doc_title:item.repeat_report_doc_title||rec.title||'',reporter:item.repeat_report_author||rec.author_name||'',whenAr:item.repeat_report_date||'',sourceId:'stored:'+explicitDoc};
         }
         const runRefs=ids.map(id=>{ const m=/^run:([^:]+):(\d+)$/.exec(id); return m?{id,doc_id:m[1],index:+m[2]}:null; }).filter(Boolean);
         for(const run of runRefs){

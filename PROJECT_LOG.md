@@ -3802,3 +3802,20 @@ Verified:
 
 Remaining:
 - Human visual confirmation after reloading the formal and sample tools.
+
+### 2026-07-27 14:15 HKT — Codex — Enabled repeat merges into existing chart events
+
+Summary: Fixed repeat-card target resolution in both tools. When a repeat record's `same_as_event_id` already identifies a chart event, the UI now resolves that live event before falling back to the report-document metadata, so `併入已有事件` is enabled for existing dots such as the `硃83` targets.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal state contains the `硃83` target events `evmrd8qehqp5n` and `evmrd9see7hs5`.
+- Both HTML files' embedded scripts parsed successfully and the live-target priority is present in both.
+- `git diff --check` passed.
+
+Remaining:
+- Human click confirmation after reloading the formal and sample tools.
