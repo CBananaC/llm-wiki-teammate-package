@@ -5757,6 +5757,20 @@
   }
   function repeatPointerForItem(item){
     if(!item) return null;
+    // A dedup bundle is loaded as an annotation over the canonical extract card.
+    // When the loader resolves its run:<doc>:<index> reference, keep the live
+    // target here so the repeat note and merge controls use the real prior item
+    // instead of the dedup bundle's local synthetic ID.
+    const transient=item.__repeatTarget;
+    if(transient&&transient.doc_id){
+      const verdict=String(item.repeat_verdict||'same').toLowerCase()==='similar'?'similar':'same';
+      const ptr={kind:transient.evId?'verified':'stored',bucketKey:transient.bucketKey||'',turnIndex:-1,itemIndex:-1,pointIndex:null,title:transient.title||item.repeat_of_title||'',reporter:transient.reporter||'',doc_id:String(transient.doc_id),report_doc_id:String(transient.doc_id),whenAr:transient.whenAr||'',whenCh:transient.whenCh||'',report_date:transient.whenAr||'',committed:!!transient.evId,evId:transient.evId||null,verdict,reason:item.repeat_reason||'',sourceId:transient.sourceId||('run:'+String(transient.doc_id))};
+      if(invalidMatchRegForCandidate(item,ptr)) return null;
+      if(transient.item)try{Object.defineProperty(ptr,'__item',{value:transient.item,enumerable:false,configurable:true});}catch(e){}
+      if(transient.parentItem)try{Object.defineProperty(ptr,'__parentItem',{value:transient.parentItem,enumerable:false,configurable:true});}catch(e){}
+      if(transient.turn)try{Object.defineProperty(ptr,'__turn',{value:transient.turn,enumerable:false,configurable:true});}catch(e){}
+      return ptr;
+    }
     if(item.__matchReg){ const mr=enrichRepeatPointer(item.__matchReg); return invalidMatchRegForCandidate(item,mr)?null:mr; }
     const er=item.earliest_report||{}, storedSame=String(item.same_as||''), rawVerdict=String(item.repeat_verdict||'').toLowerCase();
     // Older terminal bundles stored same_as/earliest_report but omitted
@@ -6967,6 +6981,39 @@
         if(quote) return 'q:'+quote;
         return 't:'+String(item&&item.subtitle||item&&item.title||item&&item.what||'').replace(/\s+/g,'');
       };
+      const chatItemDocId=(item,refDocId)=>{
+        const source=Array.isArray(item&&item.sources)&&item.sources.length?item.sources[0]:{};
+        return String(item&&item.doc_id||item&&item.docId||source.doc_id||source.docId||refDocId||'');
+      };
+      const repeatRunRefs=item=>[item&&item.same_as_event_id,item&&item.same_as].concat(Array.isArray(item&&item.same_as_event_ids)?item.same_as_event_ids:[])
+        .map(v=>String(v||'')).filter(Boolean);
+      const repeatTargetForItem=(item,sourceDoc,actor)=>{
+        const ids=repeatRunRefs(item);
+        // A saved/committed event is already a trustworthy target if it points
+        // to a different report document. Local bundle IDs are not targets.
+        for(const id of ids){
+          const ev=eventById(id); if(!ev) continue;
+          const sources=Array.isArray(ev.sources)?ev.sources:[];
+          const priorDoc=String((ev.emperorDetail&&ev.emperorDetail.memDoc)||sources.map(s=>s&&s.doc_id).find(d=>d&&String(d)!==String(sourceDoc))||'');
+          if(!priorDoc||priorDoc===String(sourceDoc)) continue;
+          return {doc_id:priorDoc,title:evTitle(ev),whenAr:ev.dateAr||'',evId:id,sourceId:id};
+        }
+        const runRefs=ids.map(id=>{ const m=/^run:([^:]+):(\d+)$/.exec(id); return m?{id,doc_id:m[1],index:+m[2]}:null; }).filter(Boolean);
+        for(const run of runRefs){
+          if(run.doc_id===String(sourceDoc)) continue;
+          const options=canonicalRefs.filter(ref=>ref.turn&&ref.turn.kind==='extract'&&ref.turn.actor===actor);
+          for(const ref of options){
+            const list=Array.isArray(ref.turn.items)?ref.turn.items:[];
+            const indexed=list[run.index];
+            const target=indexed&&chatItemDocId(indexed,ref.docId)===run.doc_id?indexed:null;
+            const titled=!target&&item&&item.repeat_of_title?list.find(x=>chatItemDocId(x,ref.docId)===run.doc_id&&normWhere(x&& (x.subtitle||x.title||x.what||''))===normWhere(item.repeat_of_title)):null;
+            const hit=target||titled;
+            if(hit) return {doc_id:run.doc_id,title:hit.subtitle||hit.title||hit.what||item.repeat_of_title||'',whenAr:hit.whenAr||'',item:hit,turn:ref.turn,sourceId:run.id};
+          }
+        }
+        return null;
+      };
+      const setRepeatTarget=(item,target)=>{ try{Object.defineProperty(item,'__repeatTarget',{value:target,enumerable:false,configurable:true,writable:true});}catch(e){ item.__repeatTarget=target; } };
       const mergeRepeatFields=(target,source)=>{
         ['same_as','same_as_event_id','same_as_event_ids','repeat_of_title','repeat_report_bundle','repeat_report_doc_id','repeat_report_date','repeat_verdict','repeat_reason','repeat_candidates','earliest_report'].forEach(key=>{
           const value=source&&source[key];
@@ -6987,20 +7034,26 @@
         // from the substantive bundle instead of rendering a second event sequence.
         const canonicalRefs=refs.filter(ref=>!isDedupBundleTurn(ref.turn));
         refs.slice().filter(ref=>isDedupBundleTurn(ref.turn)).forEach(ref=>{
-          const items=Array.isArray(ref.turn.items)?ref.turn.items:[], sourceDoc=chatTurnDocId(ref.turn,ref.docId), unmatched=[];
+          const items=Array.isArray(ref.turn.items)?ref.turn.items:[], sourceDoc=chatTurnDocId(ref.turn,ref.docId);
           items.forEach(item=>{
             const key=chatItemKey(item); let targetItem=null;
             if(key && sourceDoc){
               for(const candidate of canonicalRefs){
                 if(candidate.turn.kind!=='extract'||candidate.turn.actor!==ref.turn.actor||chatTurnDocId(candidate.turn,candidate.docId)!==sourceDoc) continue;
                 targetItem=(candidate.turn.items||[]).find(existing=>chatItemKey(existing)===key);
-                if(targetItem){ mergeRepeatFields(targetItem,item); break; }
+                if(targetItem){
+                  const repeatTarget=repeatTargetForItem(item,sourceDoc,ref.turn.actor);
+                  if(repeatTarget){ mergeRepeatFields(targetItem,item); setRepeatTarget(targetItem,repeatTarget); }
+                  else targetItem=null;
+                  break;
+                }
               }
             }
-            if(!targetItem) unmatched.push(item);
           });
-          if(!unmatched.length){ const index=refs.indexOf(ref); if(index>=0) refs.splice(index,1); }
-          else if(unmatched.length!==items.length) ref.turn=Object.assign({},ref.turn,{items:unmatched});
+          // Dedup bundles contain annotations only. Never render an unmatched
+          // item as a fresh event card, because its local bundle pointer is not
+          // evidence that the event was previously reported.
+          const index=refs.indexOf(ref); if(index>=0) refs.splice(index,1);
         });
         refs.forEach((ref,order)=>{ ref.order=order; });
         const bundleOrder=new Map();
