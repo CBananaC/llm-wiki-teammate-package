@@ -701,6 +701,7 @@ def dedup_event_rows_global(
     retry_sleep: int,
     history_bundles: list[str] | None = None,
     top_k: int = 12,
+    workers: int = 6,
     on_progress=None,
 ) -> int:
     """Cross-document repeat-report pass over EVERY extracted card of one side.
@@ -715,9 +716,13 @@ def dedup_event_rows_global(
     `same_as_event_id` always points at the first report of the occurrence. The
     historical bundle pool contains provisional cards and is not treated as
     verified chart state. Writes `same_as_event_id` / `repeat_of_title` in place
-    for the website to merge on."""
+    for the website to merge on. Proxy searches run in a bounded pool after
+    candidate payloads have been built in chronological order; results are
+    applied in that same order so the output remains deterministic."""
     if not rows:
         return 0
+    if not 2 <= workers <= 8:
+        raise ValueError("dedup workers must be between 2 and 8")
     committed = earlier_committed_events(actor, set())
     historical = historical_dedup_candidates(actor, history_bundles or [], by_id)
     order = sorted(
@@ -736,6 +741,7 @@ def dedup_event_rows_global(
         if on_progress:
             on_progress()
 
+    jobs: list[dict[str, Any]] = []
     for position, i in enumerate(order, 1):
         item = rows[i]
         did = doc_id_of(item)
@@ -791,13 +797,42 @@ def dedup_event_rows_global(
                 for c in candidates
             ],
         }
+        jobs.append({
+            "position": position,
+            "item": item,
+            "did": did,
+            "candidates": candidates,
+            "payload": payload,
+        })
+
+    if not jobs:
+        save_progress()
+        return 0
+
+    def request_job(job: dict[str, Any]) -> tuple[dict[str, Any], dict[str, Any] | None, Exception | None]:
         try:
-            with accounting_step("repeat-report"):
-                data = post_json(proxy, payload, timeout, retries, retry_sleep)
+            # Set the accounting label on the payload itself. A shared
+            # accounting context would race while these requests are in flight.
+            request_payload = dict(job["payload"])
+            request_payload["_accounting_step"] = "repeat-report"
+            return job, post_json(proxy, request_payload, timeout, retries, retry_sleep), None
         except Exception as exc:  # dedup is advisory; never lose an extracted card over it
-            print(f"    repeat-report failed for {item.get('subtitle') or '(untitled)'}: {exc}")
+            return job, None, exc
+
+    from concurrent.futures import ThreadPoolExecutor
+    with ThreadPoolExecutor(max_workers=min(workers, len(jobs))) as executor:
+        responses = list(executor.map(request_job, jobs))
+
+    for job, data, error in responses:
+        item = job["item"]
+        did = job["did"]
+        position = job["position"]
+        candidates = job["candidates"]
+        if error is not None:
+            print(f"    repeat-report failed for {item.get('subtitle') or '(untitled)'}: {error}")
             save_progress()
             continue
+        data = data or {}
         same_ids = data.get("same_ids") if isinstance(data.get("same_ids"), list) else []
         same_ids = [str(i2) for i2 in same_ids if str(i2)]
         if not same_ids:
@@ -878,6 +913,7 @@ def rerun_dedup_only(
     timeout: int,
     retries: int,
     retry_sleep: int,
+    dedup_workers: int,
 ) -> None:
     """Re-run only the cross-document dedup stage over an existing loop bundle."""
     if not proxy:
@@ -903,8 +939,9 @@ def rerun_dedup_only(
     save_progress()
     print(f"dedup-only source bundle: {source_bundle}")
     print(f"dedup comparison bundles: {', '.join(history_bundles) or 'none'}")
-    n_lin = dedup_event_rows_global(proxy, model, lin_rows, "lin", by_id, timeout, retries, retry_sleep, history_bundles, on_progress=save_progress)
-    n_qing = dedup_event_rows_global(proxy, model, qing_rows, "qing", by_id, timeout, retries, retry_sleep, history_bundles, on_progress=save_progress)
+    print(f"dedup workers: {dedup_workers}")
+    n_lin = dedup_event_rows_global(proxy, model, lin_rows, "lin", by_id, timeout, retries, retry_sleep, history_bundles, workers=dedup_workers, on_progress=save_progress)
+    n_qing = dedup_event_rows_global(proxy, model, qing_rows, "qing", by_id, timeout, retries, retry_sleep, history_bundles, workers=dedup_workers, on_progress=save_progress)
     _clear_self_repeat_annotations(lin_rows, dedup_bundle, "lin")
     _clear_self_repeat_annotations(qing_rows, dedup_bundle, "qing")
     save_progress()
@@ -916,6 +953,7 @@ def rerun_dedup_only(
         "model": model,
         "doc_ids": wanted,
         "comparison_bundles": history_bundles,
+        "dedup_workers": dedup_workers,
         "chain": ["repeat-report-dedup (global, post-loop)"],
     })
     if not (dedup_root / "human-edits" / "notes.json").exists():
@@ -1378,10 +1416,13 @@ def main() -> None:
         help="Comma-separated earlier review bundles whose provisional 林/清 cards join cross-document dedup",
     )
     ap.add_argument("--workers", type=int, default=6, help="Concurrent proxy calls for source-chain traces and official-response")
+    ap.add_argument("--dedup-workers", type=int, default=6, help="Concurrent repeat-report searches (2-8; default: 6)")
     ap.add_argument("--dry-run", action="store_true")
     ap.add_argument("--input-price-per-million", type=float, default=None)
     ap.add_argument("--output-price-per-million", type=float, default=None)
     args = ap.parse_args()
+    if not 2 <= args.dedup_workers <= 8:
+        raise SystemExit("--dedup-workers must be between 2 and 8.")
 
     records = json.loads(SOURCE.read_text(encoding="utf-8"))
     by_id = {doc_id_of(record): record for record in records}
@@ -1444,6 +1485,7 @@ def main() -> None:
             args.timeout,
             args.retries,
             args.retry_sleep,
+            args.dedup_workers,
         )
         return
 
@@ -1594,6 +1636,7 @@ def main() -> None:
     if not dedup_done():
         print("- 重複回報檢查（獨立 bundle；全域，所有文書擷取完畢後執行）")
         print(f"  dedup comparison bundles: {', '.join(dedup_compare_bundles) or 'none'}")
+        print(f"  dedup workers: {args.dedup_workers}")
         dedup_lin_rows = [dict(row) for row in lin_rows if isinstance(row, dict)]
         dedup_qing_rows = [dict(row) for row in qing_rows if isinstance(row, dict)]
         for row in dedup_lin_rows + dedup_qing_rows:
@@ -1607,12 +1650,14 @@ def main() -> None:
         n_lin = dedup_event_rows_global(
             args.proxy, args.model, dedup_lin_rows, "lin", by_id,
             args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles,
+            workers=args.dedup_workers,
             on_progress=_save_dedup_progress,
         )
         print(f"  林方：{n_lin}/{len(dedup_lin_rows)} 判為重複")
         n_qing = dedup_event_rows_global(
             args.proxy, args.model, dedup_qing_rows, "qing", by_id,
             args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles,
+            workers=args.dedup_workers,
             on_progress=_save_dedup_progress,
         )
         print(f"  清方：{n_qing}/{len(dedup_qing_rows)} 判為重複")
@@ -1628,6 +1673,7 @@ def main() -> None:
             "model": args.model,
             "doc_ids": wanted,
             "comparison_bundles": dedup_compare_bundles,
+            "dedup_workers": args.dedup_workers,
             "chain": ["repeat-report-dedup (global, post-loop)"],
         })
         if not (dedup_root / "human-edits" / "notes.json").exists():
