@@ -3922,3 +3922,21 @@ Verified:
 
 Remaining:
 - The archival `review-tools/(1) formal/sample_1.html` was not changed; the active server routes use the formal and sample `index.html` files above.
+
+### 2026-07-27 18:14 HKT — Codex — Created structured Traditional Chinese website-content draft
+
+Summary:
+- Regenerated the introduction-website planning draft as a structured Traditional Chinese document with subtitles and prose paragraphs under each section.
+- Reorganised the content around the platform as a reusable research framework for 奏摺 and 上諭, with the 林爽文事件 retained as the demonstration case.
+- Added the AI processing loop between adapting information-extraction Skills and human verification, including JSON input, Python batch processing, AI API calls, intermediate review bundles, website import, and researcher review.
+
+Files:
+- `intro Website/網站內容草稿_第三稿.docx`
+- `PROJECT_LOG.md`
+
+Verified:
+- The DOCX rendered to 14 pages with the document renderer.
+- Visually inspected the cover, introduction, communication-reconstruction section, AI processing loop, reuse tutorial, and conclusion pages; no clipping or overlap was observed.
+
+Remaining:
+- The draft still needs the project-specific screenshots, repository/API links, final citations, and any confirmed author or affiliation information before it becomes the final website manuscript.
