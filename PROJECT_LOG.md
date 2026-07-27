@@ -4174,3 +4174,22 @@ Verified:
 
 Remaining:
 - Open the HTTP StoryMap URL in the browser instead of the old `file://` tab.
+
+### 2026-07-27 20:43 HKT — Codex — Prevented the StoryMap iframe from making an initial wrong-origin request
+
+Summary:
+- Removed the eager iframe `src` from the StoryMap review section so the static intro server does not first request the sample page from port 8765.
+- The StoryMap now assigns the iframe URL directly: the file-relative sample page for `file://`, or the running review server at port 8766 for HTTP.
+- Added an inline empty favicon to avoid the static server's unnecessary favicon 404.
+
+Files:
+- `intro Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Parsed the StoryMap JavaScript successfully.
+- Confirmed the iframe has no eager `src` and has both file-mode and HTTP routing paths.
+- Confirmed the HTTP StoryMap still returned HTTP 200 and `git diff --check` passed.
+
+Remaining:
+- Refresh the HTTP StoryMap tab so the old failed iframe request is discarded.
