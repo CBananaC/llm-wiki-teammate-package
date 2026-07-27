@@ -7122,19 +7122,32 @@
       // .cb-pop-toc lives inside the relocated .chat-toprow (now in tb-head, outside `body`), so
       // this must search `root` (body's tool-box ancestor), not `body` alone, or the 目錄 popover
       // would never be found/closed.
-      function closePops(){ root.querySelectorAll('.cb-pop').forEach(p=>{ p.style.display='none'; p.classList.remove('is-viewport'); ['top','right','bottom','left','width'].forEach(k=>p.style.removeProperty(k)); }); }
+      function closePops(){ root.querySelectorAll('.cb-pop').forEach(p=>{ p.style.display='none'; p.classList.remove('is-viewport'); ['top','right','bottom','left','width','min-width','max-width','max-height'].forEach(k=>p.style.removeProperty(k)); }); }
       function placePop(ch,pop){
         pop.classList.add('is-viewport'); pop.style.display='block';
-        const margin=8, cr=ch.getBoundingClientRect();
-        const wanted=pop.classList.contains('cb-pop-cfg')?Math.min(380,innerWidth-margin*2):Math.min(340,innerWidth-margin*2);
+        const margin=8, cr=ch.getBoundingClientRect(), isToc=pop.classList.contains('cb-pop-toc');
+        const panel=root.getBoundingClientRect();
+        const wanted=isToc?Math.max(0,panel.width-2):(pop.classList.contains('cb-pop-cfg')?Math.min(380,innerWidth-margin*2):Math.min(340,innerWidth-margin*2));
         pop.style.setProperty('width',wanted+'px','important');
+        if(isToc){
+          pop.style.setProperty('min-width','0','important'); pop.style.setProperty('max-width','none','important');
+          pop.style.setProperty('max-height',Math.max(80,panel.height-margin*2)+'px','important');
+        } else pop.style.removeProperty('max-height');
         pop.style.setProperty('right','auto','important'); pop.style.setProperty('bottom','auto','important');
         const pr=pop.getBoundingClientRect();
-        let left=Math.min(Math.max(margin,cr.left),innerWidth-pr.width-margin);
-        let top=cr.top-pr.height-6;
-        if(top<margin) top=Math.min(cr.bottom+6,innerHeight-pr.height-margin);
-        pop.style.setProperty('left',Math.max(margin,left)+'px','important');
-        pop.style.setProperty('top',Math.max(margin,top)+'px','important');
+        if(isToc){
+          const left=panel.left+1, panelTop=panel.top+margin, panelBottom=panel.bottom-margin;
+          let top=cr.bottom+4;
+          if(top+pr.height>panelBottom) top=Math.max(panelTop,panelBottom-pr.height);
+          top=Math.max(panelTop,Math.min(top,panelBottom-pr.height));
+          pop.style.setProperty('left',left+'px','important'); pop.style.setProperty('top',top+'px','important');
+        } else {
+          let left=Math.min(Math.max(margin,cr.left),innerWidth-pr.width-margin);
+          let top=cr.top-pr.height-6;
+          if(top<margin) top=Math.min(cr.bottom+6,innerHeight-pr.height-margin);
+          pop.style.setProperty('left',Math.max(margin,left)+'px','important');
+          pop.style.setProperty('top',Math.max(margin,top)+'px','important');
+        }
       }
       function updateCurrentCardChip(){ const lbl=body.querySelector('.cb-current-card .ci-lbl'); if(!lbl) return; const apis=selectedApis();
         const active=window.__activeCard&&cards.includes(window.__activeCard)?window.__activeCard:null;
@@ -7203,25 +7216,23 @@
         return null; // plain turns (typed questions, saved-prompt/skill runs, @shorthands): never grouped
       }
       function tocGroupLabel(m){
-        if(m.__skillRunId){
-          let name=m.__skillBundleName||'';
-          if(!name){ const raw=String(m.__skillRunId).replace(/^bundle:/,''); name=raw.replace(/:[a-z0-9]{6,}$/i,''); }
-          const n=m.__skillBundleDocs||'';
-          return (name||'技能輸出')+(n?'　·　'+n+' 份文書':'');
-        }
-        if(m.kind==='docpair') return '⇄ '+pairFilterLabel(m.pair);
+        if(m.kind==='docpair') return pairFilterLabel(m.pair);
         if(m.kind==='shangyuloop') return '上諭審閱迴圈';
-        if(m.kind==='extract') return '◆ 擷取'+(m.actor==='qing'?'清方':'林方')+'行動';
-        if(m.kind==='trace') return '⌕ 追溯'+(m.actor==='qing'?'清方':'林方')+'行動來源';
-        if(m.kind==='officialresponse') return '搜尋官員回應';
-        if(m.kind==='shangyuloop') return '上諭審閱迴圈';
-        if(m.kind==='zhupi') return '⊙ 擷取硃批';
-        if(m.kind==='edictmatch') return '⊙ 擷取相關上諭';
-        if(m.kind==='infosource') return '◈ 資訊來源';
-        if(m.kind==='dedupe') return '◇ 重複原文檢查';
-        if(m.kind==='consolidate') return '⧉ 整合重複事件';
-        return chatTurnLabel(m);
+        if(m.kind==='extract') return '擷取'+(m.actor==='qing'?'清方':'林方')+'行動';
+        if(m.kind==='trace') return '追溯'+(m.actor==='qing'?'清方':'林方')+'行動來源';
+        if(m.kind==='officialresponse') return '官員回應';
+        if(m.kind==='zhupi') return '擷取硃批';
+        if(m.kind==='edictmatch') return '擷取相關上諭';
+        if(m.kind==='infosource') return '資訊來源';
+        if(m.kind==='dedupe') return '重複原文檢查';
+        if(m.kind==='consolidate') return '整合重複事件';
+        if(m.kind==='daysum') return '逐日／期間摘要';
+        if(m.kind==='situfit') return '回應時效';
+        const t=String(m.prompt||'').trim().split('\n')[0];
+        return t?t.replace(/^[▸◆⌕⊙◈◇⧉⇄]\s*/,'').replace(/（\d+(?:\s*組|\s*事件|\s*份文書)?）$/,'').trim():'（AI 回應，無提示文字）';
       }
+      function tocBundleName(m){ return String(m&&m.__skillBundleName||'').trim(); }
+      function tocTime(m){ return String(m&&m.at||'').replace('T',' ').slice(0,16); }
       function isOutputCardTurn(m){
         return !!(m && ['extract','trace','officialresponse','zhupi','edictmatch','infosource','dedupe','daysum','consolidate','situfit'].includes(m.kind));
       }
@@ -7253,7 +7264,7 @@
         while(i<c.length){
           const gk=tocGroupKey(c[i]);
           if(gk==='__SKIP__'){ i++; continue; }
-          if(gk===null){ rows.push({label:chatTurnLabel(c[i]), index:i}); i++; continue; }
+          if(gk===null){ rows.push({label:tocGroupLabel(c[i]), index:i, time:tocTime(c[i]), bundle:tocBundleName(c[i])}); i++; continue; }
           // Group only strictly consecutive turns of the same kind -- a run of
           // per-item turns produced by ONE action. A __SKIP__ (local-skill-output
           // placeholder) turn is hidden from the list but must still END the run:
@@ -7271,11 +7282,10 @@
             for(let k=firstIndex;k<j;k++){ const m=c[k]||{}, p=m.pair||{}; [p.yu_doc_id,p.zhu_doc_id,p.reply_doc_id,p.doc_id,m.doc_id].forEach(x=>{ if(x) docs.add(String(x)); }); (m.items||[]).forEach(it=>{ [it.doc_id,it.edict_id,it.memDoc].forEach(x=>{ if(x) docs.add(String(x)); }); }); }
             if(docs.size) bundleCount='　·　'+docs.size+' 份文書';
           }
-          const tocTime=String((firstTurn&&firstTurn.at)||'').replace('T',' ').slice(0,16);
-          rows.push({label:tocGroupLabel(firstTurn)+bundleCount+(n>1&&!String(gk).startsWith('bundle:')?`（${n}）`:''), index:firstIndex, time:tocTime});
+          rows.push({label:tocGroupLabel(firstTurn), index:firstIndex, time:tocTime(firstTurn), bundle:tocBundleName(firstTurn)});
           i=j;
         }
-        pop.innerHTML=rows.length? rows.map(r=>`<button class="cb-mi cb-toc-item" data-toci="${r.index}" type="button">${r.time?`<span class="cb-toc-time">${esc(r.time)}</span>`:''}<span class="cb-toc-l">${esc(r.label)}</span></button>`).join('') : '<div class="gx-prow-empty">此對話串尚無訊息。</div>';
+        pop.innerHTML=rows.length? rows.map(r=>`<button class="cb-mi cb-toc-item" data-toci="${r.index}" type="button"><span class="cb-toc-l">${esc(r.label)}</span>${r.time?`<span class="cb-toc-time">${esc(r.time)}</span>`:''}${r.bundle?`<span class="cb-toc-bundle">${esc(r.bundle)}</span>`:''}</button>`).join('') : '<div class="gx-prow-empty">此對話串尚無訊息。</div>';
         pop.querySelectorAll('.cb-toc-item').forEach(b=>b.onclick=()=>{ closePops(); const target=log.querySelector('[data-logi="'+b.dataset.toci+'"]'); if(target) log.scrollTop=Math.max(0,target.offsetTop-8); }); }
       function buildActMenu(insertMode){ const pop=body.querySelector('.cb-pop[data-for="act"]');
         const sec=()=>'<div class="cb-div"></div>';
@@ -12107,10 +12117,10 @@ body .cb-pop, body.dark-mode .cb-pop{
   border-radius:var(--r2) !important; box-shadow:var(--sh-3) !important; }
 /* bottom toolbar popovers open UPWARD (from above the button, top→bottom) */
 .chat-box .cb-pop{ top:auto !important; bottom:calc(100% + 6px) !important; }
-/* TOC entries: label + time subtitle */
-.cb-toc-item{ display:flex !important; flex-direction:column; align-items:flex-start !important; gap:2px; }
-.cb-toc-item .cb-toc-l{ font-weight:500; }
-.cb-toc-item .cb-toc-time{ font-size:calc(10.5px*var(--fs,1)); color:var(--faint); }
+/* TOC entries: one full-width skill title followed by two light metadata lines. */
+.cb-toc-item{ display:flex !important; flex-direction:column; align-items:flex-start !important; gap:2px; width:100%; box-sizing:border-box; white-space:nowrap !important; overflow:hidden; }
+.cb-toc-item .cb-toc-l{ width:100%; font-weight:700; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.cb-toc-item .cb-toc-time, .cb-toc-item .cb-toc-bundle{ width:100%; font-size:calc(10.5px*var(--fs,1)); font-weight:300; line-height:1.25; color:var(--faint); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
 .chat-log [data-logi].last-reviewed-focus{ outline:2px solid var(--accent,#2e6b52); outline-offset:3px; }
 /* Keep every control bubble in the top toolbar on one shared baseline. */
 body .dual-toolbar{ align-items:center; }
