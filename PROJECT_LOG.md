@@ -3999,3 +3999,21 @@ Verified:
 
 Remaining:
 - A human should perform one Mac Command-drag and one Windows Ctrl-drag on an event-bearing document to confirm the input modifier behavior on each platform; the automated coordinate drag test timed out in the narrow review pane and did not change saved data.
+
+### 2026-07-27 19:07 HKT — Codex — Simplified highlight-label styling
+
+Summary:
+- Removed the nested label border and background so each inline highlight label has one shared boundary only.
+- Made `林方行動` bold and darker while keeping the event title at the same compact size and font family.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Parsed all embedded scripts in both HTML files successfully and `git diff --check` passed.
+- Reloaded the formal and sample pages in the live review server; both loaded successfully with empty browser error logs.
+
+Remaining:
+- Human visual confirmation on an event-bearing document remains advisable.

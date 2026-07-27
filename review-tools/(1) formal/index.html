@@ -13054,7 +13054,7 @@ body .ix-text .seg:hover, body.dark-mode .ix-text .seg:hover {
   border:1px solid var(--line,#e5dacb) !important;
 }
 
-/* Highlight labels stay compact and use the same visual tone as their source mark. */
+/* Highlight labels use one shared boundary; the filter type is the darker, bold lead-in. */
 body .inote, body .ix-note:not(.div), body.dark-mode .inote, body.dark-mode .ix-note:not(.div) {
   background:color-mix(in srgb,var(--hl-color,#d6c4a6) 13%,var(--panel)) !important;
   border-color:color-mix(in srgb,var(--hl-color,#d6c4a6) 46%,var(--line)) !important;
@@ -13062,20 +13062,21 @@ body .inote, body .ix-note:not(.div), body.dark-mode .inote, body.dark-mode .ix-
 }
 body .inote .ilab, body .ix-note:not(.div) .ilab,
 body.dark-mode .inote .ilab, body.dark-mode .ix-note:not(.div) .ilab {
-  display:inline-block; box-sizing:border-box; margin:0 4px 0 0; padding:1px 5px;
-  border:1px solid color-mix(in srgb,var(--hl-color,#d6c4a6) 66%,var(--line-strong)) !important;
-  border-radius:4px;
-  background:color-mix(in srgb,var(--hl-color,#d6c4a6) 22%,var(--panel)) !important;
-  color:color-mix(in srgb,var(--hl-color,#d6c4a6) 56%,var(--ink)) !important;
+  display:inline; box-sizing:border-box; margin:0 4px 0 0; padding:0;
+  border:0 !important; border-radius:0; background:transparent !important;
+  color:inherit !important;
   font-family:inherit !important; font-size:calc(11.5px * var(--fs,1)) !important;
-  font-weight:550 !important; line-height:1.35 !important; box-shadow:none !important;
+  font-weight:500 !important; line-height:1.35 !important; box-shadow:none !important;
 }
-body .inote .hl-filter-type, body .inote .hl-event-title,
-body .ix-note:not(.div) .hl-filter-type, body .ix-note:not(.div) .hl-event-title,
-body.dark-mode .inote .hl-filter-type, body.dark-mode .inote .hl-event-title,
-body.dark-mode .ix-note:not(.div) .hl-filter-type, body.dark-mode .ix-note:not(.div) .hl-event-title {
+body .inote .hl-filter-type, body .ix-note:not(.div) .hl-filter-type,
+body.dark-mode .inote .hl-filter-type, body.dark-mode .ix-note:not(.div) .hl-filter-type {
+  color:color-mix(in srgb,var(--hl-color,#d6c4a6) 78%,var(--ink)) !important;
+  font-family:inherit !important; font-size:inherit !important; font-weight:750 !important;
+}
+body .inote .hl-event-title, body .ix-note:not(.div) .hl-event-title,
+body.dark-mode .inote .hl-event-title, body.dark-mode .ix-note:not(.div) .hl-event-title {
   color:inherit !important; font-family:inherit !important; font-size:inherit !important;
-  font-weight:inherit !important;
+  font-weight:500 !important;
 }
 body mark.hl, body.dark-mode mark.hl {
   box-shadow:0 0 0 1px color-mix(in srgb,var(--hl-color,#d6c4a6) 72%,#594b3b) inset !important;
