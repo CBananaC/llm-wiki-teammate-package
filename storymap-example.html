@@ -87,33 +87,74 @@
     .mini-line { height: 7px; margin: 10px 0; background: #d3dcd4; }
     .mini-line.short { width: 66%; }
 
-    .review-backdrop { display: grid; place-items: center; padding: 5vh 4vw; background: #e3dbcc; }
+    /* The example below reuses the sample review tool's document-card and AI-card vocabulary. */
+    .review-backdrop { display: grid; place-items: center; padding: 5vh 4vw; background: #efe7d9; }
     .review-backdrop::after { display: none; }
-    .review-window { width: min(1240px, 92vw); height: min(700px, 84vh); overflow: hidden; background: #f8f5ed; border: 1px solid rgba(23,59,63,.2); box-shadow: 0 24px 65px rgba(23,59,63,.2); }
-    .review-window-head { height: 46px; display: flex; align-items: center; justify-content: space-between; padding: 0 18px; color: #f8f5ed; background: #173b3f; font-size: 11px; letter-spacing: .09em; }
-    .review-window-head .source-label { color: #f0a08d; }
-    .review-body { display: grid; grid-template-columns: minmax(250px, .9fr) minmax(290px, 1.1fr); height: calc(100% - 46px); }
-    .ai-review-panel, .original-doc-panel { min-width: 0; overflow: auto; padding: 24px; }
-    .ai-review-panel { background: #f0eadf; border-right: 1px solid rgba(23,59,63,.14); }
-    .panel-label { margin: 0 0 14px; color: var(--muted); font-size: 10px; letter-spacing: .13em; }
-    .ai-output-card { padding: 20px; background: #fbf8f0; border: 1px solid rgba(23,59,63,.17); box-shadow: 0 10px 25px rgba(23,59,63,.08); }
-    .ai-output-card .skill-tag { display: inline-block; padding: 5px 8px; color: #8a422f; background: #f7dfd1; font-size: 10px; letter-spacing: .08em; }
-    .ai-output-card h3 { margin: 14px 0 8px; color: var(--ink); font: 600 22px/1.25 var(--serif); }
-    .ai-output-card p { margin: 0; color: #466366; font: 14px/1.65 var(--serif); }
-    .quote-button { width: 100%; margin-top: 18px; padding: 14px 15px; color: #5c574c; background: #eee5d4; border: 1px solid #d4c3a7; text-align: left; font: italic 15px/1.6 var(--serif); cursor: pointer; transition: background .2s, border-color .2s, transform .2s; }
-    .quote-button:hover, .quote-button:focus-visible { background: #f5d98a; border-color: #c69e45; outline: 2px solid rgba(199,84,63,.35); outline-offset: 2px; }
-    .quote-button.is-selected { background: #ffd966; border-color: #c58f32; transform: translateY(-1px); }
-    .quote-button::before { content: "點擊以回到原文 →"; display: block; margin-bottom: 6px; color: #9a6b25; font: 10px/1.3 var(--sans); font-style: normal; letter-spacing: .08em; }
-    .result-meta { display: grid; grid-template-columns: 70px 1fr; gap: 7px 10px; margin-top: 18px; color: #537073; font-size: 11px; }
-    .result-meta strong { color: var(--ink); font-weight: 500; }
-    .original-doc-panel { background: #fbf8f0; }
-    .doc-meta { padding-bottom: 15px; border-bottom: 1px solid rgba(23,59,63,.15); }
-    .doc-meta h3 { margin: 0 0 8px; color: var(--ink); font: 600 21px/1.25 var(--serif); }
-    .doc-meta p { margin: 0; color: var(--muted); font-size: 11px; line-height: 1.6; }
-    .original-text { margin: 20px 0 0; color: #292e2d; font: 18px/2.05 var(--serif); }
-    .quote-target { padding: 2px 0; transition: background .3s, box-shadow .3s; }
-    .quote-target.is-highlighted { background: #ffd966; box-shadow: 4px 0 #ffd966, -4px 0 #ffd966; }
-    .review-status { min-height: 18px; margin: 16px 0 0; color: #9a6b25; font-size: 11px; line-height: 1.5; }
+    .review-window { width: min(1420px, 94vw); height: min(790px, 88vh); overflow: hidden; background: #f8f5ee; border: 1px solid #cdbfa9; border-radius: 12px; box-shadow: 0 20px 56px rgba(60,44,20,.22); color: #2d261d; font-family: ui-serif, Georgia, "Noto Serif CJK TC", "Songti TC", serif; }
+    .review-body { display: grid; grid-template-columns: minmax(360px, .82fr) minmax(500px, 1.18fr); gap: 9px; height: 100%; background: #e0d5c3; }
+    .review-window .tool-box, .review-window .card { min-width: 0; min-height: 0; border: 1px solid #cdbfa9; border-radius: 10px; background: #fffdf8; box-shadow: 0 3px 12px rgba(60,44,20,.13); overflow: hidden; display: flex; flex-direction: column; }
+    .review-window .tool-box { background: #fffdf8; }
+    .review-window .tb-head, .review-window .ip-head { flex: 0 0 auto; border-bottom: 1px solid #e0d5c3; background: linear-gradient(#fbf4e6,#f2e8d6); }
+    .review-window .tb-head { display: flex; align-items: center; gap: 8px; padding: 9px 12px; min-height: 43px; }
+    .review-window .tb-title { font-weight: 700; font-size: 14px; }
+    .review-window .tb-hint { flex: 1; color: #7a6f63; font-size: 11px; }
+    .review-window .tb-close, .review-window .ip-btns button { border: 1px solid #d3c4ac; background: #fffaf1; color: #6a5d49; border-radius: 6px; cursor: pointer; line-height: 1; }
+    .review-window .tb-close { width: 26px; height: 24px; font-size: 16px; }
+    .review-window .tb-body { flex: 1; min-height: 0; overflow: auto; padding: 10px 12px 14px; }
+    .review-window .chat-extract { border: 1px solid #d8c9b0; border-radius: 10px; background: #fbf7ef; padding: 9px; margin: 0; }
+    .review-window .cx-head { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; color: #5c4a2c; font-size: 13px; font-weight: 700; }
+    .review-window .cx-head .head-spacer { flex: 1; }
+    .review-window .cx-ev { padding: 4px 0; }
+    .review-window .cx-qcat { display: inline-block; margin: 0 0 4px; padding: 1px 8px; border-radius: 10px; background: #faeeda; color: #854f0b; font-size: 11px; }
+    .review-window .cx-sub { margin: 0 0 5px; color: #5c4a2c; font-size: 14px; font-weight: 700; line-height: 1.5; }
+    .review-window .cx-desc { margin: 0 0 9px; color: #5c5142; font-size: 13px; line-height: 1.7; }
+    .review-window .cx-meta { display: grid; grid-template-columns: 56px 1fr; gap: 3px 8px; margin: 12px 0 0; color: #5c5142; font-size: 12px; line-height: 1.5; }
+    .review-window .cx-meta dt { color: #7a6f63; }
+    .review-window .cx-meta dd { margin: 0; }
+    .review-window .em-aspect { margin-bottom: 3px; color: #5c4a2c; font-size: 13px; font-weight: 700; }
+    .review-window .em-meta, .review-window .em-how { color: #5c5142; font-size: 13px; line-height: 1.7; }
+    .review-window .em-meta { display: inline-block; margin: 0 0 8px; padding: 1px 8px; border-radius: 10px; background: #faeeda; color: #854f0b; font-size: 11px; }
+    .review-window .em-detail { margin-top: 8px; }
+    .review-window .em-detail .l { display: block; margin-bottom: 4px; color: #7a6f63; font-size: 11px; }
+    .review-window .cx-q { margin: 3px 0; padding: 6px 9px; border-left: 3px solid #c9a24a; border-radius: 0 6px 6px 0; background: #faf3df; color: #6a5417; font-size: 13px; line-height: 1.65; cursor: pointer; transition: background .18s, border-color .18s, box-shadow .18s; }
+    .review-window .cx-q:hover, .review-window .cx-q.is-selected { background: #f3e8c6; border-left-color: #b68f2f; }
+    .review-window .cx-q.is-selected { box-shadow: 0 0 0 2px rgba(198,143,50,.22); }
+    .review-window .em-srcinfo { display: grid; grid-template-columns: 52px 1fr; gap: 3px 8px; margin: 13px 0 0; padding-top: 10px; border-top: 1px solid #e5dacb; font-size: 12px; line-height: 1.5; }
+    .review-window .em-srcinfo dt { color: #7a6f63; }
+    .review-window .em-srcinfo dd { margin: 0; color: #5c5142; }
+    .review-window .cx-acts { margin-top: 12px; display: flex; align-items: center; gap: 7px; }
+    .review-window .cx-acts button { border: 1px solid #b9d0c4; border-radius: 7px; padding: 3px 12px; color: #1f4a3a; background: #eef6f1; font: inherit; font-size: 12px; cursor: pointer; }
+    .review-window .cx-acts button:hover, .review-window .cx-acts button.is-active { background: #e0efe7; }
+    .review-window .cx-acts .cx-skip { border-color: #cbbba5; color: #2d261d; background: #fffaf1; }
+    .review-window .cx-acts .cx-skip:hover, .review-window .cx-acts .cx-skip.is-active { background: #efe3cf; }
+    .review-window .cx-done { display: inline-block; padding: 3px 10px; border: 1px solid #d8a94a; border-radius: 7px; background: #fff6e6; color: #7a5a12; font-size: 11px; }
+    .review-window .ip-head { position: relative; display: flex; align-items: flex-start; gap: 8px; padding: 10px 12px 9px; }
+    .review-window .ip-titles { flex: 1; min-width: 0; }
+    .review-window .ip-titles .m1 { margin-bottom: 4px; padding-right: 4px; font-size: 15px; line-height: 1.35; word-break: break-word; }
+    .review-window .badge { display: inline-block; margin-right: 5px; padding: 2px 9px; border-radius: 999px; color: #fff; font-size: 13px; vertical-align: 1px; }
+    .review-window .b-zhu { background: #c46a2b; }
+    .review-window .meta-table { width: 100%; border-collapse: collapse; table-layout: fixed; color: #5c5142; font-size: 12px; line-height: 1.5; }
+    .review-window .meta-table td { padding: 1px 0; vertical-align: top; }
+    .review-window .ip-btns { position: static; display: flex; gap: 3px; flex: 0 0 auto; }
+    .review-window .ip-btns button { width: 26px; height: 24px; padding: 0; font-size: 13px; }
+    .review-window .ip-body { display: flex; flex: 1; min-height: 0; flex-direction: column; }
+    .review-window .ip-filterdock { display: flex; align-items: center; gap: 8px; flex: 0 0 auto; padding: 6px 12px; border-bottom: 1px solid #ece2d2; background: #faf5ec; }
+    .review-window .ip-filterbtn, .review-window .ip-settingsbtn { border: 1px solid #cbbba5; background: #fffaf1; color: #2d261d; cursor: pointer; }
+    .review-window .ip-filterbtn { border-radius: 999px; padding: 3px 11px; font: inherit; font-size: 12px; }
+    .review-window .ip-settingsbtn { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 26px; margin-left: auto; border-radius: 999px; font-size: 14px; }
+    .review-window .ip-scroll { flex: 1; min-height: 0; overflow: auto; padding: 5px 8px 8px; }
+    .review-window .ix-pane { display: block; }
+    .review-window .ix-summary { margin: 0 0 14px; padding: 11px 13px 12px; border: 1px solid #ece1cd; border-radius: 9px; background: #fffdf8; }
+    .review-window .ix-summary:empty { display: none; }
+    .review-window .ix-summary-label { margin-bottom: 5px; color: #7a6f63; font-size: 11px; font-weight: 700; letter-spacing: .08em; }
+    .review-window .ix-summary-text { color: #3d352d; font-size: 13px; line-height: 1.75; }
+    .review-window .ix-cols { display: block; padding: 0; }
+    .review-window .ix-text { min-height: 100%; padding: 0; color: #2d261d; background: transparent; font-size: 15px; line-height: 2.05; white-space: pre-wrap; }
+    .review-window .ix-text .blk-label { display: block; margin: 0 0 12px; color: #8a6a2e; font-size: 11px; font-weight: 700; letter-spacing: .04em; }
+    .review-window .original-body { margin: 0; padding: 12px 14px 16px; border-radius: 10px; background: #f6efe1; white-space: pre-wrap; }
+    .review-window .quote-target { padding: 2px 0; background: transparent; transition: background .25s, box-shadow .25s; }
+    .review-window .quote-target.is-highlighted { background: #f3d36b; box-shadow: 4px 0 #f3d36b, -4px 0 #f3d36b; }
+    .review-window .review-status { min-height: 18px; margin: 13px 0 0; color: #7a6f63; font-size: 11px; line-height: 1.5; }
 
     .end { min-height: 76svh; display: grid; place-items: center; padding: 90px 10vw; background: var(--ink); color: #f7f3ea; }
     .end-inner { max-width: 720px; }
@@ -136,11 +177,11 @@
       .tool-window .tool-body { grid-template-columns: 1fr; }
       .mini-panel { display: none; }
       pre { font-size: 11px; }
-      .review-backdrop { inset: 0 0 38% 0; display: block; padding: 18px 16px; }
+      .review-backdrop { inset: 0; display: block; padding: 14px; }
       .review-window { width: 100%; height: 100%; }
-      .review-body { grid-template-columns: 1fr; }
-      .original-doc-panel { display: none; }
-      .ai-review-panel { border-right: 0; }
+      .review-body { grid-template-columns: 1fr; gap: 8px; overflow: auto; padding: 0 0 8px; }
+      .review-window .tool-box { min-height: 290px; }
+      .review-window .card { min-height: 620px; }
     }
   </style>
 </head>
@@ -201,27 +242,68 @@
 
     <section class="story" id="review-demo" data-tab="平台" data-nav="#platform" style="--card-x: 5vw; --card-y: 14vh; --card-w: 285px;">
       <div class="backdrop full review-backdrop">
-        <div class="review-window" aria-label="硃83 AI 引文核驗示例">
-          <div class="review-window-head"><span>AI OUTPUT ↔ ORIGINAL DOCUMENT</span><span class="source-label">硃83 · 互動示例</span></div>
+        <div class="review-window" aria-label="sample review tool 硃83 引文核驗示例">
           <div class="review-body">
-            <div class="ai-review-panel">
-              <p class="panel-label">AI ANALYSIS CARD</p>
-              <div class="ai-output-card">
-                <span class="skill-tag">清方行動</span>
-                <h3>常青催令福寧鎮、銅山、羅源等營兵力繼進</h3>
-                <p>人工智能從硃批所對應的奏摺中提取清方軍事行動，並保留原文引文供研究者核對。</p>
-                <button class="quote-button" type="button" data-target="zhu83-quote">至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進</button>
-                <div class="result-meta"><span>文書</span><strong>硃83</strong><span>來源</span><strong>明清台灣檔案匯編 冊30 頁188</strong><span>狀態</span><strong>等待核驗</strong></div>
-                <p class="review-status" id="review-status" aria-live="polite">點擊上方引文，定位原始文書中的對應文字。</p>
+            <section class="tool-box" data-kind="ai" aria-label="AI 助手面板">
+              <div class="tb-head">
+                <span class="tb-title">AI 助手</span>
+                <span class="tb-hint">硃83 · 清廷行動</span>
+                <button class="tb-close" type="button" aria-label="關閉 AI 助手">×</button>
               </div>
-            </div>
-            <div class="original-doc-panel" id="original-doc-panel">
-              <div class="doc-meta">
-                <h3>為奏聞鳳山失陷援兵渡海赴臺事</h3>
-                <p>閩浙總督・常青<br>1787/01/02 上奏・1787/01/15 硃批<br>《明清台灣檔案匯編》冊 30，頁 188・硃83</p>
+              <div class="tb-body">
+                <div class="chat-extract" data-logi="0">
+                  <div class="cx-head"><span>AI 清廷行動（1）</span><span class="head-spacer"></span><button class="turn-del-x" type="button" aria-label="移除示例訊息">×</button></div>
+                  <div class="cx-ev">
+                    <div class="cx-qcat qcat-plan">待執行</div>
+                    <div class="cx-sub">常青催令福寧鎮等兵繼進</div>
+                    <div class="cx-desc">總督常青催促續派之福寧鎮及銅山、羅源等營兵共一千名陸續跟進渡臺支援。</div>
+                    <div class="cx-q" data-doc="硃83" data-target="zhu83-quote" title="點按在原文中顯示">「至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進」<span class="cx-src">—硃83</span></div>
+                    <dl class="cx-meta cx-facts">
+                      <dt>地點</dt><dd>福寧</dd>
+                      <dt>人物</dt><dd>常青</dd>
+                      <dt>發生日期</dt><dd>未明</dd>
+                    </dl>
+                    <div class="cx-acts">
+                      <button class="cx-add review-action" type="button" data-decision="approve">加入</button>
+                      <button class="cx-skip review-action" type="button" data-decision="reject">略過</button>
+                    </div>
+                    <p class="review-status" id="review-status" aria-live="polite">點擊引文，在右側原文面板定位並標示。</p>
+                  </div>
+                </div>
               </div>
-              <p class="original-text">延、建兵一千名，亦已分起前來。因令督、撫標兵，仍駐省城防守。將延、建兵一千名派委延平協副將林天洛管帶，由陸路兼程赴廈，並派先經調來之汀州鎮總兵普吉保統率登舟；又於水師提標五營內，預備兵丁六百名，派令興化協副將楊繽額帶領，亦從廈門配船飛渡，均由鹿耳赴臺，隨同水師提臣協力進剿。<span class="quote-target" id="zhu83-quote">至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進</span>，並一面飛咨水陸兩提臣上緊援剿外，臣不勝憂慮急迫之至。合將據報鳳山被賊情形恭摺奏聞。</p>
-            </div>
+            </section>
+
+            <section class="card original-doc-panel" id="original-doc-panel" data-doc-id="硃83" aria-label="硃83 原文面板">
+              <div class="ip-head">
+                <div class="ip-titles">
+                  <div class="m1"><span class="badge b-zhu" data-short="硃">硃</span> <b>為奏聞鳳山失陷援兵渡海赴臺事</b></div>
+                  <table class="meta-table">
+                    <tr><td>閩浙總督・常青</td></tr>
+                    <tr><td>1787/01/02 上奏，1787/01/15 硃批（13 日）</td></tr>
+                    <tr><td>明清台灣檔案匯編 冊30 頁188・硃83</td></tr>
+                  </table>
+                </div>
+                <div class="ip-btns" aria-label="原文面板控制">
+                  <button type="button" aria-label="移動原文面板">↥</button>
+                  <button type="button" aria-label="收合原文面板">−</button>
+                  <button type="button" aria-label="關閉原文面板">×</button>
+                </div>
+              </div>
+              <div class="ip-body">
+                <div class="ip-filterdock">
+                  <button class="ip-filterbtn" type="button">⌕ 篩選</button>
+                  <button class="ip-settingsbtn" type="button" aria-label="顯示設定">⚙</button>
+                </div>
+                <div class="ip-scroll">
+                  <div class="ix-pane active">
+                    <div class="ix-summary"></div>
+                    <div class="ix-cols">
+                      <div class="ix-text" id="zhu83-original-text"><span class="blk-label">原文</span><div class="original-body" id="zhu83-original-body"></div></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
@@ -288,16 +370,37 @@
     }, { threshold: 0.55 });
     sections.forEach((section) => observer.observe(section));
 
-    document.querySelectorAll('.quote-button').forEach((button) => {
-      button.addEventListener('click', () => {
-        const target = document.getElementById(button.dataset.target);
+    const zhu83OriginalBody = "閩浙總督臣常青跪奏，為飛摺奏聞事十二月三十日戌刻，接據臺灣道永福十二月十四日來稟，內稱：竊照彰匪林爽文、王芬等謀為不軌，攻陷諸、彰兩邑，業經職道將官弁被害並督率兵丁分路救援各緣由，馳稟在案。職道以臺鎮雖經調遣將兵往救諸羅，並四處堵禦，而大兵未到，郡城兵少堪虞。正在嚴督實力守禦，一面會同柴鎮設法剿捕間，茲於十二月十三日亥刻，據南路兵丁劉茂光回稱：鳳邑瑚參將於十二日聞知賊匪有攻打鳳城之信，即帶兵三百名紮營城外。十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落。等語又據逃回鳳邑跟丁稟稱：賊人進入縣署，該縣湯大奎情急拔劍自刎。等情。查賊匪恃眾猖獗四處潛聚，乘隙攻陷。臺屬兵少勢孤，顧此又虞失彼，郡城遼闊兵單，實難防守抵敵，事在危急，相應飛稟迅撥大兵來臺，以便克期進剿，恢復諸、彰等邑，不勝惶悚待命之至。等情到臣。臣接閱之下，驚駭憤懣，恨不親自奮飛殲此惡孽。但水、陸二提臣俱經臣派撥官兵，早令統率前往，因守風待渡，又經屢次發令嚴催。今據廈門同知稟報，水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。查該處與鹿仔港相對，一俟風定，即可揚帆直達。且接據署守備陳邦光稟報，鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。惟是賊情猖獗，到處蔓延，自澎湖至鹿耳門，係屬臺郡咽喉，尤宜厚集兵力。臣前經續調督撫標兵一千名，原令由南臺出口，前往鹿耳，以備策應第恐海道行回，風汛難定，適預備之延、建兵一千名，亦已分起前來。因令督、撫標兵，仍駐省城防守。將延、建兵一千名派委延平協副將林天洛管帶，由陸路兼程赴廈，並派先經調來之汀州鎮總兵普吉保統率登舟；又於水師提標五營內，預備兵丁六百名，派令興化協副將格繃額帶領，亦從廈門配船飛渡，均由鹿耳赴臺，隨同水師提臣協力進剿。至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進，並一面飛咨水陸兩提臣上緊援剿外，臣不勝憂憤急迫之至。合將據報鳳山被賊情形恭摺馳奏。再，漳、泉二郡，民俗凶悍，誠恐賊匪潛通勾結，臣俱密為防範。並往來泉、廈各海口嚴加督察，務保無虞。合並陳明，伏祈皇上睿鑒。謹奏。\n\n乾隆五十二年正月初二日\n乾隆五十二年正月十五日奉硃批：此時惟以鎮靜為要，毋得張皇失措，餘有旨諭。欽此。〔本文原收錄於軍錄】";
+    const zhu83Quote = '至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進';
+    const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
+    const originalBody = document.getElementById('zhu83-original-body');
+    if (originalBody) {
+      const quoteStart = zhu83OriginalBody.indexOf(zhu83Quote);
+      const before = quoteStart >= 0 ? zhu83OriginalBody.slice(0, quoteStart) : zhu83OriginalBody;
+      const after = quoteStart >= 0 ? zhu83OriginalBody.slice(quoteStart + zhu83Quote.length) : '';
+      originalBody.innerHTML = `${escapeHtml(before)}${quoteStart >= 0 ? `<span class="quote-target" id="zhu83-quote">${escapeHtml(zhu83Quote)}</span>` : ''}${escapeHtml(after)}`;
+    }
+
+    document.querySelectorAll('.cx-q[data-doc]').forEach((quote) => {
+      quote.addEventListener('click', () => {
+        const target = document.getElementById(quote.dataset.target || 'zhu83-quote');
         const status = document.getElementById('review-status');
-        document.querySelectorAll('.quote-button').forEach((item) => item.classList.remove('is-selected'));
+        document.querySelectorAll('.cx-q[data-doc]').forEach((item) => item.classList.remove('is-selected'));
         document.querySelectorAll('.quote-target').forEach((item) => item.classList.remove('is-highlighted'));
-        button.classList.add('is-selected');
+        quote.classList.add('is-selected');
+        if (!target) return;
         target.classList.add('is-highlighted');
         target.scrollIntoView({ behavior: 'smooth', block: 'center' });
-        status.textContent = '已定位：原文引文已在右側文書面板標示。';
+        if (status) status.textContent = '已定位：原文引文已在右側文書面板標示。';
+      });
+    });
+
+    document.querySelectorAll('.review-action').forEach((action) => {
+      action.addEventListener('click', () => {
+        document.querySelectorAll('.review-action').forEach((item) => item.classList.remove('is-active'));
+        action.classList.add('is-active');
+        const status = document.getElementById('review-status');
+        if (status) status.textContent = action.dataset.decision === 'approve' ? '已暫存：研究者批准此項結果，可加入圖表。' : '已暫存：研究者略過此項結果。';
       });
     });
   </script>
