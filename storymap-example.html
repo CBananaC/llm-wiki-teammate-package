@@ -1,0 +1,231 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>奏摺與上諭研究平台｜StoryMap UI Example</title>
+  <style>
+    :root {
+      --ink: #173b3f;
+      --muted: #678082;
+      --paper: #f3eee4;
+      --card: rgba(248, 245, 238, .94);
+      --accent: #c7543f;
+      --line: rgba(23, 59, 63, .23);
+      --serif: Georgia, "Songti TC", "STSong", serif;
+      --sans: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); }
+    body::selection { background: var(--accent); color: #fff; }
+
+    .topbar {
+      position: fixed; z-index: 20; inset: 0 0 auto; height: 64px;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 0 30px; color: #f7f3ea; background: rgba(23, 59, 63, .95);
+      border-bottom: 1px solid rgba(255,255,255,.16); backdrop-filter: blur(14px);
+    }
+    .brand { color: inherit; text-decoration: none; font: 600 15px var(--serif); letter-spacing: .08em; }
+    .tabs { display: flex; gap: 22px; align-items: center; }
+    .tabs a { color: rgba(247,243,234,.68); text-decoration: none; font-size: 12px; letter-spacing: .08em; transition: color .2s; }
+    .tabs a:hover, .tabs a.active { color: #fff; }
+    .tabs a.active::after { content: ""; display: block; height: 2px; margin-top: 7px; background: var(--accent); }
+
+    .story { position: relative; min-height: 100svh; overflow: hidden; isolation: isolate; }
+    .story.hero { display: grid; place-items: center; min-height: 100svh; background: #173b3f; color: #f7f3ea; }
+    .hero-backdrop { position: absolute; inset: 0; background: radial-gradient(circle at 72% 30%, rgba(199,84,63,.7), transparent 32%), linear-gradient(120deg, #173b3f 5%, #274e4f 50%, #a56c56 140%); z-index: -2; }
+    .hero-backdrop::after { content: "奏  ·  摺  ·  諭"; position: absolute; right: 7vw; bottom: 10vh; color: rgba(255,255,255,.13); font: 9vw var(--serif); letter-spacing: .08em; white-space: nowrap; }
+    .hero-content { width: min(780px, 82vw); margin-right: auto; margin-left: 11vw; }
+    .eyebrow { margin: 0 0 18px; color: #f0a08d; font-size: 12px; letter-spacing: .2em; text-transform: uppercase; }
+    h1, h2, h3 { font-family: var(--serif); font-weight: 400; }
+    h1 { max-width: 760px; margin: 0; font-size: clamp(46px, 8vw, 112px); line-height: .94; letter-spacing: -.05em; }
+    .hero-content p { max-width: 520px; margin: 28px 0 0; color: rgba(247,243,234,.77); font: 19px/1.7 var(--serif); }
+    .scroll-note { position: absolute; left: 11vw; bottom: 36px; color: rgba(247,243,234,.6); font-size: 11px; letter-spacing: .14em; }
+    .scroll-note::before { content: "↓"; display: inline-block; margin-right: 10px; color: #f0a08d; font-size: 18px; }
+
+    .backdrop { position: absolute; z-index: -2; overflow: hidden; background: #d9d1c4; }
+    .backdrop.full { inset: 0; }
+    .backdrop.left { inset: 0 31% 0 0; }
+    .backdrop.right { inset: 0 0 0 31%; }
+    .backdrop.top { inset: 0 0 28% 0; }
+    .backdrop img, .backdrop video, .backdrop iframe { width: 100%; height: 100%; border: 0; object-fit: cover; display: block; }
+    .backdrop::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,46,48,.28), transparent 62%); pointer-events: none; }
+
+    .story-card {
+      position: absolute; z-index: 4; left: var(--card-x, 10vw); top: var(--card-y, 24vh);
+      width: min(var(--card-w, 370px), calc(100vw - 40px)); padding: 30px 30px 28px;
+      color: var(--ink); background: var(--card); box-shadow: 0 18px 55px rgba(26, 49, 47, .18);
+      border-top: 4px solid var(--accent); backdrop-filter: blur(12px);
+    }
+    .story-card .number { color: var(--accent); font-size: 11px; letter-spacing: .16em; }
+    .story-card h2 { margin: 12px 0 7px; font-size: clamp(28px, 4vw, 48px); line-height: 1.04; }
+    .story-card h3 { margin: 0 0 17px; color: var(--muted); font-size: 17px; font-weight: 400; line-height: 1.35; }
+    .story-card p { margin: 0; color: #355356; font: 16px/1.75 var(--serif); }
+    .story-card .caption { margin-top: 18px; color: var(--muted); font: 11px/1.5 var(--sans); letter-spacing: .04em; }
+
+    .code-backdrop { display: grid; place-items: center; background: #14282a; padding: 8vw 6vw; }
+    .code-backdrop::after { display: none; }
+    pre { width: min(850px, 82vw); margin: 0; color: #d7ead9; font: 15px/1.85 ui-monospace, SFMono-Regular, Menlo, monospace; white-space: pre-wrap; }
+    .code-key { color: #f0a08d; }
+    .code-string { color: #b5d89b; }
+    .code-comment { color: #789b9d; }
+
+    .tool-backdrop { display: grid; place-items: center; background: #d6dfdc; }
+    .tool-window { width: min(920px, 84vw); height: min(610px, 72vh); overflow: hidden; border: 1px solid rgba(23,59,63,.24); background: #f8f6ef; box-shadow: 0 25px 70px rgba(23,59,63,.18); }
+    .tool-window .tool-head { height: 40px; display: flex; align-items: center; gap: 7px; padding: 0 16px; color: #f8f6ef; background: #173b3f; font-size: 11px; letter-spacing: .1em; }
+    .dot { width: 7px; height: 7px; border-radius: 50%; background: #f0a08d; }
+    .tool-window .tool-body { display: grid; grid-template-columns: 1.2fr .8fr; height: calc(100% - 40px); }
+    .mini-chart { position: relative; background: linear-gradient(180deg, #e5ebe6, #f7f4ec); }
+    .mini-chart::before, .mini-chart::after { content: ""; position: absolute; left: 10%; right: 7%; height: 1px; background: rgba(23,59,63,.18); }
+    .mini-chart::before { top: 33%; box-shadow: 0 75px rgba(23,59,63,.18), 0 150px rgba(23,59,63,.18); }
+    .mini-chart::after { top: 54%; transform: rotate(-7deg); background: var(--accent); box-shadow: 125px 22px 0 -0.4px var(--accent); }
+    .mini-panel { padding: 28px; border-left: 1px solid rgba(23,59,63,.12); color: var(--ink); font-family: var(--serif); }
+    .mini-panel strong { display: block; margin-bottom: 14px; color: var(--accent); font-size: 12px; letter-spacing: .1em; }
+    .mini-panel p { margin: 0 0 14px; line-height: 1.7; }
+    .mini-line { height: 7px; margin: 10px 0; background: #d3dcd4; }
+    .mini-line.short { width: 66%; }
+
+    .end { min-height: 76svh; display: grid; place-items: center; padding: 90px 10vw; background: var(--ink); color: #f7f3ea; }
+    .end-inner { max-width: 720px; }
+    .end h2 { margin: 0 0 20px; font-size: clamp(34px, 6vw, 72px); }
+    .end p { color: rgba(247,243,234,.72); font: 18px/1.8 var(--serif); }
+
+    @media (max-width: 700px) {
+      .topbar { height: 56px; padding: 0 17px; }
+      .brand { font-size: 13px; }
+      .tabs { gap: 11px; }
+      .tabs a { font-size: 10px; }
+      .story { min-height: 860px; }
+      .backdrop.left, .backdrop.right { inset: 0 0 35% 0; }
+      .backdrop.top { inset: 0 0 40% 0; }
+      .story-card { left: 20px; top: auto; bottom: 34px; width: calc(100% - 40px); padding: 23px 22px; }
+      .story-card h2 { font-size: 34px; }
+      .story-card p { font-size: 15px; }
+      .hero-content { margin-left: 20px; width: calc(100% - 40px); }
+      .hero-content p { font-size: 17px; }
+      .tool-window .tool-body { grid-template-columns: 1fr; }
+      .mini-panel { display: none; }
+      pre { font-size: 11px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#cover">奏摺與上諭研究平台</a>
+    <nav class="tabs" aria-label="主要章節">
+      <a href="#why">導言</a>
+      <a href="#platform">平台</a>
+      <a href="#reuse">重用</a>
+      <a href="#demo">示範</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="story hero" id="cover" data-tab="">
+      <div class="hero-backdrop"></div>
+      <div class="hero-content">
+        <p class="eyebrow">Digital Humanities · Qing Imperial Communication</p>
+        <h1>讀懂奏摺，<br>看見通信。</h1>
+        <p>以人工智能協助閱讀清代奏摺與上諭，並以互動視覺化重建地方官員與皇帝之間的資訊流動。</p>
+      </div>
+      <div class="scroll-note">SCROLL TO EXPLORE</div>
+    </section>
+
+    <section class="story" id="why" data-tab="導言" style="--card-x: 9vw; --card-y: 25vh; --card-w: 390px;">
+      <div class="backdrop left" style="background: linear-gradient(135deg, #9b775e, #d6b99b 48%, #567072);">
+        <img src="https://images.unsplash.com/photo-1544716278-ca5e3f4abd8c?auto=format&fit=crop&w=1800&q=85" alt="古籍與書頁的示意照片">
+      </div>
+      <article class="story-card">
+        <div class="number">01 / INTRODUCTION</div>
+        <h2>兩種官方通信</h2>
+        <h3>奏摺、硃批與上諭如何共同記錄清代政治溝通？</h3>
+        <p>奏摺保存地方官員向皇帝呈報的資訊；硃批與上諭則保存皇帝的回應、命令和判斷。它們不是孤立的文本，而是同一個中央與地方通信網絡中的不同環節。</p>
+        <div class="caption">Backdrop：photo · Card：可調整位置與寬度</div>
+      </article>
+    </section>
+
+    <section class="story" id="platform" data-tab="平台" style="--card-x: 58vw; --card-y: 20vh; --card-w: 360px;">
+      <div class="backdrop full code-backdrop">
+        <pre><span class="code-comment">// AI Skills → structured evidence → human review</span>
+{
+  <span class="code-key">"event"</span>: <span class="code-string">"彰化城被攻陷"</span>,
+  <span class="code-key">"date"</span>: <span class="code-string">"乾隆五十二年十二月"</span>,
+  <span class="code-key">"quote"</span>: <span class="code-string">"……"</span>,
+  <span class="code-key">"source"</span>: <span class="code-string">"奏摺｜台 160"</span>,
+  <span class="code-key">"status"</span>: <span class="code-string">"待研究者核驗"</span>
+}</pre>
+      </div>
+      <article class="story-card">
+        <div class="number">02 / PLATFORM</div>
+        <h2>AI 先提取，<br>人再判斷。</h2>
+        <h3>每項結果都要帶有原文引文和來源資料。</h3>
+        <p>人工智能把長篇文本轉成結構化候選結果，再由研究者回到原文核對、保留、拒絕或修改。只有通過核驗的結果，才會進入圖表。</p>
+        <div class="caption">Backdrop：code · Card：可放置在任何空白區域</div>
+      </article>
+    </section>
+
+    <section class="story" id="reuse" data-tab="重用" style="--card-x: 8vw; --card-y: 52vh; --card-w: 390px;">
+      <div class="backdrop right" style="background: #526967;">
+        <video autoplay muted loop playsinline poster="https://images.unsplash.com/photo-1456324504439-367cee3b3c32?auto=format&fit=crop&w=1600&q=80">
+          <source src="https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4" type="video/mp4">
+        </video>
+      </div>
+      <article class="story-card">
+        <div class="number">03 / REUSE</div>
+        <h2>一套流程，<br>多個題目。</h2>
+        <h3>由新史料到新網站的 AI 處理循環。</h3>
+        <p>研究者可以準備新的文本、轉換為 JSON、調整 Skills，然後以 Python 和 AI API 逐份執行，再把中間結果載入網站核驗。這個框架可延伸到戰爭、司法、災害、外交及地方行政等題目。</p>
+        <div class="caption">Backdrop：video · Card：置於視覺內容旁邊</div>
+      </article>
+    </section>
+
+    <section class="story" id="demo" data-tab="示範" style="--card-x: 52vw; --card-y: 55vh; --card-w: 410px;">
+      <div class="backdrop full tool-backdrop">
+        <div class="tool-window" aria-label="審閱工具網站的介面示意">
+          <div class="tool-head"><span class="dot"></span><span class="dot"></span><span class="dot"></span> REVIEW TOOL / VERIFIED EVIDENCE</div>
+          <div class="tool-body">
+            <div class="mini-chart" aria-label="四線時間與通信圖表示意"></div>
+            <div class="mini-panel">
+              <strong>AI ANALYSIS</strong>
+              <p>事件：官員收到前線消息</p>
+              <div class="mini-line"></div><div class="mini-line short"></div>
+              <p>引文已連回原始奏摺，等待研究者核驗。</p>
+              <div class="mini-line"></div><div class="mini-line short"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <article class="story-card">
+        <div class="number">04 / DEMONSTRATION</div>
+        <h2>把資訊延遲<br>畫出來。</h2>
+        <h3>林爽文事件是示範案例，不是平台的限制。</h3>
+        <p>圖表把事件發生、官員奏報、皇帝收到消息、硃批或上諭，以及地方後續回應放在同一條時間軸上，讓研究者看見純文字閱讀不易察覺的通信距離。</p>
+        <div class="caption">Backdrop：review-tool preview · 可替換為正式網站或 iframe</div>
+      </article>
+    </section>
+
+    <section class="end">
+      <div class="end-inner">
+        <p class="eyebrow">A research assistant, not a replacement for judgement</p>
+        <h2>人工智能協助，<br>研究者判斷。</h2>
+        <p>這個 StoryMap 版型的核心，是讓每個視覺場景都能回到一個清楚的研究問題；讓每項 AI 結果都能回到一段原文；也讓每個已確認的節點都能成為下一步歷史分析的材料。</p>
+      </div>
+    </section>
+  </main>
+
+  <script>
+    const sections = [...document.querySelectorAll('.story[data-tab]')];
+    const tabs = [...document.querySelectorAll('.tabs a')];
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (!entry.isIntersecting) return;
+        const id = entry.target.id;
+        tabs.forEach((tab) => tab.classList.toggle('active', tab.getAttribute('href') === '#' + id));
+      });
+    }, { threshold: 0.55 });
+    sections.forEach((section) => observer.observe(section));
+  </script>
+</body>
+</html>
