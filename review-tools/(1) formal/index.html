@@ -7145,17 +7145,17 @@
       function placePop(ch,pop){
         pop.classList.add('is-viewport'); pop.style.display='block';
         const margin=8, cr=ch.getBoundingClientRect(), isToc=pop.classList.contains('cb-pop-toc'), isCfg=pop.classList.contains('cb-pop-cfg'), isPanelPop=isToc||isCfg;
-        const panel=root.getBoundingClientRect();
+        const panel=root.getBoundingClientRect(), displayArea=isCfg&&root.querySelector('.chat-log')?root.querySelector('.chat-log').getBoundingClientRect():panel;
         const wanted=isPanelPop?Math.max(0,panel.width-2):Math.min(340,innerWidth-margin*2);
         pop.style.setProperty('width',wanted+'px','important');
         if(isPanelPop){
           pop.style.setProperty('min-width','0','important'); pop.style.setProperty('max-width','none','important');
-          pop.style.setProperty('max-height',Math.max(80,panel.height-margin*2)+'px','important');
+          pop.style.setProperty('max-height',Math.max(80,displayArea.height-margin*2)+'px','important');
         } else pop.style.removeProperty('max-height');
         pop.style.setProperty('right','auto','important'); pop.style.setProperty('bottom','auto','important');
         const pr=pop.getBoundingClientRect();
         if(isPanelPop){
-          const left=panel.left+1, panelTop=panel.top+margin, panelBottom=panel.bottom-margin;
+          const left=panel.left+1, panelTop=displayArea.top+margin, panelBottom=displayArea.bottom-margin;
           let top=isToc?cr.bottom+4:cr.top-pr.height-4;
           if(isToc && top+pr.height>panelBottom) top=Math.max(panelTop,panelBottom-pr.height);
           if(isCfg && top<panelTop) top=cr.bottom+4;
@@ -12088,27 +12088,29 @@ body .cb-chip .cb-ic{ display:none !important; }
 }
 /* ── 設定 menu: cleaner stacked form ── */
 body .cb-pop-cfg{ min-width:0 !important; width:100% !important; max-width:none !important;
-  padding:calc(12px * var(--fs,1)) !important; font-size:calc(13.5px * var(--fs,1)) !important; }
+  padding:calc(12px * var(--ui-fs,1)) !important; font-size:calc(13.5px * var(--ui-fs,1)) !important; }
 .cb-pop-cfg .gx-cfgrow{ display:flex !important; flex-direction:column !important; align-items:stretch !important;
-  gap:calc(5px * var(--fs,1)) !important; margin-bottom:calc(12px * var(--fs,1)) !important; }
+  gap:calc(5px * var(--ui-fs,1)) !important; margin-bottom:calc(12px * var(--ui-fs,1)) !important; }
 .cb-pop-cfg .gx-cfgrow:last-child{ margin-bottom:0 !important; }
 .cb-pop-cfg .gx-cfgrow > span{ width:auto !important; min-width:0 !important; text-align:left !important;
   color:var(--faint) !important; font-weight:700 !important; letter-spacing:.03em;
-  font-size:calc(13.5px*var(--fs,1)) !important; line-height:1.25; }
+  font-size:calc(13.5px*var(--ui-fs,1)) !important; line-height:1.25; }
 body .cb-pop-cfg .gx-model, body .cb-pop-cfg .gx-url, body .cb-pop-cfg .ai-provider, body .cb-pop-cfg .ai-base, body .cb-pop-cfg .ai-key{ width:100% !important; box-sizing:border-box !important;
   border:1px solid var(--line-strong) !important; border-radius:7px !important;
   background:var(--panel) !important; color:var(--ink) !important;
-  min-height:calc(38px * var(--fs,1)); padding:calc(7px * var(--fs,1)) calc(10px * var(--fs,1)) !important;
-  font-size:calc(13.5px * var(--fs,1)) !important; line-height:1.25; }
-.cb-pop-cfg .cb-mem2{ flex-direction:row !important; align-items:center !important; gap:calc(8px * var(--fs,1)) !important; margin:0 !important;
-  padding:calc(2px * var(--fs,1)) 0; color:var(--ink) !important;
-  font-size:calc(13.5px * var(--fs,1)) !important; line-height:1.4; }
-.cb-pop-cfg .cb-mem2 input{ width:calc(16px * var(--fs,1)); height:calc(16px * var(--fs,1)); flex:0 0 calc(16px * var(--fs,1)); margin:0; accent-color:var(--accent); }
-.cb-pop-cfg .ai-model-wrap, .cb-pop-cfg .ai-key-wrap{ gap:calc(6px * var(--fs,1)); }
-.cb-pop-cfg .ai-model-refresh, .cb-pop-cfg .ai-key-toggle{ width:calc(36px * var(--fs,1)); height:calc(38px * var(--fs,1)); min-height:calc(38px * var(--fs,1));
-  flex:0 0 calc(36px * var(--fs,1)); display:inline-flex; align-items:center; justify-content:center;
-  padding:calc(7px * var(--fs,1)) !important; font-size:calc(16px * var(--fs,1)) !important; line-height:1; }
-.cb-pop-cfg .ai-model-refresh .svgic, .cb-pop-cfg .ai-key-toggle .svgic{ width:calc(17px * var(--fs,1)); height:calc(17px * var(--fs,1)); display:block; }
+  min-height:calc(38px * var(--ui-fs,1)); padding:calc(7px * var(--ui-fs,1)) calc(10px * var(--ui-fs,1)) !important;
+  font-size:calc(13.5px * var(--ui-fs,1)) !important; line-height:1.25; }
+.cb-pop-cfg .cb-mem2{ flex-direction:row !important; align-items:center !important; gap:calc(8px * var(--ui-fs,1)) !important; margin:0 !important;
+  padding:calc(2px * var(--ui-fs,1)) 0; color:var(--ink) !important;
+  font-size:calc(13.5px * var(--ui-fs,1)) !important; line-height:1.4; }
+.cb-pop-cfg .cb-mem2 input{ width:calc(16px * var(--ui-fs,1)); height:calc(16px * var(--ui-fs,1)); flex:0 0 calc(16px * var(--ui-fs,1)); margin:0; accent-color:var(--accent); }
+.cb-pop-cfg .ai-model-wrap, .cb-pop-cfg .ai-key-wrap{ gap:calc(6px * var(--ui-fs,1)); }
+.cb-pop-cfg .ai-proxy-wrap{ gap:calc(6px * var(--ui-fs,1)); }
+.cb-pop-cfg .ai-model-refresh, .cb-pop-cfg .ai-key-toggle{ width:calc(36px * var(--ui-fs,1)); height:calc(38px * var(--ui-fs,1)); min-height:calc(38px * var(--ui-fs,1));
+  flex:0 0 calc(36px * var(--ui-fs,1)); display:inline-flex; align-items:center; justify-content:center;
+  padding:calc(7px * var(--ui-fs,1)) !important; font-size:calc(16px * var(--ui-fs,1)) !important; line-height:1; }
+.cb-pop-cfg .ai-model-refresh .svgic, .cb-pop-cfg .ai-key-toggle .svgic{ width:calc(17px * var(--ui-fs,1)); height:calc(17px * var(--ui-fs,1)); display:block; }
+.cb-pop-cfg .ai-provider-state{ min-height:calc(18px * var(--ui-fs,1)); font-size:calc(12px * var(--ui-fs,1)); }
 /* ── 套用 (range) menu: wider ── */
 body .cb-pop[data-for="scope"]{ min-width:300px !important; padding:12px !important; }
 .cb-pop[data-for="scope"] .fp-scope{ margin-bottom:10px !important; }
