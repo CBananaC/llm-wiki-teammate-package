@@ -4075,3 +4075,23 @@ Verified:
 
 Remaining:
 - Human confirmation of another repeat target with a different title remains advisable.
+
+### 2026-07-27 19:36 HKT — Codex — Matched StoryMap 硃83 example to the sample review UI and source data
+
+Summary:
+- Replaced the custom review mock-up in `intro Website/storymap-example.html` with the sample review tool's visible panel structure: one `tool-box` AI panel with one `chat-extract` result card and one `card` original-document panel.
+- Used the approved sample extraction for 硃83: `常青催令福寧鎮等兵繼進`, its description, location, actor, category, and exact source quotation.
+- Embedded the complete canonical 硃83 original body from `review-tools/shared data/stage1_original_text.json`, including the date lines and 硃批 text; clicking the sample-style `.cx-q` quotation scrolls to and highlights its matching passage.
+- Added working `加入` and `略過` review actions for the demonstration card.
+
+Files:
+- `intro Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the embedded original body exactly matches the canonical Stage 1 硃83 body, with one exact quotation occurrence.
+- Confirmed there is one AI quotation card, one full original-document panel, and no extra StoryMap information card in the review-demo section.
+- Parsed the embedded JavaScript successfully and `git diff --check` passed.
+
+Remaining:
+- Live interaction testing remains limited because the in-app browser blocks reloads of the local `file://` prototype; the source/data and interaction structure were statically verified.
