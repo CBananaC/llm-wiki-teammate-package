@@ -3978,6 +3978,25 @@ Verified:
 Remaining:
 - Replace demonstration assets and mock review-tool content with project-approved media and the final website embed when available.
 
+### 2026-07-27 18:52 HKT — Codex — Simplified 硃83 quotation-review example
+
+Summary:
+- Updated `storymap-example.html` so the 硃83 demonstration contains only an AI chat/output panel and a full original-document panel.
+- Kept one AI result card with the 清方行動 extraction and the source quotation 「至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進」.
+- Clicking the quotation selects the card, scrolls to the matching passage in the original document panel, highlights it, and updates the review status message.
+
+Files:
+- `intro Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Review-demo structure check passed: one AI output card, one original-document panel, and no extra floating card in the example.
+- Embedded JavaScript passed syntax validation.
+- `git diff --check` passed.
+
+Remaining:
+- Live click testing in the in-app browser was blocked because the browser security policy would not reload the local `file://` page; the interaction was checked statically instead.
+
 ### 2026-07-27 18:34 HKT — Codex — Preserved existing events during repeat-source merges
 
 Summary:
