@@ -1,0 +1,258 @@
+[
+  {
+    "category": "done",
+    "description": "水師提督黃仕簡率領官兵自金門料羅灣放洋出海，預計兩、三日內抵達鹿耳門以支援郡城。",
+    "howKnown": "轉述",
+    "quote": "水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "黃仕簡率水師自料羅放洋赴臺",
+    "whenAr": "1787/02/15",
+    "whenCh": "十二月二十八日",
+    "whenKnownCh": "十二月三十日",
+    "where": "料羅",
+    "who": [
+      "黃仕簡"
+    ],
+    "who_loc": {
+      "黃仕簡": "料羅"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "水師提臣黃仕簡自金門收泊料羅，續於二十八日又自料羅放洋，計期兩、三日內，即可前抵鹿耳，援應郡城。"
+      }
+    ],
+    "actor": "qing",
+    "same_as_event_id": "evmrd8qehqp5n",
+    "repeat_of_title": "黃仕簡率兵放洋赴臺",
+    "repeat_report_doc_id": "奏48",
+    "repeat_report_author": "常青",
+    "repeat_report_doc_title": "為奏聞水師提督黃仕簡放洋赴臺日期事（附片）"
+  },
+  {
+    "category": "done",
+    "description": "陸路提督任承恩率兵自蚶江出口放洋，因遭遇風雨，暫時寄泊於臭塗澳外，等待風定後直達鹿仔港。",
+    "howKnown": "轉述",
+    "quote": "陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "任承恩率陸路官兵自蚶江放洋",
+    "whenAr": "1787/02/15",
+    "whenCh": "十二月二十八日",
+    "whenKnownCh": "十二月三十日",
+    "where": "蚶江",
+    "who": [
+      "任承恩"
+    ],
+    "who_loc": {
+      "任承恩": "臭塗澳"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "陸路提臣任承恩係由蚶江出口，據蚶江通判稟報，亦於二十八日放洋。旋因風雨驟作，寄泊臭塗澳外。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "鹿港一帶的義民自發組織，共同保守地方，可望與前來的官軍接應以壯聲勢。",
+    "howKnown": "轉述",
+    "quote": "鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "義民鹿港義民共相保守防禦",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "十二月三十日",
+    "where": "鹿港",
+    "who": [
+      "義民"
+    ],
+    "who_loc": {
+      "義民": "鹿港"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "鹿港一帶，但有義民，共相保守，可望接應，以壯聲援。"
+      }
+    ],
+    "actor": "qing",
+    "subtitle_original": "鹿港義民共相保守防禦"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青因慮及海道風汛難定，改變原令，命令督、撫標兵一千名仍駐紮省城進行防守。",
+    "howKnown": "親歷",
+    "quote": "因令督、撫標兵，仍駐省城防守。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "常青留督撫標兵防守省城",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "省城",
+    "who": [
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "省城"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "因令督、撫標兵，仍駐省城防守。"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "常青派委延平協副將林天洛管帶延、建兵一千名由陸路兼程前往廈門，並派汀州鎮總兵普吉保統率登船準備渡臺。",
+    "howKnown": "親歷",
+    "quote": "將延、建兵一千名派委延平協副將林天洛管帶，由陸路兼程赴廈，並派先經調來之汀州鎮總兵普吉保統率登舟",
+    "relations": [
+      {
+        "evidence": "將延、建兵一千名派委延平協副將林天洛管帶",
+        "relation": "派委",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "林天洛"
+      },
+      {
+        "evidence": "並派先經調來之汀州鎮總兵普吉保統率登舟",
+        "relation": "派",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "普吉保"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青派林天洛與普吉保赴廈",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "常青",
+      "林天洛",
+      "普吉保"
+    ],
+    "who_loc": {
+      "常青": "省城",
+      "普吉保": "廈門",
+      "林天洛": "廈門"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "將延、建兵一千名派委延平協副將林天洛管帶，由陸路兼程赴廈，並派先經調來之汀州鎮總兵普吉保統率登舟"
+      }
+    ],
+    "actor": "qing",
+    "same_as_event_id": "evmrd9see7hs5",
+    "repeat_of_title": "調遣建延水師兵渡臺",
+    "repeat_report_doc_id": "天90",
+    "repeat_report_author": "",
+    "repeat_report_doc_title": ""
+  },
+  {
+    "category": "done",
+    "description": "常青自水師提標五營內預備兵丁六百名，派令興化協副將格繃額帶領，自廈門配船飛渡鹿耳門。",
+    "howKnown": "親歷",
+    "quote": "又於水師提標五營內，預備兵丁六百名，派令興化協副將格繃額帶領，亦從廈門配船飛渡",
+    "relations": [
+      {
+        "evidence": "派令興化協副將格繃額帶領",
+        "relation": "派令",
+        "relation_type": "command",
+        "source": "常青",
+        "target": "格繃額"
+      }
+    ],
+    "side": "qing",
+    "subtitle": "常青派格繃額率兵自廈飛渡",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "廈門",
+    "who": [
+      "常青",
+      "格繃額"
+    ],
+    "who_loc": {
+      "常青": "省城",
+      "格繃額": "廈門"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "又於水師提標五營內，預備兵丁六百名，派令興化協副將格繃額帶領，亦從廈門配船飛渡"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "plan",
+    "description": "常青催促續派的福寧鎮及銅山、羅源等營共一千名兵力，陸續向臺灣前線繼進支援。",
+    "howKnown": "親歷",
+    "quote": "至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "常青催令福寧等營兵力繼進",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "福寧",
+    "who": [
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "省城"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進"
+      }
+    ],
+    "actor": "qing"
+  },
+  {
+    "category": "done",
+    "description": "閩浙總督常青因擔心漳州、泉州民俗凶悍、潛通賊匪，故嚴密防範，並親往泉州、廈門各海口嚴加督察。",
+    "howKnown": "親歷",
+    "quote": "漳、泉二郡，民俗凶悍，誠恐賊匪潛通勾結，臣俱密為防範。並往來泉、廈各海口嚴加督察，務保無虞。",
+    "relations": [],
+    "side": "qing",
+    "subtitle": "常青密防漳泉並督察海口",
+    "whenAr": "",
+    "whenCh": "",
+    "whenKnownCh": "",
+    "where": "泉州",
+    "who": [
+      "常青"
+    ],
+    "who_loc": {
+      "常青": "泉州"
+    },
+    "doc_id": "硃83",
+    "sources": [
+      {
+        "doc_id": "硃83",
+        "quote": "漳、泉二郡，民俗凶悍，誠恐賊匪潛通勾結，臣俱密為防範。並往來泉、廈各海口嚴加督察，務保無虞。"
+      }
+    ],
+    "actor": "qing"
+  }
+]
