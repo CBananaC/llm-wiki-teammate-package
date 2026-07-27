@@ -1,0 +1,12 @@
+{
+  "諭24": {
+    "summary": true,
+    "divide": true,
+    "yu-reported-events": true,
+    "yu-emperor-actions": true,
+    "official-response": true
+  },
+  "__global__": {
+    "repeat-report": true
+  }
+}

@@ -1,0 +1,1203 @@
+[
+  {
+    "category": null,
+    "description": "林爽文等賊匪於十一月二十九日攻破彰化縣城，後於十二月初六日攻破諸羅縣城。",
+    "edict_quote": "賊匪於十一月二十九、十二月初六等日，攻破彰化、諸羅",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "十一月二十九日賊匪攻陷彰化，十二月初六日卯時，攻破諸羅。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "relay",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "十一月二十九日攻破彰化，初六日卯時攻破諸羅。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "賊匪攻破彰化及諸羅縣城",
+    "whenAr": "1786/12/19 - 1786/12/26",
+    "whenCh": "乾隆五十一年十一月二十九日至十二月初六日",
+    "where": "彰化、諸羅",
+    "who": [
+      "林爽文",
+      "賊匪"
+    ],
+    "who_loc": {
+      "林爽文": "彰化",
+      "賊匪": "彰化、諸羅"
+    },
+    "doc_id": "諭24",
+    "sources": [
+      {
+        "doc_id": "諭24",
+        "quote": "賊匪於十一月二十九、十二月初六等日，攻破彰化、諸羅",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "十一月二十九日賊匪攻陷彰化，十二月初六日卯時，攻破諸羅。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "十一月二十九日攻破彰化，初六日卯時攻破諸羅。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭24#lin#0"
+  },
+  {
+    "description": "賊匪林爽文等在福建臺灣彰化地方糾衆滋擾，攻陷縣城並殺害官員。",
+    "edict_quote": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "臺匪林爽文等滋事不法，攻陷彰化縣城。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "臺灣彰化縣城被賊攻陷",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "奏29",
+        "source_official": "常青",
+        "source_quote": "彰化逆匪林爽文等謀為不軌，攻掠城池",
+        "source_receive_date": "",
+        "source_send_date": "1786/12/28"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃33",
+        "source_official": "常青",
+        "source_quote": "彰化匪徒林爽文等結黨肆擾",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "林爽文等糾衆滋擾劫縣戕官",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "福建臺灣彰化地方",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "福建臺灣彰化地方"
+    },
+    "doc_id": "諭27",
+    "sources": [
+      {
+        "doc_id": "諭27",
+        "quote": "現在福建臺灣彰化地方，有賊匪林爽文等糾衆滋擾，劫縣戕官一案。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "臺匪林爽文等滋事不法，攻陷彰化縣城。",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "臺灣彰化縣城被賊攻陷",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "奏29",
+        "quote": "彰化逆匪林爽文等謀為不軌，攻掠城池",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/28"
+      },
+      {
+        "doc_id": "硃33",
+        "quote": "彰化匪徒林爽文等結黨肆擾",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭27#lin#1"
+  },
+  {
+    "category": "",
+    "description": "臺灣賊匪林爽文等聚眾滋事，劫掠官吏，攻陷縣城。",
+    "edict_quote": "閩省臺灣賊匪林爽文等，聚衆滋事，劫縣官一事",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "竊照臺灣彰化縣城被賊攻陷，蔓延淡水，經臣派撥官兵進剿緣由，業經節次奏報在案茲於十六日復接到該鎮道會稟：奸民林爽文、王芬等聚眾劫營，謀為不軌",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "竊照臺匪林爽文等滋事不法，攻陷彰化縣城。",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃34",
+        "source_official": "黃仕簡",
+        "source_quote": "竊照聞報臺灣匪犯攻陷彰化縣城殺官",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/12"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃31",
+        "source_official": "任承恩",
+        "source_quote": "彰化縣城被賊匪攻陷，殺害官員",
+        "source_receive_date": "1786/12/29",
+        "source_send_date": "1786/12/13"
+      }
+    ],
+    "subtitle": "林爽文聚眾滋事攻劫縣官",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "諭28",
+    "sources": [
+      {
+        "doc_id": "諭28",
+        "quote": "閩省臺灣賊匪林爽文等，聚衆滋事，劫縣官一事",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "竊照臺灣彰化縣城被賊攻陷，蔓延淡水，經臣派撥官兵進剿緣由，業經節次奏報在案茲於十六日復接到該鎮道會稟：奸民林爽文、王芬等聚眾劫營，謀為不軌",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "竊照臺匪林爽文等滋事不法，攻陷彰化縣城。",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃34",
+        "quote": "竊照聞報臺灣匪犯攻陷彰化縣城殺官",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      },
+      {
+        "doc_id": "硃31",
+        "quote": "彰化縣城被賊匪攻陷，殺害官員",
+        "howKnown": "官員親報",
+        "whenKnown": "1786/12/29"
+      }
+    ],
+    "card_id": "諭28#lin#2",
+    "same_as": "諭27#lin#1",
+    "earliest_report": {
+      "id": "諭27#lin#1",
+      "doc_id": "諭27",
+      "date": "1787/01/02",
+      "title": "林爽文等糾衆滋擾劫縣戕官"
+    },
+    "repeat_candidates": [
+      "諭27#lin#1"
+    ]
+  },
+  {
+    "category": null,
+    "description": "隨著清軍澎湖及安平援兵趕到臺灣府城，叛軍圍攻府城之勢頭稍有退卻。",
+    "edict_quote": "現在賊勢稍退等語。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃56",
+        "source_official": "常青",
+        "source_quote": "據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。",
+        "source_receive_date": "1787/01/07",
+        "source_send_date": "1786/12/20"
+      }
+    ],
+    "subtitle": "臺灣府城圍攻賊勢稍退",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月中旬",
+    "where": "臺灣府城",
+    "who": [
+      "林爽文黨羽"
+    ],
+    "who_loc": {
+      "林爽文黨羽": "臺灣府城周圍"
+    },
+    "doc_id": "諭31",
+    "sources": [
+      {
+        "doc_id": "諭31",
+        "quote": "現在賊勢稍退等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃56",
+        "quote": "據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/07"
+      }
+    ],
+    "card_id": "諭31#lin#3"
+  },
+  {
+    "description": "奸民林爽文等在臺灣糾眾戕害官吏，佔奪縣城。",
+    "edict_quote": "閩省臺灣有奸民林爽文等糾衆戕官，佔奪縣城一案",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃64",
+        "source_official": "常青",
+        "source_quote": "彰化賊人林爽文等謀為不軌，匪眾蔓延... 彰化、竹塹各處被占",
+        "source_receive_date": "1787/01/10",
+        "source_send_date": "1786/12/24"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃60",
+        "source_official": "徐嗣曾",
+        "source_quote": "臺匪林爽文等滋事不法",
+        "source_receive_date": "1787/01/08",
+        "source_send_date": "1786/12/23"
+      }
+    ],
+    "subtitle": "林爽文糾眾戕官佔城",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "諭38",
+    "sources": [
+      {
+        "doc_id": "諭38",
+        "quote": "閩省臺灣有奸民林爽文等糾衆戕官，佔奪縣城一案",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃64",
+        "quote": "彰化賊人林爽文等謀為不軌，匪眾蔓延... 彰化、竹塹各處被占",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/10"
+      },
+      {
+        "doc_id": "硃60",
+        "quote": "臺匪林爽文等滋事不法",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/08"
+      }
+    ],
+    "card_id": "諭38#lin#4",
+    "same_as": "諭27#lin#1",
+    "earliest_report": {
+      "id": "諭27#lin#1",
+      "doc_id": "諭27",
+      "date": "1787/01/02",
+      "title": "林爽文等糾衆滋擾劫縣戕官"
+    },
+    "repeat_candidates": [
+      "諭39#lin#6",
+      "諭28#lin#2",
+      "諭27#lin#1",
+      "諭43#lin#8"
+    ]
+  },
+  {
+    "description": "賊夥吳異人前往艋舺地方，聲稱欲帶兵接應賊人。",
+    "edict_quote": "有賊夥吳異人到艋舺地方，稱欲帶兵接應賊人",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃64",
+        "source_official": "常青",
+        "source_quote": "遣夥吳異人即貢生吳志超同胞叔吳尊，伊弟吳淑夜、游異等，挺身到艋，聲稱要帶兵前往接應",
+        "source_receive_date": "1787/01/10",
+        "source_send_date": "1786/12/24"
+      }
+    ],
+    "subtitle": "吳異人到艋舺欲接應賊匪",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "艋舺",
+    "who": [
+      "吳異人"
+    ],
+    "who_loc": {
+      "吳異人": "艋舺"
+    },
+    "doc_id": "諭38",
+    "sources": [
+      {
+        "doc_id": "諭38",
+        "quote": "有賊夥吳異人到艋舺地方，稱欲帶兵接應賊人",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃64",
+        "quote": "遣夥吳異人即貢生吳志超同胞叔吳尊，伊弟吳淑夜、游異等，挺身到艋，聲稱要帶兵前往接應",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/10"
+      }
+    ],
+    "card_id": "諭38#lin#5"
+  },
+  {
+    "description": "臺灣奸民林爽文等人糾眾滋事，攻占地方。",
+    "edict_quote": "臺灣奸民林爽文等糾衆滋事一案",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃56",
+        "source_official": "常青",
+        "source_quote": "彰化賊人林爽文等，謀為不軌，攻占城池",
+        "source_receive_date": "1787/01/07",
+        "source_send_date": "1786/12/20"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃59",
+        "source_official": "常青",
+        "source_quote": "彰化逆匪林爽文等蔓延肆擾",
+        "source_receive_date": "1787/01/08",
+        "source_send_date": "1786/12/22"
+      },
+      {
+        "relation": "direct",
+        "source_doc_id": "硃64",
+        "source_official": "常青",
+        "source_quote": "彰化賊人林爽文等謀為不軌，匪眾蔓延",
+        "source_receive_date": "1787/01/10",
+        "source_send_date": "1786/12/24"
+      }
+    ],
+    "subtitle": "林爽文等糾眾滋事",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "諭39",
+    "sources": [
+      {
+        "doc_id": "諭39",
+        "quote": "臺灣奸民林爽文等糾衆滋事一案",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃56",
+        "quote": "彰化賊人林爽文等，謀為不軌，攻占城池",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/07"
+      },
+      {
+        "doc_id": "硃59",
+        "quote": "彰化逆匪林爽文等蔓延肆擾",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/08"
+      },
+      {
+        "doc_id": "硃64",
+        "quote": "彰化賊人林爽文等謀為不軌，匪眾蔓延",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/10"
+      }
+    ],
+    "card_id": "諭39#lin#6",
+    "same_as": "諭27#lin#1",
+    "earliest_report": {
+      "id": "諭27#lin#1",
+      "doc_id": "諭27",
+      "date": "1787/01/02",
+      "title": "林爽文等糾衆滋擾劫縣戕官"
+    },
+    "repeat_candidates": [
+      "諭38#lin#4"
+    ]
+  },
+  {
+    "category": null,
+    "description": "賊夥貢生吳異人等聲稱要帶兵前往接應，欲借道經過艋舺。",
+    "edict_quote": "借道賊夥貢生吳異人等擒拿斬梟各情形",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃64",
+        "source_official": "常青",
+        "source_quote": "遣夥吳異人即貢生吳志超同胞叔吳尊，伊弟吳淑夜、游異等，挺身到艋，聲稱要帶兵前往接應，借道經過",
+        "source_receive_date": "1787/01/10",
+        "source_send_date": "1786/12/24"
+      }
+    ],
+    "subtitle": "貢生吳異人等借道",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初十日",
+    "where": "艋舺",
+    "who": [
+      "吳異人",
+      "吳志超",
+      "吳尊",
+      "吳淑",
+      "游異"
+    ],
+    "who_loc": {
+      "吳尊": "吳異人胞叔",
+      "吳志超": "貢生",
+      "吳淑": "吳異人弟",
+      "吳異人": "貢生",
+      "游異": "賊夥"
+    },
+    "doc_id": "諭40",
+    "sources": [
+      {
+        "doc_id": "諭40",
+        "quote": "借道賊夥貢生吳異人等擒拿斬梟各情形",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃64",
+        "quote": "遣夥吳異人即貢生吳志超同胞叔吳尊，伊弟吳淑夜、游異等，挺身到艋，聲稱要帶兵前往接應，借道經過",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/10"
+      }
+    ],
+    "card_id": "諭40#lin#7",
+    "same_as": "evmr4m70cke34",
+    "earliest_report": {
+      "id": "evmr4m70cke34",
+      "doc_id": "硃64",
+      "date": "1786/12/24",
+      "title": "賴水等豎旗招匪並遣人借道"
+    },
+    "repeat_candidates": [
+      "evmr4m70cke34",
+      "諭38#lin#5"
+    ]
+  },
+  {
+    "category": null,
+    "description": "臺灣林爽文等匪徒糾眾滋事攻城。",
+    "edict_quote": "臺匪糾衆滋事",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃71",
+        "source_official": "孫士毅",
+        "source_quote": "訪得臺灣彰化縣被賊匪糾眾攻城",
+        "source_receive_date": "1787/01/13",
+        "source_send_date": "1786/12/24"
+      }
+    ],
+    "subtitle": "臺匪糾眾滋事",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "林爽文"
+    ],
+    "who_loc": {
+      "林爽文": "臺灣"
+    },
+    "doc_id": "諭43",
+    "sources": [
+      {
+        "doc_id": "諭43",
+        "quote": "臺匪糾衆滋事",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃71",
+        "quote": "訪得臺灣彰化縣被賊匪糾眾攻城",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/13"
+      }
+    ],
+    "card_id": "諭43#lin#8"
+  },
+  {
+    "description": "賊匪於十二月初七、初十、十二等日連番攻犯臺灣府城西門。",
+    "edict_quote": "十二月初七、初十、十二等日，賊匪來犯臺灣府城西門",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃78",
+        "source_official": "柴大紀",
+        "source_quote": "由海來攻府城西門... 初十日復來打仗... 十二日早，正在點齊兵丁，欲往各莊搜賊，乃賊眾數萬，散漫滿野，三面擁至",
+        "source_receive_date": "1787/01/14",
+        "source_send_date": "1786/12/14"
+      }
+    ],
+    "subtitle": "賊匪攻犯臺灣府城西門",
+    "whenAr": "",
+    "whenCh": "十二月初七、初十、十二等日",
+    "where": "臺灣府城西門",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "臺灣府城西門"
+    },
+    "doc_id": "諭47",
+    "sources": [
+      {
+        "doc_id": "諭47",
+        "quote": "十二月初七、初十、十二等日，賊匪來犯臺灣府城西門",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃78",
+        "quote": "由海來攻府城西門... 初十日復來打仗... 十二日早，正在點齊兵丁，欲往各莊搜賊，乃賊眾數萬，散漫滿野，三面擁至",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/14"
+      }
+    ],
+    "card_id": "諭47#lin#9"
+  },
+  {
+    "description": "賊匪侵犯鳳山縣城，致鳳山縣城被攻陷並受滋擾。",
+    "edict_quote": "鳳山縣亦被賊滋擾",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃77",
+        "source_official": "柴大紀",
+        "source_quote": "接到臺灣道永福來札，據南路逃回兵丁劉茂光稟稱... 有賊匪二千餘名直攻縣城... 賊匪乘虛由龜山北門撲入城內",
+        "source_receive_date": "1787/01/14",
+        "source_send_date": "1786/12/24"
+      }
+    ],
+    "subtitle": "賊匪攻陷滋擾鳳山縣",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "鳳山縣",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "鳳山縣"
+    },
+    "doc_id": "諭47",
+    "sources": [
+      {
+        "doc_id": "諭47",
+        "quote": "鳳山縣亦被賊滋擾",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃77",
+        "quote": "接到臺灣道永福來札，據南路逃回兵丁劉茂光稟稱... 有賊匪二千餘名直攻縣城... 賊匪乘虛由龜山北門撲入城內",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/14"
+      }
+    ],
+    "card_id": "諭47#lin#10",
+    "same_as": "evmr4hwi3sccw",
+    "earliest_report": {
+      "id": "evmr4hwi3sccw",
+      "doc_id": "硃128",
+      "date": "1786/12/21",
+      "title": "賊匪攻陷鳳山縣城"
+    },
+    "repeat_candidates": [
+      "諭52#lin#12",
+      "evmr4hwi3sccw"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "賊匪滋擾鳳山縣後，於十二月二十二日、二十四日等日復來犯臺灣府城，俱被官兵、義民、鄉勇擊退殺敗。",
+    "edict_quote": "賊匪在鳳山縣滋擾後，二十二、二十四等日，復來犯郡城，俱被官兵、義民、鄉勇殺敗。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [],
+    "subtitle": "賊匪犯鳳山及郡城",
+    "whenAr": "",
+    "whenCh": "十二月二十二日、十二月二十四日",
+    "where": "鳳山縣、臺灣府城",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "諭51",
+    "sources": [
+      {
+        "doc_id": "諭51",
+        "quote": "賊匪在鳳山縣滋擾後，二十二、二十四等日，復來犯郡城，俱被官兵、義民、鄉勇殺敗。",
+        "howKnown": "上諭所載"
+      }
+    ],
+    "card_id": "諭51#lin#11"
+  },
+  {
+    "description": "賊匪滋擾攻陷鳳山縣城，參將瑚圖裏因兵潰散縱馬逃去、不知下落，知縣湯大奎情急自刎。",
+    "edict_quote": "賊匪滋擾鳳山縣城，參將瑚圖裏因兵散去，尚無下落，知縣湯大奎自刎",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃83",
+        "source_official": "常青",
+        "source_quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落...賊人進入縣署，該縣湯大奎情急拔劍自刎。",
+        "source_receive_date": "1787/01/15",
+        "source_send_date": "1787/01/02"
+      }
+    ],
+    "subtitle": "賊匪攻陷鳳山縣城",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十三日",
+    "where": "鳳山縣城",
+    "who": [
+      "賊匪",
+      "瑚圖裏",
+      "湯大奎"
+    ],
+    "who_loc": {
+      "湯大奎": "鳳山縣城",
+      "瑚圖裏": "鳳山縣城"
+    },
+    "doc_id": "諭52",
+    "sources": [
+      {
+        "doc_id": "諭52",
+        "quote": "賊匪滋擾鳳山縣城，參將瑚圖裏因兵散去，尚無下落，知縣湯大奎自刎",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃83",
+        "quote": "十三日天明時候，有賊匪二千餘名直攻縣城。瑚參將施放槍炮，僅斃賊五、六人，賊勢稍退。瑚參將放馬直追，賊匪乘虛由龜山北門撲入城內。斯時官兵槍炮莫施，旋即潰散。瑚參將縱馬由南而去，不知下落...賊人進入縣署，該縣湯大奎情急拔劍自刎。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/15"
+      }
+    ],
+    "card_id": "諭52#lin#12",
+    "same_as": "evmr4hwi3sccw",
+    "earliest_report": {
+      "id": "evmr4hwi3sccw",
+      "doc_id": "硃128",
+      "date": "1786/12/21",
+      "title": "賊匪攻陷鳳山縣城"
+    },
+    "repeat_candidates": [
+      "evmrd71cls4sk",
+      "諭47#lin#10"
+    ]
+  },
+  {
+    "description": "賊匪於十二月二十二日、二十四日等日再次侵犯臺灣郡城。",
+    "edict_quote": "二十二、二十四等日，賊復來犯郡城",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [],
+    "subtitle": "賊匪復犯郡城",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月二十二日、二十四日",
+    "where": "郡城",
+    "who": [
+      "賊匪"
+    ],
+    "who_loc": {
+      "賊匪": "郡城"
+    },
+    "doc_id": "諭52",
+    "sources": [
+      {
+        "doc_id": "諭52",
+        "quote": "二十二、二十四等日，賊復來犯郡城",
+        "howKnown": "上諭所載"
+      }
+    ],
+    "card_id": "諭52#lin#13",
+    "same_as": "諭51#lin#11",
+    "earliest_report": {
+      "id": "諭51#lin#11",
+      "doc_id": "諭51",
+      "date": "1787/01/15",
+      "title": "賊匪犯鳳山及郡城"
+    },
+    "repeat_candidates": [
+      "諭51#lin#11"
+    ]
+  },
+  {
+    "category": "",
+    "description": "臺灣匪徒糾眾滋事攻城。",
+    "edict_quote": "聞臺匪糾衆滋事",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃71",
+        "source_official": "孫士毅",
+        "source_quote": "訪得臺灣彰化縣被賊匪糾眾攻城",
+        "source_receive_date": "1787/01/13",
+        "source_send_date": "1786/12/24"
+      }
+    ],
+    "subtitle": "臺匪糾眾滋事",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "臺匪"
+    ],
+    "who_loc": {
+      "臺匪": "臺灣"
+    },
+    "doc_id": "諭53",
+    "sources": [
+      {
+        "doc_id": "諭53",
+        "quote": "聞臺匪糾衆滋事",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃71",
+        "quote": "訪得臺灣彰化縣被賊匪糾眾攻城",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/13"
+      }
+    ],
+    "card_id": "諭53#lin#14"
+  },
+  {
+    "category": null,
+    "description": "據獲犯楊詠等供稱，天地會係漳州平和縣人嚴煙（莊煙）於乾隆五十一年十二月過臺灣興起。",
+    "edict_quote": "據楊詠供起會根由，系嚴煙過臺來興起的等語。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃87",
+        "source_official": "常青",
+        "source_quote": "據楊詠、楊軒同供：這天地會是五十年十二月裡，有漳州平和縣人莊煙即嚴煙，過臺來興起的。",
+        "source_receive_date": "1787/01/20",
+        "source_send_date": "1787/01/06"
+      }
+    ],
+    "subtitle": "嚴煙過臺興起天地會",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "臺灣",
+    "who": [
+      "嚴煙",
+      "楊詠"
+    ],
+    "who_loc": {
+      "嚴煙": "臺灣",
+      "楊詠": "臺灣"
+    },
+    "doc_id": "諭56",
+    "sources": [
+      {
+        "doc_id": "諭56",
+        "quote": "據楊詠供起會根由，系嚴煙過臺來興起的等語。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃87",
+        "quote": "據楊詠、楊軒同供：這天地會是五十年十二月裡，有漳州平和縣人莊煙即嚴煙，過臺來興起的。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/20"
+      }
+    ],
+    "card_id": "諭56#lin#15"
+  },
+  {
+    "category": null,
+    "description": "據楊詠供述聽聞嚴煙所述，天地會起會根由為廣東後溪鳳花亭之洪二房和尚與一朱姓少年所創起。",
+    "edict_quote": "據楊詠供出之洪二房和尚及朱姓等",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃87",
+        "source_official": "常青",
+        "source_quote": "小的們聽得嚴煙說及起會的根源，是廣東有個姓洪的和尚，叫洪二房，同一個姓朱的人起的。洪二房和尚居住後溪鳳花亭",
+        "source_receive_date": "1787/01/20",
+        "source_send_date": "1787/01/06"
+      }
+    ],
+    "subtitle": "洪二房和尚與朱姓創起天地會",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "廣東後溪鳳花亭",
+    "who": [
+      "洪二房",
+      "朱姓"
+    ],
+    "who_loc": {
+      "洪二房": "廣東後溪鳳花亭"
+    },
+    "doc_id": "諭56",
+    "sources": [
+      {
+        "doc_id": "諭56",
+        "quote": "據楊詠供出之洪二房和尚及朱姓等",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃87",
+        "quote": "小的們聽得嚴煙說及起會的根源，是廣東有個姓洪的和尚，叫洪二房，同一個姓朱的人起的。洪二房和尚居住後溪鳳花亭",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/20"
+      }
+    ],
+    "card_id": "諭56#lin#16"
+  },
+  {
+    "category": "",
+    "description": "廣東和尚洪二房與年約十五六歲之朱姓男子於廣東後溪鳳花亭創立天地會，為天地會起會根源。",
+    "edict_quote": "起會的根源，是廣東有個姓洪的和尚，叫洪二房，同一個姓朱的人起的。洪二房和尚居住後溪鳳花亭，不知是何府何縣地方。那姓朱的年才十五、六歲，不知叫什麼名字，也不知住在那裡。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃87",
+        "source_official": "常青",
+        "source_quote": "起會的根源，是廣東有個姓洪的和尚，叫洪二房，同一個姓朱的人起的。洪二房和尚居住後溪鳳花亭，不知是何府何縣地方。那姓朱的年才十五、六歲，不知叫什麼名字，也不知住在那裡。",
+        "source_receive_date": "1787/01/20",
+        "source_send_date": "1787/01/06"
+      }
+    ],
+    "subtitle": "洪二房與朱姓創立天地會",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "廣東後溪鳳花亭",
+    "who": [
+      "洪二房",
+      "朱姓"
+    ],
+    "who_loc": {
+      "洪二房": "廣東後溪鳳花亭"
+    },
+    "doc_id": "諭57",
+    "sources": [
+      {
+        "doc_id": "諭57",
+        "quote": "起會的根源，是廣東有個姓洪的和尚，叫洪二房，同一個姓朱的人起的。洪二房和尚居住後溪鳳花亭，不知是何府何縣地方。那姓朱的年才十五、六歲，不知叫什麼名字，也不知住在那裡。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃87",
+        "quote": "起會的根源，是廣東有個姓洪的和尚，叫洪二房，同一個姓朱的人起的。洪二房和尚居住後溪鳳花亭，不知是何府何縣地方。那姓朱的年才十五、六歲，不知叫什麼名字，也不知住在那裡。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/20"
+      }
+    ],
+    "card_id": "諭57#lin#17",
+    "same_as": "諭56#lin#16",
+    "earliest_report": {
+      "id": "諭56#lin#16",
+      "doc_id": "諭56",
+      "date": "1787/01/20",
+      "title": "洪二房和尚與朱姓創起天地會"
+    },
+    "repeat_candidates": [
+      "諭56#lin#16"
+    ]
+  },
+  {
+    "category": "",
+    "description": "漳州府平和縣人莊煙（即嚴煙）於乾隆五十年十二月過臺灣興起天地會。",
+    "edict_quote": "這天地會是五十年十二月裡，有漳州平和縣人莊煙即嚴煙，過臺來興起的。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃87",
+        "source_official": "常青",
+        "source_quote": "這天地會是五十年十二月裡，有漳州平和縣人莊煙即嚴煙，過臺來興起的。",
+        "source_receive_date": "1787/01/20",
+        "source_send_date": "1787/01/06"
+      }
+    ],
+    "subtitle": "嚴煙過臺興起天地會",
+    "whenAr": "",
+    "whenCh": "乾隆五十年十二月",
+    "where": "臺灣",
+    "who": [
+      "莊煙",
+      "嚴煙"
+    ],
+    "who_loc": {
+      "嚴煙": "福建漳州府平和縣",
+      "莊煙": "福建漳州府平和縣"
+    },
+    "doc_id": "諭57",
+    "sources": [
+      {
+        "doc_id": "諭57",
+        "quote": "這天地會是五十年十二月裡，有漳州平和縣人莊煙即嚴煙，過臺來興起的。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃87",
+        "quote": "這天地會是五十年十二月裡，有漳州平和縣人莊煙即嚴煙，過臺來興起的。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/20"
+      }
+    ],
+    "card_id": "諭57#lin#18",
+    "same_as": "諭56#lin#15",
+    "earliest_report": {
+      "id": "諭56#lin#15",
+      "doc_id": "諭56",
+      "date": "1787/01/20",
+      "title": "嚴煙過臺興起天地會"
+    },
+    "repeat_candidates": [
+      "諭56#lin#15"
+    ]
+  },
+  {
+    "category": "",
+    "description": "彰化文武官員至大墩圍查拿林爽文及楊光勳案內逸犯並揚言燒莊，林爽文遂糾眾劫大墩營盤、殺害官員，並攻取彰化縣城、分派偽官攻取諸羅等地。",
+    "edict_quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員，無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃87",
+        "source_official": "常青",
+        "source_quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員，無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+        "source_receive_date": "1787/01/20",
+        "source_send_date": "1787/01/06"
+      }
+    ],
+    "subtitle": "林爽文劫大墩營盤攻彰化城",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十一月",
+    "where": "大墩圍、彰化縣城、諸羅",
+    "who": [
+      "林爽文",
+      "楊光勳"
+    ],
+    "who_loc": {
+      "林爽文": "彰化大墩圍"
+    },
+    "doc_id": "諭57",
+    "sources": [
+      {
+        "doc_id": "諭57",
+        "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員，無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃87",
+        "quote": "今因彰化文武官同到大墩圍拿林爽文並楊光勳案內逸犯，還說要放火燒莊。林爽文才起意糾集多人，劫了大墩營盤。又因殺了文武官員，無處逃罪，就攻取彰化縣城，分派偽官，去取諸羅各處的。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/20"
+      }
+    ],
+    "card_id": "諭57#lin#19"
+  },
+  {
+    "category": null,
+    "description": "高文麟等人加入臺灣叛亂並領受偽職。",
+    "edict_quote": "高文麟等系臺匪案內領受僞職要犯",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃88",
+        "source_official": "常青",
+        "source_quote": "查高文麟等四犯，膽敢從賊肆擾，攻佔城池，領受偽職，實屬罪大惡極",
+        "source_receive_date": "1787/01/20",
+        "source_send_date": "1787/01/06"
+      }
+    ],
+    "subtitle": "高文麟等領受偽職",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "高文麟"
+    ],
+    "who_loc": {
+      "高文麟": "臺灣"
+    },
+    "doc_id": "諭59",
+    "sources": [
+      {
+        "doc_id": "諭59",
+        "quote": "高文麟等系臺匪案內領受僞職要犯",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃88",
+        "quote": "查高文麟等四犯，膽敢從賊肆擾，攻佔城池，領受偽職，實屬罪大惡極",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/20"
+      }
+    ],
+    "card_id": "諭59#lin#20"
+  },
+  {
+    "description": "臺灣匪徒聚眾滋事，起兵反抗官府。",
+    "edict_quote": "臺匪滋事不法",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [],
+    "subtitle": "臺匪滋事不法",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "臺灣",
+    "who": [
+      "臺匪"
+    ],
+    "who_loc": {
+      "臺匪": "臺灣"
+    },
+    "doc_id": "諭60",
+    "sources": [
+      {
+        "doc_id": "諭60",
+        "quote": "臺匪滋事不法",
+        "howKnown": "上諭所載"
+      }
+    ],
+    "card_id": "諭60#lin#21"
+  },
+  {
+    "category": "",
+    "description": "臺灣起事賊匪派遣匪犯陳樵返回福建內地，前往漳浦等處探聽清朝官兵調遣消息。",
+    "edict_quote": "訊系賊回探聽官兵消息",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃113",
+        "source_official": "徐嗣曾",
+        "source_quote": "現據漳浦縣羅澤坤稟報，拿獲匪犯陳樵，訊係賊匪遣回探聽官兵消息",
+        "source_receive_date": "1787/01/27",
+        "source_send_date": "1787/01/14"
+      }
+    ],
+    "subtitle": "臺灣賊匪派遣陳樵回內地探聽官兵消息",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月至乾隆五二年正月初",
+    "where": "福建省漳州府漳浦縣",
+    "who": [
+      "陳樵"
+    ],
+    "who_loc": {
+      "陳樵": "臺灣"
+    },
+    "doc_id": "諭75",
+    "sources": [
+      {
+        "doc_id": "諭75",
+        "quote": "訊系賊回探聽官兵消息",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃113",
+        "quote": "現據漳浦縣羅澤坤稟報，拿獲匪犯陳樵，訊係賊匪遣回探聽官兵消息",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/27"
+      }
+    ],
+    "card_id": "諭75#lin#22"
+  },
+  {
+    "description": "林爽文部眾遭官兵重創後星散潰敗，奔逃進入內山生番巢穴。",
+    "edict_quote": "賊俱星散奔逃內山",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃114",
+        "source_official": "徐嗣曾",
+        "source_quote": "賊俱星散，奔逃內山",
+        "source_receive_date": "1787/01/27",
+        "source_send_date": "1787/01/14"
+      }
+    ],
+    "subtitle": "林爽文部眾敗逃內山",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "內山",
+    "who": [],
+    "who_loc": {},
+    "doc_id": "諭79",
+    "sources": [
+      {
+        "doc_id": "諭79",
+        "quote": "賊俱星散奔逃內山",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃114",
+        "quote": "賊俱星散，奔逃內山",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/27"
+      }
+    ],
+    "card_id": "諭79#lin#23"
+  }
+]

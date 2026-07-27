@@ -1,0 +1,45 @@
+[
+  {
+    "category": "done",
+    "description": "鳳山縣滋事不法之賊首王啓郎、曾錦等人已被官府逮捕。",
+    "edict_quote": "接據臺灣鎮道稟報，鳳山滋事不法之賊首王啓郎、曾錦等，已被拿獲。",
+    "relations": [],
+    "side": "lin",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃143",
+        "source_official": "徐嗣曾",
+        "source_quote": "連日接據臺灣鎮道具報：鳳山滋事不法之賊首王啟郎、曾錦等，亦被拿獲。",
+        "source_receive_date": "1787/02/09",
+        "source_send_date": "1787/01/26"
+      }
+    ],
+    "subtitle": "鳳山賊首王啓郎曾錦滋事被捕",
+    "whenAr": "",
+    "whenCh": "",
+    "where": "鳳山",
+    "who": [
+      "王啓郎",
+      "曾錦"
+    ],
+    "who_loc": {
+      "曾錦": "鳳山",
+      "王啓郎": "鳳山"
+    },
+    "doc_id": "諭116",
+    "sources": [
+      {
+        "doc_id": "諭116",
+        "quote": "接據臺灣鎮道稟報，鳳山滋事不法之賊首王啓郎、曾錦等，已被拿獲。",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃143",
+        "quote": "連日接據臺灣鎮道具報：鳳山滋事不法之賊首王啟郎、曾錦等，亦被拿獲。",
+        "howKnown": "轉述",
+        "whenKnown": "1787/02/09"
+      }
+    ]
+  }
+]

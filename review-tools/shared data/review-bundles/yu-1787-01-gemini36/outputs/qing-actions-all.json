@@ -1,0 +1,244 @@
+[
+  {
+    "category": "done",
+    "description": "臺灣總兵柴大紀帶兵於離臺灣府城十里之三坎店堵禦，並召募鄉勇緊守府城。",
+    "edict_quote": "總兵柴大紀帶兵堵住離府城十里之三坎店，召募鄉勇，緊守府城",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇，緊守府城",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "柴大紀帶兵防守三坎店及府城",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月初",
+    "where": "三坎店、臺灣府城",
+    "who": [
+      "柴大紀"
+    ],
+    "who_loc": {
+      "柴大紀": "三坎店"
+    },
+    "doc_id": "諭24",
+    "sources": [
+      {
+        "doc_id": "諭24",
+        "quote": "總兵柴大紀帶兵堵住離府城十里之三坎店，召募鄉勇，緊守府城",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "柴鎮帶兵堵住離府城十里之三坎店，臺道召募鄉勇，緊守府城",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "柴鎮帶兵一千餘名，堵住離府城十里之三坎店。臺道招募鄉勇，緊守府城",
+        "howKnown": "他報佐證",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭24#qing#0",
+    "same_as": "evmr4e1a6vnvx",
+    "earliest_report": {
+      "id": "evmr4e1a6vnvx",
+      "doc_id": "硃41",
+      "date": "1786/12/17",
+      "title": "柴總兵堵剿與府城募勇"
+    },
+    "repeat_candidates": [
+      "evmr4e1a6vnvx",
+      "evmr4efgd0l0m",
+      "evmr4efjjniyc"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "總兵柴大紀率兵與賊交戰，大施火炮擊退賊勢。",
+    "edict_quote": "十一日與賊打仗，大施火炮，賊勢稍退",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "relay",
+        "source_doc_id": "硃41",
+        "source_official": "常青",
+        "source_quote": "並聞得十一日，柴鎮與賊打仗，大施火炮，賊勢稍退",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/17"
+      },
+      {
+        "relation": "corroborating",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "又據稱，在澎聞得十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "柴大紀施火炮擊退賊匪",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月十一日",
+    "where": "臺灣府城附近",
+    "who": [
+      "柴大紀"
+    ],
+    "who_loc": {
+      "柴大紀": "臺灣府城附近"
+    },
+    "doc_id": "諭24",
+    "sources": [
+      {
+        "doc_id": "諭24",
+        "quote": "十一日與賊打仗，大施火炮，賊勢稍退",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃41",
+        "quote": "並聞得十一日，柴鎮與賊打仗，大施火炮，賊勢稍退",
+        "howKnown": "轉述",
+        "whenKnown": "1787/01/02"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "又據稱，在澎聞得十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+        "howKnown": "他報佐證",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭24#qing#1",
+    "same_as": "evmr4e1d30bi1",
+    "earliest_report": {
+      "id": "evmr4e1d30bi1",
+      "doc_id": "硃41",
+      "date": "1786/12/17",
+      "title": "三坎店戰鬥擊退賊匪"
+    },
+    "repeat_candidates": [
+      "evmr4e1d30bi1"
+    ]
+  },
+  {
+    "category": "done",
+    "description": "福建巡撫徐嗣曾派遣副將徐鼎士等帶兵一千五百名，由閩安出口直抵淡水協同守禦，並犒賞獎勵泉州鄉勇相機剿捕。",
+    "edict_quote": "現派副將徐鼎士等，帶兵一千五百名，由閩安出口，直抵淡水，協同守禦，並多帶犒賞，獎勵泉州鄉勇，相機進剿",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃43",
+        "source_official": "徐嗣曾",
+        "source_quote": "臣即將現派備調之省兵一千五百名，飭令閩安協副將徐鼎士、撫標右營遊擊吳秀統領，多帶軍火器械，配齊船隻，雇募熟諳該處海道之舵水，克日由閩安出口，直抵淡水，協同守禦，並多帶賞犒，獎勵泉州鄉勇相機剿捕",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": ""
+      }
+    ],
+    "subtitle": "徐嗣曾派徐鼎士帶兵協守淡水",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "閩安、淡水",
+    "who": [
+      "徐嗣曾",
+      "徐鼎士"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州",
+      "徐鼎士": "閩安"
+    },
+    "doc_id": "諭24",
+    "sources": [
+      {
+        "doc_id": "諭24",
+        "quote": "現派副將徐鼎士等，帶兵一千五百名，由閩安出口，直抵淡水，協同守禦，並多帶犒賞，獎勵泉州鄉勇，相機進剿",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃43",
+        "quote": "臣即將現派備調之省兵一千五百名，飭令閩安協副將徐鼎士、撫標右營遊擊吳秀統領，多帶軍火器械，配齊船隻，雇募熟諳該處海道之舵水，克日由閩安出口，直抵淡水，協同守禦，並多帶賞犒，獎勵泉州鄉勇相機剿捕",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭24#qing#2",
+    "same_as": "evmr4m3qk86zf",
+    "earliest_report": {
+      "id": "evmr4m3qk86zf",
+      "doc_id": "硃64",
+      "date": "1786/12/24",
+      "title": "檄委徐鼎士帶兵前往淡水北路援救"
+    },
+    "repeat_candidates": [
+      "evmr4m3qk86zf",
+      "evmr4i61k5yug"
+    ]
+  },
+  {
+    "category": "plan",
+    "description": "福建巡撫徐嗣曾飛諮廣東、浙江督撫及提督，於附近水師營內酌撥戰兵二三千名於交界處駐紮備應。",
+    "edict_quote": "飛諮廣東、浙江二省督撫、提督，於附近水師營內酌撥戰兵二、三千名，各於交界本境駐紮，如需策應，便於徵發",
+    "relations": [],
+    "side": "qing",
+    "source_documents": [
+      {
+        "relation": "direct",
+        "source_doc_id": "硃42",
+        "source_official": "徐嗣曾",
+        "source_quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。如需策應，便於征發，亦可藉為聲援",
+        "source_receive_date": "1787/01/02",
+        "source_send_date": "1786/12/18"
+      }
+    ],
+    "subtitle": "徐嗣曾飛諮粵浙二省酌撥戰兵備調",
+    "whenAr": "",
+    "whenCh": "乾隆五十一年十二月",
+    "where": "廣東、浙江交界",
+    "who": [
+      "徐嗣曾"
+    ],
+    "who_loc": {
+      "徐嗣曾": "福州"
+    },
+    "doc_id": "諭24",
+    "sources": [
+      {
+        "doc_id": "諭24",
+        "quote": "飛諮廣東、浙江二省督撫、提督，於附近水師營內酌撥戰兵二、三千名，各於交界本境駐紮，如需策應，便於徵發",
+        "howKnown": "上諭所載"
+      },
+      {
+        "doc_id": "硃42",
+        "quote": "臣又飛咨廣東督、撫、提臣及浙江撫、提二臣，於附近水師營內酌撥備戰兵二、三千名，各於交界本境駐紮。如需策應，便於征發，亦可藉為聲援",
+        "howKnown": "官員親報",
+        "whenKnown": "1787/01/02"
+      }
+    ],
+    "card_id": "諭24#qing#3",
+    "same_as": "evmr4eh2hv49w",
+    "earliest_report": {
+      "id": "evmr4eh2hv49w",
+      "doc_id": "硃42",
+      "date": "1786/12/18",
+      "title": "徐嗣曾飛咨鄰省撥兵"
+    },
+    "repeat_candidates": [
+      "evmr4eh2hv49w",
+      "evmr4i35804uc"
+    ]
+  }
+]
