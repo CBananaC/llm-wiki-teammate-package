@@ -84,7 +84,7 @@ DEFAULT_GEMINI_MODELS = {
     # DeepSeek V3.2 is also available through Google Cloud's managed MaaS
     # endpoint and uses the same ADC/service-account authentication.
     "deepseek-v3.2-maas", "deepseek-ai/deepseek-v3.2-maas",
-    "gemini-3.1-pro-preview", "gemini-3.5-flash",
+    "gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.1-pro-preview",
     "gemini-2.5-flash", "gemini-2.5-pro",
     "gemini-2.0-flash-001", "gemini-1.5-flash-002", "gemini-1.5-pro-002",
 }

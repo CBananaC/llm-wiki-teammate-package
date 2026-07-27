@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (emperor-action origin placement checkpoint complete; human visual refresh next)
+- Formal review editor: none (tooltip layering checkpoint complete; human visual refresh next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -3664,3 +3664,56 @@ Verified:
 
 Remaining:
 - No remaining display issue observed; human visual confirmation after reopening the formal tool remains useful.
+
+### 2026-07-27 13:40 HKT — Codex — Prevented button tooltips from being covered
+
+Summary: Replaced per-button tooltip pseudo-elements with a shared body-level tooltip portal in both review tools. Labels still appear after a short hover delay, but now stay above local panels and overflow boundaries, flip below buttons near the top edge, and remain clamped inside the viewport.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- Tooltip portal markup and behavior are present once in each HTML file.
+
+Remaining:
+- Human visual confirmation after reopening both review tools remains useful, especially for tooltips inside open drawers and dropdowns.
+
+### 2026-07-27 13:39 HKT — Codex — Added parallel repeat-report dedup workers
+
+Summary: Added a dedicated bounded worker option for cross-document repeat-report searches. `--dedup-workers` accepts 2-8 and defaults to 6; candidate payloads are built chronologically and responses are applied in that order so parallel requests do not reorder or change the dedup output semantics.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Ran an exactly five-card `硃79` dedup-only test through a local deterministic mock with `--dedup-workers 6`; 5 requests completed and the mock observed up to 4 in flight because only four cards had candidates.
+- The test output contained 5 cards, 5 mock repeat annotations, and 0 same-document repeat references.
+- `--dedup-workers 1` is rejected; Python compilation and `git diff --check` passed.
+
+Remaining:
+- Real January and February reruns still require explicit authorization to send research text to the configured external model proxy.
+
+### 2026-07-27 13:39 HKT — Codex — Restored editable model suggestions
+
+Summary: Changed the AI chat model control in both formal and sample tools from a native select back to an editable text input with a clickable suggestion list below it. Clicking/focusing shows all known provider models; typing filters the suggestions; clicking a suggestion fills and saves the model. Added the requested GPT-5.5/GPT-5.6 Sol/Terra/Luna and Gemini 3.6 fallback entries, while live `/models` discovery remains able to replace them with the provider’s returned catalogue.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `tool/proxy/gemini-proxy/main.py`
+- `tool/proxy/chatgpt-proxy/main.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files parsed successfully; both proxy Python files compiled successfully.
+- `git diff --check` passed.
+- Live formal preview showed an editable input, a clickable filtered suggestion list below it, and successful suggestion selection.
+- TokenRouter suggestions included `gpt-5.6-sol`, `gpt-5.6-terra`, `gpt-5.6-luna`, `gpt-5.5`, and `gpt-5.4`; Gemini suggestions included `gemini-3.6-flash` and related models.
+
+Remaining:
+- With a running provider proxy and credentials, the live `/models` response should be checked against each provider’s current catalogue.

@@ -384,7 +384,8 @@
     user-select:none; line-height:1.3; }
   .ix-chip .dotc { width:11px; height:11px; border-radius:50%; flex:0 0 auto; border:1px solid rgba(0,0,0,.15); }
   .ix-chip.on { box-shadow:0 0 0 2px rgba(45,38,29,.35) inset; font-weight:600; }
-  .ix-chip .num { font-size:calc(11px * var(--fs,1)); color:var(--muted); }
+  .ix-chip-type { font-size:calc(10.5px * var(--fs,1)); color:var(--muted); font-weight:500; }
+  .ix-chip-title { font-size:calc(12.5px * var(--fs,1)); color:var(--ink); font-weight:600; }
   .ix-cols { position:relative; display:flex; gap:14px; align-items:flex-start; }
   .ix-text { flex:1 1 60%; white-space:pre-wrap; font-size:calc(13.5px * var(--fs,1)); line-height:2.0;
     background:#fbf6ec; padding:14px 16px; border-radius:8px; }
@@ -482,7 +483,6 @@
   .ip-ovh { font-size:calc(11px * var(--fs,1)); font-weight:700; color:#5c6a52; text-transform:uppercase; letter-spacing:.03em; margin-bottom:3px; }
   .ip-ovtext { font-size:calc(13.5px * var(--fs,1)); line-height:1.7; }
   .ip-chipbar { display:flex; flex-wrap:wrap; gap:6px; margin:8px 0 10px; }
-  .ix-chip .dotc + b, .ix-chip b { font-size:calc(11px * var(--fs,1)); background:#3a2c1422; border-radius:6px; padding:0 5px; margin-left:2px; }
   .ix-chip.allc { background:#efe2cc; font-weight:600; }
   .ip-foot { flex:0 0 auto; border-top:1px solid #e0d5c3; background:#faf5ec; max-height:42%; display:flex; flex-direction:column; }
   .ft-tabs { display:flex; gap:6px; padding:6px 12px 0; }
@@ -1523,10 +1523,6 @@
   body.dark-mode .ix-chip.userc {
     background:#2c2638;
     border-color:#75679a;
-  }
-  body.dark-mode .ix-chip b {
-    background:rgba(255,255,255,.12);
-    color:#f3eadb;
   }
   body.dark-mode .ios-track {
     background:#46515d;
@@ -3437,22 +3433,21 @@
       ].includes(label)) return false;
       return true;
     }
-    function docItemVisible(it){ return it.src==='user'||it.src==='prov'||docFilterLabelVisible(it.label); }
+    // The document filter is a view of user-approved material only. AI chat
+    // findings stay in the chat until the user commits them as an event (or
+    // creates a manual annotation); they must not silently become highlights.
+    function docItemVisible(it){ return it.src==='user'||it.src==='prov'||(it.src==='event'&&docFilterLabelVisible(it.label)); }
     function items(){
-      const ie=docEditsRead(r.id).itemEdits||{}; const out=[];
-      const aiItems=reviewedAIItemsForDocument(r);
-      aiItems.forEach(it=>{ const k=itemKey(it), a=ie[k]||{};
-        out.push({src:'ai', key:k, label:a.label??it.label, summary:a.summary??it.summary,
-          color:readableHLColor(a.color||it.color), quote:a.frag||it.quote, block:it.block||'body', fields:a.fields||it.fields||[]}); });
+      const out=[];
       (docEditsRead(r.id).userHL||[]).forEach((u,ui)=>out.push({src:'user', ui, key:'u'+ui, label:u.label||'自訂標註', summary:u.summary||'', color:readableHLColor(u.color||'#f3d36b'), quote:u.frag, block:u.block||'body', fields:[]}));
       // event-projection highlights: each visible event's source quote for THIS doc (single source of truth = the event)
       { const did=String(r._baseId||r.id);
         visibleEvents().forEach(e=>{ (e.sources||[]).forEach(sc=>{ if(String(sc.doc_id)!==did) return; const q=sc.quote||''; if(!q.trim()) return;
-          out.push({src:'event', evId:e.id, actor:e.actor, docId:did, key:'ev:'+e.id, label:eventFilterLabel(e,sc), summary:e.description||'', color:readableHLColor(EVENT_HL_HEX[e.actor]||'#d6d1c7'), quote:q, block:sc.block||'body',
+          out.push({src:'event', evId:e.id, actor:e.actor, docId:did, key:'ev:'+e.id, label:eventFilterLabel(e,sc), eventTitle:evTitle(e), summary:e.description||'', color:readableHLColor(EVENT_HL_HEX[e.actor]||'#d6d1c7'), quote:q, block:sc.block||'body',
             fields:[ e.description?{name:'敘述',val:e.description}:null, e.where?{name:'地點',val:e.where}:null, (e.dateAr||e.whenCh)?{name:'日期',val:e.dateAr||e.whenCh}:null ].filter(Boolean) }); }); });
         // provenance-projection highlights: each committed transmission hop whose evidence quote is in THIS doc
         visibleEvents().forEach(e=>{ allHopsOf(e).forEach(h=>{ if(String(h.doc_id)!==did) return; const q=h.quote||''; if(!q.trim()) return;
-          out.push({src:'prov', evId:e.id, hopId:h.id, actor:e.actor, docId:did, key:'pv:'+(h.id||h.layer), label:AI_FILTER_LABELS.sourceChain, summary:hopMeta(h), color:readableHLColor(h.inferred?PROV_INFER_HL_HEX:PROV_HL_HEX), quote:q, block:h.block||'body',
+          out.push({src:'prov', evId:e.id, hopId:h.id, actor:e.actor, docId:did, key:'pv:'+(h.id||h.layer), label:AI_FILTER_LABELS.sourceChain, eventTitle:evTitle(e), summary:hopMeta(h), color:readableHLColor(h.inferred?PROV_INFER_HL_HEX:PROV_HL_HEX), quote:q, block:h.block||'body',
             fields:[ {name:'方式',val:h.how||'－'}, h.place?{name:'地點',val:h.place}:null, h.whenCh?{name:'時間',val:h.whenCh}:null, {name:'判定',val:h.inferred?'由文意推斷':'原文明載'} ].filter(Boolean) }); }); }); }
       const visible=out.filter(docItemVisible);
       visible.forEach((it,i)=>{ it.n=i+1; it.frags=fragsOf(it.quote||''); });
@@ -3463,7 +3458,7 @@
     const openNotes=new Set(); // item KEYS whose label details are expanded
     let divisions=deepClone(docEditsRead(r.id).divisions)||null;
     let showDiv=!!divisions;
-    function autoActive(){ if(divisions) return; const ie=docEditsRead(r.id).itemEdits||{}; ITEMS.forEach(it=>{ if(it.src==='user'||it.src==='event'||it.src==='prov'||ie[it.key]) active.add(it.key); }); }
+    function autoActive(){ if(divisions) return; ITEMS.forEach(it=>{ if(it.src==='user'||it.src==='event'||it.src==='prov') active.add(it.key); }); }
     autoActive();
     function saveDivisions(){ if(divisions) docEdits(r.id).divisions=deepClone(divisions); else delete docEditsRead(r.id).divisions; saveEdits(); }
 
@@ -3482,7 +3477,7 @@
     const setBtn=host.querySelector('.ip-settingsbtn'); if(setBtn){ setBtn.onclick=()=>{ filterDock.classList.toggle('setopen'); setBtn.classList.toggle('on', filterDock.classList.contains('setopen')); }; }
 
     function groupLabel(it){ return it.label||AI_FILTER_LABELS.manual; }
-    function labelGroups(){ const g={}; ITEMS.forEach(it=>{ const lab=groupLabel(it); (g[lab]=g[lab]||[]).push(it); }); return g; }
+    function labelGroups(){ const g={}; ITEMS.forEach(it=>{ const key=groupLabel(it)+'::'+(it.eventTitle||''); (g[key]=g[key]||[]).push(it); }); return g; }
     function renderSummary(){
       const text=reviewedSummaryTextFor(r);
       ixSummary.innerHTML='';
@@ -3497,13 +3492,13 @@
       filterBtn.querySelector('.filter-label').textContent='篩選';
       let h=`<span class="ix-chip allc${allOn?' on':''}" data-all="1">全部</span>`;
       if(divisions) h+=`<span class="ix-chip divc${showDiv?' on':''}" data-div="1">分段</span>`;
-      Object.keys(g).forEach(lab=>{ const arr=g[lab], on=arr.every(it=>active.has(it.key)), us=arr[0].src==='user';
-        h+=`<span class="ix-chip${on?' on':''}${us?' userc':''}" data-lab="${esc(lab)}"><span class="dotc" style="background:${arr[0].color}"></span>${esc(lab)}${arr.length>1?' <b>'+arr.length+'</b>':''}</span>`; });
+      Object.keys(g).forEach(groupKey=>{ const arr=g[groupKey], lab=groupLabel(arr[0]), title=arr[0].eventTitle||'', on=arr.every(it=>active.has(it.key)), us=arr[0].src==='user';
+        h+=`<span class="ix-chip${on?' on':''}${us?' userc':''}" data-lab="${esc(groupKey)}"><span class="dotc" style="background:${arr[0].color}"></span><span class="ix-chip-type">${esc(lab)}</span>${title?`<span class="ix-chip-title">${esc(title)}</span>`:''}</span>`; });
       chipbar.innerHTML=h;
       chipbar.querySelectorAll('.ix-chip').forEach(ch=>ch.onclick=()=>{
         if(ch.dataset.all){ const on=ITEMS.every(it=>active.has(it.key)); active.clear(); if(!on) ITEMS.forEach(it=>active.add(it.key)); }
         else if(ch.dataset.div){ showDiv=!showDiv; }
-        else { const arr=labelGroups()[ch.dataset.lab]||[], on=arr.every(it=>active.has(it.key)); arr.forEach(it=>{ if(on) active.delete(it.key); else active.add(it.key); }); }
+        else { const arr=labelGroups()[ch.dataset.lab]||[], on=arr.every(it=>active.has(it.key)); arr.forEach(it=>{ if(on) active.delete(it.key); else active.add(it.key); }); const ev=arr[0]&&arr[0].evId?eventById(arr[0].evId):null; if(ev&&typeof openEventCard==='function') openEventCard(ev,{keepOpen:true}); }
         renderChips(); renderText();
       });
     }
@@ -4648,12 +4643,34 @@
       __spreadGroups.delete(gid);
     });
   }
-  function openEventCard(ev){
+  // Event cards belong beside the document the user is reading. Keep them in
+  // their own column so opening an approved event never inserts a second card
+  // into, or displaces, the source document panel.
+  function eventInfoListFor(ev){
+    const existing=evCards.get(ev&&ev.id);
+    if(existing&&existing.el&&existing.el.parentElement&&existing.el.parentElement.classList.contains('ws-list')) return existing.el.parentElement;
+    const openEventList=lists().find(l=>l.querySelector('.card.ev-card'));
+    if(openEventList) return openEventList;
+    const activeDoc=activeList&&activeList.querySelector('.card:not(.ev-card)')?activeList:null;
+    const rid=hlDocRid!=null?String(hlDocRid):'';
+    const linkedDoc=rid&&cards.find(c=>c.rec&&String(c.rec._baseId||c.rec.id)===rid);
+    const docList=activeDoc||(linkedDoc&&linkedDoc.list)||lists().find(l=>l.querySelector('.card:not(.ev-card)'))||null;
+    return docList?createListAt(docList,'before'):ensureList();
+  }
+  function openEventCard(ev, opts){
+    opts=opts||{};
     collapseUnrelatedSpreadGroups(ev.id);
-    if(evCards.has(ev.id)){ closeEventCard(ev.id); return; }   // toggle off
+    if(evCards.has(ev.id)){
+      const existing=evCards.get(ev.id), list=existing&&existing.el&&existing.el.parentElement;
+      if(list&&list.classList.contains('ws-list')) activeList=list;
+      if(existing&&existing.el&&existing.el.scrollIntoView) existing.el.scrollIntoView({block:'nearest'});
+      if(!opts.keepOpen){ closeEventCard(ev.id); }
+      return;
+    }   // timeline event clicks retain their existing toggle behavior
+    const list=eventInfoListFor(ev);
     hlEventId=ev.id; hlDocRid=null; hlDocSide=null;
-    const list=ensureList();
     const el=document.createElement('div'); el.className='card ev-card';
+    el.dataset.eventId=ev.id;
     el.innerHTML=`<div class="ip-head"><button class="ip-move" type="button" title="拖曳移動">${IC.move}</button><div class="ip-titles"></div><div class="ip-btns"><button class="ip-close" type="button" title="關閉">${IC.close}</button></div></div><div class="ip-body ev-body"></div>`;
     list.appendChild(el);
     el.querySelector('.ip-close').onclick=()=>closeEventCard(ev.id);
@@ -6026,11 +6043,11 @@
   }
 
   // ---- floating workspace Note / AI tools ----
-  const FLOAT_MODELS=['deepseek-v3.2-maas','gemini-3.1-pro-preview','gemini-3.5-flash','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash-001','gemini-1.5-flash-002'];
+  const FLOAT_MODELS=['deepseek-v3.2-maas','gemini-3.6-flash','gemini-3.5-flash','gemini-3.5-flash-lite','gemini-3.1-pro-preview','gemini-2.5-flash','gemini-2.5-pro','gemini-2.0-flash-001','gemini-1.5-flash-002'];
   const AI_PROVIDERS={
     gemini:{label:'Gemini / Google Cloud', defaultModel:'deepseek-v3.2-maas', defaultBase:'https://generativelanguage.googleapis.com/v1beta', models:FLOAT_MODELS},
     openai:{label:'OpenAI GPT', defaultModel:'gpt-4.1', defaultBase:'https://api.openai.com/v1', models:['gpt-4.1','gpt-4.1-mini','gpt-4o','gpt-4o-mini']},
-    tokenrouter:{label:'ChatGPT via TokenRouter', defaultModel:'gpt-5.4', defaultBase:'https://www.tokenrouter.tech/v1', models:['gpt-5.4']},
+    tokenrouter:{label:'ChatGPT via TokenRouter', defaultModel:'gpt-5.4', defaultBase:'https://www.tokenrouter.tech/v1', models:['gpt-5.6-sol','gpt-5.6-terra','gpt-5.6-luna','gpt-5.5','gpt-5.4']},
     anthropic:{label:'Anthropic Claude', defaultModel:'claude-sonnet-4-20250514', defaultBase:'https://api.anthropic.com/v1', models:['claude-sonnet-4-20250514','claude-opus-4-20250514','claude-3-7-sonnet-20250219','claude-3-5-haiku-20241022']},
     deepseek:{label:'DeepSeek', defaultModel:'deepseek-chat', defaultBase:'https://api.deepseek.com', models:['deepseek-chat','deepseek-reasoner']},
     custom:{label:'第三方 API', defaultModel:'', defaultBase:'', models:[]}
@@ -6085,9 +6102,13 @@
   function aiProviderOptions(){ const cur=getAIProvider(); return Object.entries(AI_PROVIDERS).map(([id,cfg])=>`<option value="${id}"${id===cur?' selected':''}>${esc(cfg.label)}</option>`).join(''); }
   function aiModelPlaceholder(provider){ return provider==='gemini'?'deepseek-v3.2-maas':'使用代理預設模型，或輸入模型 ID'; }
   function aiModelListHtml(provider){ return AI_MODEL_CACHE[provider]||(AI_PROVIDERS[provider]||{}).models||[]; }
-  function aiModelOptionsHtml(provider, selected, models){
-    const values=Array.from(new Set((models==null?aiModelListHtml(provider):models).concat(selected||[]).filter(Boolean)));
-    return values.map(m=>`<option value="${esc(m)}"${m===selected?' selected':''}>${esc(m)}</option>`).join('');
+  function aiModelChoices(provider, selected, models){
+    return Array.from(new Set((models==null?aiModelListHtml(provider):models).concat(selected||[]).filter(Boolean)));
+  }
+  function aiModelSuggestionsHtml(provider, selected, query, models){
+    const needle=String(query||'').trim().toLowerCase();
+    return aiModelChoices(provider,selected,models).filter(m=>!needle||String(m).toLowerCase().includes(needle))
+      .map(m=>`<button class="ai-model-suggestion" type="button" role="option" data-model="${esc(m)}">${esc(m)}</button>`).join('');
   }
   async function refreshAIModels(provider){
     const payload={provider,api_base:getAIBaseUrl(provider),api_key:getAIApiKey(provider)};
@@ -7108,8 +7129,7 @@
       };
       const chatArr=()=>viewChatArray();
       const composerFolded=aiComposerFolded();
-      const providerNow=getAIProvider(), modelListId=uid('aimodel');
-      const modelOptions=aiModelOptionsHtml(providerNow,getAIModel(providerNow));
+      const providerNow=getAIProvider();
       body.classList.toggle('ai-composer-folded', composerFolded);
       // The 目錄/收合輸入 buttons used to sit in their own bordered row above the chat log, which just
       // ate vertical space that could go to actual content. They get moved into the panel's own
@@ -7132,7 +7152,7 @@
             <div class="cb-pop" data-for="act" style="display:none"></div>
             <div class="cb-pop cb-pop-cfg" data-for="cfg" style="display:none">
               <div class="gx-cfgrow"><span>AI 服務</span><select class="ai-provider">${aiProviderOptions()}</select></div>
-              <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><select class="gx-model" aria-label="模型">${modelOptions}</select></div></div>
+              <div class="gx-cfgrow"><span>模型</span><div class="ai-model-wrap"><input class="gx-model" value="${esc(getAIModel())}" placeholder="${esc(aiModelPlaceholder(providerNow))}" autocomplete="off" aria-label="模型"><div class="ai-model-suggestions" role="listbox" hidden></div></div></div>
               <div class="gx-cfgrow"><span>API Base</span><input class="ai-base" value="${esc(getAIBaseUrl())}" placeholder="https://api.example.com/v1"></div>
               <div class="gx-cfgrow"><span>API Key</span><div class="ai-key-wrap"><input class="ai-key" type="password" value="${esc(getAIApiKey())}" autocomplete="off" placeholder="API key（只保留至此分頁關閉）"><button class="ai-key-toggle" type="button" title="顯示或隱藏 API key">${IC.eye}</button></div></div>
               <div class="gx-cfgrow"><label class="cb-mem2"><input type="checkbox" class="ai-mem"> 記憶對話（跨訊息記住脈絡）</label></div>
@@ -7187,16 +7207,28 @@
       if(!window.__aiCardTrackerBound){ window.__aiCardTrackerBound=true; document.addEventListener('click',e=>{ const card=e.target.closest&&e.target.closest('.tool-box[data-kind="ai"] .chat-log [data-logi]'); if(!card) return; const tb=card.closest('.tool-box'); if(tb) tb.dataset.lastCard=card.dataset.logi; }, true); }
       function setReplyRef(ref){ if(ref) setComposerFolded(false); replyRef=ref; replyBox.classList.toggle('on', !!ref); replyTxt.textContent=ref?('回覆：'+ref.text.slice(0,140)+(ref.text.length>140?'…':'')):''; input.focus(); }
       body.querySelector('.rr-x').onclick=()=>setReplyRef(null);
-      const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), providerState=body.querySelector('.ai-provider-state');
+      const url=body.querySelector('.gx-url'), provider=body.querySelector('.ai-provider'), model=body.querySelector('.gx-model'), suggestions=body.querySelector('.ai-model-suggestions'), base=body.querySelector('.ai-base'), key=body.querySelector('.ai-key'), keyToggle=body.querySelector('.ai-key-toggle'), providerState=body.querySelector('.ai-provider-state');
       url.onchange=()=>setAIProxyUrl(url.value.trim(),provider.value);
-      function updateModelOptions(models){ const selected=model.value||getAIModel(provider.value); model.innerHTML=aiModelOptionsHtml(provider.value,selected,models); if(selected) model.value=selected; }
+      let modelSuggestQuery='';
+      function hideModelSuggestions(){ suggestions.hidden=true; suggestions.innerHTML=''; }
+      function renderModelSuggestions(){
+        const html=aiModelSuggestionsHtml(provider.value,model.value,modelSuggestQuery);
+        suggestions.innerHTML=html; suggestions.hidden=!html||document.activeElement!==model;
+        suggestions.querySelectorAll('.ai-model-suggestion').forEach(button=>button.onclick=()=>{ model.value=button.dataset.model||''; setAIModel(model.value,provider.value); hideModelSuggestions(); });
+      }
+      function updateModelOptions(models){ renderModelSuggestions(); }
       async function loadModels(){ setAIProxyUrl(url.value.trim(),provider.value); setAIBaseUrl(base.value.trim(),provider.value); setAIApiKey(key.value.trim(),provider.value); providerState.textContent='讀取模型中…';
         try{ const models=await refreshAIModels(provider.value); updateModelOptions(models); if(!model.value&&models.length){ model.value=models[0]; setAIModel(model.value,provider.value); } providerState.textContent=models.length?('已載入 '+models.length+' 個模型'):'未取得模型清單'; }
         catch(e){ providerState.textContent=e.message; } }
       provider.onchange=()=>{ setAIProvider(provider.value); model.value=getAIModel(provider.value); base.value=getAIBaseUrl(provider.value); key.value=getAIApiKey(provider.value); url.value=getAIProxyUrl(provider.value);
-        updateModelOptions(); loadModels(); };
+        modelSuggestQuery=''; hideModelSuggestions(); updateModelOptions(); loadModels(); };
       provider.addEventListener('focus',()=>{ if(!AI_MODEL_CACHE[provider.value]) loadModels(); });
-      model.onchange=()=>setAIModel(model.value,provider.value);
+      model.addEventListener('focus',()=>{ modelSuggestQuery=''; renderModelSuggestions(); if(!AI_MODEL_CACHE[provider.value]) loadModels(); });
+      model.addEventListener('click',()=>{ if(suggestions.hidden){ modelSuggestQuery=''; renderModelSuggestions(); } });
+      model.addEventListener('input',()=>{ modelSuggestQuery=model.value; renderModelSuggestions(); });
+      model.addEventListener('change',()=>setAIModel(model.value,provider.value));
+      model.addEventListener('blur',()=>setTimeout(hideModelSuggestions,120));
+      suggestions.addEventListener('mousedown',e=>{ if(e.target.closest('.ai-model-suggestion')) e.preventDefault(); });
       base.onchange=()=>setAIBaseUrl(base.value.trim(),provider.value);
       key.addEventListener('input',()=>setAIApiKey(key.value.trim(),provider.value));
       keyToggle.onclick=()=>{ key.type=key.type==='password'?'text':'password'; };
@@ -11524,12 +11556,14 @@ body.dark-mode .ft-tab.active, body.dark-mode .rv-tab.active {
 .ip-tabs { padding:0 12px !important; }
 .ft-tabs { padding:0 12px !important; }
 
-/* filter chips: pill with count */
+/* filter chips */
 body .ix-chip, body.dark-mode .ix-chip {
   background:var(--surface); border:1px solid var(--line); border-radius:999px;
   color:var(--muted); box-shadow:none;
 }
 body .ix-chip:hover { border-color:var(--line-strong); color:var(--ink); }
+body .ix-chip.on .ix-chip-type { color:var(--muted); font-weight:500; }
+body .ix-chip.on .ix-chip-title { color:var(--accent); font-weight:650; }
 body .ix-chip.on, body.dark-mode .ix-chip.on, body.dark-mode .ix-chip.allc.on,
 body.dark-mode .ix-chip.divc.on {
   background:var(--accent-soft) !important; border-color:var(--accent) !important;
@@ -12273,7 +12307,7 @@ body .cb-chip .cb-ic{ display:none !important; }
 }
 /* ── 設定 menu: cleaner stacked form ── */
 body .cb-pop-cfg{ min-width:0 !important; width:100% !important; max-width:none !important;
-  padding:calc(12px * var(--ui-fs,1)) !important; font-size:calc(13.5px * var(--ui-fs,1)) !important; }
+  padding:calc(12px * var(--ui-fs,1)) !important; font-size:calc(13.5px * var(--ui-fs,1)) !important; overflow-y:auto !important; overflow-x:hidden !important; }
 .cb-pop-cfg .gx-cfgrow{ display:flex !important; flex-direction:column !important; align-items:stretch !important;
   gap:calc(5px * var(--ui-fs,1)) !important; margin-bottom:calc(12px * var(--ui-fs,1)) !important; }
 .cb-pop-cfg .gx-cfgrow:last-child{ margin-bottom:0 !important; }
@@ -12291,6 +12325,12 @@ body .cb-pop-cfg .gx-model, body .cb-pop-cfg .gx-url, body .cb-pop-cfg .ai-provi
 .cb-pop-cfg .cb-mem2 input{ width:calc(16px * var(--ui-fs,1)); height:calc(16px * var(--ui-fs,1)); flex:0 0 calc(16px * var(--ui-fs,1)); margin:0; accent-color:var(--accent); }
 .cb-pop-cfg .ai-model-wrap, .cb-pop-cfg .ai-key-wrap{ gap:calc(6px * var(--ui-fs,1)); }
 .cb-pop-cfg .ai-proxy-wrap{ gap:calc(6px * var(--ui-fs,1)); }
+.cb-pop-cfg .ai-model-wrap{ flex-direction:column; align-items:stretch; width:100%; }
+.cb-pop-cfg .ai-model-suggestions{ display:flex; flex-direction:column; max-height:calc(220px * var(--ui-fs,1)); overflow:auto; margin-top:calc(2px * var(--ui-fs,1)); border:1px solid var(--line-strong); border-radius:var(--r1); background:var(--panel); box-shadow:var(--sh-2); }
+.cb-pop-cfg .ai-model-suggestions[hidden]{ display:none !important; }
+.cb-pop-cfg .ai-model-suggestion{ width:100%; min-height:calc(30px * var(--ui-fs,1)); padding:calc(5px * var(--ui-fs,1)) calc(9px * var(--ui-fs,1)); border:0; border-bottom:1px solid var(--line); background:transparent; color:var(--ink); font:inherit; font-size:calc(13px * var(--ui-fs,1)); line-height:1.25; text-align:left; cursor:pointer; }
+.cb-pop-cfg .ai-model-suggestion:last-child{ border-bottom:0; }
+.cb-pop-cfg .ai-model-suggestion:hover, .cb-pop-cfg .ai-model-suggestion:focus{ background:var(--surface); outline:none; }
 .cb-pop-cfg .ai-key-toggle{ width:calc(36px * var(--ui-fs,1)); height:calc(38px * var(--ui-fs,1)); min-height:calc(38px * var(--ui-fs,1));
   flex:0 0 calc(36px * var(--ui-fs,1)); display:inline-flex; align-items:center; justify-content:center;
   padding:calc(7px * var(--ui-fs,1)) !important; font-size:calc(16px * var(--ui-fs,1)) !important; line-height:1; }
@@ -12783,30 +12823,21 @@ body.dark-mode .search-pop .search-excerpt { color:var(--muted); }
 .search-pop .search-copyall:hover { filter:brightness(0.97); }
 
 /* ===== Claude: delayed black tooltip label for icon-only symbol buttons ===== */
-/* Shows after ~1s of hovering (not immediately), like a native tooltip but styled consistently
-   everywhere instead of relying on the OS/browser's own title-tooltip look. The delay trick: the
-   base rule's opacity transition has no delay (so it hides promptly on mouse-out); only the
-   :hover rule's transition has the 1s delay (so it takes a beat to appear). */
+/* Render one tooltip at body level so local overflow and stacking contexts cannot cover it. */
 button[data-tip] { position:relative; }
-button[data-tip]::after {
-  content:attr(data-tip);
-  position:absolute; left:50%; bottom:calc(100% + 7px); transform:translateX(-50%) translateY(2px);
-  background:#232323; color:#fff; font:500 calc(11.5px * var(--ui-fs,1))/1.4 var(--font-ui, inherit);
-  padding:4px 9px; border-radius:6px; white-space:nowrap; max-width:min(320px, 60vw);
-  box-shadow:0 4px 14px rgba(0,0,0,.28); pointer-events:none; z-index:20000;
-  opacity:0; visibility:hidden; transition:opacity .12s ease, visibility 0s linear .12s, transform .12s ease;
+button[data-tip]::after { content:none !important; display:none !important; }
+.button-tip-portal {
+  position:fixed; left:0; top:0; z-index:2147483647; box-sizing:border-box;
+  max-width:min(320px, calc(100vw - 16px)); padding:4px 9px; border-radius:6px;
+  background:#232323; color:#fff;
+  font:500 calc(11.5px * var(--ui-fs,1))/1.4 var(--font-ui, inherit);
+  text-align:center; white-space:normal; overflow-wrap:anywhere;
+  box-shadow:0 4px 14px rgba(0,0,0,.28); pointer-events:none;
+  opacity:0; visibility:hidden; transform:translate(-50%, -100%);
+  transition:opacity .12s ease, visibility 0s linear .12s;
 }
-button[data-tip]:hover::after {
-  opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);
-  transition:opacity .12s ease 1s, visibility 0s linear 1s, transform .12s ease 1s;
-}
-/* a button hugging the right edge of the viewport (e.g. the search-copyall footer button) should
-   not push its label off-screen -- flip the label to the left edge of the button instead */
-.search-pop button[data-tip]::after, .col-dd-pop button[data-tip]::after {
-  left:auto; right:0; transform:translateY(2px);
-}
-.search-pop button[data-tip]:hover::after, .col-dd-pop button[data-tip]:hover::after {
-  transform:translateY(0);
+.button-tip-portal.is-visible {
+  opacity:1; visibility:visible; transition:opacity .12s ease;
 }
 
 /* document-info heading/card alignment */
@@ -12956,6 +12987,65 @@ body .ix-text .seg:hover, body.dark-mode .ix-text .seg:hover {
   });
   function init(){ initToolbar(); enhanceTurns(); enhanceHeads(); enhanceSeparators(); mo.observe(document.body,{childList:true,subtree:true}); }
   if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init);else init();
+})();
+</script>
+<script id="button-tip-portal">
+(function(){
+  function init(){
+    if(document.querySelector('.button-tip-portal')) return;
+    var tip=document.createElement('div');
+    tip.className='button-tip-portal';
+    tip.setAttribute('role','tooltip');
+    tip.setAttribute('aria-hidden','true');
+    document.body.appendChild(tip);
+    var active=null, timer=0;
+    function clearTimer(){ if(timer){ clearTimeout(timer); timer=0; } }
+    function hide(){
+      clearTimer(); active=null; tip.classList.remove('is-visible'); tip.setAttribute('aria-hidden','true');
+    }
+    function place(){
+      if(!active || !tip.classList.contains('is-visible') || !document.body.contains(active)) return;
+      var r=active.getBoundingClientRect(), tr=tip.getBoundingClientRect(), gap=8, pad=8;
+      var above=r.top-tr.height-gap>=pad;
+      var belowTop=r.bottom+gap;
+      if(!above && belowTop+tr.height>window.innerHeight-pad) above=true;
+      var x=Math.max(tr.width/2+pad, Math.min(window.innerWidth-tr.width/2-pad, r.left+r.width/2));
+      var y=above ? Math.max(pad+tr.height, r.top-gap) : belowTop;
+      tip.style.left=x+'px';
+      tip.style.top=y+'px';
+      tip.style.transform=above?'translate(-50%, -100%)':'translate(-50%, 0)';
+    }
+    function show(button){
+      clearTimer(); active=button;
+      timer=setTimeout(function(){
+        timer=0;
+        if(active!==button || !document.body.contains(button)) return;
+        var label=button.getAttribute('data-tip')||'';
+        if(!label){ hide(); return; }
+        tip.textContent=label; tip.classList.add('is-visible'); tip.setAttribute('aria-hidden','false'); place();
+      },600);
+    }
+    document.addEventListener('mouseover',function(e){
+      var button=e.target.closest&&e.target.closest('button[data-tip]');
+      if(button && button!==active) show(button);
+    },true);
+    document.addEventListener('mouseout',function(e){
+      var button=e.target.closest&&e.target.closest('button[data-tip]');
+      if(!button || (e.relatedTarget && button.contains(e.relatedTarget))) return;
+      if(button===active) hide();
+    },true);
+    document.addEventListener('focusin',function(e){
+      var button=e.target.closest&&e.target.closest('button[data-tip]');
+      if(button) show(button);
+    },true);
+    document.addEventListener('focusout',function(e){
+      var button=e.target.closest&&e.target.closest('button[data-tip]');
+      if(button===active) hide();
+    },true);
+    window.addEventListener('scroll',place,true);
+    window.addEventListener('resize',place);
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init); else init();
 })();
 </script>
 <script id="primary-header-ui">

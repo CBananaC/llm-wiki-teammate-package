@@ -29,9 +29,10 @@ app.config["MAX_CONTENT_LENGTH"] = int(os.environ.get("MAX_REQUEST_BYTES", "8388
 BASE_URL = os.environ.get("TOKENROUTER_BASE_URL", "https://www.tokenrouter.tech/v1").rstrip("/")
 API_KEY = os.environ.get("TOKENROUTER_API_KEY", "")
 DEFAULT_MODEL = os.environ.get("TOKENROUTER_DEFAULT_MODEL", "gpt-5.4")
+DEFAULT_MODELS = ["gpt-5.6-sol", "gpt-5.6-terra", "gpt-5.6-luna", "gpt-5.5", "gpt-5.4"]
 ALLOWED_MODELS = [
     item.strip()
-    for item in os.environ.get("TOKENROUTER_ALLOWED_MODELS", DEFAULT_MODEL).split(",")
+    for item in os.environ.get("TOKENROUTER_ALLOWED_MODELS", ",".join(DEFAULT_MODELS)).split(",")
     if item.strip()
 ]
 # Default high enough that dense event / provenance JSON is never truncated.
