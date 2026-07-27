@@ -6932,6 +6932,7 @@
       const bundleTurnId=turn=>String(turn&&turn.__skillRunId||turn&&turn.__skillBundleName||'');
       const bundleTurnRank=turn=>{
         if(!turn) return 999;
+        if(turn.kind==='docpair') return turn.pair&&turn.pair.analysis_only ? 5 : 0;
         if(turn.kind==='extract'&&turn.actor==='lin') return 10;
         if(turn.kind==='extract'&&turn.actor==='qing'){
           const item=Array.isArray(turn.items)&&turn.items.length ? turn.items[0] : {};
