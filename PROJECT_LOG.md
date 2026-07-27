@@ -3959,6 +3959,25 @@ Verified:
 Remaining:
 - Add final website links and interactive page anchors when the website implementation is ready.
 
+### 2026-07-27 18:39 HKT — Codex — Created StoryMap UI example
+
+Summary:
+- Added a standalone StoryMap-style HTML prototype for the introduction website.
+- Demonstrated a fixed top tab, scrolling full-screen sections, adjustable backdrop/card placement through CSS variables, and optional title/subtitle/body card layers.
+- Included example backdrop types for image, video, code, and a review-tool interface mockup that can later be replaced by the actual review website or iframe.
+
+Files:
+- `intro Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- HTML structure check passed.
+- Embedded JavaScript passed syntax validation.
+- `git diff --check` passed for the new prototype.
+
+Remaining:
+- Replace demonstration assets and mock review-tool content with project-approved media and the final website embed when available.
+
 ### 2026-07-27 18:34 HKT — Codex — Preserved existing events during repeat-source merges
 
 Summary:
