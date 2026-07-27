@@ -3819,3 +3819,37 @@ Verified:
 
 Remaining:
 - Human click confirmation after reloading the formal and sample tools.
+
+### 2026-07-27 14:58 HKT — Codex — Repaired repeat-target fallback and canonical repeat metadata
+
+Summary: Repeat cards now prefer live chart events, but can also materialize a candidate-shaped merge target from `repeat_report_doc_id` when an old bundle points to an event ID that is not present in the current isolated state. Repeat labels now resolve reporter and date metadata through `stage1_original_text.json`, including aliases such as `天90` → canonical `硃90`, while retaining the AI event title in the label.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Canonical Stage 1 lookup for `天90` resolves to `硃90`, author `普吉保`, send date `1787/01/04`.
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+
+Remaining:
+- Human click confirmation for a 硃83 repeat card after reloading the formal and sample tools.
+
+### 2026-07-27 15:01 HKT — Codex — Corrected 天90 canonical alias priority
+
+Summary: The canonical Stage 1 resolver now prefers `硃90` for a repeat pointer labelled `天90` before considering same-number `諭90`, preventing the unrelated 李侍堯 record from supplying the repeat label metadata.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Live sample 硃83 output displays `已由 普吉保 於 〈調遣建延水師兵渡臺〉（天90） (1787/01/04) 回報過`.
+- The same repeat card contains an enabled `併入已有事件` button.
+- Both HTML files' embedded scripts parsed successfully and `git diff --check` passed.
+
+Remaining:
+- No known implementation work remains for this request; formal visual confirmation is still optional.

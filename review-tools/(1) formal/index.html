@@ -1806,6 +1806,7 @@
   // title, rescript_text, etc.), including fields not copied into DUAL.
   const originalDocSearch = new Map();
   const originalDocReadable = new Map();
+  const originalDocRecords = new Map();
   // Search values only; JSON property names such as "volume" are not searchable.
   function searchValueText(value){
     if(value==null) return '';
@@ -1818,10 +1819,27 @@
     docs.forEach(doc=>{
       const id=doc&&doc.doc_id!=null?String(doc.doc_id):'';
       if(id){
+        originalDocRecords.set(id, doc);
         originalDocSearch.set(id, searchValueText(doc).toLowerCase());
         const readable=Object.keys(doc||{}).map(k=>searchValueText(doc[k])).filter(Boolean).join('\n');
         originalDocReadable.set(id, readable);
       }
+    });
+  }
+  function canonicalDocRecord(docId){
+    const raw=String(docId||'').trim(), m=raw.match(/^天(\d+)$/);
+    const ids=m?['硃'+m[1],'奏'+m[1],'諭'+m[1],'天'+m[1]]:(typeof docIdAliases==='function'?docIdAliases(docId):[raw]);
+    for(const id of ids){ const doc=originalDocRecords.get(String(id)); if(doc) return doc; }
+    return null;
+  }
+  function canonicalDocMeta(docId, fallback){
+    const base=fallback||{}, doc=canonicalDocRecord(docId), author=doc&&doc.author;
+    if(!doc) return base;
+    const dateValue=value=>Array.isArray(value)?(value[1]||value[0]||''):(value||'');
+    return Object.assign({}, base, {
+      title:doc.title||base.title||'',
+      reporter:(author&&author.name)||doc.author_name||base.reporter||'',
+      dateAr:dateValue(doc.send_date)||dateValue(doc.receive_date)||dateValue(doc.announce_date)||base.dateAr||''
     });
   }
   fetch('/shared/stage1_original_text.json', {cache:'no-store'})
@@ -5756,8 +5774,9 @@
     const reportDoc=er.doc_id||item.repeat_report_doc_id||item.repeat_doc_id||item.report_doc_id||evDoc||runDoc||'';
     const reportDate=er.date||item.repeat_report_date||item.repeat_date||evDate||'';
     const title=er.title||item.repeat_of_title||(ev&&evTitle(ev))||'';
-    const targetRecord=reportDoc?(typeof recByAnyDocId==='function'?(recByAnyDocId(reportDoc)||{}):(recByDocId2(reportDoc)||{})):{};
-    const reporter=er.reporter||item.repeat_report_author||item.repeat_reporter||targetRecord.author_name||'';
+    const embeddedTarget=reportDoc?(typeof recByAnyDocId==='function'?(recByAnyDocId(reportDoc)||{}):(recByDocId2(reportDoc)||{})):{};
+    const targetRecord=reportDoc?canonicalDocMeta(reportDoc,{title:embeddedTarget.title||'',reporter:embeddedTarget.author_name||'',dateAr:docBestAr(embeddedTarget)}):{};
+    const reporter=targetRecord.reporter||er.reporter||item.repeat_report_author||item.repeat_reporter||'';
     const docTitle=item.repeat_report_doc_title||targetRecord.title||'';
     if(!ev&&!reportDoc) return null;
     const ptr={kind:ev?'verified':'stored',bucketKey:ev?'__verified__':'',turnIndex:-1,itemIndex:-1,pointIndex:null,title,doc_title:docTitle,reporter,doc_id:reportDoc,report_doc_id:reportDoc,whenAr:reportDate,whenCh:'',report_date:reportDate,committed:!!ev,evId:ev?ev.id:null,verdict,reason:item.repeat_reason||'',sourceId:runDoc||pointerId};
@@ -7036,6 +7055,18 @@
         .map(v=>String(v||'')).filter(Boolean);
       const repeatTargetForItem=(item,sourceDoc,actor)=>{
         const ids=repeatRunRefs(item);
+        const targetMeta=(docId)=>{
+          const embedded=typeof recByAnyDocId==='function'?(recByAnyDocId(docId)||{}):(recByDocId2(docId)||{});
+          return canonicalDocMeta(docId,{title:embedded.title||'',reporter:embedded.author_name||'',dateAr:docBestAr(embedded)});
+        };
+        const reportStub=(docId)=>{
+          if(!docId||docId===String(sourceDoc)) return null;
+          const meta=targetMeta(docId), title=String(item&&item.repeat_of_title||'').trim();
+          if(!title) return null;
+          const stub={actor:actor||'qing',subtitle:title,what:title,description:'',where:'',who:meta.reporter?[meta.reporter]:[],whoLoc:{},relations:[],whenCh:'',whenAr:'',doc_id:docId,
+            sources:[{doc_id:docId,quote:'',label:title,howKnown:'',whenKnown:''}]};
+          return {doc_id:docId,title,doc_title:meta.title||'',reporter:meta.reporter||'',whenAr:meta.dateAr||'',item:stub,parentItem:stub,turn:{kind:'extract',actor:actor||'qing',items:[stub]},sourceId:'stored:'+docId};
+        };
         // Prefer a live chart event when the saved repeat pointer already names
         // one. The report-document fallback below is for targets not loaded in
         // the current chart and should not disable merging into existing dots.
@@ -7044,13 +7075,18 @@
           const sources=Array.isArray(ev.sources)?ev.sources:[];
           const priorDoc=String((ev.emperorDetail&&ev.emperorDetail.memDoc)||sources.map(s=>s&&s.doc_id).find(d=>d&&String(d)!==String(sourceDoc))||'');
           if(!priorDoc||priorDoc===String(sourceDoc)) continue;
-          const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(priorDoc)||{}):(recByDocId2(priorDoc)||{});
-          return {doc_id:priorDoc,title:evTitle(ev),doc_title:rec.title||'',reporter:rec.author_name||'',whenAr:ev.dateAr||'',evId:id,sourceId:id};
+          const meta=targetMeta(priorDoc);
+          return {doc_id:priorDoc,title:evTitle(ev),doc_title:meta.title||'',reporter:meta.reporter||'',whenAr:ev.dateAr||meta.dateAr||'',evId:id,sourceId:id};
         }
         const explicitDoc=String(item&&item.repeat_report_doc_id||'');
         if(explicitDoc&&explicitDoc!==String(sourceDoc)){
-          const rec=typeof recByAnyDocId==='function'?(recByAnyDocId(explicitDoc)||{}):(recByDocId2(explicitDoc)||{});
-          return {doc_id:explicitDoc,title:item.repeat_of_title||'',doc_title:item.repeat_report_doc_title||rec.title||'',reporter:item.repeat_report_author||rec.author_name||'',whenAr:item.repeat_report_date||'',sourceId:'stored:'+explicitDoc};
+          const stub=reportStub(explicitDoc); if(stub){
+            const meta=targetMeta(explicitDoc);
+            stub.doc_title=item.repeat_report_doc_title||meta.title||'';
+            stub.reporter=meta.reporter||item.repeat_report_author||'';
+            stub.whenAr=meta.dateAr||item.repeat_report_date||'';
+            return stub;
+          }
         }
         const runRefs=ids.map(id=>{ const m=/^run:([^:]+):(\d+)$/.exec(id); return m?{id,doc_id:m[1],index:+m[2]}:null; }).filter(Boolean);
         for(const run of runRefs){
@@ -7513,10 +7549,11 @@
         const mr=repeatPointerForItem(it); if(!mr) return '';
         if(invalidMatchRegForCandidate(it, mr)) return '';
         const verdict=String(mr.verdict||it.repeat_verdict||'same').toLowerCase();
-        const targetRec=mr.doc_id?(typeof recByAnyDocId==='function'?(recByAnyDocId(mr.doc_id)||{}):(recByDocId2(mr.doc_id)||{})):{};
-        const reporter=mr.reporter||it.repeat_report_author||targetRec.author_name||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
+        const embeddedTarget=mr.doc_id?(typeof recByAnyDocId==='function'?(recByAnyDocId(mr.doc_id)||{}):(recByDocId2(mr.doc_id)||{})):{};
+        const targetRec=mr.doc_id?canonicalDocMeta(mr.doc_id,{title:embeddedTarget.title||'',reporter:embeddedTarget.author_name||'',dateAr:docBestAr(embeddedTarget)}):{};
+        const reporter=targetRec.reporter||mr.reporter||it.repeat_report_author||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
         const titleName=mr.title||it.repeat_of_title||it.repeat_report_doc_title||mr.doc_title||targetRec.title||'較早文書';
-        const reportDate=it.repeat_report_date||docBestAr(targetRec)||'';
+        const reportDate=targetRec.dateAr||it.repeat_report_date||'';
         const titleRef=mr.doc_id?`〈${esc(titleName)}〉（${esc(mr.doc_id)}）${reportDate?` (${esc(reportDate)})`:''}`:esc(titleName);
         const note=verdict==='similar'
           ? `可能與 ${titleRef} 相似（AI 尚未判定為同一事件）`
