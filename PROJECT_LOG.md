@@ -4116,3 +4116,24 @@ Verified:
 
 Remaining:
 - Live browser reload testing remains limited by the in-app browser's local `file://` security restriction; local static validation passed.
+
+### 2026-07-27 20:02 HKT — Codex — Switched the StoryMap example to the real sample review-tool HTML
+
+Summary:
+- Replaced the StoryMap iframe source with `review-tools/(2) sample/index.html`, so the demonstration now uses the actual sample review-tool interface and its canonical data rather than a visual recreation.
+- Added the same URL-driven embed mode to the formal and sample review tools. `embed=1`, `doc=硃83`, and `panels=ai,original` open one selected document, show the AI and original-document panels, hide the timeline and other tools, and preserve the full original-text area.
+- Scoped the demonstration AI panel to the 硃83 extraction containing 「至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進」.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `intro Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Added the same embed CSS and initializer to both formal and sample HTML files, and exposed the loaded `DUAL` records for the initializer.
+- Parsed all embedded scripts in both review-tool HTML files successfully and `git diff --check` passed.
+- Confirmed the StoryMap iframe now targets the real sample HTML with the requested 硃83 and panel parameters.
+
+Remaining:
+- Live local `file://` verification remains limited by the in-app browser security restriction; the sample review tool may require its normal local server because it loads the canonical source through `/shared/stage1_original_text.json`.

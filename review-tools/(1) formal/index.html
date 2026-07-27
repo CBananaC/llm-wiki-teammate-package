@@ -1788,6 +1788,7 @@
     };
   }
   const DUAL=AI_DUAL.map(buildDualRecord).filter(Boolean);
+  window.__reviewEmbedRecords = DUAL;
   if(!DUAL.length) throw new Error('no timeline records matched the canonical Stage 1 source');
 
   const TYPE_LABEL = {shangzou:'上奏', zhupi:'硃批', shangyu:'上諭'};
@@ -13290,6 +13291,100 @@ body mark.hl, body.dark-mode mark.hl {
     var bb=document.getElementById('tb-bundles');
     if(bb) bb.addEventListener('click',async function(){ try{ var bundles=await api('/api/bundles'); openDrawer('組包 Bundles',(bundles.map(function(b){ return '<section class="tb-dcard"><div class="tb-drow"><strong>'+esc(b.name)+'</strong></div><pre>'+esc(JSON.stringify(b.manifest||{},null,2))+'</pre></section>'; }).join(''))||'<p>找不到組包。</p>'); }catch(e){ openDrawer('組包 Bundles','<p class="tb-derr">無法讀取（需由 server.py 提供）：'+esc(e.message)+'</p>'); } });
   });
+})();
+</script>
+<style id="review-embed-mode-style">
+/* Embedded review mode: keep the real review-tool UI, cropped to selected panels. */
+body.review-embed-mode { overflow:hidden !important; }
+body.review-embed-mode > header,
+body.review-embed-mode .dual-toolbar,
+body.review-embed-mode .tb-drawer,
+body.review-embed-mode #wsChart,
+body.review-embed-mode #click-network-panel,
+body.review-embed-mode .float-win,
+body.review-embed-mode > .tooltip,
+body.review-embed-mode > .dtooltip { display:none !important; }
+body.review-embed-mode #view-dual.active {
+  position:fixed !important; inset:0 !important; z-index:1 !important;
+  display:flex !important; background:var(--bg,#f8f5ee) !important;
+}
+body.review-embed-mode #view-dual .dual-wrap { padding:0 !important; }
+body.review-embed-mode #view-dual .ws {
+  display:grid !important;
+  grid-template-columns:minmax(320px,.85fr) minmax(420px,1.15fr) !important;
+  gap:0 !important; width:100% !important; height:100% !important;
+}
+body.review-embed-mode #view-dual .ws > .ws-tools,
+body.review-embed-mode #view-dual .ws > .ws-list {
+  display:flex !important; min-width:0 !important; width:auto !important;
+  flex:1 1 auto !important; max-width:none !important; padding:0 !important;
+  border-left:1px solid var(--line,#e0d5c3) !important; overflow:auto !important;
+}
+body.review-embed-mode #view-dual .ws > .ws-tools { order:1 !important; }
+body.review-embed-mode #view-dual .ws > .ws-list { order:2 !important; }
+body.review-embed-mode #view-dual .ws-list-bar,
+body.review-embed-mode #view-dual .ws-tools > .ws-list-bar { display:none !important; }
+body.review-embed-mode #view-dual .ws > .ws-tools > .tool-box,
+body.review-embed-mode #view-dual .ws > .ws-list > .card {
+  flex:1 1 auto !important; width:100% !important; height:100% !important;
+  max-height:none !important; margin:0 !important; border-radius:0 !important;
+}
+body.review-embed-mode #view-dual .tool-box[data-kind]:not([data-kind="ai"]) { display:none !important; }
+body.review-embed-mode #view-dual .ws-list.single > .card .ip-body,
+body.review-embed-mode #view-dual .ws-list > .card .ip-scroll { max-height:none !important; }
+body.review-embed-mode [hidden] { display:none !important; }
+@media (max-width:700px) {
+  body.review-embed-mode #view-dual .ws {
+    display:flex !important; flex-direction:column !important; overflow:auto !important;
+  }
+  body.review-embed-mode #view-dual .ws > .ws-tools,
+  body.review-embed-mode #view-dual .ws > .ws-list {
+    flex:0 0 50vh !important; min-height:280px !important; width:100% !important;
+  }
+}
+</style>
+<script id="review-embed-mode-script">
+(function(){
+  const params = new URLSearchParams(window.location.search);
+  if(params.get('embed') !== '1') return;
+  document.body.classList.add('review-embed-mode');
+  const docId = params.get('doc') || '硃83';
+  const panels = new Set((params.get('panels') || 'ai,original').split(',').map(s=>s.trim()).filter(Boolean));
+  const quote = '至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進';
+  let tries = 0;
+  function hideUnselected(){
+    const ws = document.querySelector('#view-dual .ws');
+    if(!ws) return;
+    ws.querySelectorAll('.ws-tools').forEach(el=>{ el.hidden = !panels.has('ai'); });
+    ws.querySelectorAll('.ws-list').forEach(el=>{ el.hidden = !panels.has('original'); });
+    if(panels.size === 1) ws.style.gridTemplateColumns = '1fr';
+  }
+  function keepZhu83AiCard(){
+    const box = document.querySelector('.tool-box[data-kind="ai"]');
+    const log = box && box.querySelector('.chat-log');
+    if(!log) return;
+    const entries = [...log.querySelectorAll('[data-logi]')];
+    if(!entries.length) return;
+    let keep = entries.find(el=>el.textContent.includes(quote));
+    if(!keep) keep = entries.find(el=>el.textContent.includes('常青催令福寧鎮等兵繼進'));
+    if(keep) entries.forEach(el=>{ el.hidden = el !== keep; });
+    log.scrollTop = 0;
+  }
+  function start(){
+    const records = window.__reviewEmbedRecords;
+    if(!records || !window.__openMany || !window.__scopeAIto){
+      if(++tries < 200) return setTimeout(start,100);
+      console.warn('Review embed could not initialise: review tool did not finish loading.');
+      return;
+    }
+    const rec = records.find(r=>String(r.id)===docId || String(r._baseId)===docId || String(r.doc_id)===docId);
+    if(!rec){ console.warn('Review embed document not found:', docId); return; }
+    const cards = window.__openMany([rec], 'embed');
+    window.__scopeAIto(cards);
+    hideUnselected();
+    [0,100,300,700].forEach(delay=>setTimeout(()=>{ hideUnselected(); keepZhu83AiCard(); },delay));
+  }
+  start();
 })();
 </script>
 </body>
