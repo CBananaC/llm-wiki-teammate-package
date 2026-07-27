@@ -3541,7 +3541,7 @@
     }
     function inlineNote(it){
       const label=it.label||'';
-      return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}"${it.evId?` data-event-id="${esc(it.evId)}"`:''} style="border-left-color:${it.color}"><span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${label?highlightLabel(it,true)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
+      return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}"${it.evId?` data-event-id="${esc(it.evId)}"`:''} style="border-left-color:${it.color}">${label?highlightLabel(it,true)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
     }
     function buildRuns(text, cov, from, to, firstSeen, zmask){
       let s='', c=from;
@@ -3639,7 +3639,7 @@
       ITEMS.forEach((it,idx)=>{ if(!active.has(it.key)) return;
         const mk=textEl.querySelector(`mark.hl[data-i="${idx}"]`);
         const note=document.createElement('div'); note.className='ix-note'+(openNotes.has(it.key)?' open':''); note.dataset.inote=it.key; note.style.borderLeftColor=it.color;
-        note.innerHTML=`<span class="nn" style="color:${it.color};-webkit-text-stroke:.3px #8a7a55">${it.n}</span>${it.label?highlightLabel(it,false)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}`;
+        note.innerHTML=`${it.label?highlightLabel(it,false)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}`;
         note.onclick=e=>{ if(e.target.closest('.ed')) return; e.stopPropagation(); const ev=it.evId?eventById(it.evId):null; if(ev&&typeof openEventCard==='function'){ openEventCard(ev,{keepOpen:true}); return; } toggleNote(it.key); };
         placeNote(note, mk?mk.offsetTop-baseTop:0); });
       marginEl.style.minHeight=(Math.max(40,...used.map(u=>u.bottom+8),0))+'px';

@@ -3768,3 +3768,19 @@ Verified:
 
 Remaining:
 - Existing unrelated working-tree changes remain untouched.
+
+### 2026-07-27 13:56 HKT — Codex — Removed annotation indexes from highlight labels
+
+Summary: Removed the separate numeric marker from event highlight-area labels. Highlight labels now contain only the filter type and event subtitle; numeric counts remain in the filter dropdown chips.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+
+Remaining:
+- Existing unrelated working-tree changes remain untouched.
