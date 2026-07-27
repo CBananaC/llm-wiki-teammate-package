@@ -5851,14 +5851,19 @@
   function commitMatchedCandidate(p){
     const mr=repeatPointerForItem(p); if(!mr) return commitProposal(p);
     const earlier=resolveMatchRegItem(mr);
-    if(!earlier){ return commitProposal(p); }   // earlier candidate vanished (e.g. its turn deleted) -- fall back to a normal independent add
-    if(earlier.__added && earlier.__evId){
-      const ev=eventById(earlier.__evId);
-      if(!ev) return commitProposal(p);
+    // The registry may still point to an uncommitted extraction card even though
+    // the researcher already added the earlier report from another card or bundle.
+    // Prefer that live chart dot before creating anything new. The old fallback
+    // created a new dot and then deleted the existing one during fuzzy cleanup.
+    let ev=earlier&&earlier.__added&&earlier.__evId?eventById(earlier.__evId):null;
+    if(!ev && mr.doc_id) ev=findExistingRepeatEvent(mr.doc_id, mr.title, p.actor||earlier&&earlier.actor||'');
+    if(ev){
       candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p)), {render:false}); });
-      consolidateRepeatEventDots(ev.id,mr.doc_id,mr.title);
+      if(!earlier||!earlier.__added) p.__mergedInto=ev.id;
+      saveEdits(); scheduleEventRedraw(ev.id);
       return eventById(ev.id)||ev;
     }
+    if(!earlier){ return commitProposal(p); }   // earlier candidate vanished and no live dot represents it
     // Earlier candidate was never committed: the canonical dot must be whichever DOCUMENT was sent
     // first (proposalRefAr resolves each candidate's own source document's sendAr/recvAr/annAr) --
     // NOT whichever candidate claims an earlier event-occurrence date (whenAr), since both candidates
@@ -5871,12 +5876,11 @@
     const d=eventDateFromProposal(canonical);
     const canonicalFilterLabel=canonical.actor==='lin'?AI_FILTER_LABELS.lin:(canonical.actor==='qing'?qingFilterLabel(canonical.__qcat||canonical.qcat||canonical.category||'done'):eventFilterLabel({actor:canonical.actor}));
     const canonicalSubtitle=eventDisplaySubtitle(canonical);
-    const ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonicalSubtitle, what:canonicalSubtitle, description:canonical.description||'',
+    ev=addEvent({actor:canonical.actor||p.actor, category:canonical.__qcat||canonical.qcat||canonical.category||'', aiFilterLabel:canonicalFilterLabel, subtitle:canonicalSubtitle, what:canonicalSubtitle, description:canonical.description||'',
       where:canonical.where||'', who:canonical.who||[], whoLoc:canonical.whoLoc||{}, relations:canonical.relations||[], whenCh:canonical.whenCh||'', dateAr:d?fmt(d):null,
       sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonicalSubtitle, aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
     candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other)), {render:false}); });
     earlier.__added=true; earlier.__evId=ev.id;
-    consolidateRepeatEventDots(ev.id,mr.doc_id,mr.title);
     return eventById(ev.id)||ev;
   }
   // Extend an existing event with one more document's mention (reuses addEventSource's dedupe-by-
@@ -5914,6 +5918,15 @@
   // ===== field events (overlay): things that actually happened, linked to the officials who reported them =====
   function eventsArr(){ return EDITS.__events || (EDITS.__events=[]); }
   function visibleEvents(){ return eventsArr().filter(e=>!e.hidden); }
+  let __eventRedrawQueued=false; const __eventRedrawIds=new Set();
+  function scheduleEventRedraw(id){
+    if(id) __eventRedrawIds.add(String(id));
+    if(__eventRedrawQueued) return;
+    __eventRedrawQueued=true;
+    const flush=()=>{ const ids=[...__eventRedrawIds]; __eventRedrawIds.clear(); __eventRedrawQueued=false;
+      try{ render(); } finally { ids.forEach(eid=>refreshOpenDocsForEvent(eid)); } };
+    if(typeof requestAnimationFrame==='function') requestAnimationFrame(flush); else setTimeout(flush,0);
+  }
   function eventById(id){ return eventsArr().find(e=>e.id===id); }
   function addEvent(base){ const b=base||{};
     const ev=Object.assign({ id:'ev'+Date.now().toString(36)+Math.random().toString(36).slice(2,5),
@@ -5952,8 +5965,22 @@
       .map(normWhere).filter(Boolean);
     return titles.some(t=>t===wanted||t.includes(wanted)||wanted.includes(t));
   }
-  // Merge duplicate repeat targets silently; the click handler saves and redraws
-  // once after this repair so the panel does not jump through intermediate states.
+  // Resolve an already-added dot without guessing when several events share a
+  // source document. An exact title match is preferred; otherwise only a single
+  // source/title candidate is safe to reuse.
+  function findExistingRepeatEvent(priorDoc, title, actor){
+    if(!priorDoc||!title) return null;
+    const candidates=visibleEvents().filter(e=>(!actor||(e.actor||'')===actor)
+      && eventSourceHasDoc(e, priorDoc) && eventTitleMatches(e, title));
+    if(!candidates.length) return null;
+    const wanted=normWhere(title);
+    const exact=candidates.filter(e=>normWhere(evTitle(e))===wanted);
+    if(exact.length===1) return exact[0];
+    return candidates.length===1?candidates[0]:null;
+  }
+  // Kept as a compatibility shim for old saved code paths. Repeat-source
+  // attachment now resolves the live target before creating a dot; it must
+  // never delete an existing event as a side effect of adding a source.
   function absorbEventData(target, source){
     if(!target||!source) return target;
     target.sources=target.sources||[];
@@ -5974,29 +6001,7 @@
     if(!target.description&&source.description) target.description=source.description;
     return target;
   }
-  function consolidateRepeatEventDots(targetId, priorDoc, title){
-    const target=eventById(targetId); if(!target||!priorDoc) return target;
-    const matches=visibleEvents().filter(e=>e.id!==target.id
-      && (e.actor||'')===(target.actor||'')
-      && eventSourceHasDoc(e,priorDoc)
-      && eventTitleMatches(e,title));
-    if(priorDoc){
-      const matches=visibleEvents().filter(e=>e.id!==target.id
-        && (e.actor||'')===(target.actor||'')
-        && eventSourceHasDoc(e,priorDoc)
-        && eventTitleMatches(e,title));
-      if(matches.length){
-        matches.forEach(e=>absorbEventData(target,e));
-        const removed=new Set(matches.map(e=>e.id));
-        EDITS.__events=eventsArr().filter(e=>!removed.has(e.id));
-      }
-    }
-    // The source mention is added before duplicate dots are consolidated. Redraw
-    // only after both mutations so the chart tooltip and source line describe the
-    // same surviving event, instead of a stale pre-merge SVG node.
-    saveEdits(); render(); refreshOpenDocsForEvent(target.id);
-    return eventById(target.id)||target;
-  }
+  function consolidateRepeatEventDots(targetId){ return eventById(targetId)||null; }
   function patchEvent(id, patch){ const e=eventById(id); if(e){ Object.assign(e, patch);
     if('subtitle' in patch) e.what=patch.subtitle; if('what' in patch && !('subtitle' in patch)) e.subtitle=patch.what;
     saveEdits(); render(); refreshOpenDocsForEvent(id); } }
