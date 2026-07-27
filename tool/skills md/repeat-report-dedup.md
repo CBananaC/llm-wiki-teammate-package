@@ -25,6 +25,7 @@ Same report only when it is the same specific act/event: same principal
 actor(s), same object/target, same place and time referent. Sharing people, the
 same battle, or the same broad topic is not enough; 皇帝 actions require the same
 object AND the same concrete comment/command.
+同一文書內的兩張卡片不得互判為重複回報；重複回報必須來自另一份文書。
 
 ## Website Prompt
 
@@ -45,3 +46,7 @@ object AND the same concrete comment/command.
   `formal_all.data` event id or a within-bundle card id), or absent if none.
 - `earliest_report` — `{ id, doc_id, date, title }` describing that report.
 - `repeat_candidates` — the ids the model judged equivalent (audit).
+
+The terminal dedup output may also include `repeat_report_doc_id`,
+`repeat_report_author`, and `repeat_report_doc_title`. These identify the earlier
+reporting document used by the review card label.

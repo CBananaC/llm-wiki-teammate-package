@@ -70,7 +70,6 @@ Verified:
 - Smoke-tested formal, sample, shared-data, bundle, skill, workflow, and status routes.
 - Confirmed that the canonical Stage 1 JSON matches its source byte-for-byte.
 
-Remaining:
 - Human confirmation that the formal tool contains the expected research state.
 - Sample reduction, legacy-script migration, and bundle classification.
 
@@ -3518,6 +3517,65 @@ Verified:
 Remaining:
 - Live browser visual confirmation is still needed after reloading the review tool.
 
+### 2026-07-27 13:06 HKT — Codex — Refined AI chat settings popover
+
+Summary: Updated the formal and sample AI chat settings popover so its labels, fields, memory checkbox, and action controls follow `正文` through `--fs`; made it full width and bounded to the AI panel; changed the label to `API Base`; replaced the text refresh and API-key symbols with the shared SVG icon style; and removed the proxy-help note, `使用本機` control, and its unused styling. The proxy URL field remains editable.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- The live formal AI settings popover rendered at the AI panel width, stayed within the panel bounds, showed `API Base`, omitted the removed text and button, and used SVG refresh/eye controls with matching field heights.
+
+Remaining:
+- Sample parity was verified by matching source changes and script parsing; the local preview server exposed the formal tool for live visual inspection.
+
+### 2026-07-27 13:18 HKT — Codex — Confined AI settings to card display area
+
+Summary: Adjusted the formal and sample AI settings popovers to use the AI card display region (`.chat-log`) as their vertical boundary, so the settings no longer cover the typing/composer area. Changed all settings typography and control sizing from `正文` (`--fs`) to `字級` (`--ui-fs`).
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- Live formal-panel geometry showed the settings popover entirely inside `.chat-log` and not overlapping `.chat-box`; computed settings controls followed the `--ui-fs` scale.
+
+Remaining:
+- Human confirmation after reloading the sample tool remains useful.
+
+### 2026-07-27 13:04 HKT — Codex — Preserved duplicate cards and removed dedup self-links
+
+Summary: Confirmed that the January and February dedup manifests compared against their own output bundles, producing self-referential `same_as_event_id` values. Kept dedup cards visible, changed repeat display to prefer external `run:<doc>:<index>` references, retained each card's own title, guarded the runner against self-comparison, and repaired current self-primary dedup fields while preserving all event rows.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `review-tools/shared data/review-bundles/zhu-january-dedup/manifest.json`
+- `review-tools/shared data/review-bundles/zhu-january-dedup/outputs/lin-events.json`
+- `review-tools/shared data/review-bundles/zhu-january-dedup/outputs/qing-actions-all.json`
+- `review-tools/shared data/review-bundles/zhu-february-dedup/manifest.json`
+- `review-tools/shared data/review-bundles/zhu-february-dedup/outputs/lin-events.json`
+- `review-tools/shared data/review-bundles/zhu-february-dedup/outputs/qing-actions-all.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- January and February manifests no longer list themselves as comparison bundles.
+- No current dedup output retains its own bundle as `same_as_event_id`.
+- `硃146` now stores `same_as_event_id: run:硃87:19`; its 332 Qing cards remain present.
+- Both HTML files parse and `git diff --check` passes.
+
+Remaining:
+- Existing generated bundle/data edits from the ongoing reruns remain unstaged; live browser visual confirmation is still needed after reload.
+
 ### 2026-07-27 12:52 HKT — Codex — Ordered legacy prior-edict pair cards
 
 Summary: Moved `回應先前上諭（既有配對）` docpair turns ahead of the new AI-loop event cards while keeping them immediately after ordinary `上諭回應的奏折` pairs. The loop order now starts with source pairs, then prior-edict analysis, then 林方／清方／皇帝／官員回應 output.
@@ -3551,3 +3609,58 @@ Verified:
 
 Remaining:
 - Live browser visual confirmation is still needed after reloading the review tool.
+
+### 2026-07-27 13:27 HKT — Codex — Added clean cross-month dedup reruns
+
+Summary: Added a dedup-only rerun path for existing official-loop bundles. January can compare only against December, and February can compare against the freshly rerun January dedup bundle plus December. Same-document and same-card pointers are rejected before output, while earlier report author, document title, and document ID are stored for the repeat label.
+
+Files:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `tool/skills md/repeat-report-dedup.md`
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `--dedup-only` dry-run printed the requested December comparison pool for a 硃146 example.
+- A local deterministic mock processed the six 硃146 林／清 cards and emitted no same-document references; each repeat included `repeat_report_author`, `repeat_report_doc_title`, and `repeat_report_doc_id`.
+- Both HTML files' embedded scripts parsed, Python compilation passed, and `git diff --check` passed.
+- The mock was used only for plumbing validation; no research text was sent to the external Gemini proxy because that network request was not authorized in this environment.
+
+Remaining:
+- Run the supplied January command, then the February command, with the configured proxy to obtain real model judgments.
+
+### 2026-07-27 13:27 HKT — Codex — Added provider-driven model dropdown
+
+Summary: Replaced the main AI chat settings model text field and refresh button with a native dropdown in both formal and sample tools. The dropdown starts with the provider fallback models, and focusing or changing `AI 服務` triggers `/models` discovery; returned provider models replace the list while preserving the selected model.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- Live formal preview showed a native model `<select>` with no refresh button; switching to `OpenAI GPT` populated its fallback model list and displayed the provider error state only because the local AI service was not running.
+
+Remaining:
+- With the AI service running and provider credentials configured, live `/models` results will replace the fallback lists; the sample tool should be visually reloaded for human confirmation.
+
+### 2026-07-27 13:29 HKT — Codex — Recovered blank AI event subtitles
+
+Summary: Restored visible titles for AI-loop 林方／清方 event cards whose saved `subtitle` field is empty. The paired renderers now recover the title from repeat metadata, linked source-chain events, or source labels before showing a neutral fallback; newly normalized loop items use the same recovery path.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- After a live sample reload and 硃24 selection, all 63 rendered event cards had nonblank titles; the affected Lin card displayed `林爽文等結黨搶劫`.
+- The existing saved state was not rewritten; its original blank fields remain recoverable through the renderer.
+
+Remaining:
+- No remaining display issue observed; human visual confirmation after reopening the formal tool remains useful.

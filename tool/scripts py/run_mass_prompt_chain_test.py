@@ -562,6 +562,55 @@ def _dedup_report_date(doc_id: str, by_id: dict[str, dict[str, Any]], fallback: 
     )
 
 
+def _repeat_ref_is_same_card(ref: str, bundle_name: str, actor: str, index: int, doc_id: str) -> bool:
+    """Reject a pointer that resolves to this exact card or its own document."""
+    ref = str(ref or "")
+    if ref == f"bundle:{bundle_name}:{actor}:{index}":
+        return True
+    match = re.match(r"^run:([^:]+):(\d+)$", ref)
+    return bool(match and match.group(1) == str(doc_id or ""))
+
+
+def _dedup_target_from_ref(
+    ref: str,
+    actor: str,
+    by_id: dict[str, dict[str, Any]],
+) -> dict[str, str]:
+    """Resolve enough target metadata for a repeat label without trusting the UI."""
+    ref = str(ref or "")
+    run = re.match(r"^run:([^:]+):(\d+)$", ref)
+    if run:
+        did = run.group(1)
+        record = by_id.get(did, {})
+        return {
+            "doc_id": did,
+            "author": author_name(record),
+            "doc_title": str(record.get("title") or ""),
+        }
+    bundle = re.match(r"^bundle:(.+):(lin|qing):(\d+)$", ref)
+    if not bundle:
+        return {}
+    bundle_name, ref_actor, raw_index = bundle.groups()
+    if ref_actor != actor:
+        return {}
+    filename = "lin-events.json" if actor == "lin" else "qing-actions-all.json"
+    path = BUNDLES_DIR / bundle_name / "outputs" / filename
+    rows = read_json(path, []) if path.exists() else []
+    try:
+        target = rows[int(raw_index)]
+    except (IndexError, TypeError, ValueError):
+        return {}
+    if not isinstance(target, dict):
+        return {}
+    did = doc_id_of(target)
+    record = by_id.get(did, {})
+    return {
+        "doc_id": did,
+        "author": author_name(record),
+        "doc_title": str(record.get("title") or ""),
+    } if did else {}
+
+
 def historical_dedup_candidates(
     actor: str,
     bundle_names: list[str],
@@ -598,12 +647,40 @@ def historical_dedup_candidates(
                 continue
             seen_ids.add(event_id)
             title = str(item.get("subtitle") or item.get("title") or item.get("what") or "")
-            canonical_id = str(item.get("same_as_event_id") or event_id)
-            canonical_title = str(item.get("repeat_of_title") or title)
+            raw_refs = [item.get("same_as_event_id"), item.get("same_as")]
+            raw_refs.extend(item.get("same_as_event_ids") if isinstance(item.get("same_as_event_ids"), list) else [])
+            external_refs = [
+                str(ref) for ref in raw_refs if str(ref or "")
+                and not _repeat_ref_is_same_card(str(ref), bundle_name, actor, index, did)
+            ]
+            canonical_id = external_refs[0] if external_refs else event_id
+            canonical_title = str(item.get("repeat_of_title") or title) if external_refs else title
+            target_meta = {}
+            explicit_target = str(item.get("repeat_report_doc_id") or "")
+            if explicit_target and explicit_target != did:
+                target_record = by_id.get(explicit_target, {})
+                target_meta = {
+                    "doc_id": explicit_target,
+                    "author": str(item.get("repeat_report_author") or author_name(target_record)),
+                    "doc_title": str(item.get("repeat_report_doc_title") or target_record.get("title") or ""),
+                }
+            if not target_meta:
+                for ref in external_refs:
+                    target_meta = _dedup_target_from_ref(ref, actor, by_id)
+                    if target_meta and target_meta.get("doc_id") != did:
+                        break
+            if target_meta.get("doc_id") == did:
+                target_meta = {}
+            if not target_meta:
+                target_meta = {"doc_id": did, "author": author_name(by_id.get(did, {})), "doc_title": str(by_id.get(did, {}).get("title") or "")}
+                external_refs = []
             out.append({
                 "event_id": event_id,
                 "canonical_id": canonical_id,
                 "canonical_title": canonical_title,
+                "report_doc_id": target_meta.get("doc_id") or did,
+                "report_author": target_meta.get("author") or author_name(by_id.get(did, {})),
+                "report_title": target_meta.get("doc_title") or str(by_id.get(did, {}).get("title") or ""),
                 "date": _dedup_report_date(did, by_id, item.get("whenAr") or item.get("dateAr") or ""),
                 "title": title,
                 "description": str(item.get("description") or item.get("how") or ""),
@@ -624,6 +701,7 @@ def dedup_event_rows_global(
     retry_sleep: int,
     history_bundles: list[str] | None = None,
     top_k: int = 12,
+    on_progress=None,
 ) -> int:
     """Cross-document repeat-report pass over EVERY extracted card of one side.
 
@@ -653,6 +731,11 @@ def dedup_event_rows_global(
     )
     seen: list[dict[str, Any]] = list(committed) + historical
     flagged = 0
+
+    def save_progress() -> None:
+        if on_progress:
+            on_progress()
+
     for position, i in enumerate(order, 1):
         item = rows[i]
         did = doc_id_of(item)
@@ -682,6 +765,7 @@ def dedup_event_rows_global(
             "sources": [{"doc_id": did, "quote": item.get("quote") or ""}],
         })
         if not candidates:
+            save_progress()
             continue
         payload = {
             "mode": "repeat_report",
@@ -712,12 +796,18 @@ def dedup_event_rows_global(
                 data = post_json(proxy, payload, timeout, retries, retry_sleep)
         except Exception as exc:  # dedup is advisory; never lose an extracted card over it
             print(f"    repeat-report failed for {item.get('subtitle') or '(untitled)'}: {exc}")
+            save_progress()
             continue
         same_ids = data.get("same_ids") if isinstance(data.get("same_ids"), list) else []
         same_ids = [str(i2) for i2 in same_ids if str(i2)]
         if not same_ids:
+            save_progress()
             continue
         by_event = {str(c.get("event_id") or ""): c for c in candidates}
+        same_ids = [i2 for i2 in same_ids if i2 in by_event]
+        if not same_ids:
+            save_progress()
+            continue
         target = same_ids[0]
         matched = by_event.get(target) or {}
         # if the match is another card from this run that was itself flagged as a repeat,
@@ -725,17 +815,121 @@ def dedup_event_rows_global(
         for other_index, other in enumerate(rows):
             if _run_card_id(other, other_index) == target and other.get("same_as_event_id"):
                 target = str(other.get("same_as_event_id"))
-                matched = {"title": other.get("repeat_of_title") or other.get("subtitle") or ""}
+                matched = {
+                    "title": other.get("repeat_of_title") or other.get("subtitle") or "",
+                    "canonical_id": other.get("same_as_event_id") or target,
+                    "canonical_title": other.get("repeat_of_title") or other.get("subtitle") or "",
+                    "report_doc_id": other.get("repeat_report_doc_id") or doc_id_of(other),
+                    "report_author": other.get("repeat_report_author") or author_name(by_id.get(doc_id_of(other), {})),
+                    "report_title": other.get("repeat_report_doc_title") or str(by_id.get(doc_id_of(other), {}).get("title") or ""),
+                }
                 break
+        target_doc_id = str(matched.get("report_doc_id") or ((matched.get("sources") or [{}])[0]).get("doc_id") or "")
+        if not target_doc_id or target_doc_id == did:
+            save_progress()
+            continue
         item["same_as_event_id"] = str(matched.get("canonical_id") or target)
         item["repeat_of_title"] = str(matched.get("canonical_title") or matched.get("title") or "")
+        item["repeat_report_doc_id"] = target_doc_id
+        target_record = by_id.get(target_doc_id, {})
+        item["repeat_report_author"] = str(matched.get("report_author") or author_name(target_record) or "")
+        item["repeat_report_doc_title"] = str(matched.get("report_title") or target_record.get("title") or "")
         if matched.get("history_bundle"):
             item["repeat_report_bundle"] = matched["history_bundle"]
         if len(same_ids) > 1:
             item["same_as_event_ids"] = same_ids
         flagged += 1
         print(f"    [{position}/{len(order)}] 重複：{item.get('subtitle') or ''} → {item['repeat_of_title']}")
+        save_progress()
     return flagged
+
+
+def _clear_self_repeat_annotations(rows: list[dict[str, Any]], bundle_name: str, actor: str) -> None:
+    """Final safety pass: no output card may retain a same-document repeat pointer."""
+    for index, item in enumerate(rows):
+        if not isinstance(item, dict):
+            continue
+        did = doc_id_of(item)
+        raw_refs = [item.get("same_as_event_id"), item.get("same_as")]
+        raw_refs.extend(item.get("same_as_event_ids") if isinstance(item.get("same_as_event_ids"), list) else [])
+        refs = [
+            str(ref) for ref in raw_refs if str(ref or "")
+            and not _repeat_ref_is_same_card(str(ref), bundle_name, actor, index, did)
+        ]
+        if not refs:
+            for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title"):
+                item.pop(key, None)
+            continue
+        item["same_as_event_id"] = refs[0]
+        if len(refs) > 1:
+            item["same_as_event_ids"] = refs
+        else:
+            item.pop("same_as_event_ids", None)
+
+
+def rerun_dedup_only(
+    proxy: str,
+    model: str,
+    source_bundle: str,
+    dedup_bundle: str,
+    wanted: list[str],
+    history_bundles: list[str],
+    by_id: dict[str, dict[str, Any]],
+    timeout: int,
+    retries: int,
+    retry_sleep: int,
+) -> None:
+    """Re-run only the cross-document dedup stage over an existing loop bundle."""
+    if not proxy:
+        raise SystemExit("Set GEMINI_PROXY_URL or pass --proxy for --dedup-only.")
+    source_dir = BUNDLES_DIR / source_bundle / "outputs"
+    dedup_root = BUNDLES_DIR / dedup_bundle
+    dedup_dir = dedup_root / "outputs"
+    dedup_dir.mkdir(parents=True, exist_ok=True)
+    (dedup_root / "human-edits").mkdir(parents=True, exist_ok=True)
+    wanted_set = set(wanted)
+    lin_rows = [dict(row) for row in read_json(source_dir / "lin-events.json", []) if isinstance(row, dict) and doc_id_of(row) in wanted_set]
+    qing_rows = [dict(row) for row in read_json(source_dir / "qing-actions-all.json", []) if isinstance(row, dict) and doc_id_of(row) in wanted_set]
+    if not lin_rows and not qing_rows:
+        raise SystemExit(f"No 林／清 output rows for {', '.join(wanted)} in bundle {source_bundle!r}.")
+    for row in lin_rows + qing_rows:
+        for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title"):
+            row.pop(key, None)
+
+    def save_progress() -> None:
+        write_json(dedup_dir / "lin-events.json", lin_rows)
+        write_json(dedup_dir / "qing-actions-all.json", qing_rows)
+
+    save_progress()
+    print(f"dedup-only source bundle: {source_bundle}")
+    print(f"dedup comparison bundles: {', '.join(history_bundles) or 'none'}")
+    n_lin = dedup_event_rows_global(proxy, model, lin_rows, "lin", by_id, timeout, retries, retry_sleep, history_bundles, on_progress=save_progress)
+    n_qing = dedup_event_rows_global(proxy, model, qing_rows, "qing", by_id, timeout, retries, retry_sleep, history_bundles, on_progress=save_progress)
+    _clear_self_repeat_annotations(lin_rows, dedup_bundle, "lin")
+    _clear_self_repeat_annotations(qing_rows, dedup_bundle, "qing")
+    save_progress()
+    write_json(dedup_root / "manifest.json", {
+        "name": dedup_bundle,
+        "created_at": datetime.now().isoformat(timespec="seconds"),
+        "source_bundle": source_bundle,
+        "source": str(SOURCE.relative_to(ROOT)),
+        "model": model,
+        "doc_ids": wanted,
+        "comparison_bundles": history_bundles,
+        "chain": ["repeat-report-dedup (global, post-loop)"],
+    })
+    if not (dedup_root / "human-edits" / "notes.json").exists():
+        write_json(dedup_root / "human-edits" / "notes.json", [])
+    write_json(dedup_dir / "_run-status.json", {
+        "__global__": {
+            "dedup": True,
+            "source_doc_ids": wanted,
+            "comparison_bundles": history_bundles,
+        }
+    })
+    print(f"林方：{n_lin}/{len(lin_rows)} 判為重複")
+    print(f"清方：{n_qing}/{len(qing_rows)} 判為重複")
+    print(f"Wrote dedup bundle: {dedup_root.relative_to(ROOT)}")
 
 
 def source_type(record: dict[str, Any]) -> str:
@@ -1173,6 +1367,7 @@ def main() -> None:
     ap.add_argument("--doc-ids", default=DEFAULT_DOC_IDS, help="Comma-separated source document ids")
     ap.add_argument("--bundle", default="", help="Short semantic review-bundle name")
     ap.add_argument("--dedup-bundle", default="", help="Separate bundle for 林／清 cross-document dedup output")
+    ap.add_argument("--dedup-only", action="store_true", help="Re-run dedup only from an existing official-loop bundle")
     ap.add_argument("--timeout", type=int, default=240)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--retry-sleep", type=int, default=15)
@@ -1233,6 +1428,23 @@ def main() -> None:
             sources = pairs_for_selected_yu_source(pairs, did)
             print(f"  existing yu_source links: {len(sources)} ({', '.join(pair_yu_doc_id(p) for p in sources) or 'none'})")
         print("\n(no proxy calls made)")
+        return
+
+    if args.dedup_only:
+        if not args.bundle:
+            raise SystemExit("--dedup-only requires --bundle to identify an existing official-loop bundle.")
+        rerun_dedup_only(
+            args.proxy,
+            args.model,
+            bundle_name,
+            dedup_bundle_name,
+            wanted,
+            dedup_compare_bundles,
+            by_id,
+            args.timeout,
+            args.retries,
+            args.retry_sleep,
+        )
         return
 
     if not args.proxy:
@@ -1385,12 +1597,27 @@ def main() -> None:
         dedup_lin_rows = [dict(row) for row in lin_rows if isinstance(row, dict)]
         dedup_qing_rows = [dict(row) for row in qing_rows if isinstance(row, dict)]
         for row in dedup_lin_rows + dedup_qing_rows:
-            for key in ("same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle"):
+            for key in ("same_as", "same_as_event_id", "same_as_event_ids", "repeat_of_title", "repeat_report_bundle", "repeat_report_doc_id", "repeat_report_author", "repeat_report_doc_title"):
                 row.pop(key, None)
-        n_lin = dedup_event_rows_global(args.proxy, args.model, dedup_lin_rows, "lin", by_id, args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles)
+        def _save_dedup_progress():
+            write_json(dedup_dir / "lin-events.json", dedup_lin_rows)
+            write_json(dedup_dir / "qing-actions-all.json", dedup_qing_rows)
+
+        _save_dedup_progress()
+        n_lin = dedup_event_rows_global(
+            args.proxy, args.model, dedup_lin_rows, "lin", by_id,
+            args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles,
+            on_progress=_save_dedup_progress,
+        )
         print(f"  林方：{n_lin}/{len(dedup_lin_rows)} 判為重複")
-        n_qing = dedup_event_rows_global(args.proxy, args.model, dedup_qing_rows, "qing", by_id, args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles)
+        n_qing = dedup_event_rows_global(
+            args.proxy, args.model, dedup_qing_rows, "qing", by_id,
+            args.timeout, args.retries, args.retry_sleep, dedup_compare_bundles,
+            on_progress=_save_dedup_progress,
+        )
         print(f"  清方：{n_qing}/{len(dedup_qing_rows)} 判為重複")
+        _clear_self_repeat_annotations(dedup_lin_rows, dedup_bundle_name, "lin")
+        _clear_self_repeat_annotations(dedup_qing_rows, dedup_bundle_name, "qing")
         write_json(dedup_dir / "lin-events.json", dedup_lin_rows)
         write_json(dedup_dir / "qing-actions-all.json", dedup_qing_rows)
         write_json(dedup_root / "manifest.json", {
@@ -1455,7 +1682,7 @@ def main() -> None:
         "dedup_history_bundles": dedup_compare_bundles,
         "chain": LOOP_CHAIN,
         "pair_files": [str(YU_SOURCE_PATH.relative_to(ROOT)), str(CONFIRMED_PAIRS_PATH.relative_to(ROOT))],
-        "deduplication": f"separate bundle {dedup_bundle_name}; LLM cross-document comparison with prior and own dedup outputs",
+            "deduplication": f"separate bundle {dedup_bundle_name}; LLM cross-document comparison with configured prior bundles; same-document links excluded",
         "excluded_stages": ["edict-match", "info-source", "situfit", "date-window official-response search"],
     }
     write_json(out_root / "manifest.json", manifest)
