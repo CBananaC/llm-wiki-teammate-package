@@ -3717,3 +3717,21 @@ Verified:
 
 Remaining:
 - With a running provider proxy and credentials, the live `/models` response should be checked against each provider’s current catalogue.
+
+### 2026-07-27 13:42 HKT — Codex — Restricted document filters to approved events
+
+Summary: Removed unapproved AI chat findings from the document-panel filter projection. The filter now shows user annotations plus committed event/provenance highlights, with event chips rendered as a smaller filter type followed by the event title and without per-label counts. Clicking an event chip opens its existing event information card in a dedicated column immediately to the left of the document panel; multiple selected event cards share that column.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both HTML files' embedded scripts parsed successfully.
+- `git diff --check` passed.
+- Live sample verification showed no chip count elements, two-level event labels, and two clicked event cards in one column left of the 硃40 document panel.
+- Live formal verification showed the same filter rendering path with the approved-only projection; no unapproved AI labels appeared.
+
+Remaining:
+- Existing unrelated working-tree changes and saved sample state were left untouched.
