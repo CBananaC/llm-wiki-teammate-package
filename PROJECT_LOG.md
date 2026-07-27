@@ -3853,3 +3853,20 @@ Verified:
 
 Remaining:
 - No known implementation work remains for this request; formal visual confirmation is still optional.
+
+### 2026-07-27 15:43 HKT — Codex — Reused and consolidated repeat-event dots
+
+Summary: Repeat-card merge actions now prefer the existing chart event that carries the reported document, add the new document as a second source, and silently consolidate same-actor, same-title duplicate dots left by earlier repeat clicks. The existing-document lookup now tolerates archived repeat pointers while retaining title matching so unrelated events from the same document are not absorbed.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal 硃83's `賊匪直攻鳳山縣城` repeat reused the existing `硃77` + `硃83` event; the formal saved event set did not gain a new dot.
+- A temporary sample test event was removed after verification; the pre-existing sample working-state changes remain untouched.
+- Both HTML files' embedded scripts parsed successfully and `git diff --check` passed.
+
+Remaining:
+- Human confirmation of other repeat targets with different event titles remains advisable before bulk-cleaning saved event data.

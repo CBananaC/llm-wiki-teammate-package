@@ -5799,7 +5799,8 @@
       const ev=eventById(earlier.__evId);
       if(!ev) return commitProposal(p);
       candidateSources(p).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(p))); });
-      return ev;
+      consolidateRepeatEventDots(ev.id,mr.doc_id,mr.title);
+      return eventById(ev.id)||ev;
     }
     // Earlier candidate was never committed: the canonical dot must be whichever DOCUMENT was sent
     // first (proposalRefAr resolves each candidate's own source document's sendAr/recvAr/annAr) --
@@ -5818,7 +5819,8 @@
       sources:candidateSources(canonical).map(s=>Object.assign({doc_id:s.doc_id, quote:s.quote, label:canonicalSubtitle, aiFilterLabel:canonicalFilterLabel, howKnown:s.howKnown||'', whenKnown:s.whenKnown||''}, mentionOwnFields(canonical)))});
     candidateSources(other).forEach(s=>{ addEventMention(ev.id, s.doc_id, Object.assign({quote:s.quote, howKnown:s.howKnown||'', whenKnown:s.whenKnown||'', label:ev.subtitle||ev.what||''}, mentionOwnFields(other))); });
     earlier.__added=true; earlier.__evId=ev.id;
-    return ev;
+    consolidateRepeatEventDots(ev.id,mr.doc_id,mr.title);
+    return eventById(ev.id)||ev;
   }
   // Extend an existing event with one more document's mention (reuses addEventSource's dedupe-by-
   // doc_id pattern, but always fills quote/howKnown/whenKnown -- addEventSource itself only ever
@@ -5862,6 +5864,52 @@
     if(b.what && !b.subtitle) ev.subtitle=b.what;
     eventsArr().push(ev); saveEdits(); render(); refreshOpenDocsForEvent(ev.id); return ev; }
   function evTitle(e){ return eventDisplaySubtitle(e); }
+  function eventSourceHasDoc(e, docId){
+    const wanted=new Set(docIdAliases(docId));
+    const ids=[e&&e.emperorDetail&&e.emperorDetail.memDoc]
+      .concat((Array.isArray(e&&e.sources)?e.sources:[]).map(s=>s&&s.doc_id)).filter(Boolean);
+    return ids.some(id=>docIdAliases(id).some(alias=>wanted.has(alias)));
+  }
+  function eventTitleMatches(e, title){
+    const wanted=normWhere(title); if(!wanted) return false;
+    const titles=[evTitle(e)].concat((Array.isArray(e&&e.sources)?e.sources:[]).map(s=>s&&(s.ownSubtitle||s.label||'')))
+      .map(normWhere).filter(Boolean);
+    return titles.some(t=>t===wanted||t.includes(wanted)||wanted.includes(t));
+  }
+  // Merge duplicate repeat targets silently; the click handler saves and redraws
+  // once after this repair so the panel does not jump through intermediate states.
+  function absorbEventData(target, source){
+    if(!target||!source) return target;
+    target.sources=target.sources||[];
+    (source.sources||[]).forEach(s=>{
+      if(!target.sources.some(x=>String(x.doc_id)===String(s.doc_id))) target.sources.push(s);
+      else { const ex=target.sources.find(x=>String(x.doc_id)===String(s.doc_id)); if(!ex.quote&&s.quote) ex.quote=s.quote; }
+    });
+    target.who=[...new Set([...(target.who||[]), ...(source.who||[])])];
+    target.whoLoc=Object.assign({}, source.whoLoc||{}, target.whoLoc||{});
+    target.relations=target.relations||[];
+    (source.relations||[]).forEach(rel=>{
+      if(rel&&rel.source&&rel.target){
+        const rk=rel.source+'|'+rel.target+'|'+(rel.relation||'');
+        if(!target.relations.some(x=>x.source+'|'+x.target+'|'+(x.relation||'')===rk)) target.relations.push(rel);
+      }
+    });
+    migrateProv(target); provChainsOf(source).forEach(ch=>{ if(!target.provenance.some(c=>c.id===ch.id)) target.provenance.push(ch); });
+    if(!target.description&&source.description) target.description=source.description;
+    return target;
+  }
+  function consolidateRepeatEventDots(targetId, priorDoc, title){
+    const target=eventById(targetId); if(!target||!priorDoc) return target;
+    const matches=visibleEvents().filter(e=>e.id!==target.id
+      && (e.actor||'')===(target.actor||'')
+      && eventSourceHasDoc(e,priorDoc)
+      && eventTitleMatches(e,title));
+    if(!matches.length) return target;
+    matches.forEach(e=>absorbEventData(target,e));
+    const removed=new Set(matches.map(e=>e.id));
+    EDITS.__events=eventsArr().filter(e=>!removed.has(e.id));
+    return target;
+  }
   function patchEvent(id, patch){ const e=eventById(id); if(e){ Object.assign(e, patch);
     if('subtitle' in patch) e.what=patch.subtitle; if('what' in patch && !('subtitle' in patch)) e.subtitle=patch.what;
     saveEdits(); render(); refreshOpenDocsForEvent(id); } }
@@ -7059,8 +7107,45 @@
           const embedded=typeof recByAnyDocId==='function'?(recByAnyDocId(docId)||{}):(recByDocId2(docId)||{});
           return canonicalDocMeta(docId,{title:embedded.title||'',reporter:embedded.author_name||'',dateAr:docBestAr(embedded)});
         };
+        const sameDoc=(a,b)=>{
+          const aa=String(a||'').trim(), bb=String(b||'').trim(); if(!aa||!bb) return false;
+          const wanted=new Set(docIdAliases(aa)); return docIdAliases(bb).some(id=>wanted.has(id));
+        };
+        const eventSourceIds=ev=>{
+          const ids=[];
+          const mem=ev&&ev.emperorDetail&&ev.emperorDetail.memDoc; if(mem) ids.push(mem);
+          (Array.isArray(ev&&ev.sources)?ev.sources:[]).forEach(s=>{ if(s&&s.doc_id) ids.push(s.doc_id); });
+          return ids;
+        };
+        const eventHasDoc=(ev,docId)=>eventSourceIds(ev).some(id=>sameDoc(id,docId));
+        const eventTitles=ev=>[evTitle(ev)].concat((Array.isArray(ev&&ev.sources)?ev.sources:[]).map(s=>s&&(s.ownSubtitle||s.label||''))).map(v=>normWhere(v)).filter(Boolean);
+        // A repeat pointer can outlive the chat item's event ID. Before making a
+        // synthetic prior candidate, look for the already-added dot that carries
+        // the reported document. Prefer a dot that already carries this new
+        // document too: that is the result of an earlier partial merge and must
+        // not become a third copy of the same event.
+        const existingEventForDoc=(docId,title)=>{
+          const candidates=visibleEvents().filter(ev=>{
+            if(actor&&ev.actor&&ev.actor!==actor) return false;
+            return eventHasDoc(ev,docId);
+          });
+          if(!candidates.length) return null;
+          const wanted=normWhere(title);
+          const score=ev=>{
+            const titles=eventTitles(ev), exact=wanted&&titles.some(t=>t===wanted), partial=wanted&&titles.some(t=>t.includes(wanted)||wanted.includes(t));
+            if(!exact&&!partial&&candidates.length>1) return -1;
+            return (eventHasDoc(ev,sourceDoc)?1000:0)+(exact?100:partial?50:10);
+          };
+          const ranked=candidates.map(ev=>({ev,score:score(ev)})).filter(x=>x.score>=0).sort((a,b)=>b.score-a.score);
+          if(!ranked.length) return null;
+          return ranked[0].ev;
+        };
+        const liveTarget=(ev,docId)=>{
+          const meta=targetMeta(docId);
+          return {doc_id:docId,title:evTitle(ev),doc_title:meta.title||'',reporter:meta.reporter||'',whenAr:ev.dateAr||meta.dateAr||'',evId:ev.id,sourceId:ev.id};
+        };
         const reportStub=(docId)=>{
-          if(!docId||docId===String(sourceDoc)) return null;
+          if(!docId||sameDoc(docId,sourceDoc)) return null;
           const meta=targetMeta(docId), title=String(item&&item.repeat_of_title||'').trim();
           if(!title) return null;
           const stub={actor:actor||'qing',subtitle:title,what:title,description:'',where:'',who:meta.reporter?[meta.reporter]:[],whoLoc:{},relations:[],whenCh:'',whenAr:'',doc_id:docId,
@@ -7073,13 +7158,14 @@
         for(const id of ids){
           const ev=eventById(id); if(!ev) continue;
           const sources=Array.isArray(ev.sources)?ev.sources:[];
-          const priorDoc=String((ev.emperorDetail&&ev.emperorDetail.memDoc)||sources.map(s=>s&&s.doc_id).find(d=>d&&String(d)!==String(sourceDoc))||'');
-          if(!priorDoc||priorDoc===String(sourceDoc)) continue;
-          const meta=targetMeta(priorDoc);
-          return {doc_id:priorDoc,title:evTitle(ev),doc_title:meta.title||'',reporter:meta.reporter||'',whenAr:ev.dateAr||meta.dateAr||'',evId:id,sourceId:id};
+          const priorDoc=String((ev.emperorDetail&&ev.emperorDetail.memDoc)||sources.map(s=>s&&s.doc_id).find(d=>d&&!sameDoc(d,sourceDoc))||'');
+          if(!priorDoc||sameDoc(priorDoc,sourceDoc)) continue;
+          return liveTarget(ev,priorDoc);
         }
         const explicitDoc=String(item&&item.repeat_report_doc_id||'');
-        if(explicitDoc&&explicitDoc!==String(sourceDoc)){
+        if(explicitDoc&&!sameDoc(explicitDoc,sourceDoc)){
+          const existing=existingEventForDoc(explicitDoc,item&&item.repeat_of_title||'');
+          if(existing) return liveTarget(existing,explicitDoc);
           const stub=reportStub(explicitDoc); if(stub){
             const meta=targetMeta(explicitDoc);
             stub.doc_title=item.repeat_report_doc_title||meta.title||'';
@@ -7090,7 +7176,9 @@
         }
         const runRefs=ids.map(id=>{ const m=/^run:([^:]+):(\d+)$/.exec(id); return m?{id,doc_id:m[1],index:+m[2]}:null; }).filter(Boolean);
         for(const run of runRefs){
-          if(run.doc_id===String(sourceDoc)) continue;
+          if(sameDoc(run.doc_id,sourceDoc)) continue;
+          const existing=existingEventForDoc(run.doc_id,item&&item.repeat_of_title||'');
+          if(existing) return liveTarget(existing,run.doc_id);
           const options=canonicalRefs.filter(ref=>ref.turn&&ref.turn.kind==='extract'&&ref.turn.actor===actor);
           for(const ref of options){
             const list=Array.isArray(ref.turn.items)?ref.turn.items:[];
