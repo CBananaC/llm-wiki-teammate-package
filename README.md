@@ -14,18 +14,18 @@ tool embedded in section 1.5.
 
 ## File map
 
-- `Website/storymap-example.html` — page shell, navigation, title, and the
+- `Website/storymap/storymap-example.html` — page shell, navigation, title, and the
   `intro-content` mount point. Keep this file mostly structural.
-- `Website/assets/storymap.js` — main introduction content data and rendering
+- `Website/storymap/storymap.js` — main introduction content data and rendering
   logic. The `parts` array defines the cards, sections, backgrounds, table, and
   review-tool iframe.
-- `Website/assets/storymap.css` — StoryMap layout, card styling, backgrounds,
+- `Website/storymap/storymap.css` — StoryMap layout, card styling, backgrounds,
   navigation, and responsive behaviour.
-- `Website/review-tool-embed.html` — standalone simplified review-tool embed
+- `Website/embedded-tool/review-tool-embed.html` — standalone simplified review-tool embed
   page for the self-contained demonstration UI.
-- `Website/assets/review-tool-embed.js` — self-contained 硃83 demonstration
+- `Website/embedded-tool/review-tool-embed.js` — self-contained 硃83 demonstration
   data and interactions for the AI card and original-text panel.
-- `Website/assets/review-tool-embed.css` — styling for the standalone review
+- `Website/embedded-tool/review-tool-embed.css` — styling for the standalone review
   embed.
 - `AGENT.md` — folder-specific rules for AI agents; the parent `../AGENTS.md`
   remains authoritative.
@@ -48,7 +48,7 @@ tool embedded in section 1.5.
    `頁碼待核`; do not present those as verified citations.
 3. When changing visible introduction text, compare the requested wording with
    `Outline/Content.docx`, then update the corresponding data in
-   `Website/assets/storymap.js`. Preserve section numbering and navigation
+   `Website/storymap/storymap.js`. Preserve section numbering and navigation
    grouping: 1.3 and 1.6 each contain multiple cards.
 4. Preserve the real sample review-tool embed in section 1.5. It is not a
    decorative mockup. The current example targets 硃83 and the panels
@@ -79,7 +79,7 @@ python3 -m http.server 8765
 Open:
 
 ```text
-http://127.0.0.1:8765/intro%20Website/Website/storymap-example.html
+http://127.0.0.1:8765/intro%20Website/Website/storymap/storymap-example.html
 ```
 
 When the page is opened over HTTP, the StoryMap iframe uses the review server
@@ -92,8 +92,8 @@ repository root:
 
 ```sh
 cd "/Users/creamybanana/Downloads/DH Project"
-node --check "intro Website/Website/assets/storymap.js"
-node --check "intro Website/Website/assets/review-tool-embed.js"
+node --check "intro Website/Website/storymap/storymap.js"
+node --check "intro Website/Website/embedded-tool/review-tool-embed.js"
 git diff --check
 ```
 
