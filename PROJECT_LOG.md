@@ -4270,3 +4270,50 @@ Verified:
 
 Remaining:
 - Keep the local log current after each coherent change in that folder.
+
+### 2026-07-28 15:26 HKT — Codex — Added an AI working guide for the introduction website
+
+Summary:
+- Added `intro Website/README.md` with the website purpose, file map, source
+  and language rules, review-tool embed instructions, local serving/testing
+  workflow, and handoff requirements.
+- Documented that `intro Website/INTRO_WEBSITE_CHANGE_LOG.md` must be updated
+  after every coherent website-folder change.
+
+Files:
+- `intro Website/README.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Reviewed the current StoryMap and standalone embed implementation before
+  writing the guide.
+- Confirmed the documented paths, ports, and validation commands match the
+  current project layout.
+
+Remaining:
+- Keep the README and both change logs current as the website evolves.
+
+### 2026-07-28 15:26 HKT — Codex — Split the introduction website into separate HTML, CSS, and JavaScript files
+
+Summary:
+- Removed the large inline style and script blocks from both introduction website pages.
+- Kept page structure in HTML and moved page-specific presentation and logic/data into separate files under `intro Website/Website/assets/`.
+
+Files:
+- `intro Website/Website/storymap-example.html`
+- `intro Website/Website/review-tool-embed.html`
+- `intro Website/Website/assets/storymap.css`
+- `intro Website/Website/assets/storymap.js`
+- `intro Website/Website/assets/review-tool-embed.css`
+- `intro Website/Website/assets/review-tool-embed.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both extracted JavaScript files pass `node --check`.
+- Browser inspection confirmed the introduction cards/table and review embed render from the split files.
+- Browser interaction confirmed quote highlighting still works; `git diff --check` passed.
+
+Remaining:
+- The separate review-tools server could not be started in the restricted shell, so the StoryMap iframe's server-backed route remains to be rechecked when that server is available.

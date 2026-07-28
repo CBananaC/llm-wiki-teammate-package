@@ -37,3 +37,49 @@ Verified:
 
 Remaining:
 - Keep this log updated after every coherent change made inside this folder.
+
+### 2026-07-28 15:26 HKT — Codex — Added the AI working guide
+
+Summary:
+- Added a folder README explaining the introduction website's purpose, file
+  structure, source-of-truth rules, review-tool dependency, testing workflow,
+  and change-log requirements.
+
+Files changed:
+- `README.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Reviewed the current StoryMap, standalone embed, asset files, and repository
+  instructions before writing the guide.
+- Confirmed the README uses exact current paths and documents the HTTP and
+  file-mode review embed behaviour.
+
+Remaining:
+- Keep the README and both change logs current as the website evolves.
+
+### 2026-07-28 15:26 HKT — Codex — Split the introduction website into separate HTML, CSS, and JavaScript files
+
+Summary:
+- Removed the large inline style and script blocks from both website pages.
+- Kept each page's markup in its HTML file and moved its presentation and page logic/data into separate files under `Website/assets/`.
+
+Files changed:
+- `Website/storymap-example.html`
+- `Website/review-tool-embed.html`
+- `Website/assets/storymap.css`
+- `Website/assets/storymap.js`
+- `Website/assets/review-tool-embed.css`
+- `Website/assets/review-tool-embed.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Both extracted JavaScript files pass `node --check`.
+- All external asset references exist and the HTML files contain no inline CSS or JavaScript.
+- Browser inspection confirmed the introduction cards/table and review embed render from the split files.
+- Browser interaction confirmed quote highlighting still works; `git diff --check` passed.
+
+Remaining:
+- The separate review-tools server could not be started in the restricted shell, so the StoryMap iframe's server-backed route remains to be rechecked when that server is available.
