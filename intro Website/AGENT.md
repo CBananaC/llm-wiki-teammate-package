@@ -126,6 +126,20 @@ create a concise local Git commit. Do not run `git push` automatically. At
 handoff, report the changed files, verification performed, remaining work, and
 any pre-existing or concurrent changes deliberately left untouched.
 
+### Automatic checkpoint rule
+
+- Automatically create the local commit immediately after every coherent
+  non-log change has been validated. Do not wait for a later task or user
+  confirmation.
+- Treat the corresponding log update as part of that same change, not as a
+  separate commit. Do not create a commit whose only purpose is editing
+  `INTRO_WEBSITE_CHANGE_LOG.md` or `../PROJECT_LOG.md`.
+- Stage only the intended files. If either log contains concurrent work, leave
+  that unrelated log content unstaged rather than absorbing it into the
+  current commit, while still appending the current change's entry.
+- Never auto-commit credentials, broad generated output, or unrelated user
+  changes. Never push automatically.
+
 ## Safety
 
 - Do not store credentials, API keys, tokens, or service-account files.
