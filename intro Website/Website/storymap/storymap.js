@@ -171,6 +171,7 @@ document.addEventListener('keydown', (event) => {
 const tabs = [...document.querySelectorAll('.main-nav-link')];
 const introDropdown = document.querySelector('.nav-dropdown');
 const introDropdownTrigger = introDropdown.querySelector('.nav-dropdown-trigger');
+const workflowNodes = [...document.querySelectorAll('.workflow-node')];
 const setIntroDropdownOpen = (open) => {
   introDropdown.classList.toggle('open', open);
   introDropdownTrigger.setAttribute('aria-expanded', String(open));
@@ -192,6 +193,11 @@ introDropdownTrigger.addEventListener('click', (event) => {
 introDropdown.querySelectorAll('.nav-dropdown-menu a').forEach((link) => {
   link.addEventListener('click', () => setIntroDropdownOpen(false));
 });
+workflowNodes.forEach((node) => {
+  node.addEventListener('click', () => {
+    workflowNodes.forEach((item) => item.classList.toggle('is-selected', item === node));
+  });
+});
 document.addEventListener('click', (event) => {
   if (!introDropdown.contains(event.target)) setIntroDropdownOpen(false);
 });
@@ -201,8 +207,10 @@ const observer = new IntersectionObserver((entries) => {
     if (!entry.isIntersecting) return;
     const target = entry.target.dataset.nav || '#' + entry.target.id;
     const activeTarget = target.startsWith('#intro-') ? 'intro' : target;
+    const workflowTarget = entry.target.id.startsWith('intro-1-3-') ? '#' + entry.target.id : target;
     tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.navTarget === activeTarget));
     introDropdown.classList.toggle('active', activeTarget === 'intro');
+    workflowNodes.forEach((node) => node.classList.toggle('is-selected', node.dataset.workflowTarget === workflowTarget));
   });
 }, { threshold: 0.55 });
 sections.forEach((section) => observer.observe(section));
