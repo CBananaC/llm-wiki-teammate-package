@@ -169,29 +169,62 @@ document.addEventListener('keydown', (event) => {
 });
 
 const tabs = [...document.querySelectorAll('.main-nav-link')];
+const tabPanels = [...document.querySelectorAll('[data-tab-panel]')];
 const introDropdown = document.querySelector('.nav-dropdown');
 const introDropdownTrigger = introDropdown.querySelector('.nav-dropdown-trigger');
+const introDropdownMenu = introDropdown.querySelector('.nav-dropdown-menu');
 const workflowNodes = [...document.querySelectorAll('.workflow-node')];
+let introDropdownCloseTimer;
 const setIntroDropdownOpen = (open) => {
+  window.clearTimeout(introDropdownCloseTimer);
   introDropdown.classList.toggle('open', open);
   introDropdownTrigger.setAttribute('aria-expanded', String(open));
 };
 introDropdown.addEventListener('mouseenter', () => setIntroDropdownOpen(true));
-introDropdown.addEventListener('mouseleave', () => setIntroDropdownOpen(false));
+const scheduleIntroDropdownClose = () => {
+  window.clearTimeout(introDropdownCloseTimer);
+  introDropdownCloseTimer = window.setTimeout(() => {
+    const pointerInside = introDropdown.matches(':hover') || introDropdownMenu.matches(':hover');
+    const focusInside = introDropdown.contains(document.activeElement);
+    if (!pointerInside && !focusInside) setIntroDropdownOpen(false);
+  }, 80);
+};
+introDropdown.addEventListener('mouseleave', scheduleIntroDropdownClose);
+introDropdownMenu.addEventListener('mouseenter', () => setIntroDropdownOpen(true));
+introDropdownMenu.addEventListener('mouseleave', scheduleIntroDropdownClose);
 introDropdown.addEventListener('focusin', () => setIntroDropdownOpen(true));
-introDropdown.addEventListener('focusout', () => {
-  window.setTimeout(() => {
-    if (!introDropdown.contains(document.activeElement)) setIntroDropdownOpen(false);
-  }, 0);
-});
-introDropdownTrigger.addEventListener('click', (event) => {
-  if (!introDropdown.classList.contains('open')) {
-    event.preventDefault();
-    setIntroDropdownOpen(true);
+introDropdown.addEventListener('focusout', scheduleIntroDropdownClose);
+const panelForHash = (hash) => {
+  if (hash === '#intro' || hash.startsWith('#intro-')) return 'intro';
+  if (hash === '#part-1') return 'part-1';
+  if (hash === '#part-2') return 'part-2';
+  return 'cover';
+};
+const setActiveTab = (tabName, { updateHash = true, scrollTarget = null } = {}) => {
+  const panel = tabPanels.find((item) => item.dataset.tabPanel === tabName);
+  if (!panel) return;
+  tabPanels.forEach((item) => { item.hidden = item !== panel; });
+  tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.navTarget === tabName));
+  introDropdown.classList.toggle('active', tabName === 'intro');
+  setIntroDropdownOpen(false);
+  if (updateHash) history.pushState(null, '', scrollTarget || `#${tabName}`);
+  if (scrollTarget) {
+    window.requestAnimationFrame(() => document.querySelector(scrollTarget)?.scrollIntoView({ block: 'start' }));
+  } else {
+    window.scrollTo(0, 0);
   }
+};
+tabs.forEach((tab) => {
+  tab.addEventListener('click', (event) => {
+    event.preventDefault();
+    setActiveTab(tab.dataset.navTarget);
+  });
 });
 introDropdown.querySelectorAll('.nav-dropdown-menu a').forEach((link) => {
-  link.addEventListener('click', () => setIntroDropdownOpen(false));
+  link.addEventListener('click', (event) => {
+    event.preventDefault();
+    setActiveTab('intro', { scrollTarget: link.dataset.workflowTarget });
+  });
 });
 workflowNodes.forEach((node) => {
   node.addEventListener('click', () => {
@@ -206,11 +239,18 @@ const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     const target = entry.target.dataset.nav || '#' + entry.target.id;
-    const activeTarget = target.startsWith('#intro-') ? 'intro' : target;
     const workflowTarget = entry.target.id.startsWith('intro-1-3-') ? '#' + entry.target.id : target;
-    tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.navTarget === activeTarget));
-    introDropdown.classList.toggle('active', activeTarget === 'intro');
     workflowNodes.forEach((node) => node.classList.toggle('is-selected', node.dataset.workflowTarget === workflowTarget));
   });
 }, { threshold: 0.55 });
 sections.forEach((section) => observer.observe(section));
+
+const activateFromLocation = () => {
+  const hash = window.location.hash || '#cover';
+  const tabName = panelForHash(hash);
+  const nestedTarget = tabName === 'intro' && hash.startsWith('#intro-') ? hash : null;
+  setActiveTab(tabName, { updateHash: false, scrollTarget: nestedTarget });
+};
+window.addEventListener('popstate', activateFromLocation);
+window.addEventListener('hashchange', activateFromLocation);
+activateFromLocation();
