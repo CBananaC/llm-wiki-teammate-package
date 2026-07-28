@@ -27,6 +27,8 @@ tool embedded in section 1.5.
   data and interactions for the AI card and original-text panel.
 - `Website/assets/review-tool-embed.css` — styling for the standalone review
   embed.
+- `AGENT.md` — folder-specific rules for AI agents; the parent `../AGENTS.md`
+  remains authoritative.
 - `Outline/` — Word drafts and planning material. `Outline/Content.docx` is
   the current source for the visible introduction title, prose, section
   breaks, and 1.4 comparison table. Word lock files beginning with `~$` are
