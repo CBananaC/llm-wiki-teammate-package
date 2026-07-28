@@ -12,7 +12,7 @@ for the Qing digital-history review system about the 林爽文事件. Changes he
 should improve the explanation, demonstration, accessibility, or maintainability
 of that website without corrupting research evidence or review-tool state.
 
-The main page is `Website/storymap-example.html`. It presents Traditional
+The main page is `Website/storymap/storymap-example.html`. It presents Traditional
 Chinese introduction content as a scrollable StoryMap-style page and embeds the
 sample review tool in section 1.5.
 
@@ -35,7 +35,7 @@ sample review tool in section 1.5.
   website content in Traditional Chinese; never introduce Simplified Chinese.
 - Use `Outline/Content.docx` as the current source for the visible introduction
   title, prose, section breaks, and 1.4 comparison table. Do not silently
-  change wording when implementing it in `Website/assets/storymap.js`.
+  change wording when implementing it in `Website/storymap/storymap.js`.
 - Never invent citations, page numbers, dates, people, titles, translations,
   or historical claims. Keep source evidence separate from interpretation and
   label uncertain or unverified material explicitly. For example, `頁碼待核`
@@ -48,17 +48,17 @@ sample review tool in section 1.5.
 
 ## Website architecture
 
-- Keep `Website/storymap-example.html` structural. Its main responsibilities
+- Keep `Website/storymap/storymap-example.html` structural. Its main responsibilities
   are the page shell, navigation, title, and `intro-content` mount point.
 - Put StoryMap content data and rendering logic in
-  `Website/assets/storymap.js`. The `parts` array controls cards, section
+  `Website/storymap/storymap.js`. The `parts` array controls cards, section
   grouping, backdrops, the 1.4 table, and the section 1.5 iframe.
 - Put StoryMap layout and responsive presentation in
-  `Website/assets/storymap.css`.
+  `Website/storymap/storymap.css`.
 - Keep the standalone simplified review demonstration in
-  `Website/review-tool-embed.html` with its logic in
-  `Website/assets/review-tool-embed.js` and styling in
-  `Website/assets/review-tool-embed.css`.
+  `Website/embedded-tool/review-tool-embed.html` with its logic in
+  `Website/embedded-tool/review-tool-embed.js` and styling in
+  `Website/embedded-tool/review-tool-embed.css`.
 - Preserve the real sample review-tool embed in section 1.5. It is an actual
   sample review interface, not merely a screenshot or decorative imitation.
   The current demonstration targets 硃83 and the `ai,original` panels.
@@ -86,8 +86,8 @@ After JavaScript changes, run focused checks from the repository root:
 
 ```sh
 cd "/Users/creamybanana/Downloads/DH Project"
-node --check "intro Website/Website/assets/storymap.js"
-node --check "intro Website/Website/assets/review-tool-embed.js"
+node --check "intro Website/Website/storymap/storymap.js"
+node --check "intro Website/Website/embedded-tool/review-tool-embed.js"
 git diff --check
 ```
 
@@ -100,7 +100,7 @@ python3 -m http.server 8765
 ```
 
 Check the page at
-`http://127.0.0.1:8765/intro%20Website/Website/storymap-example.html`.
+`http://127.0.0.1:8765/intro%20Website/Website/storymap/storymap-example.html`.
 Confirm that the six navigation tabs, cards, 1.4 table, responsive layout,
 section 1.5 硃83 AI card, original-document panel, and quote highlighting work.
 Record visual checks honestly; do not claim browser verification if it was not
@@ -121,10 +121,11 @@ Also update `../PROJECT_LOG.md` for the corresponding project change. Do not
 log every click, autosave, or read-only inspection. Keep unrelated concurrent
 log entries intact.
 
-After validation, stage only the files changed by the current coherent edit and
-create a concise local Git commit. Do not run `git push` automatically. At
-handoff, report the changed files, verification performed, remaining work, and
-any pre-existing or concurrent changes deliberately left untouched.
+After validation, stage the entire `/Users/creamybanana/Downloads/DH Project`
+repository and create a concise local Git commit. Do not run `git push`
+automatically. At handoff, report the changed files, verification performed,
+remaining work, and any pre-existing or concurrent changes deliberately left
+untouched.
 
 ### Automatic checkpoint rule
 
@@ -134,11 +135,11 @@ any pre-existing or concurrent changes deliberately left untouched.
 - Treat the corresponding log update as part of that same change, not as a
   separate commit. Do not create a commit whose only purpose is editing
   `INTRO_WEBSITE_CHANGE_LOG.md` or `../PROJECT_LOG.md`.
-- Stage only the intended files. If either log contains concurrent work, leave
-  that unrelated log content unstaged rather than absorbing it into the
-  current commit, while still appending the current change's entry.
-- Never auto-commit credentials, broad generated output, or unrelated user
-  changes. Never push automatically.
+- When the checkpoint is triggered, use `git add -A` from the DH Project root so
+  the commit covers the whole DH Project folder, including other current user
+  changes. Inspect the status first and do not add credentials or secrets.
+- Never push automatically. Preserve all committed content and do not use the
+  whole-repository scope as permission to delete or overwrite files.
 
 ## Safety
 

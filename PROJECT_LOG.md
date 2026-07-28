@@ -4317,3 +4317,165 @@ Verified:
 
 Remaining:
 - The separate review-tools server could not be started in the restricted shell, so the StoryMap iframe's server-backed route remains to be rechecked when that server is available.
+
+### 2026-07-28 15:27 HKT — Codex — Added typography hierarchy examples
+
+Summary:
+- Added a standalone comparison page with three simple card treatments for the four text layers: subtitle, pretext, body, and clickable APA-like reference.
+- Included a same-content comparison so the typographic differences are easy to evaluate before changing the main StoryMap cards.
+
+Files:
+- `intro Website/Website/typography-hierarchy-options.html`
+- `PROJECT_LOG.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- Confirmed the standalone HTML contains three options and three reference links targeting the example reference position.
+- Browser inspection showed all three cards rendered side by side at desktop width; `git diff --check` passed.
+
+Remaining:
+- Choose one option before applying the hierarchy to the main introduction website.
+
+### 2026-07-28 15:29 HKT — Codex — Added local AI agent rules for the introduction website
+
+Summary:
+- Added `intro Website/AGENT.md` with folder-specific rules derived from the
+  parent project instructions.
+- Documented the website architecture, source and research boundaries,
+  review-tool isolation, validation, logging, handoff, and safety requirements.
+- Added the new rules file to the introduction website README.
+
+Files:
+- `intro Website/AGENT.md`
+- `intro Website/README.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Compared the local rules with `AGENTS.md` before writing them.
+- Confirmed the documented paths, server ports, and validation commands match
+  the current introduction website layout.
+- Preserved the concurrent typography comparison change and its existing log
+  entries.
+
+Remaining:
+- Keep the local rules, README, and both change logs current as the website
+  evolves.
+
+### 2026-07-28 15:34 HKT — Codex — Split the website into StoryMap and embedded-tool folders
+
+Summary:
+- Moved the StoryMap page and its CSS/JavaScript into `intro Website/Website/storymap/`.
+- Moved the standalone embedded review tool and its CSS/JavaScript into `intro Website/Website/embedded-tool/`.
+- Updated active page references, the file-mode iframe fallback path, README guidance, and agent instructions.
+
+Files:
+- `intro Website/Website/storymap/`
+- `intro Website/Website/embedded-tool/`
+- `intro Website/AGENT.md`
+- `intro Website/README.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed active code and documentation no longer use the old mixed `Website/assets/` layout.
+- Confirmed the nested StoryMap file-mode fallback points to the review-tools directory.
+
+Remaining:
+- A concurrent uncommitted `storymap.js` edit removes section 1.5, so the moved StoryMap iframe was not independently checked; that edit was preserved. The moved embedded-tool page passed browser verification.
+
+### 2026-07-28 15:36 HKT — Codex — Applied Option C card hierarchy and inline reference
+
+Summary:
+- Applied the selected Option C typography to the introduction StoryMap cards,
+  using Option A's 30px subtitle size.
+- Moved the Dai citation into the 1.3 body immediately after
+  `超過二萬七千頁。` and linked it to an anchored reference-page entry.
+- Updated the standalone typography comparison page and preserved the requested
+  omission of the 1.5 research-results section.
+
+Files:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/typography-hierarchy-options.html`
+- `intro Website/Website/references.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both website JavaScript files pass `node --check`.
+- `git diff --check` passes.
+- Confirmed the inline citation and reference anchor paths in the edited HTML
+  and JavaScript. A fresh visual browser check was blocked for the local file
+  page by the browser security policy.
+
+Remaining:
+- Review visual spacing in the normal local HTTP preview when available.
+
+### 2026-07-28 15:50 HKT — Codex — Removed card number labels
+
+Summary:
+- Removed the orange number line above each introduction StoryMap subtitle,
+  such as `1.3 / 01`.
+- Removed the associated number styling and tightened the subtitle's top
+  spacing.
+- Restored the linked reference page after finding it deleted in the working
+  tree, preserving the existing inline citation destination.
+
+Files:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/references.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passes.
+- Confirmed the card renderer no longer outputs the number element.
+- `git diff --check` passes.
+
+Remaining:
+- Review updated card spacing in the normal local HTTP preview when available.
+
+### 2026-07-28 15:37 HKT — Codex — Added the automatic checkpoint rule for the introduction website
+
+Summary:
+- Updated `intro Website/AGENT.md` to require an immediate local commit after
+  every validated coherent non-log change.
+- Clarified that log edits belong with the related change and must not create a
+  separate log-only commit.
+
+Files:
+- `intro Website/AGENT.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the rule distinguishes non-log changes from log-only edits,
+  preserves unrelated concurrent work, and prohibits automatic pushing.
+
+Remaining:
+- Follow this checkpoint rule for subsequent introduction-website changes.
+
+### 2026-07-28 15:54 HKT — Codex — Set whole-project commit scope for automatic checkpoints
+
+Summary:
+- Updated `intro Website/AGENT.md` so automatic checkpoints commit the entire
+  DH Project repository rather than only files changed inside the introduction
+  website folder.
+- Specified `git add -A` from the repository root, with a status and secret
+  check before staging.
+
+Files:
+- `intro Website/AGENT.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the rule requires whole-repository staging and preserves the
+  prohibition on automatic pushing and destructive operations.
+- Inspected the current repository status before applying the scope change.
+
+Remaining:
+- Apply whole-repository staging for the checkpoint created by this change.
