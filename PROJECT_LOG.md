@@ -4249,3 +4249,24 @@ Verified:
 
 Remaining:
 - None.
+
+### 2026-07-28 15:24 HKT — Codex — Added a folder-specific introduction website change log
+
+Summary:
+- Added `intro Website/INTRO_WEBSITE_CHANGE_LOG.md` to record every coherent
+  change made inside the introduction website folder.
+- Recorded the folder's pre-existing uncommitted files as a baseline without
+  attributing or altering them.
+
+Files:
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the local log is directly inside `intro Website/` and contains the
+  required author, summary, files, verification, and remaining-work fields.
+- Confirmed the pre-existing uncommitted website-folder changes remain
+  untouched.
+
+Remaining:
+- Keep the local log current after each coherent change in that folder.
