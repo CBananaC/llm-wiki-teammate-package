@@ -108,6 +108,56 @@ const setReviewFrameSource = () => {
 };
 setReviewFrameSource();
 
+const settingsButton = document.getElementById('settings-button');
+const settingsPanel = document.getElementById('site-settings-panel');
+const fontSizeDecrease = document.getElementById('font-size-decrease');
+const fontSizeIncrease = document.getElementById('font-size-increase');
+const fontSizeValue = document.getElementById('font-size-value');
+const FONT_SCALE_KEY = 'intro-website-font-scale';
+const FONT_SCALE_MIN = 0.55;
+const FONT_SCALE_MAX = 2.2;
+const FONT_SCALE_STEP = 0.05;
+const clampFontScale = (value) => Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_MIN, value));
+const readFontScale = () => {
+  try {
+    const saved = Number.parseFloat(localStorage.getItem(FONT_SCALE_KEY));
+    return Number.isFinite(saved) ? clampFontScale(saved) : 1;
+  } catch (error) {
+    return 1;
+  }
+};
+const applyFontScale = (value) => {
+  const scale = clampFontScale(value);
+  document.documentElement.style.setProperty('--font-scale', String(scale));
+  fontSizeValue.value = `${Math.round(scale * 100)}%`;
+  fontSizeValue.textContent = fontSizeValue.value;
+  fontSizeDecrease.disabled = scale <= FONT_SCALE_MIN;
+  fontSizeIncrease.disabled = scale >= FONT_SCALE_MAX;
+  try {
+    localStorage.setItem(FONT_SCALE_KEY, String(scale));
+  } catch (error) {
+    // Continue without persistence when storage is unavailable.
+  }
+};
+const setSettingsOpen = (open) => {
+  settingsPanel.hidden = !open;
+  settingsButton.setAttribute('aria-expanded', String(open));
+  settingsButton.setAttribute('aria-label', open ? '關閉網站設定' : '開啟網站設定');
+};
+applyFontScale(readFontScale());
+settingsButton.addEventListener('click', () => setSettingsOpen(settingsPanel.hidden));
+fontSizeDecrease.addEventListener('click', () => applyFontScale(readFontScale() - FONT_SCALE_STEP));
+fontSizeIncrease.addEventListener('click', () => applyFontScale(readFontScale() + FONT_SCALE_STEP));
+document.addEventListener('click', (event) => {
+  if (!settingsPanel.hidden && !event.target.closest('.settings-wrap')) setSettingsOpen(false);
+});
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && !settingsPanel.hidden) {
+    setSettingsOpen(false);
+    settingsButton.focus();
+  }
+});
+
 const tabs = [...document.querySelectorAll('.tabs a')];
 const sections = [...document.querySelectorAll('.story[data-tab]')];
 const observer = new IntersectionObserver((entries) => {
