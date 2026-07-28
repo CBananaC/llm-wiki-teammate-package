@@ -128,6 +128,13 @@ h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)
 .signal-label.two { left: 43%; top: 150px; }
 .signal-label.three { right: 5%; bottom: 19px; }
 
+@media (min-width: 701px) {
+  .topbar { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); }
+  .brand { grid-column: 1; justify-self: start; }
+  .tabs { grid-column: 2; flex: 0 1 auto; justify-content: center; }
+  .settings-wrap { grid-column: 3; justify-self: end; }
+}
+
 @media (max-width: 700px) {
   .topbar { height: 56px; padding: 0 17px; }
   .brand { font-size: calc(13px * var(--font-scale)); }
