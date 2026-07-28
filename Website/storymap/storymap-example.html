@@ -12,13 +12,13 @@
   <header class="topbar">
     <a class="brand" href="#cover">清代奏摺與上諭分析平台</a>
     <nav class="tabs" aria-label="網站章節">
-      <a class="main-nav-link" href="#cover" data-nav-target="#cover">主頁</a>
+      <a class="main-nav-link" href="#cover" data-nav-target="cover">主頁</a>
       <div class="nav-dropdown">
-        <a class="main-nav-link nav-dropdown-trigger" href="#intro-1-1" data-nav-target="intro" aria-haspopup="true" aria-expanded="false">引言<span class="nav-dropdown-chevron" aria-hidden="true">⌄</span></a>
+        <a class="main-nav-link nav-dropdown-trigger" href="#intro" data-nav-target="intro" aria-haspopup="true" aria-expanded="false">引言<span class="nav-dropdown-chevron" aria-hidden="true">⌄</span></a>
         <div class="nav-dropdown-menu intro-workflow-menu" role="menu" aria-label="引言章節">
           <div class="intro-workflow-canvas">
-            <svg class="intro-workflow-lines" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-hidden="true">
-              <path d="M192 150H221M441 150H465M465 70V230M465 70H470M465 150H470M465 230H470M729 150H759M950 150H979"/>
+            <svg class="intro-workflow-lines" viewBox="0 0 1200 220" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M192 110H221M441 110H465M465 37V183M465 37H470M465 110H470M465 183H470M729 110H759M950 110H979"/>
             </svg>
             <a class="workflow-node workflow-node-1" href="#intro-1-1" data-workflow-target="#intro-1-1" role="menuitem">清代奏折上諭</a>
             <a class="workflow-node workflow-node-2" href="#intro-1-2" data-workflow-target="#intro-1-2" role="menuitem">奏折上諭研究價值</a>
@@ -30,8 +30,8 @@
           </div>
         </div>
       </div>
-      <a class="main-nav-link" href="#part-1" data-nav-target="#part-1">第一部分</a>
-      <a class="main-nav-link" href="#part-2" data-nav-target="#part-2">第二部分</a>
+      <a class="main-nav-link" href="#part-1" data-nav-target="part-1">第一部分</a>
+      <a class="main-nav-link" href="#part-2" data-nav-target="part-2">第二部分</a>
     </nav>
     <div class="settings-wrap">
       <button class="settings-button" id="settings-button" type="button" aria-expanded="false" aria-controls="site-settings-panel" aria-label="開啟網站設定" title="網站設定">
@@ -55,17 +55,48 @@
   </header>
 
   <main>
-    <section class="story hero" id="cover" data-tab="">
-      <div class="hero-backdrop"></div>
-      <div class="hero-content">
-        <p class="eyebrow">1. 引言</p>
-        <h1>〈清代奏摺與上諭分析平台——以人工智能及視覺化工具分析官方文書及重建地方—中央通信網絡〉</h1>
-        <p class="hero-note">以下內容依照 Content.docx 的引言原文編排；每個獨立段落均以一張卡片和一個背景場景呈現。</p>
-      </div>
-      <div class="scroll-note">SCROLL TO EXPLORE</div>
+    <section class="tab-panel" id="cover-panel" data-tab-panel="cover" aria-labelledby="cover-title">
+      <section class="story hero" id="cover">
+        <div class="hero-backdrop"></div>
+        <div class="hero-content">
+          <p class="eyebrow">清代數位人文研究</p>
+          <h1 id="cover-title">〈清代奏摺與上諭分析平台——以人工智能及視覺化工具分析官方文書及重建地方—中央通信網絡〉</h1>
+          <p class="hero-note">以人工智能及視覺化工具，閱讀清代官方文書，分析資訊流動與地方—中央通信網絡。</p>
+        </div>
+        <div class="scroll-note">SCROLL TO EXPLORE</div>
+      </section>
     </section>
 
-    <div id="intro-content"></div>
+    <section class="tab-panel" id="intro-panel" data-tab-panel="intro" aria-labelledby="intro-title" hidden>
+      <section class="section-hero section-hero-intro" id="intro" data-mark="引">
+        <div class="section-hero-content">
+          <p class="eyebrow">1. 引言</p>
+          <h1 id="intro-title">從奏摺與上諭理解清代通信</h1>
+          <p class="section-hero-note">由文書制度、研究價值、研究困難，到數位方法與示範案例。</p>
+        </div>
+      </section>
+      <div id="intro-content"></div>
+    </section>
+
+    <section class="tab-panel" id="part-1-panel" data-tab-panel="part-1" aria-labelledby="part-1-title" hidden>
+      <section class="section-hero section-hero-part-1" id="part-1" data-mark="一">
+        <div class="section-hero-content">
+          <p class="eyebrow">第一部分</p>
+          <h1 id="part-1-title">文書、人物與通信關係</h1>
+          <p class="section-hero-note">第一部分內容將在此獨立呈現。</p>
+        </div>
+      </section>
+    </section>
+
+    <section class="tab-panel" id="part-2-panel" data-tab-panel="part-2" aria-labelledby="part-2-title" hidden>
+      <section class="section-hero section-hero-part-2" id="part-2" data-mark="二">
+        <div class="section-hero-content">
+          <p class="eyebrow">第二部分</p>
+          <h1 id="part-2-title">視覺化研究與分析平台</h1>
+          <p class="section-hero-note">第二部分內容將在此獨立呈現。</p>
+        </div>
+      </section>
+    </section>
   </main>
 </body>
 </html>
