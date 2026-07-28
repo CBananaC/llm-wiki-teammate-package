@@ -96,7 +96,7 @@ const backdropHtml = (part) => {
   if (part.tone === 'signal') return `<div class="backdrop signal-backdrop" data-mark="流"><div class="signals"><span class="signal-label one">地方奏報</span><span class="signal-label two">皇帝回應</span><span class="signal-label three">後續回應</span></div></div>`;
   return `<div class="backdrop ${part.tone}" data-mark="${escapeHtml(part.mark)}"></div>`;
 };
-const partHtml = (part) => `<section class="story content-story" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}<article class="story-card"><div class="number">${escapeHtml(part.number)}</div><h2>${escapeHtml(part.title)}</h2>${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs)}</article></section>`;
+const partHtml = (part) => `<section class="story content-story" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}<article class="story-card"><h2>${escapeHtml(part.title)}</h2>${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs)}</article></section>`;
 document.getElementById('intro-content').innerHTML = parts.map(partHtml).join('');
 
 const setReviewFrameSource = () => {
