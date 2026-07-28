@@ -245,7 +245,7 @@
 
     <section class="story" id="review-demo" data-tab="平台" data-nav="#platform" style="--card-x: 5vw; --card-y: 14vh; --card-w: 285px;">
       <div class="backdrop full review-backdrop">
-        <iframe class="review-iframe" data-file-src="../review-tools/(2)%20sample/index.html?embed=1&amp;doc=%E7%A1%83%38%33&amp;panels=ai%2Coriginal" title="硃83 AI 引文核驗示例"></iframe>
+        <iframe class="review-iframe" data-file-src="../review-tools/(2)%20sample/index.html?embed=1&amp;doc=%E7%A1%83%38%33&amp;panels=ai%2Coriginal&amp;v=20260728-chat-data" title="硃83 AI 引文核驗示例"></iframe>
       </div>
     </section>
 
@@ -316,7 +316,7 @@
     if (reviewFrame) {
       reviewFrame.src = location.protocol === 'file:'
         ? reviewFrame.dataset.fileSrc
-        : 'http://127.0.0.1:8766/sample?embed=1&doc=%E7%A1%83%38%33&panels=ai%2Coriginal';
+        : 'http://127.0.0.1:8766/sample?embed=1&doc=%E7%A1%83%38%33&panels=ai%2Coriginal&v=20260728-chat-data';
     }
     const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char]));
     const originalBody = document.getElementById('zhu83-original-body');

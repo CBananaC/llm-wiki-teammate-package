@@ -4193,3 +4193,25 @@ Verified:
 
 Remaining:
 - Refresh the HTTP StoryMap tab so the old failed iframe request is discarded.
+
+### 2026-07-28 11:54 HKT — Codex — Restored the specified 硃83 AI card in the StoryMap embed
+
+Summary:
+- Fixed chat-state normalisation so saved AI conversations represented as numeric-keyed objects are retained instead of being replaced by an empty array.
+- Added an embed-time server-state refresh and explicit AI-panel re-render so the example receives the saved sample data after the review card is opened.
+- Updated the embed cache-buster and made the demonstration prefer the requested 「常青催令福寧鎮等兵繼進」 card when displaying the single example result.
+
+Files:
+- `intro Website/Website/storymap-example.html`
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Live HTTP StoryMap loaded at `127.0.0.1:8765` with the review iframe served by `127.0.0.1:8766`.
+- The embedded AI panel displayed one visible 硃83 card containing the requested subtitle and quotation.
+- The full original 硃83 document panel loaded, and browser error/warning logs were empty.
+- `git diff --check` passed.
+
+Remaining:
+- Refresh the user's existing StoryMap tab once so it picks up the cache-busted iframe URL.

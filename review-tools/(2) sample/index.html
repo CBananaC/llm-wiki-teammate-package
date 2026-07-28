@@ -4075,6 +4075,14 @@
   })();
   function docEdits(id){ return EDITS[id] || (EDITS[id]={}); }
   function docEditsRead(id){ return EDITS[id] || {}; }
+  window.__reviewEmbedReloadEdits=()=>fetch('/api/edits-sample',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(server=>{
+    if(!server||typeof server!=='object'||!Object.keys(server).length) return false;
+    EDITS=server; __editsServerReady=true;
+    if(typeof render==='function'){ try{ render(); }catch(e){} }
+    if(typeof renderAllTools==='function'){ try{ renderAllTools(); }catch(e){} }
+    if(typeof window.__renderOpenAITools==='function'){ try{ window.__renderOpenAITools(); }catch(e){} }
+    applyPendingStaticYuSource(); return true;
+  });
   function getSummary(r){ return docEditsRead(r.id).summary || r.summary; }
 
   // ===== dot editing: overlay (added / removed / per-record field edits) over base DUAL =====
@@ -6341,7 +6349,18 @@
   // multiple notes per store; migrate legacy single `notes` string into first card
   function notesArr(s){ if(!s.notesList){ s.notesList = (s.notes&&String(s.notes).trim())? [{id:uid('n'), body:String(s.notes), exchanges:[], at:nowStr(), updated:nowStr()}] : []; } return s.notesList; }
   // chat thread of {prompt,response,at,model,memory}; migrate legacy `answers`
-  function chatArr(s){ if(!s || typeof s!=='object') return []; if(!Array.isArray(s.chat)){ s.chat = (Array.isArray(s.answers)&&s.answers.length)? s.answers.map(a=>({prompt:a.prompt||'', response:a.text||'', at:a.at||'', model:a.model||a.mode||'', memory:false})) : []; } return s.chat; }
+  function chatArr(s){
+    if(!s || typeof s!=='object') return [];
+    if(!Array.isArray(s.chat)){
+      const keyed=s.chat&&typeof s.chat==='object'
+        ? Object.keys(s.chat).filter(k=>/^\d+$/.test(k)).sort((a,b)=>+a-+b).map(k=>s.chat[k])
+        : [];
+      s.chat=keyed.length ? keyed : ((Array.isArray(s.answers)&&s.answers.length)
+        ? s.answers.map(a=>({prompt:a.prompt||'', response:a.text||'', at:a.at||'', model:a.model||a.mode||'', memory:false}))
+        : []);
+    }
+    return s.chat;
+  }
   const readChatStoreArr=chatArr;
   function first10(t){ const w=String(t||'').trim().replace(/\s+/g,' ').split(' ').filter(Boolean); const cn=String(t||'').trim(); if(/^[一-鿿]/.test(cn)&&w.length<=1){ const s=cn.replace(/\s+/g,''); return s.slice(0,18)+(s.length>18?'…':''); } return w.slice(0,10).join(' ')+(w.length>10?'…':''); }
   function noteTitle(t){ const line=String(t||'').split(/\r?\n/).map(s=>s.trim()).find(Boolean)||''; return line || '（空白筆記）'; }
@@ -13550,8 +13569,8 @@ body.review-embed-mode [hidden] { display:none !important; }
     if(!log) return;
     const entries = [...log.querySelectorAll('[data-logi]')];
     if(!entries.length) return;
-    let keep = entries.find(el=>el.textContent.includes(quote));
-    if(!keep) keep = entries.find(el=>el.textContent.includes('常青催令福寧鎮等兵繼進'));
+    let keep = entries.find(el=>el.textContent.includes('常青催令福寧鎮等兵繼進'));
+    if(!keep) keep = entries.find(el=>el.textContent.includes(quote));
     if(keep) entries.forEach(el=>{ el.hidden = el !== keep; });
     log.scrollTop = 0;
   }
@@ -13566,8 +13585,8 @@ body.review-embed-mode [hidden] { display:none !important; }
     if(!rec){ console.warn('Review embed document not found:', docId); return; }
     const cards = window.__openMany([rec], 'embed');
     window.__scopeAIto(cards);
-    hideUnselected();
-    [0,100,300,700].forEach(delay=>setTimeout(()=>{ hideUnselected(); keepZhu83AiCard(); },delay));
+    const finish=()=>{ hideUnselected(); [0,100,300,700].forEach(delay=>setTimeout(()=>{ hideUnselected(); keepZhu83AiCard(); },delay)); };
+    if(window.__reviewEmbedReloadEdits) window.__reviewEmbedReloadEdits().catch(()=>{}).then(finish); else finish();
   }
   start();
 })();
