@@ -89,6 +89,67 @@ const parts = [
   }
 ];
 
+const part1Parts = [
+  {
+    id: 'part-1-areas', tab: 'part-1', number: '1 / 四大區域', title: '平台的四大區域', tone: 'network', mark: '四',
+    position: '--card-x: 7vw; --card-y: 13vh; --card-w: 620px; --story-height: 1220px; --card-accent: #4d817c;',
+    paragraphs: ['平台介面主要由四個區域組成，分別是導覽列、時間與關係圖表、原始史料區，以及AI分析區。'],
+    subsections: [
+      { title: '導覽列', paragraphs: ['介面區域切換、資料輸入與輸出，以及修改顯示設定。'] },
+      { title: '時間與關係圖表', paragraphs: ['呈現文書與事件的時間順序及相互聯繫。'] },
+      { title: '原始史料區', paragraphs: ['顯示文書的基本資料及完整原文。'] },
+      { title: 'AI 分析區', paragraphs: ['展示人工智能從文書中提取的資訊，供研究者檢視。'] }
+    ]
+  },
+  {
+    id: 'part-1-navigation', tab: 'part-1', number: '2 / 導覽列', title: '導覽列', tone: 'archive', mark: '列',
+    position: '--card-x: 49vw; --card-y: 14vh; --card-w: 600px; --story-height: 1320px; --card-accent: #7e6a39;',
+    subsections: [
+      {
+        title: '1. 輸入與輸出資料',
+        paragraphs: ['研究者可以從本機輸入結構化的原始文本和AI 分析結果；完成檢視和修改後，亦可以將結構化資料輸出至本機，供後續研究使用。']
+      },
+      {
+        title: '2. 切換介面區域',
+        paragraphs: ['研究者可以透過導覽列切換不同的介面區域。例如，在閱讀原文後，開啟 AI 分析區，檢視人工智能提取的資訊，同時開啟筆記頁，記錄閱讀所得，並在完成審閱後，點擊「事件鏈」，沿著事件的時間順序，追蹤戰場消息如何向上傳遞、皇帝的命令如何向下傳達，以及官員如何回應先前的硃批或上諭。']
+      }
+    ]
+  },
+  {
+    id: 'part-1-timeline', tab: 'part-1', number: '3 / 時間與關係圖表', title: '時間與關係圖表', tone: 'river', mark: '時',
+    position: '--card-x: 7vw; --card-y: 12vh; --card-w: 650px; --story-height: 1420px; --card-accent: #4d817c;',
+    paragraphs: [
+      '時間與關係圖表位於介面的主要區域，用以呈現文書和事件的時間及傳遞關係。',
+      '時間與關係圖表由四條事件線組成，中間兩條線「官員上奏」及「皇帝硃批下旨」呈現文書的發送及接收時間，資料來源自原始文本中已有的收發時間。一個節點代表一份文書。',
+      '兩側的事件線是「奏報事件」和「皇帝行動」，其中的節點分別由「官員上奏」和「皇帝硃批下旨」的節點延伸而成。這些事件首先由 AI 從原始文書中提取，再由研究者閱讀原文查證，經確認後，才會以節點形式加入圖表。',
+      '四條線上的文書和事件節點，會按照時間順序排列，並透過連線呈現彼此的傳遞關係。',
+      '研究者可以點擊任何節點，查看該文書或事件的詳細資料，或進一步點擊「事件鏈」，沿著時間順序，了解相關文書和事件的具體傳遞關係。'
+    ]
+  },
+  {
+    id: 'part-1-node', tab: 'part-1', number: '5 / 節點資訊區', title: '節點資訊區', tone: 'ink', mark: '節',
+    position: '--card-x: 52vw; --card-y: 15vh; --card-w: 560px; --story-height: 900px; --card-accent: #a45e4c;',
+    paragraphs: ['當研究者點擊圖表上的節點時，介面會開啟獨立的資訊面板，顯示該節點的完整 AI 提取結果，包括標題、描述、時間、原文引文及史料來源。']
+  },
+  {
+    id: 'part-1-original', tab: 'part-1', number: '6 / 原始史料區', title: '原始史料區', tone: 'paper', mark: '原',
+    position: '--card-x: 8vw; --card-y: 13vh; --card-w: 620px; --story-height: 1080px; --card-accent: #b66d48;',
+    paragraphs: [
+      '文書區顯示原始文書的完整原文及基本資料，包括標題、文書類型、作者、收發日期和史料出處。',
+      '文書區亦設有篩選功能，用以標示不同 AI Skills 的提取結果。研究者可以點擊相關結果的標籤，查看該項結果的完整資訊。'
+    ]
+  },
+  {
+    id: 'part-1-ai', tab: 'part-1', number: '7 / 人工智能分析區', title: '人工智能分析區', tone: 'gold', mark: 'AI',
+    position: '--card-x: 48vw; --card-y: 13vh; --card-w: 650px; --story-height: 1260px; --card-accent: #ad7a35;',
+    paragraphs: [
+      '研究者可以在本機執行 AI Skills，並將整理後的結構化結果上載至網站。上載後，分析結果會以卡片形式顯示於 AI Chat 面板中。',
+      '每張卡片均會列出相關原文引文。研究者可以點擊引文，返回原始文書的相應位置進行核對。',
+      '確認結果後，研究者可以將其加入圖表，作為獨立事件或事件中的相關資訊；如結果需要修正，研究者可以編輯或拒絕該結果，亦可以手動新增事件。'
+    ]
+  }
+];
+
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const paragraphHtml = (paragraphs) => paragraphs.map((paragraph) => {
   if (typeof paragraph === 'string') return `<p>${escapeHtml(paragraph)}</p>`;
@@ -97,6 +158,7 @@ const paragraphHtml = (paragraphs) => paragraphs.map((paragraph) => {
     : '';
   return `<p>${escapeHtml(paragraph.before || '')}${citation}${escapeHtml(paragraph.after || '')}</p>`;
 }).join('');
+const subsectionHtml = (subsections = []) => subsections.map((subsection) => `<h3>${escapeHtml(subsection.title)}</h3>${paragraphHtml(subsection.paragraphs)}`).join('');
 const tableHtml = (rows) => `<table class="method-table"><thead><tr>${rows[0].map((cell) => `<th scope="col">${escapeHtml(cell)}</th>`).join('')}</tr></thead><tbody>${rows.slice(1).map((row) => `<tr>${row.map((cell) => `<td>${escapeHtml(cell)}</td>`).join('')}</tr>`).join('')}</tbody></table>`;
 const backdropHtml = (part) => {
   if (part.review) {
@@ -106,8 +168,9 @@ const backdropHtml = (part) => {
   if (part.tone === 'signal') return `<div class="backdrop signal-backdrop" data-mark="流"><div class="signals"><span class="signal-label one">地方奏報</span><span class="signal-label two">皇帝回應</span><span class="signal-label three">後續回應</span></div></div>`;
   return `<div class="backdrop ${part.tone}" data-mark="${escapeHtml(part.mark)}"></div>`;
 };
-const partHtml = (part) => `<section class="story content-story" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}<article class="story-card"><h2>${escapeHtml(part.title)}</h2>${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs)}</article></section>`;
+const partHtml = (part) => `<section class="story content-story" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}<article class="story-card"><h2>${escapeHtml(part.title)}</h2>${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs || [])}${subsectionHtml(part.subsections)}</article></section>`;
 document.getElementById('intro-content').innerHTML = parts.map(partHtml).join('');
+document.getElementById('part-1-content').innerHTML = part1Parts.map(partHtml).join('');
 
 const setReviewFrameSource = () => {
   const frame = document.querySelector('.review-iframe');
