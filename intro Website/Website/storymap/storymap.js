@@ -150,6 +150,57 @@ const part1Parts = [
   }
 ];
 
+const part2Parts = [
+  {
+    id: 'part-2-overview', tab: 'part-2', number: '1 / 平台的運作流程', title: '1. 平台的運作流程', tone: 'archive', mark: '流',
+    position: '--card-x: 7vw; --card-y: 13vh; --card-w: 640px; --story-height: 1200px; --card-accent: #7e6a39;',
+    paragraphs: [
+      '平台旨在處理清代奏摺與上諭研究中的兩大主要困難：文書數量龐大，以及文書之間的通信關係複雜。',
+      '因此，平台運用人工智能協助研究者總結文書內容、提取重要資訊，供研究者進一步檢視和核驗，從而減輕整理史料的工作量。',
+      '同時，平台亦運用視覺化工具，透過時間與關係圖表呈現資訊的傳遞網絡，協助研究者掌握文書和事件的時間順序和相互關係。'
+    ]
+  },
+  {
+    id: 'part-2-flow', tab: 'part-2', number: '3 / 運作流程圖', title: '3. 運作流程圖', tone: 'network', mark: '圖',
+    position: '--card-x: 49vw; --card-y: 15vh; --card-w: 660px; --story-height: 900px; --card-accent: #c7543f;',
+    paragraphs: [
+      '輸入結構化的原始文書 → AI Skills → 1. 總結文書、2. 重構文書間的通訊關係、3. 收取奏摺的資訊、4. 收取上諭的資訊→載入分析結果 → 研究者審閱 →結果載入至圖表中呈現'
+    ]
+  },
+  {
+    id: 'part-2-input', tab: 'part-2', number: '4 / 輸入結構化資料', title: '4. 輸入結構化資料', tone: 'paper', mark: '資',
+    position: '--card-x: 7vw; --card-y: 12vh; --card-w: 650px; --story-height: 1450px; --card-accent: #b66d48;',
+    paragraphs: [
+      '在選定研究主題及所使用的奏摺與上諭後，第一步是對史料進行 OCR，並把結果輸出為結構化 的JSON 資料，再載入到平台之中。（由於 OCR 並不是本網站內置的功能，相關方法將留待下一節「重用平台於其他研究主題」中再作介紹。）',
+      '在結構化資料中，每份奏摺或上諭都需要分成不同欄位，包括文書類型、作者資料、標題、文書編號、文書正文及史料來源。',
+      '如果史料來自學者編纂的檔案彙編，通常都會清楚標示文書的發送和接收日期，因此亦應加入相關日期的欄位。這些日期資料可以用於排列文書的時間順序，以及重建文書之間的傳遞關係。',
+      '輸入後，網站會讀取這些欄位，並根據文書的收發日期，在時間與關係圖表上建立各份文書的節點；同時，文書區亦會顯示文書的基本資料及完整原文。'
+    ]
+  },
+  {
+    id: 'part-2-ai', tab: 'part-2', number: '5 / 使用AI從原文中抽取資訊', title: '5. 使用AI從原文中抽取資訊', tone: 'gold', mark: 'AI',
+    position: '--card-x: 48vw; --card-y: 12vh; --card-w: 670px; --story-height: 1450px; --card-accent: #ad7a35;',
+    paragraphs: ['完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。'],
+    subsections: [
+      {
+        title: '1. AI Skills',
+        paragraphs: [
+          'AI Skills 是一套預先設計的 AI 指令，讓人工智能按照指定規則處理數據，提取指定資料，並以特定格式輸出結果。',
+          '平台中的 AI Skills 是根據特定研究問題設計的，要求 AI 從文書中找出與研究問題相關的資訊，並保留相應的原文引文作為證據。'
+        ]
+      },
+      {
+        title: '2. 資訊提取的核心理念',
+        paragraphs: ['平台視 AI 為協助研究的工具，AI 提取的結果需要由研究者作出最後判斷。因此，在 AI 輸出結果後，研究者需要回到原始文書，檢查結果是否準確。相關資訊要經研究者確認，才會加入到圖表之中，成為後續研究和分析的一部分。']
+      },
+      {
+        title: '3. 四個分析階段',
+        paragraphs: ['平台共有四組 AI Skills，分別用於四個分析階段：總結文書、重建通信關係、提取奏摺資訊，以及提取上諭資訊。']
+      }
+    ]
+  }
+];
+
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const paragraphHtml = (paragraphs) => paragraphs.map((paragraph) => {
   if (typeof paragraph === 'string') return `<p>${escapeHtml(paragraph)}</p>`;
@@ -171,6 +222,7 @@ const backdropHtml = (part) => {
 const partHtml = (part) => `<section class="story content-story" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}<article class="story-card"><h2>${escapeHtml(part.title)}</h2>${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs || [])}${subsectionHtml(part.subsections)}</article></section>`;
 document.getElementById('intro-content').innerHTML = parts.map(partHtml).join('');
 document.getElementById('part-1-content').innerHTML = part1Parts.map(partHtml).join('');
+document.getElementById('part-2-content').innerHTML = part2Parts.map(partHtml).join('');
 
 const setReviewFrameSource = () => {
   const frame = document.querySelector('.review-iframe');
