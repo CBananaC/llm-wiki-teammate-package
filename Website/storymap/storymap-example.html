@@ -11,12 +11,26 @@
 <body>
   <header class="topbar">
     <a class="brand" href="#cover">清代奏摺與上諭分析平台</a>
-    <nav class="tabs" aria-label="引言章節">
-      <a href="#intro-1-1">1.1</a>
-      <a href="#intro-1-2">1.2</a>
-      <a href="#intro-1-3">1.3</a>
-      <a href="#intro-1-4">1.4</a>
-      <a href="#intro-1-6">1.6</a>
+    <nav class="tabs" aria-label="網站章節">
+      <a class="main-nav-link" href="#cover" data-nav-target="#cover">主頁</a>
+      <div class="nav-dropdown">
+        <a class="main-nav-link nav-dropdown-trigger" href="#intro-1-1" data-nav-target="intro" aria-haspopup="true" aria-expanded="false">引言<span class="nav-dropdown-chevron" aria-hidden="true">⌄</span></a>
+        <div class="nav-dropdown-menu intro-workflow-menu" role="menu" aria-label="引言章節">
+          <div class="intro-workflow-heading">引言路線</div>
+          <div class="intro-workflow-canvas">
+            <svg class="intro-workflow-lines" viewBox="0 0 600 220" preserveAspectRatio="none" aria-hidden="true">
+              <path d="M140 48H260M340 48H460M500 72V146M460 146H340"/>
+            </svg>
+            <a class="workflow-node workflow-node-1" href="#intro-1-1" role="menuitem"><span class="workflow-number">1.1</span><span>制度</span></a>
+            <a class="workflow-node workflow-node-2" href="#intro-1-2" role="menuitem"><span class="workflow-number">1.2</span><span>研究價值</span></a>
+            <a class="workflow-node workflow-node-3" href="#intro-1-3" role="menuitem"><span class="workflow-number">1.3</span><span>主要困難</span></a>
+            <a class="workflow-node workflow-node-4" href="#intro-1-4" role="menuitem"><span class="workflow-number">1.4</span><span>數位方法</span></a>
+            <a class="workflow-node workflow-node-5" href="#intro-1-6" role="menuitem"><span class="workflow-number">1.6</span><span>示範案例</span></a>
+          </div>
+        </div>
+      </div>
+      <a class="main-nav-link" href="#part-1" data-nav-target="#part-1">第一部分</a>
+      <a class="main-nav-link" href="#part-2" data-nav-target="#part-2">第二部分</a>
     </nav>
     <div class="settings-wrap">
       <button class="settings-button" id="settings-button" type="button" aria-expanded="false" aria-controls="site-settings-panel" aria-label="開啟網站設定" title="網站設定">

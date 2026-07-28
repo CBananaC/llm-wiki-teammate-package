@@ -158,13 +158,41 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-const tabs = [...document.querySelectorAll('.tabs a')];
+const tabs = [...document.querySelectorAll('.main-nav-link')];
+const introDropdown = document.querySelector('.nav-dropdown');
+const introDropdownTrigger = introDropdown.querySelector('.nav-dropdown-trigger');
+const setIntroDropdownOpen = (open) => {
+  introDropdown.classList.toggle('open', open);
+  introDropdownTrigger.setAttribute('aria-expanded', String(open));
+};
+introDropdown.addEventListener('mouseenter', () => setIntroDropdownOpen(true));
+introDropdown.addEventListener('mouseleave', () => setIntroDropdownOpen(false));
+introDropdown.addEventListener('focusin', () => setIntroDropdownOpen(true));
+introDropdown.addEventListener('focusout', () => {
+  window.setTimeout(() => {
+    if (!introDropdown.contains(document.activeElement)) setIntroDropdownOpen(false);
+  }, 0);
+});
+introDropdownTrigger.addEventListener('click', (event) => {
+  if (!introDropdown.classList.contains('open')) {
+    event.preventDefault();
+    setIntroDropdownOpen(true);
+  }
+});
+introDropdown.querySelectorAll('.nav-dropdown-menu a').forEach((link) => {
+  link.addEventListener('click', () => setIntroDropdownOpen(false));
+});
+document.addEventListener('click', (event) => {
+  if (!introDropdown.contains(event.target)) setIntroDropdownOpen(false);
+});
 const sections = [...document.querySelectorAll('.story[data-tab]')];
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;
     const target = entry.target.dataset.nav || '#' + entry.target.id;
-    tabs.forEach((tab) => tab.classList.toggle('active', tab.getAttribute('href') === target));
+    const activeTarget = target.startsWith('#intro-') ? 'intro' : target;
+    tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.navTarget === activeTarget));
+    introDropdown.classList.toggle('active', activeTarget === 'intro');
   });
 }, { threshold: 0.55 });
 sections.forEach((section) => observer.observe(section));
