@@ -4215,3 +4215,37 @@ Verified:
 
 Remaining:
 - Refresh the user's existing StoryMap tab once so it picks up the cache-busted iframe URL.
+
+### 2026-07-28 15:12 HKT — Codex — Loaded the Content.docx introduction into the StoryMap website
+
+Summary:
+- Read `intro Website/Outline/Content.docx` as the source of truth for the visible introduction title, six subtitles, paragraphs, slash-separated breaks, and the 1.4 comparison table.
+- Replaced the generic StoryMap copy with the DOCX introduction and created ten independent card-plus-backdrop parts: one for each subtitle, with 1.3 and 1.6 split at the supplied `/` markers.
+- Kept the real sample review-tool embed as the backdrop for 1.5 and preserved the extracted Traditional Chinese wording.
+
+Files:
+- `intro Website/Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The embedded script parsed successfully and `git diff --check` passed.
+- Live browser inspection found 10 cards, 10 backdrops, the four table body rows, and the 1.5 review iframe with no browser errors or warnings.
+- Checked the hero, 1.1 card, 1.4 table, and review-tool section visually; cards and backdrops fit their sections.
+
+Remaining:
+- None for the requested introduction-content load.
+
+### 2026-07-28 15:12 HKT — Codex — Corrected the 1.4 table wording to match the DOCX
+
+Summary:
+- Changed the AI Skills row from「再由研究者核對、審核及修正」to the source wording「並由研究者核對、審核及修正」.
+
+Files:
+- `intro Website/Website/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Rechecked the source table text and the website's embedded script; the source wording now matches.
+
+Remaining:
+- None.
