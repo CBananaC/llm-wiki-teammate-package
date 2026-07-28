@@ -56,6 +56,16 @@ const parts = [
     ]
   },
   {
+    id: 'intro-1-5', tab: '1.5', number: '1.5 / 研究成果', title: '研究成果：「清代奏摺與上諭分析平台」', tone: 'review', mark: '台',
+    position: '--card-x: 6vw; --card-y: 11vh; --card-w: 500px; --story-height: 1120px; --card-accent: #c46a2b;',
+    paragraphs: [
+      '基於上述理念，筆者建立了一個結合人工智能與視覺化工具的研究網站，作為研究奏摺與上諭的輔助平台。',
+      '網站能夠載入大量文書，運用人工智能提取特定資訊，供研究者核對和分析；同時透過時間線和關係網絡等視覺化工具，呈現皇帝與官員之間的文書傳遞關係及資訊流向。',
+      '透過上述功能，研究者既可從微觀層面閱讀單份文書的原文與資訊提取結果，亦可掌握宏觀的通信脈絡及資訊傳遞過程。'
+    ],
+    review: true
+  },
+  {
     id: 'intro-1-6-a', tab: '1.6', nav: 'intro-1-6', number: '1.6 / 示範案例', title: '示範案例：林爽文事件', tone: 'taiwan', mark: '林',
     position: '--card-x: 50vw; --card-y: 12vh; --card-w: 590px; --story-height: 1120px; --card-accent: #c7543f;',
     paragraphs: [
