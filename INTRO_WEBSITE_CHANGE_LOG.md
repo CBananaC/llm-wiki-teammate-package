@@ -209,6 +209,33 @@ Verified:
 Remaining:
 - Review the updated card spacing in the normal local HTTP preview when available.
 
+### 2026-07-28 16:30 HKT — Codex — Restored the 1.5 research-results section
+
+Summary:
+- Restored `1.5 / 研究成果` between 1.4 and 1.6 using the exact three
+  paragraphs supplied for the introduction.
+- Reconnected the existing 硃83 sample review interface as the section's
+  backdrop.
+- Added 1.5 to the introduction workflow navigation and extended its route to
+  1.6.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passes.
+- Confirmed the 1.5 card data, review iframe, navigation node, and section
+  anchor are present.
+- `git diff --check` passes.
+
+Remaining:
+- Review the restored section and embedded review interface in the normal
+  local HTTP preview when available.
+
 ### 2026-07-28 15:37 HKT — Codex — Added the automatic checkpoint rule
 
 Summary:
@@ -250,3 +277,278 @@ Verified:
 
 Remaining:
 - Apply whole-repository staging for the checkpoint created by this change.
+
+### 2026-07-28 16:07 HKT — Codex — Add StoryMap display settings
+
+Summary:
+- Added an unboxed gear settings button at the far right of the StoryMap top
+  bar.
+- Added persistent A−/A＋ font-size controls with a wide 55%–220% range,
+  outside-click and Escape-to-close behavior, and disabled endpoint buttons.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Confirmed the gear path matches the canonical project settings icon.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified the no-border button, panel toggle, 105% scaling, 55% and
+  220% limits, reload persistence, and reset to 100%.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 20:11 HKT — Codex — Loaded Part 2.docx into the website
+
+Summary:
+- Read `Outline/Part 2.docx` and preserved its operating-process content and
+  nested AI-analysis headings.
+- Replaced the Part 2 placeholder hero with `1. 平台的運作流程` and its
+  introductory statement.
+- Added four independent card-and-backdrop sections for the overall process,
+  workflow diagram, structured-data input, and AI extraction.
+- Kept the three AI subsections inside the AI-extraction card.
+
+Files changed:
+- `Outline/Part 2.docx` (read-only source)
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Rendered the DOCX to two page images and inspected both pages.
+- Extracted and checked the DOCX paragraph text with the bundled document
+  runtime.
+- Passed `node --check` for both website JavaScript files and `git diff --check`.
+
+Remaining:
+- Review Part 2 in the normal local HTTP preview when available.
+
+### 2026-07-28 18:45 HKT — Codex — Loaded Part 1.docx into the website
+
+Summary:
+- Read `Outline/Part 1.docx` and preserved its platform-overview text and six
+  interface subsections.
+- Replaced the Part 1 placeholder hero with `1. 平台的整體介面` and its
+  introductory paragraph.
+- Added independent card-and-backdrop sections for the four platform areas,
+  導覽列, 時間與關係圖表, 節點資訊區, 原始史料區, and 人工智能分析區.
+- Added subsection headings inside the relevant cards so the DOCX hierarchy
+  remains readable on the website.
+
+Files changed:
+- `Outline/Part 1.docx` (read-only source)
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Rendered the DOCX to two page images and inspected both pages.
+- Extracted and checked the DOCX paragraph text with the bundled document
+  runtime.
+- Passed `node --check` for both website JavaScript files and `git diff --check`.
+
+Remaining:
+- Review Part 1 in the normal local HTTP preview when available.
+
+### 2026-07-28 16:34 HKT — Codex — Rebuild 引言 workflow as full-width horizontal chart
+
+Summary:
+- Reworked the 引言 workflow into a full-width translucent deep-teal panel
+  beneath the top bar.
+- Replaced the previous route with a horizontal sequence: 清代奏折上諭、奏折
+  上諭研究價值、three separate 研究困難 bubbles, 數位方法, and 案例：林爽文事件.
+- Added white connector lines and text, coral difficulty labeling, and hover,
+  focus, and selected-bubble states.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified the full-width panel geometry, deep translucent styling,
+  seven horizontal workflow nodes, connector path, and direct section targets.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 16:25 HKT — Codex — Redesign 引言 submenu as workflow map
+
+Summary:
+- Replaced the plain vertical 引言 submenu with a paper-toned workflow
+  window containing five subtitle bubbles connected by a routed line.
+- Kept each bubble as a direct link to its corresponding introduction section,
+  with hover/focus motion and coral-accent interaction states.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified the five workflow nodes, their section links, chart layout,
+  connector path, and themed submenu dimensions.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 16:11 HKT — Codex — Center top-bar navigation
+
+Summary:
+- Centered the section buttons as a group in the desktop top bar while
+  keeping the settings button as the only right-aligned control.
+- Preserved the existing compact mobile top-bar behavior.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified that the navigation group is centered at 1280px and the
+  settings control remains aligned to the right edge.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 16:43 HKT — Codex — Refine 引言 flowchart branch layout
+
+Summary:
+- Removed all extra dropdown headings and step-number labels.
+- Rebuilt the chart to match the requested algorithm-style flow: two left
+  nodes, a three-way vertical 研究困難 branch, then 數位方法 and 案例：林爽文事件.
+- Changed the bubbles to transparent ellipses with white outlines/text and
+  coral hover, focus, and selected states.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified seven bubbles, no extra menu text, white text styling,
+  elliptical borders, and branch connector geometry.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 16:49 HKT — Codex — Compress workflow bubbles and preserve hover area
+
+Summary:
+- Reduced the workflow canvas and ellipse height so the dropdown occupies much
+  less vertical space.
+- Kept the full-width chart and branch geometry intact.
+- Changed dropdown closing to wait until the pointer has left both the 引言
+  trigger and the full workflow panel.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified 54px bubbles, a 220px chart canvas, and the fixed full-width
+  panel position.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 16:49 HKT — Codex — Split the introduction website into independent top-level tabs
+
+Summary:
+- Changed the page from one continuous list of the cover and all sections into
+  four independently displayed views: 主頁, 引言, 第一部分, and 第二部分.
+- Kept the existing introduction cards inside the 引言 view and added a
+  shorter cover-style masthead at the top of 引言 and both parts.
+- Added hash-based tab switching and preserved direct links to individual
+  introduction sections from the workflow menu.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified that each top-level tab hides the other panels, that the
+  compact masthead renders at 287px in the current desktop preview, and that
+  direct `#intro-1-3-b` navigation opens 引言 and scrolls to the target card.
+
+Remaining:
+- 第一部分 and 第二部分 currently contain their independent mastheads only;
+  their substantive content can be added into those panels when supplied.
+
+### 2026-07-28 16:59 HKT — Codex — Extend 引言 flow with research difficulty and results
+
+Summary:
+- Removed the orange active underline from the top navigation.
+- Added 研究難處 before the three difficulty bubbles and 研究成果 after
+  數位方法, preserving the horizontal branch flow.
+- Kept the compact ellipse bubbles and white connector styling.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified nine bubbles, three branch rows, 54px bubble height, the
+  220px chart canvas, and no active underline pseudo-element.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 17:11 HKT — Codex — Change workflow bubbles to thin-border rectangles
+
+Summary:
+- Replaced the ellipse bubbles with compact, lightly rounded rectangular
+  bubbles using a 1px white border and restrained shadow.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified 1px border, 8px corner radius, and compact 54px node height.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 17:15 HKT — Codex — Remove workflow bubble corner rounding
+
+Summary:
+- Set the workflow rectangles to square corners with no border radius.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified `border-radius: 0px`, a 1px border, and 54px height.
+
+Remaining:
+- None for this change.
+
+### 2026-07-28 17:17 HKT — Codex — Narrow workflow rectangles
+
+Summary:
+- Reduced the horizontal width of each workflow rectangle while preserving
+  square corners, thin borders, and the existing flow layout.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified 137px rendered width at the current desktop viewport,
+  54px height, 1px border, and zero corner radius.
+
+Remaining:
+- None for this change.
