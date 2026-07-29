@@ -272,8 +272,8 @@ const part2Parts = [
     ]
   },
   {
-    id: 'part-2-yu-info', tab: 'part-2', number: '4 / 收取上諭的資訊', title: '4. 收取上諭的資訊', tone: 'ink', mark: '諭',
-    position: '--card-x: 7vw; --card-y: 13vh; --card-w: 700px; --story-height: 1750px; --card-accent: #a45e4c;',
+    id: 'part-2-yu-info', tab: 'part-2', number: '4 / 收取上諭的資訊', title: '4. 收取上諭的資訊', tone: 'ink', mark: '諭', coverBar: true,
+    position: '--card-x: 7vw; --card-y: 38vh; --card-w: 700px; --story-height: 1750px; --card-accent: #a45e4c;',
     subsections: [
       {
         title: '1.皇帝上諭對官員奏摺的回應',
