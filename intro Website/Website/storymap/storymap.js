@@ -302,6 +302,171 @@ const part2Parts = [
   }
 ];
 
+const part3Parts = [
+  {
+    id: 'part-3-research-questions', tab: 'part-3', number: '1 / 適合的研究問題', title: '1. 適合的研究問題', tone: 'network', mark: '題',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 680px; --story-height: 1120px; --card-accent: #c7543f;',
+    paragraphs: [
+      '本平台運用 AI 與視覺化工具，重建奏摺與上諭之間的通信關係，並呈現資訊在皇帝與地方官員之間的傳遞網絡。因此，本平台適合用於研究政策如何在皇帝與地方官員的互動過程中逐步形成、調整與落實。',
+      '研究者可考察地方官員如何回應特定事件、皇帝如何回應地方官員的奏報與行動，以及地方官員如何執行皇帝的命令，從而分析政策形成過程中的中央與地方互動及其權力關係。',
+      '研究者亦可進一步探討地理距離與文書傳遞所造成的時間差，如何使皇帝與地方官員掌握不同的資訊，並影響雙方的判斷、決策與互動。'
+    ]
+  },
+  {
+    id: 'part-3-tools', tab: 'part-3', number: '2 / 所需的工具與資源', title: '2. 所需的工具與資源', tone: 'archive', mark: '具',
+    position: '--card-x: 48vw; --card-y: 14vh; --card-w: 700px; --story-height: 1480px; --card-accent: #7e6a39;',
+    paragraphs: [
+      '首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills的Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。',
+      '其次，研究者可以使用 Agentic AI （如ChatGPT Work 和Codex） 閱讀下載的原始碼，並按照 README.md 的說明部署平台，在本機開啟前端網頁。',
+      '其後，研究者可以利用 Agentic AI 協助整理原始文書、轉換為結構化資料、修改或建立 AI Skills，以及修改網站介面和功能等的程序。',
+      '此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。',
+      '最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。'
+    ]
+  },
+  {
+    id: 'part-3-basic-flow', tab: 'part-3', number: '3 / 重用平台的基本流程', title: '3. 重用平台的基本流程', tone: 'river', mark: '流',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 740px; --story-height: 920px; --card-accent: #4d817c;',
+    paragraphs: [
+      '有準備好以上的工具後，研究者可以按照以下流程，把平台應用於新的研究主題：',
+      '選定研究主題與史料 → OCR 並結構化原始史料→ 調整 AI Skills → 執行 AI 分析 → 載入網站核驗 → 修改及擴展平台 → 保存分析結果→後續研究'
+    ]
+  },
+  {
+    id: 'part-3-ocr', tab: 'part-3', number: '1 / OCR 並結構化原始史料', title: '1. OCR 並結構化原始史料', tone: 'paper', mark: 'O', coverBar: true,
+    position: '--card-x: 7vw; --card-y: 38vh; --card-w: 680px; --story-height: 1120px; --card-accent: #b66d48;',
+    subsections: [
+      {
+        title: '1. 甚麼是 OCR？',
+        paragraphs: [
+          'OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。',
+          '由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'part-3-paddleocr', tab: 'part-3', number: '2 / PaddleOCR', title: '2. PaddleOCR', tone: 'paper', mark: '字',
+    position: '--card-x: 48vw; --card-y: 14vh; --card-w: 680px; --story-height: 1080px; --card-accent: #b66d48;',
+    paragraphs: [
+      '研究者可使用 PaddleOCR 作為 OCR 的工具。PaddleOCR 是由百度開發，具有以下優點：',
+      '1. 能夠辨識掃描影像或 PDF 中的中文文字，並支援版面分析。',
+      '2. 中文辨識準確率高，而且辨識速度快。',
+      '3. 開源且免費，支援本地部署，可離線運行。'
+    ]
+  },
+  {
+    id: 'part-3-agentic-ocr', tab: 'part-3', number: '3 / 運用 Agentic AI 使用 PaddleOCR', title: '3. 運用 Agentic AI 使用 PaddleOCR', tone: 'gold', mark: 'AI',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 690px; --story-height: 900px; --card-accent: #ad7a35;',
+    paragraphs: ['PaddleOCR 通常透過 Python API 在本機安裝及運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。']
+  },
+  {
+    id: 'part-3-material', tab: 'part-3', number: '4 / OCR 前的材料準備', title: '4. OCR 前的材料準備', tone: 'archive', mark: '材',
+    position: '--card-x: 49vw; --card-y: 14vh; --card-w: 690px; --story-height: 1020px; --card-accent: #7e6a39;',
+    paragraphs: [
+      'OCR 所處理的材料通常為 PDF 或 JPG、PNG、TIFF 等影像檔案。因此，如果史料為紙本書籍，研究者可先查找是否已有可合法使用的電子版本，若沒有，則需以掃描器或相機把書頁數位化，轉換為 PDF 等形式的影像檔案。',
+      '研究者應遵守所在地的版權法規及資料庫使用條款，優先使用公有領域、已獲授權或依法可供研究使用的材料。'
+    ]
+  },
+  {
+    id: 'part-3-code', tab: 'part-3', number: '5 / 執行 OCR 的Python 代碼', title: '5. 執行 OCR 的Python 代碼', tone: 'signal', mark: '碼',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 680px; --story-height: 900px; --card-accent: #c7543f;',
+    paragraphs: ['要運行 PaddleOCR，研究者需要指示 Agentic AI撰寫執行 OCR 的 Python 代碼，指定需要辨識的影像檔案，設定辨識方式、輸出格式和儲存位置。但在此之前，研究者首先檢視史料的版面及格式，從而決定 OCR 的方式。']
+  },
+  {
+    id: 'part-3-format', tab: 'part-3', number: '6 / 檢視史料的版面及格式', title: '6. 檢視史料的版面及格式', tone: 'network', mark: '版',
+    position: '--card-x: 48vw; --card-y: 14vh; --card-w: 680px; --story-height: 900px; --card-accent: #c7543f;',
+    paragraphs: ['研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。']
+  },
+  {
+    id: 'part-3-printed', tab: 'part-3', number: '7 / 辨識印刷字', title: '7. 辨識印刷字', tone: 'paper', mark: '印',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 720px; --story-height: 1140px; --card-accent: #b66d48;',
+    paragraphs: [
+      '印刷字的字形統一，字距與行距相對規則，因此一般較容易進行 OCR 辨識。然而，研究者仍需先檢視史料的版面及格式。',
+      '以圖 1 為例，此史料採用橫排單欄的印刷版面，頁面結構由標題、日期、史料來源及正文組成，研究者因此需要指示agentic ai 在 Python 程式中特別注明相應的版面結構，以便保留原有的版面。此外，圖中的標題符號較為模糊，可能影響準確率，因此 OCR 完成後，需要利用 AI 或人工進行校對，以減少錯誤。'
+    ]
+  },
+  {
+    id: 'part-3-handwritten', tab: 'part-3', number: '8 / 辨識手寫字', title: '8. 辨識手寫字', tone: 'ink', mark: '寫',
+    position: '--card-x: 48vw; --card-y: 14vh; --card-w: 720px; --story-height: 1510px; --card-accent: #a45e4c;',
+    paragraphs: [
+      '和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。一般而言，楷書較容易辨識。相反，草書因連筆及字形變化較大，辨識準確率較低，不建議使用 OCR 處理。',
+      '另外，手寫史料的版面往往與印刷文本不同。以圖 2 為例，它是圖 1 所據原奏摺的掃描本，採用直排、由右至左閱讀及多欄排版，並包含硃批、印章等元素，以及臣字款、抬頭等特殊書寫格式。其中，臣字款指官員自稱「臣」時以小字書寫；抬頭則指涉及皇帝時採用的敬書格式。此外，文末另有以草書書寫的硃批。',
+      '進行 OCR 時，研究者須先定明清晰的處理規則，除了注明由上至下、由右至左的閱讀方向外，亦應略過難以準確辨識的草書硃批，並將因抬頭而分隔的文字重新合併。'
+    ]
+  },
+  {
+    id: 'part-3-json', tab: 'part-3', number: '9 / 輸出格式：JSON', title: '9. 輸出格式：JSON', tone: 'archive', mark: 'J',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 720px; --story-height: 1180px; --card-accent: #7e6a39;',
+    paragraphs: [
+      '除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。',
+      '每份文書的初步JSON 結構應至少包括標題和正文，在OCR完成後，再後續加入其他欄位，包括文書類型（奏折或上諭）、作者資料（官位和名字）、標題、文書編號（自訂）、文書正文、發送和接收日期，以及史料來源，形成完整的結構化史料。'
+    ]
+  },
+  {
+    id: 'part-3-test', tab: 'part-3', number: '10 / OCR測試', title: '10. OCR測試', tone: 'gold', mark: '試',
+    position: '--card-x: 48vw; --card-y: 14vh; --card-w: 720px; --story-height: 1220px; --card-accent: #ad7a35;',
+    paragraphs: ['完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。']
+  },
+  {
+    id: 'part-3-import', tab: 'part-3', number: '11 / 輸入結構化史料至平台', title: '11. 輸入結構化史料至平台', tone: 'river', mark: '入',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 720px; --story-height: 1050px; --card-accent: #4d817c;',
+    paragraphs: ['完成OCR和後續整理後，所有的史料都應儲存在一個完整的 JSON 檔案中，研究者於是可以要求 Agentic AI把 JSON 檔案匯入平台。以本平台為例，只需將整理完成的 JSON 檔案放入網站專案中的 「儲存一手史料」 資料夾，平台便可直接讀取該檔案。']
+  },
+  {
+    id: 'part-3-ai', tab: 'part-3', number: '2 / 運用AI抽取資訊', title: '2. 運用AI抽取資訊', tone: 'gold', mark: 'AI', coverBar: true,
+    position: '--card-x: 48vw; --card-y: 38vh; --card-w: 700px; --story-height: 1220px; --card-accent: #ad7a35;',
+    subsections: [
+      {
+        title: '1. 修改、建立AI Skills',
+        paragraphs: [
+          '完成資料整理後，研究者需要按照新的研究問題，修改或建立新的 Skills。例如，現時系統用於提取林爽文軍事行動的 Skills，可以根據新的研究主題，改為其他的事件類型，例如水災的情況、司法案件的調查進展等。'
+        ]
+      },
+      {
+        title: '建立新的 Skill 時，研究者應說明：',
+        paragraphs: [
+          '- 這項 Skill 要回答哪一個研究問題；',
+          '- AI 需要從文本中提取哪些資訊；',
+          '- 每項結果需要保存哪些原文引文等。',
+          '研究者可以請 Agentic AI修改和建立指令，完成 Skill 後，應先用少量文書測試，檢查 AI 是否能按照要求提取合適的結果，再進行批次處理。'
+        ]
+      }
+    ]
+  },
+  {
+    id: 'part-3-ai-chain', tab: 'part-3', number: '2 / 執行 AI Skills的方法', title: '2. 執行 AI Skills的方法', tone: 'network', mark: '鏈',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 740px; --story-height: 1320px; --card-accent: #c7543f;',
+    paragraphs: [
+      '完成修改或建立 AI Skills 後，研究者便可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。',
+      '為減少重複操作，研究者可要求 Agentic AI 撰寫 Python代碼，將多個 AI Skills 串聯成自動化的分析流程 （Chain）。程式會逐份讀取結構化文書，依序執行各項 AI Skills，並自動將結果儲存至 JSON 檔案，直至完成所有史料的分析，',
+      '例如，研究者可以建立一條處理奏摺的 AI Chain：',
+      '文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON'
+    ]
+  },
+  {
+    id: 'part-3-model', tab: 'part-3', number: '3 / 選用的AI Model', title: '3. 選用的AI Model', tone: 'archive', mark: '模',
+    position: '--card-x: 48vw; --card-y: 14vh; --card-w: 700px; --story-height: 1030px; --card-accent: #7e6a39;',
+    paragraphs: [
+      '然而，由於 AI Skills 鏈（Chain）需要對每份史料逐步執行多項的分析，因此需要消耗大量 Token，提高了使用 API 的成本。因此，建議研究者選擇成本較低，但仍具備足夠分析能力的 AI Model，以兼顧研究成本和分析品質。',
+      '目前推薦 Gemini Flash 系列及 DeepSeek 的模型。兩者的 API 成本較低，亦能大致正確理解奏摺、上諭中的文言文，因此適合用來批次執行 AI Skills，分析大量文書。'
+    ]
+  },
+  {
+    id: 'part-3-cloud', tab: 'part-3', number: '4 / Google Cloud', title: '4. Google Cloud', tone: 'river', mark: '雲',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 700px; --story-height: 920px; --card-accent: #4d817c;',
+    paragraphs: ['研究者可透過 Google Cloud 使用 Gemini Flash 及 DeepSeek 的 API，因為Google Cloud 為新用戶提供一定金額的免費額度（約港幣 2,000 元），足以應付大量的 AI Skills 批次分析工作。']
+  },
+  {
+    id: 'part-3-wiki', tab: 'part-3', number: '3 / 後續功能：LLM Wiki', title: '3. 後續功能：LLM Wiki', tone: 'ink', mark: '知', coverBar: true,
+    position: '--card-x: 48vw; --card-y: 38vh; --card-w: 720px; --story-height: 1260px; --card-accent: #a45e4c;',
+    paragraphs: [
+      '完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。',
+      '研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。',
+      'LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。'
+    ]
+  }
+];
+
 const escapeHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[char]));
 const paragraphHtml = (paragraphs) => paragraphs.map((paragraph) => {
   if (typeof paragraph === 'string') return `<p>${escapeHtml(paragraph)}</p>`;
@@ -324,6 +489,7 @@ const partHtml = (part) => `<section class="story content-story${part.coverBar ?
 document.getElementById('intro-content').innerHTML = parts.map(partHtml).join('');
 document.getElementById('part-1-content').innerHTML = part1Parts.map(partHtml).join('');
 document.getElementById('part-2-content').innerHTML = part2Parts.map(partHtml).join('');
+document.getElementById('part-3-content').innerHTML = part3Parts.map(partHtml).join('');
 
 const setReviewFrameSource = () => {
   const frame = document.querySelector('.review-iframe');
@@ -414,6 +580,7 @@ const panelForHash = (hash) => {
   if (hash === '#intro' || hash.startsWith('#intro-')) return 'intro';
   if (hash === '#part-1') return 'part-1';
   if (hash === '#part-2') return 'part-2';
+  if (hash === '#part-3') return 'part-3';
   return 'cover';
 };
 const setActiveTab = (tabName, { updateHash = true, scrollTarget = null } = {}) => {

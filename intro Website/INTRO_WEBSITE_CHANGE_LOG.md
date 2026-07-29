@@ -300,6 +300,81 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-29 17:56 HKT — Codex — Added the 4. 收取上諭的資訊 cover bar
+
+Summary:
+- Applied the thin backdrop-and-large-text cover bar to `4. 收取上諭的資訊`.
+- Kept its three detailed imperial-edict subsections in the content card below.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for both website JavaScript files.
+- Passed `git diff --check`.
+- Confirmed `part-2-yu-info` now uses `coverBar: true` and the cover-bar card
+  placement.
+
+Remaining:
+- Review the cover-bar height and long-card spacing in the normal local HTTP
+  preview when available.
+
+### 2026-07-29 17:52 HKT — Codex — Loaded the expanded Part 2 DOCX content
+
+Summary:
+- Re-read the current `Outline/Part 2.docx`, which had expanded to 64
+  non-empty source paragraphs.
+- Replaced the abbreviated Part 2 data with the complete workflow, structured
+  input, AI Skills, communication-pairing, event-extraction, source-tracing,
+  imperial-edict, and visualization content.
+- Added separate cards for the detailed nested workflows so long sections are
+  not hidden inside one overflowing card.
+- Mapped every DOCX `(cover bar UI)` marker to the thin cover-bar renderer.
+
+Files changed:
+- `Outline/Part 2.docx` (read-only source)
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Compared all 64 non-empty DOCX paragraphs against the website source; zero
+  exact source strings are missing.
+- Passed `node --check` for both website JavaScript files.
+- Passed `git diff --check`.
+
+Remaining:
+- Review the complete Part 2 sequence and long-card spacing in the normal local
+  HTTP preview when available.
+
+### 2026-07-29 17:45 HKT — Codex — Added thin cover bars to selected Part 2 sections
+
+Summary:
+- Applied the thin, non-full-screen cover-bar treatment to `1. 平台的運作流程`
+  and `3. 運作流程圖`.
+- Added backdrop-backed large title text while keeping the detailed content in
+  the readable card layer below.
+- Left `4. 輸入結構化資料` and `5. 使用AI從原文中抽取資訊` as detailed card
+  layouts.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for both website JavaScript files.
+- Passed `git diff --check`.
+- Confirmed only the two selected Part 2 sections receive the `cover-bar`
+  renderer and styling.
+
+Remaining:
+- Review the cover-bar height, backdrop contrast, and card placement in the
+  normal local HTTP preview when available.
+
 ### 2026-07-28 20:11 HKT — Codex — Loaded Part 2.docx into the website
 
 Summary:
@@ -552,3 +627,22 @@ Verified:
 
 Remaining:
 - None for this change.
+
+### 2026-07-30 03:47 HKT — Codex — Load complete Part 3 DOCX content
+
+Summary:
+- Added a new `第三部分` panel and loaded all Part 3 content from `Outline/Part 3.docx`.
+- Preserved the source hierarchy as independent cards, with thin cover bars for `1. OCR 並結構化原始史料`, `2. 運用AI抽取資訊`, and `3. 後續功能：LLM Wiki`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- Rendered and visually inspected all 5 pages of `Outline/Part 3.docx`.
+- Passed `node --check Website/storymap/storymap.js`.
+- Exact-string coverage found all 69 non-empty Part 3 source paragraphs in the website; the three DOCX cover markers are represented as UI cover bars.
+
+Remaining:
+- The in-app browser blocked reloading the local `file://` preview, so live visual refresh remains to be checked through the normal local HTTP preview.

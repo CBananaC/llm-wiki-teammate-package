@@ -80,6 +80,7 @@ body::selection { background: var(--accent); color: #fff; }
 .section-hero-intro::after { background: radial-gradient(circle at 78% 22%, rgba(199,84,63,.62), transparent 30%), linear-gradient(120deg, #173b3f 5%, #274e4f 50%, #a56c56 140%); }
 .section-hero-part-1::after { background: radial-gradient(circle at 20% 25%, rgba(92,142,133,.5), transparent 32%), linear-gradient(120deg, #173b3f 5%, #315d5a 52%, #9a6b57 140%); }
 .section-hero-part-2::after { background: radial-gradient(circle at 78% 26%, rgba(240,169,123,.55), transparent 28%), linear-gradient(120deg, #173b3f 5%, #456e69 50%, #b36f58 140%); }
+.section-hero-part-3::after { background: radial-gradient(circle at 22% 28%, rgba(199,84,63,.55), transparent 30%), linear-gradient(120deg, #173b3f 5%, #456e69 50%, #9a6b57 140%); }
 .section-hero-content { width: min(980px, 100%); }
 .section-hero h1 { max-width: 760px; margin: 0; font-size: clamp(calc(30px * var(--font-scale)), calc(4.4vw * var(--font-scale)), calc(64px * var(--font-scale))); line-height: 1.08; letter-spacing: -.04em; }
 .section-hero-note { max-width: 620px; margin: 20px 0 0; color: rgba(247,243,234,.76); font: calc(17px * var(--font-scale))/1.65 var(--serif); }
