@@ -152,24 +152,23 @@ const part1Parts = [
 
 const part2Parts = [
   {
-    id: 'part-2-overview', tab: 'part-2', number: '1 / 平台的運作流程', title: '1. 平台的運作流程', tone: 'archive', mark: '流', coverBar: true,
-    position: '--card-x: 7vw; --card-y: 38vh; --card-w: 640px; --story-height: 1200px; --card-accent: #7e6a39;',
+    id: 'part-2-overview', tab: 'part-2', number: '1 / 平台的運作流程', title: '1. 平台的運作流程', tone: 'archive', mark: '流',
+    position: '--card-x: 7vw; --card-y: 13vh; --card-w: 640px; --story-height: 1100px; --card-accent: #7e6a39;',
     paragraphs: [
-      '平台旨在處理清代奏摺與上諭研究中的兩大主要困難：文書數量龐大，以及文書之間的通信關係複雜。',
       '因此，平台運用人工智能協助研究者總結文書內容、提取重要資訊，供研究者進一步檢視和核驗，從而減輕整理史料的工作量。',
       '同時，平台亦運用視覺化工具，透過時間與關係圖表呈現資訊的傳遞網絡，協助研究者掌握文書和事件的時間順序和相互關係。'
     ]
   },
   {
-    id: 'part-2-flow', tab: 'part-2', number: '3 / 運作流程圖', title: '3. 運作流程圖', tone: 'network', mark: '圖', coverBar: true,
-    position: '--card-x: 49vw; --card-y: 38vh; --card-w: 660px; --story-height: 900px; --card-accent: #c7543f;',
+    id: 'part-2-flow', tab: 'part-2', number: '3 / 運作流程圖', title: '3. 運作流程圖', tone: 'network', mark: '圖',
+    position: '--card-x: 49vw; --card-y: 15vh; --card-w: 660px; --story-height: 900px; --card-accent: #c7543f;',
     paragraphs: [
       '輸入結構化的原始文書 → AI Skills → 1. 總結文書、2. 重構文書間的通訊關係、3. 收取奏摺的資訊、4. 收取上諭的資訊→載入分析結果 → 研究者審閱 →結果載入至圖表中呈現'
     ]
   },
   {
-    id: 'part-2-input', tab: 'part-2', number: '4 / 輸入結構化資料', title: '4. 輸入結構化資料', tone: 'paper', mark: '資',
-    position: '--card-x: 7vw; --card-y: 12vh; --card-w: 650px; --story-height: 1450px; --card-accent: #b66d48;',
+    id: 'part-2-input', tab: 'part-2', number: '4 / 輸入結構化資料', title: '4. 輸入結構化資料', tone: 'paper', mark: '資', coverBar: true,
+    position: '--card-x: 7vw; --card-y: 38vh; --card-w: 650px; --story-height: 1450px; --card-accent: #b66d48;',
     paragraphs: [
       '在選定研究主題及所使用的奏摺與上諭後，第一步是對史料進行 OCR，並把結果輸出為結構化 的JSON 資料，再載入到平台之中。（由於 OCR 並不是本網站內置的功能，相關方法將留待下一節「重用平台於其他研究主題」中再作介紹。）',
       '在結構化資料中，每份奏摺或上諭都需要分成不同欄位，包括文書類型、作者資料、標題、文書編號、文書正文及史料來源。',
@@ -178,8 +177,8 @@ const part2Parts = [
     ]
   },
   {
-    id: 'part-2-ai', tab: 'part-2', number: '5 / 使用AI從原文中抽取資訊', title: '5. 使用AI從原文中抽取資訊', tone: 'gold', mark: 'AI',
-    position: '--card-x: 48vw; --card-y: 12vh; --card-w: 670px; --story-height: 1450px; --card-accent: #ad7a35;',
+    id: 'part-2-ai', tab: 'part-2', number: '5 / 使用AI從原文中抽取資訊', title: '5. 使用AI從原文中抽取資訊', tone: 'gold', mark: 'AI', coverBar: true,
+    position: '--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1450px; --card-accent: #ad7a35;',
     paragraphs: ['完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。'],
     subsections: [
       {
@@ -197,6 +196,108 @@ const part2Parts = [
         title: '3. 四個分析階段',
         paragraphs: ['平台共有四組 AI Skills，分別用於四個分析階段：總結文書、重建通信關係、提取奏摺資訊，以及提取上諭資訊。']
       }
+    ]
+  },
+  {
+    id: 'part-2-summary', tab: 'part-2', number: '1 / 總結文書', title: '1.  總結文書', tone: 'paper', mark: '總', coverBar: true,
+    position: '--card-x: 7vw; --card-y: 38vh; --card-w: 650px; --story-height: 1050px; --card-accent: #b66d48;',
+    paragraphs: [
+      '第一組 AI Skills 負責總結文書。AI 會先將整份文書概括為一段摘要，再按照內容和功能將原文劃分成不同部分，並為每一部分提供簡短的標題和摘要。',
+      '摘要和分段結果會顯示在原始文書區中，供研究者在完整閱讀原文前快速瀏覽，掌握文書的主要內容和結構。'
+    ]
+  },
+  {
+    id: 'part-2-communication', tab: 'part-2', number: '2 / 重建通信關係', title: '2. 重建通信關係', tone: 'network', mark: '關', coverBar: true,
+    position: '--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1050px; --card-accent: #c7543f;',
+    paragraphs: [
+      '在奏摺和上諭的結尾，通常會標示奏摺的發送日期、硃批日期及上諭的發布日期。平台會利用這些日期建立文書之間的時間順序及收發關係，形成通信網絡的第一層。',
+      '然而，文書之間還存在更深層的通訊關係，例如奏摺是否回應了先前的上諭或硃批，以及上諭是否回應了先前收到的奏摺。這便需要從文書正文中尋找相關線索，並與其他文書相互比對，才能確認和重建這些更深層的關係。',
+      '平台因此設有兩種的 Skills，分別用於辨識一份奏摺所回應的硃批或上諭，以及辨識一份上諭所回應的奏摺。'
+    ]
+  },
+  {
+    id: 'part-2-yu-response', tab: 'part-2', number: '1 / 辨識奏摺所回應的上諭', title: '1. 辨識奏摺所回應的上諭', tone: 'gold', mark: '諭',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 680px; --story-height: 1650px; --card-accent: #ad7a35;',
+    paragraphs: [
+      '「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：',
+      '首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。',
+      '系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。',
+      'AI 會輸出結構化的結果，列出相配的上諭和奏摺，並提供兩份文書中的引文和關鍵日期，包括上諭的發佈日期、官員的收到日期和回覆日期，供研究者查核。研究者確認無誤後，便可以把通信關係加入到圖表中。'
+    ]
+  },
+  {
+    id: 'part-2-zhu-response', tab: 'part-2', number: '2 / 辨識奏摺所回應的硃批', title: '2. 辨識奏摺所回應的硃批', tone: 'ink', mark: '批',
+    position: '--card-x: 50vw; --card-y: 14vh; --card-w: 620px; --story-height: 920px; --card-accent: #a45e4c;',
+    paragraphs: [
+      '在回應皇帝的硃批時，官員同樣會用「奉硃批」、「奉到硃批」、「敬奉硃批」、「欽奉硃批」或「蒙硃批」等引述標記，再引用硃批原文。因此，辨識奏摺所回應硃批的 Skill，其方法和判斷邏輯與「上諭—回應配對」基本相同。'
+    ]
+  },
+  {
+    id: 'part-2-yu-source', tab: 'part-2', number: '3 / 辨識上諭所回應的奏摺', title: '3. 辨識上諭所回應的奏摺', tone: 'river', mark: '源',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 690px; --story-height: 2050px; --card-accent: #4d817c;',
+    paragraphs: [
+      '系統會使用「上諭來源配對」Skill 辨識上諭所回應的奏摺。',
+      '在評論官員奏報和下達命令前，上諭通常會先使用「據某人奏」、「據某人馳奏」或「據某人奏稱」等引述標記，交代皇帝所收到的官員奏報。',
+      '然而，與回應上諭的奏摺不同，上諭通常不會註明皇帝何時收到相關奏摺，以及相關奏摺的發送日期。',
+      '此外，同一項資訊可能由多位官員奏報，而上諭卻大多只會使用「據某人等奏稱」或「據奏」的標記，不會列出所有的奏報官員。因此，不能只用 Python 擷取人名或標記，來確定上諭所回應的奏摺。',
+      '儘管如此，上諭通常會回應最新收到的奏報，平台會先利用 Python搜尋上諭發布當日，以及發布前5日內收到的奏摺，作為後續分析的候選文本。',
+      '接著，系統會運用 AI，先提取上諭中有「據奏」標記的資訊，再閱讀每份候選奏摺的正文，判斷該資訊出現於哪一份或哪些奏摺之中，從以辨識哪些奏摺是上諭的回應對象。'
+    ]
+  },
+  {
+    id: 'part-2-extract', tab: 'part-2', number: '3 / 抽取奏摺的資訊', title: '3. 抽取奏摺的資訊', tone: 'archive', mark: '取', coverBar: true,
+    position: '--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1050px; --card-accent: #7e6a39;',
+    paragraphs: [
+      '完成通信關係重建後，平台會進一步從奏摺和上諭正文中的資訊。',
+      '系統把奏摺內容劃分為四類資訊：官員奏報的事件、奏報者與其他官員對事件的回應、以上兩種資訊的來源，以及官員對皇帝先前硃批或上諭的回應。系統會用四種Skills 讓AI抽取以上資訊。'
+    ]
+  },
+  {
+    id: 'part-2-events', tab: 'part-2', number: '1 / 抽取官員奏報的事件、官員對事件的回應', title: '1. 抽取官員奏報的事件、官員對事件的回應', tone: 'taiwan', mark: '事',
+    position: '--card-x: 7vw; --card-y: 14vh; --card-w: 700px; --story-height: 1700px; --card-accent: #c7543f;',
+    paragraphs: [
+      '在林爽文民變的案例中，官員奏報的事件就是林爽文及其部眾的軍事行動，官員的回應則包括已採取或計劃採取的軍事行動，以及非軍事措施（如後勤調度、案件調查）。',
+      '所有事件和回應皆由AI提取，並以結構化格式輸出，包含標題、描述、發生時間及相關引文，供研究者核對、修正及確認。確認無誤後，研究者便可把事件加入到平台的第一條時間線——「戰場事件」上。',
+      '考慮到每類事件（如軍事事件）包含的細類眾多（如攻城、防守、追捕等），研究者可根據研究需要，在 Skills 中預先限定需抽取的事件類型及細類，亦可不設限制，由讓AI自行判斷和抽取，再由研究者選擇採用的抽取結果。',
+      '另外，如何在Skills中定義「事件」亦值得注意。事件可以按時間單位（如時辰、日期）劃分，也可以按事件的邏輯關係（如同一任務）劃分。不同的定義會影響 AI 提取事件的「粒度」（Granularity）。研究者應根據研究需要，在 Skills 中定義事件的劃分方式。'
+    ]
+  },
+  {
+    id: 'part-2-sources', tab: 'part-2', number: '2 / 追溯資訊的來源', title: '2. 追溯資訊的來源', tone: 'paper', mark: '源',
+    position: '--card-x: 49vw; --card-y: 14vh; --card-w: 650px; --story-height: 1200px; --card-accent: #b66d48;',
+    paragraphs: [
+      '完成抽取事件後，系統會用「來源鏈追溯」Skill，逐層追溯不同事件的資訊來源。',
+      'AI 會根據文書中的資訊傳遞標記，識別表示消息來源的文句，例如「字寄」、「咨」、「移會」、「稟」、「據某人稟」、「接據某人」等。',
+      '不少資訊並非直接來自奏摺作者，而是經多人逐層轉報，AI因此會追蹤資訊由最初報告者逐步傳遞至奏摺作者的過程，重建完整的傳遞鏈，例如「甲 → 乙 → 丙 → 奏摺作者」。'
+    ]
+  },
+  {
+    id: 'part-2-yu-info', tab: 'part-2', number: '4 / 收取上諭的資訊', title: '4. 收取上諭的資訊', tone: 'ink', mark: '諭',
+    position: '--card-x: 7vw; --card-y: 13vh; --card-w: 700px; --story-height: 1750px; --card-accent: #a45e4c;',
+    subsections: [
+      {
+        title: '1.皇帝上諭對官員奏摺的回應',
+        paragraphs: [
+          '完成提取奏摺中的事件和來源後，系統可以使用 `extract-yu-emperor-actions.md`，根據先前階段已確認的「上諭回應奏摺」關係，取得相應的上諭，分析皇帝如何回應奏摺中的內容。',
+          '每份上諭可以產生多項回應的結果，AI 會將每項結果整理成結構化資料，包括上諭、硃批和奏摺中的相關引文，並說明皇帝如何針對奏摺作出評論或命令。'
+        ]
+      },
+      {
+        title: '2. 官員對皇帝上諭的回應',
+        paragraphs: ['同樣，系統亦可以執行 confirmed-yu-response-analysis.md Skill，根據先前階段已確認的「奏摺回應上諭」關係，取得相關的奏摺，分析官員後續如何就上諭中的評論、命令作出回應。']
+      },
+      {
+        title: '3. 上諭中皇帝所知的事件',
+        paragraphs: ['除此之外，在單獨分析上諭時，系統亦可以執行 extract-yu-reported-events.md Skill，根據「據奏」等引述標記，辨識皇帝從官員奏報中得知的事件；再根據先前已確認的「上諭來源配對」關係，從相關奏摺中找出報告這些事件的原文，追溯情報的來源。']
+      }
+    ]
+  },
+  {
+    id: 'part-2-visualize', tab: 'part-2', number: '4 / 視覺化呈現分析的結果', title: '4. 視覺化呈現分析的結果', tone: 'network', mark: '呈', coverBar: true,
+    position: '--card-x: 48vw; --card-y: 38vh; --card-w: 680px; --story-height: 1100px; --card-accent: #c7543f;',
+    paragraphs: [
+      'AI 完成資訊抽取後，研究者可把分析結果匯入至平台，逐一與原文比對，並選擇接受、修改或拒絕結果。系統為被採用的結果，在圖表中建立相應的節點及連線，形成事件與文書之間的關係網絡。',
+      '研究者亦可以點擊圖表上的文書或事件節點，查看其詳細資料、原文引文和資料來源，也可以開啟事件鏈，沿著時間順序追蹤一項事件由最初的報告者傳遞至官員和皇帝的過程。'
     ]
   }
 ];
