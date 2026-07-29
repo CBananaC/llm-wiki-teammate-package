@@ -152,8 +152,8 @@ const part1Parts = [
 
 const part2Parts = [
   {
-    id: 'part-2-overview', tab: 'part-2', number: '1 / 平台的運作流程', title: '1. 平台的運作流程', tone: 'archive', mark: '流',
-    position: '--card-x: 7vw; --card-y: 13vh; --card-w: 640px; --story-height: 1200px; --card-accent: #7e6a39;',
+    id: 'part-2-overview', tab: 'part-2', number: '1 / 平台的運作流程', title: '1. 平台的運作流程', tone: 'archive', mark: '流', coverBar: true,
+    position: '--card-x: 7vw; --card-y: 38vh; --card-w: 640px; --story-height: 1200px; --card-accent: #7e6a39;',
     paragraphs: [
       '平台旨在處理清代奏摺與上諭研究中的兩大主要困難：文書數量龐大，以及文書之間的通信關係複雜。',
       '因此，平台運用人工智能協助研究者總結文書內容、提取重要資訊，供研究者進一步檢視和核驗，從而減輕整理史料的工作量。',
@@ -161,8 +161,8 @@ const part2Parts = [
     ]
   },
   {
-    id: 'part-2-flow', tab: 'part-2', number: '3 / 運作流程圖', title: '3. 運作流程圖', tone: 'network', mark: '圖',
-    position: '--card-x: 49vw; --card-y: 15vh; --card-w: 660px; --story-height: 900px; --card-accent: #c7543f;',
+    id: 'part-2-flow', tab: 'part-2', number: '3 / 運作流程圖', title: '3. 運作流程圖', tone: 'network', mark: '圖', coverBar: true,
+    position: '--card-x: 49vw; --card-y: 38vh; --card-w: 660px; --story-height: 900px; --card-accent: #c7543f;',
     paragraphs: [
       '輸入結構化的原始文書 → AI Skills → 1. 總結文書、2. 重構文書間的通訊關係、3. 收取奏摺的資訊、4. 收取上諭的資訊→載入分析結果 → 研究者審閱 →結果載入至圖表中呈現'
     ]
@@ -219,7 +219,7 @@ const backdropHtml = (part) => {
   if (part.tone === 'signal') return `<div class="backdrop signal-backdrop" data-mark="流"><div class="signals"><span class="signal-label one">地方奏報</span><span class="signal-label two">皇帝回應</span><span class="signal-label three">後續回應</span></div></div>`;
   return `<div class="backdrop ${part.tone}" data-mark="${escapeHtml(part.mark)}"></div>`;
 };
-const partHtml = (part) => `<section class="story content-story" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}<article class="story-card"><h2>${escapeHtml(part.title)}</h2>${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs || [])}${subsectionHtml(part.subsections)}</article></section>`;
+const partHtml = (part) => `<section class="story content-story${part.coverBar ? ' cover-bar-story' : ''}" id="${part.id}" data-tab="${part.tab}" data-nav="#${part.nav || part.id}" style="${part.position}">${backdropHtml(part)}${part.coverBar ? `<div class="cover-bar" data-mark="${escapeHtml(part.mark)}"><h2>${escapeHtml(part.title)}</h2></div>` : ''}<article class="story-card">${part.coverBar ? '' : `<h2>${escapeHtml(part.title)}</h2>`}${part.note ? `<div class="part-note">${escapeHtml(part.note)}</div>` : ''}${paragraphHtml(part.paragraphs || [])}${subsectionHtml(part.subsections)}</article></section>`;
 document.getElementById('intro-content').innerHTML = parts.map(partHtml).join('');
 document.getElementById('part-1-content').innerHTML = part1Parts.map(partHtml).join('');
 document.getElementById('part-2-content').innerHTML = part2Parts.map(partHtml).join('');

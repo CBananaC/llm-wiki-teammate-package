@@ -124,6 +124,18 @@ h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)
 .backdrop.taiwan { background: radial-gradient(circle at 68% 35%, rgba(240,169,123,.65), transparent 24%), linear-gradient(135deg, #20484d, #427069 52%, #cf9c72); }
 .backdrop.taiwan::before { color: rgba(255,242,215,.2); }
 
+.cover-bar {
+  position: absolute; z-index: 3; inset: 0 0 auto; min-height: clamp(220px, 30vh, 330px);
+  display: flex; align-items: flex-end; padding: 58px 7vw 38px; overflow: hidden;
+  color: #f7f3ea; background: linear-gradient(90deg, rgba(23,59,63,.9), rgba(23,59,63,.46) 62%, rgba(23,59,63,.12));
+  border-bottom: 1px solid rgba(255,255,255,.25); backdrop-filter: blur(7px);
+}
+.cover-bar::before {
+  content: attr(data-mark); position: absolute; right: 7vw; bottom: -4.2rem;
+  color: rgba(255,255,255,.13); font: 18rem/.8 var(--serif); letter-spacing: -.08em; pointer-events: none;
+}
+.cover-bar h2 { position: relative; max-width: 980px; margin: 0; color: #f7f3ea; font: 600 clamp(34px, 5.2vw, 72px)/1.06 var(--serif); letter-spacing: -.035em; }
+
 .story-card {
   position: absolute; z-index: 4; left: var(--card-x, 9vw); top: var(--card-y, 15vh);
   width: min(var(--card-w, 520px), calc(100vw - 40px)); max-height: calc(100% - 120px); overflow: auto;
@@ -186,6 +198,9 @@ h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)
   .section-hero { min-height: 300px; padding: 84px 20px 38px; }
   .section-hero::before { right: 12px; bottom: -1rem; font-size: 10rem; }
   .section-hero-note { font-size: calc(16px * var(--font-scale)); }
+  .cover-bar { min-height: 250px; padding: 74px 20px 30px; }
+  .cover-bar::before { right: 16px; bottom: -1rem; font-size: 10rem; }
+  .cover-bar h2 { font-size: calc(34px * var(--font-scale)); }
   .story { min-height: 1100px; }
   .content-story { min-height: max(1100px, var(--story-height-mobile, 1320px)); }
   .story-card { left: 16px; top: auto; bottom: 28px; width: calc(100% - 32px); max-height: calc(100% - 56px); padding: 22px 20px 24px; }
