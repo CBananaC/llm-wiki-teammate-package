@@ -300,6 +300,25 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:00 HKT — Codex — Added the shared StoryMap card-layout synchronization rule
+
+Summary:
+- Added a common project rule requiring every StoryMap card creation, edit, or subtitle/title change to update the matching labelled block in `storymap-cards.css`.
+- Required the Traditional Chinese subtitle/title comment in CSS to remain synchronized for easy manual identification.
+
+Files changed:
+- `../AGENTS.md`
+- `../CLAUDE.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed `AGENTS.md` and `CLAUDE.md` are byte-for-byte identical.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-30 15:05 HKT — Codex — Remove oversized backdrop characters
 
 Summary:
@@ -829,6 +848,23 @@ Files changed:
 
 Verified:
 - Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 15:09 HKT — Codex — Remove the third intro workflow button
+
+Summary:
+- Removed the third workflow button, 研究難處, from the intro header.
+- Preserved the connector line by joining it across the former button position to the existing branch and 數位方法 connector.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Confirmed the 研究難處 workflow button is absent and the SVG connector path remains continuous.
+- Passed `git diff --check`.
+- Browser visual refresh was not possible because the in-app browser blocks the local `file://` preview.
 
 Remaining:
 - None for this change.

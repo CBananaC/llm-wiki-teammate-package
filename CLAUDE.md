@@ -47,6 +47,11 @@ layer that consumes human-reviewed results.
 - `tool/skills md/`: canonical prompt/task specifications used by website and terminal workflows.
 - `tool/scripts py/`: reproducible data-processing and model-run scripts.
 - `tool/proxy/`: optional local and deployable AI proxy services.
+- `intro Website/Website/storymap/storymap-cards.css`: the independent layout
+  source for StoryMap card size and position. Whenever a StoryMap card is
+  created, edited, or its subtitle/title changes, update its matching labelled
+  block in this CSS file in the same change. Keep the Chinese subtitle/title in
+  the CSS comment synchronized so each card remains easy to identify.
 - GitHub repository: <https://github.com/CBananaC/llm-wiki-teammate-package>
 
 ## Progress protocol
