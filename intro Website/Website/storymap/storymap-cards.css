@@ -22,7 +22,7 @@
 /* intro-1-1 — 清代奏折制度 */
 #intro-1-1 {
   --card-x: 8vw !important; /* move right */
-  --card-y: 13vh !important; /* move down */
+  --card-y: 35vh !important; /* move down */
   --card-w: 500px !important; /* card width */
   --story-height: 1120px !important; /* story section height */
 }

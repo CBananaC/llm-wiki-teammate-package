@@ -870,6 +870,23 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:16 HKT — Codex — Fit the intro dropdown to its content
+
+Summary:
+- Reduced the intro workflow canvas to one content row instead of reserving unused branch rows.
+- Kept the dropdown height content-driven, with its existing upper and lower padding providing the surrounding margins.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- Confirmed the workflow canvas has a 54px content row and the dropdown has no fixed height.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-30 15:13 HKT — Codex — Center and equalize the intro workflow chain
 
 Summary:
