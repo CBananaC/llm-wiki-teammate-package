@@ -4660,6 +4660,24 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:12 HKT — Codex — Preserve the workflow connector line
+
+Summary:
+- Kept the three numbered 研究難處 buttons removed from the intro workflow header.
+- Extended the existing middle connector line across the empty branch area to 數位方法, while preserving the vertical branch line and upper/lower arms.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the connector path remains in the SVG and reaches the 數位方法 connector.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-29 17:56 HKT — Codex — Added the 4. 收取上諭的資訊 cover bar
 
 Summary:
