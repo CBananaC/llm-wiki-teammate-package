@@ -4530,6 +4530,21 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:15 HKT — Codex — Reformatted the independent StoryMap card-layout CSS
+
+Summary: Reformatted all 49 StoryMap card rules into readable multi-line blocks with explanatory comments and blank lines between cards, without changing layout values.
+
+Files:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- Confirmed all 49 card blocks remain present.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-30 15:00 HKT — Codex — Added the shared StoryMap card-layout synchronization rule
 
 Summary: Added a common project rule requiring every StoryMap card creation, edit, or subtitle/title change to update the matching labelled block in `intro Website/Website/storymap/storymap-cards.css`, including its Traditional Chinese identification comment.
@@ -4671,6 +4686,24 @@ Files:
 - `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
 
 Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 15:11 HKT — Codex — Restore the straight intro workflow line
+
+Summary:
+- Restored the 研究難處 workflow button.
+- Removed the unnecessary branch lines and connected 研究價值, 研究難處, and 數位方法 along one straight horizontal line.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the 研究難處 button is present and the SVG contains only straight horizontal connectors for the main workflow.
 - Passed `git diff --check`.
 
 Remaining:

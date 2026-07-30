@@ -20,109 +20,403 @@
 
 /* 引言 */
 /* intro-1-1 — 清代奏折制度 */
-#intro-1-1 { --card-x: 8vw !important; --card-y: 13vh !important; --card-w: 540px !important; --story-height: 1120px !important; }
+#intro-1-1 {
+  --card-x: 8vw !important; /* move right */
+  --card-y: 13vh !important; /* move down */
+  --card-w: 500px !important; /* card width */
+  --story-height: 1120px !important; /* story section height */
+}
+
 /* intro-1-2 — 清代奏折上諭的研究價值 */
-#intro-1-2 { --card-x: 52vw !important; --card-y: 19vh !important; --card-w: 560px !important; --story-height: 960px !important; }
+#intro-1-2 {
+  --card-x: 52vw !important; /* move right */
+  --card-y: 19vh !important; /* move down */
+  --card-w: 500px !important; /* card width */
+  --story-height: 960px !important; /* story section height */
+}
+
 /* intro-1-3-a — 研究清代奏折的主要困難 */
-#intro-1-3-a { --card-x: 9vw !important; --card-y: 12vh !important; --card-w: 570px !important; --story-height: 1040px !important; }
+#intro-1-3-a {
+  --card-x: 9vw !important; /* move right */
+  --card-y: 12vh !important; /* move down */
+  --card-w: 570px !important; /* card width */
+  --story-height: 1040px !important; /* story section height */
+}
+
 /* intro-1-3-b — 研究清代奏折的主要困難 */
-#intro-1-3-b { --card-x: 48vw !important; --card-y: 18vh !important; --card-w: 570px !important; --story-height: 1040px !important; }
+#intro-1-3-b {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 18vh !important; /* move down */
+  --card-w: 570px !important; /* card width */
+  --story-height: 1040px !important; /* story section height */
+}
+
 /* intro-1-3-c — 研究清代奏折的主要困難 */
-#intro-1-3-c { --card-x: 8vw !important; --card-y: 12vh !important; --card-w: 600px !important; --story-height: 1160px !important; }
+#intro-1-3-c {
+  --card-x: 8vw !important; /* move right */
+  --card-y: 12vh !important; /* move down */
+  --card-w: 600px !important; /* card width */
+  --story-height: 1160px !important; /* story section height */
+}
+
 /* intro-1-4 — 以數位方法研究清代奏折和上諭 */
-#intro-1-4 { --card-x: 7vw !important; --card-y: 13vh !important; --card-w: 470px !important; --story-height: 1200px !important; }
+#intro-1-4 {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 13vh !important; /* move down */
+  --card-w: 470px !important; /* card width */
+  --story-height: 1200px !important; /* story section height */
+}
+
 /* intro-1-5 — 研究成果：「清代奏摺與上諭分析平台」 */
-#intro-1-5 { --card-x: 6vw !important; --card-y: 11vh !important; --card-w: 500px !important; --story-height: 1120px !important; }
+#intro-1-5 {
+  --card-x: 6vw !important; /* move right */
+  --card-y: 11vh !important; /* move down */
+  --card-w: 500px !important; /* card width */
+  --story-height: 1120px !important; /* story section height */
+}
+
 /* intro-1-6-a — 示範案例：林爽文事件 */
-#intro-1-6-a { --card-x: 50vw !important; --card-y: 12vh !important; --card-w: 590px !important; --story-height: 1120px !important; }
+#intro-1-6-a {
+  --card-x: 50vw !important; /* move right */
+  --card-y: 12vh !important; /* move down */
+  --card-w: 590px !important; /* card width */
+  --story-height: 1120px !important; /* story section height */
+}
+
 /* intro-1-6-b — 示範案例：林爽文事件 */
-#intro-1-6-b { --card-x: 8vw !important; --card-y: 10vh !important; --card-w: 610px !important; --story-height: 1260px !important; }
+#intro-1-6-b {
+  --card-x: 8vw !important; /* move right */
+  --card-y: 10vh !important; /* move down */
+  --card-w: 610px !important; /* card width */
+  --story-height: 1260px !important; /* story section height */
+}
+
 /* intro-1-6-c — 示範案例：林爽文事件 */
-#intro-1-6-c { --card-x: 47vw !important; --card-y: 12vh !important; --card-w: 610px !important; --story-height: 1260px !important; }
+#intro-1-6-c {
+  --card-x: 47vw !important; /* move right */
+  --card-y: 12vh !important; /* move down */
+  --card-w: 610px !important; /* card width */
+  --story-height: 1260px !important; /* story section height */
+}
+
 
 /* 第一部分：平台介面 */
 /* part-1-areas — 平台的四大區域 */
-#part-1-areas { --card-x: 7vw !important; --card-y: 13vh !important; --card-w: 620px !important; --story-height: 1220px !important; }
+#part-1-areas {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 13vh !important; /* move down */
+  --card-w: 620px !important; /* card width */
+  --story-height: 1220px !important; /* story section height */
+}
+
 /* part-1-navigation — 導覽列 */
-#part-1-navigation { --card-x: 49vw !important; --card-y: 14vh !important; --card-w: 600px !important; --story-height: 1320px !important; }
+#part-1-navigation {
+  --card-x: 49vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 600px !important; /* card width */
+  --story-height: 1320px !important; /* story section height */
+}
+
 /* part-1-timeline — 時間與關係圖表 */
-#part-1-timeline { --card-x: 7vw !important; --card-y: 12vh !important; --card-w: 650px !important; --story-height: 1420px !important; }
+#part-1-timeline {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 12vh !important; /* move down */
+  --card-w: 650px !important; /* card width */
+  --story-height: 1420px !important; /* story section height */
+}
+
 /* part-1-node — 節點資訊區 */
-#part-1-node { --card-x: 52vw !important; --card-y: 15vh !important; --card-w: 560px !important; --story-height: 900px !important; }
+#part-1-node {
+  --card-x: 52vw !important; /* move right */
+  --card-y: 15vh !important; /* move down */
+  --card-w: 560px !important; /* card width */
+  --story-height: 900px !important; /* story section height */
+}
+
 /* part-1-original — 原始史料區 */
-#part-1-original { --card-x: 8vw !important; --card-y: 13vh !important; --card-w: 620px !important; --story-height: 1080px !important; }
+#part-1-original {
+  --card-x: 8vw !important; /* move right */
+  --card-y: 13vh !important; /* move down */
+  --card-w: 620px !important; /* card width */
+  --story-height: 1080px !important; /* story section height */
+}
+
 /* part-1-ai — 人工智能分析區 */
-#part-1-ai { --card-x: 48vw !important; --card-y: 13vh !important; --card-w: 650px !important; --story-height: 1260px !important; }
+#part-1-ai {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 13vh !important; /* move down */
+  --card-w: 650px !important; /* card width */
+  --story-height: 1260px !important; /* story section height */
+}
+
 
 /* 第二部分：平台運作流程 */
 /* part-2-overview — 1. 平台的運作流程 */
-#part-2-overview { --card-x: 7vw !important; --card-y: 13vh !important; --card-w: 640px !important; --story-height: 1100px !important; }
+#part-2-overview {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 13vh !important; /* move down */
+  --card-w: 640px !important; /* card width */
+  --story-height: 1100px !important; /* story section height */
+}
+
 /* part-2-flow — 3. 運作流程圖 */
-#part-2-flow { --card-x: 49vw !important; --card-y: 15vh !important; --card-w: 660px !important; --story-height: 900px !important; }
+#part-2-flow {
+  --card-x: 49vw !important; /* move right */
+  --card-y: 15vh !important; /* move down */
+  --card-w: 660px !important; /* card width */
+  --story-height: 900px !important; /* story section height */
+}
+
 /* part-2-input — 4. 輸入結構化資料 */
-#part-2-input { --card-x: 7vw !important; --card-y: 38vh !important; --card-w: 650px !important; --story-height: 1450px !important; }
+#part-2-input {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 650px !important; /* card width */
+  --story-height: 1450px !important; /* story section height */
+}
+
 /* part-2-ai — 5. 使用AI從原文中抽取資訊 */
-#part-2-ai { --card-x: 48vw !important; --card-y: 38vh !important; --card-w: 670px !important; --story-height: 1450px !important; }
+#part-2-ai {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 670px !important; /* card width */
+  --story-height: 1450px !important; /* story section height */
+}
+
 /* part-2-summary — 1. 總結文書 */
-#part-2-summary { --card-x: 7vw !important; --card-y: 38vh !important; --card-w: 650px !important; --story-height: 1050px !important; }
+#part-2-summary {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 650px !important; /* card width */
+  --story-height: 1050px !important; /* story section height */
+}
+
 /* part-2-communication — 2. 重建通信關係 */
-#part-2-communication { --card-x: 48vw !important; --card-y: 38vh !important; --card-w: 670px !important; --story-height: 1050px !important; }
+#part-2-communication {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 670px !important; /* card width */
+  --story-height: 1050px !important; /* story section height */
+}
+
 /* part-2-yu-response — 1. 辨識奏摺所回應的上諭 */
-#part-2-yu-response { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 680px !important; --story-height: 1650px !important; }
+#part-2-yu-response {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 1650px !important; /* story section height */
+}
+
 /* part-2-zhu-response — 2. 辨識奏摺所回應的硃批 */
-#part-2-zhu-response { --card-x: 50vw !important; --card-y: 14vh !important; --card-w: 620px !important; --story-height: 920px !important; }
+#part-2-zhu-response {
+  --card-x: 50vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 620px !important; /* card width */
+  --story-height: 920px !important; /* story section height */
+}
+
 /* part-2-yu-source — 3. 辨識上諭所回應的奏摺 */
-#part-2-yu-source { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 690px !important; --story-height: 2050px !important; }
+#part-2-yu-source {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 690px !important; /* card width */
+  --story-height: 2050px !important; /* story section height */
+}
+
 /* part-2-extract — 3. 抽取奏摺的資訊 */
-#part-2-extract { --card-x: 48vw !important; --card-y: 38vh !important; --card-w: 670px !important; --story-height: 1050px !important; }
+#part-2-extract {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 670px !important; /* card width */
+  --story-height: 1050px !important; /* story section height */
+}
+
 /* part-2-events — 1. 抽取官員奏報的事件、官員對事件的回應 */
-#part-2-events { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 700px !important; --story-height: 1700px !important; }
+#part-2-events {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 700px !important; /* card width */
+  --story-height: 1700px !important; /* story section height */
+}
+
 /* part-2-sources — 2. 追溯資訊的來源 */
-#part-2-sources { --card-x: 49vw !important; --card-y: 14vh !important; --card-w: 650px !important; --story-height: 1200px !important; }
+#part-2-sources {
+  --card-x: 49vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 650px !important; /* card width */
+  --story-height: 1200px !important; /* story section height */
+}
+
 /* part-2-yu-info — 4. 收取上諭的資訊 */
-#part-2-yu-info { --card-x: 7vw !important; --card-y: 38vh !important; --card-w: 700px !important; --story-height: 1750px !important; }
+#part-2-yu-info {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 700px !important; /* card width */
+  --story-height: 1750px !important; /* story section height */
+}
+
 /* part-2-visualize — 4. 視覺化呈現分析的結果 */
-#part-2-visualize { --card-x: 48vw !important; --card-y: 38vh !important; --card-w: 680px !important; --story-height: 1100px !important; }
+#part-2-visualize {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 1100px !important; /* story section height */
+}
+
 
 /* 第三部分：其他研究問題 */
 /* part-3-research-questions — 1. 適合的研究問題 */
-#part-3-research-questions { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 680px !important; --story-height: 1120px !important; }
+#part-3-research-questions {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 1120px !important; /* story section height */
+}
+
 /* part-3-tools — 2. 所需的工具與資源 */
-#part-3-tools { --card-x: 48vw !important; --card-y: 14vh !important; --card-w: 700px !important; --story-height: 1480px !important; }
+#part-3-tools {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 700px !important; /* card width */
+  --story-height: 1480px !important; /* story section height */
+}
+
 /* part-3-basic-flow — 3. 重用平台的基本流程 */
-#part-3-basic-flow { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 740px !important; --story-height: 920px !important; }
+#part-3-basic-flow {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 740px !important; /* card width */
+  --story-height: 920px !important; /* story section height */
+}
+
 /* part-3-ocr — 1. OCR 並結構化原始史料 */
-#part-3-ocr { --card-x: 7vw !important; --card-y: 38vh !important; --card-w: 680px !important; --story-height: 1120px !important; }
+#part-3-ocr {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 1120px !important; /* story section height */
+}
+
 /* part-3-paddleocr — 2. PaddleOCR */
-#part-3-paddleocr { --card-x: 48vw !important; --card-y: 14vh !important; --card-w: 680px !important; --story-height: 1080px !important; }
+#part-3-paddleocr {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 1080px !important; /* story section height */
+}
+
 /* part-3-agentic-ocr — 3. 運用 Agentic AI 使用 PaddleOCR */
-#part-3-agentic-ocr { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 690px !important; --story-height: 900px !important; }
+#part-3-agentic-ocr {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 690px !important; /* card width */
+  --story-height: 900px !important; /* story section height */
+}
+
 /* part-3-material — 4. OCR 前的材料準備 */
-#part-3-material { --card-x: 49vw !important; --card-y: 14vh !important; --card-w: 690px !important; --story-height: 1020px !important; }
+#part-3-material {
+  --card-x: 49vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 690px !important; /* card width */
+  --story-height: 1020px !important; /* story section height */
+}
+
 /* part-3-code — 5. 執行 OCR 的Python 代碼 */
-#part-3-code { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 680px !important; --story-height: 900px !important; }
+#part-3-code {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 900px !important; /* story section height */
+}
+
 /* part-3-format — 6. 檢視史料的版面及格式 */
-#part-3-format { --card-x: 48vw !important; --card-y: 14vh !important; --card-w: 680px !important; --story-height: 900px !important; }
+#part-3-format {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 680px !important; /* card width */
+  --story-height: 900px !important; /* story section height */
+}
+
 /* part-3-printed — 7. 辨識印刷字 */
-#part-3-printed { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 720px !important; --story-height: 1140px !important; }
+#part-3-printed {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 720px !important; /* card width */
+  --story-height: 1140px !important; /* story section height */
+}
+
 /* part-3-handwritten — 8. 辨識手寫字 */
-#part-3-handwritten { --card-x: 48vw !important; --card-y: 14vh !important; --card-w: 720px !important; --story-height: 1510px !important; }
+#part-3-handwritten {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 720px !important; /* card width */
+  --story-height: 1510px !important; /* story section height */
+}
+
 /* part-3-json — 9. 輸出格式：JSON */
-#part-3-json { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 720px !important; --story-height: 1180px !important; }
+#part-3-json {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 720px !important; /* card width */
+  --story-height: 1180px !important; /* story section height */
+}
+
 /* part-3-test — 10. OCR測試 */
-#part-3-test { --card-x: 48vw !important; --card-y: 14vh !important; --card-w: 720px !important; --story-height: 1220px !important; }
+#part-3-test {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 720px !important; /* card width */
+  --story-height: 1220px !important; /* story section height */
+}
+
 /* part-3-import — 11. 輸入結構化史料至平台 */
-#part-3-import { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 720px !important; --story-height: 1050px !important; }
+#part-3-import {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 720px !important; /* card width */
+  --story-height: 1050px !important; /* story section height */
+}
+
 /* part-3-ai — 2. 運用AI抽取資訊 */
-#part-3-ai { --card-x: 48vw !important; --card-y: 38vh !important; --card-w: 700px !important; --story-height: 1220px !important; }
+#part-3-ai {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 700px !important; /* card width */
+  --story-height: 1220px !important; /* story section height */
+}
+
 /* part-3-ai-chain — 2. 執行 AI Skills的方法 */
-#part-3-ai-chain { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 740px !important; --story-height: 1320px !important; }
+#part-3-ai-chain {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 740px !important; /* card width */
+  --story-height: 1320px !important; /* story section height */
+}
+
 /* part-3-model — 3. 選用的AI Model */
-#part-3-model { --card-x: 48vw !important; --card-y: 14vh !important; --card-w: 700px !important; --story-height: 1030px !important; }
+#part-3-model {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 700px !important; /* card width */
+  --story-height: 1030px !important; /* story section height */
+}
+
 /* part-3-cloud — 4. Google Cloud */
-#part-3-cloud { --card-x: 7vw !important; --card-y: 14vh !important; --card-w: 700px !important; --story-height: 920px !important; }
+#part-3-cloud {
+  --card-x: 7vw !important; /* move right */
+  --card-y: 14vh !important; /* move down */
+  --card-w: 700px !important; /* card width */
+  --story-height: 920px !important; /* story section height */
+}
+
 /* part-3-wiki — 3. 後續功能：LLM Wiki */
-#part-3-wiki { --card-x: 48vw !important; --card-y: 38vh !important; --card-w: 720px !important; --story-height: 1260px !important; }
+#part-3-wiki {
+  --card-x: 48vw !important; /* move right */
+  --card-y: 38vh !important; /* move down */
+  --card-w: 720px !important; /* card width */
+  --story-height: 1260px !important; /* story section height */
+}
+
 
 /* Mobile keeps the current stacked-card layout. Add per-card mobile values to
    any block above if a particular card needs a different mobile position. */
