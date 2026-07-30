@@ -90,18 +90,11 @@ body::selection { background: var(--accent); color: #fff; }
     radial-gradient(circle at 20% 86%, rgba(92,142,133,.38), transparent 30%),
     linear-gradient(120deg, #173b3f 5%, #274e4f 50%, #a56c56 140%);
 }
-.hero-backdrop::after {
-  content: "奏  ·  摺  ·  諭"; position: absolute; right: 7vw; bottom: 10vh;
-  color: rgba(255,255,255,.13); font: 9vw var(--serif); letter-spacing: .08em; white-space: nowrap;
-}
 .hero-content { width: min(980px, 82vw); margin-right: auto; margin-left: 11vw; }
 .eyebrow { margin: 0 0 18px; color: #f0a08d; font-size: calc(12px * var(--font-scale)); letter-spacing: .2em; }
 h1, h2, h3 { font-family: var(--serif); font-weight: 400; }
 h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)), calc(5vw * var(--font-scale)), calc(78px * var(--font-scale))); line-height: 1.08; letter-spacing: -.04em; }
 .hero-note { max-width: 620px; margin: 30px 0 0; color: rgba(247,243,234,.76); font: calc(18px * var(--font-scale))/1.7 var(--serif); }
-.scroll-note { position: absolute; left: 11vw; bottom: 36px; color: rgba(247,243,234,.6); font-size: calc(11px * var(--font-scale)); letter-spacing: .14em; }
-.scroll-note::before { content: "↓"; display: inline-block; margin-right: 10px; color: #f0a08d; font-size: 18px; }
-
 .content-story { min-height: max(100svh, var(--story-height, 1040px)); background: #d9d1c4; }
 .backdrop { position: absolute; z-index: -2; inset: 0; overflow: hidden; background: #d9d1c4; }
 .backdrop::before {
