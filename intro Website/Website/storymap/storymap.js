@@ -123,6 +123,10 @@ tabs.forEach((tab) => {
     setActiveTab(tab.dataset.navTarget);
   });
 });
+document.querySelector('[data-cover-target="intro"]')?.addEventListener('click', (event) => {
+  event.preventDefault();
+  setActiveTab('intro');
+});
 introDropdown.querySelectorAll('.nav-dropdown-menu a').forEach((link) => {
   link.addEventListener('click', (event) => {
     event.preventDefault();
