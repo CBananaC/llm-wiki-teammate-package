@@ -1046,3 +1046,34 @@ Verified:
 
 Remaining:
 - Locate and verify 圖十三 before using the Taiwan sea segment or auxiliary route as a precise historical map.
+
+### 2026-07-30 17:23 HKT — Codex — Create a clear 硃40—諭24 demonstration data set
+
+Summary:
+- Added a self-contained demonstration overlay that keeps only the 10 event
+  dots sourced from 硃40 and the 13 emperor-action dots sourced from 諭24.
+- Retained one matching 硃40 AI output card per event and the structured AI
+  action output data for all retained 諭24 actions.
+- Added the requested 諭24-to-硃40 response connection as a demonstration-only
+  pair, and hid unrelated base document dots in the overlay.
+
+Files changed:
+- `Website/Clear Data/clear-demo.data`
+- `Website/Clear Data/source-documents.json`
+- `Website/Clear Data/confirmed-pairs.json`
+- `Website/Clear Data/README.md`
+- `Website/Clear Data/build_clear_demo.py`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Parsed all three JSON files and compiled the builder successfully.
+- Confirmed 23 retained events: 10 from 硃40 and 13 emperor actions from 諭24;
+  no other event source remains.
+- Confirmed every retained 諭24 emperor action has structured `emperorDetail`
+  data and a source entry, and the pair is labelled `demonstration`.
+- Passed `git diff --check`.
+
+Remaining:
+- Import the overlay into the sample review page and perform a live browser
+  check if this demonstration needs to be presented interactively.

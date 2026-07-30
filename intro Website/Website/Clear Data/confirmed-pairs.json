@@ -1,0 +1,17 @@
+{
+  "kind": "confirmed-pairs",
+  "exported_at": "2026-07-30 00:00",
+  "count": 1,
+  "pairs": [
+    {
+      "zhu_doc_id": "硃40",
+      "reply_doc_id": "諭24",
+      "relation": "official_reply_to_emperor_zhu",
+      "match_level": "demonstration",
+      "confirmed_at": null,
+      "evidence": {
+        "relation_note": "Demonstration-only connection requested for this clear dataset; it does not replace confirmed research pairings."
+      }
+    }
+  ]
+}

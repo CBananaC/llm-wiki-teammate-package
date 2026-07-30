@@ -5290,3 +5290,29 @@ Verified:
 
 Remaining:
 - Verify 圖十三 before using the marked route as precise historical cartography.
+
+### 2026-07-30 — Codex — Created a clear 硃40—諭24 demonstration data set
+
+Summary: Added a self-contained data set under `intro Website/Website/Clear Data`
+for a reduced timeline demonstration. It keeps 10 硃40 event dots, 13 諭24
+emperor-action dots, their retained AI output data, only the two relevant source
+documents, and the requested 諭24-to-硃40 demonstration response connection.
+
+Files:
+- `intro Website/Website/Clear Data/clear-demo.data`
+- `intro Website/Website/Clear Data/source-documents.json`
+- `intro Website/Website/Clear Data/confirmed-pairs.json`
+- `intro Website/Website/Clear Data/README.md`
+- `intro Website/Website/Clear Data/build_clear_demo.py`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- All JSON files parse successfully; the builder compiles.
+- The overlay contains 23 events and no event source outside 硃40 or 諭24.
+- Every retained 諭24 emperor action has structured AI detail and source data.
+- The response pair is explicitly marked demonstration-only and canonical
+  formal/sample state was not changed.
+
+Remaining:
+- Import and visually check the clear overlay in the sample review page if an
+  interactive presentation is required.
