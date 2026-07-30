@@ -121,6 +121,7 @@ def main() -> None:
         "__hidden": hidden_documents,
         "__events": kept_events,
         "__docPairs": [pair],
+        "__sourceDocuments": [source_by_id[doc_id] for doc_id in ["硃40", "諭24"]],
         "__workspaceGroups": {
             "硃40|諭24": {
                 "doc_ids": ["硃40", "諭24"],
@@ -142,25 +143,8 @@ def main() -> None:
         },
     }
 
-    pair_payload = {
-        "kind": "confirmed-pairs",
-        "exported_at": "2026-07-30 17:23",
-        "count": 1,
-        "pairs": [pair],
-    }
-    source_payload = {
-        "description": "Only the two canonical Stage 1 source documents used by the clear demonstration.",
-        "documents": [source_by_id[doc_id] for doc_id in ["硃40", "諭24"]],
-    }
-
     (OUT / "clear-demo.data").write_text(
         json.dumps(clear_data, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    (OUT / "confirmed-pairs.json").write_text(
-        json.dumps(pair_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
-    )
-    (OUT / "source-documents.json").write_text(
-        json.dumps(source_payload, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
 
     print(json.dumps(clear_data["__meta"], ensure_ascii=False, indent=2))

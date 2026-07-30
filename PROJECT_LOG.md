@@ -5316,3 +5316,25 @@ Verified:
 Remaining:
 - Import and visually check the clear overlay in the sample review page if an
   interactive presentation is required.
+
+### 2026-07-30 — Codex — Consolidated the clear demonstration into one export JSON
+
+Summary: Combined the clear demonstration overlay, the complete 硃40 and 諭24
+source records, and the requested demonstration pair into one export-style
+JSON file. Removed the redundant companion JSON files.
+
+Files:
+- `intro Website/Website/Clear Data/clear-demo.data`
+- `intro Website/Website/Clear Data/README.md`
+- `intro Website/Website/Clear Data/build_clear_demo.py`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- The single JSON file parses successfully and includes both source documents
+  under `__sourceDocuments` and the response connection under `__docPairs`.
+- The 10 硃40 event dots and 13 諭24 emperor-action dots remain unchanged.
+- The formal and sample canonical states were not modified by this change.
+
+Remaining:
+- Import and visually check the single export JSON in the sample review page if
+  an interactive presentation is required.

@@ -1077,3 +1077,32 @@ Verified:
 Remaining:
 - Import the overlay into the sample review page and perform a live browser
   check if this demonstration needs to be presented interactively.
+
+### 2026-07-30 17:33 HKT — Codex — Consolidate the clear demonstration into one export JSON
+
+Summary:
+- Embedded the complete 硃40 and 諭24 source records into `clear-demo.data`
+  under `__sourceDocuments`.
+- Kept the timeline events, AI outputs, hidden-document overlay, and requested
+  demonstration pair in the same export-style JSON object.
+- Removed the redundant standalone source-document and pair JSON files.
+
+Files changed:
+- `Website/Clear Data/clear-demo.data`
+- `Website/Clear Data/README.md`
+- `Website/Clear Data/build_clear_demo.py`
+- `Website/Clear Data/confirmed-pairs.json` (removed)
+- `Website/Clear Data/source-documents.json` (removed)
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- The single `clear-demo.data` file parses as JSON and contains both source
+  records plus the `__docPairs` connection.
+- Confirmed the event/action counts remain 10 硃40 events and 13 諭24 emperor
+  actions, with no unrelated events.
+- Passed `git diff --check`.
+
+Remaining:
+- Import the single export JSON into the sample review page and perform a live
+  browser check if an interactive presentation is required.

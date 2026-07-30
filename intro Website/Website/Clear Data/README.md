@@ -6,13 +6,10 @@ sample tool, or the canonical Stage 1 source file.
 
 ## Contents
 
-- `clear-demo.data` — importable review-state overlay.
-- `source-documents.json` — only the two source documents used here: 硃40 and
-  諭24.
-- `confirmed-pairs.json` — the requested 諭24 → 硃40 response connection,
-  labelled `demonstration` rather than confirmed research evidence.
-- `build_clear_demo.py` — reproducible builder that refreshes the three data
-  files from the current sample state.
+- `clear-demo.data` — one importable JSON review-state export containing the
+  timeline overlay, source documents, and response-pair metadata.
+- `build_clear_demo.py` — reproducible builder that refreshes the single export
+  file from the current sample state.
 
 The overlay keeps:
 
@@ -23,6 +20,8 @@ The overlay keeps:
   in the overlay.
 - A single explicit document-pair link from 硃40 to 諭24, representing 諭24 as
   a response to 硃40 for demonstration purposes.
+- The full source records for 硃40 and 諭24 under `__sourceDocuments` in the
+  same JSON file.
 
 The link is intentionally marked as demonstration-only. It should not be
 copied into the formal confirmed-pair data without separate source review.
