@@ -11,13 +11,19 @@ sample tool, or the canonical Stage 1 source file.
 - `build_clear_demo.py` — reproducible builder that refreshes the single export
   file from the current sample state.
 
-The overlay keeps:
+The export keeps:
 
 - 10 event dots sourced from 硃40, with one matching AI output card for each.
 - 13 emperor-action dots sourced from 諭24, with the retained 諭24 AI action
   output cards and each action's structured `emperorDetail`.
-- Only the 硃40 and 諭24 document dots; unrelated base document dots are hidden
-  in the overlay.
+- All existing event and emperor-action dots remain in `__events`, including the
+  other documents' dots.
+- All existing document dots remain visible. `__clearDemo.document_dots` records
+  that only 硃40 and 諭24 are intended to be clickable later; other document dots
+  remain visible but are marked non-clickable for future interaction code.
+- `__clearDemo.event_dots.selected_data` separates the 硃40 event IDs and 諭24
+  emperor-action IDs, while the selected document data remains under the matching
+  top-level `硃40` and `諭24` keys.
 - A single explicit document-pair link from 硃40 to 諭24, representing 諭24 as
   a response to 硃40 for demonstration purposes.
 - The full source records for 硃40 and 諭24 under `__sourceDocuments` in the

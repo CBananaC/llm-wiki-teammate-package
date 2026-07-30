@@ -5338,3 +5338,27 @@ Verified:
 Remaining:
 - Import and visually check the single export JSON in the sample review page if
   an interactive presentation is required.
+
+### 2026-07-30 — Codex — Keep all dots visible with a two-document interaction allowlist
+
+Summary: Updated `intro Website/Website/Clear Data/clear-demo.data` to retain all
+225 existing event and emperor-action dots. Added `__clearDemo` metadata that
+separates the selected 硃40 and 諭24 event IDs and marks only those two document
+dots as clickable for future code; all other document dots remain visible. The
+single 諭24-to-硃40 demonstration pair and selected AI output cards remain.
+
+Files:
+- `intro Website/Website/Clear Data/clear-demo.data`
+- `intro Website/Website/Clear Data/README.md`
+- `intro Website/Website/Clear Data/build_clear_demo.py`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- No `__hidden` overlay is present; the allowlist is exactly 硃40 and 諭24.
+- Confirmed 225 total event/action dots, 10 selected 硃40 events, 13 selected
+  諭24 emperor actions, and 10/9 selected AI output cards.
+- JSON parsing and `git diff --check` passed.
+
+Remaining:
+- Add the runtime click guard to the review page when the interaction behavior
+  is ready to be implemented.

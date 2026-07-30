@@ -1106,3 +1106,31 @@ Verified:
 Remaining:
 - Import the single export JSON into the sample review page and perform a live
   browser check if an interactive presentation is required.
+
+### 2026-07-30 17:43 HKT — Codex — Keep all dots visible with a two-document interaction allowlist
+
+Summary:
+- Restored all 225 existing event and emperor-action dots to the single export,
+  including the 202 硃40/諭24-independent dots.
+- Added `__clearDemo` metadata that keeps all document dots visible while marking
+  only 硃40 and 諭24 as clickable for future interaction code.
+- Kept the selected 硃40 and 諭24 event IDs and AI output cards separated under
+  their matching top-level document data.
+
+Files changed:
+- `Website/Clear Data/clear-demo.data`
+- `Website/Clear Data/README.md`
+- `Website/Clear Data/build_clear_demo.py`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed no `__hidden` document overlay is present.
+- Confirmed 225 total event/action dots, 10 selected 硃40 events, 13 selected
+  諭24 emperor actions, and 10/9 selected AI output cards.
+- Confirmed the clickable-document allowlist is exactly 硃40 and 諭24.
+- Passed JSON parsing and `git diff --check`.
+
+Remaining:
+- Add the runtime click guard to the review page when the interaction behavior
+  is ready to be implemented.
