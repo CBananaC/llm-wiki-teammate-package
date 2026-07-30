@@ -300,6 +300,30 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 16:15 HKT — Codex — Refined the 第一部分 interface overview
+
+Summary:
+- Revised the `第一部分` UI concept from multiple overview cards to one large
+  replica of the sample review tool beneath the `1. 平台的整體介面` cover.
+- Added four clickable highlights with floating function labels for the
+  導覽列、時間與關係圖表、原始史料區, and AI 分析區.
+- Added free-exploration, guided-tour, reset, responsive, and replica-boundary
+  ideas.
+
+Files changed:
+- `Website/UI Idea/03-第一部分.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the four labels match the current platform areas and use the
+  existing Traditional Chinese terminology.
+- Passed `git diff --check`.
+
+Remaining:
+- Decide whether the replica should be a live sample embed, an annotated
+  screenshot, or a purpose-built teaching replica.
+
 ### 2026-07-30 16:00 HKT — Codex — Refined research-result and case-study visuals
 
 Summary:

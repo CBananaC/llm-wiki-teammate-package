@@ -4530,6 +4530,25 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 16:15 HKT — Codex — Refined the 第一部分 interface overview
+
+Summary:
+- Changed the proposed `第一部分` overview to one sample-tool replica with
+  four clickable highlight areas and floating function labels.
+- Kept detailed explanations for later cards so the overview can focus on
+  spatial orientation and basic function recognition.
+
+Files:
+- `intro Website/Website/UI Idea/03-第一部分.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- Choose the implementation format for the replica.
+
 ### 2026-07-30 16:00 HKT — Codex — Refined research-result and case-study visuals
 
 Summary:
