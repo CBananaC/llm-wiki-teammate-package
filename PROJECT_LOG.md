@@ -4691,6 +4691,25 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:13 HKT — Codex — Center and equalize the intro workflow chain
+
+Summary:
+- Reflowed the six workflow buttons into consecutive centered columns.
+- Equalized all five connector dashes and removed the unused gap caused by the former empty branch column.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the workflow uses six consecutive columns and the SVG connector coordinates form five equal-length horizontal segments.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-30 15:11 HKT — Codex — Restore the straight intro workflow line
 
 Summary:
