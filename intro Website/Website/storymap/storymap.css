@@ -115,8 +115,7 @@ h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)
 .content-story { min-height: max(100svh, var(--story-height, 1040px)); background: #d9d1c4; }
 .backdrop { position: absolute; z-index: -2; inset: 0; overflow: hidden; background: #d9d1c4; }
 .backdrop::before {
-  content: attr(data-mark); position: absolute; right: 6vw; bottom: 3vh; color: rgba(255,255,255,.28);
-  font: 20vw/.8 var(--serif); letter-spacing: -.08em; pointer-events: none;
+  content: none;
 }
 .backdrop::after { content: ""; position: absolute; inset: 0; background: linear-gradient(90deg, rgba(14,46,48,.24), transparent 65%); pointer-events: none; }
 .backdrop.paper { background: radial-gradient(circle at 70% 18%, rgba(255,250,233,.9), transparent 25%), linear-gradient(135deg, #8b6d58, #d8c09f 48%, #516a69); }
