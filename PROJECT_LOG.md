@@ -5275,3 +5275,18 @@ Verified:
 
 Remaining:
 - None for this change.
+
+### 2026-07-30 17:05 HKT — Codex — Mark Taiwan-war report routes on the visual reference map
+
+Summary:
+- Created a marked copy of the 賴福順 route-map PDF for the introduction website, distinguishing the main mainland-to-Taiwan report route from the auxiliary 江西–潮州 route.
+- Preserved the original source PDF and recorded that the marked page is 圖十二, while the Taiwan-war text refers to 圖十三 for the precise route figure.
+
+Files:
+- `intro Website/Website/Visual Material/情報路線/2乾隆重要戰爭之軍需硏究. 賴福順. 國立故宮博物院, 1984 (dragged) - marked Taiwan routes.pdf`
+
+Verified:
+- Rendered and visually inspected the marked PDF; Traditional Chinese annotation labels display correctly.
+
+Remaining:
+- Verify 圖十三 before using the marked route as precise historical cartography.
