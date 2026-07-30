@@ -646,3 +646,59 @@ Verified:
 
 Remaining:
 - The in-app browser blocked reloading the local `file://` preview, so live visual refresh remains to be checked through the normal local HTTP preview.
+
+### 2026-07-30 14:10 HKT — Codex — Simplify cover page backdrop
+
+Summary:
+- Removed the `SCROLL TO EXPLORE` prompt from the cover page.
+- Removed the decorative 奏・摺・諭 text from the cover backdrop.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Confirmed neither cover decoration remains in the HTML or CSS.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:12 HKT — Codex — Show settings on hover and rename font control
+
+Summary:
+- Made the website settings panel open when hovering over the gear area, with
+  a small hover bridge between the gear and the dropdown.
+- Kept keyboard focus, Escape, and click interactions available.
+- Changed the visible and accessible font-control wording from 字級 to 字體.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified the gear opens the settings panel and the panel displays
+  the 字體 label.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:13 HKT — Codex — Move StoryMap content into HTML
+
+Summary:
+- Moved the authored StoryMap card text, headings, notes, citations, tables, cover bars, and backdrop labels from JavaScript data arrays into static HTML.
+- Reduced `storymap.js` to interaction and presentation behavior while preserving the existing navigation, card hierarchy, Part 2 content, and Part 3 cover bars.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed HTML parsing, `node --check Website/storymap/storymap.js`, and `git diff --check`.
+- Exact-string coverage remains complete for Part 2 (64/64) and Part 3 (69/69) source paragraphs.
+- Browser-verified the HTTP preview at `#part-3`, including the Third Part navigation link, headings, paragraphs, and thin cover-bar sections.
+
+Remaining:
+- None for this change.
