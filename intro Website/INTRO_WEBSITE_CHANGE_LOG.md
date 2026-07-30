@@ -300,6 +300,121 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:05 HKT — Codex — Remove oversized backdrop characters
+
+Summary:
+- Removed the large decorative Chinese character from every story-card backdrop.
+- Preserved the existing backdrop colors, imagery, and card content.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 15:03 HKT — Codex — Simplify the intro workflow header
+
+Summary:
+- Renamed the workflow node 奏折上諭研究價值 to 研究價值.
+- Removed the three numbered 研究難處 nodes from the intro workflow header while retaining the general 研究難處 section link.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Confirmed the old header label and all three numbered difficulty nodes are absent from the workflow markup.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:40 HKT — Codex — Added an independent StoryMap card-layout stylesheet
+
+Summary:
+- Added one clearly labelled CSS block for each of the 49 StoryMap cards.
+- Moved the practical editing workflow for card position, width, and section height into `storymap-cards.css`, with each block identified by the card's Traditional Chinese subtitle/title.
+- Kept the existing HTML inline values as non-authoritative fallbacks and loaded the new stylesheet after the main StoryMap stylesheet.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed 49 StoryMap sections and 49 matching CSS layout blocks.
+- Passed `git diff --check`.
+- Browser-verified the first card at desktop width and at a 390px mobile width; desktop position/width and mobile stacked positioning both render as expected.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:40 HKT — Codex — Remove the introductory cover tab
+
+Summary:
+- Removed the 引言 cover panel headed `從奏摺與上諭理解清代通信`.
+- Kept the 引言 content cards and workflow navigation as the direct entry point.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Confirmed the removed heading and intro cover markup no longer appear in the page.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:36 HKT — Codex — Preserve the website’s original cover palette
+
+Summary:
+- Kept the competition cover’s spacing and hierarchy as the layout reference, but restored the introduction website’s deep-teal and restrained-coral background palette.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:31 HKT — Codex — Accent the start-reading button
+
+Summary:
+- Changed `開始閱讀` to the website’s coral-orange text and border, with a matching hover state.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:24 HKT — Codex — Build the cover-page competition links
+
+Summary:
+- Replaced the cover-page eyebrow with `2026 理大人工智能 X 數位人文獎・工具型作品示例` and enlarged the cover hierarchy.
+- Added three thin, square-cornered buttons: `比賽網站`, `下載工具代碼`, and `開始閱讀`.
+- Connected the buttons to the competition website, the project GitHub repository, and the 引言 panel respectively.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser-verified the three labels, exact destinations, 1px white borders, square corners, and the `開始閱讀` panel switch to `#intro`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-29 17:56 HKT — Codex — Added the 4. 收取上諭的資訊 cover bar
 
 Summary:
@@ -699,6 +814,21 @@ Verified:
 - Passed HTML parsing, `node --check Website/storymap/storymap.js`, and `git diff --check`.
 - Exact-string coverage remains complete for Part 2 (64/64) and Part 3 (69/69) source paragraphs.
 - Browser-verified the HTTP preview at `#part-3`, including the Third Part navigation link, headings, paragraphs, and thin cover-bar sections.
+
+Remaining:
+- None for this change.
+
+### 2026-07-30 14:29 HKT — Codex — Refine the cover competition label
+
+Summary:
+- Reduced the size of `2026 理大人工智能 X 數位人文獎・工具型作品示例` so the main platform title remains the visual focus.
+- Changed the label to the website’s coral-orange accent color.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Passed `git diff --check`.
 
 Remaining:
 - None for this change.
