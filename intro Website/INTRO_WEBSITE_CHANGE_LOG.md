@@ -300,6 +300,37 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 15:47 HKT — Codex — Added per-tab UI brainstorming notes
+
+Summary:
+- Created one markdown brainstorming file for each top-level website tab.
+- Developed the `引言` concept around an interactive Qing document-route map,
+  source images, a Taiwan-to-Beijing inset, and a Forbidden City inset.
+- Separated the three `研究清代奏折的主要困難` ideas into document scale,
+  communication relations, and event/source networks.
+- Added interaction and content ideas for the platform interface, research
+  workflow, and reuse/adaptation tabs.
+
+Files changed:
+- `Website/UI Idea/01-主頁.md`
+- `Website/UI Idea/02-引言.md`
+- `Website/UI Idea/03-第一部分.md`
+- `Website/UI Idea/04-第二部分.md`
+- `Website/UI Idea/05-第三部分.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the five files match the current top-level tabs: `主頁`, `引言`,
+  `第一部分`, `第二部分`, and `第三部分`.
+- Confirmed the notes preserve Traditional Chinese UI labels and mark the
+  institutional route as a simplified model requiring source validation.
+- Passed `git diff --check`.
+
+Remaining:
+- Decide which ideas should be promoted into the live StoryMap after reviewing
+  the notes and confirming image sources, permissions, and historical framing.
+
 ### 2026-07-30 15:15 HKT — Codex — Reformatted the independent StoryMap card-layout CSS
 
 Summary:
