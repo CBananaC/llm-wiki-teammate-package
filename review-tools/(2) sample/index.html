@@ -2439,24 +2439,37 @@
         if(rel==='yu_source') yuFocusSourceRids.add(target._rid);
       });
     }
-    // A clicked non-Yu document can share a related Yu with other official replies.
-    // Focus those pair lines and dots as leaves only; their own events must not expand
-    // the clicked-document network.
+    // A clicked non-Yu document may share a Yu with other official replies, but only
+    // the clicked document's own pair and direct event/action evidence belongs here.
     const docFocus=!!(seed&&seed.kind==='doc'&&hlDocRec&&hlDocRec.type!=='shangyu');
-    const docFocusPairKeys=new Set();
+    const docFocusPairKeys=new Set(), docFocusPairRids=new Set(), docFocusEventIds=new Set();
     if(docFocus){
-      const clickedDocId=String(hlDocRec._baseId||hlDocRec.id), relatedYuIds=new Set();
+      const clickedDocId=String(hlDocRec._baseId||hlDocRec.id), clickedRid=hlDocRec._rid;
+      docFocusPairRids.add(clickedRid);
       allDocPairs().forEach(pp=>{
         const sourceId=String(pairSourceDocId(pp)), replyId=String(pp.reply_doc_id);
         const involvesClicked=sourceId===clickedDocId||replyId===clickedDocId;
-        if(involvesClicked) docFocusPairKeys.add(pairKey(pp));
+        if(!involvesClicked) return;
+        docFocusPairKeys.add(pairKey(pp));
         const sourceRec=recByDocId[sourceId], replyRec=recByDocId[replyId];
-        if(involvesClicked&&sourceRec&&sourceRec.type==='shangyu') relatedYuIds.add(sourceId);
-        if(involvesClicked&&replyRec&&replyRec.type==='shangyu') relatedYuIds.add(replyId);
+        if(sourceRec) docFocusPairRids.add(sourceRec._rid);
+        if(replyRec) docFocusPairRids.add(replyRec._rid);
       });
-      allDocPairs().forEach(pp=>{
-        const rel=normalizePairRelation(pp.relation||'official_reply_to_yu');
-        if(relatedYuIds.has(String(pairSourceDocId(pp)))&&(rel==='official_reply_to_yu'||rel==='yu_source')) docFocusPairKeys.add(pairKey(pp));
+      function eventTouchesDoc(e,rid){
+        let touched=false;
+        (e.sources||[]).forEach(sc=>{
+          let r=resolveChartRecord(sc&&sc.doc_id,sc&&sc.quote);
+          if(e.actor!=='emperor'&&sc&&sc.howKnown==='上諭所載'&&sc.viaDoc){ const vr=resolveChartRecord(sc.viaDoc,sc.quote); if(vr) r=vr; }
+          if(r&&r._rid===rid) touched=true;
+        });
+        if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=resolveChartRecord(e.emperorDetail.memDoc); if(r&&r._rid===rid) touched=true; }
+        if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)&&e.emperorDetail.infoSources.some(sc=>{ const r=resolveChartRecord(sc&&sc.doc_id,sc&&sc.quote); return r&&r._rid===rid; })) touched=true;
+        return touched;
+      }
+      allEvs.forEach(e=>{ if(eventTouchesDoc(e,clickedRid)) docFocusEventIds.add(String(e.id)); });
+      allEvs.forEach(e=>{
+        if(!docFocusEventIds.has(String(e.id))) return;
+        [e.respondsToEventId,...(e.alsoRespondsToEventIds||[])].filter(Boolean).forEach(id=>docFocusEventIds.add(String(id)));
       });
     }
     // Keep emperor-response events attached to source documents, but do not let the
@@ -2522,7 +2535,12 @@
           visit(n,focusEndpoint?cur.depth:nextDepth,pathLanes);
         });
       }
-      stats.total=visited.size;
+      if(docFocus){
+        [...hlRids].forEach(rid=>{ if(!docFocusPairRids.has(rid)) hlRids.delete(rid); });
+        [...chainEventIds].forEach(id=>{ if(!docFocusEventIds.has(String(id))) chainEventIds.delete(id); });
+        docFocusPairRids.forEach(rid=>hlRids.add(rid));
+      }
+      stats.total=docFocus ? hlRids.size+chainEventIds.size : visited.size;
     }
     stats.docs=hlRids.size; stats.events=chainEventIds.size;
     return {active:!!seed,hlEvent,hlDocRec,hlRids,chainEventIds,siblingEventIds,hlPairKeys,docFocusPairKeys,yuFocus,yuFocusReplyRids,spreadMemberIds,allEvs,stats};

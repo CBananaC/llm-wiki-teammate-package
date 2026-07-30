@@ -2417,6 +2417,36 @@
     const hlEvent=hlEventId ? (graphEventsById.get(String(hlEventId))||eventById(hlEventId)) : null;
     const hlDocRec=hlDocRid!=null ? recs.find(r=>String(r._rid)===String(hlDocRid)) : null;
     const seed=hlEvent ? eventNode(hlEvent) : hlDocRec ? docNodeForLane(hlDocRec,docLaneFromSide(hlDocRec,hlDocSide)) : null;
+    const docFocus=!!(seed&&seed.kind==='doc'&&hlDocRec&&hlDocRec.type!=='shangyu');
+    const docFocusPairKeys=new Set(), docFocusPairRids=new Set(), docFocusEventIds=new Set();
+    if(docFocus){
+      const clickedDocId=String(hlDocRec._baseId||hlDocRec.id), clickedRid=hlDocRec._rid;
+      docFocusPairRids.add(clickedRid);
+      allDocPairs().forEach(pp=>{
+        const sourceId=String(pairSourceDocId(pp)), replyId=String(pp.reply_doc_id);
+        if(sourceId!==clickedDocId&&replyId!==clickedDocId) return;
+        docFocusPairKeys.add(pairKey(pp));
+        const sourceRec=recByDocId[sourceId], replyRec=recByDocId[replyId];
+        if(sourceRec) docFocusPairRids.add(sourceRec._rid);
+        if(replyRec) docFocusPairRids.add(replyRec._rid);
+      });
+      function eventTouchesDoc(e,rid){
+        let touched=false;
+        (e.sources||[]).forEach(sc=>{
+          let r=resolveChartRecord(sc&&sc.doc_id,sc&&sc.quote);
+          if(e.actor!=='emperor'&&sc&&sc.howKnown==='上諭所載'&&sc.viaDoc){ const vr=resolveChartRecord(sc.viaDoc,sc.quote); if(vr) r=vr; }
+          if(r&&r._rid===rid) touched=true;
+        });
+        if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=resolveChartRecord(e.emperorDetail.memDoc); if(r&&r._rid===rid) touched=true; }
+        if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)&&e.emperorDetail.infoSources.some(sc=>{ const r=resolveChartRecord(sc&&sc.doc_id,sc&&sc.quote); return r&&r._rid===rid; })) touched=true;
+        return touched;
+      }
+      allEvs.forEach(e=>{ if(eventTouchesDoc(e,clickedRid)) docFocusEventIds.add(String(e.id)); });
+      allEvs.forEach(e=>{
+        if(!docFocusEventIds.has(String(e.id))) return;
+        [e.respondsToEventId,...(e.alsoRespondsToEventIds||[])].filter(Boolean).forEach(id=>docFocusEventIds.add(String(id)));
+      });
+    }
     const hlRids=new Set(), chainEventIds=new Set(), siblingEventIds=new Set();
     const stats={sourceLane:seed&&seed.lane||'',docs:0,events:0,total:0,truncated:false,byLane:{events:0,official:0,imperial:0,emperor:0}};
     if(seed){
@@ -2438,10 +2468,15 @@
           if(n&&nextDepth<=max) visit(n,nextDepth);
         });
       }
-      stats.total=visited.size;
+      if(docFocus){
+        [...hlRids].forEach(rid=>{ if(!docFocusPairRids.has(rid)) hlRids.delete(rid); });
+        [...chainEventIds].forEach(id=>{ if(!docFocusEventIds.has(String(id))) chainEventIds.delete(id); });
+        docFocusPairRids.forEach(rid=>hlRids.add(rid));
+      }
+      stats.total=docFocus ? hlRids.size+chainEventIds.size : visited.size;
     }
     stats.docs=hlRids.size; stats.events=chainEventIds.size;
-    return {active:!!seed,hlEvent,hlDocRec,hlRids,chainEventIds,siblingEventIds,spreadMemberIds,allEvs,stats};
+    return {active:!!seed,hlEvent,hlDocRec,hlRids,chainEventIds,siblingEventIds,docFocusPairKeys,spreadMemberIds,allEvs,stats};
   }
   function render(){
     const H = padTop + totalDays*pxPerDay + padBot;
@@ -2537,6 +2572,7 @@
     const hlRids = clickNetworkState.hlRids;
     const chainEventIds = clickNetworkState.chainEventIds;
     const siblingEventIds = clickNetworkState.siblingEventIds;
+    const docFocusPairKeys = clickNetworkState.docFocusPairKeys;
     const chainOn = clickNetworkState.active;
     window.__clickNetworkStats=chainOn ? clickNetworkState.stats : null;
     if(typeof window.__clickNetworkPanelRefresh==='function') requestAnimationFrame(window.__clickNetworkPanelRefresh);
@@ -2636,8 +2672,8 @@
     const yuSourceZhuRids=new Set();
     allDocPairs().forEach(pp=>{
       const yrec=recByDocId[String(pairSourceDocId(pp))], rrec=recByDocId[String(pp.reply_doc_id)];
-      const pairKey=pairLineKey(pp.relation,yrec);
-      if(!yrec||!rrec||!docLineVisible(yrec)||!docLineVisible(rrec)||!chartFilterOn('line',pairKey)) return;
+      const pairLine=pairLineKey(pp.relation,yrec);
+      if(!yrec||!rrec||!docLineVisible(yrec)||!docLineVisible(rrec)||!chartFilterOn('line',pairLine)) return;
       // Official mixed 上諭／硃批 reply pairs connect the 上諭's line-3 dot
       // to the 硃批's line-2 official-side dot. The yu_source exception below
       // instead uses the 硃批's line-3 imperial-side dot and marks it green.
@@ -2651,8 +2687,10 @@
       const fallbackSide = replySide==='R' ? 'L' : 'R';
       const rc=coord[rrec._rid+replySide]||coord[rrec._rid+fallbackSide];
       if(!yc||!rc) return;
-      const _phot=(hlRids.has(yrec._rid)||hlRids.has(rrec._rid))?'hot':'';
-      pairlinks+=`<line class="pairlink ${_phot}" data-line-filters="${pairKey}" data-pair-yu="${esc(pairSourceDocId(pp))}" data-pair-rp="${esc(pp.reply_doc_id)}" x1="${yc.x.toFixed(1)}" y1="${yc.y.toFixed(1)}" x2="${rc.x.toFixed(1)}" y2="${rc.y.toFixed(1)}"/>`;
+      const pairHot=docFocusPairKeys.size ? docFocusPairKeys.has(pairKey(pp)) : (hlRids.has(yrec._rid)||hlRids.has(rrec._rid));
+      const _phot=pairHot?'hot':'';
+      if(_phot&&yuSourceZhu) yuSourceZhuRids.add(yuSourceZhu._rid);
+      pairlinks+=`<line class="pairlink ${_phot}" data-line-filters="${pairLine}" data-pair-yu="${esc(pairSourceDocId(pp))}" data-pair-rp="${esc(pp.reply_doc_id)}" x1="${yc.x.toFixed(1)}" y1="${yc.y.toFixed(1)}" x2="${rc.x.toFixed(1)}" y2="${rc.y.toFixed(1)}"/>`;
     });
     s+=pairlinks;
     // info-source citation lines: when an emperor-action event is highlighted,
