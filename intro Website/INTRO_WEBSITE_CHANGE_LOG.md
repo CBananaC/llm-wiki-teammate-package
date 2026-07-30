@@ -1134,3 +1134,21 @@ Verified:
 Remaining:
 - Add the runtime click guard to the review page when the interaction behavior
   is ready to be implemented.
+
+### 2026-07-30 17:56 HKT — Codex — Preserve the Preview-drawn Taiwan route as an HTML line layer
+
+Summary:
+- Used the four red Preview drawing annotations in the researcher-marked route PDF as the source line.
+- Reconstructed them in the correct order, reversing the third and fourth segments where necessary, and joined them into one standalone SVG path.
+- Added optional CSS animation and reduced-motion behaviour without changing the researcher’s source PDF.
+
+Files changed:
+- `Website/storymap/taiwan-war-report-route.svg`
+- `Website/Visual Material/情報路線/2乾隆重要戰爭之軍需硏究. 賴福順. 國立故宮博物院, 1984 (dragged).pdf`
+
+Verified:
+- Parsed the SVG successfully; the 4,261-point path stays within the A4 map viewBox.
+- Confirmed the source PDF contains four Preview stamp annotations and the extracted route order joins their endpoints.
+
+Remaining:
+- Insert the SVG path into the StoryMap map container when the HTML interaction is implemented.
