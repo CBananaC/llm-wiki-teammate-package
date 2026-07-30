@@ -300,6 +300,29 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 16:00 HKT — Codex — Refined research-result and case-study visuals
+
+Summary:
+- Updated the `研究成果` idea to use a looping GIF of the complete website UI,
+  with callouts and a static accessibility fallback.
+- Specified one dominant image for each `林爽文事件` card: Qing war-scene
+  drawing, Taiwan-to-Beijing information-route map, and the two source-book
+  covers.
+
+Files changed:
+- `Website/UI Idea/02-引言.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the new image assignments are mapped to the existing three case
+  cards and the source titles use Traditional Chinese.
+- Passed `git diff --check`.
+
+Remaining:
+- Add the actual GIF, images, permissions, catalogue details, and citations
+  once the source assets are selected.
+
 ### 2026-07-30 15:47 HKT — Codex — Added per-tab UI brainstorming notes
 
 Summary:

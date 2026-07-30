@@ -4530,6 +4530,24 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 16:00 HKT — Codex — Refined research-result and case-study visuals
+
+Summary:
+- Updated the `引言` UI notes so `研究成果` uses a full-interface GIF.
+- Assigned the three `林爽文事件` cards to the Qing war drawing, the
+  Taiwan-to-Beijing information-route map, and the two source-book covers.
+
+Files:
+- `intro Website/Website/UI Idea/02-引言.md`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- Select and document the actual image assets before implementation.
+
 ### 2026-07-30 15:47 HKT — Codex — Added per-tab UI brainstorming notes
 
 Summary:
