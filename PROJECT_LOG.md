@@ -4530,6 +4530,25 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-07-30 16:39 HKT — Codex — Preserve edited original text with stale divisions
+
+Summary:
+- Fixed the document-panel renderer in both formal and sample tools so an edited original body still renders when saved division boundaries are longer than the current text.
+- Clamped division render ranges to the current body length, preventing the out-of-range highlight renderer error that hid 原文 for 硃22 after its body was edited.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+
+Verified:
+- Reproduced the failure in the sample 硃22 panel and identified the `buildRuns` out-of-range exception.
+- Reloaded the sample tool and confirmed 硃22 shows 摘要, 原文, and all four divisions after the saved body was shortened from 798 to 788 characters.
+- Reloaded the formal tool and confirmed 硃22 still shows 原文 and all four divisions.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
 ### 2026-07-30 16:15 HKT — Codex — Refined the 第一部分 interface overview
 
 Summary:

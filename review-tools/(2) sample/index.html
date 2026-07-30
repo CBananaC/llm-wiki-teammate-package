@@ -3644,6 +3644,13 @@
       return `<span class="inote${openNotes.has(it.key)?' open':''}" data-inote="${esc(it.key)}"${it.evId?` data-event-id="${esc(it.evId)}"`:''} style="--hl-color:${it.color};border-left-color:${it.color}">${label?highlightLabel(it,true)+' ':''}<span class="ifields">${fieldsHtml(it)}</span>${it.src==='user'?' <i class="umk">✎</i>':''}</span>`;
     }
     function buildRuns(text, cov, from, to, firstSeen, zmask, noteEnds, noteSeen){
+      // Saved division offsets describe the body at the time the AI output was
+      // created.  If the user edits the original text afterwards, the final
+      // division can be shorter than those old offsets.  Clamp the range to
+      // the current body so rendering never reads past the coverage array.
+      const textLength=String(text||'').length;
+      from=Number.isFinite(Number(from))?Math.max(0,Math.min(textLength,Number(from))):0;
+      to=Number.isFinite(Number(to))?Math.max(from,Math.min(textLength,Number(to))):textLength;
       const noteAt=new Map(), boundaries=[];
       (noteEnds||new Map()).forEach((end,id)=>{ end=Number(end); if(!Number.isFinite(end)||end<=from||end>to) return;
         const ids=noteAt.get(end)||[]; ids.push(id); noteAt.set(end,ids); boundaries.push(end); });
