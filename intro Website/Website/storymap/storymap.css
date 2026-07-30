@@ -94,8 +94,8 @@ body::selection { background: var(--accent); color: #fff; }
 .hero-content { width: min(980px, 82vw); margin-right: auto; margin-left: 11vw; }
 .eyebrow { margin: 0 0 18px; color: #f0a08d; font-size: calc(12px * var(--font-scale)); letter-spacing: .2em; }
 .cover-kicker {
-  max-width: 980px; margin: 0 0 22px; color: #f7f3ea;
-  font: 600 calc(24px * var(--font-scale))/1.25 var(--sans); letter-spacing: .1em;
+  max-width: 980px; margin: 0 0 18px; color: #f0a08d;
+  font: 600 calc(16px * var(--font-scale))/1.35 var(--sans); letter-spacing: .1em;
 }
 #cover-title { font-size: clamp(calc(38px * var(--font-scale)), calc(5.4vw * var(--font-scale)), calc(86px * var(--font-scale))); }
 h1, h2, h3 { font-family: var(--serif); font-weight: 400; }
@@ -109,6 +109,8 @@ h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)
   transition: color .2s ease, background-color .2s ease, border-color .2s ease, transform .2s ease;
 }
 .cover-button:hover, .cover-button:focus-visible { color: #173b3f; background: #f7f3ea; border-color: #f7f3ea; transform: translateY(-2px); }
+.cover-button[data-cover-target="intro"] { color: #f0a08d; border-color: #f0a08d; }
+.cover-button[data-cover-target="intro"]:hover, .cover-button[data-cover-target="intro"]:focus-visible { color: #173b3f; background: #f0a08d; border-color: #f0a08d; }
 .content-story { min-height: max(100svh, var(--story-height, 1040px)); background: #d9d1c4; }
 .backdrop { position: absolute; z-index: -2; inset: 0; overflow: hidden; background: #d9d1c4; }
 .backdrop::before {
@@ -202,7 +204,7 @@ h1 { max-width: 980px; margin: 0; font-size: clamp(calc(32px * var(--font-scale)
   .tabs { gap: 13px; }
   .tabs a { font-size: calc(10px * var(--font-scale)); }
   .hero-content { margin-left: 20px; width: calc(100% - 40px); }
-  .cover-kicker { font-size: calc(19px * var(--font-scale)); letter-spacing: .06em; }
+  .cover-kicker { font-size: calc(14px * var(--font-scale)); letter-spacing: .06em; }
   .hero-note { font-size: calc(17px * var(--font-scale)); }
   .cover-actions { gap: 10px; margin-top: 26px; }
   .cover-button { min-width: 138px; min-height: 44px; padding: 10px 14px; font-size: calc(13px * var(--font-scale)); }
