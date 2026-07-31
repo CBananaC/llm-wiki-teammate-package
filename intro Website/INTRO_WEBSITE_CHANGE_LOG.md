@@ -1579,3 +1579,24 @@ Verified:
 
 Remaining:
 - Choose one direction for the next implementation pass; the current page is a visual comparison prototype only.
+
+### 2026-07-31 16:51 HKT — Codex — Refine the standalone UI options page
+
+Summary:
+- Updated only `Website/UI Idea/06-UI-upgrade-options.html`.
+- Made the opening cover viewport-height and converted each option heading into a compact full-width cover block for the other tabs.
+- Removed pill-style labels, kept the option subtitle on one desktop line, and moved each description below its subtitle.
+- Simplified Option 02 by removing `Text zone / 02`, the numbered reading index, and the `版面重點` sub-card while retaining its subtitle, sub-subtitle, and point list.
+
+Files changed:
+- `Website/UI Idea/06-UI-upgrade-options.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed.
+- Local browser preview confirmed a viewport-height opening cover, compact Option 02 cover, one-line desktop subtitle, three mock panels, zero `<iframe>` elements, and no pill selectors/text remnants.
+- No other HTML file was edited for this adjustment.
+
+Remaining:
+- Choose one of the three refined layout directions for implementation in the main intro website.

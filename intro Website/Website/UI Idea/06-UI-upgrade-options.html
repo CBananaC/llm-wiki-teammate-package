@@ -101,7 +101,9 @@
     }
 
     .cover {
-      min-height: 390px;
+      display: flex;
+      min-height: calc(100svh - 64px);
+      align-items: center;
       padding: clamp(58px, 8vw, 108px) clamp(20px, 7vw, 110px) 70px;
       color: #f7f1e6;
       background:
@@ -166,22 +168,6 @@
       color: var(--yellow);
       font-weight: 800;
     }
-    .cover-chips {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 28px;
-    }
-    .cover-chip {
-      padding: 7px 10px;
-      color: var(--ink);
-      background: var(--yellow);
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-    }
-    .cover-chip.is-quiet { color: #f7f1e6; background: rgba(247, 241, 230, .12); }
-
     .option-jump {
       position: sticky;
       top: 64px;
@@ -198,8 +184,7 @@
     .option-jump a {
       padding: 7px 13px;
       color: var(--ink-soft);
-      border: 1px solid transparent;
-      border-radius: 999px;
+      border-bottom: 2px solid transparent;
       font-size: 12px;
       font-weight: 700;
       text-decoration: none;
@@ -207,54 +192,40 @@
     .option-jump a:hover,
     .option-jump a:focus-visible {
       color: var(--orange);
-      border-color: var(--orange);
+      border-bottom-color: var(--orange);
       outline: none;
     }
 
     .option-section {
       max-width: 1400px;
       margin: 0 auto;
-      padding: 88px clamp(20px, 5vw, 76px) 102px;
+      padding: 54px clamp(20px, 5vw, 76px) 102px;
       scroll-margin-top: 112px;
       border-bottom: 1px solid var(--line);
     }
     .option-heading {
-      display: grid;
-      grid-template-columns: minmax(0, .78fr) minmax(300px, 1.22fr);
-      gap: 36px;
-      align-items: end;
+      padding: clamp(34px, 4.5vw, 58px) clamp(22px, 4vw, 60px);
+      color: #f7f1e6;
+      background: linear-gradient(120deg, #173b3f, #2d5b5a 66%, #8f513f);
+      border: 1px solid rgba(22, 61, 63, .24);
       margin-bottom: 34px;
     }
-    .option-kicker { color: var(--orange); }
+    .option-kicker { color: var(--yellow); }
     .option-heading h2 {
-      max-width: 570px;
       margin: 0;
+      color: #fffaf2;
       font: 500 clamp(30px, 4vw, 54px)/1.06 var(--serif);
       letter-spacing: -.035em;
+      white-space: nowrap;
     }
-    .option-heading h2 span { color: var(--orange); }
+    .option-heading h2 span { color: var(--yellow); }
     .option-heading-copy {
-      max-width: 600px;
-      margin: 0;
-      color: var(--muted);
+      max-width: 980px;
+      margin: 20px 0 0;
+      color: rgba(247, 241, 230, .78);
       font-size: 15px;
     }
-    .option-heading-copy strong { color: var(--ink); }
-    .option-meta {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 7px;
-      margin-top: 18px;
-    }
-    .option-meta span {
-      padding: 6px 9px;
-      color: var(--ink-soft);
-      background: rgba(230, 239, 235, .75);
-      border: 1px solid rgba(49, 87, 90, .14);
-      border-radius: 999px;
-      font-size: 11px;
-      font-weight: 700;
-    }
+    .option-heading-copy strong { color: #fffaf2; }
 
     .demo-stage {
       position: relative;
@@ -472,15 +443,6 @@
     .reading-column ol,
     .reading-column ul { margin: 0 0 18px; padding-left: 22px; color: #4c5d59; }
     .reading-column li { margin: 7px 0; font: 15px/1.7 var(--serif); }
-    .evidence-note {
-      margin-top: 22px;
-      padding: 14px 16px;
-      color: #4c5d59;
-      background: var(--surface-green);
-      border-left: 3px solid var(--orange);
-      font-size: 12px;
-    }
-    .evidence-note strong { color: var(--ink); }
     .callout-row {
       display: grid;
       grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -508,23 +470,6 @@
     .option-b-layout .demo-stage { min-height: 620px; }
     .option-b-layout .mock-review { min-height: 570px; }
     .option-b-layout .reading-column { position: relative; }
-    .reading-index {
-      display: grid;
-      gap: 7px;
-      margin: 0 0 24px;
-      padding: 0 0 20px;
-      border-bottom: 1px solid var(--line);
-    }
-    .reading-index a {
-      display: flex;
-      gap: 8px;
-      color: var(--muted);
-      font-size: 11px;
-      text-decoration: none;
-    }
-    .reading-index a span { color: var(--orange); font-weight: 800; }
-    .reading-index a:hover { color: var(--ink); }
-
     .option-c-layout {
       display: grid;
       grid-template-columns: minmax(280px, .84fr) minmax(0, 1.16fr);
@@ -594,18 +539,18 @@
       .top-note { display: none; }
       .top-tabs { order: 3; width: 100%; }
       .option-jump { top: 98px; justify-content: flex-start; overflow-x: auto; }
+      .cover { min-height: calc(100svh - 98px); }
       .cover-inner,
-      .option-heading,
       .option-b-layout,
       .option-c-layout { grid-template-columns: 1fr; }
-      .option-heading { gap: 16px; }
+      .option-heading h2 { white-space: normal; }
       .option-b-layout .demo-stage,
       .option-c-layout .demo-stage { position: static; min-height: 0; }
       .option-c-layout .mock-review { min-height: 520px; }
       .decision-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 620px) {
-      .cover { min-height: 0; padding-top: 48px; }
+      .cover { min-height: calc(100svh - 98px); padding-top: 48px; }
       .cover h1 { font-size: 43px; }
       .option-section { padding-top: 60px; padding-bottom: 70px; }
       .demo-stage { padding: 12px; }
@@ -647,11 +592,6 @@
           <p class="eyebrow">A layout study for the intro website</p>
           <h1 id="page-title">把展示空間留給工具，<br><em>把閱讀空間留給文字。</em></h1>
           <p class="cover-lede">三個不依賴外部嵌入內容的 UI 方向。每個方向都以手工製作的 review-tool mock panel 示範：工具可以被放大觀看，長篇、有層次的文字則有自己的閱讀位置。</p>
-          <div class="cover-chips" aria-label="設計原則">
-            <span class="cover-chip">大面積工具示範</span>
-            <span class="cover-chip">長文可讀</span>
-            <span class="cover-chip is-quiet">獨立分頁內容</span>
-          </div>
         </div>
         <aside class="cover-principles">
           <h2>這次升級要解決的事</h2>
@@ -673,14 +613,9 @@
 
     <section class="option-section" id="option-a" aria-labelledby="option-a-title">
       <div class="option-heading">
-        <div>
-          <p class="option-kicker">Option 01 · Showcase first</p>
-          <h2 id="option-a-title">展示優先：<span>先看工具，再讀內容</span></h2>
-        </div>
-        <div>
-          <p class="option-heading-copy"><strong>最適合第一眼介紹平台功能。</strong> 把 review tool 放在整個畫面的第一層，長文在其下方成為完整的 editorial reading column；不需要把卡片疊在圖片或工具上。</p>
-          <div class="option-meta"><span>巨大展示面</span><span>閱讀區全寬</span><span>最接近 cover flow</span></div>
-        </div>
+        <p class="option-kicker">Option 01 · Showcase first</p>
+        <h2 id="option-a-title">展示優先：<span>先看工具，再讀內容</span></h2>
+        <p class="option-heading-copy"><strong>最適合第一眼介紹平台功能。</strong> 把 review tool 放在整個畫面的第一層，長文在其下方成為完整的 editorial reading column；不需要把卡片疊在圖片或工具上。</p>
       </div>
 
       <div class="option-a-layout">
@@ -726,21 +661,15 @@
             <li>向下進入結構化文字，理解為什麼需要這個工具。</li>
             <li>在證據說明中區分 AI 候選與研究者確認。</li>
           </ol>
-          <div class="evidence-note"><strong>版面重點：</strong> demo stage 和 reading column 是上下兩個明確區域；文字區永遠不會蓋住工具，也不需要把所有內容塞入一張浮動卡片。</div>
         </article>
       </div>
     </section>
 
     <section class="option-section" id="option-b" aria-labelledby="option-b-title">
       <div class="option-heading">
-        <div>
-          <p class="option-kicker">Option 02 · Editorial split</p>
-          <h2 id="option-b-title">左右分欄：<span>工具和敘事同時出現</span></h2>
-        </div>
-        <div>
-          <p class="option-heading-copy"><strong>最適合需要並讀的段落。</strong> 左邊保留大面積 mock panel，右邊提供標題、段落與小節索引；兩邊各自擁有空間，視線不會被一張卡片截斷。</p>
-          <div class="option-meta"><span>即時並讀</span><span>文字索引清楚</span><span>桌面版最有效</span></div>
-        </div>
+        <p class="option-kicker">Option 02 · Editorial split</p>
+        <h2 id="option-b-title">左右分欄：<span>工具和敘事同時出現</span></h2>
+        <p class="option-heading-copy"><strong>最適合需要並讀的段落。</strong> 左邊保留大面積 mock panel，右邊提供標題、段落與小節索引；兩邊各自擁有空間，視線不會被一張卡片截斷。</p>
       </div>
 
       <div class="option-b-layout">
@@ -776,12 +705,6 @@
           </div>
         </div>
         <article class="reading-column">
-          <p class="reading-kicker">Text zone / 02</p>
-          <nav class="reading-index" aria-label="左右分欄文字索引">
-            <a href="#option-b"><span>01</span> 為什麼要把工具放大</a>
-            <a href="#option-b"><span>02</span> 從候選引文到研究證據</a>
-            <a href="#option-b"><span>03</span> 讀者如何理解流程</a>
-          </nav>
           <h3>讓畫面同時承擔「展示」和「解釋」。</h3>
           <p>左右分欄適合 1.3-b 這種需要對照的內容。左側是可以操作、可以被觀看的 review-tool 示意；右側不是浮動卡片，而是一條真正的閱讀欄，能放下連續段落、編號清單、引文說明和小標題。</p>
           <h4>適合的文字結構</h4>
@@ -790,21 +713,15 @@
             <li>小標題分開方法、證據和研究者判斷。</li>
             <li>用 note box 補充狀態，而不是把所有訊息都放在工具面板內。</li>
           </ul>
-          <div class="evidence-note"><strong>版面重點：</strong> 在寬螢幕中，demo stage 可以佔 60–65%；文字區保留 300px 以上，不會縮成難以閱讀的窄卡片。</div>
         </article>
       </div>
     </section>
 
     <section class="option-section" id="option-c" aria-labelledby="option-c-title">
       <div class="option-heading">
-        <div>
-          <p class="option-kicker">Option 03 · Research workbench</p>
-          <h2 id="option-c-title">研究工作臺：<span>工具固定，文字分段推進</span></h2>
-        </div>
-        <div>
-          <p class="option-heading-copy"><strong>最適合長篇、步驟多的引言。</strong> 左側 mock panel 在桌面版保持可見，右側文字拆成一個個有狀態的區塊；讀者向下讀時，始終知道正在看哪個工具功能。</p>
-          <div class="option-meta"><span>長文最友善</span><span>流程感最強</span><span>可加入章節狀態</span></div>
-        </div>
+        <p class="option-kicker">Option 03 · Research workbench</p>
+        <h2 id="option-c-title">研究工作臺：<span>工具固定，文字分段推進</span></h2>
+        <p class="option-heading-copy"><strong>最適合長篇、步驟多的引言。</strong> 左側 mock panel 在桌面版保持可見，右側文字拆成一個個有狀態的區塊；讀者向下讀時，始終知道正在看哪個工具功能。</p>
       </div>
 
       <div class="option-c-layout">
@@ -858,8 +775,7 @@
           </article>
           <article class="workbench-block">
             <div class="workbench-block-header"><h3>最後標示判斷</h3><span>03 / VERIFY</span></div>
-            <p>長篇敘事最需要的是狀態清楚：哪些是 AI 候選、哪些已由研究者確認、哪些仍然需要回到原始來源。這些資訊可以用小型狀態標籤和 evidence note 呈現。</p>
-            <div class="evidence-note"><strong>建議：</strong> 將「研究者確認」固定使用綠色系，將「待核驗」固定使用橙色系，建立跨 tab 一致的語意。</div>
+            <p>長篇敘事最需要的是狀態清楚：哪些是 AI 候選、哪些已由研究者確認、哪些仍然需要回到原始來源。這些資訊可以用小型狀態標籤呈現。</p>
           </article>
         </div>
       </div>
