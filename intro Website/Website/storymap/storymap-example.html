@@ -178,27 +178,30 @@
           <div class="workbench-intro">
             <p class="layout-kicker">Option 03 · Research workbench</p>
             <h2>研究清代奏折的主要困難</h2>
-            <p>把三個問題拆成三張可展開的資料夾卡片；左側負責選擇閱讀路徑，右側保留完整文字與對應的視覺示範。</p>
+            <p>三張閱讀卡片依序展開；左側示範面板保持不變，右側每次只呈現一張完整文字卡。</p>
             <a class="workbench-source-link" href="https://theme.npm.edu.tw/exh106/qingemperorjiaqing/ch/page-3.html#main" target="_blank" rel="noopener noreferrer" title="國立故宮博物院，〈《欽定剿平三省邪匪方略》〉，《勤修無逸——嘉慶皇帝文物特展：治國政績》，2017年。清慶桂等奉敕編，清嘉慶十五年武英殿刊本。">參考來源 ↗</a>
           </div>
-          <div class="workbench-shell" data-workbench>
-            <div class="folder-rail" role="tablist" aria-label="研究困難">
-              <button class="folder-card is-active" type="button" role="tab" aria-selected="true" aria-controls="difficulty-quantity" data-workbench-target="difficulty-quantity"><span>01</span><strong>史料數量</strong><small>冊頁太多</small></button>
-              <button class="folder-card" type="button" role="tab" aria-selected="false" aria-controls="difficulty-relations" data-workbench-target="difficulty-relations"><span>02</span><strong>通信關係</strong><small>往返難追</small></button>
-              <button class="folder-card" type="button" role="tab" aria-selected="false" aria-controls="difficulty-network" data-workbench-target="difficulty-network"><span>03</span><strong>消息網絡</strong><small>來源交疊</small></button>
+          <div class="workbench-shell" data-workbench data-workbench-scroll>
+            <div class="workbench-fixed-visual" aria-label="研究困難固定示範面板">
+              <div class="fixed-visual-label">FIXED DEMO / 研究工具示意</div>
+              <div class="mock-review-document">
+                <div class="mock-review-head"><div class="mock-review-head-main"><h3>硃119｜同日軍情</h3><p>常青亦奏報臺灣軍情與四名消息來源</p></div><div class="mock-review-window-buttons" aria-hidden="true"><span>—</span><span>×</span></div></div>
+                <div class="mock-review-togglebar"><span class="is-active">原文</span><span>AI 摘要</span><span>關係</span><em>固定示範面板</em></div>
+                <div class="mock-review-scroll"><p class="mock-review-section-label">消息來源｜研究者核對</p><p><mark>廈門蚶江員弁</mark>：提臣由澎湖抵達鹿耳門。</p><p><mark>署守備陳邦光</mark>：率兵、義民搜捕賊夥。</p><p><mark>北淡水署都司易連</mark>：招集義民殺賊。</p><p><mark>廈門同知劉嘉會</mark>：聞賊人紛紛散去。</p></div>
+              </div>
             </div>
-            <div class="workbench-panels">
-              <article class="workbench-panel is-active" id="difficulty-quantity" role="tabpanel" data-workbench-panel="difficulty-quantity">
-                <div class="workbench-copy"><p class="workbench-panel-kicker">01 / 史料數量</p><h3>龐大的史料數量</h3><p>然而，研究奏折與上諭有不少困難。首先，部分議題的奏摺與上諭數量極為龐大。以研究白蓮教戰爭為例，學者戴英從指出，該戰爭的重要史料《欽定剿平三省邪匪方略》共有六十九冊，超過二萬七千頁<a class="inline-reference" href="../references.html#ref-dai-2019">（戴英從，《The White Lotus War: Rebellion and Suppression in Late Imperial China》，2019年，第一章，頁碼待核。）</a>，收錄了四千多份奏摺和上諭，篇幅之大令人望而卻步，當代學者對白蓮教戰爭的研究因此相當有限。</p></div>
-                <figure class="workbench-visual workbench-visual-image"><img src="../Visual Material/img2_4_2.jpg" alt="清代軍事文獻的冊頁與裝幀"><figcaption>史料冊頁示意</figcaption></figure>
+            <div class="workbench-card-track" data-workbench-track tabindex="0" aria-label="研究困難閱讀卡片">
+              <article class="workbench-card is-active" id="difficulty-quantity" data-workbench-card="difficulty-quantity" data-workbench-panel="difficulty-quantity">
+                <button class="workbench-card-heading" type="button" aria-expanded="true" data-workbench-target="difficulty-quantity"><span class="workbench-card-index">01</span><span class="workbench-card-heading-copy"><small>史料數量</small><strong>龐大的史料數量</strong></span><span class="workbench-card-arrow" aria-hidden="true">↕</span></button>
+                <div class="workbench-card-body"><p>然而，研究奏折與上諭有不少困難。首先，部分議題的奏摺與上諭數量極為龐大。以研究白蓮教戰爭為例，學者戴英從指出，該戰爭的重要史料《欽定剿平三省邪匪方略》共有六十九冊，超過二萬七千頁<a class="inline-reference" href="../references.html#ref-dai-2019">（戴英從，《The White Lotus War: Rebellion and Suppression in Late Imperial China》，2019年，第一章，頁碼待核。）</a>，收錄了四千多份奏摺和上諭，篇幅之大令人望而卻步，當代學者對白蓮教戰爭的研究因此相當有限。</p></div>
               </article>
-              <article class="workbench-panel" id="difficulty-relations" role="tabpanel" data-workbench-panel="difficulty-relations" hidden>
-                <div class="workbench-copy"><p class="workbench-panel-kicker">02 / 通信關係</p><h3>每一份文書都可能回應另一份文書</h3><p>另外，奏摺與上諭之間涉及複雜的通信關係。最基本的一層，是地方官員奏報，皇帝再透過硃批或上諭作出回覆。然而，研究者不僅需要掌握每份奏摺和上諭的收發時間，也要釐清一份奏摺是否回應先前的硃批或上諭，以及皇帝發布的命令又在何時、由哪些官員於後續奏報中作出回應。</p></div>
-                <div class="workbench-visual workbench-visual-ui" aria-label="上諭與奏摺通信關係示意"><div class="mock-review-document"><div class="mock-review-head"><div class="mock-review-head-main"><h3>諭24 ↔ 硃110</h3><p>上諭發布後，地方官員再行覆奏</p></div><div class="mock-review-window-buttons" aria-hidden="true"><span>—</span><span>×</span></div></div><div class="mock-review-togglebar"><span class="is-active">原文</span><span>AI 摘要</span><span>關係</span><em>回應鏈示意</em></div><div class="mock-review-scroll"><p class="mock-review-section-label">通信關係</p><p><mark>皇帝上諭</mark> → 閩浙總督常青等地方官員</p><p><mark>地方覆奏</mark> → 回應先前命令，補充兵力調度與地方情勢</p><p>研究者需要同時閱讀日期、文書類型與回應內容。</p></div></div></div>
+              <article class="workbench-card" id="difficulty-relations" data-workbench-card="difficulty-relations" data-workbench-panel="difficulty-relations">
+                <button class="workbench-card-heading" type="button" aria-expanded="false" data-workbench-target="difficulty-relations"><span class="workbench-card-index">02</span><span class="workbench-card-heading-copy"><small>通信關係</small><strong>每一份文書都可能回應另一份文書</strong></span><span class="workbench-card-arrow" aria-hidden="true">↕</span></button>
+                <div class="workbench-card-body"><p>另外，奏摺與上諭之間涉及複雜的通信關係。最基本的一層，是地方官員奏報，皇帝再透過硃批或上諭作出回覆。然而，研究者不僅需要掌握每份奏摺和上諭的收發時間，也要釐清一份奏摺是否回應先前的硃批或上諭，以及皇帝發布的命令又在何時、由哪些官員於後續奏報中作出回應。</p></div>
               </article>
-              <article class="workbench-panel" id="difficulty-network" role="tabpanel" data-workbench-panel="difficulty-network" hidden>
-                <div class="workbench-copy"><p class="workbench-panel-kicker">03 / 消息網絡</p><h3>同一事件有多重消息來源</h3><p>此外，針對奏摺所載的具體事件，研究者還要關注事件的發生時間及消息來源。而皇帝往往又會同時收到多位官員就同一事件的奏報，各奏報的描述及消息來源都不盡相同，形成了錯綜複雜的消息網絡。</p><p>因此，研究者既要分析單份文書所載的資訊，也要理解宏觀的資訊傳遞網絡。面對大量文書及複雜的通信關係，研究者需要運用視覺化工具，呈現文書之間的關聯與資訊流向。</p></div>
-                <div class="workbench-visual workbench-visual-ui" aria-label="消息來源網絡示意"><div class="mock-review-document"><div class="mock-review-head"><div class="mock-review-head-main"><h3>硃119｜同日軍情</h3><p>常青亦奏報四名消息來源</p></div><div class="mock-review-window-buttons" aria-hidden="true"><span>—</span><span>×</span></div></div><div class="mock-review-togglebar"><span class="is-active">原文</span><span>來源</span><span>關係</span><em>已標註 4 組</em></div><div class="mock-review-scroll"><p class="mock-review-section-label">消息來源</p><p><mark>廈門蚶江員弁</mark>：提臣由澎湖抵達鹿耳門。</p><p><mark>署守備陳邦光</mark>：率兵、義民搜捕賊夥。</p><p><mark>北淡水署都司易連</mark>：招集義民殺賊。</p><p><mark>廈門同知劉嘉會</mark>：聞賊人紛紛散去。</p></div></div></div>
+              <article class="workbench-card" id="difficulty-network" data-workbench-card="difficulty-network" data-workbench-panel="difficulty-network">
+                <button class="workbench-card-heading" type="button" aria-expanded="false" data-workbench-target="difficulty-network"><span class="workbench-card-index">03</span><span class="workbench-card-heading-copy"><small>消息網絡</small><strong>同一事件有多重消息來源</strong></span><span class="workbench-card-arrow" aria-hidden="true">↕</span></button>
+                <div class="workbench-card-body"><p>此外，針對奏摺所載的具體事件，研究者還要關注事件的發生時間及消息來源。而皇帝往往又會同時收到多位官員就同一事件的奏報，各奏報的描述及消息來源都不盡相同，形成了錯綜複雜的消息網絡。</p><p>因此，研究者既要分析單份文書所載的資訊，也要理解宏觀的資訊傳遞網絡。面對大量文書及複雜的通信關係，研究者需要運用視覺化工具，呈現文書之間的關聯與資訊流向。</p></div>
               </article>
             </div>
           </div>
@@ -347,26 +350,29 @@
           <div class="workbench-intro">
             <p class="layout-kicker">Option 03 · Research workbench</p>
             <h2>示範案例：林爽文事件</h2>
-            <p>三張折疊卡片帶讀者從案例背景、資訊傳遞到史料平台；點擊左側卡片，右側同步換出相應的視覺元素。</p>
+            <p>三張閱讀卡片依序展開；左側示範面板保持不變，右側只在目前卡片中呈現完整文字。</p>
           </div>
-          <div class="workbench-shell" data-workbench>
-            <div class="folder-rail" role="tablist" aria-label="林爽文事件示範案例">
-              <button class="folder-card is-active" type="button" role="tab" aria-selected="true" aria-controls="case-background" data-workbench-target="case-background"><span>01</span><strong>案例背景</strong><small>事件從哪裡開始</small></button>
-              <button class="folder-card" type="button" role="tab" aria-selected="false" aria-controls="case-route" data-workbench-target="case-route"><span>02</span><strong>資訊傳遞</strong><small>軍報如何抵達</small></button>
-              <button class="folder-card" type="button" role="tab" aria-selected="false" aria-controls="case-sources" data-workbench-target="case-sources"><span>03</span><strong>史料與平台</strong><small>如何支持研究</small></button>
+          <div class="workbench-shell" data-workbench data-workbench-scroll>
+            <div class="workbench-fixed-visual" aria-label="林爽文事件固定示範面板">
+              <div class="fixed-visual-label">FIXED DEMO / 文書研究平台</div>
+              <div class="mock-review-document">
+                <div class="mock-review-head"><div class="mock-review-head-main"><h3>硃83｜為奏聞鳳山失陷援兵渡海赴臺事</h3><p>乾隆五十二年正月二日　奏摺　閩浙總督常青</p></div><div class="mock-review-window-buttons" aria-hidden="true"><span>—</span><span>×</span></div></div>
+                <div class="mock-review-togglebar"><span class="is-active">AI 摘要</span><span>原文</span><span>關係</span><em>固定示範面板</em></div>
+                <div class="mock-review-scroll"><p class="mock-review-section-label">AI 提取｜研究者核對</p><p>常青奏報臺灣軍情與援兵調度，並指出臺灣咽喉與海運援剿的重要性。</p><p><mark>至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進。</mark></p><p>候選資訊與原文段落並置，方便研究者逐項確認。</p></div>
+              </div>
             </div>
-            <div class="workbench-panels">
-              <article class="workbench-panel is-active" id="case-background" role="tabpanel" data-workbench-panel="case-background">
-                <div class="workbench-copy"><p class="workbench-panel-kicker">01 / 案例背景</p><h3>從臺灣民變開始</h3><p>為展示本網站的研究方法及各項功能，本文將以林爽文民變作為示範案例。林爽文民變於乾隆五十一年（1786）爆發，歷時約兩年，由天地會領袖林爽文在臺灣中部的彰化發動，並迅速蔓延至臺灣多地，最終促使清廷派遣福康安率軍來臺鎮壓。乾隆帝其後將平定此役列為「十全武功」之一。</p></div>
-                <figure class="workbench-visual workbench-visual-image"><img src="../Visual Material/印版平定台湾战图册6.png" alt="《印版平定臺灣戰圖冊》的戰事圖像"><figcaption>《印版平定臺灣戰圖冊》圖像</figcaption></figure>
+            <div class="workbench-card-track" data-workbench-track tabindex="0" aria-label="林爽文事件閱讀卡片">
+              <article class="workbench-card is-active" id="case-background" data-workbench-card="case-background" data-workbench-panel="case-background">
+                <button class="workbench-card-heading" type="button" aria-expanded="true" data-workbench-target="case-background"><span class="workbench-card-index">01</span><span class="workbench-card-heading-copy"><small>案例背景</small><strong>從臺灣民變開始</strong></span><span class="workbench-card-arrow" aria-hidden="true">↕</span></button>
+                <div class="workbench-card-body"><p>為展示本網站的研究方法及各項功能，本文將以林爽文民變作為示範案例。林爽文民變於乾隆五十一年（1786）爆發，歷時約兩年，由天地會領袖林爽文在臺灣中部的彰化發動，並迅速蔓延至臺灣多地，最終促使清廷派遣福康安率軍來臺鎮壓。乾隆帝其後將平定此役列為「十全武功」之一。</p></div>
               </article>
-              <article class="workbench-panel" id="case-route" role="tabpanel" data-workbench-panel="case-route" hidden>
-                <div class="workbench-copy"><p class="workbench-panel-kicker">02 / 資訊傳遞</p><h3>遠距離文書如何影響軍事決策</h3><p>第一，資訊傳遞是戰時軍事決策形成的重要環節。戰爭期間，地方官員須持續透過奏摺向皇帝奏報軍情、兵力部署及戰場變化，而皇帝則根據奏報發布上諭，指示軍事部署及後續行動，形成地方與中央之間持續往返的決策過程。</p><p>林爽文民變發生於臺灣，與北京相距遙遠，文書傳遞往往需時數星期。當皇帝收到奏摺時，前線局勢很可能已經改變，軍事決策因此仰賴前線官員臨機處置。</p></div>
-                <div class="workbench-visual workbench-visual-route"><div class="case-route-map"><img src="taiwan-war-report-route-reverse.svg" alt="臺灣至北京的軍報傳遞路線"><span class="case-route-pin case-route-pin-taiwan">臺灣</span><span class="case-route-pin case-route-pin-beijing">北京</span></div><p class="workbench-visual-note">軍報路線示意</p></div>
+              <article class="workbench-card" id="case-route" data-workbench-card="case-route" data-workbench-panel="case-route">
+                <button class="workbench-card-heading" type="button" aria-expanded="false" data-workbench-target="case-route"><span class="workbench-card-index">02</span><span class="workbench-card-heading-copy"><small>資訊傳遞</small><strong>遠距離文書如何影響軍事決策</strong></span><span class="workbench-card-arrow" aria-hidden="true">↕</span></button>
+                <div class="workbench-card-body"><p>第一，資訊傳遞是戰時軍事決策形成的重要環節。戰爭期間，地方官員須持續透過奏摺向皇帝奏報軍情、兵力部署及戰場變化，而皇帝則根據奏報發布上諭，指示軍事部署及後續行動，形成地方與中央之間持續往返的決策過程。</p><p>林爽文民變發生於臺灣，與北京相距遙遠，文書傳遞往往需時數星期。當皇帝收到奏摺時，前線局勢很可能已經改變，軍事決策因此仰賴前線官員臨機處置。</p></div>
               </article>
-              <article class="workbench-panel" id="case-sources" role="tabpanel" data-workbench-panel="case-sources" hidden>
-                <div class="workbench-copy"><p class="workbench-panel-kicker">03 / 史料與平台</p><h3>把大量文書整理成可核驗的研究路徑</h3><p>第二，林爽文民變保存了大量奏摺與上諭，完整記錄戰時地方官員與皇帝之間的通信過程，為研究提供了豐富的材料。本研究主要採用《明清臺灣檔案彙編》及《天地會檔案彙編》所收錄的奏摺和上諭。這些史料均經當代學者整理、校勘及出版，完整保留文書原文、文書類型、收發日期及硃批等重要資訊。</p></div>
-                <div class="workbench-visual workbench-visual-ui" aria-label="研究平台示意"><div class="mock-review-document"><div class="mock-review-head"><div class="mock-review-head-main"><h3>文書研究平台</h3><p>硃83｜AI 提取與原文核對</p></div><div class="mock-review-window-buttons" aria-hidden="true"><span>—</span><span>×</span></div></div><div class="mock-review-togglebar"><span class="is-active">AI 摘要</span><span>原文</span><span>關係</span><em>研究者核對</em></div><div class="mock-review-scroll"><p class="mock-review-section-label">AI 提取｜研究者核對</p><p>常青奏報臺灣軍情與援兵調度，並指出臺灣咽喉與海運援剿的重要性。</p><p><mark>至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進。</mark></p><p>候選資訊與原文段落並置，方便研究者逐項確認。</p></div></div></div>
+              <article class="workbench-card" id="case-sources" data-workbench-card="case-sources" data-workbench-panel="case-sources">
+                <button class="workbench-card-heading" type="button" aria-expanded="false" data-workbench-target="case-sources"><span class="workbench-card-index">03</span><span class="workbench-card-heading-copy"><small>史料與平台</small><strong>把大量文書整理成可核驗的研究路徑</strong></span><span class="workbench-card-arrow" aria-hidden="true">↕</span></button>
+                <div class="workbench-card-body"><p>第二，林爽文民變保存了大量奏摺與上諭，完整記錄戰時地方官員與皇帝之間的通信過程，為研究提供了豐富的材料。本研究主要採用《明清臺灣檔案彙編》及《天地會檔案彙編》所收錄的奏摺和上諭。這些史料均經當代學者整理、校勘及出版，完整保留文書原文、文書類型、收發日期及硃批等重要資訊。</p></div>
               </article>
             </div>
           </div>

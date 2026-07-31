@@ -35,7 +35,7 @@
   --story-height: 820px !important;
 }
 
-/* intro-1-3-a — 研究清代奏折的主要困難｜Option 03：三張資料夾卡片 */
+/* intro-1-3-a — 研究清代奏折的主要困難｜Option 03：固定 mock panel＋右側單卡閱讀欄 */
 #intro-1-3-a {
   --card-x: 0 !important;
   --card-y: 0 !important;
@@ -91,7 +91,7 @@
   --story-height: 820px !important;
 }
 
-/* intro-1-6-a-source — 示範案例：林爽文事件｜Option 03：三張折疊卡片 */
+/* intro-1-6-a-source — 示範案例：林爽文事件｜Option 03：固定 mock panel＋三張閱讀卡片 */
 #intro-1-6-a-source {
   --card-x: 0 !important;
   --card-y: 0 !important;

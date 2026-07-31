@@ -5923,3 +5923,22 @@ showed the compact centered chart, nine clickable bubbles, no horizontal
 overflow, and the Option 01 copy directly beneath its subtitle.
 
 Remaining: Review the final chart spacing on a narrow mobile viewport.
+
+### 2026-07-31 18:23 HKT — Codex — Refine intro workbench cards and visual divisions
+
+Summary: Replaced the two visible Option 03 folder workbenches with fixed mock
+review panels and right-side one-card reading tracks. Added click/scroll active
+state handling, mobile card expansion, clearer introduction section surfaces and
+dividers, and a contained card for `研究成果：「清代奏摺與上諭分析平台」`.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`storymap.css`, `storymap.js`, `storymap-cards.css`, and this log plus
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: Both JavaScript syntax checks and targeted `git diff --check` passed;
+the local HTTP response includes the fixed panels, card tracks, and platform
+result card. The current in-app browser session blocked navigation from its
+open UI-idea file to the local StoryMap URL, so visual browser QA remains open.
+
+Remaining: Reopen the local StoryMap in an allowed local-HTTP browser session
+and review desktop scroll tracking and mobile card expansion.

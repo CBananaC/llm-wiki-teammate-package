@@ -1689,3 +1689,28 @@ Verified:
 
 Remaining:
 - Review the final chart spacing on a narrow mobile viewport.
+
+### 2026-07-31 18:23 HKT — Codex — Refine workbench reading cards and section boundaries
+
+Summary:
+- Replaced the difficulty and 林爽文 workbench folder layouts with a fixed mock review panel and a right-side, one-card-at-a-time reading track. Clicking a card scrolls it into place; desktop scrolling updates the active card, while mobile cards expand their own content below the heading.
+- Added clear section surfaces and divider lines throughout the introduction, and turned the long platform-result copy into a contained reading card.
+- Updated the StoryMap card-layout comments so the two Option 03 blocks describe the new fixed-panel/card-track structure.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- `node --check Website/embedded-tool/review-tool-embed.js` passed.
+- `git diff --check` passed for the StoryMap files.
+- Local HTTP response contains both fixed mock panels, both card tracks, and the platform-result card content.
+- The current in-app browser session rejected navigation from its open UI-idea file to the local StoryMap URL, so the updated visual state could not be reopened there in this turn.
+
+Remaining:
+- Open the local StoryMap URL in a browser session that permits the local HTTP origin and review desktop scroll tracking plus the mobile expanded-card state.
