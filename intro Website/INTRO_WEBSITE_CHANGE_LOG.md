@@ -1600,3 +1600,23 @@ Verified:
 
 Remaining:
 - Choose one of the three refined layout directions for implementation in the main intro website.
+
+### 2026-07-31 17:07 HKT — Codex — Polish the standalone options page workflow presentation
+
+Summary:
+- Updated only `Website/UI Idea/06-UI-upgrade-options.html`; no other HTML file was edited.
+- Removed the dark backdrop from option subtitles and the outer backdrop around each hand-built review-tool panel, and reduced body/stage spacing.
+- Replaced the frozen option navigation with a normal in-page row whose four tabs reveal branching workflow previews on hover or keyboard focus.
+- Added polished workflow structures for 展示優先、左右分欄、研究工作臺 and 比較, including alternate routes, decision branches and return loops inspired by the supplied workflow reference.
+
+Files changed:
+- `Website/UI Idea/06-UI-upgrade-options.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed.
+- Local browser preview confirmed the plain option headings, transparent review-tool stage, reduced padding, four workflow preview blocks, and non-sticky option row.
+
+Remaining:
+- Review the hover workflow previews in the target browser and choose the final layout direction for the main intro website.
