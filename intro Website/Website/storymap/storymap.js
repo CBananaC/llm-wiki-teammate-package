@@ -156,44 +156,88 @@ workflowNodes.forEach((node) => {
 document.querySelectorAll('[data-workbench]').forEach((workbench) => {
   const controls = [...workbench.querySelectorAll('[data-workbench-target]')];
   const cards = [...workbench.querySelectorAll('[data-workbench-card]')];
+  const visuals = [...workbench.querySelectorAll('[data-workbench-visual-panel]')];
   const panels = cards.length ? cards : [...workbench.querySelectorAll('[data-workbench-panel]')];
   if (!controls.length || !panels.length) return;
   const panelTarget = (panel) => panel.dataset.workbenchCard || panel.dataset.workbenchPanel;
-  const activateWorkbenchPanel = (targetId, { scroll = false } = {}) => {
+  const activateWorkbenchPanel = (targetId, { scroll = false, open = false } = {}) => {
     const targetPanel = panels.find((panel) => panelTarget(panel) === targetId);
     if (!targetPanel) return;
-    controls.forEach((control) => {
-      const active = control.dataset.workbenchTarget === targetId;
-      control.classList.toggle('is-active', active);
-      control.setAttribute('aria-expanded', String(active));
-      if (control.hasAttribute('aria-selected')) control.setAttribute('aria-selected', String(active));
-    });
-    panels.forEach((panel) => {
-      const active = panelTarget(panel) === targetId;
-      panel.classList.toggle('is-active', active);
-      if (!cards.length) panel.hidden = !active;
-    });
+    if (cards.length) {
+      if (open) targetPanel.classList.add('is-open');
+      cards.forEach((card) => {
+        const active = card === targetPanel;
+        const expanded = card.classList.contains('is-open');
+        const control = card.querySelector('[data-workbench-target]');
+        card.classList.toggle('is-active', active);
+        if (control) {
+          control.classList.toggle('is-active', active);
+          control.setAttribute('aria-expanded', String(expanded));
+          if (control.hasAttribute('aria-selected')) control.setAttribute('aria-selected', String(active));
+        }
+      });
+      visuals.forEach((visual) => {
+        const active = visual.dataset.workbenchVisualPanel === targetId;
+        visual.classList.toggle('is-active', active);
+        visual.hidden = !active;
+      });
+    } else {
+      controls.forEach((control) => {
+        const active = control.dataset.workbenchTarget === targetId;
+        control.classList.toggle('is-active', active);
+        control.setAttribute('aria-expanded', String(active));
+        if (control.hasAttribute('aria-selected')) control.setAttribute('aria-selected', String(active));
+      });
+      panels.forEach((panel) => {
+        const active = panelTarget(panel) === targetId;
+        panel.classList.toggle('is-active', active);
+        panel.hidden = !active;
+      });
+    }
     if (scroll && cards.length) targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
+  let userHasOpenedCard = false;
   controls.forEach((control) => {
-    control.addEventListener('click', () => activateWorkbenchPanel(control.dataset.workbenchTarget, { scroll: Boolean(cards.length) }));
+    control.addEventListener('click', () => {
+      if (cards.length) userHasOpenedCard = true;
+      activateWorkbenchPanel(control.dataset.workbenchTarget, { scroll: Boolean(cards.length), open: Boolean(cards.length) });
+    });
     control.addEventListener('keydown', (event) => {
       if (event.key !== 'ArrowDown' && event.key !== 'ArrowRight' && event.key !== 'ArrowUp' && event.key !== 'ArrowLeft') return;
       event.preventDefault();
       const index = controls.indexOf(control);
       const nextIndex = (index + (event.key === 'ArrowDown' || event.key === 'ArrowRight' ? 1 : -1) + controls.length) % controls.length;
       controls[nextIndex].focus();
-      activateWorkbenchPanel(controls[nextIndex].dataset.workbenchTarget, { scroll: Boolean(cards.length) });
+      if (cards.length) userHasOpenedCard = true;
+      activateWorkbenchPanel(controls[nextIndex].dataset.workbenchTarget, { scroll: Boolean(cards.length), open: Boolean(cards.length) });
     });
   });
   const initialPanel = panels.find((panel) => panel.classList.contains('is-active')) || panels[0];
-  activateWorkbenchPanel(panelTarget(initialPanel));
+  if (cards.length) {
+    cards.forEach((card) => {
+      card.classList.remove('is-open', 'is-active');
+      const control = card.querySelector('[data-workbench-target]');
+      if (control) control.setAttribute('aria-expanded', 'false');
+    });
+    activateWorkbenchPanel(panelTarget(initialPanel));
+  } else {
+    activateWorkbenchPanel(panelTarget(initialPanel));
+  }
   if (cards.length && 'IntersectionObserver' in window) {
     const cardObserver = new IntersectionObserver((entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
         .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
-      if (visible) activateWorkbenchPanel(visible.target.dataset.workbenchCard);
+      if (!visible) return;
+      if (!userHasOpenedCard) {
+        visuals.forEach((visual) => {
+          const active = visual.dataset.workbenchVisualPanel === visible.target.dataset.workbenchCard;
+          visual.classList.toggle('is-active', active);
+          visual.hidden = !active;
+        });
+        return;
+      }
+      activateWorkbenchPanel(visible.target.dataset.workbenchCard, { open: true });
     }, { rootMargin: '-110px 0px -45% 0px', threshold: [0.15, 0.4, 0.7] });
     cards.forEach((card) => cardObserver.observe(card));
   }
@@ -201,7 +245,7 @@ document.querySelectorAll('[data-workbench]').forEach((workbench) => {
 document.addEventListener('click', (event) => {
   if (!introDropdown.contains(event.target)) setIntroDropdownOpen(false);
 });
-const sections = [...document.querySelectorAll('.story[data-tab]')];
+const sections = [...document.querySelectorAll('.story[data-tab], [data-intro-card][data-tab]')];
 const observer = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
     if (!entry.isIntersecting) return;

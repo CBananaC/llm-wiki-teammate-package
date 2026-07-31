@@ -1634,3 +1634,392 @@ body {
   #intro-content .mock-toolbar-right .mock-status { display: none; }
   #intro-content .mock-review-head { padding: 14px; }
 }
+
+/* Current introduction composition: one route map beside two continuous reading
+   cards, then compact workbench cards that open cumulatively as the reader moves. */
+#intro-content > .story {
+  position: relative;
+  margin-top: 0;
+  border-top: 0;
+  border-bottom: 1px solid rgba(23,59,63,.18);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,.55), inset 0 -22px 42px rgba(23,59,63,.045);
+}
+#intro-content > .story + .story {
+  margin-top: 16px;
+  border-top: 1px solid rgba(23,59,63,.2);
+}
+#intro-content > .story + .story::before { display: none; }
+#intro-content > .story.map-reading-story {
+  min-height: 0;
+  padding-top: clamp(28px, 4vw, 56px);
+  background: linear-gradient(120deg, #eee7dc 0%, #f4efe7 54%, #e5e4dc 100%);
+}
+#intro-content > .story.difficulty-workbench {
+  background: linear-gradient(120deg, #e5eee9, #edf2ec 56%, #dbe8e5);
+}
+#intro-content > .story.option-1-showcase-story {
+  background: linear-gradient(120deg, #e0eae6, #eef1e8 58%, #dbe6e4);
+}
+#intro-content > .story.platform-showcase-story {
+  background: linear-gradient(120deg, #f0e5d9, #f7eee5 55%, #e6e4da);
+}
+#intro-content > .story.case-workbench {
+  background: linear-gradient(120deg, #eee0d7, #f5e9df 55%, #e5e1d9);
+}
+
+#intro-content .option-heading h2,
+#intro-content .platform-copy-card h2,
+#intro-content .map-reading-card h2 {
+  display: flex;
+  align-items: baseline;
+  gap: 17px;
+}
+#intro-content .option-number {
+  display: inline-block;
+  flex: 0 0 auto;
+  color: var(--accent);
+  font: 800 calc(13px * var(--font-scale))/1 var(--sans);
+  letter-spacing: .1em;
+}
+#intro-content .option-heading .option-kicker,
+#intro-content .option-heading .layout-kicker { display: none; }
+
+/* Part 1 and Part 2 use one sticky map. The reading cards advance vertically
+   while the visual remains in the same right-hand frame. */
+#intro-content > .map-reading-story > .backdrop.route-map-backdrop {
+  z-index: 0;
+  inset: 0 0 0 48%;
+  background: #e3e0d8 url("fizzy-background.png") center / cover no-repeat;
+  border-left: 1px solid rgba(23,59,63,.16);
+  opacity: .76;
+}
+#intro-content .map-reading-layout {
+  position: relative;
+  z-index: 1;
+  display: grid;
+  grid-template-columns: minmax(0, .94fr) minmax(0, 1.06fr);
+  align-items: start;
+  gap: clamp(24px, 4vw, 56px);
+}
+#intro-content .map-reading-track {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+}
+#intro-content .map-reading-card {
+  position: relative;
+  width: auto;
+  min-height: min(560px, calc(100svh - 190px));
+  max-height: none;
+  margin: 0;
+  padding: clamp(24px, 3.2vw, 42px);
+  overflow: visible;
+  color: var(--ink);
+  background: rgba(255,250,242,.78);
+  border: 1px solid rgba(23,59,63,.18);
+  border-left: 4px solid var(--card-accent, var(--accent));
+  border-radius: 0;
+  box-shadow: 0 16px 30px rgba(39,49,45,.08);
+  scroll-margin-top: 122px;
+  backdrop-filter: none;
+}
+#intro-content .map-reading-card h2 {
+  margin: 0 0 26px;
+  color: var(--ink);
+  font: 500 clamp(28px, 3.1vw, 48px)/1.12 var(--serif);
+  letter-spacing: -.03em;
+}
+#intro-content .map-reading-card p {
+  max-width: 34rem;
+  margin: 0 0 18px;
+  color: #465d59;
+  font: calc(16px * var(--font-scale))/1.95 var(--serif);
+}
+#intro-content .map-reading-card p:last-child { margin-bottom: 0; }
+#intro-content .map-reading-visual {
+  position: sticky;
+  top: 122px;
+  z-index: 2;
+  min-width: 0;
+  min-height: min(610px, calc(100svh - 190px));
+}
+#intro-content .map-reading-visual .route-map-interaction {
+  position: relative;
+  inset: auto;
+  width: 100%;
+  height: min(610px, calc(100svh - 190px));
+  min-height: 500px;
+  overflow: hidden;
+  background: rgba(249,247,240,.72);
+  border: 1px solid rgba(23,59,63,.2);
+  box-shadow: 0 18px 38px rgba(39,49,45,.12);
+}
+
+/* Method and platform sections keep their explanatory text in clear editorial
+   surfaces, with the visual demo occupying a separate field. */
+#intro-content > .option-1-showcase-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  grid-template-rows: auto auto auto;
+  gap: 0;
+  min-height: 0;
+}
+#intro-content > .option-1-showcase-story > .option-heading { grid-row: 1; }
+#intro-content > .option-1-showcase-story > .method-backdrop {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  grid-row: 2;
+  display: block;
+  min-height: 0;
+  padding: 0;
+  background: transparent;
+}
+#intro-content > .option-1-showcase-story > .story-card {
+  grid-row: 3;
+  position: relative;
+  width: min(920px, 100%);
+  max-height: none;
+  margin: 20px auto 0;
+  padding: 22px 26px;
+  color: var(--ink);
+  background: rgba(255,250,242,.76);
+  border: 1px solid rgba(23,59,63,.18);
+  border-left: 4px solid #bd704b;
+  border-radius: 0;
+  box-shadow: none;
+  backdrop-filter: none;
+}
+#intro-content .method-intro-card p { margin: 0; font: 500 calc(18px * var(--font-scale))/1.75 var(--serif); }
+#intro-content > .option-1-showcase-story .method-table {
+  width: 100%;
+  border-radius: 4px;
+  box-shadow: 0 14px 30px rgba(23,59,63,.1);
+}
+#intro-content > .platform-showcase-story {
+  display: grid;
+  grid-template-columns: minmax(0, 1.34fr) minmax(300px, .66fr);
+  grid-template-rows: minmax(0, 1fr);
+  align-items: start;
+  gap: clamp(24px, 4vw, 54px);
+  min-height: 0;
+}
+#intro-content > .platform-showcase-story > .review-backdrop {
+  position: relative;
+  inset: auto;
+  z-index: 1;
+  grid-column: 1;
+  grid-row: 1;
+  display: block;
+  min-height: min(610px, calc(100svh - 190px));
+  padding: 0;
+  background: transparent;
+}
+#intro-content > .platform-showcase-story > .review-backdrop::before { display: none; }
+#intro-content > .platform-showcase-story .review-window {
+  width: 100%;
+  height: min(610px, calc(100svh - 190px));
+  min-height: 500px;
+  border-radius: 4px;
+  box-shadow: 0 18px 38px rgba(39,49,45,.12);
+}
+#intro-content > .platform-showcase-story > .platform-copy-card {
+  grid-column: 2;
+  grid-row: 1;
+  align-self: start;
+  width: auto;
+  max-height: none;
+  margin: 0;
+  padding: clamp(24px, 3vw, 38px);
+  background: rgba(255,250,242,.82);
+  border: 1px solid rgba(23,59,63,.18);
+  border-left: 4px solid #bd704b;
+  border-radius: 0;
+  box-shadow: 0 16px 30px rgba(39,49,45,.08);
+  backdrop-filter: none;
+}
+#intro-content .platform-copy-card h2 {
+  margin: 0 0 25px;
+  color: var(--ink);
+  font: 500 clamp(28px, 3.1vw, 48px)/1.1 var(--serif);
+  letter-spacing: -.03em;
+}
+#intro-content .platform-copy-card p {
+  margin: 0 0 18px;
+  color: #465d59;
+  font: calc(16px * var(--font-scale))/1.9 var(--serif);
+}
+#intro-content .platform-copy-card p:last-child { margin-bottom: 0; }
+
+/* The visual panel is a stable 60% column. Each card selects a different
+   panel without moving the workbench or changing its outer height. */
+#intro-content > .option-3-workbench-story .workbench-shell {
+  grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr);
+  gap: clamp(22px, 3vw, 38px);
+  align-items: start;
+}
+#intro-content .workbench-fixed-visual {
+  position: sticky;
+  top: 122px;
+  min-width: 0;
+  overflow: visible;
+}
+#intro-content .workbench-visual-panels {
+  position: relative;
+  display: grid;
+  width: 100%;
+  height: min(610px, calc(100svh - 190px));
+  min-height: 500px;
+}
+#intro-content .workbench-visual-panel {
+  grid-area: 1 / 1;
+  display: none;
+  min-width: 0;
+  min-height: 0;
+  overflow: hidden;
+  background: #f8f5ee;
+  border: 1px solid rgba(23,59,63,.2);
+  box-shadow: 0 18px 38px rgba(39,49,45,.12);
+}
+#intro-content .workbench-visual-panel.is-active { display: flex; flex-direction: column; }
+#intro-content .workbench-visual-panel[hidden] { display: none; }
+#intro-content .workbench-visual-panel > img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  object-fit: cover;
+  filter: saturate(.72) sepia(.08) contrast(.98);
+}
+#intro-content .workbench-visual-panel > figcaption {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  padding: 13px 17px;
+  color: #f8f5ee;
+  background: linear-gradient(transparent, rgba(23,59,63,.86));
+  font: 700 calc(11px * var(--font-scale))/1.3 var(--sans);
+  letter-spacing: .05em;
+}
+#intro-content .workbench-visual-panel .mock-review-document {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+#intro-content .relationship-visual {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  align-items: center;
+  flex: 1 1 auto;
+  gap: clamp(8px, 1.3vw, 20px);
+  padding: clamp(22px, 4vw, 62px);
+  background:
+    linear-gradient(90deg, rgba(22,61,63,.06) 1px, transparent 1px) 0 0 / 25% 100%,
+    linear-gradient(#f4efe6, #e0ebe6);
+}
+#intro-content .relationship-node {
+  display: grid;
+  min-height: 92px;
+  padding: 15px;
+  place-items: center;
+  color: var(--ink);
+  background: rgba(255,250,242,.94);
+  border: 1px solid rgba(23,59,63,.24);
+  border-top: 4px solid var(--accent);
+  box-shadow: 0 10px 20px rgba(23,59,63,.1);
+  font: 600 clamp(14px, 1.7vw, 22px)/1.35 var(--serif);
+  text-align: center;
+}
+#intro-content .relationship-node-official { border-top-color: #bd704b; }
+#intro-content .relationship-node-response { border-top-color: #7e9b73; }
+#intro-content .relationship-arrow { color: var(--accent); font: 800 clamp(20px, 3vw, 36px)/1 var(--sans); text-align: center; }
+#intro-content .visual-panel-caption {
+  margin: 0;
+  padding: 13px 17px;
+  color: var(--muted);
+  background: #f6f0e7;
+  border-top: 1px solid rgba(23,59,63,.14);
+  font: 700 calc(11px * var(--font-scale))/1.3 var(--sans);
+  letter-spacing: .05em;
+}
+#intro-content .case-route-visual {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: hidden;
+  background: linear-gradient(145deg, #e3ece8, #f4eee3 60%, #dfd3c3);
+}
+#intro-content .case-route-visual::before {
+  position: absolute;
+  inset: 12% 10%;
+  content: "";
+  background: radial-gradient(circle at 72% 72%, rgba(196,93,56,.27) 0 6px, transparent 7px), radial-gradient(circle at 27% 27%, rgba(22,61,63,.22) 0 6px, transparent 7px), linear-gradient(145deg, transparent 47%, rgba(196,93,56,.3) 48% 49%, transparent 50%);
+}
+#intro-content .case-route-visual img { position: absolute; inset: 12% 10%; width: 80%; height: 76%; object-fit: contain; mix-blend-mode: multiply; opacity: .82; }
+#intro-content .case-route-label { position: absolute; z-index: 1; padding: 7px 10px; color: #f7f3ea; background: var(--ink); font: 700 calc(11px * var(--font-scale))/1 var(--sans); box-shadow: 0 6px 14px rgba(23,59,63,.16); }
+#intro-content .case-route-label-taiwan { right: 13%; bottom: 15%; }
+#intro-content .case-route-label-beijing { left: 15%; top: 17%; }
+
+/* Closed workbench cards are intentionally quiet; opening one reveals only
+   its own copy, while previously opened cards stay open above it. */
+#intro-content .workbench-card {
+  min-height: 0;
+  background: rgba(255,250,242,.78);
+  border: 1px solid rgba(23,59,63,.18);
+  border-left: 4px solid transparent;
+  border-radius: 0;
+  box-shadow: 0 8px 18px rgba(39,49,45,.05);
+}
+#intro-content .workbench-card.is-active:not(.is-open) { background: rgba(255,250,242,.88); box-shadow: 0 8px 18px rgba(39,49,45,.05); }
+#intro-content .workbench-card.is-open {
+  min-height: min(500px, calc(100svh - 190px));
+  background: rgba(230,239,235,.9);
+  border-left-color: var(--accent);
+  box-shadow: 0 12px 24px rgba(39,49,45,.08);
+}
+#intro-content .workbench-card-heading-copy small { display: none; }
+#intro-content .workbench-card-heading { min-height: 88px; padding: 22px 24px; }
+#intro-content .workbench-card-heading-copy { gap: 0; }
+#intro-content .workbench-card-heading-copy strong { font: 600 clamp(20px, 2vw, 29px)/1.24 var(--serif); }
+#intro-content .workbench-card-arrow { transform: none; }
+#intro-content .workbench-card.is-open .workbench-card-arrow { transform: rotate(180deg); }
+#intro-content .workbench-card-body { display: none; margin: 0 24px 27px; padding: 19px 0 0; border-top: 1px solid rgba(23,59,63,.16); }
+#intro-content .workbench-card.is-open .workbench-card-body { display: block; }
+#intro-content .workbench-card-body p { margin: 0 0 14px; color: #465d59; font: calc(15px * var(--font-scale))/1.9 var(--serif); }
+#intro-content .workbench-card-body p:last-child { margin-bottom: 0; }
+
+@media (max-width: 900px) {
+  #intro-content > .story { padding-right: 20px; padding-left: 20px; }
+  #intro-content .map-reading-layout,
+  #intro-content > .platform-showcase-story { grid-template-columns: 1fr; gap: 24px; }
+  #intro-content .map-reading-track { order: 1; }
+  #intro-content .map-reading-visual { order: 0; position: relative; top: auto; }
+  #intro-content .map-reading-visual .route-map-interaction,
+  #intro-content .workbench-visual-panels,
+  #intro-content > .platform-showcase-story .review-window { height: 520px; min-height: 0; }
+  #intro-content > .map-reading-story > .backdrop.route-map-backdrop { inset: 0; opacity: .38; border-left: 0; }
+  #intro-content .map-reading-card { min-height: 0; }
+  #intro-content > .platform-showcase-story > .review-backdrop,
+  #intro-content > .platform-showcase-story > .platform-copy-card { grid-column: 1; }
+  #intro-content > .platform-showcase-story > .review-backdrop { grid-row: 1; }
+  #intro-content > .platform-showcase-story > .platform-copy-card { grid-row: 2; }
+  #intro-content > .option-3-workbench-story .workbench-shell { grid-template-columns: 1fr; gap: 28px; }
+  #intro-content .workbench-fixed-visual { position: relative; top: auto; }
+  #intro-content .workbench-card.is-open { min-height: 0; }
+  #intro-content .relationship-visual { padding: 26px 16px; }
+}
+
+@media (max-width: 580px) {
+  #intro-content .map-reading-card h2,
+  #intro-content .platform-copy-card h2 { font-size: 31px; }
+  #intro-content .map-reading-card p,
+  #intro-content .platform-copy-card p { font-size: calc(15px * var(--font-scale)); line-height: 1.82; }
+  #intro-content .relationship-visual { grid-template-columns: 1fr; gap: 10px; }
+  #intro-content .relationship-arrow { transform: rotate(90deg); }
+  #intro-content .workbench-card-heading { min-height: 76px; padding: 19px 17px; }
+  #intro-content .workbench-card-body { margin-right: 17px; margin-left: 17px; }
+}

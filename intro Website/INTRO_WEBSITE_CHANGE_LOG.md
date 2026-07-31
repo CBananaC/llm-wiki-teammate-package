@@ -1739,3 +1739,28 @@ Verified:
 
 Remaining:
 - Reopen the local StoryMap in the browser and review desktop spacing and the mobile stacked-card behavior.
+
+### 2026-07-31 19:04 HKT — Codex — Refine section reading flow and visual hierarchy
+
+Summary:
+- Removed the redundant intro transition bar, orange option labels, and explanatory UI copy from the visible StoryMap sections; replaced them with numbered section headings.
+- Rebuilt the first two reading sections around one shared map with two sequential text cards, preventing the map and text from overlapping as the reader scrolls.
+- Added cumulative click/scroll opening for the three-card workbenches, separate visual panels for each card, clearer section backgrounds/dividers, and a contained result card for the platform description.
+- Updated the method-section copy to the requested wording and synchronized the StoryMap card-layout comments.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Targeted `git diff --check` passed.
+- Local HTTP browser preview showed one shared map, separated section surfaces, and no visible overlap in the first two sections.
+- Initial workbench cards were folded; clicking opened the selected card, and scrolling opened the next card while keeping the previous card open.
+
+Remaining:
+- The desktop interaction is verified locally; a separate narrow-mobile visual pass is still optional.

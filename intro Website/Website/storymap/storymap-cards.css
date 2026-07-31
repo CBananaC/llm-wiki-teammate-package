@@ -19,7 +19,7 @@
 */
 
 /* 引言 */
-/* intro-1-1 — 清代奏折制度｜Option 03：文字左、地圖右 */
+/* intro-1-1 — 清代奏折制度｜共用地圖閱讀序列：第一張文字卡 */
 #intro-1-1 {
   --card-x: 0 !important; /* layout is controlled by the two-column shell */
   --card-y: 0 !important;
@@ -27,7 +27,7 @@
   --story-height: 820px !important;
 }
 
-/* intro-1-2 — 清代奏折上諭的研究價值｜Option 02：左右分欄 */
+/* intro-1-2 — 清代奏折上諭的研究價值｜共用地圖閱讀序列：第二張文字卡 */
 #intro-1-2 {
   --card-x: 0 !important;
   --card-y: 0 !important;

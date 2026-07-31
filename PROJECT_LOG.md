@@ -5962,3 +5962,21 @@ available because the browser session no longer exposed the open StoryMap tab.
 
 Remaining: Reopen the StoryMap in the browser and review desktop spacing and
 mobile stacked-card behavior.
+
+### 2026-07-31 19:04 HKT — Codex — Refine intro StoryMap section hierarchy
+
+Summary: Removed the redundant `從文書制度到研究工具` bar, replaced orange option labels and visible UI-description copy with numbered headings, and redesigned the first two sections as a shared-map reading sequence. Added cumulative click/scroll opening for the three-card workbenches, separate visual panels, stronger section backgrounds/dividers, the requested AI-method sentence, and a contained platform-result card.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap.js`,
+`intro Website/Website/storymap/storymap-cards.css`, and this log plus
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: `node --check` passed for the changed StoryMap JavaScript;
+targeted `git diff --check` passed; local HTTP browser QA showed the shared map,
+separated section surfaces, no first/second-part overlap, folded initial cards,
+and cumulative card opening after click/scroll.
+
+Remaining: Desktop behavior is verified locally. A narrow-mobile visual pass
+remains optional; no deployment or push was performed.
