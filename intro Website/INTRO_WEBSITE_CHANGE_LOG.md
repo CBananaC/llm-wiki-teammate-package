@@ -1643,6 +1643,34 @@ Verified:
 Remaining:
 - Review the final workflow-chart spacing on a narrow mobile viewport.
 
+### 2026-07-31 17:59 HKT — Codex — Apply the selected UI directions to the intro website
+
+Summary:
+- Kept the full-screen cover and existing independent top-tab shell, while upgrading the visible intro sections to the selected UI directions.
+- Rebuilt 清代奏折制度 as an Option 03 text-left/map-right layout and folded the long institutional explanation into that card so the next scroll position is 清代奏折上諭的研究價值.
+- Rebuilt 研究價值 and 研究成果：「清代奏摺與上諭分析平台」 as Option 02 visual-left/reading-right layouts; the platform demonstration remains a hand-built panel with no iframe or backdrop image.
+- Rebuilt the research-difficulty and 林爽文事件 groups as clickable three-folder workbenches. Each active folder expands a full reading panel with a corresponding photo, route, or review-tool UI visual.
+- Rebuilt 以數位方法研究清代奏折和上諭 as Option 01, placing the structured method table before the reading text.
+- Polished the 引言 hover workflow chart and updated its links for the new section structure. Added keyboard and click behavior for both workbenches.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check "intro Website/Website/storymap/storymap.js"` passed.
+- `node --check "intro Website/Website/embedded-tool/review-tool-embed.js"` passed.
+- `git diff --check` passed.
+- Local browser preview confirmed the full-screen cover, all five independent tab panels, the polished workflow chart, map interaction, Option 02 split panels, Option 01 table-first flow, both three-folder workbenches, clickable folder switching, `字體` settings label, and zero `<iframe>` elements in the page.
+
+Remaining:
+- The repeated difficulty instruction was interpreted as the final, more specific Option 03 three-folder workbench; revise the first difficulty card to a separate Option 02 split only if that repeated line was intended as a separate requirement.
+- Narrow viewport visual review remains to be done in the target browser.
+
 ### 2026-07-31 17:29 HKT — Codex — Polish the whole-tab workflow chart
 
 Summary:

@@ -5876,6 +5876,36 @@ reading card is removed and its text appears directly beneath the subtitle.
 
 Remaining: Review the final workflow-chart spacing on a narrow mobile viewport.
 
+### 2026-07-31 17:59 HKT — Codex — Apply the selected UI directions to the intro website
+
+Summary: Kept the full-screen cover and existing independent top-tab shell,
+then applied the selected layouts to the intro StoryMap. 清代奏折制度 now uses
+an Option 03 text-left/map-right presentation with the institutional reading
+text consolidated before the next 清代奏折上諭的研究價值 card. 研究價值 and
+研究成果：「清代奏摺與上諭分析平台」 use visual-left/reading-right Option 02
+layouts; 以數位方法研究清代奏折和上諭 uses a table-first Option 01 layout.
+The research-difficulty and 林爽文 event groups now use three clickable folder
+cards, each expanding a full text panel and a paired photo, route, or review-tool
+visual. The 引言 hover chart was polished and its links updated for the new
+section structure; workbench click and keyboard behavior was added.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap.js`,
+`intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: both requested `node --check` commands passed; `git diff --check`
+passed; local browser preview confirmed the cover, independent tabs, workflow
+chart navigation, preserved map interaction, split panels, table-first flow,
+both folder workbenches, folder switching, the `字體` settings label, and zero
+`<iframe>` elements.
+
+Remaining: The repeated difficulty instruction was interpreted as the final,
+more specific Option 03 three-folder workbench. Revisit only if the first
+difficulty card should separately use Option 02. Narrow viewport visual review
+remains to be done in the target browser.
+
 ### 2026-07-31 17:29 HKT — Codex — Polish the whole-tab workflow chart
 
 Summary: Updated only `intro Website/Website/UI Idea/06-UI-upgrade-options.html`;
