@@ -5854,3 +5854,24 @@ preview blocks, and non-sticky option row.
 
 Remaining: Review the hover workflow previews in the target browser and choose
 the final layout direction for the main intro website.
+
+### 2026-07-31 17:24 HKT — Codex — Replace option navigation with a whole-tab workflow chart
+
+Summary: Updated only `intro Website/Website/UI Idea/06-UI-upgrade-options.html`;
+no other HTML file was edited. Moved the 展示優先 text into the plain subtitle
+content area and removed its separate reading card. Replaced the four-option bar
+and its per-option mini workflows with one whole-page workflow chart below the
+cover. Top-bar hover/focus on 主頁、引言、第一部分、第二部分、設定 opens the
+chart; the chart remains reachable while the pointer moves into it, and its
+bubbles link to corresponding page sections. Each bubble has a short one-line
+label with no visible explanatory text outside the chart.
+
+Files: `intro Website/Website/UI Idea/06-UI-upgrade-options.html` and
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: `git diff --check` passed. Local browser preview confirmed the chart
+is hidden on load, opens after a top-bar interaction, contains nine clickable
+bubbles, and a chart bubble navigates to `#option-b`. Confirmed the Option 01
+reading card is removed and its text appears directly beneath the subtitle.
+
+Remaining: Review the final workflow-chart spacing on a narrow mobile viewport.
