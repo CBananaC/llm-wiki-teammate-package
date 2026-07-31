@@ -5942,3 +5942,23 @@ open UI-idea file to the local StoryMap URL, so visual browser QA remains open.
 
 Remaining: Reopen the local StoryMap in an allowed local-HTTP browser session
 and review desktop scroll tracking and mobile card expansion.
+
+### 2026-07-31 18:36 HKT — Codex — Align intro StoryMap with UI-upgrade prototype
+
+Summary: Compared the UI-study prototype with the live StoryMap and applied its
+warm paper visual system, compact ruled section headings, contained editorial
+reading surfaces, mock-tool toolbar anatomy, and compact intro top screen.
+Changed both visible workbenches to page-flow cards beside sticky mock panels so
+page scrolling advances the text without losing the desktop demonstration.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`storymap.css`, `storymap.js`, `storymap-cards.css`, and this log plus
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: Both JavaScript syntax checks and targeted `git diff --check` passed;
+the local HTTP response contains the new section-heading, mock-toolbar,
+workbench, and intro-cover markup. Fresh browser screenshot verification was not
+available because the browser session no longer exposed the open StoryMap tab.
+
+Remaining: Reopen the StoryMap in the browser and review desktop spacing and
+mobile stacked-card behavior.

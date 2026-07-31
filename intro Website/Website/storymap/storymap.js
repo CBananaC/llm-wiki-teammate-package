@@ -157,7 +157,6 @@ document.querySelectorAll('[data-workbench]').forEach((workbench) => {
   const controls = [...workbench.querySelectorAll('[data-workbench-target]')];
   const cards = [...workbench.querySelectorAll('[data-workbench-card]')];
   const panels = cards.length ? cards : [...workbench.querySelectorAll('[data-workbench-panel]')];
-  const track = workbench.querySelector('[data-workbench-track]');
   if (!controls.length || !panels.length) return;
   const panelTarget = (panel) => panel.dataset.workbenchCard || panel.dataset.workbenchPanel;
   const activateWorkbenchPanel = (targetId, { scroll = false } = {}) => {
@@ -174,7 +173,7 @@ document.querySelectorAll('[data-workbench]').forEach((workbench) => {
       panel.classList.toggle('is-active', active);
       if (!cards.length) panel.hidden = !active;
     });
-    if (scroll && track) track.scrollTo({ top: Math.max(0, targetPanel.offsetTop - 2), behavior: 'smooth' });
+    if (scroll && cards.length) targetPanel.scrollIntoView({ behavior: 'smooth', block: 'start' });
   };
   controls.forEach((control) => {
     control.addEventListener('click', () => activateWorkbenchPanel(control.dataset.workbenchTarget, { scroll: Boolean(cards.length) }));
@@ -189,13 +188,13 @@ document.querySelectorAll('[data-workbench]').forEach((workbench) => {
   });
   const initialPanel = panels.find((panel) => panel.classList.contains('is-active')) || panels[0];
   activateWorkbenchPanel(panelTarget(initialPanel));
-  if (cards.length && track && 'IntersectionObserver' in window) {
+  if (cards.length && 'IntersectionObserver' in window) {
     const cardObserver = new IntersectionObserver((entries) => {
       const visible = entries
         .filter((entry) => entry.isIntersecting)
         .sort((first, second) => second.intersectionRatio - first.intersectionRatio)[0];
       if (visible) activateWorkbenchPanel(visible.target.dataset.workbenchCard);
-    }, { root: track, threshold: [0.45, 0.7, 0.9] });
+    }, { rootMargin: '-110px 0px -45% 0px', threshold: [0.15, 0.4, 0.7] });
     cards.forEach((card) => cardObserver.observe(card));
   }
 });

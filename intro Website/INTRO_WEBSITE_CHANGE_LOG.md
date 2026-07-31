@@ -1714,3 +1714,28 @@ Verified:
 
 Remaining:
 - Open the local StoryMap URL in a browser session that permits the local HTTP origin and review desktop scroll tracking plus the mobile expanded-card state.
+
+### 2026-07-31 18:36 HKT — Codex — Align StoryMap with the UI-upgrade prototype
+
+Summary:
+- Compared `Website/storymap/storymap-example.html` with `Website/UI Idea/06-UI-upgrade-options.html` and carried the prototype's visual grammar into the live StoryMap: warm paper background, compact section headings with rules, contained reading columns, lighter editorial surfaces, and the dark mock-tool toolbar anatomy.
+- Added a compact intro top screen, preserved the full cover and tab routing, and moved the visible intro sections into the prototype's heading → demonstration → reading flow.
+- Changed both workbenches to normal page-flow cards beside a sticky mock panel, so scrolling the page advances the text while the desktop demonstration remains visible.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- `node --check Website/embedded-tool/review-tool-embed.js` passed.
+- `git diff --check` passed for the changed StoryMap files.
+- Local HTTP markup smoke test found the new intro top screen, option headings, mock toolbar anatomy, brand mark, and workbench markup.
+- The in-app browser tab was no longer available to the browser session for a fresh visual screenshot, so visual comparison remains unverified in this turn.
+
+Remaining:
+- Reopen the local StoryMap in the browser and review desktop spacing and the mobile stacked-card behavior.
