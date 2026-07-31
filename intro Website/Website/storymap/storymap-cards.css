@@ -27,28 +27,12 @@
   --story-height: 1120px !important; /* story section height */
 }
 
-/* intro-1-1-source-a — 清代奏折制度 */
-#intro-1-1-source-a {
+/* intro-1-1-source — 清代奏折制度 */
+#intro-1-1-source {
   --card-x: 8vw !important;
   --card-y: 15vh !important;
-  --card-w: 500px !important;
-  --story-height: 900px !important;
-}
-
-/* intro-1-1-source-b — 清代奏折制度 */
-#intro-1-1-source-b {
-  --card-x: 50vw !important;
-  --card-y: 15vh !important;
-  --card-w: 560px !important;
-  --story-height: 940px !important;
-}
-
-/* intro-1-1-source-c — 清代奏折制度 */
-#intro-1-1-source-c {
-  --card-x: 8vw !important;
-  --card-y: 15vh !important;
-  --card-w: 560px !important;
-  --story-height: 900px !important;
+  --card-w: 700px !important;
+  --story-height: 980px !important;
 }
 
 /* intro-1-2 — 清代奏折上諭的研究價值 */
@@ -112,14 +96,6 @@
   --card-x: 6vw !important; /* move right */
   --card-y: 11vh !important; /* move down */
   --card-w: 500px !important; /* card width */
-  --story-height: 1120px !important; /* story section height */
-}
-
-/* intro-1-6-a — 示範案例：林爽文事件 */
-#intro-1-6-a {
-  --card-x: 50vw !important; /* move right */
-  --card-y: 12vh !important; /* move down */
-  --card-w: 590px !important; /* card width */
   --story-height: 1120px !important; /* story section height */
 }
 

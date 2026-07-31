@@ -5726,3 +5726,67 @@ reference remains under `intro Website/Website/storymap/`.
 Remaining: Hard-refresh the local preview and visually check the three mock
 panels at `#intro-1-3-b`, `#intro-1-3-c`, and `#intro-1-5`. The in-app browser's
 local-page security policy prevented live visual inspection in this session.
+
+### 2026-07-31 15:26 HKT — Codex — Rebuild the 諭24／硃110 StoryMap panels from sample-tool UI and canonical records
+
+Summary: Replaced the abbreviated comparison mockups with panels following the
+sample review tool's document-card anatomy: document header, metadata table,
+controls, tab strip, scrollable original-text pane, and highlighted evidence.
+Embedded the complete canonical source bodies for 諭24 and 硃110 from
+`review-tools/shared data/stage1_original_text.json`, corrected the metadata to
+the source records' dates, and added local tab switching for 原文、AI 摘要、關係.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"` and
+`git diff --check` passed. Canonical body prefixes and all requested highlight
+phrases for 諭24 and 硃110 are present.
+
+Remaining: Hard-refresh the local preview and compare the panels against the
+supplied sample-tool screenshot at `#intro-1-3-b`. Live browser inspection
+remains blocked by the local-page security policy in this session.
+
+### 2026-07-31 15:48 HKT — Codex — Match the StoryMap comparison panels to the sample review-tool document UI
+
+Summary: Rebuilt the 諭24／硃110 replicas around the sample review tool's actual
+document-card anatomy: ghost move/minimize/close controls, centered header resize
+grip, type badge, compact metadata rows, filter/settings strip, and scrollable
+原文 pane. Kept the complete canonical source bodies and requested evidence
+highlights, and added local minimize, close, filter, and settings affordances.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"`, HTML
+nesting validation, and `git diff --check` passed. Both sample panels are
+present and no StoryMap iframe/8766 references remain.
+
+Remaining: Hard-refresh the local preview and compare `#intro-1-3-b` against the
+supplied sample screenshot; live browser inspection remains blocked by the
+local-page security policy.
+
+### 2026-07-31 16:00 HKT — Codex — Consolidate source card text and remove duplicate intro copy
+
+Summary: Removed the four route/demo paragraphs from the `清代奏折制度` visual
+card; combined the three `原文補回` source cards into one; removed the specified
+1.3-b paragraphs, the 1.3-c 同日奏報 sentence, and its source-network table;
+removed the short duplicate `示範案例：林爽文事件` card while keeping the longer
+case-background card and updated the workflow link.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: Bundled Node syntax checks and `git diff --check` passed. Live preview
+contains 14 intro sections; the requested removed phrases and table are absent,
+the combined source card has three paragraphs, the longer case card remains, and
+no card has internal overflow.
+
+Remaining: Review the updated intro card spacing during the next visual pass.
