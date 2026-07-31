@@ -27,12 +27,36 @@
   --story-height: 1120px !important; /* story section height */
 }
 
+/* intro-1-1-source-a — 清代奏折制度 */
+#intro-1-1-source-a {
+  --card-x: 8vw !important;
+  --card-y: 15vh !important;
+  --card-w: 500px !important;
+  --story-height: 900px !important;
+}
+
+/* intro-1-1-source-b — 清代奏折制度 */
+#intro-1-1-source-b {
+  --card-x: 50vw !important;
+  --card-y: 15vh !important;
+  --card-w: 560px !important;
+  --story-height: 940px !important;
+}
+
+/* intro-1-1-source-c — 清代奏折制度 */
+#intro-1-1-source-c {
+  --card-x: 8vw !important;
+  --card-y: 15vh !important;
+  --card-w: 560px !important;
+  --story-height: 900px !important;
+}
+
 /* intro-1-2 — 清代奏折上諭的研究價值 */
 #intro-1-2 {
-  --card-x: 52vw !important; /* move right */
-  --card-y: 19vh !important; /* move down */
-  --card-w: 500px !important; /* card width */
-  --story-height: 960px !important; /* story section height */
+  --card-x: 8vw !important; /* move right */
+  --card-y: 35vh !important; /* move down */
+  --card-w: 470px !important; /* card width */
+  --story-height: 1120px !important; /* story section height */
 }
 
 /* intro-1-3-a — 研究清代奏折的主要困難 */
@@ -43,20 +67,36 @@
   --story-height: 1040px !important; /* story section height */
 }
 
+/* intro-1-3-a-source — 研究清代奏折的主要困難 */
+#intro-1-3-a-source {
+  --card-x: 9vw !important;
+  --card-y: 13vh !important;
+  --card-w: 600px !important;
+  --story-height: 980px !important;
+}
+
 /* intro-1-3-b — 研究清代奏折的主要困難 */
 #intro-1-3-b {
-  --card-x: 48vw !important; /* move right */
-  --card-y: 18vh !important; /* move down */
-  --card-w: 570px !important; /* card width */
-  --story-height: 1040px !important; /* story section height */
+  --card-x: 8vw !important; /* move right */
+  --card-y: 74vh !important; /* move down */
+  --card-w: 84vw !important; /* card width */
+  --story-height: 1450px !important; /* story section height */
+}
+
+/* intro-1-3-b-source — 研究清代奏折的主要困難 */
+#intro-1-3-b-source {
+  --card-x: 8vw !important;
+  --card-y: 15vh !important;
+  --card-w: 700px !important;
+  --story-height: 980px !important;
 }
 
 /* intro-1-3-c — 研究清代奏折的主要困難 */
 #intro-1-3-c {
   --card-x: 8vw !important; /* move right */
-  --card-y: 12vh !important; /* move down */
-  --card-w: 600px !important; /* card width */
-  --story-height: 1160px !important; /* story section height */
+  --card-y: 74vh !important; /* move down */
+  --card-w: 84vw !important; /* card width */
+  --story-height: 1600px !important; /* story section height */
 }
 
 /* intro-1-4 — 以數位方法研究清代奏折和上諭 */
@@ -83,12 +123,28 @@
   --story-height: 1120px !important; /* story section height */
 }
 
+/* intro-1-6-a-source — 示範案例：林爽文事件 */
+#intro-1-6-a-source {
+  --card-x: 8vw !important;
+  --card-y: 14vh !important;
+  --card-w: 700px !important;
+  --story-height: 1080px !important;
+}
+
 /* intro-1-6-b — 示範案例：林爽文事件 */
 #intro-1-6-b {
   --card-x: 8vw !important; /* move right */
   --card-y: 10vh !important; /* move down */
   --card-w: 610px !important; /* card width */
   --story-height: 1260px !important; /* story section height */
+}
+
+/* intro-1-6-b-source — 示範案例：林爽文事件 */
+#intro-1-6-b-source {
+  --card-x: 8vw !important;
+  --card-y: 14vh !important;
+  --card-w: 760px !important;
+  --story-height: 1180px !important;
 }
 
 /* intro-1-6-c — 示範案例：林爽文事件 */

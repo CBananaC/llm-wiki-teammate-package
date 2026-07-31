@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (canonical Stage 1 source-loader checkpoint complete; human visual refresh next)
+- Formal review editor: none (non-Yu click-network focus narrowed in both renderers; human browser validation next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -5379,3 +5379,350 @@ Verified:
 
 Remaining:
 - Insert the SVG path into the StoryMap map container when the HTML interaction is implemented.
+
+### 2026-07-30 18:27 HKT — Codex — Add the map backdrop and location pins to the first two intro cards
+
+Summary: Rendered the supplied `Fizzy Background.pdf` crop box as a web-ready PNG,
+used it as the backdrop for the first two StoryMap intro cards, and added separate
+SVG pin layers marking Beijing and Taiwan at the existing route endpoints. The pin
+layer remains independent from the future animated route SVG.
+
+Files:
+- `intro Website/Website/storymap/fizzy-background.png`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/Visual Material/情報路線/Fizzy Background.pdf`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: The PNG is 2106 × 1489 and matches the map's A4 crop-box ratio; both cards
+contain two red pins at the Beijing and Taiwan route endpoint coordinates; `node --check`
+and `git diff --check` passed. Browser visual validation was unavailable because the
+local preview address was rejected by the browser security policy.
+
+Remaining: Add the standalone route SVG as an HTML layer when the line animation
+interaction is ready.
+
+### 2026-07-30 18:36 HKT — Codex — Keep non-Yu click focus on the clicked Zhu's Yu relationship
+
+Summary: Changed both review tools so clicking a non-Yu document keeps only its
+directly paired Yu/document endpoints and the clicked document's own event/action
+evidence. A shared Yu no longer causes all sibling Zhu pair lines, green
+`yu_source` rings, or unrelated sibling emperor actions to be highlighted. Clicking
+the Yu itself retains its existing expansion to all directly paired Zhu documents.
+
+Files:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All inline JavaScript blocks parsed in both HTML files.
+- Focused-pair assertions passed in both renderers.
+- `git diff --check` passed.
+
+Remaining:
+- Human browser confirmation with one Yu paired to multiple Zhu documents.
+
+### 2026-07-30 18:36 HKT — Codex — Replace map spots with interactive Google-style pins
+
+Summary: Replaced the oversized red polygon spots in both first StoryMap cards
+with compact red teardrop pins and white centers. Added hover and keyboard-focus
+information popovers for 北京 and 臺灣（鹿仔港／鹿耳門）. The pin geometry remains
+in the shared map SVG coordinate system for future route animation.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: Four pins, four accessible labels, and four hover popovers are present
+across the two cards. `node --check` and `git diff --check` passed.
+
+Remaining: Browser visual validation and the route-line animation remain pending
+because the local preview address is blocked by the browser security policy.
+
+### 2026-07-30 19:13 HKT — Codex — Build the Taiwan-to-Beijing interactive route map
+
+Summary: Applied the same `Fizzy Background.pdf`-derived map backdrop to the first
+two cards and built a Taiwan-first click sequence. Taiwan starts alone; clicking
+it opens a three-page gallery, draws the supplied route from Taiwan to Beijing in
+one second, and then reveals Beijing with its information window. Reaching the
+third gallery page replays the route animation. The supplied route SVG is loaded at
+runtime and its point sequence is reversed for the requested direction.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/taiwan-route-source-page.png`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: The route source has 4,261 points; the reversed sequence begins at the
+Taiwan endpoint `(730.24, 510.39)` and ends at Beijing `(627.41, 207.15)`. Both
+cards contain the route map and gallery structure, all referenced assets resolve,
+and `node --check` plus `git diff --check` passed. Browser visual validation
+remains unavailable because the local preview address is blocked by the browser
+security policy.
+
+Remaining: Perform a human browser pass when the local preview can be opened,
+especially checking the information-window position at the smallest mobile width.
+
+### 2026-07-30 19:47 HKT — Codex — Make the supplied route SVG work in local preview and update the first card text
+
+Summary: Replaced the `fetch()`-dependent route loader with a native embedded
+object using the supplied `Visual Material/情報路線/taiwan-war-report-route.svg`.
+The embedded path is reversed at activation time and animated from Taiwan to
+Beijing over one second. Replaced the first card's previous explanatory prose
+with the four supplied chronological paragraphs about 柴大紀、乾隆帝硃批、軍機處
+登記 and the廷寄諭旨.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: Both map instances directly reference the supplied route SVG through
+`route-line-object`; StoryMap and embedded-tool JavaScript syntax checks and
+`git diff --check` passed.
+
+Remaining: Perform a human browser pass to confirm the embedded SVG's
+`contentDocument` is accessible in the user's local preview browser.
+
+### 2026-07-30 19:56 HKT — Codex — Remove file-preview route and review-tool cross-origin failures
+
+Summary: Generated `taiwan-war-report-route-reverse.svg` from the supplied route
+SVG by reversing its 4,261-point path sequence. The map now loads this local
+reverse derivative directly, with its own one-second draw animation, so it does
+not access an embedded document. The review iframe now uses the existing local
+HTTP review server on port 8766 even when the StoryMap itself is opened as a file.
+
+Files:
+- `intro Website/Website/storymap/taiwan-war-report-route-reverse.svg`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: The reverse route starts at Taiwan `(730.24, 510.39)` and ends at
+Beijing `(627.41, 207.15)` with 4,261 points. StoryMap JavaScript no longer uses
+`fetch()` or `contentDocument` for the route. Both JavaScript syntax checks and
+`git diff --check` passed.
+
+Remaining: Open the StoryMap through the local HTTP workflow and confirm the
+review server is running on port 8766.
+
+### 2026-07-30 20:05 HKT — Codex — Move route gallery to Beijing and repair bidirectional playback
+
+Summary: Replaced the old Taiwan three-page popup with a concise Taiwan
+starting-point information card, moved the three-page image gallery to the
+Beijing popup, and added separate SVG route layers for the outbound Taiwan →
+Beijing animation and the return Beijing → Taiwan replay after page 3. The
+route loader no longer depends on an embedded-object load event, removing the
+failure that prevented the Beijing reveal in the preview.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "Website/storymap/storymap.js"` and `git diff --check`
+passed. Both route-map instances contain the Taiwan information card, hidden
+Beijing pin, Beijing three-page gallery, and two direction-specific SVG layers.
+
+Remaining: The in-app browser blocked localhost inspection in this turn; reopen
+the local preview and test Taiwan click → Beijing reveal → gallery page 3 →
+return animation.
+
+### 2026-07-30 20:20 HKT — Codex — Bring route pins above the map popups
+
+Summary: Raised the interactive route layer above the StoryMap card stacking
+layer and raised the pin SVG above both information windows, so the Taiwan and
+Beijing pins remain visible while their cards are open. The line layer remains
+behind the information windows and pins.
+
+Files:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `git diff --check` passed. The route layer is z-index 5, the pin SVG
+is z-index 4, and the information windows remain z-index 3 within the route
+layer.
+
+Remaining: Reload the local preview and confirm both red pins remain visible at
+Beijing and Taiwan while the Beijing gallery is on any of its three pages.
+
+### 2026-07-30 20:23 HKT — Codex — Use supplied route narrative and reveal the SVG Beijing pin
+
+Summary: Replaced the Beijing gallery copy with the three supplied passages
+about relay-station delivery, military-office registration, and the imperial
+edict sent to 柴大紀. The red outbound route remains visible after appearing;
+the return layer replays without first removing the already-visible red line.
+Fixed the Beijing marker reveal by removing the SVG `<g>` element's `hidden`
+attribute directly instead of assigning an unsupported SVG `hidden` property.
+
+Files:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "Website/storymap/storymap.js"` and `git diff --check`
+passed. All three gallery strings match the supplied Traditional Chinese text.
+
+Remaining: Hard-refresh the local preview and click the Taiwan pin once; the
+Beijing pin should appear after the one-second route animation, with the three
+supplied passages available through its gallery.
+
+### 2026-07-30 20:44 HKT — Codex — Add source image and reference link to the research-difficulty card
+
+Summary: Changed `intro-1-3-a` to use `Visual Material/img2_4_2.jpg` as its full
+backdrop. Added a compact upper-corner `參考來源 ↗` button linking to the
+supplied National Palace Museum page, with the complete citation in its
+accessible title. Updated the card paragraph to refer directly to
+《欽定剿平三省邪匪方略》 and removed the stale 戴英從 citation from this card.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"` and
+`git diff --check` passed. The image path and supplied external reference URL
+are present in the section.
+
+Remaining: Hard-refresh the local preview and open 引言 → 3. 研究清代奏折的主要困難
+to check the image crop and corner-button contrast.
+
+### 2026-07-30 20:46 HKT — Codex — Add the 林爽文 demonstration-case artwork and source link
+
+Summary: Updated `intro-1-6-a` with the supplied introductory sentence,
+`為展示本網站的研究方法及各項功能。`, replaced its backdrop with
+`Visual Material/印版平定台湾战图册6.png`, and added the same upper-corner
+`參考來源 ↗` treatment linking to the supplied 國家文化記憶庫 record for
+〈平定臺灣戰圖（七）生擒逆首林爽文〉.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"` and
+`git diff --check` passed. The supplied image path, sentence, and source URL
+are present in `intro-1-6-a`.
+
+Remaining: Hard-refresh the local preview and open 引言 → 案例：林爽文事件
+to check the artwork crop and reference-button contrast.
+
+### 2026-07-30 20:49 HKT — Codex — Add the route map to the information-delay case card
+
+Summary: Updated `intro-1-6-b` to use the `Fizzy Background` map backdrop and
+the full red Taiwan-to-Beijing route line. Kept the requested text,
+`第一，資訊傳遞是戰時軍事決策形成的重要環節。`, and added a corner
+`參考來源 ↗` link to the local PDF for 賴福順《乾隆重要戰爭之軍需研究》（1984）.
+The card remains a focused introduction so the map and route are the main
+visual evidence for the information-delay point.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"` and
+`git diff --check` passed. The static route uses
+`taiwan-war-report-route-reverse.svg`, and the reference link targets the exact
+local source PDF.
+
+Remaining: Hard-refresh the local preview and open 引言 → 案例：林爽文事件 →
+the first reason card to check the red-line crop and PDF button.
+
+### 2026-07-30 20:59 HKT — Codex — Add the 諭24／硃110 second-level communication comparison
+
+Summary: Reworked `intro-1-3-b` for the requested second layer of communication,
+with the supplied explanation about 乾隆帝's 1月2日上諭 and 常青's 13日後
+回奏. Added two side-by-side embedded sample review-tool panels, 諭24 on the
+left and 硃110 on the right. Added sample-only URL highlight support so each
+panel marks exact source wording corresponding to the summarized commands and
+response, and moved the StoryMap card below the comparison panels.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `review-tools/(2) sample/index.html` (sample-only embed behavior explicitly requested)
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"` and
+`git diff --check` passed. Canonical source records for 諭24 and 硃110 were
+checked before selecting exact highlight spans.
+
+Remaining: Hard-refresh the local preview and open `#intro-1-3-b` to confirm both
+review panels load from port 8766 and the highlighted passages are visible. The
+review service was not running during this check and could not be started from
+the restricted session; keep the normal review server running on port 8766 for
+the embedded panels.
+
+### 2026-07-30 21:06 HKT — Codex — Add the 硃119 source-network evidence panel
+
+Summary: Reworked `intro-1-3-c` for the requested “事件、消息來源與資訊網絡”
+example. Added one embedded sample review-tool panel for 硃119, labelled
+`同日｜常青亦奏報臺灣軍情與四名消息來源`, with exact-source highlights for the
+four passages concerning 廈門蚶江員弁、署守備陳邦光、易連／王增錞, and
+廈門同知劉嘉會. Added a three-column evidence table for source, report content,
+and quotation, and corrected the duplicated “的” in the explanatory paragraph.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"`, inline
+sample-script parsing, and `git diff --check` passed. The canonical 硃119 record
+was checked before selecting exact highlight spans.
+
+Remaining: Hard-refresh the local preview and open `#intro-1-3-c` with the review
+server running on port 8766 to check the highlighted passages and table layout.
+
+### 2026-07-31 15:11 HKT — Codex — Restore omitted introduction prose in separate source cards
+
+Summary: Restored the omitted `Outline/Content.docx` introduction prose in
+independent source-text cards, while preserving the newer visual/demo cards and
+their backdrops. Added three 1.1 source cards, the missing 1.3 source
+paragraphs, and the missing 1.6 case-introduction and first-reason paragraphs.
+Restored the inline Dai citation immediately after `超過二萬七千頁`, linked to
+the existing reference entry.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: Bundled JavaScript syntax checks and `git diff --check` passed. The
+browser HTTP preview confirmed 17 intro sections/cards, no empty cards, no card
+overflow, and the inline reference link targets
+`../references.html#ref-dai-2019`.
+
+Remaining: Review the new source-card backdrop positioning at the preferred
+browser width; the embedded review panels still require the separate port-8766
+server for their content.
+
+### 2026-07-31 15:11 HKT — Codex — Replace StoryMap sample iframes with local review-panel replicas
+
+Summary: Replaced the StoryMap's embedded review-tool iframes for 硃83,
+諭24／硃110, and 硃119 with local HTML/CSS mock review windows. Recreated the
+document header, metadata, tab strip, scrollable original-text area, and static
+evidence highlights. The standalone sample review tool remains unchanged.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"` and
+`git diff --check` passed. No `iframe`, `8766`, or `setReviewFrameSource`
+reference remains under `intro Website/Website/storymap/`.
+
+Remaining: Hard-refresh the local preview and visually check the three mock
+panels at `#intro-1-3-b`, `#intro-1-3-c`, and `#intro-1-5`. The in-app browser's
+local-page security policy prevented live visual inspection in this session.
