@@ -173,25 +173,26 @@
       overflow: hidden;
       opacity: 0;
       color: #f7f1e6;
-      background: #173b3f;
+      background: linear-gradient(135deg, #173b3f 0%, #1d4b4b 58%, #204346 100%);
       border-bottom: 1px solid rgba(22, 61, 63, .28);
       transition: max-height .32s ease, opacity .22s ease;
     }
     .workflow-reveal.is-open {
-      max-height: 330px;
+      max-height: 270px;
       opacity: 1;
     }
     .workflow-map {
       position: relative;
       display: grid;
-      grid-template-columns: minmax(98px, .7fr) 30px minmax(98px, .8fr) 38px minmax(118px, .9fr) 38px minmax(130px, 1fr);
-      grid-template-rows: repeat(4, minmax(52px, auto));
+      grid-template-columns: 150px 34px 170px 34px 180px 34px 210px;
+      grid-template-rows: repeat(4, 44px);
       gap: 10px;
       align-items: center;
-      max-width: 1280px;
-      min-height: 190px;
+      justify-content: center;
+      max-width: 1120px;
+      min-height: 220px;
       margin: 0 auto;
-      padding: 26px clamp(18px, 4vw, 52px);
+      padding: 22px 20px;
     }
     .workflow-map::before,
     .workflow-map::after {
@@ -202,15 +203,15 @@
     }
     .workflow-map::before {
       top: 50%;
-      right: 13%;
-      left: 22%;
+      right: 40%;
+      left: 28%;
       height: 1px;
       background: rgba(247, 241, 230, .35);
     }
     .workflow-map::after {
-      top: 25%;
-      bottom: 25%;
-      left: 47%;
+      top: 17%;
+      bottom: 17%;
+      left: 59%;
       width: 1px;
       background: rgba(247, 241, 230, .35);
     }
@@ -218,16 +219,17 @@
       position: relative;
       z-index: 1;
       display: inline-flex;
-      min-height: 42px;
+      width: 100%;
+      min-height: 40px;
       align-items: center;
       justify-content: center;
-      padding: 8px 12px;
+      padding: 7px 10px;
       color: var(--ink);
       background: #f7f1e6;
       border: 1px solid rgba(247, 241, 230, .52);
-      border-radius: 5px;
-      box-shadow: 0 7px 16px rgba(4, 27, 29, .16);
-      font: 700 13px/1.2 var(--serif);
+      border-radius: 4px;
+      box-shadow: 0 5px 12px rgba(4, 27, 29, .15);
+      font: 700 12px/1.2 var(--serif);
       text-align: center;
       text-decoration: none;
       white-space: nowrap;
@@ -251,7 +253,7 @@
       position: relative;
       z-index: 1;
       color: var(--yellow);
-      font-size: 22px;
+      font-size: 19px;
       line-height: 1;
       text-align: center;
     }
@@ -268,6 +270,7 @@
     .workflow-link-arrow.is-branch-1 { grid-column: 6; grid-row: 1; }
     .workflow-link-arrow.is-branch-2 { grid-column: 6; grid-row: 2; }
     .workflow-link-arrow.is-branch-3 { grid-column: 6; grid-row: 3; }
+    .workflow-link-arrow.is-branch-4 { grid-column: 6; grid-row: 4; }
     .workflow-bubble-compare { grid-column: 7; grid-row: 4; }
 
     .option-section {
@@ -694,6 +697,7 @@
         <span class="workflow-link-arrow is-branch-1" aria-hidden="true">↘</span>
         <span class="workflow-link-arrow is-branch-2" aria-hidden="true">→</span>
         <span class="workflow-link-arrow is-branch-3" aria-hidden="true">↗</span>
+        <span class="workflow-link-arrow is-branch-4" aria-hidden="true">↘</span>
         <a class="workflow-bubble workflow-bubble-showcase is-option" data-workflow-bubble="showcase" href="#option-a">展示優先</a>
         <a class="workflow-bubble workflow-bubble-split is-option" data-workflow-bubble="split" href="#option-b">左右分欄</a>
         <a class="workflow-bubble workflow-bubble-workbench is-option" data-workflow-bubble="workbench" href="#option-c">研究工作臺</a>

@@ -1642,3 +1642,22 @@ Verified:
 
 Remaining:
 - Review the final workflow-chart spacing on a narrow mobile viewport.
+
+### 2026-07-31 17:29 HKT — Codex — Polish the whole-tab workflow chart
+
+Summary:
+- Updated only `Website/UI Idea/06-UI-upgrade-options.html`; no other HTML file was edited.
+- Tightened the chart into a centered hierarchy with fixed, consistent bubble widths, smaller spacing, a shorter reveal area, clearer branch rails, and a connected path to 比較.
+- Rebalanced the dark chart surface and node colors so the chart reads as one deliberate navigation map rather than a stretched row of cards.
+
+Files changed:
+- `Website/UI Idea/06-UI-upgrade-options.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed.
+- Local browser preview at desktop width showed the compact centered chart, nine clickable bubbles, no horizontal overflow, and the Option 01 copy directly beneath its subtitle.
+
+Remaining:
+- Review the final chart spacing on a narrow mobile viewport.

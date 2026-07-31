@@ -5875,3 +5875,21 @@ bubbles, and a chart bubble navigates to `#option-b`. Confirmed the Option 01
 reading card is removed and its text appears directly beneath the subtitle.
 
 Remaining: Review the final workflow-chart spacing on a narrow mobile viewport.
+
+### 2026-07-31 17:29 HKT — Codex — Polish the whole-tab workflow chart
+
+Summary: Updated only `intro Website/Website/UI Idea/06-UI-upgrade-options.html`;
+no other HTML file was edited. Tightened the chart into a centered hierarchy
+with fixed, consistent bubble widths, smaller spacing, a shorter reveal area,
+clearer branch rails, and a connected path to 比較. Rebalanced the dark chart
+surface and node colors so it reads as one deliberate navigation map rather than
+a stretched row of cards.
+
+Files: `intro Website/Website/UI Idea/06-UI-upgrade-options.html` and
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: `git diff --check` passed. Local browser preview at desktop width
+showed the compact centered chart, nine clickable bubbles, no horizontal
+overflow, and the Option 01 copy directly beneath its subtitle.
+
+Remaining: Review the final chart spacing on a narrow mobile viewport.
