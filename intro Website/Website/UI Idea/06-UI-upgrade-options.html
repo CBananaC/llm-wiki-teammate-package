@@ -1,0 +1,882 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>UI upgrade options｜Review-tool exhibition</title>
+  <style>
+    :root {
+      --ink: #163d3f;
+      --ink-soft: #31575a;
+      --paper: #f4efe6;
+      --paper-deep: #e8dfd1;
+      --surface: #fffaf2;
+      --surface-green: #e6efeb;
+      --line: rgba(22, 61, 63, .18);
+      --muted: #6d756f;
+      --orange: #c45d38;
+      --orange-soft: #f1d6c6;
+      --yellow: #f3c967;
+      --shadow: 0 24px 70px rgba(45, 47, 36, .16);
+      --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      --serif: "Noto Serif TC", "Source Han Serif TC", "PMingLiU", Georgia, serif;
+    }
+
+    * { box-sizing: border-box; }
+    html { scroll-behavior: smooth; }
+    body {
+      margin: 0;
+      color: var(--ink);
+      background:
+        radial-gradient(circle at 84% 0%, rgba(196, 93, 56, .08), transparent 25rem),
+        var(--paper);
+      font-family: var(--sans);
+      line-height: 1.55;
+    }
+    a { color: inherit; }
+    button, a { -webkit-tap-highlight-color: transparent; }
+
+    .site-bar {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      min-height: 64px;
+      padding: 10px clamp(18px, 4vw, 60px);
+      color: #f7f1e6;
+      background: rgba(22, 61, 63, .96);
+      border-bottom: 1px solid rgba(255, 250, 242, .16);
+      box-shadow: 0 8px 24px rgba(22, 61, 63, .12);
+      backdrop-filter: blur(14px);
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      min-width: max-content;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: .12em;
+    }
+    .brand-mark {
+      display: grid;
+      width: 30px;
+      height: 30px;
+      place-items: center;
+      color: var(--ink);
+      background: var(--yellow);
+      border-radius: 50%;
+      font: 700 15px/1 var(--serif);
+    }
+    .top-tabs {
+      display: flex;
+      align-items: center;
+      gap: 3px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .top-tabs::-webkit-scrollbar { display: none; }
+    .top-tabs a {
+      padding: 8px 12px;
+      color: rgba(247, 241, 230, .72);
+      border-bottom: 2px solid transparent;
+      font-size: 12px;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .top-tabs a:hover,
+    .top-tabs a:focus-visible,
+    .top-tabs a[aria-current="page"] {
+      color: #fffaf2;
+      border-bottom-color: var(--yellow);
+    }
+    .top-note {
+      min-width: max-content;
+      color: rgba(247, 241, 230, .62);
+      font-size: 11px;
+      letter-spacing: .08em;
+    }
+
+    .cover {
+      min-height: 390px;
+      padding: clamp(58px, 8vw, 108px) clamp(20px, 7vw, 110px) 70px;
+      color: #f7f1e6;
+      background:
+        linear-gradient(125deg, rgba(22, 61, 63, .98), rgba(37, 82, 81, .94) 60%, rgba(196, 93, 56, .78)),
+        radial-gradient(circle at 86% 25%, rgba(243, 201, 103, .54), transparent 19rem);
+    }
+    .cover-inner {
+      display: grid;
+      grid-template-columns: minmax(0, 1.15fr) minmax(280px, .85fr);
+      gap: clamp(32px, 8vw, 120px);
+      align-items: end;
+      max-width: 1320px;
+      margin: 0 auto;
+    }
+    .eyebrow,
+    .option-kicker,
+    .mock-label,
+    .reading-kicker {
+      margin: 0 0 12px;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: .15em;
+      text-transform: uppercase;
+    }
+    .eyebrow { color: var(--yellow); }
+    .cover h1 {
+      max-width: 800px;
+      margin: 0;
+      font: 500 clamp(40px, 6vw, 76px)/1.05 var(--serif);
+      letter-spacing: -.04em;
+    }
+    .cover h1 em { color: var(--yellow); font-style: normal; }
+    .cover-lede {
+      max-width: 650px;
+      margin: 24px 0 0;
+      color: rgba(247, 241, 230, .78);
+      font-size: clamp(15px, 1.7vw, 18px);
+    }
+    .cover-principles {
+      padding: 22px 22px 20px;
+      background: rgba(12, 41, 43, .36);
+      border: 1px solid rgba(247, 241, 230, .24);
+      border-radius: 4px;
+    }
+    .cover-principles h2 {
+      margin: 0 0 14px;
+      color: var(--yellow);
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: .08em;
+    }
+    .cover-principles ul { display: grid; gap: 10px; margin: 0; padding: 0; list-style: none; }
+    .cover-principles li {
+      display: grid;
+      grid-template-columns: 24px 1fr;
+      gap: 10px;
+      color: rgba(247, 241, 230, .82);
+      font-size: 13px;
+    }
+    .cover-principles li::before {
+      content: "✓";
+      color: var(--yellow);
+      font-weight: 800;
+    }
+    .cover-chips {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-top: 28px;
+    }
+    .cover-chip {
+      padding: 7px 10px;
+      color: var(--ink);
+      background: var(--yellow);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .cover-chip.is-quiet { color: #f7f1e6; background: rgba(247, 241, 230, .12); }
+
+    .option-jump {
+      position: sticky;
+      top: 64px;
+      z-index: 10;
+      display: flex;
+      justify-content: center;
+      gap: 4px;
+      padding: 10px 16px;
+      background: rgba(244, 239, 230, .94);
+      border-bottom: 1px solid var(--line);
+      box-shadow: 0 8px 20px rgba(45, 47, 36, .06);
+      backdrop-filter: blur(12px);
+    }
+    .option-jump a {
+      padding: 7px 13px;
+      color: var(--ink-soft);
+      border: 1px solid transparent;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .option-jump a:hover,
+    .option-jump a:focus-visible {
+      color: var(--orange);
+      border-color: var(--orange);
+      outline: none;
+    }
+
+    .option-section {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 88px clamp(20px, 5vw, 76px) 102px;
+      scroll-margin-top: 112px;
+      border-bottom: 1px solid var(--line);
+    }
+    .option-heading {
+      display: grid;
+      grid-template-columns: minmax(0, .78fr) minmax(300px, 1.22fr);
+      gap: 36px;
+      align-items: end;
+      margin-bottom: 34px;
+    }
+    .option-kicker { color: var(--orange); }
+    .option-heading h2 {
+      max-width: 570px;
+      margin: 0;
+      font: 500 clamp(30px, 4vw, 54px)/1.06 var(--serif);
+      letter-spacing: -.035em;
+    }
+    .option-heading h2 span { color: var(--orange); }
+    .option-heading-copy {
+      max-width: 600px;
+      margin: 0;
+      color: var(--muted);
+      font-size: 15px;
+    }
+    .option-heading-copy strong { color: var(--ink); }
+    .option-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 7px;
+      margin-top: 18px;
+    }
+    .option-meta span {
+      padding: 6px 9px;
+      color: var(--ink-soft);
+      background: rgba(230, 239, 235, .75);
+      border: 1px solid rgba(49, 87, 90, .14);
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    .demo-stage {
+      position: relative;
+      padding: clamp(14px, 2.4vw, 28px);
+      background:
+        linear-gradient(145deg, rgba(255, 250, 242, .82), rgba(232, 223, 209, .72)),
+        var(--paper-deep);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow);
+    }
+    .demo-stage::before {
+      position: absolute;
+      top: 12px;
+      left: 14px;
+      color: rgba(22, 61, 63, .44);
+      content: "HAND-BUILT MOCK PANEL / NOT CONNECTED TO DATA";
+      font-size: 9px;
+      font-weight: 800;
+      letter-spacing: .12em;
+    }
+    .demo-stage > .mock-review { margin-top: 16px; }
+
+    .mock-review {
+      display: flex;
+      min-width: 0;
+      min-height: 500px;
+      flex-direction: column;
+      overflow: hidden;
+      color: var(--ink);
+      background: #fbf7ef;
+      border: 1px solid #cdbfa9;
+      border-radius: 7px;
+      box-shadow: 0 16px 36px rgba(60, 44, 20, .14);
+    }
+    .mock-toolbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 16px;
+      min-height: 42px;
+      padding: 8px 12px;
+      color: #f8f4eb;
+      background: #173b3f;
+      font-size: 11px;
+    }
+    .mock-toolbar-left,
+    .mock-toolbar-right { display: flex; align-items: center; gap: 9px; }
+    .mock-product { font-weight: 800; letter-spacing: .08em; }
+    .mock-dot { width: 7px; height: 7px; background: var(--yellow); border-radius: 50%; }
+    .mock-status { color: rgba(248, 244, 235, .68); }
+    .mock-toolbar-icon {
+      display: grid;
+      width: 23px;
+      height: 23px;
+      place-items: center;
+      color: rgba(248, 244, 235, .78);
+      border: 1px solid rgba(248, 244, 235, .22);
+      border-radius: 3px;
+      font-size: 13px;
+    }
+    .mock-doc-head {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 16px;
+      padding: 18px 20px 15px;
+      background: linear-gradient(#fffaf2, #f3eada);
+      border-bottom: 1px solid #e6dccb;
+    }
+    .mock-doc-head h3 {
+      margin: 0 0 5px;
+      font: 600 clamp(16px, 1.5vw, 21px)/1.25 var(--serif);
+    }
+    .mock-doc-head p { margin: 0; color: var(--muted); font-size: 11px; }
+    .mock-doc-badge {
+      flex: 0 0 auto;
+      padding: 6px 8px;
+      color: #9d482f;
+      background: var(--orange-soft);
+      border-radius: 3px;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .08em;
+    }
+    .mock-tabs {
+      display: flex;
+      align-items: center;
+      gap: 5px;
+      padding: 8px 14px;
+      background: #f7f0e5;
+      border-bottom: 1px solid #e6dccb;
+    }
+    .mock-tab {
+      padding: 5px 9px;
+      color: #71807a;
+      border-radius: 3px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+    .mock-tab.is-active { color: #f8f4eb; background: #496f6d; }
+    .mock-tab-note { margin-left: auto; color: var(--orange); font-size: 10px; font-weight: 700; }
+    .mock-body {
+      display: grid;
+      min-height: 0;
+      flex: 1 1 auto;
+      grid-template-columns: minmax(190px, .72fr) minmax(0, 1.35fr);
+    }
+    .mock-ai {
+      padding: 15px;
+      background: var(--surface-green);
+      border-right: 1px solid #cadad2;
+    }
+    .mock-panel-label {
+      margin: 0 0 11px;
+      color: #51706c;
+      font-size: 10px;
+      font-weight: 800;
+      letter-spacing: .1em;
+    }
+    .ai-summary {
+      margin: 0 0 14px;
+      color: #385b5a;
+      font: 14px/1.65 var(--serif);
+    }
+    .ai-card {
+      position: relative;
+      margin-top: 9px;
+      padding: 10px 10px 10px 13px;
+      background: rgba(255, 250, 242, .7);
+      border: 1px solid rgba(73, 111, 109, .2);
+      border-radius: 4px;
+    }
+    .ai-card::before {
+      position: absolute;
+      top: 10px;
+      bottom: 10px;
+      left: 0;
+      width: 3px;
+      background: var(--orange);
+      content: "";
+      border-radius: 0 4px 4px 0;
+    }
+    .ai-card-label { display: block; color: var(--orange); font-size: 10px; font-weight: 800; }
+    .ai-card p { margin: 3px 0 0; color: #3d5c5a; font: 13px/1.45 var(--serif); }
+    .mock-original {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      background: #fffdf8;
+    }
+    .mock-original-head {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 15px 17px 10px;
+      border-bottom: 1px solid #ece3d5;
+    }
+    .mock-original-head h4 { margin: 0; font: 600 16px/1.25 var(--serif); }
+    .mock-original-head span { color: var(--muted); font-size: 10px; }
+    .mock-scroll {
+      min-height: 0;
+      flex: 1 1 auto;
+      padding: 14px 17px 22px;
+      overflow: hidden;
+    }
+    .mock-scroll p {
+      margin: 0 0 14px;
+      color: #3c4f4d;
+      font: 15px/1.85 var(--serif);
+    }
+    .mock-scroll .mock-section-label {
+      margin-top: 4px;
+      color: #a34b38;
+      font: 700 10px/1.4 var(--sans);
+      letter-spacing: .12em;
+    }
+    .mock-scroll mark {
+      padding: 2px 3px;
+      color: #5d321f;
+      background: rgba(243, 201, 103, .54);
+      box-decoration-break: clone;
+      -webkit-box-decoration-break: clone;
+    }
+    .mock-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      padding: 8px 13px;
+      color: #6d756f;
+      background: #f4eee4;
+      border-top: 1px solid #e6dccb;
+      font-size: 10px;
+    }
+    .mock-footer strong { color: #48736d; }
+
+    .reading-column {
+      padding: clamp(22px, 3vw, 38px);
+      background: rgba(255, 250, 242, .68);
+      border: 1px solid var(--line);
+    }
+    .reading-kicker { color: var(--orange); }
+    .reading-column h3 {
+      margin: 0 0 14px;
+      font: 500 clamp(24px, 3vw, 37px)/1.12 var(--serif);
+      letter-spacing: -.025em;
+    }
+    .reading-column h4 {
+      margin: 25px 0 8px;
+      color: var(--ink);
+      font-size: 13px;
+      letter-spacing: .08em;
+    }
+    .reading-column p { margin: 0 0 15px; color: #4c5d59; font: 16px/1.9 var(--serif); }
+    .reading-column p:last-child { margin-bottom: 0; }
+    .reading-column ol,
+    .reading-column ul { margin: 0 0 18px; padding-left: 22px; color: #4c5d59; }
+    .reading-column li { margin: 7px 0; font: 15px/1.7 var(--serif); }
+    .evidence-note {
+      margin-top: 22px;
+      padding: 14px 16px;
+      color: #4c5d59;
+      background: var(--surface-green);
+      border-left: 3px solid var(--orange);
+      font-size: 12px;
+    }
+    .evidence-note strong { color: var(--ink); }
+    .callout-row {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 10px;
+      margin-top: 22px;
+    }
+    .callout {
+      padding: 13px;
+      background: #f6e8dc;
+      border: 1px solid rgba(196, 93, 56, .2);
+    }
+    .callout-number { color: var(--orange); font-size: 11px; font-weight: 800; }
+    .callout p { margin: 5px 0 0; color: #694b3d; font: 13px/1.55 var(--serif); }
+
+    .option-a-layout { display: grid; gap: 24px; }
+    .option-a-layout .demo-stage { min-height: 580px; }
+    .option-a-layout .reading-column { max-width: 940px; }
+
+    .option-b-layout {
+      display: grid;
+      grid-template-columns: minmax(0, 1.45fr) minmax(280px, .72fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .option-b-layout .demo-stage { min-height: 620px; }
+    .option-b-layout .mock-review { min-height: 570px; }
+    .option-b-layout .reading-column { position: relative; }
+    .reading-index {
+      display: grid;
+      gap: 7px;
+      margin: 0 0 24px;
+      padding: 0 0 20px;
+      border-bottom: 1px solid var(--line);
+    }
+    .reading-index a {
+      display: flex;
+      gap: 8px;
+      color: var(--muted);
+      font-size: 11px;
+      text-decoration: none;
+    }
+    .reading-index a span { color: var(--orange); font-weight: 800; }
+    .reading-index a:hover { color: var(--ink); }
+
+    .option-c-layout {
+      display: grid;
+      grid-template-columns: minmax(280px, .84fr) minmax(0, 1.16fr);
+      gap: 24px;
+      align-items: start;
+    }
+    .option-c-layout .demo-stage {
+      position: sticky;
+      top: 122px;
+    }
+    .option-c-layout .mock-review { min-height: 610px; }
+    .workbench-copy { display: grid; gap: 14px; }
+    .workbench-block {
+      padding: 23px 24px;
+      background: rgba(255, 250, 242, .72);
+      border: 1px solid var(--line);
+    }
+    .workbench-block.is-current {
+      background: var(--surface-green);
+      border-color: rgba(73, 111, 109, .34);
+      box-shadow: inset 4px 0 0 var(--orange);
+    }
+    .workbench-block-header {
+      display: flex;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 10px;
+    }
+    .workbench-block-header h3 { margin: 0; font: 600 22px/1.2 var(--serif); }
+    .workbench-block-header span { color: var(--orange); font-size: 10px; font-weight: 800; letter-spacing: .1em; }
+    .workbench-block p { margin: 0 0 12px; color: #4c5d59; font: 15px/1.85 var(--serif); }
+    .workbench-block p:last-child { margin-bottom: 0; }
+    .workbench-block ul { margin: 0; padding-left: 20px; color: #4c5d59; }
+    .workbench-block li { margin: 6px 0; font: 14px/1.7 var(--serif); }
+
+    .decision-strip {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 72px clamp(20px, 5vw, 76px) 100px;
+    }
+    .decision-strip h2 { margin: 0 0 22px; font: 500 31px/1.1 var(--serif); }
+    .decision-grid {
+      display: grid;
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+      gap: 12px;
+    }
+    .decision-card {
+      min-height: 170px;
+      padding: 20px;
+      background: rgba(255, 250, 242, .75);
+      border: 1px solid var(--line);
+    }
+    .decision-card h3 { margin: 0 0 8px; font-size: 14px; }
+    .decision-card p { margin: 0; color: var(--muted); font-size: 13px; line-height: 1.65; }
+    .decision-card strong { color: var(--orange); }
+    footer {
+      padding: 24px clamp(20px, 5vw, 76px) 42px;
+      color: #f7f1e6;
+      background: var(--ink);
+      font-size: 11px;
+    }
+    footer p { max-width: 900px; margin: 0; color: rgba(247, 241, 230, .66); }
+
+    @media (max-width: 900px) {
+      .site-bar { align-items: flex-start; flex-wrap: wrap; gap: 8px 16px; }
+      .top-note { display: none; }
+      .top-tabs { order: 3; width: 100%; }
+      .option-jump { top: 98px; justify-content: flex-start; overflow-x: auto; }
+      .cover-inner,
+      .option-heading,
+      .option-b-layout,
+      .option-c-layout { grid-template-columns: 1fr; }
+      .option-heading { gap: 16px; }
+      .option-b-layout .demo-stage,
+      .option-c-layout .demo-stage { position: static; min-height: 0; }
+      .option-c-layout .mock-review { min-height: 520px; }
+      .decision-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .cover { min-height: 0; padding-top: 48px; }
+      .cover h1 { font-size: 43px; }
+      .option-section { padding-top: 60px; padding-bottom: 70px; }
+      .demo-stage { padding: 12px; }
+      .mock-body { grid-template-columns: 1fr; }
+      .mock-ai { border-right: 0; border-bottom: 1px solid #cadad2; }
+      .mock-ai .ai-card:nth-of-type(n+3) { display: none; }
+      .mock-original { min-height: 300px; }
+      .mock-toolbar-right .mock-status { display: none; }
+      .mock-doc-head { padding: 14px; }
+      .mock-doc-badge { display: none; }
+      .callout-row { grid-template-columns: 1fr; }
+      .reading-column,
+      .workbench-block { padding: 20px; }
+      .reading-column p,
+      .workbench-block p { font-size: 15px; }
+    }
+  </style>
+</head>
+<body>
+  <header class="site-bar">
+    <a class="brand" href="#top" aria-label="回到頁首">
+      <span class="brand-mark">研</span>
+      <span>REVIEW TOOL / UI STUDY</span>
+    </a>
+    <nav class="top-tabs" aria-label="網站分頁">
+      <a href="#top" aria-current="page">主頁</a>
+      <a href="#option-a">引言</a>
+      <a href="#option-b">第一部分</a>
+      <a href="#option-c">第二部分</a>
+      <a href="#decision">設定</a>
+    </nav>
+    <span class="top-note">UI upgrade options · 2026</span>
+  </header>
+
+  <main id="top">
+    <section class="cover" aria-labelledby="page-title">
+      <div class="cover-inner">
+        <div>
+          <p class="eyebrow">A layout study for the intro website</p>
+          <h1 id="page-title">把展示空間留給工具，<br><em>把閱讀空間留給文字。</em></h1>
+          <p class="cover-lede">三個不依賴外部嵌入內容的 UI 方向。每個方向都以手工製作的 review-tool mock panel 示範：工具可以被放大觀看，長篇、有層次的文字則有自己的閱讀位置。</p>
+          <div class="cover-chips" aria-label="設計原則">
+            <span class="cover-chip">大面積工具示範</span>
+            <span class="cover-chip">長文可讀</span>
+            <span class="cover-chip is-quiet">獨立分頁內容</span>
+          </div>
+        </div>
+        <aside class="cover-principles">
+          <h2>這次升級要解決的事</h2>
+          <ul>
+            <li>將 review tool 從背景中抽出，成為清晰的展示舞臺。</li>
+            <li>讓標題、段落、清單和證據說明不再被浮動卡片遮住。</li>
+            <li>每一個 tab 只顯示自己的內容，並保留 compact cover-style top screen。</li>
+          </ul>
+        </aside>
+      </div>
+    </section>
+
+    <nav class="option-jump" aria-label="UI 選項">
+      <a href="#option-a">01 展示優先</a>
+      <a href="#option-b">02 左右分欄</a>
+      <a href="#option-c">03 研究工作臺</a>
+      <a href="#decision">比較</a>
+    </nav>
+
+    <section class="option-section" id="option-a" aria-labelledby="option-a-title">
+      <div class="option-heading">
+        <div>
+          <p class="option-kicker">Option 01 · Showcase first</p>
+          <h2 id="option-a-title">展示優先：<span>先看工具，再讀內容</span></h2>
+        </div>
+        <div>
+          <p class="option-heading-copy"><strong>最適合第一眼介紹平台功能。</strong> 把 review tool 放在整個畫面的第一層，長文在其下方成為完整的 editorial reading column；不需要把卡片疊在圖片或工具上。</p>
+          <div class="option-meta"><span>巨大展示面</span><span>閱讀區全寬</span><span>最接近 cover flow</span></div>
+        </div>
+      </div>
+
+      <div class="option-a-layout">
+        <div class="demo-stage">
+          <div class="mock-review" aria-label="手工製作的 review tool 示意面板">
+            <div class="mock-toolbar">
+              <div class="mock-toolbar-left"><span class="mock-dot"></span><span class="mock-product">文書研究平台</span><span class="mock-status">／ 示意工作區</span></div>
+              <div class="mock-toolbar-right"><span class="mock-status">研究者模式</span><span class="mock-toolbar-icon">⚙</span><span class="mock-toolbar-icon">⌁</span></div>
+            </div>
+            <div class="mock-doc-head">
+              <div><h3>硃83｜為奏聞鳳山失陷援兵渡海赴臺事</h3><p>乾隆五十二年正月二日　奏摺　閩浙總督常青</p></div>
+              <span class="mock-doc-badge">硃批</span>
+            </div>
+            <div class="mock-tabs"><span class="mock-tab is-active">AI 摘要</span><span class="mock-tab">原文</span><span class="mock-tab">關係</span><span class="mock-tab-note">引文核驗示例</span></div>
+            <div class="mock-body">
+              <aside class="mock-ai">
+                <p class="mock-panel-label">AI 提取｜研究者核對</p>
+                <p class="ai-summary">常青奏報臺灣軍情與援兵調度，並指出臺灣咽喉與海運援剿的重要性。</p>
+                <div class="ai-card"><span class="ai-card-label">人物</span><p>閩浙總督常青</p></div>
+                <div class="ai-card"><span class="ai-card-label">行動</span><p>催令援兵陸續繼進</p></div>
+                <div class="ai-card"><span class="ai-card-label">研究狀態</span><p>待研究者確認引文</p></div>
+              </aside>
+              <article class="mock-original">
+                <div class="mock-original-head"><h4>原文引文</h4><span>第 1 / 4 段</span></div>
+                <div class="mock-scroll">
+                  <p class="mock-section-label">SOURCE TEXT</p>
+                  <p><mark>至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進，並一面飛咨水陸兩提臣上緊援剿。</mark></p>
+                  <p><mark>臣接閱之下，驚駭憤懣，恨不親自奮飛殲此惡孽。</mark></p>
+                  <p>此處保留原文閱讀空間，研究者可在 AI 提取結果與來源文字之間來回核對。</p>
+                </div>
+              </article>
+            </div>
+            <div class="mock-footer"><span><strong>●</strong> 研究者核對狀態：示意中</span><span>資料面板 01</span></div>
+          </div>
+        </div>
+        <article class="reading-column">
+          <p class="reading-kicker">Text zone / 01</p>
+          <h3>工具是主角，文字不再是浮在上面的卡片。</h3>
+          <p>這個方向把每一個內容 tab 當成一個小型展覽頁：上方先保留一個縮短版的 cover-style top screen，接著用完整寬度展示 review tool。讀者先看到平台如何工作，再向下閱讀設計理念與研究方法。</p>
+          <h4>閱讀順序</h4>
+          <ol>
+            <li>看到文件標題、AI 摘要與原文引文。</li>
+            <li>向下進入結構化文字，理解為什麼需要這個工具。</li>
+            <li>在證據說明中區分 AI 候選與研究者確認。</li>
+          </ol>
+          <div class="evidence-note"><strong>版面重點：</strong> demo stage 和 reading column 是上下兩個明確區域；文字區永遠不會蓋住工具，也不需要把所有內容塞入一張浮動卡片。</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="option-section" id="option-b" aria-labelledby="option-b-title">
+      <div class="option-heading">
+        <div>
+          <p class="option-kicker">Option 02 · Editorial split</p>
+          <h2 id="option-b-title">左右分欄：<span>工具和敘事同時出現</span></h2>
+        </div>
+        <div>
+          <p class="option-heading-copy"><strong>最適合需要並讀的段落。</strong> 左邊保留大面積 mock panel，右邊提供標題、段落與小節索引；兩邊各自擁有空間，視線不會被一張卡片截斷。</p>
+          <div class="option-meta"><span>即時並讀</span><span>文字索引清楚</span><span>桌面版最有效</span></div>
+        </div>
+      </div>
+
+      <div class="option-b-layout">
+        <div class="demo-stage">
+          <div class="mock-review" aria-label="手工製作的 review tool 示意面板">
+            <div class="mock-toolbar">
+              <div class="mock-toolbar-left"><span class="mock-dot"></span><span class="mock-product">文書研究平台</span><span class="mock-status">／ 示意工作區</span></div>
+              <div class="mock-toolbar-right"><span class="mock-status">硃83</span><span class="mock-toolbar-icon">☰</span><span class="mock-toolbar-icon">×</span></div>
+            </div>
+            <div class="mock-doc-head">
+              <div><h3>硃83｜為奏聞鳳山失陷援兵渡海赴臺事</h3><p>乾隆五十二年正月二日　奏摺　閩浙總督常青</p></div>
+              <span class="mock-doc-badge">SOURCE</span>
+            </div>
+            <div class="mock-tabs"><span class="mock-tab">AI 摘要</span><span class="mock-tab is-active">原文</span><span class="mock-tab">關係</span><span class="mock-tab-note">同屏閱讀</span></div>
+            <div class="mock-body">
+              <aside class="mock-ai">
+                <p class="mock-panel-label">研究線索</p>
+                <p class="ai-summary">先用左側摘要定位可核驗的句子，再在右側查看上下文。</p>
+                <div class="ai-card"><span class="ai-card-label">候選引文 01</span><p>援兵渡海赴臺</p></div>
+                <div class="ai-card"><span class="ai-card-label">候選引文 02</span><p>上緊援剿</p></div>
+              </aside>
+              <article class="mock-original">
+                <div class="mock-original-head"><h4>原文</h4><span>可閱讀段落</span></div>
+                <div class="mock-scroll">
+                  <p class="mock-section-label">SOURCE TEXT / CONTEXT</p>
+                  <p>查臺灣孤懸海外，為七省咽喉，關係緊要。今鳳山失陷，軍情亟迫，援剿部署須由水陸兩路同時推進。</p>
+                  <p><mark>至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進。</mark></p>
+                  <p>原文 pane 在這裡保持足夠高度；讀者可以看到前後文，而不是只看到被卡片裁切的一句。</p>
+                </div>
+              </article>
+            </div>
+            <div class="mock-footer"><span><strong>↗</strong> 從摘要跳至原文：示意中</span><span>閱讀位置 36%</span></div>
+          </div>
+        </div>
+        <article class="reading-column">
+          <p class="reading-kicker">Text zone / 02</p>
+          <nav class="reading-index" aria-label="左右分欄文字索引">
+            <a href="#option-b"><span>01</span> 為什麼要把工具放大</a>
+            <a href="#option-b"><span>02</span> 從候選引文到研究證據</a>
+            <a href="#option-b"><span>03</span> 讀者如何理解流程</a>
+          </nav>
+          <h3>讓畫面同時承擔「展示」和「解釋」。</h3>
+          <p>左右分欄適合 1.3-b 這種需要對照的內容。左側是可以操作、可以被觀看的 review-tool 示意；右側不是浮動卡片，而是一條真正的閱讀欄，能放下連續段落、編號清單、引文說明和小標題。</p>
+          <h4>適合的文字結構</h4>
+          <ul>
+            <li>一段引導文字，說明讀者現在要看什麼。</li>
+            <li>小標題分開方法、證據和研究者判斷。</li>
+            <li>用 note box 補充狀態，而不是把所有訊息都放在工具面板內。</li>
+          </ul>
+          <div class="evidence-note"><strong>版面重點：</strong> 在寬螢幕中，demo stage 可以佔 60–65%；文字區保留 300px 以上，不會縮成難以閱讀的窄卡片。</div>
+        </article>
+      </div>
+    </section>
+
+    <section class="option-section" id="option-c" aria-labelledby="option-c-title">
+      <div class="option-heading">
+        <div>
+          <p class="option-kicker">Option 03 · Research workbench</p>
+          <h2 id="option-c-title">研究工作臺：<span>工具固定，文字分段推進</span></h2>
+        </div>
+        <div>
+          <p class="option-heading-copy"><strong>最適合長篇、步驟多的引言。</strong> 左側 mock panel 在桌面版保持可見，右側文字拆成一個個有狀態的區塊；讀者向下讀時，始終知道正在看哪個工具功能。</p>
+          <div class="option-meta"><span>長文最友善</span><span>流程感最強</span><span>可加入章節狀態</span></div>
+        </div>
+      </div>
+
+      <div class="option-c-layout">
+        <div class="demo-stage">
+          <div class="mock-review" aria-label="手工製作的 review tool 示意面板">
+            <div class="mock-toolbar">
+              <div class="mock-toolbar-left"><span class="mock-dot"></span><span class="mock-product">文書研究平台</span></div>
+              <div class="mock-toolbar-right"><span class="mock-status">工作臺固定示意</span><span class="mock-toolbar-icon">⋮</span></div>
+            </div>
+            <div class="mock-doc-head">
+              <div><h3>硃83｜為奏聞鳳山失陷援兵渡海赴臺事</h3><p>乾隆五十二年正月二日　奏摺　閩浙總督常青</p></div>
+              <span class="mock-doc-badge">REVIEW</span>
+            </div>
+            <div class="mock-tabs"><span class="mock-tab is-active">AI 摘要</span><span class="mock-tab">原文</span><span class="mock-tab">關係</span><span class="mock-tab-note">目前：核對引文</span></div>
+            <div class="mock-body">
+              <aside class="mock-ai">
+                <p class="mock-panel-label">工作流程</p>
+                <div class="ai-card"><span class="ai-card-label">01 · 載入文書</span><p>已完成</p></div>
+                <div class="ai-card"><span class="ai-card-label">02 · AI 提取</span><p>已完成</p></div>
+                <div class="ai-card"><span class="ai-card-label">03 · 研究者核對</span><p>目前步驟</p></div>
+                <div class="ai-card"><span class="ai-card-label">04 · 加入關係圖</span><p>待確認</p></div>
+              </aside>
+              <article class="mock-original">
+                <div class="mock-original-head"><h4>研究者核對</h4><span>候選 02 / 04</span></div>
+                <div class="mock-scroll">
+                  <p class="mock-section-label">EVIDENCE CHECK</p>
+                  <p><mark>臣接閱之下，驚駭憤懣，恨不親自奮飛殲此惡孽。</mark></p>
+                  <p>確認這段引文的來源範圍、人物關係及其在整體敘事中的位置。</p>
+                  <p class="mock-section-label">STATUS</p>
+                  <p>這個 mock panel 只展示界面層次；真正資料接入時，可在此保留研究者確認紀錄。</p>
+                </div>
+              </article>
+            </div>
+            <div class="mock-footer"><span><strong>03</strong> 目前步驟：研究者核對</span><span>進度 3 / 4</span></div>
+          </div>
+        </div>
+        <div class="workbench-copy">
+          <article class="workbench-block is-current">
+            <div class="workbench-block-header"><h3>先建立問題</h3><span>01 / ORIENT</span></div>
+            <p>開頭用一個短小的 cover-style top screen 說明本節目的，下面接一段完整的背景文字。這個區域負責讓讀者知道：為什麼單靠人工閱讀大量文書會困難。</p>
+            <div class="callout-row">
+              <div class="callout"><span class="callout-number">A</span><p>背景段落</p></div>
+              <div class="callout"><span class="callout-number">B</span><p>研究問題</p></div>
+              <div class="callout"><span class="callout-number">C</span><p>工具回應</p></div>
+            </div>
+          </article>
+          <article class="workbench-block">
+            <div class="workbench-block-header"><h3>再展示方法</h3><span>02 / DEMO</span></div>
+            <p>當讀者向下讀到這裡，左側固定的 mock panel 可以同步展示 AI 摘要、原文和關係資料。文字則解釋各面板的角色，不必和工具爭奪同一層空間。</p>
+            <ul><li>AI 摘要：提出待核驗的候選資訊。</li><li>原文：保留來源段落和上下文。</li><li>關係：把已確認資料放入更大的研究脈絡。</li></ul>
+          </article>
+          <article class="workbench-block">
+            <div class="workbench-block-header"><h3>最後標示判斷</h3><span>03 / VERIFY</span></div>
+            <p>長篇敘事最需要的是狀態清楚：哪些是 AI 候選、哪些已由研究者確認、哪些仍然需要回到原始來源。這些資訊可以用小型狀態標籤和 evidence note 呈現。</p>
+            <div class="evidence-note"><strong>建議：</strong> 將「研究者確認」固定使用綠色系，將「待核驗」固定使用橙色系，建立跨 tab 一致的語意。</div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section class="decision-strip" id="decision" aria-labelledby="decision-title">
+      <h2 id="decision-title">三個方向怎麼選？</h2>
+      <div class="decision-grid">
+        <article class="decision-card"><h3>01 展示優先</h3><p><strong>推薦給：</strong>平台介紹、第一個功能展示、需要大面積呈現工具的頁面。閱讀流最自然，實作也最直觀。</p></article>
+        <article class="decision-card"><h3>02 左右分欄</h3><p><strong>推薦給：</strong>需要讓讀者同時看工具和說明的段落。適合桌面版，但要替窄螢幕準備上下堆疊。</p></article>
+        <article class="decision-card"><h3>03 研究工作臺</h3><p><strong>推薦給：</strong>方法介紹和長篇結構化內容。最能保留流程感，但需要更精準的 sticky 和 mobile 行為。</p></article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <p>這是一個獨立的 UI upgrade options prototype。所有 review-tool 內容都是 hand-built mock panel，用來比較版面層次，沒有外部嵌入，也沒有連接正式或 sample 資料。</p>
+  </footer>
+</body>
+</html>

@@ -5790,3 +5790,25 @@ the combined source card has three paragraphs, the longer case card remains, and
 no card has internal overflow.
 
 Remaining: Review the updated intro card spacing during the next visual pass.
+
+### 2026-07-31 16:32 HKT — Codex — Add standalone UI upgrade options prototype
+
+Summary: Added `intro Website/Website/UI Idea/06-UI-upgrade-options.html` as a
+self-contained comparison page for three UI directions: 展示優先、左右分欄、研究
+工作臺. Each option uses a hand-built review-tool mock panel with a separate
+long-text reading area. Restored the temporary iframe experiment in `intro-1-5`
+to the existing mock panel and preserved the current StoryMap content.
+
+Files: `intro Website/Website/UI Idea/06-UI-upgrade-options.html`,
+`intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap.js`,
+`intro Website/Website/storymap/storymap-cards.css`, and
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: `node --check "intro Website/Website/storymap/storymap.js"`,
+`git diff --check`, and local browser preview with three option sections, three
+mock panels, and zero `<iframe>` elements in the new page.
+
+Remaining: Choose one direction for the next implementation pass; the current
+page is a visual comparison prototype only.

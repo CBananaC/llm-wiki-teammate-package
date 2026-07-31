@@ -1555,3 +1555,27 @@ Verified:
 
 Remaining:
 - Review the updated intro card spacing during the next visual pass.
+
+### 2026-07-31 16:32 HKT — Codex — Add standalone UI upgrade options prototype
+
+Summary:
+- Added a self-contained comparison page with three UI directions: 展示優先、左右分欄、研究工作臺.
+- Built three hand-crafted review-tool mock panels with separate tool and long-text zones; the prototype has no external embed and does not connect to formal or sample data.
+- Restored the temporary iframe experiment in `intro-1-5` to the existing hand-built mock panel and preserved the current StoryMap content.
+
+Files changed:
+- `Website/UI Idea/06-UI-upgrade-options.html`
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check "Website/storymap/storymap.js"` passed.
+- `git diff --check` passed.
+- Local browser preview confirmed three option sections, three mock panels, and zero `<iframe>` elements in the new page.
+
+Remaining:
+- Choose one direction for the next implementation pass; the current page is a visual comparison prototype only.
