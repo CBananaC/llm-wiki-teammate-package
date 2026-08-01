@@ -341,6 +341,10 @@ img { max-width: 100%; }
 .acc-body p { margin: 0 0 12px; color: var(--text); font: var(--body-weight) calc(14.5px * var(--font-scale))/1.85 var(--serif); }
 .acc-body p:last-child { margin-bottom: 0; }
 .acc-body:hover p { color: var(--ink); }
+.acc-point-list { margin: 0 0 12px; padding: 0; color: var(--ink-soft); list-style: none; }
+.acc-point-list li { position: relative; margin: 7px 0; padding-left: 1.5em; color: var(--text); font: var(--body-weight) calc(14.5px * var(--font-scale))/1.7 var(--serif); }
+.acc-point-list li::before { content: "—"; position: absolute; left: 0; top: 0; color: var(--accent); font-weight: 700; }
+.acc-point-list li:last-child { margin-bottom: 0; }
 .acc-visual { position: sticky; top: calc(var(--bar-h) + 12px); min-width: 0; }
 .acc-panels { position: relative; display: grid; }
 .acc-panel { grid-area: 1 / 1; display: none; min-width: 0; overflow: hidden; background: #f8f5ee; border: 1px solid var(--line); box-shadow: 0 12px 28px rgba(39, 49, 45, .1); }
@@ -386,14 +390,59 @@ img { max-width: 100%; }
 /* ============================================================================
    7b · 圖片畫廊：左右翻頁、乾淨圖片、下方長描述＋底部引註
    ========================================================================== */
+/* 高度由 .visual-frame（在 storymap-example.html 與此元素並列的 class）控制，
+   此處不可再設 height，否則會覆寫 --visual-h／--visual-x 的效果。 */
 .photo-gallery {
-  display: flex; flex-direction: column; width: 100%; height: 100%;
+  display: flex; flex-direction: column; width: 100%;
   background: var(--card); border: 1px solid var(--line); overflow: hidden;
 }
 .photo-gallery-stage { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; background: #e8e1d6; }
 .photo-gallery-frame { position: absolute; inset: 0; opacity: 0; transition: opacity .32s ease; pointer-events: none; }
 .photo-gallery-frame.is-active { opacity: 1; pointer-events: auto; }
-.photo-gallery-frame img { display: block; width: 100%; height: 100%; object-fit: contain; background: #e8e1d6; }
+/* 每張圖片的顯示範圍與大小，全部可在 storymap-cards.css 調整：
+     --gallery-fit / --gallery-position   整組畫廊的預設值
+     --photo-fit / --photo-position / --photo-zoom
+       針對「第幾張」圖片的個別覆寫，透過 :nth-of-type(N) 選取器指定
+       （N 從 1 開始），寫法請見 storymap-cards.css 開頭的說明。
+   個別設定的優先度高於整組預設；若沒有個別設定，就套用整組預設。 */
+.photo-gallery-frame img {
+  display: block; width: 100%; height: 100%; background: #e8e1d6;
+  object-fit: var(--photo-fit, var(--gallery-fit, contain));
+  object-position: var(--photo-position, var(--gallery-position, center));
+  transform: scale(var(--photo-zoom, 1));
+  cursor: zoom-in;
+}
+
+/* 點擊圖片後的放大檢視（單一浮層，全站共用） */
+.photo-lightbox {
+  position: fixed; inset: 0; z-index: 200;
+  display: grid; place-items: center; padding: clamp(20px, 5vw, 64px);
+  background: rgba(11, 30, 32, .88);
+  opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s linear .2s;
+}
+.photo-lightbox.is-open { opacity: 1; visibility: visible; transition: opacity .2s ease; }
+.photo-lightbox-figure { position: relative; max-width: 100%; max-height: 100%; }
+.photo-lightbox-figure img {
+  display: block; max-width: min(1400px, 92vw); max-height: 88vh;
+  width: auto; height: auto; object-fit: contain;
+  background: #e8e1d6; box-shadow: 0 30px 70px rgba(0, 0, 0, .4);
+}
+.photo-lightbox-caption {
+  margin: 12px 2px 0; color: rgba(247, 243, 234, .82);
+  font: var(--body-weight) calc(13.5px * var(--font-scale))/1.6 var(--serif);
+  max-width: min(1400px, 92vw);
+}
+.photo-lightbox-close {
+  position: absolute; top: -16px; right: -16px; z-index: 1;
+  display: grid; place-items: center; width: 40px; height: 40px;
+  color: #12363a; background: #f7f3ea; border: 0; border-radius: 50%;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, .3); cursor: pointer;
+  font: 600 20px/1 var(--sans); transition: transform .15s ease;
+}
+.photo-lightbox-close:hover, .photo-lightbox-close:focus-visible { transform: scale(1.08); }
+@media (max-width: 620px) {
+  .photo-lightbox-close { top: -14px; right: 0; }
+}
 .photo-gallery-nav {
   position: absolute; top: 0; bottom: 0; z-index: 3;
   display: flex; align-items: center; justify-content: center;

@@ -1855,3 +1855,145 @@ elsewhere in the site — their captions are marked "示範用佔位說明" /
 verified citations. Replace with real images and sourced captions for this
 section before publishing. Browser validation of both the gallery and the
 relocated route map (section 06) is outstanding.
+
+### 2026-08-01 17:52 HKT — Codex — Replace the first gallery placeholders with supplied source documents
+
+Summary:
+- Updated the 清代奏摺制度 card with the exact requested two-paragraph Traditional Chinese text.
+- Replaced the placeholder gallery with three supplied sources: 常青奏摺影像, the 十全武功軍報傳遞路線圖, and the 軍機處隨手登記檔 image.
+- Rendered the selected PDF pages into web-ready PNG assets and linked each gallery source label back to its local PDF.
+- Corrected the inherited `data-photo-gallery-data` attribute typo so the gallery initializer can load its JSON data.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/gallery-npmpdf-page1.png`
+- `Website/storymap/gallery-route-map.png`
+- `Website/storymap/gallery-register-page2.png`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check "Website/storymap/storymap.js"`.
+- Passed `git diff --check` and HTML tag-balance validation.
+- Passed gallery JSON, asset-existence, requested-text, and local-source-link checks.
+- Rendered and visually inspected the selected PDF pages before using them as gallery assets.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.
+
+### 2026-08-01 18:37 HKT — Codex — Remove hand-built mock-panel labels
+
+Summary:
+- Removed all visible `HAND-BUILT MOCK PANEL / 文書研究平台` labels from the StoryMap page.
+- Preserved the underlying document-panel content and interactions.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed zero occurrences of the requested label remain.
+- Passed `node --check` for the StoryMap and embedded-tool JavaScript.
+- Passed `git diff --check` and HTML tag-balance validation.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.
+
+### 2026-08-01 18:29 HKT — Codex — Rewrite the 林爽文民變 demonstration case
+
+Summary:
+- Updated the case-study heading to `示範案例：林爽文民變（1786-1788）` and added the requested introductory sentence.
+- Replaced the three expandable case cards with `林爽文民變`, `林爽文民變中的資訊傳遞`, and `史料來源`, using the supplied Traditional Chinese text.
+- Synchronized the older duplicate case cards so they no longer display the previous headings or wording.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for the StoryMap and embedded-tool JavaScript.
+- Passed `git diff --check`.
+- Passed requested title, heading, prose, source-text, old-title removal, and balanced-HTML checks.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.
+
+### 2026-08-01 18:24 HKT — Codex — Revise the digital-methods introduction
+
+Summary:
+- Replaced the introductory sentence in 以數位方法研究清代奏折和上諭 with the requested explanation of analysing individual documents, communication relationships, and information networks.
+- Kept the existing comparison table unchanged.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for the StoryMap and embedded-tool JavaScript.
+- Passed `git diff --check`.
+- Passed requested-text and balanced-HTML checks.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.
+
+### 2026-08-01 18:20 HKT — Codex — Add the research-difficulty introduction
+
+Summary:
+- Added `然而，研究奏折與上諭有不少困難。` directly beneath the 研究清代奏折的主要困難 heading and before the accordion cards.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for the StoryMap and embedded-tool JavaScript.
+- Passed `git diff --check`.
+- Passed the targeted sentence-presence and balanced-HTML checks.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.
+
+### 2026-08-01 18:15 HKT — Codex — Match the communication-difficulty point form
+
+Summary:
+- Changed the two questions in 通信關係複雜 from a numbered list to the dash-led point form used in `13-combined-preview.html`.
+- Added the corresponding accordion-list styling for indentation, spacing, and accent-colour dash markers.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for the StoryMap and embedded-tool JavaScript.
+- Passed `git diff --check`.
+- Passed targeted point-list, wording, and balanced-HTML checks.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.
+
+### 2026-08-01 18:13 HKT — Codex — Refine the research-difficulty cards
+
+Summary:
+- Removed the 參考來源 link and visible mock-panel labels from the 研究清代奏折的主要困難 section.
+- Replaced the three accordion headings and bodies with the requested content: 史料數量龐大、通信關係複雜、 and 資訊流向複雜.
+- Preserved the existing illustrative panel and accordion interaction.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check` for the StoryMap and embedded-tool JavaScript.
+- Passed `git diff --check`.
+- Passed targeted checks for removed labels, requested headings and prose, and balanced HTML tags.
+
+Remaining:
+- Browser visual and interaction QA remains to be performed in the local HTTP preview.

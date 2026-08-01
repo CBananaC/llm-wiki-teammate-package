@@ -257,9 +257,54 @@ const observer = new IntersectionObserver((entries) => {
 }, { threshold: 0.35 });
 sections.forEach((section) => observer.observe(section));
 
+/* 圖片放大檢視：全站共用一個浮層。點圖片開啟，點 X 或點外部深色區域關閉，
+   也支援 Esc 鍵關閉。 */
+const photoLightbox = (() => {
+  const overlay = document.createElement('div');
+  overlay.className = 'photo-lightbox';
+  overlay.innerHTML = `
+    <figure class="photo-lightbox-figure">
+      <button type="button" class="photo-lightbox-close" aria-label="關閉放大檢視">×</button>
+      <img alt="">
+      <figcaption class="photo-lightbox-caption" hidden></figcaption>
+    </figure>
+  `;
+  document.body.appendChild(overlay);
+  const img = overlay.querySelector('img');
+  const caption = overlay.querySelector('.photo-lightbox-caption');
+  const closeBtn = overlay.querySelector('.photo-lightbox-close');
+  let lastFocused = null;
+
+  const close = () => {
+    overlay.classList.remove('is-open');
+    img.src = '';
+    if (lastFocused) lastFocused.focus();
+  };
+  const open = (src, alt, captionText, triggerEl) => {
+    lastFocused = triggerEl || null;
+    img.src = src;
+    img.alt = alt || '';
+    if (captionText) { caption.textContent = captionText; caption.hidden = false; }
+    else { caption.textContent = ''; caption.hidden = true; }
+    overlay.classList.add('is-open');
+    closeBtn.focus();
+  };
+
+  /* 點外部深色區域（不是圖片本身）即關閉 */
+  overlay.addEventListener('click', (event) => {
+    if (event.target === overlay || event.target === overlay.firstElementChild) close();
+  });
+  closeBtn.addEventListener('click', close);
+  document.addEventListener('keydown', (event) => {
+    if (event.key === 'Escape' && overlay.classList.contains('is-open')) close();
+  });
+
+  return { open, close };
+})();
+
 /* 圖片畫廊：左右翻頁、乾淨圖片、下方說明（預設只顯示標題，滑鼠移入展開）。
    每個 [data-photo-gallery] 讀取自己的 <script type="application/json"
-   data-photo-gallery-data> 作為圖片與說明來源。 */
+   data-photo-gallery-data> 作為圖片與說明來源。點擊圖片本身可開啟放大檢視。 */
 document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const dataScript = gallery.querySelector('[data-photo-gallery-data]');
   if (!dataScript) return;
@@ -283,6 +328,15 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     const img = document.createElement('img');
     img.src = page.image;
     img.alt = page.alt || '';
+    /* 每張圖片的裁切／對齊／縮放一律在 storymap-cards.css 用
+       :nth-of-type(N) 設定（N = 第幾張，從 1 開始），不在這裡處理，
+       避免行內樣式蓋過 CSS 設定而難以調整。 */
+    /* 點圖片本身開啟放大檢視：一律顯示完整原圖（不套用上面的裁切／縮放），
+       說明文字帶標題與來源，方便在放大狀態下核對。 */
+    img.addEventListener('click', () => {
+      const captionParts = [page.title, page.source?.text].filter(Boolean);
+      photoLightbox.open(page.image, page.alt || page.title, captionParts.join('｜'), img);
+    });
     frame.appendChild(img);
     stage.appendChild(frame);
   });

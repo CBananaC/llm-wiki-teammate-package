@@ -27,6 +27,29 @@
                  寬鬆或緊湊時才需要在這裡覆寫。
                  例：--pad-y: 120px;
 
+    --gallery-fit / --gallery-position
+                 只用於含有圖片畫廊（.photo-gallery）的節，例如引言 01。
+                 設定「整組畫廊」預設的顯示方式：
+                   --gallery-fit: contain;   圖片完整顯示，可能上下或左右留白（預設）
+                   --gallery-fit: cover;     圖片裁切至填滿整個框，不留白但可能切邊
+                   --gallery-position: 50% 30%;   對齊位置，預設 center（正中央）
+
+    單張圖片覆寫（同樣在這個檔案改，不必碰 storymap-example.html）：
+                 若某一節的某一張圖片需要跟整組預設不同的裁切／位置／縮放，
+                 在該節區塊「下面」另外加一行，用 :nth-of-type(N) 指定是
+                 第幾張圖片（N 從 1 開始算，跟畫廊裡的順序一致）：
+
+                   #intro-1-1 .photo-gallery-frame:nth-of-type(2) {
+                     --photo-fit: cover;        （只有第 2 張改成裁切填滿）
+                     --photo-position: center 42%;
+                     --photo-zoom: 1.35;        （額外放大 35%）
+                   }
+
+                 --photo-fit / --photo-position / --photo-zoom 只影響指定的
+                 那一張，其餘圖片仍套用整組的 --gallery-fit / --gallery-position。
+                 --photo-zoom 不寫則預設 1（不放大）。
+                 下面「引言 01」區塊後面已附上一個實際範例，可直接參考修改。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -44,11 +67,22 @@
 
 /* ============================== 引言 ===================================== */
 
-/* 1 — 清代奏折制度｜文字在左、互動地圖在右 */
+/* 1 — 清代奏折制度｜文字在左、圖片畫廊在右 */
 #intro-1-1 {
   --vis-w: 50%;
-  --visual-x: 1;
   --card-accent: #b66d48;
+  --visual-h: 900px;           /* 畫廊固定高度，與文字欄相近 */
+  --gallery-fit: contain;      /* 整組畫廊預設：完整顯示（改 cover 則裁切填滿框） */
+  --gallery-position: center;  /* 整組畫廊預設對齊位置 */
+}
+
+/* 引言 01・第 2 張圖片（遞送奏摺／路線圖）：原圖是一整頁掃描，地圖本身只佔
+   頁面一小部分，因此改用 cover 裁切並放大，讓地圖填滿整個框，而不是縮成
+   小圖飄在大片空白中。 */
+#intro-1-1 .photo-gallery-frame:nth-of-type(2) {
+  --photo-fit: contain;
+  --photo-position: center 42%;
+  --photo-zoom: 1;
 }
 
 /* 2 — 清代奏折上諭的研究價值｜文字在左、照片在右 */
@@ -79,7 +113,7 @@
   --card-accent: #c46a2b;
 }
 
-/* 6 — 示範案例：林爽文事件｜左側小卡展開、右側對應畫面 */
+/* 6 — 示範案例：林爽文民變（1786-1788）｜左側小卡展開、右側對應畫面 */
 #intro-1-6-a-source {
   --panel-w: 35%;
   --visual-x: 1;
