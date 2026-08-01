@@ -1,0 +1,632 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>13 — 綜合預覽：導覽、配色、版面、表格、文字層級</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --font-scale:1;
+  --ink:#163d3f;
+  --ink-soft:#31575a;
+  --paper:#f4efe6;
+  --card:#fffaf2;
+  --line:rgba(22,61,63,.18);
+  --muted:#6d756f;
+  --accent:#c45d38;
+  --yellow:#f3c967;
+  /* 雙字體系統（沿用 06-UI-upgrade-options.html）
+     serif = 閱讀用：標題、正文、點列、表格內容
+     sans  = 介面用：眉標、標籤、按鈕、中繼資料、註記
+     原則：字級大者用細字重（serif 500），字級小者用粗字重（sans 700–800）＋加寬字距 */
+  --serif:"Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC",sans-serif;
+
+  --bar-h:60px;
+  --part-pad-y:clamp(34px,3.4vw,52px);
+  --part-pad-x:clamp(16px,3.4vw,52px);
+  --head-gap:clamp(14px,1.5vw,22px);
+  --col-gap:clamp(16px,1.8vw,28px);
+  --indent:clamp(18px,2vw,32px);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.notice{padding:9px clamp(16px,4vw,40px);color:#8a6a2b;background:#fdf3d8;border-bottom:1px solid #e6d193;font:700 10.5px var(--sans);letter-spacing:.1em}
+
+/* ================= TOPBAR ================= */
+/* 三欄：品牌置左、分頁置中、設定置右 */
+.topbar{position:sticky;top:0;z-index:50;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);
+  align-items:center;gap:20px;height:var(--bar-h);padding:0 clamp(16px,3vw,30px);
+  color:#f7f3ea;background:#12363a;border-bottom:1px solid rgba(255,255,255,.14)}
+.brand{grid-column:1;justify-self:start;font:500 calc(14px * var(--font-scale)) var(--serif);letter-spacing:.08em;white-space:nowrap}
+.navrow{grid-column:2;justify-self:center;display:flex;align-items:center;gap:clamp(16px,2.2vw,32px);height:100%}
+.settings-wrap{grid-column:3;justify-self:end;position:relative}
+
+.navrow > a,.navitem > button{height:100%;display:inline-flex;align-items:center;gap:6px;padding:0;
+  color:rgba(247,243,234,.72);background:none;border:0;
+  font:500 calc(12.5px * var(--font-scale)) var(--sans);letter-spacing:.09em;cursor:pointer;text-decoration:none;transition:color .2s;white-space:nowrap}
+.navrow > a:hover,.navitem:hover > button{color:#fff}
+.navitem{position:static;height:100%;display:flex;align-items:center}
+.navitem.active > button{color:#fff}
+.chev{font-size:10px;opacity:.7;transition:transform .22s}
+.navitem:hover .chev{transform:rotate(180deg)}
+
+/* 下拉：橫跨整個視窗寬度，內容置中、寬度隨內容自動調整 */
+.dropdown{position:absolute;top:var(--bar-h);left:0;right:0;z-index:45;
+  display:flex;justify-content:center;
+  padding:clamp(22px,2.4vw,34px) clamp(16px,3vw,40px);
+  background:#0e3034;border-top:1px solid rgba(255,255,255,.14);border-bottom:1px solid rgba(255,255,255,.16);
+  box-shadow:0 24px 52px rgba(6,24,26,.4);
+  opacity:0;visibility:hidden;transform:translateY(-8px);
+  transition:opacity .2s,transform .2s,visibility 0s linear .2s}
+.navitem:hover .dropdown,.navitem:focus-within .dropdown{opacity:1;visibility:visible;transform:translateY(0);transition-delay:0s}
+.dd-inner{width:100%;max-width:1560px}
+.chart-chain{display:flex;align-items:stretch;justify-content:center}
+.chain-node{flex:0 0 auto;display:flex;flex-direction:column;justify-content:center;
+  min-width:clamp(120px,10vw,168px);
+  padding:16px clamp(18px,2vw,30px);color:#eef4f2;background:rgba(255,255,255,.05);
+  border:1px solid rgba(255,255,255,.3);
+  font:500 calc(16px * var(--font-scale))/1.45 var(--serif);text-align:center;text-decoration:none;
+  white-space:nowrap;transition:.2s}
+.chain-node small{display:block;margin-top:7px;color:rgba(238,244,242,.5);font:700 calc(11px * var(--font-scale)) var(--sans);letter-spacing:.12em}
+.chain-node:hover{color:#12363a;background:var(--yellow);border-color:var(--yellow)}
+.chain-node:hover small{color:rgba(18,54,58,.65)}
+.chain-link{flex:0 0 clamp(26px,3vw,48px);align-self:center;height:1px;background:rgba(255,255,255,.34);position:relative}
+.chain-link::after{content:"";position:absolute;right:0;top:-3.5px;border-left:7px solid rgba(255,255,255,.55);border-top:4px solid transparent;border-bottom:4px solid transparent}
+
+/* ---- 分支流程圖（第二部分） ---- */
+.chart{display:block;width:100%;height:auto;margin:0 auto}
+.n-box{fill:rgba(255,255,255,.06);stroke:rgba(255,255,255,.42);stroke-width:1.2}
+.n-pill{fill:rgba(196,93,56,.3);stroke:#e08a68;stroke-width:1.3}
+.n-dia{fill:rgba(243,201,103,.16);stroke:var(--yellow);stroke-width:1.3}
+.n-label{fill:#eef4f2;font:500 18px var(--serif);text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.n-label-sm{fill:#eef4f2;font:500 17px var(--serif);text-anchor:middle;dominant-baseline:middle;pointer-events:none}
+.n-num{fill:rgba(238,244,242,.5);font:700 11.5px var(--sans);letter-spacing:.12em;text-anchor:middle;pointer-events:none}
+.edge{stroke:rgba(255,255,255,.42);stroke-width:1.4;fill:none;marker-end:url(#arrow)}
+.node{cursor:pointer}
+.node:hover .n-box,.node:hover .n-dia{fill:var(--yellow);stroke:var(--yellow)}
+.node:hover .n-pill{fill:#e08a68;stroke:#e08a68}
+.node:hover .n-label,.node:hover .n-label-sm,.node:hover .n-num{fill:#12363a}
+
+/* 設定按鈕（維持在右） */
+.settings-btn{display:grid;place-items:center;width:34px;height:34px;color:rgba(247,243,234,.8);background:none;border:0;cursor:pointer;transition:color .2s}
+.settings-btn:hover,.settings-btn[aria-expanded="true"]{color:#fff}
+.settings-btn svg{width:20px;height:20px}
+.settings-panel{position:absolute;top:calc(100% + 10px);right:0;z-index:60;min-width:216px;padding:14px 15px;
+  color:var(--ink);background:#fffaf2;border:1px solid rgba(22,61,63,.24);box-shadow:0 16px 40px rgba(18,43,44,.26)}
+.settings-panel[hidden]{display:none}
+.settings-title{margin:0 0 11px;color:var(--muted);font:700 10.5px var(--sans);letter-spacing:.13em}
+.settings-row{display:flex;align-items:center;justify-content:space-between;gap:16px;font:calc(13.5px * var(--font-scale)) var(--sans)}
+.fs-controls{display:inline-flex;align-items:center;gap:6px}
+.fs-controls button{min-width:32px;padding:4px 6px;color:var(--ink);background:transparent;border:1px solid rgba(22,61,63,.28);font:13px var(--sans);line-height:1;cursor:pointer}
+.fs-controls button:hover{color:var(--accent);border-color:var(--accent)}
+#fs-val{min-width:44px;color:var(--muted);font:12px var(--sans);text-align:center}
+
+/* ================= 分頁封面帶（矮版 hero） ================= */
+.tabcover{position:relative;display:flex;align-items:center;overflow:hidden}
+.tabcover-inner{width:min(1560px,100%);margin:0 auto;padding:0 var(--part-pad-x)}
+.tabcover .eyebrow{margin:0 0 9px;font:800 calc(11px * var(--font-scale)) var(--sans);letter-spacing:.18em}
+.tabcover h1{margin:0;font:500 clamp(26px,3.4vw,44px)/1.14 var(--serif);letter-spacing:-.035em}
+.tabcover p.note{margin:10px 0 0;max-width:62ch;font:calc(15px * var(--font-scale))/1.75 var(--serif)}
+
+/* 採用 V4 版式（不含編號）：矮版、深色、漸變底，每個分頁一種變體 */
+.tabcover{min-height:clamp(140px,19vh,195px);padding:28px 0;color:#f7f3ea;
+  border-bottom:1px solid rgba(255,255,255,.16)}
+.tabcover .eyebrow{color:var(--yellow)}
+.tabcover p.note{color:rgba(247,243,234,.76)}
+.tabcover::after{content:"";position:absolute;z-index:-1;inset:0}
+
+/* 逐變漸層底：沿用 Codex 版的分頁變體，降低彩度以配合新版面 */
+.bd-intro::after{background:
+  radial-gradient(circle at 78% 22%, rgba(199,84,63,.55), transparent 32%),
+  linear-gradient(120deg,#173b3f 5%,#274e4f 52%,#a56c56 145%)}
+.bd-part1::after{background:
+  radial-gradient(circle at 20% 25%, rgba(92,142,133,.5), transparent 34%),
+  linear-gradient(120deg,#173b3f 5%,#315d5a 52%,#9a6b57 145%)}
+.bd-part2::after{background:
+  radial-gradient(circle at 78% 26%, rgba(240,169,123,.5), transparent 30%),
+  linear-gradient(120deg,#173b3f 5%,#456e69 50%,#b36f58 145%)}
+.bd-part3::after{background:
+  radial-gradient(circle at 22% 28%, rgba(199,84,63,.5), transparent 32%),
+  linear-gradient(120deg,#173b3f 5%,#456e69 50%,#9a6b57 145%)}
+.bd-gold::after{background:
+  radial-gradient(circle at 70% 24%, rgba(243,201,103,.42), transparent 30%),
+  linear-gradient(120deg,#173b3f 5%,#3d6560 50%,#b98b54 150%)}
+.bd-river::after{background:
+  radial-gradient(ellipse at 28% 78%, rgba(207,115,82,.5), transparent 28%),
+  linear-gradient(140deg,#173b3f 5%,#3f6e6a 52%,#8c9a7e 150%)}
+/* 編號方塊：同樣使用漸層底，每節一個變體 */
+.numbadge{background:linear-gradient(135deg,#173b3f 8%,#2f5a58 58%,#8a5f4c 160%)}
+.p01 .numbadge{background:
+  radial-gradient(circle at 76% 20%, rgba(199,84,63,.6), transparent 58%),
+  linear-gradient(135deg,#173b3f 8%,#274e4f 58%,#a56c56 165%)}
+.p02 .numbadge{background:
+  radial-gradient(circle at 22% 24%, rgba(92,142,133,.62), transparent 60%),
+  linear-gradient(135deg,#173b3f 8%,#315d5a 58%,#9a6b57 165%)}
+.p03 .numbadge{background:
+  radial-gradient(circle at 76% 26%, rgba(240,169,123,.58), transparent 56%),
+  linear-gradient(135deg,#173b3f 8%,#456e69 56%,#b36f58 165%)}
+.p04 .numbadge{background:
+  radial-gradient(circle at 24% 28%, rgba(199,84,63,.55), transparent 58%),
+  linear-gradient(135deg,#173b3f 8%,#456e69 56%,#9a6b57 165%)}
+.p05 .numbadge{background:
+  radial-gradient(circle at 70% 22%, rgba(243,201,103,.5), transparent 56%),
+  linear-gradient(135deg,#173b3f 8%,#3d6560 56%,#b98b54 170%)}
+.p06 .numbadge{background:
+  radial-gradient(ellipse at 28% 76%, rgba(207,115,82,.58), transparent 56%),
+  linear-gradient(140deg,#173b3f 8%,#3f6e6a 58%,#8c9a7e 170%)}
+
+.cover-switch{display:flex;flex-wrap:wrap;align-items:center;gap:10px;padding:11px clamp(16px,4vw,40px);
+  color:#f7f3ea;background:#0b282c;border-bottom:1px solid rgba(255,255,255,.14)}
+.cover-switch p{margin:0;font:800 10.5px var(--sans);letter-spacing:.16em;color:rgba(247,243,234,.55)}
+.cover-switch button{padding:6px 13px;color:rgba(247,243,234,.78);background:rgba(255,255,255,.06);
+  border:1px solid rgba(255,255,255,.28);font:500 11.5px var(--sans);cursor:pointer;transition:.2s}
+.cover-switch button:hover{color:#fff;border-color:rgba(255,255,255,.6)}
+.cover-switch button.on{color:#12363a;background:var(--yellow);border-color:var(--yellow)}
+
+/* ================= SECTIONS (配色方案 1) ================= */
+.part{padding:var(--part-pad-y) var(--part-pad-x);border-bottom:1px solid rgba(22,61,63,.16);scroll-margin-top:var(--bar-h)}
+.part-inner{width:min(1560px,100%);margin:0 auto}
+.p01,.p05{background:#f6f1e8}
+.p02,.p04{background:#efe8dc}
+.p03,.p06{background:#e8dfd1}
+
+/* ================= 文字層級（v12 修訂版） ================= */
+.blk{max-width:74ch}
+.title-row{display:flex;align-items:center;gap:clamp(12px,1.4vw,20px);margin:0 0 11px}
+.numbadge{flex:0 0 auto;display:inline-flex;align-items:center;justify-content:center;
+  min-width:clamp(40px,3.8vw,58px);height:clamp(40px,3.8vw,58px);
+  color:#f7f3ea;background:var(--ink);font:700 clamp(16px,1.8vw,23px)/1 var(--sans);letter-spacing:.02em}
+.title-row h2{margin:0;min-width:0;font:500 clamp(27px,3.4vw,46px)/1.12 var(--serif);letter-spacing:-.035em}
+.subtitle{margin:0 0 var(--head-gap);padding-bottom:14px;border-bottom:1px solid var(--line);
+  color:var(--muted);font:400 clamp(16px,1.6vw,20px)/1.55 var(--serif)}
+.body > p{margin:0 0 15px;color:#3c5754;font:500 calc(16px * var(--font-scale))/1.9 var(--serif)}
+.body > p:last-child{margin-bottom:0}
+/* 點列：沿用 06 原型的作法 —— 使用瀏覽器原生項目符號與縮排，
+   換行自動與文字對齊；小標為小級數粗體無襯線＋加寬字距 */
+.listhead{margin:25px 0 8px;color:var(--ink);
+  font:700 calc(15px * var(--font-scale))/1.55 var(--serif);letter-spacing:.04em}
+.listhead:first-child{margin-top:0}
+.body ul{margin:0 0 18px;padding-left:22px;color:var(--ink-soft);list-style:none}
+.body ul li{position:relative;margin:7px 0;padding-left:1.5em;color:#3c5754;
+  font:500 calc(15px * var(--font-scale))/1.7 var(--serif)}
+/* 破折號項目符號；以 em 為單位，換行仍與文字對齊，且隨字級縮放 */
+.body ul li::before{content:"—";position:absolute;left:0;top:0;color:var(--accent);font-weight:700}
+.body ul li .lead{color:var(--accent);font-weight:700}
+.body ul ul{margin:7px 0 0;padding-left:22px}
+.body ul ul li::before{content:"·";font-size:1.4em;line-height:1.2}
+.ref{color:var(--accent);font:500 12.5px var(--sans);text-decoration:none;border-bottom:1px solid rgba(196,93,56,.42);white-space:nowrap}
+.ref:hover{color:var(--ink);border-bottom-color:var(--ink)}
+.aside{margin:20px 0 0;padding:15px 18px;background:rgba(22,61,63,.055);border:1px solid var(--line)}
+.aside b{display:block;margin-bottom:5px;color:var(--ink);font:800 10.5px var(--sans);letter-spacing:.13em}
+.aside p{margin:0;color:var(--muted);font:13.5px/1.85 var(--sans)}
+
+/* ================= VISUALS ================= */
+.vis{position:relative;display:grid;place-items:center;min-height:var(--vis-h,560px);overflow:hidden;
+  background:rgba(255,255,255,.42);border:1px solid var(--line)}
+.vis-map::before{content:"";position:absolute;inset:14% 12%;background:
+  radial-gradient(circle at 74% 74%,var(--accent) 0 7px,transparent 8px),
+  radial-gradient(circle at 26% 26%,var(--ink) 0 7px,transparent 8px),
+  linear-gradient(145deg,transparent 47.4%,rgba(196,93,56,.5) 47.6% 48.4%,transparent 48.6%)}
+.vis-photo{background:repeating-linear-gradient(45deg,rgba(22,61,63,.06) 0 12px,rgba(22,61,63,.11) 12px 24px)}
+.vis-tool{display:flex;flex-direction:column;background:#fffdf8}
+.vis cite{position:absolute;left:0;right:0;bottom:0;padding:9px 13px;color:#f8f5ee;
+  background:linear-gradient(transparent,rgba(22,61,63,.86));font:700 10.5px/1.35 var(--sans);font-style:normal;letter-spacing:.06em}
+.vis .vis-label{position:relative;z-index:1;padding:7px 12px;color:var(--muted);background:rgba(255,250,242,.92);
+  border:1px dashed var(--line);font:700 10.5px var(--sans);letter-spacing:.12em}
+.tool-bar{flex:0 0 auto;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:9px 13px;color:#f8f4eb;background:var(--ink);font:11px var(--sans)}
+.tool-bar b{font-weight:800;letter-spacing:.08em}
+.tool-bar span{color:rgba(248,244,235,.62)}
+.tool-head{flex:0 0 auto;padding:15px 18px 13px;background:linear-gradient(#fffaf2,#f3eada);border-bottom:1px solid #e6dccb}
+.tool-head h4{margin:0 0 5px;font:500 18px/1.25 var(--serif)}
+.tool-head p{margin:0;color:var(--muted);font:11px/1.5 var(--sans)}
+.tool-tabs{flex:0 0 auto;display:flex;gap:7px;padding:8px 15px;background:#f7f0e5;border-bottom:1px solid #e0d5c3}
+.tool-tabs span{padding:4px 11px;background:#fffaf1;border:1px solid #cbbba5;border-radius:3px;font:700 11px var(--sans)}
+.tool-tabs span.on{background:#efe2cc}
+.tool-body{flex:1 1 auto;overflow:auto;padding:16px 20px 22px}
+.tool-body p{margin:0 0 13px;color:#2d261d;font:14.5px/1.95 var(--serif)}
+.tool-body mark{background:#ffef00;padding:0 1px}
+
+/* ================= LAYOUTS ================= */
+.lay-stack{display:grid;gap:12px}
+.lay-split{display:grid;grid-template-columns:minmax(0,var(--vis-fr,1.6fr)) minmax(268px,var(--copy-fr,.78fr));align-items:start;gap:var(--col-gap)}
+.lay-split.flip .lay-split-vis{order:2}
+.copybox{padding:clamp(18px,1.8vw,26px);background:var(--card);border:1px solid var(--line)}
+.lay-split-vis{position:sticky;top:calc(var(--bar-h) + 12px)}
+.lay-acc{display:grid;grid-template-columns:minmax(258px,.7fr) minmax(0,1.5fr);align-items:start;gap:var(--col-gap)}
+.acc-track{display:grid;gap:8px}
+.acc-card{background:var(--card);border:1px solid var(--line);transition:background .22s,border-color .22s,box-shadow .22s}
+.acc-card.open{background:rgba(255,255,255,.74);border-color:rgba(22,61,63,.34);box-shadow:0 6px 16px rgba(22,61,63,.06)}
+.acc-btn{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:12px;width:100%;padding:15px 17px;color:inherit;background:none;border:0;cursor:pointer;text-align:left;font:inherit}
+.acc-btn i{color:var(--accent);font:800 10.5px/1 var(--sans);font-style:normal;letter-spacing:.14em}
+.acc-btn strong{font:500 18px/1.28 var(--serif)}
+.acc-btn em{color:var(--accent);font:500 18px/1 var(--sans);font-style:normal;transition:transform .22s}
+.acc-card.open .acc-btn em{transform:rotate(180deg)}
+.acc-body{display:none;margin:0 17px 16px;padding-top:12px;border-top:1px solid var(--line);cursor:pointer;transition:color .2s}
+.acc-card.open .acc-body{display:block}
+.acc-body p{margin:0;color:#3c5754;font:500 calc(14.5px * var(--font-scale))/1.85 var(--serif)}
+.acc-body:hover p{color:var(--ink)}
+.acc-card.showing{border-color:rgba(22,61,63,.45)}
+.acc-vis{position:sticky;top:calc(var(--bar-h) + 12px)}
+.acc-panel{display:none}
+.acc-panel.on{display:block}
+.tool-section{--vis-h:min(760px,calc(100vh - 110px));--vis-fr:2fr;--copy-fr:.66fr}
+
+/* ================= TABLE (T2 · 卡片型，白底提高對比) ================= */
+.tbl-wrap{overflow-x:auto;margin:6px 0 0}
+table{width:100%;border-collapse:collapse;background:#fff;border:1px solid rgba(22,61,63,.28);
+  box-shadow:0 10px 26px rgba(22,61,63,.1);color:var(--ink);font:calc(14.5px * var(--font-scale))/1.7 var(--serif)}
+caption{margin:0 0 9px;color:var(--muted);font:700 10.5px var(--sans);letter-spacing:.12em;text-align:left}
+th,td{padding:13px 16px;border-bottom:1px solid rgba(22,61,63,.12);text-align:left;vertical-align:top}
+thead th{color:#f7f3ea;background:var(--ink);font:700 11.5px var(--sans);letter-spacing:.08em;border-bottom:0}
+tbody tr:nth-child(even){background:rgba(22,61,63,.032)}
+tbody tr:last-child td{border-bottom:0}
+td:first-child{color:var(--accent);font-weight:600;white-space:nowrap}
+
+@media(max-width:980px){
+  .lay-split,.lay-acc{grid-template-columns:1fr}
+  .lay-split-vis,.acc-vis{position:relative;top:auto}
+  /* 小螢幕：文字卡一律排在視覺元素之上 */
+  .lay-split .copybox,.lay-split.flip .copybox{order:1}
+  .lay-split .lay-split-vis,.lay-split.flip .lay-split-vis{order:2}
+  .lay-acc .acc-track{order:1}
+  .lay-acc .acc-vis{order:2}
+  .vis{--vis-h:400px}
+  .tool-section{--vis-h:480px}
+  .topbar{grid-template-columns:auto 1fr auto;gap:12px}
+  .navrow{gap:14px;overflow-x:auto}
+  .chart-chain{flex-direction:column}
+  .chain-link{flex:0 0 16px;width:1px;height:16px;margin:0 auto}
+  .chain-link::after{right:auto;left:-3px;top:auto;bottom:0;border:0;border-top:6px solid rgba(255,255,255,.5);border-left:3.5px solid transparent;border-right:3.5px solid transparent}
+}
+</style>
+</head>
+<body>
+
+<div class="notice">示範用佔位內容 · 所有文字、圖像與表格數值僅供版面測試，不代表任何史料、引用或研究結論</div>
+
+<header class="topbar">
+  <span class="brand">清代奏摺與上諭分析平台</span>
+
+  <nav class="navrow">
+    <a href="#top">主頁</a>
+    <div class="navitem active">
+      <button type="button">引言 <span class="chev">▾</span></button>
+      <div class="dropdown">
+        <div class="dd-inner">
+          <div class="chart-chain">
+            <a class="chain-node" href="#s01">清代奏摺制度<small>01</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#s02">研究價值<small>02</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#s03">研究困難<small>03</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#s04">數位方法<small>04</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#s05">研究成果<small>05</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#s06">示範案例<small>06</small></a>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="navitem">
+      <button type="button">第一部分 <span class="chev">▾</span></button>
+      <div class="dropdown">
+        <div class="dd-inner">
+          <div class="chart-chain">
+            <a class="chain-node" href="#top">導覽列<small>01</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#top">時間與關係圖表<small>02</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#top">節點資訊區<small>03</small></a><span class="chain-link"></span>
+            <a class="chain-node" href="#top">原始史料區<small>04</small></a>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="navitem">
+      <button type="button">第二部分 <span class="chev">▾</span></button>
+      <div class="dropdown">
+        <div class="dd-inner">
+          <svg class="chart" viewBox="0 0 1120 320" role="group" aria-label="第二部分章節流程圖">
+            <defs>
+              <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
+                <path d="M0,1 L9,5 L0,9 z" fill="rgba(255,255,255,.5)"/>
+              </marker>
+            </defs>
+            <path class="edge" d="M130,182 L146,182"/>
+            <path class="edge" d="M254,182 L288,182"/>
+            <path class="edge" d="M440,182 L446,182"/>
+            <path class="edge" d="M554,182 L583,182"/>
+            <path class="edge" d="M735,182 L778,182"/>
+            <path class="edge" d="M930,182 L968,182"/>
+            <path class="edge" d="M200,155 L200,70"/>
+            <path class="edge" d="M265,45 L303,45"/>
+            <path class="edge" d="M365,70 L365,155"/>
+            <path class="edge" d="M500,209 L500,245"/>
+            <path class="edge" d="M560,270 L598,270"/>
+            <path class="edge" d="M660,245 L660,209"/>
+            <a class="node" href="#top"><rect class="n-pill" x="10" y="157" width="120" height="50" rx="25"/><text class="n-label" x="70" y="182">起點</text></a>
+            <a class="node" href="#top"><polygon class="n-dia" points="200,142 252,182 200,222 148,182"/><text class="n-label-sm" x="200" y="182">分歧一</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="145" y="20" width="120" height="50"/><text class="n-label-sm" x="205" y="39">示範步驟</text><text class="n-num" x="205" y="58">01</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="305" y="20" width="120" height="50"/><text class="n-label-sm" x="365" y="39">示範步驟</text><text class="n-num" x="365" y="58">02</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="290" y="157" width="150" height="50"/><text class="n-label" x="365" y="176">示範步驟</text><text class="n-num" x="365" y="196">03</text></a>
+            <a class="node" href="#top"><polygon class="n-dia" points="500,142 552,182 500,222 448,182"/><text class="n-label-sm" x="500" y="182">分歧二</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="440" y="245" width="120" height="50"/><text class="n-label-sm" x="500" y="264">示範步驟</text><text class="n-num" x="500" y="283">04</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="600" y="245" width="120" height="50"/><text class="n-label-sm" x="660" y="264">示範步驟</text><text class="n-num" x="660" y="283">05</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="585" y="157" width="150" height="50"/><text class="n-label" x="660" y="176">示範步驟</text><text class="n-num" x="660" y="196">06</text></a>
+            <a class="node" href="#top"><rect class="n-box" x="780" y="157" width="150" height="50"/><text class="n-label" x="855" y="176">示範步驟</text><text class="n-num" x="855" y="196">07</text></a>
+            <a class="node" href="#top"><rect class="n-pill" x="968" y="157" width="120" height="50" rx="25"/><text class="n-label" x="1028" y="182">終點</text></a>
+          </svg>
+        </div>
+      </div>
+    </div>
+
+    <a href="#top">第三部分</a>
+  </nav>
+
+  <div class="settings-wrap">
+    <button class="settings-btn" id="settings-btn" type="button" aria-expanded="false" aria-label="開啟網站設定">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7"><circle cx="12" cy="12" r="3.2"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.6 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.6a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9v0a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg>
+    </button>
+    <div class="settings-panel" id="settings-panel" hidden>
+      <p class="settings-title">網站設定</p>
+      <div class="settings-row">
+        <span>介面字級</span>
+        <span class="fs-controls">
+          <button type="button" id="fs-dec">−</button>
+          <span id="fs-val">100%</span>
+          <button type="button" id="fs-inc">＋</button>
+        </span>
+      </div>
+    </div>
+  </div>
+</header>
+
+<div class="cover-switch">
+  <p>封面帶漸層變體</p>
+  <button type="button" data-cov="bd-intro" class="on">引言</button>
+  <button type="button" data-cov="bd-part1">第一部分</button>
+  <button type="button" data-cov="bd-part2">第二部分</button>
+  <button type="button" data-cov="bd-part3">第三部分</button>
+  <button type="button" data-cov="bd-gold">金</button>
+  <button type="button" data-cov="bd-river">河</button>
+</div>
+
+<main id="top">
+
+  <section class="tabcover bd-intro" id="tabcover">
+    <div class="tabcover-inner">
+      <p class="eyebrow">引言</p>
+      <h1>示範用分頁標題</h1>
+      <p class="note">示範用一句說明，用來測試矮版封面帶的高度與行距。</p>
+    </div>
+  </section>
+
+  <!-- 01 · split -->
+  <section class="part p01" id="s01">
+    <div class="part-inner">
+      <div class="lay-split">
+        <div class="lay-split-vis"><div class="vis vis-map"><span class="vis-label">互動地圖（示範佔位）</span><cite>示範用佔位圖說</cite></div></div>
+        <div class="copybox">
+          <article class="blk">
+            <div class="title-row"><span class="numbadge">1</span><h2>清代奏摺制度</h2></div>
+            <p class="subtitle">示範用副標題，一句說明主標題的話。</p>
+            <div class="body">
+              <p>示範用段落正文<a class="ref" href="#r">（示範引註，頁碼待核）</a>。</p>
+              <p class="listhead">示範用點列小標</p>
+              <ul>
+                <li>示範用點列內容，用來測試在較窄的文字欄中換行是否仍與首行對齊。</li>
+                <li>示範用點列內容。</li>
+              </ul>
+              <p class="listhead">示範用點列小標（項目內另有橙色引句）</p>
+              <ul>
+                <li><span class="lead">示範用引句。</span>示範用點列內容，粗體小標與項目內的橙色引句可同時使用。</li>
+                <li><span class="lead">示範用引句。</span>示範用點列內容。</li>
+              </ul>
+              <div class="aside"><b>補充說明</b><p>示範用補充文字。</p></div>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 02 · stack -->
+  <section class="part p02" id="s02">
+    <div class="part-inner">
+      <article class="blk" style="margin-bottom:var(--head-gap)">
+        <div class="title-row"><span class="numbadge">2</span><h2>清代奏摺上諭的研究價值</h2></div>
+        <p class="subtitle">示範用副標題。</p>
+        <div class="body">
+          <p>示範用段落正文。此節採用「文字在上、元素在下」的滿版版面。</p>
+          <p class="listhead">示範用點列小標</p>
+          <ul>
+            <li>示範用點列內容。</li>
+            <li>示範用點列內容，較長的內容用來測試換行對齊。</li>
+          </ul>
+          <ul>
+            <li>示範用無小標點列項目。</li>
+          </ul>
+        </div>
+      </article>
+      <div class="lay-stack">
+        <div class="vis vis-photo"><span class="vis-label">照片（示範佔位）</span><cite>示範用佔位圖說</cite></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 03 · accordion -->
+  <section class="part p03" id="s03">
+    <div class="part-inner">
+      <article class="blk" style="margin-bottom:var(--head-gap)">
+        <div class="title-row"><span class="numbadge">3</span><h2>研究清代奏摺的主要困難</h2></div>
+        <p class="subtitle">示範用副標題。</p>
+      </article>
+      <div class="lay-acc" data-acc>
+        <div class="acc-track">
+          <div class="acc-card" data-card="1">
+            <button class="acc-btn" type="button"><i>01</i><strong>示範項目一</strong><em>▾</em></button>
+            <div class="acc-body"><p>示範文字。點開此卡時，右側切換到對應畫面。</p></div>
+          </div>
+          <div class="acc-card" data-card="2">
+            <button class="acc-btn" type="button"><i>02</i><strong>示範項目二</strong><em>▾</em></button>
+            <div class="acc-body"><p>示範文字。</p></div>
+          </div>
+          <div class="acc-card" data-card="3">
+            <button class="acc-btn" type="button"><i>03</i><strong>示範項目三</strong><em>▾</em></button>
+            <div class="acc-body"><p>示範文字。</p></div>
+          </div>
+        </div>
+        <div class="acc-vis">
+          <div class="acc-panel on" data-panel="1"><div class="vis vis-map"><span class="vis-label">互動地圖（示範佔位）</span><cite>對應項目一</cite></div></div>
+          <div class="acc-panel" data-panel="2"><div class="vis vis-photo"><span class="vis-label">照片（示範佔位）</span><cite>對應項目二</cite></div></div>
+          <div class="acc-panel" data-panel="3">
+            <div class="vis vis-tool">
+              <div class="tool-bar"><b>審閱工具</b><span>示範畫面 · 未連接資料</span></div>
+              <div class="tool-head"><h4>示範文件標題</h4><p>示範用中繼資料列（示範佔位）</p></div>
+              <div class="tool-tabs"><span class="on">原文</span><span>AI 分析</span></div>
+              <div class="tool-body"><p>示範用原文段落，<mark>示範引文標示</mark>。</p></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 04 · table -->
+  <section class="part p04" id="s04">
+    <div class="part-inner">
+      <article class="blk" style="margin-bottom:var(--head-gap)">
+        <div class="title-row"><span class="numbadge">4</span><h2>以數位方法研究清代奏摺和上諭</h2></div>
+        <p class="subtitle">示範用副標題。</p>
+        <div class="body">
+          <p>示範用段落正文，用來引出下方的比較表。</p>
+        </div>
+      </article>
+      <div class="tbl-wrap">
+        <table>
+          <caption>示範用比較表（佔位資料）</caption>
+          <thead><tr><th>示範欄一</th><th>示範欄二</th><th>示範欄三</th></tr></thead>
+          <tbody>
+            <tr><td>示範項目甲</td><td>示範說明</td><td>示範用較長的說明文字，用來測試多行內容時的行距與對齊。</td></tr>
+            <tr><td>示範項目乙</td><td>示範說明</td><td>示範用說明文字。</td></tr>
+            <tr><td>示範項目丙</td><td>示範說明</td><td>示範用較長的說明文字，用來測試欄寬分配。</td></tr>
+            <tr><td>示範項目丁</td><td>示範說明</td><td>示範用說明文字。</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </section>
+
+  <!-- 05 · tool, large -->
+  <section class="part p05 tool-section" id="s05">
+    <div class="part-inner">
+      <div class="lay-split">
+        <div class="lay-split-vis">
+          <div class="vis vis-tool">
+            <div class="tool-bar"><b>審閱工具</b><span>示範畫面 · 未連接資料</span></div>
+            <div class="tool-head"><h4>示範文件標題</h4><p>示範用中繼資料列（示範佔位）</p></div>
+            <div class="tool-tabs"><span class="on">原文</span><span>AI 分析</span><span>關係</span></div>
+            <div class="tool-body">
+              <p>示範用原文段落，僅供版面測試，<mark>此處示範引文標示效果</mark>。</p>
+              <p>示範用第二段。</p>
+            </div>
+          </div>
+        </div>
+        <div class="copybox">
+          <article class="blk">
+            <div class="title-row"><span class="numbadge">5</span><h2>研究成果</h2></div>
+            <p class="subtitle">清代奏摺與上諭分析平台。</p>
+            <div class="body">
+              <p>示範用段落正文。工具畫面佔約三分之二寬、接近整個視窗高。</p>
+              <p class="listhead">示範用點列小標</p>
+              <ul>
+                <li>示範用點列內容。</li>
+                <li>示範用點列內容。</li>
+              </ul>
+            </div>
+          </article>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 06 · stack -->
+  <section class="part p06" id="s06">
+    <div class="part-inner">
+      <article class="blk" style="margin-bottom:var(--head-gap)">
+        <div class="title-row"><span class="numbadge">6</span><h2>示範案例：林爽文事件</h2></div>
+        <p class="subtitle">示範用副標題。</p>
+        <div class="body"><p>示範用段落正文。</p></div>
+      </article>
+      <div class="lay-stack">
+        <div class="vis vis-map"><span class="vis-label">互動地圖（示範佔位）</span><cite>示範用佔位圖說</cite></div>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* settings + font scale */
+var btn=document.getElementById('settings-btn'),panel=document.getElementById('settings-panel'),
+    val=document.getElementById('fs-val'),scale=1;
+function setOpen(o){panel.hidden=!o;btn.setAttribute('aria-expanded',String(o));}
+btn.addEventListener('click',function(){setOpen(panel.hidden);});
+document.addEventListener('click',function(e){if(!panel.hidden&&!e.target.closest('.settings-wrap'))setOpen(false);});
+function apply(v){scale=Math.min(2.2,Math.max(.55,v));document.documentElement.style.setProperty('--font-scale',String(scale));val.textContent=Math.round(scale*100)+'%';}
+document.getElementById('fs-dec').addEventListener('click',function(){apply(scale-.05);});
+document.getElementById('fs-inc').addEventListener('click',function(){apply(scale+.05);});
+
+/* 分頁封面帶切換 */
+var cover=document.getElementById('tabcover');
+document.querySelectorAll('.cover-switch button').forEach(function(b){
+  b.addEventListener('click',function(){
+    var v=b.getAttribute('data-cov');
+    cover.hidden=(v==='off');
+    cover.className='tabcover'+(v==='off'?'':' '+v);
+    document.querySelectorAll('.cover-switch button').forEach(function(x){x.classList.toggle('on',x===b);});
+  });
+});
+
+/* accordion — 初始全部收合；點開一張不會關掉先前開啟的；再點該張則收合 */
+document.querySelectorAll('[data-acc]').forEach(function(group){
+  var cards=[].slice.call(group.querySelectorAll('.acc-card')),
+      panels=[].slice.call(group.querySelectorAll('.acc-panel'));
+  function showPanel(id){
+    panels.forEach(function(p){p.classList.toggle('on',p.getAttribute('data-panel')===id);});
+    cards.forEach(function(c){c.classList.toggle('showing',c.getAttribute('data-card')===id);});
+  }
+  cards.forEach(function(card){
+    var btn=card.querySelector('.acc-btn'),
+        body=card.querySelector('.acc-body');
+    btn.setAttribute('aria-expanded','false');
+
+    /* 上半（標題）：展開／收合 */
+    btn.addEventListener('click',function(){
+      var id=card.getAttribute('data-card'),
+          willOpen=!card.classList.contains('open');
+      card.classList.toggle('open',willOpen);
+      btn.setAttribute('aria-expanded',String(willOpen));
+      if(willOpen){
+        showPanel(id);
+      }else{
+        var stillOpen=cards.filter(function(c){return c.classList.contains('open');});
+        showPanel(stillOpen.length?stillOpen[stillOpen.length-1].getAttribute('data-card'):'1');
+      }
+    });
+
+    /* 下半（內文）：只切換右側畫面，不收合 */
+    if(body){
+      body.setAttribute('role','button');
+      body.setAttribute('tabindex','0');
+      body.setAttribute('aria-label','顯示此項目的視覺元素');
+      body.addEventListener('click',function(){showPanel(card.getAttribute('data-card'));});
+      body.addEventListener('keydown',function(e){
+        if(e.key==='Enter'||e.key===' '){e.preventDefault();showPanel(card.getAttribute('data-card'));}
+      });
+    }
+  });
+});
+</script>
+</body>
+</html>

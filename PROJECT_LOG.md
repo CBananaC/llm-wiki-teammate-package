@@ -5980,3 +5980,43 @@ and cumulative card opening after click/scroll.
 
 Remaining: Desktop behavior is verified locally. A narrow-mobile visual pass
 remains optional; no deployment or push was performed.
+
+### 2026-07-31 19:07 HKT — Codex — Restore the previous header version
+
+Summary: Restored the header markup and header styling from the commit immediately before the latest StoryMap prototype commit, while preserving the latest content-panel and StoryMap section changes outside the header.
+
+Files:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: Confirmed the first 75 lines of the HTML and first 70 lines of the CSS match the previous commit’s header; passed `git diff --check`.
+
+Remaining: None for this change.
+
+### 2026-08-01 — Claude — Rewrite the StoryMap stylesheet and restructure the introduction tab
+
+Summary: Rewrote `intro Website/Website/storymap/storymap.css` as a single
+stylesheet, replacing four layered override passes that had accumulated from
+earlier redesign attempts (original scrollytelling, option-1/2/3 experiment
+layer, a second `:root` palette, and an `#intro-content` override layer). The
+introduction tab was restructured so reading text and visual elements sit side
+by side instead of translucent cards floating over backdrops. Header tabs are
+centred, the settings control stays on the right, and the dropdown spans the
+window width as a chain-style chapter chart.
+
+Files: `intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.js`, eight new option-study files in
+`intro Website/Website/UI Idea/`, plus this log and
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: `node --check` passed for the changed StoryMap JavaScript;
+`git diff --check` passed; HTML tag balance verified programmatically. Browser
+QA was not performed in this session.
+
+Remaining: Parts 1–3 retain the previous card markup and are held by a marked
+transitional block in the stylesheet; restructure them next and then delete
+that block. Browser validation of the introduction tab is outstanding. No
+formal or sample review state was touched; no push was performed.

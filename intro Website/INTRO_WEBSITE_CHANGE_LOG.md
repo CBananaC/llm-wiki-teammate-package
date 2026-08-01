@@ -1764,3 +1764,61 @@ Verified:
 
 Remaining:
 - The desktop interaction is verified locally; a separate narrow-mobile visual pass is still optional.
+
+### 2026-07-31 19:07 HKT — Codex — Restore the previous header version
+
+Summary:
+- Restored the header markup and header styling from the commit immediately before the latest StoryMap prototype commit.
+- Preserved the latest commit’s content-panel and StoryMap section changes outside the header.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- Confirmed the first 75 lines of the HTML and first 70 lines of the CSS match the previous commit’s header.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this change.
+
+### 2026-08-01 — Claude — Rewrite the StoryMap stylesheet and restructure the introduction tab
+
+Summary: Replaced the four layered, mutually overriding CSS passes in
+`storymap.css` with a single coherent stylesheet, and rebuilt the introduction
+tab so no reading card covers a visual element. Header now centres the tab
+names, keeps the settings button on the right, and opens a full-width,
+centred chain-style dropdown. Introduction layouts: 01 and 02 place the text
+column on the left with the visual on the right; 03 and 06 use the tap-to-expand
+card layout with a matching panel; 04 places the lead-in paragraph and the
+comparison table under the heading; 05 places the text above a full-width tool
+panel. Adopted the two-font system, the dash bullet list with hanging indent,
+the bold serif list heading, inline number badges (1–6), and a `--body-weight`
+token for global reading-text weight.
+
+Files:
+- `intro Website/Website/storymap/storymap.css` (rewritten)
+- `intro Website/Website/storymap/storymap-cards.css` (rewritten; obsolete
+  absolute-positioning variables removed, per-section accent colours retained)
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/UI Idea/07-redesign-options.html` (new, options study)
+- `intro Website/Website/UI Idea/08-intro-colour-schemes.html` (new)
+- `intro Website/Website/UI Idea/09-density-and-tables.html` (new)
+- `intro Website/Website/UI Idea/10-table-contrast.html` (new)
+- `intro Website/Website/UI Idea/11-text-hierarchy.html` (new)
+- `intro Website/Website/UI Idea/12-text-hierarchy-final.html` (new)
+- `intro Website/Website/UI Idea/13-combined-preview.html` (new)
+- `intro Website/Website/UI Idea/14-dropdown-flowchart.html` (new)
+
+Verified: `node --check` passed for `storymap.js`; `git diff --check` passed;
+HTML tag balance checked programmatically (section/div/article all balanced).
+No browser QA was performed in this session — this is stated plainly rather
+than assumed.
+
+Remaining: Parts 1–3 still use the previous `.story-card` / `.backdrop` markup
+and are carried by a clearly-marked transitional block at the end of
+`storymap.css`; they should be restructured next, after which that block can be
+deleted. The Google Fonts link requires network access; self-hosting Inter and
+Noto Serif TC is advisable if the demonstration must run fully offline.
+Browser validation of the introduction tab is outstanding.

@@ -13580,6 +13580,7 @@ body.review-embed-mode [hidden] { display:none !important; }
   const docId = params.get('doc') || '硃83';
   const panels = new Set((params.get('panels') || 'ai,original').split(',').map(s=>s.trim()).filter(Boolean));
   const quote = '至續派之福寧鎮及銅山、羅源等營，共兵一千名，亦催令陸續繼進';
+  const highlight = params.get('highlight') || '';
   let tries = 0;
   function hideUnselected(){
     const ws = document.querySelector('#view-dual .ws');
@@ -13610,7 +13611,11 @@ body.review-embed-mode [hidden] { display:none !important; }
     if(!rec){ console.warn('Review embed document not found:', docId); return; }
     const cards = window.__openMany([rec], 'embed');
     window.__scopeAIto(cards);
-    const finish=()=>{ hideUnselected(); [0,100,300,700].forEach(delay=>setTimeout(()=>{ hideUnselected(); keepZhu83AiCard(); },delay)); };
+    const finish=()=>{
+      hideUnselected();
+      [0,100,300,700].forEach(delay=>setTimeout(()=>{ hideUnselected(); keepZhu83AiCard(); },delay));
+      if(highlight) setTimeout(()=>{ if(typeof window.flashQuoteInDoc==='function') window.flashQuoteInDoc(docId, highlight); },650);
+    };
     if(window.__reviewEmbedReloadEdits) window.__reviewEmbedReloadEdits().catch(()=>{}).then(finish); else finish();
   }
   start();
