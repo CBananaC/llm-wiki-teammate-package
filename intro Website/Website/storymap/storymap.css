@@ -42,7 +42,7 @@
 
   /* 尺寸 */
   --bar-h: 62px;
-  --part-pad-y: clamp(34px, 3.4vw, 52px);
+  --part-pad-y: clamp(56px, 6vw, 96px);
   --part-pad-x: clamp(16px, 3.4vw, 52px);
   --head-gap: clamp(14px, 1.5vw, 22px);
   --col-gap: clamp(16px, 1.8vw, 28px);
@@ -228,7 +228,7 @@ img { max-width: 100%; }
 #intro-content > .story,
 .part-content > .story {
   position: relative;
-  padding: var(--part-pad-y) var(--part-pad-x);
+  padding: var(--pad-y, var(--part-pad-y)) var(--part-pad-x);
   border-bottom: 1px solid rgba(22, 61, 63, .16);
   scroll-margin-top: var(--bar-h);
 }
@@ -306,21 +306,22 @@ img { max-width: 100%; }
 .lay-stack > .blk { margin-bottom: 4px; }
 
 /* 6b · 左右分欄；.text-left = 文字在左、元素在右 */
+/* 只需指定視覺元素的寬度百分比（--vis-w），文字欄自動佔用剩餘空間。 */
 .lay-split {
   display: grid;
-  grid-template-columns: minmax(0, var(--vis-fr, 1.6fr)) minmax(268px, var(--copy-fr, .78fr));
+  grid-template-columns: var(--vis-w, 62%) minmax(0, auto);
   align-items: start; gap: var(--col-gap);
 }
-.lay-split.text-left { grid-template-columns: minmax(268px, var(--copy-fr, .82fr)) minmax(0, var(--vis-fr, 1.5fr)); }
+.lay-split.text-left { grid-template-columns: minmax(0, auto) var(--vis-w, 62%); }
 .lay-split.text-left > .lay-copy { grid-column: 1; }
 .lay-split.text-left > .lay-visual { grid-column: 2; }
 .lay-visual { position: sticky; top: calc(var(--bar-h) + 12px); min-width: 0; }
 .lay-copy { min-width: 0; }
 /* 工具展示使用最大的框架 */
-.tool-section { --vis-fr: 2fr; --copy-fr: .66fr; }
+.tool-section { --vis-w: 70%; }
 
 /* 6c · 小卡（點擊展開）一側、對應元素另一側 */
-.lay-acc { display: grid; grid-template-columns: minmax(258px, .7fr) minmax(0, 1.5fr); align-items: start; gap: var(--col-gap); }
+.lay-acc { display: grid; grid-template-columns: minmax(0, auto) var(--panel-w, 62%); align-items: start; gap: var(--col-gap); }
 .acc-track { display: grid; gap: 8px; min-width: 0; }
 .acc-card { background: var(--card); border: 1px solid var(--line); transition: background-color .22s, border-color .22s, box-shadow .22s; }
 .acc-card.is-open { background: rgba(255, 255, 255, .74); border-color: rgba(22, 61, 63, .34); box-shadow: 0 6px 16px rgba(22, 61, 63, .06); }
@@ -354,10 +355,17 @@ img { max-width: 100%; }
 }
 .acc-panel > figcaption { position: absolute; right: 0; bottom: 0; left: 0; color: #f8f5ee; background: linear-gradient(transparent, rgba(23, 59, 63, .86)); border-top: 0; }
 
-/* 視覺元素外框的統一高度 */
-.visual-frame { height: min(620px, calc(100svh - var(--bar-h) - 70px)); min-height: 460px; }
-.visual-frame-tall { height: min(760px, calc(100svh - var(--bar-h) - 60px)); min-height: 500px; }
-.visual-frame-wide { height: min(680px, 72vh); min-height: 420px; }
+/* 視覺元素外框的高度。
+   在 storymap-cards.css 可用兩種方式指定，擇一即可：
+     --visual-x : 文字欄高度的倍數（1 = 與文字等高，.8 = 八成，1.2 = 高兩成）
+                  文字欄實際高度由 storymap.js 量測後寫入 --text-h。
+     --visual-h : 固定像素高度；若同時設定，以 --visual-h 為準。 */
+.visual-frame,
+.visual-frame-tall,
+.visual-frame-wide { --visual-size: var(--visual-h, calc(var(--visual-x, 1) * var(--text-h, 620px))); }
+.visual-frame { height: var(--visual-size); min-height: 320px; }
+.visual-frame-tall { height: var(--visual-size); min-height: 360px; }
+.visual-frame-wide { height: var(--visual-size); min-height: 320px; }
 
 /* ============================================================================
    7 · 表格
@@ -376,13 +384,88 @@ img { max-width: 100%; }
 .method-table td:first-child { color: var(--accent); font-weight: 600; }
 
 /* ============================================================================
+   7b · 圖片畫廊：左右翻頁、乾淨圖片、下方長描述＋底部引註
+   ========================================================================== */
+.photo-gallery {
+  display: flex; flex-direction: column; width: 100%; height: 100%;
+  background: var(--card); border: 1px solid var(--line); overflow: hidden;
+}
+.photo-gallery-stage { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; background: #e8e1d6; }
+.photo-gallery-frame { position: absolute; inset: 0; opacity: 0; transition: opacity .32s ease; pointer-events: none; }
+.photo-gallery-frame.is-active { opacity: 1; pointer-events: auto; }
+.photo-gallery-frame img { display: block; width: 100%; height: 100%; object-fit: contain; background: #e8e1d6; }
+.photo-gallery-nav {
+  position: absolute; top: 0; bottom: 0; z-index: 3;
+  display: flex; align-items: center; justify-content: center;
+  width: 56px; color: #f7f3ea; background: transparent; border: 0; cursor: pointer;
+  transition: background-color .2s;
+}
+.photo-gallery-nav:hover, .photo-gallery-nav:focus-visible { background: rgba(22, 61, 63, .28); }
+.photo-gallery-nav.prev { left: 0; }
+.photo-gallery-nav.next { right: 0; }
+.photo-gallery-nav svg { width: 20px; height: 20px; filter: drop-shadow(0 1px 3px rgba(0, 0, 0, .5)); }
+.photo-gallery-dots { position: absolute; z-index: 3; left: 0; right: 0; bottom: 12px; display: flex; justify-content: center; gap: 7px; }
+.photo-gallery-dot { width: 7px; height: 7px; padding: 0; border: 0; border-radius: 50%; background: rgba(247, 243, 234, .42); cursor: pointer; transition: background-color .2s, transform .2s; }
+.photo-gallery-dot:hover { background: rgba(247, 243, 234, .7); }
+.photo-gallery-dot.is-active { background: var(--yellow); transform: scale(1.25); }
+.photo-gallery-counter {
+  position: absolute; z-index: 3; top: 12px; right: 14px;
+  padding: 5px 11px; color: #f7f3ea; background: rgba(22, 61, 63, .66);
+  font: 700 calc(11px * var(--font-scale))/1.2 var(--sans); letter-spacing: .07em;
+}
+
+/* 說明區：預設只顯示標題；滑鼠移入（或鍵盤聚焦）後展開完整描述與引註 */
+.photo-gallery-body {
+  flex: 0 0 auto; border-top: 1px solid var(--line);
+  padding: clamp(16px, 1.8vw, 22px) clamp(20px, 2.4vw, 28px);
+  cursor: default;
+}
+.photo-gallery-title {
+  margin: 0; font: 500 clamp(18px, 1.8vw, 23px)/1.3 var(--serif); letter-spacing: -.02em;
+  transition: margin .22s ease;
+}
+.photo-gallery-more {
+  display: grid; grid-template-rows: 0fr; opacity: 0;
+  transition: grid-template-rows .28s ease, opacity .22s ease .02s;
+}
+.photo-gallery-more > div { min-height: 0; overflow: hidden; }
+.photo-gallery-body:hover .photo-gallery-more,
+.photo-gallery-body:focus-within .photo-gallery-more {
+  grid-template-rows: 1fr; opacity: 1;
+}
+.photo-gallery-body:hover .photo-gallery-title,
+.photo-gallery-body:focus-within .photo-gallery-title { margin-bottom: 12px; }
+.photo-gallery-desc { margin: 0; max-width: 74ch; color: var(--text); font: var(--body-weight) calc(15px * var(--font-scale))/1.9 var(--serif); }
+.photo-gallery-desc + .photo-gallery-desc { margin-top: 12px; }
+.photo-gallery-source {
+  margin: 14px 0 0; padding-top: 12px; border-top: 1px dashed var(--line);
+  color: var(--muted); font: calc(12px * var(--font-scale)) var(--sans);
+}
+.photo-gallery-source a { color: var(--accent); text-decoration: none; border-bottom: 1px solid rgba(196, 93, 56, .42); }
+.photo-gallery-source a:hover { color: var(--ink); border-bottom-color: var(--ink); }
+.photo-gallery-hint {
+  margin: 10px 0 0; color: var(--muted); font: calc(11px * var(--font-scale)) var(--sans); letter-spacing: .04em;
+  transition: opacity .2s ease;
+}
+.photo-gallery-body:hover .photo-gallery-hint,
+.photo-gallery-body:focus-within .photo-gallery-hint { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+
+@media (hover: none) {
+  /* 觸控裝置沒有 hover：改為點擊說明區展開／收合 */
+  .photo-gallery-body.is-expanded .photo-gallery-more { grid-template-rows: 1fr; opacity: 1; }
+  .photo-gallery-body.is-expanded .photo-gallery-title { margin-bottom: 12px; }
+  .photo-gallery-body.is-expanded .photo-gallery-hint { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+}
+
+/* ============================================================================
    8 · 互動地圖（保留原有行為）
    ========================================================================== */
 .route-map-interaction {
-  position: relative; width: 100%; overflow: hidden;
+  position: relative; width: 100%; height: 100%; min-height: 320px; overflow: hidden;
   background: #e3e0d8 url("fizzy-background.png") center / cover no-repeat;
   border: 1px solid var(--line); box-shadow: 0 12px 28px rgba(39, 49, 45, .1);
 }
+.acc-panel .route-map-interaction { border: 0; box-shadow: none; }
 .route-line-svg, .route-map-svg { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .route-line-svg { z-index: 0; }
 .route-map-svg { z-index: 4; overflow: visible; }

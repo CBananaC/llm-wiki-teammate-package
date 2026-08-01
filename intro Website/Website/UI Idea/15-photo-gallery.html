@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>15 — 圖片畫廊（已採用：G2，圖3/3計數、hover 展開說明）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#163d3f; --ink-soft:#31575a; --text:#3c5754;
+  --paper:#f4efe6; --card:#fffaf2; --line:rgba(22,61,63,.18);
+  --muted:#6d756f; --accent:#c45d38; --yellow:#f3c967;
+  --serif:"Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+  --sans:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang TC",sans-serif;
+  --body-weight:500;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--paper);color:var(--ink);font-family:var(--sans);-webkit-font-smoothing:antialiased}
+.notice{padding:9px clamp(16px,4vw,40px);color:#8a6a2b;background:#fdf3d8;border-bottom:1px solid #e6d193;font:700 10.5px var(--sans);letter-spacing:.1em}
+.head{padding:34px clamp(16px,4vw,52px) 24px;border-bottom:1px solid var(--line)}
+.head h1{margin:0 0 9px;font:500 clamp(23px,2.7vw,34px)/1.16 var(--serif);letter-spacing:-.03em}
+.head p{margin:0;max-width:78ch;color:var(--muted);font:14.5px/1.8 var(--sans)}
+.kicker{margin:0 0 10px;color:var(--accent);font:800 10.5px var(--sans);letter-spacing:.16em}
+.demo{padding:0 0 clamp(40px,4.4vw,64px);border-bottom:1px solid var(--line)}
+.demo-cap{padding:26px clamp(16px,3.4vw,52px) 18px}
+.opt-label{display:flex;align-items:baseline;gap:12px;margin:0 0 5px}
+.opt-label b{color:var(--accent);font:800 10.5px var(--sans);letter-spacing:.14em}
+.opt-label strong{font:600 19px/1.3 var(--serif)}
+.opt-note{margin:0;max-width:76ch;color:var(--ink-soft);font:13.5px/1.75 var(--sans)}
+.stage{padding:0 clamp(16px,3.4vw,52px)}
+
+/* ============================================================================
+   共用畫廊元件
+   ========================================================================== */
+.gallery{
+  --gal-h: min(560px, 62vh);
+  position:relative; width:100%; max-width:1200px; margin:0 auto;
+  background:var(--card); border:1px solid var(--line);
+  box-shadow:0 18px 44px rgba(22,61,63,.12);
+}
+.gallery-stage{position:relative; width:100%; height:var(--gal-h); overflow:hidden; background:#e8e1d6}
+.gallery-frame{position:absolute; inset:0; opacity:0; transition:opacity .32s ease; pointer-events:none}
+.gallery-frame.is-active{opacity:1; pointer-events:auto}
+.gallery-frame img{display:block; width:100%; height:100%; object-fit:contain; background:#e8e1d6}
+
+.gallery-nav{
+  position:absolute; top:0; bottom:0; z-index:3;
+  display:flex; align-items:center; justify-content:center;
+  width:64px; color:#f7f3ea; background:transparent; border:0; cursor:pointer;
+  transition:background-color .2s;
+}
+.gallery-nav:hover, .gallery-nav:focus-visible{background:rgba(22,61,63,.28)}
+.gallery-nav.prev{left:0}
+.gallery-nav.next{right:0}
+.gallery-nav svg{width:22px; height:22px; filter:drop-shadow(0 1px 3px rgba(0,0,0,.5))}
+.gallery-nav:disabled{opacity:.28; cursor:default; background:transparent}
+
+.gallery-counter{
+  position:absolute; z-index:3; top:14px; right:16px;
+  padding:5px 11px; color:#f7f3ea; background:rgba(22,61,63,.66);
+  font:700 calc(11px)/1.2 var(--sans); letter-spacing:.08em;
+}
+
+.gallery-dots{position:absolute; z-index:3; left:0; right:0; bottom:14px; display:flex; justify-content:center; gap:7px}
+.gallery-dot{width:7px; height:7px; padding:0; border:0; border-radius:50%; background:rgba(247,243,234,.42); cursor:pointer; transition:background-color .2s, transform .2s}
+.gallery-dot:hover{background:rgba(247,243,234,.7)}
+.gallery-dot.is-active{background:var(--yellow); transform:scale(1.25)}
+
+.gallery-body{padding:clamp(20px,2.4vw,30px) clamp(22px,2.8vw,34px) clamp(22px,2.6vw,30px); border-top:1px solid var(--line)}
+.gallery-kicker{margin:0 0 8px; color:var(--accent); font:800 11px var(--sans); letter-spacing:.14em}
+.gallery-title{margin:0 0 12px; font:500 clamp(20px,2vw,26px)/1.3 var(--serif); letter-spacing:-.02em}
+.gallery-desc{margin:0; max-width:74ch; color:var(--text); font:var(--body-weight) 15.5px/1.9 var(--serif)}
+.gallery-desc + .gallery-desc{margin-top:12px}
+.gallery-source{
+  display:flex; align-items:baseline; gap:8px; flex-wrap:wrap;
+  margin:16px 0 0; padding-top:14px; border-top:1px dashed var(--line);
+  color:var(--muted); font:calc(12px) var(--sans);
+}
+.gallery-source b{color:var(--ink); font:700 10.5px var(--sans); letter-spacing:.1em}
+.gallery-source a{color:var(--accent); text-decoration:none; border-bottom:1px solid rgba(196,93,56,.42)}
+.gallery-source a:hover{color:var(--ink); border-bottom-color:var(--ink)}
+
+/* ---- 變體 G1：說明文字疊在圖片下方（半透明字幕條） ---- */
+.g1 .gallery-caption-bar{
+  position:absolute; z-index:2; left:0; right:0; bottom:0;
+  padding:16px 72px 14px; color:#f7f3ea;
+  background:linear-gradient(transparent, rgba(15,40,42,.92) 55%);
+}
+.g1 .gallery-caption-bar .gallery-kicker{color:var(--yellow)}
+.g1 .gallery-caption-bar .gallery-title{color:#f7f3ea; margin-bottom:0}
+
+/* ---- 變體 G3：縮圖列 ---- */
+.g3-thumbs{display:flex; gap:8px; padding:12px 16px; overflow-x:auto; background:#efe8dc; border-top:1px solid var(--line)}
+.g3-thumb{flex:0 0 auto; width:72px; height:52px; padding:0; overflow:hidden; border:2px solid transparent; cursor:pointer; opacity:.55; transition:opacity .2s, border-color .2s}
+.g3-thumb img{display:block; width:100%; height:100%; object-fit:cover}
+.g3-thumb:hover{opacity:.85}
+.g3-thumb.is-active{opacity:1; border-color:var(--accent)}
+
+@media (max-width:700px){
+  .gallery{ --gal-h: 300px; }
+  .gallery-nav{width:48px}
+  .gallery-source{flex-direction:column; gap:2px}
+}
+</style>
+</head>
+<body>
+
+<div class="notice">示範用佔位內容 · 圖片、說明文字與引註僅供版面測試，不代表任何史料或研究結論</div>
+
+<header class="head">
+  <p class="kicker">PHOTO GALLERY OPTIONS</p>
+  <h1>圖片畫廊：左右翻頁、長描述、底部引註</h1>
+  <p>三種畫廊結構，差別在於「說明文字」放在哪裡、以及如何提示還有幾張圖。三者都支援點左／右箭頭切換上一張／下一張，也都可用鍵盤方向鍵操作。說明文字區與圖片區分開，即使描述很長也不會蓋住圖片。</p>
+</header>
+
+<!-- ============ G1 ============ -->
+<section class="demo">
+  <div class="demo-cap">
+    <p class="opt-label"><b>G1</b><strong>字幕疊圖＋下方長描述並存</strong></p>
+    <p class="opt-note">圖片上疊一條半透明字幕條，顯示簡短標題；完整的長描述與引註則在圖片下方獨立區塊，永遠不會被截斷或需要另外展開。</p>
+  </div>
+  <div class="stage">
+    <div class="gallery g1" data-gallery>
+      <div class="gallery-stage">
+        <div class="gallery-frame is-active" data-frame="0">
+          <img src="../Visual Material/印版平定台湾战图册6.png" alt="《印版平定臺灣戰圖冊》圖像">
+          <div class="gallery-caption-bar">
+            <p class="gallery-kicker">圖 1 / 3</p>
+            <h3 class="gallery-title">《印版平定臺灣戰圖冊》戰事圖像</h3>
+          </div>
+        </div>
+        <div class="gallery-frame" data-frame="1" hidden>
+          <img src="../Visual Material/img2_4_2.jpg" alt="清代軍事文獻的冊頁與裝幀">
+          <div class="gallery-caption-bar">
+            <p class="gallery-kicker">圖 2 / 3</p>
+            <h3 class="gallery-title">清代軍事文獻的冊頁與裝幀</h3>
+          </div>
+        </div>
+        <div class="gallery-frame" data-frame="2" hidden>
+          <img src="taiwan-route-source-page.png" alt="《乾隆重要戰爭之軍需研究》〈台灣之役〉頁面">
+          <div class="gallery-caption-bar">
+            <p class="gallery-kicker">圖 3 / 3</p>
+            <h3 class="gallery-title">〈台灣之役〉研究頁面</h3>
+          </div>
+        </div>
+        <button class="gallery-nav prev" type="button" data-gallery-prev aria-label="上一張">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="gallery-nav next" type="button" data-gallery-next aria-label="下一張">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="gallery-dots" data-gallery-dots></div>
+      </div>
+      <div class="gallery-body" data-gallery-body>
+        <!-- 內容由下方 data-gallery-data 依目前頁碼填入 -->
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ G2 ============ -->
+<section class="demo">
+  <div class="demo-cap">
+    <p class="opt-label"><b>G2</b><strong>圖片乾淨、說明完全在下方</strong></p>
+    <p class="opt-note">圖片區不疊加任何文字，只有右上角頁碼與左右箭頭；標題、長描述、引註全部在下方區塊，層次最清楚，適合圖片本身需要完整呈現、不希望被字幕遮擋的情況。</p>
+  </div>
+  <div class="stage">
+    <div class="gallery g2" data-gallery>
+      <div class="gallery-stage">
+        <div class="gallery-frame is-active" data-frame="0">
+          <img src="../Visual Material/印版平定台湾战图册6.png" alt="《印版平定臺灣戰圖冊》圖像">
+        </div>
+        <div class="gallery-frame" data-frame="1" hidden>
+          <img src="../Visual Material/img2_4_2.jpg" alt="清代軍事文獻的冊頁與裝幀">
+        </div>
+        <div class="gallery-frame" data-frame="2" hidden>
+          <img src="taiwan-route-source-page.png" alt="《乾隆重要戰爭之軍需研究》〈台灣之役〉頁面">
+        </div>
+        <button class="gallery-nav prev" type="button" data-gallery-prev aria-label="上一張">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="gallery-nav next" type="button" data-gallery-next aria-label="下一張">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="gallery-counter" data-gallery-counter>1 / 3</div>
+      </div>
+      <div class="gallery-body" data-gallery-body></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ G3 ============ -->
+<section class="demo" style="border-bottom:0">
+  <div class="demo-cap">
+    <p class="opt-label"><b>G3</b><strong>加縮圖列，可直接跳到任一張</strong></p>
+    <p class="opt-note">與 G2 相同的乾淨圖片＋下方說明，但額外加入一列縮圖，讀者可以看到全部圖片、直接點選要看哪一張，不必逐張翻頁。圖片數量較多時更實用。</p>
+  </div>
+  <div class="stage">
+    <div class="gallery g3" data-gallery>
+      <div class="gallery-stage">
+        <div class="gallery-frame is-active" data-frame="0">
+          <img src="../Visual Material/印版平定台湾战图册6.png" alt="《印版平定臺灣戰圖冊》圖像">
+        </div>
+        <div class="gallery-frame" data-frame="1" hidden>
+          <img src="../Visual Material/img2_4_2.jpg" alt="清代軍事文獻的冊頁與裝幀">
+        </div>
+        <div class="gallery-frame" data-frame="2" hidden>
+          <img src="taiwan-route-source-page.png" alt="《乾隆重要戰爭之軍需研究》〈台灣之役〉頁面">
+        </div>
+        <button class="gallery-nav prev" type="button" data-gallery-prev aria-label="上一張">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+        </button>
+        <button class="gallery-nav next" type="button" data-gallery-next aria-label="下一張">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>
+        </button>
+        <div class="gallery-counter" data-gallery-counter>1 / 3</div>
+      </div>
+      <div class="g3-thumbs" data-gallery-thumbs>
+        <button class="g3-thumb is-active" type="button" data-gallery-goto="0"><img src="../Visual Material/印版平定台湾战图册6.png" alt=""></button>
+        <button class="g3-thumb" type="button" data-gallery-goto="1"><img src="../Visual Material/img2_4_2.jpg" alt=""></button>
+        <button class="g3-thumb" type="button" data-gallery-goto="2"><img src="taiwan-route-source-page.png" alt=""></button>
+      </div>
+      <div class="gallery-body" data-gallery-body></div>
+    </div>
+  </div>
+</section>
+
+<script>
+/* 每一頁對應的完整內容：標題、可能多段的長描述、引註來源與連結。
+   G1／G2／G3 共用同一份資料，只是圖片區的呈現方式不同。 */
+const galleryData = [
+  {
+    kicker: '圖 1 / 3',
+    title: '奏摺抵達御前',
+    paragraphs: [
+      '柴大紀的奏摺經福建、江蘇、山東的驛站輾轉傳遞，歷時一個月，在一月二日始送達御前。乾隆帝硃批：「已有旨了。」',
+      '示範用第二段長描述，用來測試較長的說明文字在此區塊中的行距與段落間距是否舒適，並確認不會因為描述過長而遮擋圖片。'
+    ],
+    source: { label: '資料來源', text: '柴大紀奏摺傳遞記錄', href: '../references.html#ref-example-1' }
+  },
+  {
+    kicker: '圖 2 / 3',
+    title: '軍機處登記同日軍情',
+    paragraphs: [
+      '乾隆帝硃批後，奏摺交由軍機處登記和辦理。根據當日的《軍機處隨手登記檔》，乾隆帝當天不僅收到柴大紀的奏摺，還包括閩浙總督常青、福建巡撫徐嗣曾與福建水師提督黃仕簡所上的奏摺，同樣奏報臺灣的軍情。'
+    ],
+    source: { label: '資料來源', text: '《軍機處隨手登記檔》', href: '../references.html#ref-example-2' }
+  },
+  {
+    kicker: '圖 3 / 3',
+    title: '諭旨廷寄與柴大紀',
+    paragraphs: [
+      '據《登記檔》所載，乾隆帝當日下了兩道諭旨，其中一道〈諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻〉也廷寄給了柴大紀，嘉許了他嚴守臺灣府城，並命他迅速剿滅匪徒，收復失地。'
+    ],
+    source: { label: '資料來源', text: '《登記檔》所載諭旨', href: '../references.html#ref-example-3' }
+  }
+];
+
+function renderBody(body, index) {
+  const d = galleryData[index];
+  const paras = d.paragraphs.map((p) => `<p class="gallery-desc">${p}</p>`).join('');
+  body.innerHTML = `
+    <p class="gallery-kicker">${d.kicker}</p>
+    <h3 class="gallery-title">${d.title}</h3>
+    ${paras}
+    <p class="gallery-source"><b>${d.source.label}</b><a href="${d.source.href}">${d.source.text} ↗</a></p>
+  `;
+}
+
+document.querySelectorAll('[data-gallery]').forEach((gallery) => {
+  const frames = [...gallery.querySelectorAll('[data-frame]')];
+  const prevBtn = gallery.querySelector('[data-gallery-prev]');
+  const nextBtn = gallery.querySelector('[data-gallery-next]');
+  const counter = gallery.querySelector('[data-gallery-counter]');
+  const dotsWrap = gallery.querySelector('[data-gallery-dots]');
+  const thumbs = [...gallery.querySelectorAll('[data-gallery-goto]')];
+  const body = gallery.querySelector('[data-gallery-body]');
+  let index = 0;
+
+  if (dotsWrap) {
+    frames.forEach((_, i) => {
+      const dot = document.createElement('button');
+      dot.type = 'button';
+      dot.className = 'gallery-dot' + (i === 0 ? ' is-active' : '');
+      dot.setAttribute('aria-label', `前往第 ${i + 1} 張`);
+      dot.addEventListener('click', () => show(i));
+      dotsWrap.appendChild(dot);
+    });
+  }
+
+  function show(next) {
+    index = (next + frames.length) % frames.length;
+    frames.forEach((frame, i) => {
+      frame.classList.toggle('is-active', i === index);
+      frame.hidden = i !== index;
+    });
+    if (counter) counter.textContent = `${index + 1} / ${frames.length}`;
+    if (dotsWrap) [...dotsWrap.children].forEach((dot, i) => dot.classList.toggle('is-active', i === index));
+    thumbs.forEach((thumb) => thumb.classList.toggle('is-active', Number(thumb.dataset.galleryGoto) === index));
+    if (prevBtn) prevBtn.disabled = false;
+    if (nextBtn) nextBtn.disabled = false;
+    if (body) renderBody(body, index);
+  }
+
+  prevBtn?.addEventListener('click', () => show(index - 1));
+  nextBtn?.addEventListener('click', () => show(index + 1));
+  thumbs.forEach((thumb) => thumb.addEventListener('click', () => show(Number(thumb.dataset.galleryGoto))));
+  gallery.setAttribute('tabindex', '0');
+  gallery.addEventListener('keydown', (event) => {
+    if (event.key === 'ArrowLeft') show(index - 1);
+    if (event.key === 'ArrowRight') show(index + 1);
+  });
+
+  show(0);
+});
+</script>
+</body>
+</html>

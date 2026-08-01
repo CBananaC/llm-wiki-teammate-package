@@ -153,6 +153,32 @@ workflowNodes.forEach((node) => {
   });
 });
 
+/* 量測每一節文字欄的高度，寫入該節的 --text-h。
+   storymap-cards.css 的 --visual-x（倍數）便以此為基準計算視覺元素高度。
+   文字欄高度會隨字級設定、視窗寬度、小卡展開而改變，因此持續觀察。 */
+const measureTextColumns = () => {
+  const groups = [...document.querySelectorAll('.lay-split, .lay-acc')];
+  if (!groups.length) return;
+  const apply = () => {
+    groups.forEach((group) => {
+      const textColumn = group.querySelector('.lay-copy, .acc-track');
+      if (!textColumn) return;
+      const height = Math.round(textColumn.getBoundingClientRect().height);
+      if (height > 0) group.style.setProperty('--text-h', `${height}px`);
+    });
+  };
+  apply();
+  if ('ResizeObserver' in window) {
+    const observer = new ResizeObserver(apply);
+    groups.forEach((group) => {
+      const textColumn = group.querySelector('.lay-copy, .acc-track');
+      if (textColumn) observer.observe(textColumn);
+    });
+  }
+  window.addEventListener('resize', apply);
+};
+measureTextColumns();
+
 /* 小卡（點擊展開）＋對應視覺元素。
    行為：初始全部收合；點標題展開／收合，不影響其他已展開的卡；
    點已展開卡片的內文，只把右側畫面切換到該卡，不收合。 */
@@ -230,6 +256,92 @@ const observer = new IntersectionObserver((entries) => {
   });
 }, { threshold: 0.35 });
 sections.forEach((section) => observer.observe(section));
+
+/* 圖片畫廊：左右翻頁、乾淨圖片、下方說明（預設只顯示標題，滑鼠移入展開）。
+   每個 [data-photo-gallery] 讀取自己的 <script type="application/json"
+   data-photo-gallery-data> 作為圖片與說明來源。 */
+document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
+  const dataScript = gallery.querySelector('[data-photo-gallery-data]');
+  if (!dataScript) return;
+  let pages = [];
+  try {
+    pages = JSON.parse(dataScript.textContent);
+  } catch (error) {
+    return;
+  }
+  if (!Array.isArray(pages) || !pages.length) return;
+
+  const stage = gallery.querySelector('.photo-gallery-stage');
+  const body = gallery.querySelector('.photo-gallery-body');
+  if (!stage || !body) return;
+
+  stage.innerHTML = '';
+  pages.forEach((page, i) => {
+    const frame = document.createElement('div');
+    frame.className = 'photo-gallery-frame' + (i === 0 ? ' is-active' : '');
+    frame.dataset.frame = String(i);
+    const img = document.createElement('img');
+    img.src = page.image;
+    img.alt = page.alt || '';
+    frame.appendChild(img);
+    stage.appendChild(frame);
+  });
+  const frames = [...stage.querySelectorAll('.photo-gallery-frame')];
+
+  if (pages.length > 1) {
+    const prevBtn = document.createElement('button');
+    prevBtn.type = 'button'; prevBtn.className = 'photo-gallery-nav prev'; prevBtn.setAttribute('aria-label', '上一張');
+    prevBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>';
+    const nextBtn = document.createElement('button');
+    nextBtn.type = 'button'; nextBtn.className = 'photo-gallery-nav next'; nextBtn.setAttribute('aria-label', '下一張');
+    nextBtn.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 18l6-6-6-6"/></svg>';
+    const counter = document.createElement('div');
+    counter.className = 'photo-gallery-counter';
+    stage.append(prevBtn, nextBtn, counter);
+
+    let index = 0;
+    const show = (next) => {
+      index = (next + frames.length) % frames.length;
+      frames.forEach((frame, i) => {
+        frame.classList.toggle('is-active', i === index);
+        frame.hidden = i !== index;
+      });
+      counter.textContent = `圖 ${index + 1} / ${frames.length}`;
+      renderBody(pages[index]);
+    };
+    prevBtn.addEventListener('click', () => show(index - 1));
+    nextBtn.addEventListener('click', () => show(index + 1));
+    gallery.setAttribute('tabindex', '0');
+    gallery.addEventListener('keydown', (event) => {
+      if (event.key === 'ArrowLeft') show(index - 1);
+      if (event.key === 'ArrowRight') show(index + 1);
+    });
+    show(0);
+  } else {
+    renderBody(pages[0]);
+  }
+
+  function renderBody(page) {
+    const paras = (page.paragraphs || []).map((p) => `<p class="photo-gallery-desc">${p}</p>`).join('');
+    const source = page.source
+      ? `<p class="photo-gallery-source"><a href="${page.source.href}" target="_blank" rel="noopener noreferrer">${page.source.text} ↗</a></p>`
+      : '';
+    body.innerHTML = `
+      <h3 class="photo-gallery-title">${page.title}</h3>
+      <div class="photo-gallery-more"><div>
+        ${paras}
+        ${source}
+      </div></div>
+      <p class="photo-gallery-hint">將滑鼠移到此處查看完整說明</p>
+    `;
+  }
+
+  /* 觸控裝置：點擊說明區展開／收合 */
+  body.addEventListener('click', (event) => {
+    if (event.target.closest('a')) return;
+    if (window.matchMedia('(hover: none)').matches) body.classList.toggle('is-expanded');
+  });
+});
 
 const routeGalleryPages = [
   {

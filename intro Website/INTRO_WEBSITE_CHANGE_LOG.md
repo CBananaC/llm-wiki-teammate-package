@@ -1822,3 +1822,36 @@ and are carried by a clearly-marked transitional block at the end of
 deleted. The Google Fonts link requires network access; self-hosting Inter and
 Noto Serif TC is advisable if the demonstration must run fully offline.
 Browser validation of the introduction tab is outstanding.
+
+### 2026-08-01 — Claude — Add a reusable photo gallery component and use it in 引言 01
+
+Summary: Added a `.photo-gallery` component (storymap.css section 7b, init
+logic in storymap.js) — clean image stage with left/right arrow navigation,
+keyboard arrow support, a "圖 X / N" counter, and a description area below the
+image that shows only the title by default and expands to the full
+description and reference on hover (click-to-expand on touch devices, via
+`(hover: none)`). Replaced section 引言 01（清代奏折制度）'s visual, which had
+been the interactive Taiwan–Beijing route map, with this gallery. The route
+map (pins, animated route line, and its own embedded page gallery) was
+relocated to 引言 06（示範案例：林爽文事件）'s "case-route" panel, replacing a
+simpler static route graphic there — this is where the route map's actual
+subject matter (Lin Shuangwen-era report transmission) belongs thematically.
+
+Files:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/UI Idea/15-photo-gallery.html` (new, options study)
+
+Verified: `node --check` passed for `storymap.js`; `git diff --check` passed;
+HTML tag balance and gallery/route-map marker counts checked programmatically
+(one `data-photo-gallery`, one `data-route-map`, section/div counts balanced).
+No browser QA was performed in this session.
+
+Remaining: The two images now shown in 引言 01's gallery
+(`img2_4_2.jpg`, `印版平定台湾战图册6.png`) are placeholders reused from
+elsewhere in the site — their captions are marked "示範用佔位說明" /
+"來源待補" in the data script inside `storymap-example.html` and are not
+verified citations. Replace with real images and sourced captions for this
+section before publishing. Browser validation of both the gallery and the
+relocated route map (section 06) is outstanding.
