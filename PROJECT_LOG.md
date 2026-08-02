@@ -6426,3 +6426,13 @@ Files: `intro Website/Website/storymap/zhu40-review-tool-capture.gif`, `intro We
 Verified: Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds. Browser QA confirmed the sharpened GIF loads visibly in the research-results section at 2048×1080 natural dimensions and the intended wide layout. Passed `git diff --check`.
 
 Remaining: None for this clarity improvement. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 20:57 HKT — Codex — Restore the original light color balance
+
+Summary: Replaced the darker clarity pass with a new re-encode based directly on the original light-mode GIF, using full-frame palette preservation and gentler sharpening so the original website colors remain faithful.
+
+Files: `intro Website/Website/storymap/zhu40-review-tool-capture.gif`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds. Browser QA confirmed the color-balanced GIF loads visibly in the research-results section at 2048×1080 natural dimensions with the original light presentation. Passed `git diff --check`.
+
+Remaining: None for this correction. No formal or sample review state was touched; no push was performed.

@@ -2345,3 +2345,23 @@ Verified:
 
 Remaining:
 - None for this clarity improvement; formal and sample review data remain untouched.
+
+### 2026-08-02 20:57 HKT — Codex — Restore the original light color balance
+
+Summary:
+- Replaced the darker clarity pass with a new re-encode based directly on the original light-mode GIF.
+- Used full-frame palette preservation and gentler sharpening so the original website colors and interface text remain faithful.
+
+Files changed:
+- `Website/storymap/zhu40-review-tool-capture.gif`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds.
+- Confirmed the StoryMap reference remains unchanged.
+- Browser QA confirmed the color-balanced GIF loads visibly in the research-results section at 2048×1080 natural dimensions with the original light presentation.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this correction; formal and sample review data remain untouched.
