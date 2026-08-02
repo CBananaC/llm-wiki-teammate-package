@@ -2536,3 +2536,23 @@ Verified:
 
 Remaining:
 - None for this alignment fix. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 00:23 HKT — Codex — Keep only the sample 情報來源 callouts
+
+Summary:
+- Removed the mistaken mirrored `03` marker from the light 硃119 document panel.
+- Kept the intended `情報來源1`–`情報來源4` callout labels and their left-side connector layout; offscreen labels remain hidden until their highlighted text is visible.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed no `.source-flow-panel-number` remains, `情報來源1` is visible on the left of the document, and `情報來源2`–`情報來源4` remain hidden at the initial scroll position.
+- No browser console warnings/errors were reported. Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this correction. Formal and sample review data remain untouched; no push was performed.

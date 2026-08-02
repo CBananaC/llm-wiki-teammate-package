@@ -111,7 +111,6 @@
   --source-panel-offset-x: 0px;
   --source-panel-offset-y: 0px;
   --source-panel-source-space: clamp(122px, 19%, 184px);
-  --source-panel-number-top: var(--source-panel-margin-top);
   --source-panel-mobile-top-gap: 86px;
 }
 

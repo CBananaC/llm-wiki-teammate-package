@@ -6526,3 +6526,13 @@ Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/sto
 Verified: Browser QA confirmed the marker top and document-panel top are aligned exactly, the right-side `03` accordion remains active, and only the currently visible `情報來源1` label remains shown. No browser console warnings/errors were reported. Passed JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this alignment fix. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 00:23 HKT — Codex — Keep only the sample 情報來源 callouts
+
+Summary: Removed the mistaken mirrored `03` marker from the light 硃119 document panel. Kept the intended `情報來源1`–`情報來源4` callout labels and their left-side connector layout; offscreen labels remain hidden until their highlighted text is visible.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed no `.source-flow-panel-number` remains, `情報來源1` is visible on the left of the document, and `情報來源2`–`情報來源4` remain hidden at the initial scroll position. No browser console warnings/errors were reported. Passed JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for this correction. No formal or sample review state was touched; no push was performed.
