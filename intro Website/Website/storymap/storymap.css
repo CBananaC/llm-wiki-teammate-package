@@ -655,7 +655,7 @@ img { max-width: 100%; }
 .source-flow-panel-number {
   position: absolute;
   z-index: 4;
-  top: 0;
+  top: var(--source-panel-number-top, var(--source-flow-top-gap));
   left: 0;
   display: inline-flex;
   align-items: center;

@@ -6516,3 +6516,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Confirmed every highlight span is an exact substring of canonical 硃119, passed StoryMap JavaScript syntax checking and `git diff --check`, and completed local browser QA with 4 bubbles, 5 highlights, 4 connectors, full original text, and no console warnings/errors.
 
 Remaining: None for this insertion. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 00:15 HKT — Codex — Align the left source-flow number with the document panel
+
+Summary: Fixed the light 硃119 panel’s mirrored `03` marker so it aligns with the top of the document panel instead of floating in the gap beneath the section heading. Added `--source-panel-number-top` beside the other card-level panel controls, keeping the marker position easy to adjust from `storymap-cards.css`.
+
+Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed the marker top and document-panel top are aligned exactly, the right-side `03` accordion remains active, and only the currently visible `情報來源1` label remains shown. No browser console warnings/errors were reported. Passed JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for this alignment fix. No formal or sample review state was touched; no push was performed.

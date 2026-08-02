@@ -2517,3 +2517,22 @@ Verified:
 
 Remaining:
 - None for this refinement. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 00:15 HKT — Codex — Align the left source-flow number with the document panel
+
+Summary:
+- Fixed the light 硃119 panel’s mirrored `03` marker so it aligns with the top of the document panel instead of floating in the gap beneath the section heading.
+- Added `--source-panel-number-top` beside the other card-level panel controls, keeping the marker position easy to adjust from `storymap-cards.css`.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed the marker top and document-panel top are aligned exactly, the right-side `03` accordion remains active, and only the currently visible `情報來源1` label remains shown.
+- No browser console warnings/errors were reported. Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this alignment fix. Formal and sample review data remain untouched; no push was performed.
