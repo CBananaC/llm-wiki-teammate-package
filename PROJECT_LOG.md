@@ -6457,6 +6457,16 @@ Verified: Confirmed all five phrases are exact substrings of canonical 硃119, p
 
 Remaining: None for this refinement. No formal or sample review state was touched; no push was performed.
 
+### 2026-08-03 00:10 HKT — Codex — Balance the source-flow number labels
+
+Summary: Added a left-side `03` visual-element marker to the 硃119 document panel to balance the existing right-side `03 資訊流向複雜` accordion marker, with a small-screen position adjustment.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed matching `03` markers on the left panel and right accordion, preserved `情報來源1` visibility behavior, and no console warnings/errors. Passed `git diff --check`.
+
+Remaining: None for this visual-balance adjustment. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-02 23:59 HKT — Codex — Hide off-screen source labels and expose panel controls
 
 Summary: Updated the 硃119 source-annotation layer so labels and connector lines are shown only while their highlighted phrase is inside the document scroll viewport and visible page viewport; `前據各口岸探明` is grouped with 情報來源1. Added card-level variables in `intro Website/Website/storymap/storymap-cards.css` for panel width, height, margins, offsets, source-label space, and mobile top gap, and connected the shared panel styles to those variables.

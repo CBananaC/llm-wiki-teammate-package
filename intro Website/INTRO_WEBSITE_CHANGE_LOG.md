@@ -2477,6 +2477,25 @@ Verified:
 Remaining:
 - None for this refinement. Formal and sample review data remain untouched; no push was performed.
 
+### 2026-08-03 00:10 HKT — Codex — Balance the source-flow number labels
+
+Summary:
+- Added a left-side `03` visual-element marker to the 硃119 document panel so it balances the existing right-side `03 資訊流向複雜` accordion marker.
+- Reused the section’s light teal/accent number treatment and added a small-screen position adjustment.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed the left panel marker and right accordion marker both read `03`, the existing `情報來源1` visibility behavior remains intact, and no console warnings/errors were reported.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this visual-balance adjustment. Formal and sample review data remain untouched; no push was performed.
+
 ### 2026-08-02 23:59 HKT — Codex — Hide off-screen source labels and expose panel controls
 
 Summary:
