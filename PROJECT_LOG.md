@@ -6370,6 +6370,36 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-02 21:08 HKT — Codex — Scale the intro GIF proportionally
+
+Summary: Replaced the fixed GIF height with `--visual-scale`; the frame now scales width and height together using the original 2048×1080 aspect ratio.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Reload the local HTTP preview to confirm proportional scaling visually. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 21:01 HKT — Codex — Widen the intro GIF container
+
+Summary: Removed the shared 1560px content-width cap for the research-results section only, allowing the GIF to fill the available page width.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Reload the local HTTP preview to confirm the wider frame visually. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 20:59 HKT — Codex — Make the intro GIF height variable effective
+
+Summary: Fixed the more-specific intro GIF frame rule that forced `height: auto`, so the `--visual-h` setting now changes the displayed frame height.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Reload the local HTTP preview to confirm the enlarged frame visually. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-02 10:45 HKT — Codex — Remove browsing dates from gallery references
 
 Summary: Removed all browsing-date text from the five StoryMap gallery source labels while preserving their citation details and clickable links.
@@ -6436,3 +6466,13 @@ Files: `intro Website/Website/storymap/zhu40-review-tool-capture.gif`, `intro We
 Verified: Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds. Browser QA confirmed the color-balanced GIF loads visibly in the research-results section at 2048×1080 natural dimensions with the original light presentation. Passed `git diff --check`.
 
 Remaining: None for this correction. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 21:02 HKT — Codex — Match the brighter unsolved-state capture
+
+Summary: Brightened the GIF’s midtones from the original light-mode capture so the unsolved and panel-open states match the supplied screenshot’s brighter cream background and pale chart lines, while preserving highlight colors, text, dimensions, and timing.
+
+Files: `intro Website/Website/storymap/zhu40-review-tool-capture.gif`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds. Browser QA confirmed the brighter GIF loads visibly in the research-results section at 2048×1080 natural dimensions, with the lighter unsolved/panel-open presentation. Passed `git diff --check`.
+
+Remaining: None for this brightness correction. No formal or sample review state was touched; no push was performed.

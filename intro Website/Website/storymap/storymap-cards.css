@@ -112,16 +112,22 @@
 
 /* 5 — 研究成果：「清代奏摺與上諭分析平台」｜文字在上、工具畫面滿版在下
        （文字與元素上下排列，沒有並排的文字欄可作基準，
-         因此這一節請用固定像素高度 --visual-h，不要用 --visual-x） */
+       因此這一節用 --visual-scale 按原始 GIF 比例放大或縮小。 */
 #intro-1-5 {
-  --visual-h: 1000px;
+  --visual-scale: 1;
   --card-accent: #c46a2b;
+}
+#intro-1-5 > .story-inner {
+  width: min(2200px, 100%);
+  max-width: none;
 }
 #intro-1-5 .blk { width: 100%; max-width: none !important; }
 #intro-1-5 .review-capture-frame {
+  width: calc(100% * var(--visual-scale, 1));
   height: auto;
   aspect-ratio: 2048 / 1080;
   min-height: 320px;
+  margin-inline: auto;
   display: grid;
   place-items: center;
   background: #f8f5ee;
