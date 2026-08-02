@@ -201,12 +201,23 @@ const refreshSourceFlowConnectors = () => {
       if (key && !marks.has(key)) marks.set(key, mark);
     });
 
+    const scrollViewport = visual.querySelector('.ip-scroll')?.getBoundingClientRect();
+    const pageViewport = { top: 0, bottom: window.innerHeight };
     let previousBottom = 8;
     visual.querySelectorAll('[data-source-bubble]').forEach((bubble) => {
       const key = bubble.dataset.sourceBubble;
       const mark = marks.get(key);
       if (!mark) return;
       const markRect = mark.getBoundingClientRect();
+      const markIsVisible = !scrollViewport
+        || (markRect.bottom > Math.max(scrollViewport.top, pageViewport.top)
+          && markRect.top < Math.min(scrollViewport.bottom, pageViewport.bottom));
+      bubble.hidden = !markIsVisible;
+      bubble.setAttribute('aria-hidden', String(!markIsVisible));
+      if (!markIsVisible) {
+        bubble.style.removeProperty('top');
+        return;
+      }
       const bubbleHeight = bubble.getBoundingClientRect().height;
       const targetY = markRect.top + markRect.height / 2 - rootRect.top;
       const maxBubbleTop = Math.max(8, height - bubbleHeight - 8);

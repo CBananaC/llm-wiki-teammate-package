@@ -100,6 +100,18 @@
   --panel-w: 40%;
   --visual-x: 2;
   --card-accent: #ad7a35;
+
+ /* 硃119 文書面板：集中在這裡調整，不必改動共用 storymap.css。 */
+  --source-panel-width: 100%;
+  --source-panel-height: 700px;
+  --source-panel-margin-top: clamp(30px, 4.5vh, 56px);
+  --source-panel-margin-right: 0px;
+  --source-panel-margin-bottom: 0px;
+  --source-panel-margin-left: 0px;
+  --source-panel-offset-x: 0px;
+  --source-panel-offset-y: 0px;
+  --source-panel-source-space: clamp(122px, 19%, 184px);
+  --source-panel-mobile-top-gap: 86px;
 }
 
 /* 4 — 以數位方法研究清代奏折和上諭｜文字在上、比較表在下

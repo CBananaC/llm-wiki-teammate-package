@@ -2476,3 +2476,25 @@ Verified:
 
 Remaining:
 - None for this refinement. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-02 23:59 HKT — Codex — Hide off-screen source labels and expose panel controls
+
+Summary:
+- Changed the source-annotation layer so an `情報來源` label and connector appear only when its corresponding highlight is inside both the document scroll viewport and the visible page viewport; labels for unscrolled/off-screen excerpts are hidden. `前據各口岸探明` is grouped with 情報來源1.
+- Added clearly named panel variables to `Website/storymap/storymap-cards.css` for width, height, four margins, x/y offsets, top source-label space, and mobile top gap.
+- Wired the shared panel CSS to those card-level variables so the 硃119 document panel can be repositioned and resized from the section block without editing the shared stylesheet.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Targeted validation confirmed 4 source bubbles, 5 requested highlights, with `前據各口岸探明` assigned to 情報來源1, plus all documented card-level control variables.
+- Browser QA confirmed only the currently visible `情報來源1` label and connector are shown at the initial scroll position; hidden labels remain available to appear when their excerpts enter the visible viewport. No console warnings/errors were reported.
+
+Remaining:
+- None for this refinement. Formal and sample review data remain untouched; no push was performed.

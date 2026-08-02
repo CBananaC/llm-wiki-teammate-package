@@ -6457,6 +6457,16 @@ Verified: Confirmed all five phrases are exact substrings of canonical 硃119, p
 
 Remaining: None for this refinement. No formal or sample review state was touched; no push was performed.
 
+### 2026-08-02 23:59 HKT — Codex — Hide off-screen source labels and expose panel controls
+
+Summary: Updated the 硃119 source-annotation layer so labels and connector lines are shown only while their highlighted phrase is inside the document scroll viewport and visible page viewport; `前據各口岸探明` is grouped with 情報來源1. Added card-level variables in `intro Website/Website/storymap/storymap-cards.css` for panel width, height, margins, offsets, source-label space, and mobile top gap, and connected the shared panel styles to those variables.
+
+Files: `intro Website/Website/storymap/storymap.js`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed JavaScript syntax checking and `git diff --check`; targeted validation confirmed 4 bubbles, 5 requested highlights with `前據各口岸探明` assigned to 情報來源1, and the documented card controls. Browser QA confirmed only the visible initial source label/connector is shown, with no console warnings/errors.
+
+Remaining: None for this refinement. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-02 11:30 HKT — Codex — Improve the 硃40 review capture clarity
 
 Summary: Re-encoded the research-results GIF at the same 2048×1080 size, frame count, and duration with controlled sharpening and optimized palette dithering, preserving the interface text and interaction sequence.
