@@ -2325,3 +2325,23 @@ Verified:
 
 Remaining:
 - None for this insertion; formal and sample review data remain untouched.
+
+### 2026-08-02 11:30 HKT — Codex — Improve the 硃40 review capture clarity
+
+Summary:
+- Re-encoded the research-results GIF at the same 2048×1080 size, frame count, and duration with controlled sharpening and optimized palette dithering.
+- Preserved the light-mode interface, Traditional-Chinese text, interaction sequence, and website reference.
+
+Files changed:
+- `Website/storymap/zhu40-review-tool-capture.gif`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds.
+- Confirmed the existing StoryMap image reference is unchanged.
+- Browser QA confirmed the sharpened GIF loads visibly in the research-results section at 2048×1080 natural dimensions and the intended wide layout.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this clarity improvement; formal and sample review data remain untouched.
