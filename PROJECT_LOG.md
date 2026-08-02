@@ -6546,3 +6546,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Browser QA confirmed 5 distinct highlights, 10 mirrored callout labels, 4 initially visible connectors for the first two visible sources, and no console warnings/errors. Passed JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this source-label balance change. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 00:44 HKT — Codex — Use one alternating-side label per source
+
+Summary: Removed the duplicated mirrored labels so each of the five sources has exactly one callout. Kept odd-numbered labels `情報來源1`, `情報來源3`, and `情報來源5` on the left, and even-numbered labels `情報來源2` and `情報來源4` on the right.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed 5 total callout labels, 5 unique source keys, the first label on the left, the second on the right, and no console warnings/errors. Passed `git diff --check`.
+
+Remaining: None for this alternating-label correction. No formal or sample review state was touched; no push was performed.

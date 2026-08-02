@@ -2576,3 +2576,21 @@ Verified:
 
 Remaining:
 - None for this source-label balance change. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 00:44 HKT — Codex — Use one alternating-side label per source
+
+Summary:
+- Removed the duplicated mirrored labels so each of the five sources has exactly one callout.
+- Kept odd-numbered labels `情報來源1`, `情報來源3`, and `情報來源5` on the left, and even-numbered labels `情報來源2` and `情報來源4` on the right.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed 5 total callout labels, 5 unique source keys, the first label on the left, the second on the right, and no console warnings/errors.
+- Passed `git diff --check`.
+
+Remaining:
+- None for this alternating-label correction. Formal and sample review data remain untouched; no push was performed.
