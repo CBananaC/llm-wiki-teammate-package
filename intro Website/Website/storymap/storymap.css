@@ -348,8 +348,20 @@ img { max-width: 100%; }
 .acc-point-list li:last-child { margin-bottom: 0; }
 .acc-visual { position: sticky; top: calc(var(--bar-h) + 12px); min-width: 0; }
 .acc-panels { position: relative; display: grid; }
+/* 高度改由「目前顯示的那一張小卡面板」自己決定，不再由整組容器統一固定。
+   容器本身設 auto，未顯示的面板是 display:none，因此容器高度永遠等於
+   當下顯示那一張的高度——切回 A 就回到 A 的高度，不會被剛才看過的 B 撐住。 */
+.acc-panels.visual-frame,
+.acc-panels.visual-frame-tall,
+.acc-panels.visual-frame-wide { height: auto; min-height: 0; }
 .acc-panel { grid-area: 1 / 1; display: none; min-width: 0; overflow: hidden; background: #f8f5ee; border: 1px solid var(--line); box-shadow: 0 12px 28px rgba(39, 49, 45, .1); }
-.acc-panel.is-active { display: flex; flex-direction: column; }
+/* 每張面板各自的高度：優先用 storymap-cards.css 針對該面板設定的 --panel-h（px），
+   沒設定時退回這一節共用的 --visual-h／--visual-x。 */
+.acc-panel.is-active {
+  display: flex; flex-direction: column;
+  height: var(--panel-h, var(--visual-h, calc(var(--visual-x, 1) * var(--text-h, 620px))));
+  min-height: 320px;
+}
 .acc-panel[hidden] { display: none; }
 .acc-panel > img { display: block; width: 100%; height: 100%; min-height: 0; object-fit: cover; }
 .acc-panel > figcaption,
@@ -598,6 +610,71 @@ img { max-width: 100%; }
 .case-route-label-beijing { left: 15%; top: 17%; }
 @media (prefers-reduced-motion: reduce) {
   .route-pin-shape, .route-line-use, .route-info-window { transition: none; animation-duration: .01ms !important; }
+}
+
+/* ============================================================================
+   8b · GIF 示範的浮動標註
+   段落文字與 GIF 之間留出一塊空白區（.annotation-band），說明卡片浮在這塊
+   空白裡，因此不會蓋到段落文字，也不會蓋到 GIF 畫面本身。卡片與 GIF 上的
+   指標圓點之間以細線連接，線的角度與長度由 storymap.js 自動計算。
+
+   所有位置與尺寸都用 CSS 變數控制，實際數值請在 storymap-cards.css 設定：
+     --band-h                 空白區高度
+     --label-x / --label-y    卡片在空白區內的位置
+     --label-w                卡片寬度
+     --dot-x / --dot-y        圓點在 GIF 上的位置
+     --line-w / --line-color  連接線的粗細與顏色
+   ========================================================================== */
+.gif-annotated { position: relative; }
+
+.annotation-band { position: relative; height: var(--band-h, 170px); }
+
+.annotation-label {
+  position: absolute;
+  left: var(--label-x, 0%); top: var(--label-y, 0px);
+  width: var(--label-w, 300px); max-width: 100%;
+  padding: 12px 14px;
+  background: var(--card); border: 1px solid var(--line);
+  box-shadow: 0 10px 22px rgba(22, 61, 63, .16);
+}
+.annotation-label .num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 20px; height: 20px; margin-right: 8px;
+  color: #fffaf2; background: var(--accent);
+  border-radius: 50%; font: 800 calc(11px * var(--font-scale))/1 var(--sans);
+}
+.annotation-label h4 { display: inline; margin: 0; color: var(--ink); font: 700 calc(13.5px * var(--font-scale))/1.4 var(--sans); }
+.annotation-label p { margin: 6px 0 0; color: var(--text); font: var(--body-weight) calc(12.5px * var(--font-scale))/1.6 var(--serif); }
+
+.gif-annotated .review-capture-frame { position: relative; }
+/* --mark-x／--mark-y 會同時移動圓點與連接線的起點（線的起點永遠跟著圓點走），
+   因此可以把「圓點＋線」當成一個整體一起搬動。 */
+.annotation-dot {
+  position: absolute; z-index: 5;
+  left: var(--dot-x, 50%); top: var(--dot-y, 50%);
+  transform: translate(var(--mark-x, 0px), var(--mark-y, 0px));
+  width: 14px; height: 14px; margin: -7px 0 0 -7px;
+  background: var(--accent); border: 2px solid #fffaf2; border-radius: 50%;
+  box-shadow: 0 0 0 4px rgba(196, 93, 56, .25);
+}
+.annotation-dot::after {
+  content: ""; position: absolute; inset: -7px; border-radius: 50%;
+  border: 2px solid var(--accent); opacity: .55;
+  animation: annotation-pulse 2.2s ease-out infinite;
+}
+@keyframes annotation-pulse {
+  0% { transform: scale(.7); opacity: .6; }
+  100% { transform: scale(1.9); opacity: 0; }
+}
+
+.annotation-line-layer { position: absolute; inset: 0; z-index: 4; pointer-events: none; }
+.annotation-line {
+  position: absolute; height: var(--line-w, 2px);
+  background: var(--line-color, var(--accent)); opacity: .75;
+  transform-origin: 0 50%;
+}
+@media (prefers-reduced-motion: reduce) {
+  .annotation-dot::after { animation: none; }
 }
 
 /* ============================================================================
@@ -935,6 +1012,12 @@ img { max-width: 100%; }
   .lay-acc > .acc-visual { order: 2; }
   .lay-visual, .acc-visual { position: relative; top: auto; }
   .visual-frame, .visual-frame-tall, .visual-frame-wide { height: 480px; min-height: 0; }
+  /* 小螢幕：空白區與連接線失去意義，卡片改為一般由上而下排列在 GIF 之前 */
+  .annotation-band { height: auto; display: grid; gap: 12px; margin-bottom: 18px; }
+  .annotation-label { position: static; width: 100%; }
+  .annotation-line-layer, .annotation-dot { display: none; }
+  .acc-panels.visual-frame, .acc-panels.visual-frame-tall, .acc-panels.visual-frame-wide { height: auto; }
+  .acc-panel.is-active { height: 480px; min-height: 0; }
   .route-info-window { right: 4%; left: 4%; width: auto; }
   .route-info-window-taiwan { top: 12px; bottom: auto; }
   .route-info-window-beijing { top: 12px; width: auto; }

@@ -401,12 +401,27 @@
                 <div class="title-row"><span class="option-number">5</span><h2>研究成果：「清代奏摺與上諭分析平台」</h2></div>
                 <div class="body">
                   <p>為處理以上的研究困難，本平台結合人工智能與視覺化工具，讓研究者既能從微觀層面分析單份文書，亦能重建宏觀的通信關係和資訊傳遞網絡。</p>
-                  <p>網站能夠載入大量文書，並運用人工智能提取特定資訊，供研究者核對和分析。網站同時透過時間線和關係網絡等視覺化工具，呈現皇帝與官員之間的文書傳遞關係及資訊流向。</p>
                 </div>
               </article>
-              <figure class="review-window visual-frame-wide review-capture-frame">
-                <img src="zhu40-review-tool-capture.gif" alt="研究成果平台互動示範：游標停留在硃40後開啟文書卡片，向下瀏覽原文，再開啟 AI 證據欄並瀏覽含原文標註的內容。" loading="lazy">
-              </figure>
+              <!-- GIF 示範＋浮動標註。位置與尺寸一律在 storymap-cards.css 調整。 -->
+              <div class="gif-annotated" data-gif-annotate>
+                <div class="annotation-band">
+                  <div class="annotation-label" data-label="1">
+                    <span class="num">1</span><h4>時間線與關係網絡</h4>
+                    <p>透過時間線與關係網絡等視覺化工具，呈現戰場事件、官員上奏與皇帝硃批下旨之間的文書傳遞關係及資訊流向。</p>
+                  </div>
+                  <div class="annotation-label" data-label="2">
+                    <span class="num">2</span><h4>AI 提取與人工核對</h4>
+                    <p>網站能夠載入大量文書，並運用人工智能提取特定資訊，與原文段落並置，供研究者逐項核對和分析。</p>
+                  </div>
+                </div>
+                <figure class="review-window visual-frame-wide review-capture-frame">
+                  <img src="zhu40-review-tool-capture.gif" alt="研究成果平台互動示範：游標停留在硃40後開啟文書卡片，向下瀏覽原文，再開啟 AI 證據欄並瀏覽含原文標註的內容。" loading="lazy">
+                  <span class="annotation-dot" data-dot="1"></span>
+                  <span class="annotation-dot" data-dot="2"></span>
+                </figure>
+                <div class="annotation-line-layer" data-line-layer></div>
+              </div>
             </div>
           </div>
         </section>

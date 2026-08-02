@@ -1,0 +1,193 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>16 · 研究成果 GIF 示範標註 — 選項 A 定稿</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 48px 24px 120px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 760px; margin: 0 0 40px; }
+  .demo-block { max-width: 1300px; margin: 0 auto 48px; }
+  .demo-note { font: 500 13.5px/1.6 var(--serif); color: var(--ink-soft); max-width: 780px; margin: 14px 0 0; }
+  .fake-para { max-width: 900px; margin: 0 0 28px; font: var(--body-weight, 500) 15px/1.85 var(--serif); color: var(--text); }
+  .fake-para em { font-style: normal; color: var(--muted); font: 700 11px var(--sans); letter-spacing: .1em; }
+
+  /* ==========================================================================
+     控制面板 — 之後套用到 storymap-cards.css 時用同一套變數名稱即可。
+
+     版面：說明卡片一列橫排在「段落文字」與「GIF」之間，不疊在圖片上，
+     也不會蓋住上面的段落文字（各自是獨立的區塊，卡片列只佔自己的高度）。
+     圓點標在圖片上對應的位置，細線由卡片下緣連到圓點。
+
+       --band-h     段落文字與 GIF 之間那塊「空白區」的高度（px）。
+                    卡片就放在這塊空白裡，因此不會蓋到段落文字或 GIF。
+
+       --label-x    卡片在空白區內的水平位置（百分比，0% = 最左）。
+       --label-y    卡片在空白區內的垂直位置（px，0 = 貼齊空白區頂端）。
+
+       --label-w    卡片寬度（px）。
+
+       --dot-x / --dot-y   圓點在「圖片本身」上的位置（百分比）。
+
+       --line-w / --line-color   連接線的粗細與顏色，預設 2px、同圓點顏色。
+
+     連接線的起點與終點完全由上面的卡片位置與圓點位置決定，兩者其中一個
+     移動了，線會自動重新計算角度和長度，不需要另外調整線本身。
+     ========================================================================== */
+
+  .gif-block { position: relative; }
+
+  /* 段落文字與 GIF 之間的空白區：這是一塊刻意留出來的空白，
+     卡片就浮在這塊空白裡面，因此不會蓋到上面的段落文字，也不會蓋到下面的 GIF。
+     空白區的高度用 --band-h 控制；卡片在裡面的位置用 --label-x / --label-y 控制。 */
+  .annotation-band {
+    position: relative;
+    height: var(--band-h, 170px);
+  }
+  .annotation-label {
+    position: absolute;
+    left: var(--label-x, 0%);
+    top: var(--label-y, 0px);
+    width: var(--label-w, 300px);
+    background: var(--card); border: 1px solid var(--line);
+    box-shadow: 0 10px 22px rgba(22,61,63,.16);
+    padding: 12px 14px;
+  }
+  .annotation-label .num {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 20px; height: 20px; margin-right: 8px;
+    background: var(--accent); color: #fffaf2;
+    font: 800 11px/1 var(--sans); border-radius: 50%;
+  }
+  .annotation-label h4 {
+    display: inline; margin: 0; color: var(--ink);
+    font: 700 13.5px/1.4 var(--sans);
+  }
+  .annotation-label p {
+    margin: 6px 0 0; color: var(--text);
+    font: 500 12.5px/1.6 var(--serif);
+  }
+
+  .gif-stage { position: relative; background: #f8f5ee; border: 1px solid var(--line); box-shadow: 0 12px 28px rgba(39,49,45,.1); }
+  .gif-stage img { display: block; width: 100%; height: auto; }
+
+  .line-layer { position: absolute; inset: 0; pointer-events: none; z-index: 4; }
+
+  .annotation-dot {
+    position: absolute;
+    left: var(--dot-x); top: var(--dot-y);
+    width: 14px; height: 14px; margin: -7px 0 0 -7px;
+    background: var(--accent); border: 2px solid #fffaf2; border-radius: 50%;
+    box-shadow: 0 0 0 4px rgba(196,93,56,.25);
+    z-index: 5;
+  }
+  .annotation-dot::after {
+    content: ""; position: absolute; inset: -7px; border-radius: 50%;
+    border: 2px solid var(--accent); opacity: .55;
+    animation: annotation-pulse 2.2s ease-out infinite;
+  }
+  @keyframes annotation-pulse {
+    0% { transform: scale(.7); opacity: .6; }
+    100% { transform: scale(1.9); opacity: 0; }
+  }
+
+  .annotation-line {
+    position: absolute; height: var(--line-w, 2px);
+    background: var(--line-color, var(--accent)); opacity: .75;
+    transform-origin: 0 50%;
+  }
+</style>
+</head>
+<body>
+
+  <h1>研究成果 GIF 示範｜浮動標註氣泡 — 選項 A 定稿</h1>
+  <p class="lead">
+    說明卡片改為橫排一列，放在段落文字與 GIF 之間，各自佔自己的高度，
+    不疊在圖片上，也不會蓋住上面的段落。圓點標在圖片對應位置，細線由卡片連下去。
+  </p>
+
+  <div class="demo-block">
+    <p class="fake-para"><em>（示意上方段落文字）</em><br>
+      網站能夠載入大量文書，並運用人工智能提取特定資訊，供研究者核對和分析。網站同時透過時間線和關係網絡等視覺化工具，呈現皇帝與官員之間的文書傳遞關係及資訊流向。</p>
+
+    <div class="gif-block" id="frame-a">
+      <div class="annotation-band" style="--band-h:180px;">
+        <div class="annotation-label" data-label="1" style="--label-x:6%; --label-y:10px; --label-w:300px;">
+          <span class="num">1</span><h4>時間線與關係網絡</h4>
+          <p>左側以時間線標示戰場事件、官員上奏與皇帝硃批下旨，並用連線呈現文書之間的傳遞關係與資訊流向。</p>
+        </div>
+        <div class="annotation-label" data-label="2" style="--label-x:58%; --label-y:10px; --label-w:320px;">
+          <span class="num">2</span><h4>AI 提取與人工核對</h4>
+          <p>載入文書原文後，AI 自動提取重點資訊並以標註形式對照原文段落，供研究者逐項核對真確性。</p>
+        </div>
+      </div>
+
+      <div class="gif-stage">
+        <img src="demo-review-tool-fullview.png" alt="研究成果平台示範截圖">
+        <span class="annotation-dot" data-dot="1" style="--dot-x:16%; --dot-y:60%;"></span>
+        <span class="annotation-dot" data-dot="2" style="--dot-x:72%; --dot-y:46%;"></span>
+      </div>
+
+      <div class="line-layer" id="line-layer-a"></div>
+    </div>
+    <p class="demo-note">
+      調整每張卡片的 <code>--label-x</code>（水平位置）讓它大致落在對應圓點的上方，
+      調整圖片上的 <code>--dot-x / --dot-y</code> 對準正確區塊，存檔重新整理即可看到線自動重新連接。
+    </p>
+  </div>
+
+  <script>
+    // 依 data-dot / data-label 的編號配對，找出每一組圓點與卡片，
+    // 自動計算連接線的角度與長度並畫在 .line-layer 裡（覆蓋整個卡片列＋圖片區）。
+    function updateConnectors(block, layer) {
+      layer.innerHTML = '';
+      const blockRect = block.getBoundingClientRect();
+
+      block.querySelectorAll('[data-dot]').forEach(dot => {
+        const id = dot.getAttribute('data-dot');
+        const label = block.querySelector(`[data-label="${id}"]`);
+        if (!label) return;
+
+        const dotRect = dot.getBoundingClientRect();
+        const labelRect = label.getBoundingClientRect();
+
+        const dx = (dotRect.left + dotRect.width / 2) - blockRect.left;
+        const dy = (dotRect.top + dotRect.height / 2) - blockRect.top;
+
+        // 連到卡片邊框上「離圓點最近」的那一點（通常是卡片底邊），
+        // 這樣線不會穿過卡片文字。
+        const lx = Math.max(labelRect.left, Math.min(dotRect.left + dotRect.width / 2, labelRect.right)) - blockRect.left;
+        const ly = Math.max(labelRect.top, Math.min(dotRect.top + dotRect.height / 2, labelRect.bottom)) - blockRect.top;
+
+        const length = Math.hypot(lx - dx, ly - dy);
+        const angle = Math.atan2(ly - dy, lx - dx) * 180 / Math.PI;
+
+        const line = document.createElement('span');
+        line.className = 'annotation-line';
+        line.style.left = dx + 'px';
+        line.style.top = dy + 'px';
+        line.style.width = length + 'px';
+        line.style.transform = `rotate(${angle}deg)`;
+        layer.appendChild(line);
+      });
+    }
+
+    const frameA = document.getElementById('frame-a');
+    const layerA = document.getElementById('line-layer-a');
+    const img = frameA.querySelector('img');
+    const run = () => updateConnectors(frameA, layerA);
+    if (img.complete) run(); else img.addEventListener('load', run);
+    window.addEventListener('resize', run);
+    new ResizeObserver(run).observe(frameA);
+  </script>
+
+</body>
+</html>

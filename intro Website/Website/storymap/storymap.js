@@ -645,6 +645,86 @@ const initRouteMap = (map) => {
 };
 document.querySelectorAll('[data-route-map]').forEach(initRouteMap);
 
+/* ---------------------------------------------------------------------------
+   GIF 示範的浮動標註：把每張說明卡片連到 GIF 上對應的圓點。
+   卡片與圓點的位置都由 storymap-cards.css 的變數決定，這裡只負責依照兩者
+   當下的實際位置，計算連接線的角度與長度並畫出來；視窗縮放或版面變動時
+   會自動重畫，因此不需要在 CSS 裡手動指定線的座標。
+   --------------------------------------------------------------------------- */
+const initGifAnnotations = (block) => {
+  const layer = block.querySelector('[data-line-layer]');
+  if (!layer) return;
+
+  const draw = () => {
+    layer.innerHTML = '';
+    // 小螢幕已改為單欄排列並隱藏連接線，不需要計算。
+    if (window.getComputedStyle(layer).display === 'none') return;
+
+    const blockRect = block.getBoundingClientRect();
+
+    block.querySelectorAll('[data-dot]').forEach((dot) => {
+      const label = block.querySelector(`[data-label="${dot.getAttribute('data-dot')}"]`);
+      if (!label) return;
+
+      const dotRect = dot.getBoundingClientRect();
+      const labelRect = label.getBoundingClientRect();
+      const dotCx = dotRect.left + dotRect.width / 2;
+      const dotCy = dotRect.top + dotRect.height / 2;
+
+      // 自動計算的起點（圓點）與終點（卡片邊框上離圓點最近的一點，
+      // 通常是卡片底邊，這樣線不會穿過卡片文字）。
+      let dx = dotCx - blockRect.left;
+      let dy = dotCy - blockRect.top;
+      let lx = Math.max(labelRect.left, Math.min(dotCx, labelRect.right)) - blockRect.left;
+      let ly = Math.max(labelRect.top, Math.min(dotCy, labelRect.bottom)) - blockRect.top;
+
+      // 手動微調（全部可省略，省略時就是上面的自動結果）。
+      // 數值寫在 storymap-cards.css：整組「圓點＋線」的設定寫在圓點的區塊，
+      // 卡片端的微調寫在卡片的區塊；兩邊都會被讀取。
+      const dotStyle = window.getComputedStyle(dot);
+      const labelStyle = window.getComputedStyle(label);
+      const num = (name) => {
+        const raw = (dotStyle.getPropertyValue(name) || labelStyle.getPropertyValue(name)).trim();
+        if (!raw) return null;
+        const value = parseFloat(raw);
+        return Number.isFinite(value) ? value : null;
+      };
+
+      // 註：--mark-x／--mark-y 由 CSS 直接位移圓點，圓點的實際座標已經含在
+      // dotRect 裡，所以線的起點會自動跟著一起移動，這裡不必再加一次。
+
+      // --line-from-x／--line-from-y：只移動線的起點，圓點不動
+      dx += num('--line-from-x') || 0;
+      dy += num('--line-from-y') || 0;
+      // --line-to-x／--line-to-y：把線的「終點」（卡片端）平移幾 px
+      lx += num('--line-to-x') || 0;
+      ly += num('--line-to-y') || 0;
+
+      // --line-angle：直接指定線的角度（度，0 = 向右、90 = 向下）
+      // --line-length：直接指定線的長度（px）
+      const autoAngle = Math.atan2(ly - dy, lx - dx) * 180 / Math.PI;
+      const autoLength = Math.hypot(lx - dx, ly - dy);
+      const angle = num('--line-angle');
+      const length = num('--line-length');
+
+      const line = document.createElement('span');
+      line.className = 'annotation-line';
+      line.style.left = `${dx}px`;
+      line.style.top = `${dy}px`;
+      line.style.width = `${length === null ? autoLength : length}px`;
+      line.style.transform = `rotate(${angle === null ? autoAngle : angle}deg)`;
+      layer.appendChild(line);
+    });
+  };
+
+  const img = block.querySelector('img');
+  if (img && !img.complete) img.addEventListener('load', draw);
+  window.addEventListener('resize', draw);
+  if (typeof ResizeObserver === 'function') new ResizeObserver(draw).observe(block);
+  draw();
+};
+document.querySelectorAll('[data-gif-annotate]').forEach(initGifAnnotations);
+
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);

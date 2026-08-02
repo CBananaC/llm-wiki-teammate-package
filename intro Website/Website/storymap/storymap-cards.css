@@ -57,6 +57,51 @@
                  如需個別頁面上限，可在該頁 JSON 加入 bodyMaxHeight，例如
                  "bodyMaxHeight": "70%"。圖片區本身仍維持固定視覺框高度。
 
+    --panel-h    只用於「小卡展開＋對應元素」的小節（引言 03、06）。
+                 為其中「某一張」面板單獨指定固定高度（px）。
+                 例：點開第一張小卡時右邊要 420px、第二張要 640px，就分別設定。
+                 沒有設定的面板，仍沿用該節的 --visual-h／--visual-x。
+                 寫法是在該節區塊下面另加一行，用 [data-acc-panel="名稱"] 指定：
+
+                   #intro-1-3-a .acc-panel[data-acc-panel="difficulty-relations"] {
+                     --panel-h: 640px;
+                   }
+
+                 每張面板的高度是各自獨立的：先看 B 再切回 A，A 一定回到
+                 A 自己的高度，不會被 B 撐大。下面各節已列出可用的面板名稱。
+
+    GIF 浮動標註（目前只用於引言 05 的工具示範 GIF）：
+                 段落文字與 GIF 之間會留出一塊空白區，說明卡片浮在這塊空白裡，
+                 因此不會蓋到段落文字，也不會蓋到 GIF 畫面本身。
+
+                 --band-h                 空白區的高度（px）。卡片放不下就調大。
+                 --label-x / --label-y    卡片在空白區內的位置
+                                          （水平為百分比、垂直為 px，0 = 貼齊空白區頂端）。
+                 --label-w                卡片寬度（px）。
+                 --dot-x / --dot-y        指標圓點在 GIF 上的位置（百分比），
+                                          請對準畫面中要說明的那個區塊。
+                 --line-w / --line-color  連接線的粗細與顏色。
+
+                 連接線預設會自動從圓點連到卡片，移動卡片或圓點就自動重連，
+                 一般不必理會。若自動的結果不理想，可以手動微調。
+                 每一個標註都是各自獨立設定的（1 號改了不會影響 2 號），
+                 寫在該標註自己的區塊裡即可。
+
+                 寫在「圓點」的區塊（#intro-1-5 .annotation-dot[data-dot="N"]）：
+                 --mark-x / --mark-y            整組「圓點＋線」一起往右／往下
+                                                移動幾 px（線的起點永遠跟著圓點）
+                 --line-length                  線的長度（px）
+                 --line-angle                   線的角度（度數，
+                                                0 = 向右、90 = 向下、-90 = 向上）
+
+                 寫在「卡片」的區塊（#intro-1-5 .annotation-label[data-label="N"]）：
+                 --line-from-x / --line-from-y  只移動線的起點，圓點不動
+                 --line-to-x   / --line-to-y    移動線的終點（卡片端）
+
+                 注意：--line-length 與 --line-angle 是完全接手，寫了之後線
+                 就不再自動連到卡片；只想小幅修正時建議改用平移類的設定。
+                 下面「引言 05」區塊後面已列出兩個標註各自的實際設定。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -78,9 +123,9 @@
 #intro-1-1 {
   --vis-w: 50%;
   --card-accent: #b66d48;
-  --visual-h: 900px;           /* 畫廊固定高度，與文字欄相近 */
-  --gallery-fit: contain;      /* 整組畫廊預設：完整顯示（改 cover 則裁切填滿框） */
-  --gallery-position: center;  /* 整組畫廊預設對齊位置 */
+  --visual-h: 900px;          /*畫廊固定高度，與文字欄相近 */
+  --gallery-fit: contain;     /*整組畫廊預設：完整顯示（改 cover 則裁切填滿框） */
+  --gallery-position: center; /*整組畫廊預設對齊位置 */
 }
 
 /* 研究價值卡片與制度卡片之間保留額外上方留白 */
@@ -102,8 +147,8 @@
   --card-accent: #ad7a35;
 
  /* 硃119 文書面板：集中在這裡調整，不必改動共用 storymap.css。 */
-  --source-panel-width: 100%;
-  --source-panel-height: 700px;
+  --source-panel-width: 110%;
+  --source-panel-height: 1000px;
   --source-panel-margin-top: clamp(30px, 4.5vh, 56px);
   --source-panel-margin-right: 0px;
   --source-panel-margin-bottom: 0px;
@@ -113,6 +158,13 @@
   --source-panel-source-space: clamp(122px, 19%, 184px);
   --source-panel-mobile-top-gap: 86px;
 }
+
+/* 引言 03 的三張面板，可各自指定固定高度（不寫則沿用上面的 --visual-x）。
+   面板名稱依小卡順序：01 difficulty-quantity／02 difficulty-relations／
+   03 difficulty-network。 */
+#intro-1-3-a .acc-panel[data-acc-panel="difficulty-quantity"]  {--panel-h: 520px; }
+#intro-1-3-a .acc-panel[data-acc-panel="difficulty-relations"] {--panel-h: 640px; }
+#intro-1-3-a .acc-panel[data-acc-panel="difficulty-network"]   {--panel-h: 900px;}
 
 /* 4 — 以數位方法研究清代奏折和上諭｜文字在上、比較表在下
        （表格為滿版，沒有寬度可調） */
@@ -128,6 +180,73 @@
 #intro-1-5 {
   --visual-scale: 1;
   --card-accent: #c46a2b;
+
+  /* GIF 浮動標註：段落文字與 GIF 之間空白區的高度。
+     卡片就浮在這塊空白裡，因此不會蓋到段落文字，也不會蓋到 GIF。
+     卡片放不下時把這個數字調大即可。 */
+  --band-h: 180px;
+
+  /* 連接線的粗細與顏色（線的位置由卡片與圓點自動決定，不需手動設定）。 */
+  --line-w: 2px;
+  --line-color: #c45d38;
+}
+
+/* 標註 1｜時間線與關係網絡
+   --label-x / --label-y：卡片在空白區內的位置（水平百分比／垂直 px）
+   --label-w：卡片寬度
+   --dot-x / --dot-y：圓點在 GIF 上的位置（百分比，對準畫面左側時間線） */
+#intro-1-5 .annotation-label[data-label="1"] {
+  --label-x: 4%;
+  --label-y: 8px;
+  --label-w: 320px;
+
+/*線的手動微調（不需要就整段留著註解即可，維持自動連接）：*/
+  --line-from-x: 0px;
+  --line-from-y: 0px;
+  --line-to-x: 0px;
+  --line-to-y: 0px;
+  --line-length: 200px;
+  --line-angle: -90;
+
+}
+#intro-1-5 .annotation-dot[data-dot="1"] {
+  --dot-x: 16%;
+  --dot-y: 60%;
+
+  /* 「圓點＋線」整組一起調整（不需要就留著註解）：
+     --mark-x／--mark-y  整組往右／往下移動幾 px（圓點與線一起動）
+     --line-length       線的長度（px）
+     --line-angle        線的角度（度，0 = 向右、90 = 向下、-90 = 向上）
+  --mark-x: 0px;
+  --mark-y: 0px;
+  --line-length: 220px;
+  --line-angle: -90;
+  */
+}
+
+/* 標註 2｜AI 提取與人工核對（對準畫面右側 AI 證據欄） */
+#intro-1-5 .annotation-label[data-label="2"] {
+  --label-x: 56%;
+  --label-y: 8px;
+  --label-w: 340px;
+
+  /* 線的手動微調（不需要就整段留著註解即可，維持自動連接）：
+  --line-from-x: 0px;
+  --line-from-y: 0px;
+  --line-to-x: 0px;
+  --line-to-y: 0px;
+  */
+}
+#intro-1-5 .annotation-dot[data-dot="2"] {
+  --dot-x: 72%;
+  --dot-y: 46%;
+
+  /* 「圓點＋線」整組一起調整（不需要就留著註解）：
+  --mark-x: 0px;
+  --mark-y: 0px;
+  --line-length: 220px;
+  --line-angle: -90;
+  */
 }
 #intro-1-5 > .story-inner {
   width: min(2200px, 100%);
