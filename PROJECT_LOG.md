@@ -6060,6 +6060,248 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-02 09:51 HKT — Codex — Unify StoryMap photo galleries and enlarged-image interaction
+
+Summary: Converted the standalone research-difficulty and case-background
+photos to the shared image-plus-information gallery UI; added tap/click
+enlargement for route-gallery images; and isolated per-image fit, position, and
+zoom settings so switching images cannot carry over another image's size or
+crop.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap.js`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `node --check` for the StoryMap and embedded-tool JavaScript,
+`git diff --check`, targeted gallery/lightbox/settings checks, and HTML
+tag-balance validation.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 10:00 HKT — Codex — Reset gallery area when switching pages
+
+Summary: Fixed the gallery page-switch state so a touch-expanded information
+panel is collapsed before the next image is rendered. The panel scroll
+position and optional per-page body-height override are also reset, preventing
+a longer page from leaving its expanded area on a shorter page.
+
+Files: `intro Website/Website/storymap/storymap.js`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `node --check Website/storymap/storymap.js` and
+`git diff --check`; confirmed the page-switch reset logic is present.
+
+Remaining: Browser visual and touch interaction QA remains to be performed in
+the local HTTP preview. No formal or sample review state was touched; no push
+was performed.
+
+### 2026-08-02 10:03 HKT — Codex — Make expanded gallery height page-specific
+
+Summary: Removed the shared fixed `32%` expanded-body height that forced every
+gallery page to occupy the same area. Expanded panels now use each page's
+natural description height with a configurable maximum, while the image stage
+remains fixed. The page-switch reset remains in place.
+
+Files: `intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap.js`,
+`intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `node --check Website/storymap/storymap.js` and
+`git diff --check`; confirmed the shared `32%` rule is removed and the
+page-specific max-height rule is active.
+
+Remaining: Browser visual and touch interaction QA remains to be performed in
+the local HTTP preview. No formal or sample review state was touched; no push
+was performed.
+
+### 2026-08-02 10:13 HKT — Codex — Merge the research-difficulty table category
+
+Summary: Merged the four research-tool rows under one vertically merged
+category label, 通信關係、資訊流向複雜. The AI, AI Skills, Python 文本搜尋,
+and 互動式網站 tools and explanations were preserved, and the merged label is
+vertically centered.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the old table labels are removed and `rowspan="4"` is
+present; passed StoryMap JavaScript syntax and `git diff --check` validation.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP
+preview. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 10:15 HKT — Codex — Split the research-difficulty table into two merged groups
+
+Summary: Corrected the table to use two separate two-row groups:
+史料數量龐大 for rows 1–2, and 通信關係、資訊流向複雜 for rows 3–4.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed exactly two `rowspan="2"` category cells are present;
+passed StoryMap JavaScript syntax and `git diff --check` validation.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP
+preview. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 10:22 HKT — Codex — Standardize inline citations in the reference UI
+
+Summary: Converted the inline citations for 莊吉發, 戴英從, and 許毓良 to the
+requested parenthetical format `(作者，《書名》，年份)`, linked each citation
+to `references.html` through the existing `inline-reference` styling, and added
+the missing 莊吉發 and 許毓良 reference entries.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/references.html`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed all three citation links and reference anchors are present;
+passed StoryMap JavaScript syntax and `git diff --check` validation.
+
+Remaining: Browser visual QA of the citation links remains to be performed in
+the local HTTP preview. No formal or sample review state was touched; no push
+was performed.
+
+### 2026-08-02 10:31 HKT — Codex — Add gallery image references
+
+Summary: Added the supplied Chinese-style bibliographic references to gallery 1
+image 1 and image 3, the National Palace Museum reference to 研究清代奏折的
+主要困難 image 1, and the National Cultural Memory Bank reference to
+示範案例：林爽文民變 image 1. External links and the supplied 2026/08/02
+browsing date were preserved.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed all four gallery source objects contain citation text and a
+link; passed StoryMap JavaScript syntax and `git diff --check` validation.
+
+Remaining: Browser visual QA of the expanded gallery references remains to be
+performed in the local HTTP preview. No formal or sample review state was
+touched; no push was performed.
+
+### 2026-08-02 09:36 HKT — Codex — Widen the research-results and case-study introductions
+
+Summary: Extended the title and introductory text block in 研究成果：「清代奏摺與
+上諭分析平台」 and the title/introduction block in 示範案例：林爽文民變
+（1786-1788） to the full content width. Visual panels and expandable cards were
+preserved.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed both section-specific full-width rules; passed StoryMap and
+embedded-tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 09:20 HKT — Codex — Fix collapsed gallery information height
+
+Summary: Changed the gallery image stage to fill the available height when the
+information panel is collapsed. The information panel is now auto-height by
+default and restores its expanded height only on hover, focus, or touch
+expansion.
+
+Files: `intro Website/Website/storymap/storymap.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the collapsed and expanded gallery flex rules; passed
+StoryMap and embedded-tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 09:18 HKT — Codex — Make the second-card spacing explicit
+
+Summary: Added an explicit responsive `margin-top` directly to the `清代奏折的研究價值`
+card and reinforced it with a section-specific `!important` rule, making the
+visible separation independent of the shared grid-gap styling.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed both margin rules are present; passed StoryMap and embedded-
+tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 09:16 HKT — Codex — Strengthen the section 4 full-width override
+
+Summary: Strengthened the section 4 rule so both the introductory block and its
+body explicitly use `width: 100%` and no `max-width` constraint.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed both section-specific width rules are present; passed
+StoryMap and embedded-tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 09:14 HKT — Codex — Widen the digital-methods introduction
+
+Summary: Extended the `因此，研究奏摺時` introductory text in section 4 to
+the full content width of the website while leaving the title and comparison
+table unchanged.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the section-specific full-width rule; passed StoryMap and
+embedded-tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 09:13 HKT — Codex — Add spacing above the research-value card
+
+Summary: Added dedicated responsive top margin above the `清代奏折的研究價值`
+card.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the second-card margin rule; passed StoryMap and embedded-
+tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
+### 2026-08-02 09:11 HKT — Codex — Combine the制度與研究價值 cards under one gallery
+
+Summary: Moved `清代奏折的研究價值` into the `清代奏折制度` section as a
+second stacked text card, reused the existing three-image gallery for both
+cards, and removed the separate research-value gallery section. The navigation
+target now points to the moved card.
+
+Files: `intro Website/Website/storymap/storymap-example.html`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/Website/storymap/storymap-cards.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap and embedded-tool JavaScript syntax checks,
+`git diff --check`, combined-section/gallery/navigation checks, and HTML
+tag-balance validation.
+
+Remaining: Browser visual and interaction QA remains to be performed in the
+local HTTP preview. No formal or sample review state was touched; no push was
+performed.
+
 ### 2026-08-01 18:37 HKT — Codex — Remove hand-built mock-panel labels
 
 Summary: Removed all visible `HAND-BUILT MOCK PANEL / 文書研究平台` labels from
@@ -6128,6 +6370,26 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-02 10:45 HKT — Codex — Remove browsing dates from gallery references
+
+Summary: Removed all browsing-date text from the five StoryMap gallery source labels while preserving their citation details and clickable links.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed no `瀏覽日期` remains in the gallery references and passed `git diff --check`.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 10:37 HKT — Codex — Apply PolyU full-reference format to gallery sources
+
+Summary: Reformatted all five StoryMap gallery source labels according to the supplied PolyU Chinese thesis style, preserving the supplied links and browsing date.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and targeted validation confirming all five reference strings.
+
+Remaining: Browser visual QA of expanded gallery references remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-01 18:15 HKT — Codex — Match the communication-difficulty point form
 
 Summary: Changed the two questions in 通信關係複雜 from a numbered list to the
@@ -6145,3 +6407,12 @@ tag-balance validation.
 Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
+### 2026-08-02 11:25 HKT — Codex — Load the 硃40 review capture into the research-results card
+
+Summary: Replaced the hand-built research-results placeholder with the current light-mode 硃40 review-tool GIF, added it as a local StoryMap asset, and preserved the 2048×1080 aspect ratio.
+
+Files: `intro Website/Website/storymap/zhu40-review-tool-capture.gif`, `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap and embedded-tool JavaScript syntax checks and `git diff --check`. Browser QA confirmed one visible GIF image in the section, loaded successfully at its expected 2048×1080 natural dimensions, with the intended wide light-mode presentation.
+
+Remaining: None for this insertion. No formal or sample review state was touched; no push was performed.

@@ -50,6 +50,13 @@
                  --photo-zoom 不寫則預設 1（不放大）。
                  下面「引言 01」區塊後面已附上一個實際範例，可直接參考修改。
 
+    --gallery-body-max-h
+                 說明區展開時的最大高度，預設為整組畫廊高度的 62%。
+                 展開後實際高度依每一張圖片自己的說明文字而定：短說明只佔
+                 較小區域，長說明才會增加高度；超過最大高度時在說明區內捲動。
+                 如需個別頁面上限，可在該頁 JSON 加入 bodyMaxHeight，例如
+                 "bodyMaxHeight": "70%"。圖片區本身仍維持固定視覺框高度。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -67,7 +74,7 @@
 
 /* ============================== 引言 ===================================== */
 
-/* 1 — 清代奏折制度｜文字在左、圖片畫廊在右 */
+/* 1 — 清代奏折制度／研究價值｜文字在左、共用圖片畫廊在右 */
 #intro-1-1 {
   --vis-w: 50%;
   --card-accent: #b66d48;
@@ -76,6 +83,9 @@
   --gallery-position: center;  /* 整組畫廊預設對齊位置 */
 }
 
+/* 研究價值卡片與制度卡片之間保留額外上方留白 */
+#intro-1-2 { margin-top: clamp(24px, 2.2vw, 40px) !important; }
+
 /* 引言 01・第 2 張圖片（遞送奏摺／路線圖）：原圖是一整頁掃描，地圖本身只佔
    頁面一小部分，因此改用 cover 裁切並放大，讓地圖填滿整個框，而不是縮成
    小圖飄在大片空白中。 */
@@ -83,13 +93,6 @@
   --photo-fit: contain;
   --photo-position: center 42%;
   --photo-zoom: 1;
-}
-
-/* 2 — 清代奏折上諭的研究價值｜文字在左、照片在右 */
-#intro-1-2 {
-  --vis-w: 60%;
-  --visual-x: 1;
-  --card-accent: #a45e4c;
 }
 
 /* 3 — 研究清代奏折的主要困難｜左側小卡展開、右側對應畫面 */
@@ -104,6 +107,8 @@
 #intro-1-4 {
   --card-accent: #7e6a39;
 }
+#intro-1-4 .blk { width: 100%; max-width: none !important; }
+#intro-1-4 .body { width: 100%; max-width: none; }
 
 /* 5 — 研究成果：「清代奏摺與上諭分析平台」｜文字在上、工具畫面滿版在下
        （文字與元素上下排列，沒有並排的文字欄可作基準，
@@ -112,6 +117,22 @@
   --visual-h: 680px;
   --card-accent: #c46a2b;
 }
+#intro-1-5 .blk { width: 100%; max-width: none !important; }
+#intro-1-5 .review-capture-frame {
+  height: auto;
+  aspect-ratio: 2048 / 1080;
+  min-height: 320px;
+  display: grid;
+  place-items: center;
+  background: #f8f5ee;
+}
+#intro-1-5 .review-capture-frame img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  background: #f8f5ee;
+}
 
 /* 6 — 示範案例：林爽文民變（1786-1788）｜左側小卡展開、右側對應畫面 */
 #intro-1-6-a-source {
@@ -119,6 +140,7 @@
   --visual-x: 1;
   --card-accent: #c7543f;
 }
+#intro-1-6-a-source > .story-inner > .blk { width: 100%; max-width: none !important; }
 
 /* 編號方塊沿用各節的強調色作漸層底（一般不需修改） */
 .story .option-number {

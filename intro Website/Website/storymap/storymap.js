@@ -328,6 +328,10 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     const img = document.createElement('img');
     img.src = page.image;
     img.alt = page.alt || '';
+    /* 每張圖片保留自己的顯示設定；切換圖片時不會沿用上一張的尺寸或裁切方式。 */
+    if (page.fit) img.style.setProperty('--photo-fit', page.fit);
+    if (page.position) img.style.setProperty('--photo-position', page.position);
+    if (page.zoom) img.style.setProperty('--photo-zoom', String(page.zoom));
     /* 每張圖片的裁切／對齊／縮放一律在 storymap-cards.css 用
        :nth-of-type(N) 設定（N = 第幾張，從 1 開始），不在這裡處理，
        避免行內樣式蓋過 CSS 設定而難以調整。 */
@@ -361,6 +365,13 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
         frame.hidden = i !== index;
       });
       counter.textContent = `圖 ${index + 1} / ${frames.length}`;
+      /* A touch-expanded page must not leave its larger information area on
+         the next page.  Reset the transient state before rendering the new
+         page; a desktop hover can still expand it again naturally. */
+      body.classList.remove('is-expanded');
+      body.scrollTop = 0;
+      if (pages[index].bodyMaxHeight) body.style.setProperty('--gallery-body-max-h', pages[index].bodyMaxHeight);
+      else body.style.removeProperty('--gallery-body-max-h');
       renderBody(pages[index]);
     };
     prevBtn.addEventListener('click', () => show(index - 1));
@@ -376,6 +387,11 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   }
 
   function renderBody(page) {
+    /* Keep each page's optional layout override independent.  This also
+       makes a page with a short description return to its own area after a
+       previous page with a longer description was expanded. */
+    body.classList.remove('is-expanded');
+    body.scrollTop = 0;
     const paras = (page.paragraphs || []).map((p) => `<p class="photo-gallery-desc">${p}</p>`).join('');
     const source = page.source
       ? `<p class="photo-gallery-source"><a href="${page.source.href}" target="_blank" rel="noopener noreferrer">${page.source.text} ↗</a></p>`
@@ -467,6 +483,10 @@ const initRouteMap = (map) => {
     const page = routeGalleryPages[state.page];
     galleryImage.src = page.image;
     galleryImage.alt = page.alt;
+    ['fit', 'position', 'zoom'].forEach((key) => galleryImage.style.removeProperty(`--route-photo-${key}`));
+    if (page.fit) galleryImage.style.setProperty('--route-photo-fit', page.fit);
+    if (page.position) galleryImage.style.setProperty('--route-photo-position', page.position);
+    if (page.zoom) galleryImage.style.setProperty('--route-photo-zoom', String(page.zoom));
     galleryTitle.textContent = page.title;
     galleryText.textContent = page.text;
     gallerySource.textContent = page.source;
@@ -521,6 +541,10 @@ const initRouteMap = (map) => {
     taiwanPin.setAttribute('aria-expanded', 'false');
   });
   beijingInfo.querySelector('[data-route-close]').addEventListener('click', () => { beijingInfo.hidden = true; });
+  galleryImage.addEventListener('click', () => {
+    const page = routeGalleryPages[state.page];
+    photoLightbox.open(page.image, page.alt, `${page.title}｜${page.source}`, galleryImage);
+  });
   galleryPrevious.addEventListener('click', () => renderGalleryPage(state.page - 1));
   galleryNext.addEventListener('click', () => {
     if (state.page < routeGalleryPages.length - 1) {

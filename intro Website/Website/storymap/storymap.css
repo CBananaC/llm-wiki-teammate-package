@@ -317,6 +317,7 @@ img { max-width: 100%; }
 .lay-split.text-left > .lay-visual { grid-column: 2; }
 .lay-visual { position: sticky; top: calc(var(--bar-h) + 12px); min-width: 0; }
 .lay-copy { min-width: 0; }
+.lay-copy-stack { display: grid; gap: var(--col-gap); }
 /* 工具展示使用最大的框架 */
 .tool-section { --vis-w: 70%; }
 
@@ -386,6 +387,7 @@ img { max-width: 100%; }
 .method-table tbody tr:nth-child(even) { background: rgba(22, 61, 63, .032); }
 .method-table tbody tr:last-child td { border-bottom: 0; }
 .method-table td:first-child { color: var(--accent); font-weight: 600; }
+.method-table td[rowspan] { vertical-align: middle; }
 
 /* ============================================================================
    7b · 圖片畫廊：左右翻頁、乾淨圖片、下方長描述＋底部引註
@@ -396,6 +398,9 @@ img { max-width: 100%; }
   display: flex; flex-direction: column; width: 100%;
   background: var(--card); border: 1px solid var(--line); overflow: hidden;
 }
+.acc-panel .photo-gallery { height: 100%; min-height: 0; border: 0; }
+/* 收合時圖片區填滿剩餘高度；說明區只佔標題和提示文字的高度。
+   hover／focus／觸控展開時，說明區才恢復 --gallery-body-h 的高度。 */
 .photo-gallery-stage { position: relative; flex: 1 1 auto; min-height: 0; overflow: hidden; background: #e8e1d6; }
 .photo-gallery-frame { position: absolute; inset: 0; opacity: 0; transition: opacity .32s ease; pointer-events: none; }
 .photo-gallery-frame.is-active { opacity: 1; pointer-events: auto; }
@@ -463,11 +468,22 @@ img { max-width: 100%; }
   font: 700 calc(11px * var(--font-scale))/1.2 var(--sans); letter-spacing: .07em;
 }
 
-/* 說明區：預設只顯示標題；滑鼠移入（或鍵盤聚焦）後展開完整描述與引註 */
+/* 說明區：預設只顯示標題；滑鼠移入（或鍵盤聚焦）後才增加高度並展開完整描述與引註。 */
 .photo-gallery-body {
-  flex: 0 0 auto; border-top: 1px solid var(--line);
+  flex: 0 0 auto; min-height: 0; overflow: hidden;
+  border-top: 1px solid var(--line);
   padding: clamp(16px, 1.8vw, 22px) clamp(20px, 2.4vw, 28px);
   cursor: default;
+}
+.photo-gallery-body:hover,
+.photo-gallery-body:focus-within,
+.photo-gallery-body.is-expanded {
+  /* Let each page determine its own expanded height from its content.  The
+     image stage remains the fixed visual area; a long description is capped
+     and scrolls instead of making the next page inherit its height. */
+  flex: 0 0 auto;
+  max-height: var(--gallery-body-max-h, 62%);
+  overflow-y: auto;
 }
 .photo-gallery-title {
   margin: 0; font: 500 clamp(18px, 1.8vw, 23px)/1.3 var(--serif); letter-spacing: -.02em;
@@ -549,7 +565,13 @@ img { max-width: 100%; }
 .route-info-close:hover, .route-info-close:focus-visible { color: #ed2f14; }
 .route-gallery { display: grid; grid-template-columns: 42% minmax(0, 1fr); gap: 14px; align-items: start; }
 .route-gallery-figure { height: 168px; margin: 0; overflow: hidden; background: #e7e0d4; }
-.route-gallery-figure img { display: block; width: 100%; height: 100%; object-fit: cover; }
+.route-gallery-figure img {
+  display: block; width: 100%; height: 100%;
+  object-fit: var(--route-photo-fit, cover);
+  object-position: var(--route-photo-position, center);
+  transform: scale(var(--route-photo-zoom, 1));
+  cursor: zoom-in;
+}
 .route-gallery-copy { min-width: 0; padding-top: 4px; }
 .route-info-kicker { margin: 0 0 7px; color: #a34b38; font: 700 calc(11px * var(--font-scale))/1.35 var(--sans); letter-spacing: .08em; }
 .route-info-window h3 { margin: 0 26px 8px 0; color: var(--ink); font: 600 calc(19px * var(--font-scale))/1.25 var(--serif); }
