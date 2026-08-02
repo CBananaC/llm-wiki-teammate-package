@@ -2594,3 +2594,26 @@ Verified:
 
 Remaining:
 - None for this alternating-label correction. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 00:46 HKT — Codex — Add requested case-study source images
+
+Summary:
+- Replaced the 02「林爽文民變中的資訊傳遞」visual with the requested single military-report route image, linked to `Fizzy Background.pdf`.
+- Replaced the 03「史料來源」mock panel with a two-image gallery showing the cover page from volume 30 of《明清臺灣檔案彙編》and the first page of《天地會》（一）.
+- Added web preview PNGs rendered from the two requested cover PDFs; the original PDFs remain the linked source files.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/gallery-mingqing-taiwan-volume30-cover.png`
+- `Website/storymap/gallery-tiandihui-1-cover.png`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Rendered and visually inspected the first pages of the requested PDFs.
+- Confirmed the 02 gallery data contains 1 image and the 03 gallery data contains 2 images.
+- Passed `node --check Website/storymap/storymap.js`, `node --check Website/embedded-tool/review-tool-embed.js`, and `git diff --check`.
+
+Remaining:
+- Local HTTP/browser visual QA passed and local checkpoint `06ce1d6` was created. Formal and sample review data remain untouched; no push was performed.

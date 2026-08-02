@@ -158,6 +158,17 @@
   --visual-x: 1;
   --card-accent: #c7543f;
 }
+
+/* 引言 06 的三張面板，面板名稱依小卡順序：01 case-background／
+   02 case-route（單張軍報路線圖）／03 case-sources（兩張出版物封面畫廊）。 */
+#intro-1-6-a-source .acc-panel[data-acc-panel="case-background"] {--panel-h: 700px;}
+#intro-1-6-a-source .acc-panel[data-acc-panel="case-route"]      {--panel-h: 720px;}
+#intro-1-6-a-source .acc-panel[data-acc-panel="case-sources"]    {--panel-h: 900px;}
+#intro-1-6-a-source .acc-panel[data-acc-panel="case-route"] .photo-gallery,
+#intro-1-6-a-source .acc-panel[data-acc-panel="case-sources"] .photo-gallery {
+  --gallery-fit: contain;
+  --gallery-position: center;
+}
 #intro-1-6-a-source > .story-inner > .blk { width: 100%; max-width: none !important; }
 
 /* 編號方塊沿用各節的強調色作漸層底（一般不需修改） */

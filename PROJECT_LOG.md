@@ -6556,3 +6556,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/IN
 Verified: Browser QA confirmed 5 total callout labels, 5 unique source keys, the first label on the left, the second on the right, and no console warnings/errors. Passed `git diff --check`.
 
 Remaining: None for this alternating-label correction. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 00:46 HKT — Codex — Add requested case-study source images
+
+Summary: Updated the introduction website's 林爽文民變 demonstration so the 02「林爽文民變中的資訊傳遞」card shows one route-map image linked to `Fizzy Background.pdf`, and the 03「史料來源」card shows a two-image gallery with the requested《明清臺灣檔案彙編》and《天地會》（一）cover previews.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap-cards.css`, the two new preview PNGs under `intro Website/Website/storymap/`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Rendered and visually inspected the first pages of the requested PDFs; confirmed the gallery data contains 1 image for 02 and 2 images for 03; passed StoryMap and embedded-tool JavaScript syntax checks and `git diff --check`.
+
+Remaining: Local HTTP/browser visual QA passed and local checkpoint `06ce1d6` was created. Formal and sample review data remain untouched; no push was performed.
