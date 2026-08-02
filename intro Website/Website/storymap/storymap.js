@@ -203,52 +203,55 @@ const refreshSourceFlowConnectors = () => {
 
     const scrollViewport = visual.querySelector('.ip-scroll')?.getBoundingClientRect();
     const pageViewport = { top: 0, bottom: window.innerHeight };
-    let previousBottom = 8;
-    visual.querySelectorAll('[data-source-bubble]').forEach((bubble) => {
-      const key = bubble.dataset.sourceBubble;
-      const mark = marks.get(key);
-      if (!mark) return;
-      const markRect = mark.getBoundingClientRect();
-      const markIsVisible = !scrollViewport
-        || (markRect.bottom > Math.max(scrollViewport.top, pageViewport.top)
-          && markRect.top < Math.min(scrollViewport.bottom, pageViewport.bottom));
-      bubble.hidden = !markIsVisible;
-      bubble.setAttribute('aria-hidden', String(!markIsVisible));
-      if (!markIsVisible) {
-        bubble.style.removeProperty('top');
-        return;
-      }
-      const bubbleHeight = bubble.getBoundingClientRect().height;
-      const targetY = markRect.top + markRect.height / 2 - rootRect.top;
-      const maxBubbleTop = Math.max(8, height - bubbleHeight - 8);
-      let bubbleTop = Math.max(8, Math.min(maxBubbleTop, targetY - bubbleHeight / 2));
-      if (bubbleTop < previousBottom + 10) bubbleTop = Math.min(maxBubbleTop, previousBottom + 10);
-      bubble.style.top = `${Math.round(bubbleTop)}px`;
-      previousBottom = bubbleTop + bubbleHeight;
+    visual.querySelectorAll('.source-callouts').forEach((callouts) => {
+      let previousBottom = 8;
+      const isRight = callouts.classList.contains('source-callouts-right');
+      callouts.querySelectorAll('[data-source-bubble]').forEach((bubble) => {
+        const key = bubble.dataset.sourceBubble;
+        const mark = marks.get(key);
+        if (!mark) return;
+        const markRect = mark.getBoundingClientRect();
+        const markIsVisible = !scrollViewport
+          || (markRect.bottom > Math.max(scrollViewport.top, pageViewport.top)
+            && markRect.top < Math.min(scrollViewport.bottom, pageViewport.bottom));
+        bubble.hidden = !markIsVisible;
+        bubble.setAttribute('aria-hidden', String(!markIsVisible));
+        if (!markIsVisible) {
+          bubble.style.removeProperty('top');
+          return;
+        }
+        const bubbleHeight = bubble.getBoundingClientRect().height;
+        const targetY = markRect.top + markRect.height / 2 - rootRect.top;
+        const maxBubbleTop = Math.max(8, height - bubbleHeight - 8);
+        let bubbleTop = Math.max(8, Math.min(maxBubbleTop, targetY - bubbleHeight / 2));
+        if (bubbleTop < previousBottom + 10) bubbleTop = Math.min(maxBubbleTop, previousBottom + 10);
+        bubble.style.top = `${Math.round(bubbleTop)}px`;
+        previousBottom = bubbleTop + bubbleHeight;
 
-      const bubbleRect = bubble.getBoundingClientRect();
-      const x1 = bubbleRect.right - rootRect.left;
-      const y1 = bubbleRect.top + bubbleRect.height / 2 - rootRect.top;
-      const x2 = Math.max(0, Math.min(width, markRect.left - rootRect.left));
-      const y2 = Math.max(8, Math.min(height - 8, targetY));
-      const color = getComputedStyle(bubble).getPropertyValue('--source-color').trim();
+        const bubbleRect = bubble.getBoundingClientRect();
+        const x1 = (isRight ? bubbleRect.left : bubbleRect.right) - rootRect.left;
+        const y1 = bubbleRect.top + bubbleRect.height / 2 - rootRect.top;
+        const x2 = Math.max(0, Math.min(width, (isRight ? markRect.right : markRect.left) - rootRect.left));
+        const y2 = Math.max(8, Math.min(height - 8, targetY));
+        const color = getComputedStyle(bubble).getPropertyValue('--source-color').trim();
 
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.classList.add('source-connector-line');
-      line.style.stroke = color;
-      line.setAttribute('x1', String(Math.round(x1)));
-      line.setAttribute('y1', String(Math.round(y1)));
-      line.setAttribute('x2', String(Math.round(x2)));
-      line.setAttribute('y2', String(Math.round(y2)));
-      svg.appendChild(line);
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.classList.add('source-connector-line');
+        line.style.stroke = color;
+        line.setAttribute('x1', String(Math.round(x1)));
+        line.setAttribute('y1', String(Math.round(y1)));
+        line.setAttribute('x2', String(Math.round(x2)));
+        line.setAttribute('y2', String(Math.round(y2)));
+        svg.appendChild(line);
 
-      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-      dot.classList.add('source-connector-dot');
-      dot.style.fill = color;
-      dot.setAttribute('cx', String(Math.round(x2)));
-      dot.setAttribute('cy', String(Math.round(y2)));
-      dot.setAttribute('r', '3.5');
-      svg.appendChild(dot);
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.classList.add('source-connector-dot');
+        dot.style.fill = color;
+        dot.setAttribute('cx', String(Math.round(x2)));
+        dot.setAttribute('cy', String(Math.round(y2)));
+        dot.setAttribute('r', '3.5');
+        svg.appendChild(dot);
+      });
     });
   });
 };

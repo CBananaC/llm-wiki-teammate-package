@@ -2556,3 +2556,23 @@ Verified:
 
 Remaining:
 - None for this correction. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 00:33 HKT — Codex — Mirror five numbered 情報來源 callouts
+
+Summary:
+- Split the five requested highlighted phrases into five distinct sources: `前據各口岸探明`, `據廈門蚶江員弁稟到`, `署守備陳邦光稟稱`, `據北淡水署都司易連、新莊巡檢王增錞來稟`, and `據廈門同知劉嘉會稟稱`.
+- Added matching single-number `情報來源1`–`情報來源5` callout labels on both the left and right sides of the document panel, with independent stacking and connectors for each side.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed 5 distinct highlights, 10 mirrored callout labels, 4 initially visible connectors for the first two visible sources, and no console warnings/errors.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this source-label balance change. Formal and sample review data remain untouched; no push was performed.

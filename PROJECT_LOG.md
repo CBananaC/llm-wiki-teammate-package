@@ -6536,3 +6536,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Browser QA confirmed no `.source-flow-panel-number` remains, `情報來源1` is visible on the left of the document, and `情報來源2`–`情報來源4` remain hidden at the initial scroll position. No browser console warnings/errors were reported. Passed JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this correction. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 00:33 HKT — Codex — Mirror five numbered 情報來源 callouts
+
+Summary: Split the five requested highlighted phrases into five distinct sources: `前據各口岸探明`, `據廈門蚶江員弁稟到`, `署守備陳邦光稟稱`, `據北淡水署都司易連、新莊巡檢王增錞來稟`, and `據廈門同知劉嘉會稟稱`. Added matching single-number `情報來源1`–`情報來源5` callout labels on both the left and right sides of the document panel, with independent stacking and connectors for each side.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed 5 distinct highlights, 10 mirrored callout labels, 4 initially visible connectors for the first two visible sources, and no console warnings/errors. Passed JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for this source-label balance change. No formal or sample review state was touched; no push was performed.

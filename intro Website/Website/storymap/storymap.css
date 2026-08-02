@@ -644,12 +644,13 @@ img { max-width: 100%; }
   --source-2: #c28b37;
   --source-3: #5c89aa;
   --source-4: #6f9b60;
+  --source-5: #82648f;
   --source-flow-top-gap: var(--source-panel-margin-top, clamp(30px, 4.5vh, 56px));
   position: relative;
   width: 100%;
   height: 100%;
   min-height: 0;
-  padding: var(--source-flow-top-gap) 0 0 var(--source-panel-source-space, clamp(122px, 19%, 184px));
+  padding: var(--source-flow-top-gap) var(--source-panel-source-space, clamp(122px, 19%, 184px)) 0;
   overflow: visible;
 }
 .source-flow-document {
@@ -793,6 +794,7 @@ img { max-width: 100%; }
 .source-highlight-2 { color: #684716; background: #f2d8a7; box-shadow: 0 0 0 1px rgba(194, 139, 55, .12); }
 .source-highlight-3 { color: #2d526c; background: #c5dced; box-shadow: 0 0 0 1px rgba(92, 137, 170, .12); }
 .source-highlight-4 { color: #3b5c35; background: #d1e5c8; box-shadow: 0 0 0 1px rgba(111, 155, 96, .12); }
+.source-highlight-5 { color: #5d4667; background: #dfcce6; box-shadow: 0 0 0 1px rgba(130, 100, 143, .12); }
 .source-callouts {
   position: absolute;
   z-index: 3;
@@ -802,6 +804,8 @@ img { max-width: 100%; }
   width: clamp(112px, calc(19% - 10px), 174px);
   pointer-events: none;
 }
+.source-callouts-left { left: 0; }
+.source-callouts-right { right: 0; left: auto; }
 .source-callout {
   position: absolute;
   left: 0;
@@ -820,6 +824,7 @@ img { max-width: 100%; }
 .source-callout-2 { --source-color: var(--source-2); }
 .source-callout-3 { --source-color: var(--source-3); }
 .source-callout-4 { --source-color: var(--source-4); }
+.source-callout-5 { --source-color: var(--source-5); }
 .source-connector-layer {
   position: absolute;
   z-index: 2;
@@ -841,6 +846,8 @@ img { max-width: 100%; }
 @media (max-width: 980px) {
   .source-flow-visual { --source-flow-top-gap: var(--source-panel-mobile-top-gap, 86px); padding: var(--source-flow-top-gap) 0 0; }
   .source-callouts {
+    position: relative;
+    inset: auto;
     right: 0;
     bottom: auto;
     display: grid;
@@ -849,6 +856,7 @@ img { max-width: 100%; }
     width: auto;
     padding: 0 8px;
   }
+  .source-callouts-right { margin-top: 7px; }
   .source-callout { position: relative; left: auto; top: auto !important; width: auto; }
   .source-connector-layer { display: none; }
   .source-flow-document { height: calc(100% - var(--source-flow-top-gap)); }
