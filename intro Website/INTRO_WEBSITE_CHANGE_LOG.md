@@ -2433,3 +2433,25 @@ Verified:
 
 Remaining:
 - None for this brightness correction; formal and sample review data remain untouched.
+
+### 2026-08-02 23:08 HKT — Codex — Add the light 硃119 source-flow document panel
+
+Summary:
+- Replaced the old mock panel in `資訊流向複雜` with a light review-tool document-panel replica using the canonical 硃119 metadata and full original text.
+- Added four external source bubbles with dynamic connector lines to the corresponding original-text excerpts; the four source categories use distinct highlight colors, with two exact excerpts grouped under 來源3.
+- Kept the teaching-site-only filter/settings controls without adding unrelated filter data, and scoped the panel controls so minimize/close behavior does not alter the formal or sample review tools.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed all five rendered highlight spans are exact substrings of `硃119` in `../review-tools/shared data/stage1_original_text.json`, covering all four requested sources.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser QA on the local StoryMap confirmed the active panel, 4 source bubbles, 5 highlights, 4 SVG connectors, full 硃119 text, and no console warnings/errors.
+
+Remaining:
+- None for this insertion. Formal and sample review data remain untouched; no push was performed.

@@ -1,7 +1,7 @@
 
 const settingsButton = document.getElementById('settings-button');
 
-document.querySelectorAll('.sample-doc-panel').forEach((panel) => {
+document.querySelectorAll('.sample-doc-panel, .source-flow-document').forEach((panel) => {
   const minButton = panel.querySelector('.ip-min');
   const closeButton = panel.querySelector('.ip-close');
   const filterButton = panel.querySelector('.ip-filterbtn');
@@ -11,7 +11,8 @@ document.querySelectorAll('.sample-doc-panel').forEach((panel) => {
     minButton.setAttribute('aria-expanded', String(!panel.classList.contains('is-folded')));
   });
   closeButton?.addEventListener('click', () => {
-    panel.closest('.comparison-review-panel')?.setAttribute('hidden', '');
+    const wrapper = panel.closest('.comparison-review-panel, .acc-panel');
+    wrapper?.setAttribute('hidden', '');
   });
   [filterButton, settingsButton].forEach((button) => {
     button?.addEventListener('click', () => {
@@ -179,6 +180,78 @@ const measureTextColumns = () => {
 };
 measureTextColumns();
 
+/* 硃119消息來源標註：外置來源框跟隨原文引文位置，並在文件內捲動或
+   視窗尺寸改變時重畫連線。這組標註是教學網站新增的視覺層，不修改審閱工具。 */
+let sourceFlowRefreshFrame = 0;
+const refreshSourceFlowConnectors = () => {
+  sourceFlowRefreshFrame = 0;
+  document.querySelectorAll('[data-source-flow]').forEach((visual) => {
+    const svg = visual.querySelector('.source-connector-layer');
+    if (!svg) return;
+    const rootRect = visual.getBoundingClientRect();
+    const width = Math.round(visual.clientWidth);
+    const height = Math.round(visual.clientHeight);
+    if (!width || !height) return;
+
+    svg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    svg.innerHTML = '';
+    const marks = new Map();
+    visual.querySelectorAll('[data-source-highlight]').forEach((mark) => {
+      const key = mark.dataset.sourceHighlight;
+      if (key && !marks.has(key)) marks.set(key, mark);
+    });
+
+    let previousBottom = 8;
+    visual.querySelectorAll('[data-source-bubble]').forEach((bubble) => {
+      const key = bubble.dataset.sourceBubble;
+      const mark = marks.get(key);
+      if (!mark) return;
+      const markRect = mark.getBoundingClientRect();
+      const bubbleHeight = bubble.getBoundingClientRect().height;
+      const targetY = markRect.top + markRect.height / 2 - rootRect.top;
+      const maxBubbleTop = Math.max(8, height - bubbleHeight - 8);
+      let bubbleTop = Math.max(8, Math.min(maxBubbleTop, targetY - bubbleHeight / 2));
+      if (bubbleTop < previousBottom + 10) bubbleTop = Math.min(maxBubbleTop, previousBottom + 10);
+      bubble.style.top = `${Math.round(bubbleTop)}px`;
+      previousBottom = bubbleTop + bubbleHeight;
+
+      const bubbleRect = bubble.getBoundingClientRect();
+      const x1 = bubbleRect.right - rootRect.left;
+      const y1 = bubbleRect.top + bubbleRect.height / 2 - rootRect.top;
+      const x2 = Math.max(0, Math.min(width, markRect.left - rootRect.left));
+      const y2 = Math.max(8, Math.min(height - 8, targetY));
+      const color = getComputedStyle(bubble).getPropertyValue('--source-color').trim();
+
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.classList.add('source-connector-line');
+      line.style.stroke = color;
+      line.setAttribute('x1', String(Math.round(x1)));
+      line.setAttribute('y1', String(Math.round(y1)));
+      line.setAttribute('x2', String(Math.round(x2)));
+      line.setAttribute('y2', String(Math.round(y2)));
+      svg.appendChild(line);
+
+      const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+      dot.classList.add('source-connector-dot');
+      dot.style.fill = color;
+      dot.setAttribute('cx', String(Math.round(x2)));
+      dot.setAttribute('cy', String(Math.round(y2)));
+      dot.setAttribute('r', '3.5');
+      svg.appendChild(dot);
+    });
+  });
+};
+const scheduleSourceFlowConnectorRefresh = () => {
+  if (sourceFlowRefreshFrame) return;
+  sourceFlowRefreshFrame = window.requestAnimationFrame(refreshSourceFlowConnectors);
+};
+window.addEventListener('resize', scheduleSourceFlowConnectorRefresh);
+document.querySelectorAll('[data-source-flow]').forEach((visual) => {
+  visual.querySelector('.ip-scroll')?.addEventListener('scroll', scheduleSourceFlowConnectorRefresh, { passive: true });
+  if ('ResizeObserver' in window) new ResizeObserver(scheduleSourceFlowConnectorRefresh).observe(visual);
+});
+scheduleSourceFlowConnectorRefresh();
+
 /* 小卡（點擊展開）＋對應視覺元素。
    行為：初始全部收合；點標題展開／收合，不影響其他已展開的卡；
    點已展開卡片的內文，只把右側畫面切換到該卡，不收合。 */
@@ -194,6 +267,7 @@ document.querySelectorAll('[data-acc]').forEach((group) => {
       panel.hidden = !active;
     });
     cards.forEach((card) => card.classList.toggle('is-showing', card.dataset.accCard === id));
+    scheduleSourceFlowConnectorRefresh();
   };
 
   cards.forEach((card) => {

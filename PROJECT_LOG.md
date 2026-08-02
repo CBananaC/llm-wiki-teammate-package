@@ -6476,3 +6476,13 @@ Files: `intro Website/Website/storymap/zhu40-review-tool-capture.gif`, `intro We
 Verified: Confirmed the GIF remains 2048×1080, 74 frames, and 9.26 seconds. Browser QA confirmed the brighter GIF loads visibly in the research-results section at 2048×1080 natural dimensions, with the lighter unsolved/panel-open presentation. Passed `git diff --check`.
 
 Remaining: None for this brightness correction. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-02 23:08 HKT — Codex — Add the light 硃119 source-flow document panel
+
+Summary: Replaced the old `資訊流向複雜` mock visual with a light review-tool document-panel replica containing the canonical 硃119 metadata and full original text. Added four external source bubbles and dynamic connector lines to five exact highlighted spans across the four requested source categories, with no unrelated filter dataset. Scoped the panel controls to the teaching-site replica.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed every highlight span is an exact substring of canonical 硃119, passed StoryMap JavaScript syntax checking and `git diff --check`, and completed local browser QA with 4 bubbles, 5 highlights, 4 connectors, full original text, and no console warnings/errors.
+
+Remaining: None for this insertion. No formal or sample review state was touched; no push was performed.

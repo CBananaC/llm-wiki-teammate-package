@@ -173,12 +173,77 @@
                   </div>
                   <p class="visual-panel-caption">一份文書回應另一份文書</p>
                 </div>
-                <div class="acc-panel" data-acc-panel="difficulty-network" hidden>
-                  <div class="mock-review-document">
-                    <div class="mock-toolbar"><div class="mock-toolbar-left"><span class="mock-dot"></span><span class="mock-product">文書研究平台</span><span class="mock-status">／ 示意工作區</span></div><div class="mock-toolbar-right"><span class="mock-status">研究者模式</span><span class="mock-toolbar-icon">⚙</span><span class="mock-toolbar-icon">⌁</span></div></div>
-                    <div class="mock-review-head"><div class="mock-review-head-main"><h3>硃119｜同日軍情</h3><p>常青亦奏報臺灣軍情與四名消息來源</p></div><div class="mock-review-window-buttons" aria-hidden="true"><span>—</span><span>×</span></div></div>
-                    <div class="mock-review-togglebar"><span class="is-active">原文</span><span>AI 摘要</span><span>關係</span></div>
-                    <div class="mock-review-scroll"><p class="mock-review-section-label">消息來源｜研究者核對</p><p><mark>廈門蚶江員弁</mark>：提臣由澎湖抵達鹿耳門。</p><p><mark>署守備陳邦光</mark>：率兵、義民搜捕賊夥。</p><p><mark>北淡水署都司易連</mark>：招集義民殺賊。</p><p><mark>廈門同知劉嘉會</mark>：聞賊人紛紛散去。</p></div>
+                <div class="acc-panel source-flow-panel" data-acc-panel="difficulty-network" hidden>
+                  <div class="source-flow-visual" data-source-flow>
+                    <div class="source-callouts" aria-label="硃119消息來源">
+                      <div class="source-callout source-callout-1" data-source-bubble="source-1">
+                        <span class="source-callout-label">來源1：</span>
+                        <span class="source-callout-name">廈門蚶江員弁</span>
+                      </div>
+                      <div class="source-callout source-callout-2" data-source-bubble="source-2">
+                        <span class="source-callout-label">來源2：</span>
+                        <span class="source-callout-name">署守備陳邦光</span>
+                      </div>
+                      <div class="source-callout source-callout-3" data-source-bubble="source-3">
+                        <span class="source-callout-label">來源3：</span>
+                        <span class="source-callout-name">易連、王增錞</span>
+                      </div>
+                      <div class="source-callout source-callout-4" data-source-bubble="source-4">
+                        <span class="source-callout-label">來源4：</span>
+                        <span class="source-callout-name">廈門同知劉嘉會</span>
+                      </div>
+                    </div>
+                    <svg class="source-connector-layer" aria-hidden="true" focusable="false"></svg>
+                    <div class="source-flow-document ip" aria-label="硃119原文文件面板">
+                      <div class="ip-head">
+                        <div class="ip-titles">
+                          <div class="m1"><span class="badge b-zhu">硃</span> <b>為奏聞官兵抵臺日期及近日戰況事</b></div>
+                          <table class="meta-table">
+                            <tbody>
+                              <tr><td>常青</td></tr>
+                              <tr><td>1787/1/15-1/28（13 日）</td></tr>
+                              <tr><td>明清台檔30, 257, 硃119</td></tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <div class="ip-btns">
+                          <button class="ip-move" type="button" title="按住拖曳：移動" aria-label="移動"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></button>
+                          <button class="ip-min" type="button" title="收合 / 展開" aria-label="收合 / 展開"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                          <button class="ip-close" type="button" title="關閉" aria-label="關閉"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+                        </div>
+                        <div class="ip-head-resize" title="拖曳調整標頭高度"></div>
+                      </div>
+                      <div class="ip-body">
+                        <div class="ip-filterdock">
+                          <button class="ip-filterbtn" type="button" title="篩選" aria-label="篩選"><span class="filter-icon" aria-hidden="true"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="21 4 3 4 10 12.5 10 19 14 21 14 12.5 21 4"/></svg></span></button>
+                          <button class="ip-settingsbtn" type="button" title="顯示設定" aria-label="顯示設定"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82V9a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1.51-1V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15z"/></svg></button>
+                        </div>
+                        <div class="ip-scroll">
+                          <div class="ip-pane ix active">
+                            <div class="ix-cols">
+                              <div class="ix-text">
+                                <div class="blk">
+                                  <span class="blk-label">原文</span>
+                                  <div class="source-flow-body-text" data-source-body>
+                                    閩浙總督臣常青跪奏，為據報官兵抵臺日期，恭摺奏聞事。竊照水、陸提臣黃仕簡、任承恩等，統領官兵渡臺剿匪，前據各口岸探明，黃仕簡於十二十九日已抵澎湖，任承恩於正月初四日在崇武澳得風開洋，均經臣節次具奏在案。嗣因連日颶風大作，船隻不能往來，正切盼望。
+                                    <mark class="source-highlight source-highlight-1" data-source-highlight="source-1">茲於十五日據廈門蚶江員弁稟到，探明提臣黃仕簡、總兵郝壯猷、副將丁朝雄等所帶兵船，俱於初三日自澎湖開駕，初四日進鹿耳門登岸。提臣任承恩統領各營官兵船隻，於初六日齊抵鹿仔港。</mark>
+                                    各等情前來。伏查臺灣郡城，前經差探，固守無虞。其鹿港一路，又於正月十四日
+                                    <mark class="source-highlight source-highlight-2" data-source-highlight="source-2">接據署守備陳邦光稟稱：率同兵、義民，在於彰化境內，四處搜捕，焚毀賊巢。復擒獲賊夥簡鳩、劉實、張文、林天球、林耽、朱開六名，陸續解送。</mark>
+                                    <mark class="source-highlight source-highlight-3" data-source-highlight="source-3">並據北淡水署都司易連、新莊巡檢王增錞來稟：統領兵弁，招集義民屢次殺賊。</mark>惟訪聞淡水同知程峻、竹塹巡檢張芝馨均已被害。現今新莊之艋舺一帶，協力保護，
+                                    <mark class="source-highlight source-highlight-3" data-source-highlight="source-3">並令守備董得魁等，帶領兵丁鄉勇，前往收復竹塹。</mark>
+                                    <mark class="source-highlight source-highlight-4" data-source-highlight="source-4">又據廈門同知劉嘉會稟稱：差丁往探，聞賊人已知大兵將到，紛紛散去。</mark>各等語。伏思賊匪本屬么麼烏合，今兩提臣俱經到臺，南、北兩路會合搜剿，定可克期殲滅。臣惟嚴飭內地沿海各口岸，加緊巡查，以防竄逸，並飛提獲解匪犯到泉，究審辦理。仍俟提臣等報到殲賊情形，再行馳奏外，所有現在官兵抵臺日期，合先恭摺奏聞，伏祈皇上睿鑒。謹奏。
+
+                                    乾隆五十二年正月十五日
+                                    乾隆五十二年正月二十八日奉硃批：已有旨了。欽此。【本文原收錄於軍錄】
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="ix-margin" aria-hidden="true"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
