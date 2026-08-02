@@ -644,11 +644,12 @@ img { max-width: 100%; }
   --source-2: #c28b37;
   --source-3: #5c89aa;
   --source-4: #6f9b60;
+  --source-flow-top-gap: clamp(30px, 4.5vh, 56px);
   position: relative;
   width: 100%;
   height: 100%;
   min-height: 0;
-  padding-left: clamp(122px, 19%, 184px);
+  padding: var(--source-flow-top-gap) 0 0 clamp(122px, 19%, 184px);
   overflow: visible;
 }
 .source-flow-document {
@@ -657,7 +658,7 @@ img { max-width: 100%; }
   display: flex;
   flex-direction: column;
   width: 100%;
-  height: 100%;
+  height: min(700px, calc(100% - var(--source-flow-top-gap)));
   min-width: 0;
   min-height: 0;
   overflow: hidden;
@@ -698,7 +699,7 @@ img { max-width: 100%; }
   width: 100%;
   border-collapse: collapse;
   color: #7a6f63;
-  font: calc(12px * var(--font-scale))/1.5 var(--sans);
+  font: calc(13.5px * var(--font-scale))/1.5 var(--sans);
 }
 .source-flow-document .meta-table td { padding: 1px 0; vertical-align: top; }
 .source-flow-document .ip-btns {
@@ -767,7 +768,7 @@ img { max-width: 100%; }
   color: #2d261d;
   background: transparent;
   border: 0;
-  font: var(--body-weight) calc(18px * var(--font-scale))/2.05 var(--serif);
+  font: var(--body-weight) calc(19px * var(--font-scale))/2.1 var(--serif);
 }
 .source-flow-document .blk-label {
   display: block;
@@ -788,6 +789,7 @@ img { max-width: 100%; }
 .source-highlight-2 { color: #684716; background: #f2d8a7; box-shadow: 0 0 0 1px rgba(194, 139, 55, .12); }
 .source-highlight-3 { color: #2d526c; background: #c5dced; box-shadow: 0 0 0 1px rgba(92, 137, 170, .12); }
 .source-highlight-4 { color: #3b5c35; background: #d1e5c8; box-shadow: 0 0 0 1px rgba(111, 155, 96, .12); }
+.source-highlight-context { color: #785d2e; background: #ead9b9; box-shadow: 0 0 0 1px rgba(152, 117, 55, .1); }
 .source-callouts {
   position: absolute;
   z-index: 3;
@@ -833,7 +835,7 @@ img { max-width: 100%; }
 .source-connector-dot { fill: var(--source-color); }
 
 @media (max-width: 980px) {
-  .source-flow-visual { padding: 86px 0 0; }
+  .source-flow-visual { --source-flow-top-gap: 86px; padding: var(--source-flow-top-gap) 0 0; }
   .source-callouts {
     right: 0;
     bottom: auto;
@@ -845,7 +847,7 @@ img { max-width: 100%; }
   }
   .source-callout { position: relative; left: auto; top: auto !important; width: auto; }
   .source-connector-layer { display: none; }
-  .source-flow-document { height: calc(100% - 86px); }
+  .source-flow-document { height: calc(100% - var(--source-flow-top-gap)); }
 }
 
 /* 關係示意 */

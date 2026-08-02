@@ -6447,6 +6447,16 @@ Verified: Passed StoryMap and embedded-tool JavaScript syntax checks and `git di
 
 Remaining: None for this insertion. No formal or sample review state was touched; no push was performed.
 
+### 2026-08-02 23:45 HKT — Codex — Refine 硃119 panel spacing, metadata, and source marks
+
+Summary: Added more space above the light 硃119 document panel, limited it to a 700px document window with internal scrolling, and rebalanced the title/metadata/body typography. Replaced the long date metadata with `乾隆五十二年發出、硃批。`, simplified the four labels to `情報來源1`–`情報來源4`, and narrowed the visual marks to the five requested source-reporting phrases.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed all five phrases are exact substrings of canonical 硃119, passed JavaScript syntax checking and `git diff --check`, and completed local browser QA with a scrollable panel, 4 bubbles, 4 connectors, 5 requested highlights, and no console warnings/errors.
+
+Remaining: None for this refinement. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-02 11:30 HKT — Codex — Improve the 硃40 review capture clarity
 
 Summary: Re-encoded the research-results GIF at the same 2048×1080 size, frame count, and duration with controlled sharpening and optimized palette dithering, preserving the interface text and interaction sequence.

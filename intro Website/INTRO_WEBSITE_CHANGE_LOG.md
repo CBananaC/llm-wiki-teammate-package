@@ -2455,3 +2455,24 @@ Verified:
 
 Remaining:
 - None for this insertion. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-02 23:45 HKT — Codex — Refine 硃119 panel spacing, metadata, and source marks
+
+Summary:
+- Added visible space above the light document panel and limited the panel height so the complete original text is read through the internal scroll area.
+- Rebalanced the document title, metadata, and body-text proportions; replaced the date row with `乾隆五十二年發出、硃批。`.
+- Reduced the visible annotations to the five requested phrases: `前據各口岸探明`, `據廈門蚶江員弁稟到`, `接據署守備陳邦光稟稱`, `據北淡水署都司易連、新莊巡檢王增錞來稟`, and `據廈門同知劉嘉會稟稱`. Simplified the four external labels to `情報來源1`–`情報來源4`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed all five requested phrases are exact substrings of canonical `硃119` in `../review-tools/shared data/stage1_original_text.json`.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+- Browser QA confirmed the 700px panel height, scrollable original-text area, 4 bubbles, 4 connectors, 5 requested marks, and no console warnings/errors.
+
+Remaining:
+- None for this refinement. Formal and sample review data remain untouched; no push was performed.
