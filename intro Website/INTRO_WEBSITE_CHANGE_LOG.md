@@ -3184,3 +3184,13 @@ Files: `Website/storymap/storymap.css` and `Website/UI Idea/part3-tools-option-0
 Verified: Browser preview showed the enlarged panel text; `node --check Website/storymap/storymap.js` and `git diff --check` passed. Existing Part 3 question-gallery changes were preserved.
 
 Remaining: None for this text-size adjustment.
+
+### 2026-08-03 18:51 HKT — Codex — Add adjustable dimensions to the Part 3 tools window
+
+Summary: Added centralized CSS layout controls for the `所需的工具與資源` checklist and information panel. The live StoryMap and standalone sample now expose overall width, checklist-column width, overall height, checklist-row height, and information-photo height as variables.
+
+Files: `Website/storymap/storymap.css` and `Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Live browser preview showed all five checklist rows and five information views; selecting a row still changes the information panel. The standalone sample also loaded all five rows and views. Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining: None for the adjustable tools-window layout.

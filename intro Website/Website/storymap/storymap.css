@@ -1167,9 +1167,17 @@ img { max-width: 100%; }
   margin-bottom: 0;
 }
 .part3-tools-checklist {
+  /* 版面調整：修改以下數值即可調整清單與資訊視窗的寬度、比例及高度。 */
+  --part3-tools-width: 100%;
+  --part3-tools-list-width: 31%;
+  --part3-tools-height: 680px;
+  --part3-tools-row-height: 76px;
+  --part3-tools-photo-height: 46vh;
   display: grid;
-  grid-template-columns: minmax(260px, 31%) minmax(0, 1fr);
-  min-height: 680px;
+  width: min(var(--part3-tools-width), 100%);
+  margin-inline: auto;
+  grid-template-columns: minmax(260px, var(--part3-tools-list-width)) minmax(0, 1fr);
+  min-height: var(--part3-tools-height);
   background: #e8dfd1;
   border: 1px solid var(--line);
   box-shadow: 0 18px 40px rgba(22, 61, 63, .1);
@@ -1203,7 +1211,7 @@ img { max-width: 100%; }
   gap: 12px;
   align-items: center;
   width: 100%;
-  min-height: 76px;
+  min-height: var(--part3-tools-row-height);
   padding: 12px 13px;
   color: var(--ink);
   background: rgba(255, 250, 242, .7);
@@ -1281,13 +1289,13 @@ img { max-width: 100%; }
   background: var(--card);
 }
 .part3-tools-info-panel {
-  min-height: calc(680px - 52px);
+  min-height: calc(var(--part3-tools-height) - 52px);
 }
 .part3-tool-info-view[hidden] { display: none; }
 .part3-tool-info-view {
   display: grid;
-  grid-template-rows: minmax(300px, 46vh) auto;
-  min-height: calc(680px - 52px);
+  grid-template-rows: minmax(300px, var(--part3-tools-photo-height)) auto;
+  min-height: calc(var(--part3-tools-height) - 52px);
 }
 .part3-tool-info-photo {
   position: relative;

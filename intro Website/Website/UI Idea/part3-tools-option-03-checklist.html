@@ -61,9 +61,17 @@
     }
 
     .workbench {
+      /* 調整清單與資訊視窗：修改以下數值即可改變寬度、比例及高度。 */
+      --tools-width: 100%;
+      --tools-list-width: 31%;
+      --tools-height: 700px;
+      --tools-row-height: 76px;
+      --tools-photo-height: 46vh;
       display: grid;
-      grid-template-columns: minmax(260px, 31%) minmax(0, 1fr);
-      min-height: 700px;
+      width: min(var(--tools-width), 100%);
+      margin-inline: auto;
+      grid-template-columns: minmax(260px, var(--tools-list-width)) minmax(0, 1fr);
+      min-height: var(--tools-height);
       background: #e8dfd1;
       border: 1px solid var(--line);
       box-shadow: 0 18px 40px rgba(22, 61, 63, .1);
@@ -109,7 +117,7 @@
       gap: 12px;
       align-items: center;
       width: 100%;
-      min-height: 76px;
+      min-height: var(--tools-row-height);
       padding: 12px 13px;
       color: var(--ink);
       background: rgba(255, 250, 242, .7);
@@ -207,14 +215,14 @@
     }
 
     .info-panel {
-      min-height: calc(700px - 52px);
+      min-height: calc(var(--tools-height) - 52px);
     }
 
     .info-view[hidden] { display: none; }
     .info-view {
       display: grid;
-      grid-template-rows: minmax(300px, 46vh) auto;
-      min-height: calc(700px - 52px);
+      grid-template-rows: minmax(300px, var(--tools-photo-height)) auto;
+      min-height: calc(var(--tools-height) - 52px);
     }
 
     .info-photo {
