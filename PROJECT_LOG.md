@@ -6712,3 +6712,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Confirmed the rendered 硃113 body text matches the canonical `review-tools/shared data/stage1_original_text.json` record exactly. Browser QA confirmed the second subcard, requested highlights, header-hidden labels, lower-date label reveal, and hover metadata. Passed StoryMap JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this 硃113 panel. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 15:16 HKT — Codex — Correct document dates and shorten 硃113 preview
+
+Summary: Replaced the generic header date text for 硃113 and 硃119 with their canonical send and 硃批 dates. Shortened the 硃113 panel after the third `欽此。` to `⋯⋯`, retaining the dated footer beginning at 乾隆五十二年正月十四日.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed both header dates against `review-tools/shared data/stage1_original_text.json`. Browser QA confirmed both headers, the requested ellipsis, the retained dated footer, and removal of the previously displayed continuation text. Passed StoryMap JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for this date and preview correction. Formal and sample review data remain untouched; no push was performed.
