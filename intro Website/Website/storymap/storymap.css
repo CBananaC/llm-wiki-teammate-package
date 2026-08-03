@@ -399,6 +399,10 @@ img { max-width: 100%; }
 .method-table tbody tr:nth-child(even) { background: rgba(22, 61, 63, .032); }
 .method-table tbody tr:last-child td { border-bottom: 0; }
 .method-table td:first-child { color: var(--accent); font-weight: 600; }
+.method-table tbody td:nth-child(2),
+.method-table tbody td:nth-child(3),
+.method-table tbody td.method-tool-cell,
+.method-table tbody td.method-help-cell { color: var(--ink); background: #efefef; }
 .method-table td[rowspan] { vertical-align: middle; }
 
 /* ============================================================================

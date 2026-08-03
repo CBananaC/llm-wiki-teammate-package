@@ -6370,6 +6370,36 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-03 10:54 HKT — Codex — Use Fizzy Background PDF in the information-transmission panel
+
+Summary: Rendered the supplied `Fizzy Background.pdf` as a web-ready PNG for the `林爽文民變中的資訊傳遞` gallery panel and kept the original PDF as its source link.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/fizzy-background-from-pdf.png`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and targeted asset/link validation.
+
+Remaining: Reload the local HTTP preview to confirm the backdrop visually. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 10:41 HKT — Codex — Fix row-spanned table column styling
+
+Summary: Added explicit classes to all `數位工具` and `如何協助研究` body cells, preventing the row-spanned layout from applying the orange first-column style to the tool cells.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and targeted class-count validation.
+
+Remaining: Reload the local HTTP preview to confirm the corrected table visually. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 10:40 HKT — Codex — Match the table body column backgrounds
+
+Summary: Applied the 人工智能技能（AI Skills） grey background to all body cells in 數位工具 and 如何協助研究, while leaving the header row unchanged.
+
+Files: `intro Website/Website/storymap/storymap.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-03 10:36 HKT — Codex — Restyle the digital-tools table column
 
 Summary: Applied the table's grey backdrop to the 數位工具 column and changed its text to the standard dark colour.

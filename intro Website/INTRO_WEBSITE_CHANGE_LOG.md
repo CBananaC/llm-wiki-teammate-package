@@ -2248,6 +2248,61 @@ Verified:
 Remaining:
 - Browser visual and interaction QA remains to be performed in the local HTTP preview.
 
+### 2026-08-03 10:54 HKT — Codex — Use Fizzy Background PDF in the information-transmission panel
+
+Summary:
+- Rendered the supplied `Fizzy Background.pdf` as a web-ready PNG for the `林爽文民變中的資訊傳遞` gallery panel.
+- Kept the gallery source link pointing to the original PDF.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/fizzy-background-from-pdf.png`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed StoryMap JavaScript syntax checking and `git diff --check`.
+- Confirmed the rendered image exists and the panel retains the original PDF link.
+
+Remaining:
+- Reload the local HTTP preview to confirm the backdrop visually.
+
+### 2026-08-03 10:41 HKT — Codex — Fix row-spanned table column styling
+
+Summary:
+- Added explicit classes to all `數位工具` and `如何協助研究` body cells.
+- Prevented the row-spanned layout from incorrectly applying the orange first-column style to `人工智能技能（AI Skills）` and `互動式網站`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed StoryMap JavaScript syntax checking and `git diff --check`.
+- Confirmed four tool cells and four help cells have explicit styling classes.
+
+Remaining:
+- Reload the local HTTP preview to confirm the corrected table visually.
+
+### 2026-08-03 10:40 HKT — Codex — Match the table body column backgrounds
+
+Summary:
+- Applied the 人工智能技能（AI Skills） grey background to all body cells in both 數位工具 and 如何協助研究.
+- Kept the header row unchanged.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- Browser visual QA remains to be performed in the local HTTP preview.
+
 ### 2026-08-03 10:36 HKT — Codex — Restyle the digital-tools table column
 
 Summary:
