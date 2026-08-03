@@ -203,6 +203,13 @@ const refreshSourceFlowConnectors = () => {
 
     const scrollViewport = visual.querySelector('.ip-scroll')?.getBoundingClientRect();
     const pageViewport = { top: 0, bottom: window.innerHeight };
+    const panelHeaderBottom = [
+      visual.querySelector('.ip-head')?.getBoundingClientRect(),
+      visual.querySelector('.ip-filterdock')?.getBoundingClientRect()
+    ].filter(Boolean).reduce(
+      (bottom, rect) => Math.max(bottom, rect.bottom),
+      scrollViewport?.top ?? pageViewport.top
+    );
     visual.querySelectorAll('.source-callouts').forEach((callouts) => {
       let previousBottom = 8;
       const isRight = callouts.classList.contains('source-callouts-right');
@@ -211,9 +218,12 @@ const refreshSourceFlowConnectors = () => {
         const mark = marks.get(key);
         if (!mark) return;
         const markRect = mark.getBoundingClientRect();
+        const contentTop = Math.max(panelHeaderBottom, scrollViewport?.top ?? pageViewport.top);
+        const contentBottom = Math.min(scrollViewport?.bottom ?? pageViewport.bottom, pageViewport.bottom);
         const markIsVisible = !scrollViewport
-          || (markRect.bottom > Math.max(scrollViewport.top, pageViewport.top)
-            && markRect.top < Math.min(scrollViewport.bottom, pageViewport.bottom));
+          || (markRect.top >= contentTop
+            && markRect.bottom > contentTop
+            && markRect.top < contentBottom);
         bubble.hidden = !markIsVisible;
         bubble.setAttribute('aria-hidden', String(!markIsVisible));
         if (!markIsVisible) {

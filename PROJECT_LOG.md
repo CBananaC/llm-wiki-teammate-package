@@ -6370,6 +6370,16 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-03 10:36 HKT — Codex — Restyle the digital-tools table column
+
+Summary: Applied the table's grey backdrop to the 數位工具 column and changed its text to the standard dark colour.
+
+Files: `intro Website/Website/storymap/storymap.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-02 21:08 HKT — Codex — Scale the intro GIF proportionally
 
 Summary: Replaced the fixed GIF height with `--visual-scale`; the frame now scales width and height together using the original 2048×1080 aspect ratio.
@@ -6566,3 +6576,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Rendered and visually inspected the first pages of the requested PDFs; confirmed the gallery data contains 1 image for 02 and 2 images for 03; passed StoryMap and embedded-tool JavaScript syntax checks and `git diff --check`.
 
 Remaining: Local HTTP/browser visual QA passed and local checkpoint `06ce1d6` was created. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 10:37 HKT — Codex — Hide source labels at the document header
+
+Summary: Updated the 硃119 source-label visibility test so a callout hides as soon as its highlight reaches the fixed document header, including the title/metadata area and filter bar.
+
+Files: `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed labels disappear when their highlights move into the panel header zone and reappear for later body highlights; no browser console warnings/errors were reported. Passed JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for this header-visibility fix. No formal or sample review state was touched; no push was performed.
