@@ -6370,6 +6370,16 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-03 11:26 HKT — Codex — Replace intro images with Done assets
+
+Summary: Replaced the intro's non-GIF images with the requested `Visual Material/Done` set: `intro_1–3` for 清代奏折制度, `intro_4` for the research-difficulty card, and `intro_7–10` for the 林爽文民變 case. The GIF and route SVG remain unchanged.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, the eight rendered `done-intro-*` assets, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and targeted image-reference validation. No formal or sample review state was touched; no push was performed.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview.
+
 ### 2026-08-03 10:54 HKT — Codex — Use Fizzy Background PDF in the information-transmission panel
 
 Summary: Rendered the supplied `Fizzy Background.pdf` as a web-ready PNG for the `林爽文民變中的資訊傳遞` gallery panel and kept the original PDF as its source link.
@@ -6616,3 +6626,19 @@ Files: `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSIT
 Verified: Browser QA confirmed labels disappear when their highlights move into the panel header zone and reappear for later body highlights; no browser console warnings/errors were reported. Passed JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this header-visibility fix. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 11:32 HKT — Codex — Clarify StoryMap image-panel references
+
+Summary: Replaced the image-gallery prompt `將滑鼠移到此處查看完整說明` with `閱讀更多` when explanatory paragraphs are available. For source-only image panels, the full linked reference now displays directly below the title without a prompt or hidden description area.
+
+Files: `intro Website/Website/storymap/storymap.js`,
+`intro Website/Website/storymap/storymap.css`,
+`intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Local HTTP browser QA confirmed the description-gallery prompt is
+`閱讀更多`, the source-only difficulty gallery has no prompt and has a visible
+full source reference, and no browser warnings/errors were reported. Passed
+both StoryMap JavaScript syntax checks and `git diff --check`.
+
+Remaining: None for this image-panel behavior. No formal or sample review data
+were touched; no push was performed.

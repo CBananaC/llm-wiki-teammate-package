@@ -2248,6 +2248,35 @@ Verified:
 Remaining:
 - Browser visual and interaction QA remains to be performed in the local HTTP preview.
 
+### 2026-08-03 11:26 HKT — Codex — Replace intro images with Done assets
+
+Summary:
+- Replaced the intro's non-GIF images with the requested `Visual Material/Done` set.
+- Mapped `intro_1–3` to 清代奏折制度, `intro_4` to the research-difficulty card, and `intro_7–10` to the four 林爽文民變 case images.
+- Updated the route-map CSS backdrop to use the rendered `intro_8` asset.
+- Kept the GIF and route SVG unchanged.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/done-intro-1.png`
+- `Website/storymap/done-intro-2.png`
+- `Website/storymap/done-intro-3.png`
+- `Website/storymap/done-intro-4.jpg`
+- `Website/storymap/done-intro-7.png`
+- `Website/storymap/done-intro-8.png`
+- `Website/storymap/done-intro-9.png`
+- `Website/storymap/done-intro-10.png`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed StoryMap JavaScript syntax checking and `git diff --check`.
+- Confirmed the intro image references point to the eight requested Done assets, with only the GIF and route SVG remaining as before.
+
+Remaining:
+- Browser visual QA remains to be performed in the local HTTP preview.
+
 ### 2026-08-03 10:54 HKT — Codex — Use Fizzy Background PDF in the information-transmission panel
 
 Summary:
@@ -2706,3 +2735,23 @@ Verified:
 
 Remaining:
 - None for this header-visibility fix. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 11:32 HKT — Codex — Clarify image-panel references
+
+Summary:
+- Replaced the image-panel prompt `將滑鼠移到此處查看完整說明` with `閱讀更多` for galleries that contain explanatory paragraphs.
+- When a gallery has no explanatory paragraph but does have a source, the full linked reference now appears directly below the image title and the prompt is omitted.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Local HTTP browser QA found `閱讀更多` on description galleries and confirmed the source-only difficulty gallery has no hint, no hidden description container, and a visible full source reference.
+- No browser warning/error logs were reported.
+- Passed `node --check Website/storymap/storymap.js`, `node --check Website/embedded-tool/review-tool-embed.js`, and `git diff --check`.
+
+Remaining:
+- None for this image-panel behavior. Formal and sample review data remain untouched; no push was performed.

@@ -402,7 +402,8 @@ const photoLightbox = (() => {
 
 /* 圖片畫廊：左右翻頁、乾淨圖片、下方說明（預設只顯示標題，滑鼠移入展開）。
    每個 [data-photo-gallery] 讀取自己的 <script type="application/json"
-   data-photo-gallery-data> 作為圖片與說明來源。點擊圖片本身可開啟放大檢視。 */
+   data-photo-gallery-data> 作為圖片與說明來源。若只有來源而沒有段落，直接顯示完整引註；
+   點擊圖片本身可開啟放大檢視。 */
 document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const dataScript = gallery.querySelector('[data-photo-gallery-data]');
   if (!dataScript) return;
@@ -490,17 +491,21 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
        previous page with a longer description was expanded. */
     body.classList.remove('is-expanded');
     body.scrollTop = 0;
-    const paras = (page.paragraphs || []).map((p) => `<p class="photo-gallery-desc">${p}</p>`).join('');
+    const paragraphs = (page.paragraphs || []).filter(Boolean);
+    const hasDescription = paragraphs.length > 0;
+    const hasSource = Boolean(page.source?.text);
+    const paras = paragraphs.map((p) => `<p class="photo-gallery-desc">${p}</p>`).join('');
     const source = page.source
       ? `<p class="photo-gallery-source"><a href="${page.source.href}" target="_blank" rel="noopener noreferrer">${page.source.text} ↗</a></p>`
       : '';
+    body.classList.toggle('is-source-only', !hasDescription && hasSource);
     body.innerHTML = `
       <h3 class="photo-gallery-title">${page.title}</h3>
-      <div class="photo-gallery-more"><div>
+      ${hasDescription ? `<div class="photo-gallery-more"><div>
         ${paras}
         ${source}
       </div></div>
-      <p class="photo-gallery-hint">將滑鼠移到此處查看完整說明</p>
+      <p class="photo-gallery-hint">閱讀更多</p>` : source}
     `;
   }
 
