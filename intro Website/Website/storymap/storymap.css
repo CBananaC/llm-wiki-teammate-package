@@ -1172,12 +1172,14 @@ img { max-width: 100%; }
   --part3-tools-list-width: 31%;
   --part3-tools-height: 680px;
   --part3-tools-row-height: 88px;
-  --part3-tools-photo-height: 46vh;
+  --part3-tools-photo-height: 46%;
+  --part3-tools-info-height: 54%;
   display: grid;
   width: min(var(--part3-tools-width), 100%);
   margin-inline: auto;
-  grid-template-columns: minmax(260px, var(--part3-tools-list-width)) minmax(0, 1fr);
-  min-height: var(--part3-tools-height);
+  grid-template-columns: minmax(0, var(--part3-tools-list-width)) minmax(0, 1fr);
+  height: var(--part3-tools-height);
+  min-height: 0;
   background: #e8dfd1;
   border: 1px solid var(--line);
   box-shadow: 0 18px 40px rgba(22, 61, 63, .1);
@@ -1203,6 +1205,9 @@ img { max-width: 100%; }
   display: grid;
   gap: 8px;
   padding: 18px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
 }
 .part3-tool-row {
   position: relative;
@@ -1286,20 +1291,26 @@ img { max-width: 100%; }
 }
 .part3-tools-info-window {
   min-width: 0;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
   background: var(--card);
 }
 .part3-tools-info-panel {
-  min-height: calc(var(--part3-tools-height) - 58px);
+  height: calc(100% - 58px);
+  min-height: 0;
+  overflow: hidden;
 }
 .part3-tool-info-view[hidden] { display: none; }
 .part3-tool-info-view {
   display: grid;
-  grid-template-rows: minmax(300px, var(--part3-tools-photo-height)) auto;
-  min-height: calc(var(--part3-tools-height) - 58px);
+  grid-template-rows: var(--part3-tools-photo-height) var(--part3-tools-info-height);
+  height: 100%;
+  min-height: 0;
 }
 .part3-tool-info-photo {
   position: relative;
-  min-height: 300px;
+  min-height: 0;
   margin: 0;
   overflow: hidden;
   background: #d8cdbb;
@@ -1336,6 +1347,8 @@ img { max-width: 100%; }
 .part3-tool-info-copy {
   padding: clamp(24px, 4vw, 48px);
   border-top: 1px solid var(--line);
+  min-height: 0;
+  overflow-y: auto;
 }
 .part3-tool-info-subtitle {
   margin: 0 0 9px;
@@ -1502,21 +1515,36 @@ img { max-width: 100%; }
 @media (max-width: 760px) {
   .part3-tools-checklist {
     grid-template-columns: 1fr;
+    height: auto;
     min-height: 0;
   }
   .part3-tools-list-window {
     border-right: 0;
     border-bottom: 1px solid var(--line);
   }
+  .part3-tools-info-window {
+    height: auto;
+    overflow: visible;
+  }
+  .part3-tools-list {
+    flex: 0 1 auto;
+    overflow: visible;
+  }
   .part3-tool-info-view {
     grid-template-rows: 280px auto;
+    height: auto;
     min-height: 0;
   }
   .part3-tools-info-panel {
+    height: auto;
     min-height: 0;
+    overflow: visible;
   }
   .part3-tool-info-photo {
     min-height: 280px;
+  }
+  .part3-tool-info-copy {
+    overflow: visible;
   }
 }
 

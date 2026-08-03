@@ -66,12 +66,14 @@
       --tools-list-width: 31%;
       --tools-height: 700px;
       --tools-row-height: 88px;
-      --tools-photo-height: 46vh;
+      --tools-photo-height: 46%;
+      --tools-info-height: 54%;
       display: grid;
       width: min(var(--tools-width), 100%);
       margin-inline: auto;
-      grid-template-columns: minmax(260px, var(--tools-list-width)) minmax(0, 1fr);
-      min-height: var(--tools-height);
+      grid-template-columns: minmax(0, var(--tools-list-width)) minmax(0, 1fr);
+      height: var(--tools-height);
+      min-height: 0;
       background: #e8dfd1;
       border: 1px solid var(--line);
       box-shadow: 0 18px 40px rgba(22, 61, 63, .1);
@@ -108,6 +110,9 @@
       display: grid;
       gap: 8px;
       padding: 18px;
+      flex: 1 1 auto;
+      min-height: 0;
+      overflow-y: auto;
     }
 
     .tool-row {
@@ -211,23 +216,29 @@
 
     .info-window {
       min-width: 0;
+      height: 100%;
+      min-height: 0;
+      overflow: hidden;
       background: var(--card);
     }
 
     .info-panel {
-      min-height: calc(var(--tools-height) - 58px);
+      height: calc(100% - 58px);
+      min-height: 0;
+      overflow: hidden;
     }
 
     .info-view[hidden] { display: none; }
     .info-view {
       display: grid;
-      grid-template-rows: minmax(300px, var(--tools-photo-height)) auto;
-      min-height: calc(var(--tools-height) - 58px);
+      grid-template-rows: var(--tools-photo-height) var(--tools-info-height);
+      height: 100%;
+      min-height: 0;
     }
 
     .info-photo {
       position: relative;
-      min-height: 300px;
+      min-height: 0;
       margin: 0;
       overflow: hidden;
       background: #d8cdbb;
@@ -268,6 +279,8 @@
     .info-copy {
       padding: clamp(24px, 4vw, 48px);
       border-top: 1px solid var(--line);
+      min-height: 0;
+      overflow-y: auto;
     }
 
     .info-subtitle {
@@ -297,11 +310,14 @@
         padding-top: 36px;
       }
       .page-heading { align-items: start; flex-direction: column; gap: 14px; }
-      .workbench { grid-template-columns: 1fr; }
+      .workbench { grid-template-columns: 1fr; height: auto; }
       .checklist-window { border-right: 0; border-bottom: 1px solid var(--line); }
-      .info-view { grid-template-rows: 280px auto; min-height: 0; }
-      .info-panel { min-height: 0; }
+      .tool-list { flex: 0 1 auto; overflow: visible; }
+      .info-view { grid-template-rows: 280px auto; height: auto; min-height: 0; }
+      .info-window { height: auto; overflow: visible; }
+      .info-panel { height: auto; min-height: 0; overflow: visible; }
       .info-photo { min-height: 280px; }
+      .info-copy { overflow: visible; }
     }
   </style>
 </head>

@@ -6891,3 +6891,13 @@ Files: `intro Website/Website/storymap/storymap-cards.css`.
 Verified: StoryMap browser preview loaded the card with one checklist, five rows, one information panel, and two window headings. Passed StoryMap JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for the card-specific sizing controls.
+
+### 2026-08-03 19:11 HKT — Codex — Use fixed px and percentage sizing for Part 3 tools card
+
+Summary: Changed the Part 3 tools card to use a fixed `px` height for the complete checklist and information window, a `%` width for the checklist column, and percentage rows for the information photo and text panel. Added internal scrolling so a smaller fixed height remains usable.
+
+Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, and `intro Website/Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser preview rendered the fixed-height card and percentage photo/info split. Existing user-edited Part 3 content changes were preserved. Passed StoryMap JavaScript syntax checking and focused `git diff --check` for the three edited sizing files.
+
+Remaining: None for the requested sizing-unit adjustment.

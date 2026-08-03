@@ -116,9 +116,11 @@
     第三部分「所需的工具與資源」checklist 視窗：
                  --part3-tools-width       整組 checklist 與資訊視窗的寬度。
                  --part3-tools-list-width   左側 checklist 佔整組的寬度比例。
-                 --part3-tools-height       整組視窗的最低高度（px）。
+                 --part3-tools-height       整組視窗的固定高度（px）。
                  --part3-tools-row-height   左側每一列的最低高度（px）。
-                 --part3-tools-photo-height 右側圖片區的高度（px、vh 或其他 CSS 單位）。
+                 --part3-tools-photo-height 右側圖片區佔資訊視窗內容區的高度（%）。
+                 --part3-tools-info-height  右側文字區佔資訊視窗內容區的高度（%）。
+                 兩者合計應為 100%。
                  這些設定寫在下方的 #part-3-tools 區塊即可。
 
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
@@ -334,10 +336,11 @@
   --card-accent: #7e6a39;
   /* Checklist 與工具資訊視窗的寬度／高度控制，直接在此調整。 */
   --part3-tools-width: 100%;
-  --part3-tools-list-width: 31%;
-  --part3-tools-height: 680px;
-  --part3-tools-row-height: 88px;
-  --part3-tools-photo-height: 46vh;
+  --part3-tools-list-width: 25%;
+  --part3-tools-height: 1000px;
+  --part3-tools-row-height: 40px;
+  --part3-tools-photo-height: 70%;
+  --part3-tools-info-height: 30%;
 }
 #part-3-basic-flow { --card-accent: #4d817c; }
 
