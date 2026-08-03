@@ -6702,3 +6702,13 @@ Files: `review-tools/(1) formal/index.html`, `review-tools/(2) sample/index.html
 Verified: Both HTML files' inline scripts parse successfully and `git diff --check` passes. Browser visual validation remains to be performed.
 
 Remaining: Human browser validation of a clicked document and its emperor-action dot/line.
+
+### 2026-08-03 15:08 HKT — Codex — Add 硃113 communication document panel
+
+Summary: Replaced the second subcard of `研究清代奏折的主要困難` with the light review-tool document-panel replica for 硃113. Added four single source callouts—`收發時間`, `回覆先前上諭1`, `回覆先前上諭2`, and `回覆先前上諭3`—with the latter three linked on hover to the canonical 諭20、諭24、諭28 titles and issue dates. Both send/receive dates use the shared `收發時間` highlight key, and the connector logic now supports multiple highlights per label and page-scroll refreshes.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Confirmed the rendered 硃113 body text matches the canonical `review-tools/shared data/stage1_original_text.json` record exactly. Browser QA confirmed the second subcard, requested highlights, header-hidden labels, lower-date label reveal, and hover metadata. Passed StoryMap JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for this 硃113 panel. Formal and sample review data remain untouched; no push was performed.

@@ -198,7 +198,7 @@ const refreshSourceFlowConnectors = () => {
     const marks = new Map();
     visual.querySelectorAll('[data-source-highlight]').forEach((mark) => {
       const key = mark.dataset.sourceHighlight;
-      if (key && !marks.has(key)) marks.set(key, mark);
+      if (key) marks.set(key, [...(marks.get(key) || []), mark]);
     });
 
     const scrollViewport = visual.querySelector('.ip-scroll')?.getBoundingClientRect();
@@ -215,21 +215,24 @@ const refreshSourceFlowConnectors = () => {
       const isRight = callouts.classList.contains('source-callouts-right');
       callouts.querySelectorAll('[data-source-bubble]').forEach((bubble) => {
         const key = bubble.dataset.sourceBubble;
-        const mark = marks.get(key);
-        if (!mark) return;
-        const markRect = mark.getBoundingClientRect();
+        const markList = marks.get(key) || [];
+        if (!markList.length) return;
         const contentTop = Math.max(panelHeaderBottom, scrollViewport?.top ?? pageViewport.top);
         const contentBottom = Math.min(scrollViewport?.bottom ?? pageViewport.bottom, pageViewport.bottom);
-        const markIsVisible = !scrollViewport
-          || (markRect.top >= contentTop
-            && markRect.bottom > contentTop
-            && markRect.top < contentBottom);
+        const visibleMarks = markList
+          .map((mark) => ({ mark, rect: mark.getBoundingClientRect() }))
+          .filter(({ rect }) => !scrollViewport
+            || (rect.top >= contentTop
+              && rect.bottom > contentTop
+              && rect.top < contentBottom));
+        const markIsVisible = visibleMarks.length > 0;
         bubble.hidden = !markIsVisible;
         bubble.setAttribute('aria-hidden', String(!markIsVisible));
         if (!markIsVisible) {
           bubble.style.removeProperty('top');
           return;
         }
+        const markRect = visibleMarks[0].rect;
         const bubbleHeight = bubble.getBoundingClientRect().height;
         const targetY = markRect.top + markRect.height / 2 - rootRect.top;
         const maxBubbleTop = Math.max(8, height - bubbleHeight - 8);
@@ -270,6 +273,7 @@ const scheduleSourceFlowConnectorRefresh = () => {
   sourceFlowRefreshFrame = window.requestAnimationFrame(refreshSourceFlowConnectors);
 };
 window.addEventListener('resize', scheduleSourceFlowConnectorRefresh);
+window.addEventListener('scroll', scheduleSourceFlowConnectorRefresh, { passive: true });
 document.querySelectorAll('[data-source-flow]').forEach((visual) => {
   visual.querySelector('.ip-scroll')?.addEventListener('scroll', scheduleSourceFlowConnectorRefresh, { passive: true });
   visual.querySelectorAll('.source-callout').forEach((callout) => {

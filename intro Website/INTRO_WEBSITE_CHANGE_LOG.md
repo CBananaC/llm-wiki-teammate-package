@@ -2848,3 +2848,26 @@ Verified:
 
 Remaining:
 - None for this image-panel behavior. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 15:08 HKT — Codex — Add 硃113 communication document panel
+
+Summary:
+- Replaced the second subcard's relationship mock with the light review-tool document-panel replica for 硃113.
+- Added four single source callouts: `收發時間`, `回覆先前上諭1`, `回覆先前上諭2`, and `回覆先前上諭3`. The latter three identify 諭20、諭24、諭28 through hover titles containing their exact titles and issue dates.
+- Highlighted both 硃113 send/receive dates with the same `收發時間` source key and added multi-highlight support to the connector visibility logic.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the rendered 硃113 body text matches the canonical `stage1_original_text.json` record exactly.
+- Browser QA confirmed the second subcard opens the 硃113 panel, highlights all four requested source ranges, keeps labels hidden above the panel header, reveals the `收發時間` label for the lower date highlights, and exposes the requested hover metadata in the label titles.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this 硃113 panel. Formal and sample review data remain untouched; no push was performed.
