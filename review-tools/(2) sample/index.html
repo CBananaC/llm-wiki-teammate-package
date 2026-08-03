@@ -2403,6 +2403,11 @@
     allEvs.forEach(e=>{
       const en=eventNode(e); addNode(en);
       (e.sources||[]).forEach(sc=>{ let r=sc&&resolveChartRecord(sc.doc_id,sc.quote); if(!r) return; if(e.actor!=='emperor'&&sc.howKnown==='上諭所載'&&sc.viaDoc){ const vr=resolveChartRecord(sc.viaDoc,sc.quote); if(vr) r=vr; } link(en,docNodeForRecord(r,e.actor==='emperor'?'imperial':'official'),'source'); });
+      if(e.actor==='emperor'&&e.emperorDetail){
+        [e.emperorDetail.doc_id,e.emperorDetail.edict_id].filter(Boolean).forEach(id=>{
+          const r=resolveChartRecord(id,e.emperorDetail.quote); if(r) link(en,docNodeForRecord(r,'imperial'),'origin');
+        });
+      }
       if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=resolveChartRecord(e.emperorDetail.memDoc); if(r) link(en,docNodeForRecord(r,'official'),'source'); }
       if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)){ e.emperorDetail.infoSources.forEach(sc=>{ const r=sc&&resolveChartRecord(sc.doc_id,sc.quote); if(r) link(en,docNodeForRecord(r,'official'),'info-source'); }); }
       const targets=[e.respondsToEventId,...(e.alsoRespondsToEventIds||[])].filter(Boolean);
@@ -2464,6 +2469,9 @@
         });
         if(e.emperorDetail&&e.emperorDetail.memDoc){ const r=resolveChartRecord(e.emperorDetail.memDoc); if(r&&r._rid===rid) touched=true; }
         if(e.emperorDetail&&Array.isArray(e.emperorDetail.infoSources)&&e.emperorDetail.infoSources.some(sc=>{ const r=resolveChartRecord(sc&&sc.doc_id,sc&&sc.quote); return r&&r._rid===rid; })) touched=true;
+        if(e.actor==='emperor'&&e.emperorDetail&&[e.emperorDetail.doc_id,e.emperorDetail.edict_id].some(id=>{
+          const r=resolveChartRecord(id,e.emperorDetail.quote); return r&&r._rid===rid;
+        })) touched=true;
         return touched;
       }
       allEvs.forEach(e=>{ if(eventTouchesDoc(e,clickedRid)) docFocusEventIds.add(String(e.id)); });
@@ -2693,10 +2701,20 @@
     evs.forEach(e=>{ const ec=ecoord[e.id]; if(!ec||!eventLineVisible(e)) return;
       const isClicked = chainEventIds.has(e.id), isDirectEvent=!!(hlEvent&&String(hlEvent.id)===String(e.id));
       const isSibling = siblingEventIds.has(e.id), isIndirectNetworkEvent=chainOn&&isClicked&&!isDirectEvent;
+      const sourceEntries=[];
       (e.sources||[]).forEach(sc=>{ let r=resolveChartRecord(sc.doc_id,sc.quote); if(!r) return;
         // yu-loop: a 上諭 source on a field event is drawn to the official doc it came through
         // (viaDoc), so the chain reads 上諭 -> 官方文書 -> 事件 (the yu_source pair carries 官方文書 -> 上諭).
         if(e.actor!=='emperor' && sc.howKnown==='上諭所載' && sc.viaDoc){ const vr=resolveChartRecord(sc.viaDoc,sc.quote); if(vr) r=vr; }
+        sourceEntries.push({sc,r});
+      });
+      if(e.actor==='emperor'&&e.emperorDetail){
+        [e.emperorDetail.doc_id,e.emperorDetail.edict_id].filter(Boolean).forEach(id=>{
+          const r=resolveChartRecord(id,e.emperorDetail.quote); if(!r||sourceEntries.some(x=>x.r._rid===r._rid)) return;
+          sourceEntries.push({sc:{doc_id:id,quote:e.emperorDetail.quote||''},r});
+        });
+      }
+      sourceEntries.forEach(({sc,r})=>{
         if(!docLineVisible(r)) return;
         if(isIndirectNetworkEvent&&!hlRids.has(r._rid)) return;
         // Field events (lin/qing) connect ONLY to the officials-line dot (never straight to the
