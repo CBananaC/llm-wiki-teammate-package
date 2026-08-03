@@ -2962,6 +2962,27 @@ Verified:
 
 Remaining:
 - Later refine the click sequence, callout placement, and exact sample-tool control behavior after the visual base is approved. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 17:18 HKT — Codex — Apply 林方／清方 event-and-source result UI
+
+Summary:
+- Reworked the Part 1 AI result area to follow the sample tool's 林方／清方 extraction anatomy: actor-group headers, event candidate cards, location/person/date facts, source quotation blocks, and nested source-chain blocks.
+- Kept the existing confirmed 林方 event visibly separate from the two reviewable 清方 candidates, using the sample tool's red/blue actor distinction and green confirmed state.
+- Added source-quotation定位, source-date demonstration, add, skip, source-chain reveal, and reset behaviour without coupling the replica to the independent explanation cards.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed two groups and three event cards, all three source quotations locate the 硃42 original, a confirmed 清方 candidate creates a new chart dot and reveals its source chain, skip leaves the candidate out of the chart, and reset restores the initial linked-document panel.
+- Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
+- Formal and sample review data remain untouched; the pre-existing StoryMap Part 3 edits were preserved.
+
+Remaining:
+- None for this event-and-source UI pass. No push was performed.
 ### 2026-08-03 16:49 HKT — Codex — Align Part 3 with UI template and vertical card sequence
 
 Summary:

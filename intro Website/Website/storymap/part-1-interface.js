@@ -186,6 +186,7 @@
   const filterDock = replica.querySelector('[data-filterdock]');
   const aiBody = replica.querySelector('[data-ai-body]');
   const progress = replica.querySelector('[data-part1-progress]');
+  let renderedEventItems = [];
 
   const setProgress = (message) => { if (progress) progress.textContent = message; };
 
@@ -424,8 +425,9 @@
         <blockquote><b>①</b>「${escapeHtml('提臣黃仕簡已於十五日由廈門出口放洋')}」</blockquote>
         <blockquote><b>②</b>「${escapeHtml('任承恩亦配兵登舟，合之郝壯猷所帶，計共兵六千人')}」</blockquote>
       </div>
-      <div class="part1-linked-foot"><span>${escapeHtml(doc.docId)}</span><button type="button">功能⌄</button><span>⚙</span></div>
+      <div class="part1-linked-foot"><span>${escapeHtml(doc.docId)}</span><button type="button" data-load-cards>查看 AI 結果</button><button type="button">功能⌄</button><span>⚙</span></div>
     `;
+    aiBody.querySelector('[data-load-cards]')?.addEventListener('click', renderCandidates);
   };
 
   let terminalTimer = 0;
@@ -466,23 +468,88 @@
 
   const renderCandidates = () => {
     replica.querySelector('[data-callout="nav-io"]').hidden = true;
-    aiBody.innerHTML = `
-      <div class="part1-step"><span class="part1-step-num">3</span>逐項核對 AI 提取的結果。確認無誤後按「加入」，該項就會成為圖表上的事件節點。</div>
-      ${data.aiCandidates.map((item, index) => `
-        <article class="part1-card" data-candidate="${index}">
-          <div class="part1-card-head">AI 提取結果（${index + 1}）<span class="part1-card-skill">${escapeHtml(item.aiFilterLabel)}</span></div>
+    renderedEventItems = [
+      { ...data.dots.events, __confirmed: true, resultLabel: '林方事件', sourceRole: '林方報告' },
+      ...data.aiCandidates.map((item) => ({ ...item, resultLabel: '清方行動', sourceRole: '清方軍事行動' }))
+    ];
+
+    const actorLabel = (actor) => actor === 'lin' ? '林方事件' : '清方行動';
+    const actorClass = (actor) => actor === 'lin' ? 'is-lin' : 'is-qing';
+    const sourceDate = (item) => item.quoteDocId === doc.docId ? doc.sendDate[1] : '';
+    const sourceTitle = (item) => item.quoteDocId === doc.docId
+      ? `${doc.title}（${doc.docId}）`
+      : String(item.quoteDocId || '來源文書');
+    const sourceChain = (item, index) => `
+      <div class="part1-source-chain" data-source-chain="${index}"${item.__confirmed ? '' : ' hidden'}>
+        <div class="part1-source-chain-head">
+          <span class="part1-source-chain-label">來源鏈 1</span>
+          <span class="part1-source-chain-status">直接奏報</span>
+        </div>
+        <div class="part1-source-hop">
+          <span class="part1-source-node">${escapeHtml(sourceTitle(item))}</span>
+          <span class="part1-source-arrow" aria-hidden="true">→</span>
+          <span class="part1-source-node">${escapeHtml(actorLabel(item.actor))}</span>
+        </div>
+        <div class="part1-source-chain-events">
+          <span>此來源鏈所報事件</span>
+          <button class="part1-source-event" type="button" data-quote="${escapeHtml(item.quote)}" data-quote-doc="${escapeHtml(item.quoteDocId)}">
+            ${escapeHtml(item.subtitle)}
+          </button>
+        </div>
+      </div>`;
+    const renderEventCard = (item, index) => {
+      const confirmed = Boolean(item.__confirmed);
+      const sendDate = sourceDate(item);
+      return `
+        <article class="part1-card part1-event-card ${actorClass(item.actor)}${confirmed ? ' is-confirmed' : ''}" data-candidate="${index}">
+          <div class="part1-card-head">
+            <span>AI ${escapeHtml(actorLabel(item.actor))}</span>
+            <span class="part1-card-skill">${escapeHtml(item.aiFilterLabel)}</span>
+          </div>
           <p class="part1-card-title">${escapeHtml(item.subtitle)}</p>
           <p class="part1-card-desc">${escapeHtml(item.description)}</p>
-          <button class="part1-quote" type="button" data-quote="${escapeHtml(item.quote)}" data-quote-doc="${escapeHtml(item.quoteDocId)}">「${escapeHtml(item.quote)}」<span class="part1-quote-src">—${escapeHtml(item.quoteDocId)}　點擊引文，在原始史料區定位</span></button>
-          <div class="part1-card-acts">
-            <button class="part1-act" type="button" data-add="${index}">加入圖表</button>
-            <button class="part1-act part1-act-skip" type="button" data-skip="${index}">略過</button>
+          <dl class="part1-event-facts">
+            <dt>地點</dt><dd>${escapeHtml(item.where || '？')}</dd>
+            ${item.who?.length ? `<dt>人物</dt><dd>${escapeHtml(item.who.join('、'))}</dd>` : ''}
+            <dt>發生日期</dt><dd>${escapeHtml(item.whenCh || '未明')}（${escapeHtml(item.dateAr || '未明')}）</dd>
+          </dl>
+          <div class="part1-event-source">
+            <div class="part1-event-source-head">
+              <span>來源引文</span>
+              <span class="part1-event-source-role">${escapeHtml(item.sourceRole)}</span>
+            </div>
+            <button class="part1-quote part1-event-quote" type="button" data-quote="${escapeHtml(item.quote)}" data-quote-doc="${escapeHtml(item.quoteDocId)}">
+              「${escapeHtml(item.quote)}」
+              <span class="part1-quote-src">—${escapeHtml(item.quoteDocId)}／原文　點按定位</span>
+            </button>
+            <div class="part1-event-source-meta">${escapeHtml(sourceTitle(item))}${sendDate ? `　發送日 ${escapeHtml(sendDate)}` : ''}</div>
           </div>
-          <p class="part1-card-status" data-status="${index}"></p>
-        </article>
-      `).join('')}
+          <div class="part1-card-acts">
+            ${confirmed
+              ? '<span class="part1-confirmed">✓ 已加入</span>'
+              : `<button class="part1-act" type="button" data-add="${index}">加入圖表</button>
+                 ${sendDate ? `<button class="part1-act part1-act-date" type="button" data-use-date="${index}">用文書發送日 ${escapeHtml(sendDate)}</button>` : ''}
+                 <button class="part1-act part1-act-skip" type="button" data-skip="${index}">略過</button>`}
+          </div>
+          <p class="part1-card-status" data-status="${index}">${confirmed ? '此林方事件已在圖表上；以下保留其來源鏈供核對。' : ''}</p>
+          ${sourceChain(item, index)}
+        </article>`;
+    };
+
+    const groups = ['lin', 'qing'].map((actor) => {
+      const items = renderedEventItems.map((item, index) => ({ item, index })).filter(({ item }) => item.actor === actor);
+      if (!items.length) return '';
+      return `<section class="part1-event-group ${actorClass(actor)}">
+        <div class="part1-event-group-head"><span>${actor === 'lin' ? '林方事件' : '清方行動'}</span><span>${items.length} 項</span></div>
+        ${items.map(({ item, index }) => renderEventCard(item, index)).join('')}
+      </section>`;
+    }).join('');
+
+    aiBody.innerHTML = `
+      <div class="part1-step"><span class="part1-step-num">3</span>AI 結果依照林方／清方事件分組。每張卡先顯示事件內容，再顯示可回到原文核對的來源引文；只有確認後才加入圖表。</div>
+      ${groups}
     `;
-    setProgress('AI 結果已載入。先點引文回原文核對，確認後再按「加入圖表」。');
+    setProgress('AI 結果已載入。先點來源引文回原文核對，再確認是否加入圖表。');
 
     aiBody.querySelectorAll('[data-quote]').forEach((button) => {
       button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc));
@@ -494,11 +561,21 @@
       button.addEventListener('click', () => {
         const index = Number(button.dataset.skip);
         const card = aiBody.querySelector(`[data-candidate="${index}"]`);
-        card?.classList.add('is-added');
+        card?.classList.add('is-skipped');
         card?.querySelectorAll('.part1-act').forEach((item) => { item.disabled = true; });
         const status = aiBody.querySelector(`[data-status="${index}"]`);
         if (status) status.textContent = '已略過：此項不會加入圖表。';
         setProgress('已略過該項結果。被略過的結果不會進入圖表，原始文書不受影響。');
+      });
+    });
+    aiBody.querySelectorAll('[data-use-date]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const index = Number(button.dataset.useDate);
+        const item = renderedEventItems[index];
+        const status = aiBody.querySelector(`[data-status="${index}"]`);
+        if (status) status.textContent = `已套用來源文書發送日：${sourceDate(item)}。正式工具會以此日期補正事件位置。`;
+        button.disabled = true;
+        setProgress('已示範以來源文書發送日補正事件日期；正式工具會把修正後日期帶入圖表。');
       });
     });
   };
@@ -506,14 +583,16 @@
   const addedCandidates = new Set();
   const addCandidate = (index) => {
     if (addedCandidates.has(index)) return;
-    const item = data.aiCandidates[index];
+    const item = renderedEventItems[index];
+    if (!item || item.__confirmed) return;
     addedCandidates.add(index);
 
     const card = aiBody.querySelector(`[data-candidate="${index}"]`);
     card?.classList.add('is-added');
     card?.querySelectorAll('.part1-act').forEach((button) => { button.disabled = true; });
     const status = aiBody.querySelector(`[data-status="${index}"]`);
-    if (status) status.textContent = '已加入圖表：可在「戰場事件」線上點擊新圓點查看。';
+    if (status) status.textContent = '已加入圖表：可在「戰場事件」線上點擊新圓點查看；來源鏈已保留在此卡片下方。';
+    card?.querySelector('.part1-source-chain')?.removeAttribute('hidden');
 
     const button = addDot({
       lane: 'events',
@@ -524,7 +603,7 @@
     });
     drawLinks();
     setRegion('chart', { silent: true });
-    setProgress(`「${item.subtitle}」已加入戰場事件線。點擊那個新圓點，查看它的節點資訊區。`);
+    setProgress(`「${item.subtitle}」已加入戰場事件線。點擊新圓點，或在卡片下方查看其來源鏈。`);
     window.setTimeout(() => button?.classList.remove('is-new'), 700);
   };
 
@@ -605,6 +684,7 @@
   const reset = () => {
     window.clearTimeout(terminalTimer);
     addedCandidates.clear();
+    renderedEventItems = [];
     lanesEl.querySelectorAll('.part1-dot, .part1-dot-date').forEach((element) => element.remove());
     laneDots.forEach(addDot);
     nodePanel.hidden = true;

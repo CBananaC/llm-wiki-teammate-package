@@ -6781,3 +6781,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Original-content comparison found all 45 paragraphs and 23 headings present. Confirmed the new model, cloud, and three LLM Wiki sections exist and the research visual uses the right grid column. Passed StoryMap JavaScript syntax checking and `git diff --check`. Formal and sample review data remain untouched; no push was performed.
 
 Remaining: None for this requested Part 3 layout adjustment.
+
+### 2026-08-03 17:18 HKT — Codex — Apply 林方／清方 event-and-source result UI
+
+Summary: Reworked the Part 1 AI result area to follow the sample tool's 林方／清方 extraction anatomy: actor-group headers, event candidate cards, location/person/date facts, source quotation blocks, and nested source-chain blocks. Kept the confirmed 林方 event separate from the two reviewable 清方 candidates, with actor-specific red/blue styling and green confirmed state. Added quotation定位, source-date demonstration, add, skip, source-chain reveal, and reset behaviour without coupling the replica to the independent explanation cards.
+
+Files: `intro Website/Website/storymap/part-1-interface.js`, `intro Website/Website/storymap/part-1-interface.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser QA confirmed two groups and three event cards, all three source quotations locate the 硃42 original, a confirmed 清方 candidate creates a new chart dot and reveals its source chain, skip leaves the candidate out of the chart, and reset restores the initial linked-document panel. Passed `node --check intro Website/Website/storymap/part-1-interface.js` and `git diff --check`. Formal and sample review data remain untouched; pre-existing StoryMap Part 3 edits were preserved.
+
+Remaining: None for this event-and-source UI pass. No push was performed.
