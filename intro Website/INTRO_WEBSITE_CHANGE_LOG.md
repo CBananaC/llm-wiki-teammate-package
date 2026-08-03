@@ -3224,3 +3224,13 @@ Files: `Website/storymap/storymap.css`, `Website/storymap/storymap-cards.css`, a
 Verified: Browser preview rendered the fixed-height card and percentage photo/info split. Existing user-edited Part 3 content changes were preserved. Passed `node --check Website/storymap/storymap.js` and focused `git diff --check` for the three edited sizing files.
 
 Remaining: None for the requested sizing-unit adjustment.
+
+### 2026-08-03 19:20 HKT — Codex — Refresh StoryMap card CSS version for adjustable sizing
+
+Summary: Updated the `storymap-cards.css` query version in the StoryMap HTML so changes made in the `#part-3-tools` sizing block are loaded instead of the cached defaults. The current card settings now apply `1000px` overall height, `25%` checklist width, and `70% / 30%` photo/info proportions.
+
+Files: `Website/storymap/storymap-example.html` and `Website/storymap/storymap-cards.css`.
+
+Verified: Browser inspection identified the stale values before the cache refresh; after changing the stylesheet version, the StoryMap card loaded the updated stylesheet. Existing Agentic AI animation and content edits were preserved.
+
+Remaining: None for the CSS cache-refresh fix.
