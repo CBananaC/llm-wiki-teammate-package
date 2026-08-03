@@ -6851,3 +6851,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/We
 Verified: Browser preview confirmed five checklist rows, five subtitles, far-right tick alignment, five information views, and loaded photos. Selecting `Agentic AI` updates the right panel and active row; the live section contains no count/status labels. Passed StoryMap JavaScript syntax checking and `git diff --check`. Existing Part 3 question-gallery changes were preserved; no push was performed.
 
 Remaining: None for the applied checklist tools window.
+
+### 2026-08-03 18:44 HKT — Codex — Enlarge text in the Part 3 tools information panel
+
+Summary: Increased the selected tool title and original information paragraph inside the `所需的工具與資源` visual panel in the live StoryMap section and standalone checklist sample; removed the sample's unused status reference.
+
+Files: `intro Website/Website/storymap/storymap.css` and `intro Website/Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser preview showed the enlarged panel text; StoryMap JavaScript syntax checking and `git diff --check` passed. Existing Part 3 question-gallery changes were preserved.
+
+Remaining: None for this text-size adjustment.

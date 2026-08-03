@@ -376,8 +376,6 @@
   <script>
     const rows = [...document.querySelectorAll("[data-tool-id]")];
     const views = [...document.querySelectorAll("[data-info-id]")];
-    const status = document.getElementById("active-status");
-
     function selectTool(id) {
       const row = rows.find((item) => item.dataset.toolId === id);
       const view = views.find((item) => item.dataset.infoId === id);

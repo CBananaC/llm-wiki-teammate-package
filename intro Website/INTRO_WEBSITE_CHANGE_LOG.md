@@ -3174,3 +3174,13 @@ Verified:
 
 Remaining:
 - None for the applied checklist tools window. Existing Part 3 question-gallery changes were preserved.
+
+### 2026-08-03 18:44 HKT — Codex — Enlarge text in the Part 3 tools information panel
+
+Summary: Increased the selected tool title and original information paragraph inside the `所需的工具與資源` visual panel in both the live StoryMap section and the standalone checklist sample. Removed the unused status reference from the sample.
+
+Files: `Website/storymap/storymap.css` and `Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser preview showed the enlarged panel text; `node --check Website/storymap/storymap.js` and `git diff --check` passed. Existing Part 3 question-gallery changes were preserved.
+
+Remaining: None for this text-size adjustment.
