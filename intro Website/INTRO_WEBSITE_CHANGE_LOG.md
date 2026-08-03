@@ -3234,3 +3234,13 @@ Files: `Website/storymap/storymap-example.html` and `Website/storymap/storymap-c
 Verified: Browser inspection identified the stale values before the cache refresh; after changing the stylesheet version, the StoryMap card loaded the updated stylesheet. Existing Agentic AI animation and content edits were preserved.
 
 Remaining: None for the CSS cache-refresh fix.
+
+### 2026-08-03 19:24 HKT — Codex — Let card-level sizing variables override component defaults
+
+Summary: Removed the component-level dimension variables that were overriding `#part-3-tools`. The checklist now uses fallback values only, so the card stylesheet controls the actual layout. Refreshed the StoryMap base stylesheet version as well.
+
+Files: `Website/storymap/storymap.css` and `Website/storymap/storymap-example.html`.
+
+Verified: Browser preview rendered the current `1000px` card with the `70%` photo / `30%` information split, and the Agentic AI animation remained active after selecting its row. Existing animation and content edits were preserved.
+
+Remaining: None for the card-variable inheritance fix.
