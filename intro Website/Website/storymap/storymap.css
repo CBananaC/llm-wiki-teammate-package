@@ -206,16 +206,26 @@ img { max-width: 100%; }
 /* ============================================================================
    3 · 分頁封面帶（矮版）— 每個分頁一種漸層變體
    ========================================================================== */
+/* 下緣以漸層強調線收尾，讓帶子與下方紙色內文有明確的分界。 */
+/* 文字上方的留白比下方多，讓標題不會緊貼頂欄；
+   兩個數值可在 storymap-cards.css 用 --hero-pad-t／--hero-pad-b 個別調整。 */
 .section-hero {
   position: relative; display: flex; align-items: center; overflow: hidden;
-  min-height: clamp(140px, 19vh, 195px); padding: 28px 0;
-  color: #f7f3ea; border-bottom: 1px solid rgba(255, 255, 255, .16);
+  min-height: clamp(230px, 29vh, 320px);
+  padding: var(--hero-pad-t, clamp(96px, 10vh, 140px)) 0 var(--hero-pad-b, clamp(28px, 3vh, 38px));
+  color: #f7f3ea;
+  border-top: 0; border-bottom: 0;
 }
 .section-hero::after { content: ""; position: absolute; z-index: -1; inset: 0; background: linear-gradient(120deg, #173b3f 5%, #274e4f 52%, #a56c56 145%); }
-.section-hero-content { width: min(var(--wrap), 100%); margin: 0 auto; padding: 0 var(--part-pad-x); }
+.section-hero::before {
+  content: ""; position: absolute; z-index: 3; inset: auto 0 0 0; height: 4px;
+  background: linear-gradient(90deg, var(--yellow), var(--accent) 55%, transparent);
+}
+.section-hero-content { position: relative; z-index: 2; width: min(var(--wrap), 100%); margin: 0 auto; padding: 0 var(--part-pad-x); }
 .section-hero .eyebrow { margin: 0 0 9px; color: var(--yellow); font: 800 calc(11px * var(--font-scale)) var(--sans); letter-spacing: .18em; }
-.section-hero h1 { margin: 0; font: 500 clamp(26px, 3.4vw, 44px)/1.14 var(--serif); letter-spacing: -.035em; }
-.section-hero-note { margin: 10px 0 0; max-width: 62ch; color: rgba(247, 243, 234, .76); font: var(--body-weight) calc(15px * var(--font-scale))/1.75 var(--serif); }
+.section-hero h1 { margin: 0; font: 500 clamp(28px, 3.8vw, 50px)/1.14 var(--serif); letter-spacing: -.035em; }
+/* 說明文改用較小的 sans，與 serif 大標題明顯分層 */
+.section-hero-note { margin: 12px 0 0; max-width: 66ch; color: rgba(247, 243, 234, .68); font: 500 calc(13.5px * var(--font-scale))/1.75 var(--sans); letter-spacing: .01em; }
 
 .section-hero-intro::after { background: radial-gradient(circle at 78% 22%, rgba(199, 84, 63, .55), transparent 32%), linear-gradient(120deg, #173b3f 5%, #274e4f 52%, #a56c56 145%); }
 .section-hero-part-1::after { background: radial-gradient(circle at 20% 25%, rgba(92, 142, 133, .5), transparent 34%), linear-gradient(120deg, #173b3f 5%, #315d5a 52%, #9a6b57 145%); }
@@ -1045,10 +1055,19 @@ img { max-width: 100%; }
 .part3-stage {
   border-top: 1px solid rgba(22, 61, 63, .16);
 }
+/* 第三部分內部的階段小標題帶：沿用封面帶的底色，但維持原本較矮的高度，
+   並且不加分頁封面帶下緣的漸層強調線，以免與分頁層級混淆。 */
 .part3-stage-bar {
   min-height: clamp(140px, 19vh, 195px);
+  padding: 28px 0;
+  --hero-pad-t: 28px;
+  --hero-pad-b: 28px;
+  border-top: 0;
+  border-bottom: 1px solid rgba(255, 255, 255, .16);
   isolation: isolate;
 }
+.part3-stage-bar::before { content: none; }
+.part3-stage-bar h1 { font-size: clamp(26px, 3.4vw, 44px); }
 .part3-two-card-grid,
 .part3-card-grid,
 .part3-three-card-grid,

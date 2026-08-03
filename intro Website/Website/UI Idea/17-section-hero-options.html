@@ -1,0 +1,273 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>17 · 分頁封面帶（section-hero）強化選項</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+    --body-weight: 500;
+    --font-scale: 1;
+    --bar-h: 62px;
+    --part-pad-x: clamp(16px, 3.4vw, 52px);
+    --wrap: 1560px;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+
+  /* 說明用的頁面外框 */
+  .page-head { padding: 40px clamp(16px,3vw,40px) 8px; }
+  .page-head h1 { margin: 0 0 6px; font: 700 22px/1.3 var(--sans); }
+  .page-head p { margin: 0; max-width: 760px; color: var(--muted); font: 500 14px/1.7 var(--sans); }
+  .opt { margin: 44px 0 0; }
+  .opt-tag {
+    display: inline-block; margin: 0 0 10px clamp(16px,3vw,40px);
+    padding: 5px 10px; color: var(--accent); background: rgba(196,93,56,.1);
+    border: 1px solid rgba(196,93,56,.3);
+    font: 800 11px/1 var(--sans); letter-spacing: .12em;
+  }
+  .opt-desc { margin: 0 0 14px; padding: 0 clamp(16px,3vw,40px); max-width: 860px; color: var(--ink-soft); font: 500 13.5px/1.7 var(--serif); }
+  .after-paper { padding: 34px clamp(16px,3vw,40px) 44px; color: var(--text); font: var(--body-weight) 14.5px/1.85 var(--serif); }
+  .after-paper span { color: var(--muted); font: 700 11px var(--sans); letter-spacing: .1em; }
+
+  /* 模擬頂欄，用來檢查封面帶與頂欄是否分得開 */
+  .topbar {
+    display: grid; grid-template-columns: minmax(0,1fr) auto minmax(0,1fr);
+    align-items: center; gap: 20px;
+    height: var(--bar-h); padding: 0 clamp(16px,3vw,30px);
+    color: #f7f3ea; background: #12363a;
+    border-bottom: 1px solid rgba(255,255,255,.14);
+  }
+  .brand { justify-self: start; font: 600 14px var(--serif); letter-spacing: .08em; }
+  .tabs { justify-self: center; display: flex; gap: clamp(16px,2.2vw,32px); }
+  .tabs span { color: rgba(247,243,234,.72); font: 500 12.5px var(--sans); letter-spacing: .09em; }
+  .tabs span.active { color: #fff; }
+
+  /* ==========================================================================
+     目前的樣式（作為對照組）
+     ========================================================================== */
+  .section-hero {
+    position: relative; display: flex; align-items: center; overflow: hidden;
+    min-height: clamp(140px, 19vh, 195px); padding: 28px 0;
+    color: #f7f3ea; border-bottom: 1px solid rgba(255,255,255,.16);
+  }
+  .section-hero::after {
+    content: ""; position: absolute; z-index: 0; inset: 0;
+    background: radial-gradient(circle at 22% 28%, rgba(199,84,63,.5), transparent 32%),
+                linear-gradient(120deg, #173b3f 5%, #456e69 50%, #9a6b57 145%);
+  }
+  .section-hero-content { position: relative; z-index: 2; width: min(var(--wrap),100%); margin: 0 auto; padding: 0 var(--part-pad-x); }
+  .section-hero .eyebrow { margin: 0 0 9px; color: var(--yellow); font: 800 11px var(--sans); letter-spacing: .18em; }
+  .section-hero h1 { margin: 0; font: 500 clamp(26px,3.4vw,44px)/1.14 var(--serif); letter-spacing: -.035em; }
+  .section-hero-note { margin: 10px 0 0; max-width: 62ch; color: rgba(247,243,234,.76); font: var(--body-weight) 15px/1.75 var(--serif); }
+
+  /* ==========================================================================
+     選項 1 — 分隔邊：頂／底加上強調色細線，讓帶子從頂欄獨立出來
+     ========================================================================== */
+  .hero-v1 { border-top: 3px solid var(--yellow); border-bottom: 0; }
+  .hero-v1::before {
+    content: ""; position: absolute; z-index: 3; inset: auto 0 0 0; height: 4px;
+    background: linear-gradient(90deg, var(--yellow), var(--accent) 55%, transparent);
+  }
+
+  /* ==========================================================================
+     選項 2 — 編號徽章：沿用內文各節的 .option-number 方塊樣式
+     ========================================================================== */
+  .hero-v2 .hero-title-row { display: flex; align-items: center; gap: 16px; }
+  .hero-v2 .option-number {
+    display: grid; place-items: center; flex: none;
+    width: clamp(44px,4vw,58px); height: clamp(44px,4vw,58px);
+    color: #fffaf2; font: 700 clamp(19px,2vw,26px)/1 var(--sans);
+    background: radial-gradient(circle at 74% 22%, rgba(255,255,255,.14), transparent 60%),
+                linear-gradient(135deg, #0d2b2e 8%, #2b524f 56%, var(--accent) 175%);
+    box-shadow: 0 8px 20px rgba(6,24,26,.35);
+  }
+  .hero-v2 { border-top: 3px solid var(--yellow); }
+
+  /* ==========================================================================
+     選項 3 — 巨型浮水印：右側放大字，帶子立刻有重量
+     ========================================================================== */
+  .hero-v3 { border-top: 3px solid var(--yellow); }
+  .hero-v3::before {
+    content: attr(data-mark);
+    position: absolute; z-index: 1; right: clamp(20px,5vw,90px); top: 50%;
+    transform: translateY(-50%);
+    color: rgba(247,243,234,.13);
+    font: 700 clamp(120px,17vw,230px)/.8 var(--serif);
+    pointer-events: none;
+  }
+
+  /* ==========================================================================
+     選項 4 — 網點紋理 + 進度指示：帶子有材質，也提供閱讀位置
+     ========================================================================== */
+  .hero-v4 { border-top: 3px solid var(--yellow); }
+  .hero-v4::before {
+    content: ""; position: absolute; z-index: 1; inset: 0;
+    background-image: radial-gradient(rgba(247,243,234,.16) 1px, transparent 1px);
+    background-size: 14px 14px;
+    -webkit-mask-image: linear-gradient(100deg, transparent 30%, #000 100%);
+            mask-image: linear-gradient(100deg, transparent 30%, #000 100%);
+    pointer-events: none;
+  }
+  .hero-steps { position: absolute; z-index: 3; right: clamp(20px,4vw,56px); bottom: 18px; display: flex; gap: 10px; }
+  .hero-steps span {
+    display: grid; place-items: center; min-width: 30px; padding: 5px 8px;
+    color: rgba(247,243,234,.55); border: 1px solid rgba(247,243,234,.28);
+    font: 800 11px/1 var(--sans); letter-spacing: .1em;
+  }
+  .hero-steps span.is-current { color: #12363a; background: var(--yellow); border-color: var(--yellow); }
+
+  /* ==========================================================================
+     選項 5 — 全部組合：分隔邊＋編號徽章＋浮水印＋紋理＋字級對比
+     說明文改為 sans、更小更淡，與標題明顯分層
+     ========================================================================== */
+  .hero-v5 { border-top: 3px solid var(--yellow); border-bottom: 0; min-height: clamp(170px,22vh,230px); }
+  .hero-v5::after {
+    background: radial-gradient(circle at 18% 22%, rgba(199,84,63,.55), transparent 34%),
+                linear-gradient(118deg, #0f3034 4%, #3e6a66 48%, #9a6b57 140%);
+  }
+  .hero-v5 .hero-texture {
+    position: absolute; z-index: 1; inset: 0;
+    background-image: radial-gradient(rgba(247,243,234,.14) 1px, transparent 1px);
+    background-size: 14px 14px;
+    -webkit-mask-image: linear-gradient(100deg, transparent 34%, #000 100%);
+            mask-image: linear-gradient(100deg, transparent 34%, #000 100%);
+  }
+  .hero-v5 .hero-mark {
+    position: absolute; z-index: 1; right: clamp(20px,5vw,90px); top: 50%;
+    transform: translateY(-50%);
+    color: rgba(247,243,234,.12);
+    font: 700 clamp(120px,17vw,230px)/.8 var(--serif);
+  }
+  .hero-v5 .hero-title-row { display: flex; align-items: center; gap: 16px; }
+  .hero-v5 .option-number {
+    display: grid; place-items: center; flex: none;
+    width: clamp(46px,4.2vw,60px); height: clamp(46px,4.2vw,60px);
+    color: #fffaf2; font: 700 clamp(20px,2.1vw,27px)/1 var(--sans);
+    background: radial-gradient(circle at 74% 22%, rgba(255,255,255,.14), transparent 60%),
+                linear-gradient(135deg, #0d2b2e 8%, #2b524f 56%, var(--accent) 175%);
+    box-shadow: 0 8px 20px rgba(6,24,26,.35);
+  }
+  .hero-v5 h1 { font-size: clamp(28px,3.8vw,50px); }
+  .hero-v5 .section-hero-note {
+    max-width: 66ch; color: rgba(247,243,234,.68);
+    font: 500 13.5px/1.75 var(--sans); letter-spacing: .01em;
+  }
+  .hero-v5::before {
+    content: ""; position: absolute; z-index: 3; inset: auto 0 0 0; height: 4px;
+    background: linear-gradient(90deg, var(--yellow), var(--accent) 55%, transparent);
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-head">
+    <h1>分頁封面帶（section-hero）強化選項</h1>
+    <p>每個選項上方都放了同一條頂欄，方便檢查封面帶是否與頂欄分得開。內容一律使用實際的第三部分文字。</p>
+  </div>
+
+  <!-- ===================== 對照組：目前樣式 ===================== -->
+  <div class="opt">
+    <span class="opt-tag">現況 · 目前線上樣式</span>
+    <p class="opt-desc">問題：與頂欄同為深綠、之間沒有分界，兩塊合成一大片；下緣直接切到紙色；標題與說明文同為 serif、字重相近，層次不明顯。</p>
+    <div class="topbar"><span class="brand">清代奏摺與上諭分析平台</span><div class="tabs"><span>主頁</span><span>引言</span><span>第一部分</span><span>第二部分</span><span class="active">第三部分</span></div><span></span></div>
+    <section class="section-hero">
+      <div class="section-hero-content">
+        <p class="eyebrow">第三部分</p>
+        <h1>運用平台研究其他的問題</h1>
+        <p class="section-hero-note">除了網站的示例——林爽文事件外，此平台亦可應用於其他的研究議題，本節會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+      </div>
+    </section>
+    <div class="after-paper"><span>（下方內文區）</span><br>接續的段落文字。</div>
+  </div>
+
+  <!-- ===================== 選項 1 ===================== -->
+  <div class="opt">
+    <span class="opt-tag">選項 1 · 分隔邊</span>
+    <p class="opt-desc">上緣加一條 3px 黃色實線把帶子從頂欄切開，下緣改用漸層強調線收尾。改動最小，但帶子立刻成為獨立的一塊。</p>
+    <div class="topbar"><span class="brand">清代奏摺與上諭分析平台</span><div class="tabs"><span>主頁</span><span>引言</span><span>第一部分</span><span>第二部分</span><span class="active">第三部分</span></div><span></span></div>
+    <section class="section-hero hero-v1">
+      <div class="section-hero-content">
+        <p class="eyebrow">第三部分</p>
+        <h1>運用平台研究其他的問題</h1>
+        <p class="section-hero-note">除了網站的示例——林爽文事件外，此平台亦可應用於其他的研究議題，本節會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+      </div>
+    </section>
+    <div class="after-paper"><span>（下方內文區）</span><br>接續的段落文字。</div>
+  </div>
+
+  <!-- ===================== 選項 2 ===================== -->
+  <div class="opt">
+    <span class="opt-tag">選項 2 · 編號徽章</span>
+    <p class="opt-desc">左側加上編號方塊，沿用引言各節既有的 <code>.option-number</code> 樣式，與網站其他部分一致，也讓左端有明確的視覺錨點。</p>
+    <div class="topbar"><span class="brand">清代奏摺與上諭分析平台</span><div class="tabs"><span>主頁</span><span>引言</span><span>第一部分</span><span>第二部分</span><span class="active">第三部分</span></div><span></span></div>
+    <section class="section-hero hero-v2">
+      <div class="section-hero-content">
+        <p class="eyebrow">第三部分</p>
+        <div class="hero-title-row">
+          <span class="option-number">3</span>
+          <h1>運用平台研究其他的問題</h1>
+        </div>
+        <p class="section-hero-note">除了網站的示例——林爽文事件外，此平台亦可應用於其他的研究議題，本節會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+      </div>
+    </section>
+    <div class="after-paper"><span>（下方內文區）</span><br>接續的段落文字。</div>
+  </div>
+
+  <!-- ===================== 選項 3 ===================== -->
+  <div class="opt">
+    <span class="opt-tag">選項 3 · 巨型浮水印</span>
+    <p class="opt-desc">右側放一個極淡的巨大「參」字（沿用現有 <code>data-mark</code> 屬性，不必改 HTML 結構）。右半邊原本是空的，加上浮水印後整條帶子有重量也有識別度。</p>
+    <div class="topbar"><span class="brand">清代奏摺與上諭分析平台</span><div class="tabs"><span>主頁</span><span>引言</span><span>第一部分</span><span>第二部分</span><span class="active">第三部分</span></div><span></span></div>
+    <section class="section-hero hero-v3" data-mark="參">
+      <div class="section-hero-content">
+        <p class="eyebrow">第三部分</p>
+        <h1>運用平台研究其他的問題</h1>
+        <p class="section-hero-note">除了網站的示例——林爽文事件外，此平台亦可應用於其他的研究議題，本節會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+      </div>
+    </section>
+    <div class="after-paper"><span>（下方內文區）</span><br>接續的段落文字。</div>
+  </div>
+
+  <!-- ===================== 選項 4 ===================== -->
+  <div class="opt">
+    <span class="opt-tag">選項 4 · 網點紋理 ＋ 進度指示</span>
+    <p class="opt-desc">加上細網點紋理讓平面漸層有材質；右下角放 01／02／03 進度指示，除了強調帶子本身，也讓讀者知道目前在整份內容的哪一段。</p>
+    <div class="topbar"><span class="brand">清代奏摺與上諭分析平台</span><div class="tabs"><span>主頁</span><span>引言</span><span>第一部分</span><span>第二部分</span><span class="active">第三部分</span></div><span></span></div>
+    <section class="section-hero hero-v4">
+      <div class="section-hero-content">
+        <p class="eyebrow">第三部分</p>
+        <h1>運用平台研究其他的問題</h1>
+        <p class="section-hero-note">除了網站的示例——林爽文事件外，此平台亦可應用於其他的研究議題，本節會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+      </div>
+      <div class="hero-steps"><span>01</span><span>02</span><span class="is-current">03</span></div>
+    </section>
+    <div class="after-paper"><span>（下方內文區）</span><br>接續的段落文字。</div>
+  </div>
+
+  <!-- ===================== 選項 5 ===================== -->
+  <div class="opt">
+    <span class="opt-tag">選項 5 · 全部組合</span>
+    <p class="opt-desc">分隔邊＋編號徽章＋浮水印＋紋理，帶子加高，標題放大，說明文改為較小的 sans 並降低對比，讓標題與說明明顯分層。</p>
+    <div class="topbar"><span class="brand">清代奏摺與上諭分析平台</span><div class="tabs"><span>主頁</span><span>引言</span><span>第一部分</span><span>第二部分</span><span class="active">第三部分</span></div><span></span></div>
+    <section class="section-hero hero-v5">
+      <span class="hero-texture" aria-hidden="true"></span>
+      <span class="hero-mark" aria-hidden="true">參</span>
+      <div class="section-hero-content">
+        <p class="eyebrow">第三部分</p>
+        <div class="hero-title-row">
+          <span class="option-number">3</span>
+          <h1>運用平台研究其他的問題</h1>
+        </div>
+        <p class="section-hero-note">除了網站的示例——林爽文事件外，此平台亦可應用於其他的研究議題，本節會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+      </div>
+    </section>
+    <div class="after-paper"><span>（下方內文區）</span><br>接續的段落文字。</div>
+  </div>
+
+</body>
+</html>
