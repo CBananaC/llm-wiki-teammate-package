@@ -3194,3 +3194,13 @@ Files: `Website/storymap/storymap.css` and `Website/UI Idea/part3-tools-option-0
 Verified: Live browser preview showed all five checklist rows and five information views; selecting a row still changes the information panel. The standalone sample also loaded all five rows and views. Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
 
 Remaining: None for the adjustable tools-window layout.
+
+### 2026-08-03 18:55 HKT — Codex — Enlarge Part 3 tools-window typography
+
+Summary: Increased the text size for the five checklist rows, row numbers, subtitles, tick marks, the `工具清單` and `工具資訊` window headings, and the selected tool's information panel. Increased row height to keep the larger labels readable.
+
+Files: `Website/storymap/storymap.css` and `Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser preview showed the enlarged checklist and information-panel text with all five rows and both window headings visible. Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining: None for this typography adjustment.
