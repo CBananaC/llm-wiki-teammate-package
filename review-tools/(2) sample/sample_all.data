@@ -14403,72 +14403,6 @@
           "kind": "docpair",
           "pair": {
             "yu_doc_id": "諭13",
-            "reply_doc_id": "硃24",
-            "relation": "yu_source",
-            "match_level": "high",
-            "confirmed_at": "2026-07-17 11:24",
-            "evidence": {
-              "matched_yu_span": "又據徐嗣曾由六百里馳奏，接蚶江通判陳惇稟稱，昨據船戶黃斌供，有傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。又鎮道已抵彰城，賊匪俱被殺死等語。",
-              "quote_in_reply": "據蚶江通判陳惇稟稱，初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：……又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。等語。是日申刻，臣於省城密查得，同知程峻署中子侄程實〔必〕大……內稱……本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死",
-              "memorialist": "徐嗣曾",
-              "relation_note": "上諭引述徐嗣曾由六百里馳奏，提及接獲蚶江通判陳惇轉述船戶黃斌之傳聞，包含賊攻諸羅被殺二千餘人及鎮道已抵彰城等情，此摺即為該情報的遞送公文（傳遞鏈為徐嗣曾←陳惇←黃斌）。",
-              "send_date": "1786/12/14"
-            },
-            "yu": {
-              "id": "諭13",
-              "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
-              "type": "",
-              "doc_type": "上諭",
-              "author": "常青",
-              "recipients": [],
-              "issue_date": "",
-              "send_date": "",
-              "receive_date": ""
-            },
-            "reply": {
-              "id": "硃24",
-              "title": "為奏接鎮道文報並派遣省兵赴臺事",
-              "type": "",
-              "doc_type": "硃批",
-              "author": "徐嗣曾",
-              "recipients": [],
-              "issue_date": "",
-              "send_date": [
-                "乾隆五十一年十二月十四日",
-                "1786/12/14"
-              ],
-              "receive_date": [
-                "乾隆五十一年十二月二十七日",
-                "1786/12/27"
-              ]
-            },
-            "source_doc_id": "硃24",
-            "source": {
-              "id": "硃24",
-              "title": "為奏接鎮道文報並派遣省兵赴臺事",
-              "type": "",
-              "doc_type": "硃批",
-              "author": "徐嗣曾",
-              "recipients": [],
-              "issue_date": "",
-              "send_date": [
-                "乾隆五十一年十二月十四日",
-                "1786/12/14"
-              ],
-              "receive_date": [
-                "乾隆五十一年十二月二十七日",
-                "1786/12/27"
-              ]
-            }
-          },
-          "prompt": "上諭回應的奏折"
-        },
-        {
-          "at": "2026-07-30 10:40",
-          "model": "local skill output",
-          "kind": "docpair",
-          "pair": {
-            "yu_doc_id": "諭13",
             "reply_doc_id": "硃26",
             "relation": "yu_source",
             "match_level": "high",
@@ -30747,70 +30681,711 @@
   "硃24": {
     "chat": [
       {
-        "at": "2026-07-30 09:51",
-        "model": "local skill output",
-        "kind": "docpair",
-        "pair": {
-          "yu_doc_id": "諭13",
-          "reply_doc_id": "硃24",
-          "relation": "yu_source",
-          "match_level": "high",
-          "confirmed_at": "2026-07-17 11:24",
-          "evidence": {
-            "matched_yu_span": "又據徐嗣曾由六百里馳奏，接蚶江通判陳惇稟稱，昨據船戶黃斌供，有傳說賊人赴諸羅縣攻城，被官兵殺死二千餘人。又鎮道已抵彰城，賊匪俱被殺死等語。",
-            "quote_in_reply": "據蚶江通判陳惇稟稱，初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱：……又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人。等語。是日申刻，臣於省城密查得，同知程峻署中子侄程實〔必〕大……內稱……本月初六日聞得鎮、道官兵已抵彰城，賊匪被炮打死",
-            "memorialist": "徐嗣曾",
-            "relation_note": "上諭引述徐嗣曾由六百里馳奏，提及接獲蚶江通判陳惇轉述船戶黃斌之傳聞，包含賊攻諸羅被殺二千餘人及鎮道已抵彰城等情，此摺即為該情報的遞送公文（傳遞鏈為徐嗣曾←陳惇←黃斌）。",
-            "send_date": "1786/12/14"
-          },
-          "yu": {
-            "id": "諭13",
-            "title": "諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡",
-            "type": "",
-            "doc_type": "上諭",
-            "author": "常青",
-            "recipients": [],
-            "issue_date": "",
-            "send_date": "",
-            "receive_date": ""
-          },
-          "reply": {
-            "id": "硃24",
-            "title": "為奏接鎮道文報並派遣省兵赴臺事",
-            "type": "",
-            "doc_type": "硃批",
-            "author": "徐嗣曾",
-            "recipients": [],
-            "issue_date": "",
-            "send_date": [
-              "乾隆五十一年十二月十四日",
-              "1786/12/14"
+        "kind": "extract",
+        "actor": "lin",
+        "prompt": "",
+        "items": [
+          {
+            "actor": "lin",
+            "subtitle": "奸民林爽文與王芬結黨搶劫",
+            "description": "奸民林爽文、王芬等人在北路大里杙等莊結黨聚眾搶劫，抗拒官府查拿。",
+            "where": "大里杙",
+            "who": [
+              "奸民林爽文",
+              "王芬"
             ],
-            "receive_date": [
-              "乾隆五十一年十二月二十七日",
-              "1786/12/27"
-            ]
-          },
-          "source_doc_id": "硃24",
-          "source": {
-            "id": "硃24",
-            "title": "為奏接鎮道文報並派遣省兵赴臺事",
-            "type": "",
-            "doc_type": "硃批",
-            "author": "徐嗣曾",
-            "recipients": [],
-            "issue_date": "",
-            "send_date": [
-              "乾隆五十一年十二月十四日",
-              "1786/12/14"
+            "whoLoc": {
+              "奸民林爽文": "大里杙",
+              "王芬": "大里杙"
+            },
+            "relations": [
+              {
+                "source": "奸民林爽文",
+                "target": "王芬",
+                "relation": "結黨",
+                "relation_type": "ally",
+                "evidence": "奸民林爽文、王芬等結黨搶劫"
+              }
             ],
-            "receive_date": [
-              "乾隆五十一年十二月二十七日",
-              "1786/12/27"
-            ]
+            "whenAr": "1786/11",
+            "whenCh": "乾隆五十一年十一月以前",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "北路大里杙等莊，有奸民林爽文、王芬等結黨搶劫",
+                "label": "奸民林爽文與王芬結黨搶劫",
+                "howKnown": "轉述",
+                "whenKnown": ""
+              }
+            ],
+            "__traceChains": [
+              {
+                "id": "pvcmscpsw7549lt1115",
+                "hops": [
+                  {
+                    "layer": 1,
+                    "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "to_person": "福建巡撫徐嗣曾",
+                    "place": "省城",
+                    "whenCh": "十二月十四日丑刻",
+                    "whenAr": "1786/12/14",
+                    "how": "移稟",
+                    "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  }
+                ],
+                "events": [
+                  {
+                    "subtitle": "奸民林爽文與王芬結黨搶劫",
+                    "reporter": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "whenCh": "",
+                    "where": "北路大里杙等莊",
+                    "quote": "本鎮等訪聞北路大里杙等莊，有奸民林爽文、王芬等結黨搶劫",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#lin#candidate"
+          },
+          {
+            "actor": "lin",
+            "subtitle": "賊匪夜襲大墩營盤並截斷大肚溪道路",
+            "description": "乾隆五十一年十一月二十七日夜四更，數千名賊匪散而復聚，圍攻大墩營盤，並在大肚溪邊聚集截斷道路，致使官府訊息不通。",
+            "where": "大墩",
+            "who": [
+              "奸民林爽文"
+            ],
+            "whoLoc": {
+              "奸民林爽文": "大墩"
+            },
+            "relations": [
+              {
+                "source": "奸民林爽文",
+                "target": "大墩",
+                "relation": "攻劫",
+                "relation_type": "other",
+                "evidence": "賊匪散而復聚，竟有數千人往劫大墩營盤"
+              }
+            ],
+            "whenAr": "1786/11/27",
+            "whenCh": "乾隆五十一年十一月二十七日夜",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。並於大肚溪邊聚匪截路，以致信息不通",
+                "label": "賊匪夜襲大墩營盤並截斷大肚溪道路",
+                "howKnown": "轉述",
+                "whenKnown": ""
+              }
+            ],
+            "__traceChains": [
+              {
+                "id": "pvcmscpsw7bqht56323",
+                "hops": [
+                  {
+                    "layer": 1,
+                    "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "to_person": "福建巡撫徐嗣曾",
+                    "place": "省城",
+                    "whenCh": "十二月十四日丑刻",
+                    "whenAr": "1786/12/14",
+                    "how": "移稟",
+                    "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  },
+                  {
+                    "layer": 2,
+                    "from_person": "北路中營都司",
+                    "to_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "place": "",
+                    "whenCh": "十二月初一日辰刻",
+                    "whenAr": "1786/12/01",
+                    "how": "報稱",
+                    "quote": "本月初一日辰刻，據北路中營都司報稱",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  }
+                ],
+                "events": [
+                  {
+                    "subtitle": "賊匪夜襲大墩營盤並截斷大肚溪道路",
+                    "reporter": "北路中營都司",
+                    "whenCh": "十一月二十七日夜四更時候",
+                    "where": "大墩營盤、大肚溪邊",
+                    "quote": "二十七日夜四更時候，賊匪散而復聚，竟有數千人往劫大墩營盤。並於大肚溪邊聚匪截路，以致信息不通",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#lin#candidate"
+          },
+          {
+            "actor": "lin",
+            "subtitle": "叛軍攻陷彰化縣城殺害官員",
+            "description": "乾隆五十一年十一月二十九日，叛軍攻陷彰化縣城，城內駐守官員均遭殺害。",
+            "where": "彰化縣城",
+            "who": [
+              "奸民林爽文"
+            ],
+            "whoLoc": {
+              "奸民林爽文": "彰化縣城"
+            },
+            "relations": [
+              {
+                "source": "奸民林爽文",
+                "target": "彰化縣城",
+                "relation": "攻陷",
+                "relation_type": "other",
+                "evidence": "彰化縣城內被賊殺害各官"
+              }
+            ],
+            "whenAr": "1786/11/29",
+            "whenCh": "乾隆五十一年十一月二十九日",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官",
+                "label": "叛軍攻陷彰化縣城殺害官員",
+                "howKnown": "轉述",
+                "whenKnown": ""
+              }
+            ],
+            "__traceChains": [
+              {
+                "id": "pvcmscpsw7imf8o8488",
+                "hops": [
+                  {
+                    "layer": 1,
+                    "from_person": "蚶江通判陳惇",
+                    "to_person": "福建巡撫徐嗣曾",
+                    "place": "省城",
+                    "whenCh": "十二月十三日午刻",
+                    "whenAr": "1786/12/13",
+                    "how": "稟稱",
+                    "quote": "十三日午刻，據蚶江通判陳惇稟稱",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  },
+                  {
+                    "layer": 2,
+                    "from_person": "舵工黃斌",
+                    "to_person": "蚶江通判陳惇",
+                    "place": "蚶江",
+                    "whenCh": "十二月初十日酉時",
+                    "whenAr": "1786/12/10",
+                    "how": "供稱",
+                    "quote": "初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  }
+                ],
+                "events": [
+                  {
+                    "subtitle": "叛軍攻陷彰化縣城殺害官員",
+                    "reporter": "舵工黃斌",
+                    "whenCh": "十一月二十九日",
+                    "where": "彰化縣城",
+                    "quote": "十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官",
+                    "doc_id": "硃24"
+                  },
+                  {
+                    "subtitle": "叛軍前往攻打諸羅縣城",
+                    "reporter": "舵工黃斌",
+                    "whenCh": "",
+                    "where": "諸羅縣",
+                    "quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#lin#candidate"
+          },
+          {
+            "actor": "lin",
+            "subtitle": "叛軍前往攻打諸羅縣城",
+            "description": "叛軍攻陷彰化後，復前往諸羅縣攻城，遭官兵殺死二千餘人。",
+            "where": "諸羅縣城",
+            "who": [
+              "奸民林爽文"
+            ],
+            "whoLoc": {
+              "奸民林爽文": "諸羅縣城"
+            },
+            "relations": [
+              {
+                "source": "奸民林爽文",
+                "target": "諸羅縣城",
+                "relation": "攻打",
+                "relation_type": "other",
+                "evidence": "賊人赴諸羅縣攻城"
+              }
+            ],
+            "whenAr": "1786/11/29",
+            "whenCh": "乾隆五十一年十一月二十九日以後",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人",
+                "label": "叛軍前往攻打諸羅縣城",
+                "howKnown": "轉述",
+                "whenKnown": ""
+              }
+            ],
+            "__traceChains": [
+              {
+                "id": "pvcmscpsw7imf8o8488",
+                "hops": [
+                  {
+                    "layer": 1,
+                    "from_person": "蚶江通判陳惇",
+                    "to_person": "福建巡撫徐嗣曾",
+                    "place": "省城",
+                    "whenCh": "十二月十三日午刻",
+                    "whenAr": "1786/12/13",
+                    "how": "稟稱",
+                    "quote": "十三日午刻，據蚶江通判陳惇稟稱",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  },
+                  {
+                    "layer": 2,
+                    "from_person": "舵工黃斌",
+                    "to_person": "蚶江通判陳惇",
+                    "place": "蚶江",
+                    "whenCh": "十二月初十日酉時",
+                    "whenAr": "1786/12/10",
+                    "how": "供稱",
+                    "quote": "初十日酉時，民人紀長錦船只由鹿仔港來蚶進口，詢據舵工黃斌供稱",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  }
+                ],
+                "events": [
+                  {
+                    "subtitle": "叛軍攻陷彰化縣城殺害官員",
+                    "reporter": "舵工黃斌",
+                    "whenCh": "十一月二十九日",
+                    "where": "彰化縣城",
+                    "quote": "十一月二十九日在鹿仔港口內，聽得人說彰化縣城內被賊殺害各官",
+                    "doc_id": "硃24"
+                  },
+                  {
+                    "subtitle": "叛軍前往攻打諸羅縣城",
+                    "reporter": "舵工黃斌",
+                    "whenCh": "",
+                    "where": "諸羅縣",
+                    "quote": "又聽人傳說，賊人赴諸羅縣攻城，被官兵殺死二千餘人",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#lin#candidate"
           }
-        },
-        "prompt": "上諭回應的奏折"
+        ],
+        "leftoverChains": [],
+        "at": "2026-08-03 04:14",
+        "model": "gemini-3.6-flash"
+      },
+      {
+        "kind": "extract",
+        "actor": "qing",
+        "prompt": "",
+        "items": [
+          {
+            "actor": "qing",
+            "subtitle": "游擊耿世文帶兵搜捕大里杙等莊匪徒",
+            "description": "北協副將赫生額、游擊耿世文、同知長庚、彰化知縣俞峻帶兵前往大里杙等莊查拿匪徒，並駐紮在大墩汛地進行搜捕。",
+            "where": "大墩汛地",
+            "who": [
+              "游擊耿世文",
+              "北協副將赫生額",
+              "同知長庚",
+              "彰化知縣俞峻"
+            ],
+            "whoLoc": {
+              "北協副將赫生額": "大墩汛地",
+              "同知長庚": "大墩汛地",
+              "彰化知縣俞峻": "大墩汛地",
+              "游擊耿世文": "大墩汛地"
+            },
+            "relations": [
+              {
+                "source": "北協副將赫生額",
+                "target": "大墩汛地",
+                "relation": "防守",
+                "relation_type": "other",
+                "evidence": "帶兵駐扎離縣城三十里之大墩汛地"
+              }
+            ],
+            "whenAr": "1786/11/28",
+            "whenCh": "十一月二十八日辰刻以前",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "撥遊擊耿世文帶兵會同北協副將赫升〔生〕額、同知長庚、彰化知縣俞峻前往查拿。本月初一日辰刻，據北路中營都司報稱，俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕",
+                "label": "游擊耿世文帶兵搜捕大里杙等莊匪徒",
+                "howKnown": "轉述",
+                "whenKnown": ""
+              }
+            ],
+            "__qcat": "all",
+            "__traceChains": [
+              {
+                "id": "pvcmscpvfahsut02656",
+                "hops": [
+                  {
+                    "layer": 1,
+                    "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "to_person": "福建巡撫徐嗣曾",
+                    "place": "臺灣府城",
+                    "whenCh": "十二月十四日丑刻",
+                    "whenAr": "1786/12/14",
+                    "how": "移稟",
+                    "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  },
+                  {
+                    "layer": 2,
+                    "from_person": "北路中營都司",
+                    "to_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "place": "",
+                    "whenCh": "十二月初一日辰刻",
+                    "whenAr": "1786/12/01",
+                    "how": "報稱",
+                    "quote": "本月初一日辰刻，據北路中營都司報稱",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  }
+                ],
+                "events": [
+                  {
+                    "subtitle": "游擊耿世文帶兵搜捕大里杙等莊匪徒",
+                    "reporter": "北路中營都司",
+                    "whenCh": "十一月",
+                    "where": "大墩汛地",
+                    "quote": "撥遊擊耿世文帶兵會同北協副將赫升〔生〕額、同知長庚、彰化知縣俞峻前往查拿。本月初一日辰刻，據北路中營都司報稱，俞知縣同赫副將、耿遊擊帶兵駐扎離縣城三十里之大墩汛地，前往各莊搜捕，賊匪俱已逃竄。",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#qing#candidate"
+          },
+          {
+            "actor": "qing",
+            "subtitle": "臺灣鎮總兵柴大紀率兵前往諸彰要處剿捕並調兵",
+            "description": "臺灣鎮總兵柴大紀與臺灣道永福率領游擊李中揚、水師游擊林光玉、水師游擊楊起麟等人帶領弁兵前往諸羅、彰化要處分路剿捕，並檄調澎湖右營游擊蔡攀龍率兵八百名聽候調用。",
+            "where": "臺灣府城",
+            "who": [
+              "臺灣鎮總兵柴大紀",
+              "臺灣道永福",
+              "游擊李中揚",
+              "水師游擊林光玉",
+              "水師游擊楊起麟",
+              "澎湖右營游擊蔡攀龍"
+            ],
+            "whoLoc": {
+              "水師游擊林光玉": "臺灣府城",
+              "水師游擊楊起麟": "臺灣府城",
+              "游擊李中揚": "臺灣府城",
+              "澎湖右營游擊蔡攀龍": "澎湖",
+              "臺灣道永福": "臺灣府城",
+              "臺灣鎮總兵柴大紀": "臺灣府城"
+            },
+            "relations": [
+              {
+                "source": "臺灣鎮總兵柴大紀",
+                "target": "澎湖右營游擊蔡攀龍",
+                "relation": "調派",
+                "relation_type": "command",
+                "evidence": "檄調澎湖右營遊擊蔡攀龍八百名"
+              }
+            ],
+            "whenAr": "1786/12/02",
+            "whenCh": "十二月初二日早",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "本鎮職道等會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵，即於初二日早飛赴諸、彰要處，分路剿捕，檄調澎湖右營遊擊蔡攀龍八百名，來營聽候調用。",
+                "label": "臺灣鎮總兵柴大紀率兵前往諸彰要處剿捕並調兵",
+                "howKnown": "轉述",
+                "whenKnown": ""
+              }
+            ],
+            "__qcat": "all",
+            "__traceChains": [
+              {
+                "id": "pvcmscpvfak8bns2170",
+                "hops": [
+                  {
+                    "layer": 1,
+                    "from_person": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "to_person": "福建巡撫徐嗣曾",
+                    "place": "臺灣府城",
+                    "whenCh": "十二月十四日丑刻",
+                    "whenAr": "1786/12/14",
+                    "how": "移稟",
+                    "quote": "十四日丑刻，始接據臺灣鎮總兵柴大紀及該道永福移稟",
+                    "doc_id": "硃24",
+                    "inferred": false
+                  }
+                ],
+                "events": [
+                  {
+                    "subtitle": "臺灣鎮總兵柴大紀率兵前往諸彰要處剿捕並調兵",
+                    "reporter": "臺灣鎮總兵柴大紀、臺灣道永福",
+                    "whenCh": "十二月初二日",
+                    "where": "諸羅、彰化要處",
+                    "quote": "本鎮職道等會率本標遊擊李中揚、水師遊擊林光玉、楊起麟帶領弁兵，即於初二日早飛赴諸、彰要處，分路剿捕，檄調澎湖右營遊擊蔡攀龍八百名，來營聽候調用。",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#qing#candidate"
+          },
+          {
+            "actor": "qing",
+            "subtitle": "提督黃仕簡帶兵由廈門渡海赴鹿耳門",
+            "description": "水師提督黃仕簡帶領官兵自廈門出口渡海前往鹿耳門，隨後亦有官兵繼進策應。",
+            "where": "廈門",
+            "who": [
+              "提督黃仕簡"
+            ],
+            "whoLoc": {
+              "提督黃仕簡": "廈門"
+            },
+            "relations": [],
+            "whenAr": "1786/12/14",
+            "whenCh": "十二月十四日以前",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "現在提臣黃仕簡已帶兵由（要）廈門出口，飛渡鹿耳門，隨後又有官兵繼進策應。",
+                "label": "提督黃仕簡帶兵由廈門渡海赴鹿耳門",
+                "howKnown": "親歷",
+                "whenKnown": ""
+              }
+            ],
+            "__qcat": "all",
+            "__traceChains": [
+              {
+                "id": "pvcmscpvfakfisl5950",
+                "hops": [],
+                "events": [
+                  {
+                    "subtitle": "提督黃仕簡帶兵由廈門渡海赴鹿耳門",
+                    "reporter": "福建巡撫徐嗣曾",
+                    "whenCh": "",
+                    "where": "廈門",
+                    "quote": "現在提臣黃仕簡已帶兵由（要）廈門出口，飛渡鹿耳門",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#qing#candidate"
+          },
+          {
+            "actor": "qing",
+            "subtitle": "巡撫徐嗣曾登船遣發總兵郝壯猷等帶兵往淡水",
+            "description": "福建巡撫徐嗣曾備齊船隻軍械大砲與行糧賞號，親自登上船隻，遣發總兵郝壯猷統領副將丁朝雄、副將那穆素里帶領官兵，由閩安出口直達淡水。",
+            "where": "閩安",
+            "who": [
+              "福建巡撫徐嗣曾",
+              "總督常青",
+              "副將丁朝雄",
+              "副將那穆素里",
+              "總兵郝壯猷"
+            ],
+            "whoLoc": {
+              "副將丁朝雄": "閩安",
+              "副將那穆素里": "閩安",
+              "福建巡撫徐嗣曾": "閩安",
+              "總兵郝壯猷": "閩安",
+              "總督常青": "蚶江"
+            },
+            "relations": [
+              {
+                "source": "總督常青",
+                "target": "副將丁朝雄",
+                "relation": "調派",
+                "relation_type": "command",
+                "evidence": "亦經督臣調派副將丁朝雄"
+              },
+              {
+                "source": "福建巡撫徐嗣曾",
+                "target": "總兵郝壯猷",
+                "relation": "遣發",
+                "relation_type": "command",
+                "evidence": "臣親至船上，遣發起身"
+              },
+              {
+                "source": "總兵郝壯猷",
+                "target": "淡水",
+                "relation": "進攻",
+                "relation_type": "other",
+                "evidence": "聽總兵郝壯猷統領進發...直達淡水"
+              }
+            ],
+            "whenAr": "1786/12/14",
+            "whenCh": "十二月十四日前",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "亦經督臣調派副將丁朝雄、那穆素里，帶領官兵至閩安，會合閩安、烽火各營兵，聽總兵郝壯猷統領進發。臣現已備齊船隻，挑兵配械，多帶火藥、鉛彈，並帶大炮二尊，及應需行糧、鹽菜、賞號等項。臣親至船上，遣發起身",
+                "label": "巡撫徐嗣曾登船遣發總兵郝壯猷等帶兵往淡水",
+                "howKnown": "親歷",
+                "whenKnown": ""
+              }
+            ],
+            "__qcat": "all",
+            "__traceChains": [
+              {
+                "id": "pvcmscpvfakqegn8921",
+                "hops": [],
+                "events": [
+                  {
+                    "subtitle": "巡撫徐嗣曾登船遣發總兵郝壯猷等帶兵往淡水",
+                    "reporter": "福建巡撫徐嗣曾",
+                    "whenCh": "十二月十四日前",
+                    "where": "閩安",
+                    "quote": "聽總兵郝壯猷統領進發。臣現已備齊船隻，挑兵配械，多帶火藥、鉛彈，並帶大炮二尊，及應需行糧、鹽菜、賞號等項。臣親至船上，遣發起身",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#qing#candidate"
+          },
+          {
+            "actor": "qing",
+            "subtitle": "巡撫徐嗣曾嚴飭沿海口岸實力巡防",
+            "description": "福建巡撫徐嗣曾嚴加敕令福建沿海各大口岸進行嚴密巡查，以防賊匪潰逸逃竄。",
+            "where": "福建沿海口岸",
+            "who": [
+              "福建巡撫徐嗣曾"
+            ],
+            "whoLoc": {
+              "福建巡撫徐嗣曾": "省城"
+            },
+            "relations": [],
+            "whenAr": "1786/12/14",
+            "whenCh": "十二月十四日",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "臣現在嚴飭沿海口岸，實力徼巡，防其竄逸",
+                "label": "巡撫徐嗣曾嚴飭沿海口岸實力巡防",
+                "howKnown": "親歷",
+                "whenKnown": ""
+              }
+            ],
+            "__qcat": "all",
+            "__traceChains": [
+              {
+                "id": "pvcmscpvfak0i8u9837",
+                "hops": [],
+                "events": [
+                  {
+                    "subtitle": "巡撫徐嗣曾嚴飭沿海口岸實力巡防",
+                    "reporter": "福建巡撫徐嗣曾",
+                    "whenCh": "",
+                    "where": "沿海口岸",
+                    "quote": "臣現在嚴飭沿海口岸，實力徼巡，防其竄逸",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#qing#candidate"
+          },
+          {
+            "actor": "qing",
+            "subtitle": "巡撫徐嗣曾派專差飛探戰況",
+            "description": "福建巡撫徐嗣曾飛飭蚶江等處派遣專差前往飛速探聽實在殺賊情形，以便另行馳奏。",
+            "where": "蚶江",
+            "who": [
+              "福建巡撫徐嗣曾"
+            ],
+            "whoLoc": {
+              "福建巡撫徐嗣曾": "省城"
+            },
+            "relations": [],
+            "whenAr": "1786/12/14",
+            "whenCh": "十二月十四日",
+            "sources": [
+              {
+                "doc_id": "硃24",
+                "quote": "再飛飭蚶江等處專差飛探實在殺賊情形，另行馳奏",
+                "label": "巡撫徐嗣曾派專差飛探戰況",
+                "howKnown": "親歷",
+                "whenKnown": ""
+              }
+            ],
+            "__qcat": "all",
+            "__traceChains": [
+              {
+                "id": "pvcmscpvfakqlr81490",
+                "hops": [],
+                "events": [
+                  {
+                    "subtitle": "巡撫徐嗣曾派專差飛探戰況",
+                    "reporter": "福建巡撫徐嗣曾",
+                    "whenCh": "",
+                    "where": "蚶江等處",
+                    "quote": "再飛飭蚶江等處專差飛探實在殺賊情形，另行馳奏",
+                    "doc_id": "硃24"
+                  }
+                ]
+              }
+            ],
+            "__repeatId": "硃24#qing#candidate"
+          }
+        ],
+        "leftoverChains": [],
+        "at": "2026-08-03 04:16",
+        "model": "gemini-3.6-flash"
+      }
+    ],
+    "dot": {
+      "author_name": "徐嗣曾"
+    },
+    "divisions": [
+      {
+        "label": "接獲各方稟報與傳聞",
+        "summary": "報告收到署淡水同知、蚶江通判稟報以及民間傳聞信件，內容涉及彰化縣城失陷與諸羅戰事等初期訊息。",
+        "start": 0,
+        "end": 309,
+        "n": 1
+      },
+      {
+        "label": "臺灣鎮道正式移稟",
+        "summary": "匯報收到臺灣鎮總兵柴大紀與臺灣道永福的正式公文，說明大墩營盤遭劫、匪徒攻打縣城及懇請火速派兵救援。",
+        "start": 309,
+        "end": 672,
+        "n": 2
+      },
+      {
+        "label": "情勢研判與三路進兵部署",
+        "summary": "研判各方情報並詳細陳述黃仕簡、常青及閩安出發之省兵從南北中三路渡海分頭圍剿的戰略部署。",
+        "start": 672,
+        "end": 1179,
+        "n": 3
+      },
+      {
+        "label": "沿海嚴防與奉旨結語",
+        "summary": "說明已嚴令沿海巡防竄逸、派差探聽實情，並註明進奏日期與皇帝「即有旨諭」之硃批。",
+        "start": 1179,
+        "end": 1324,
+        "n": 4
       }
     ]
   },

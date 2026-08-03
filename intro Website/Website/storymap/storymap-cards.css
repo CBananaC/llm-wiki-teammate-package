@@ -27,12 +27,13 @@
                  寬鬆或緊湊時才需要在這裡覆寫。
                  例：--pad-y: 120px;
 
-    --gallery-fit / --gallery-position
+    --gallery-fit / --gallery-left / --gallery-top
                  只用於含有圖片畫廊（.photo-gallery）的節，例如引言 01。
                  設定「整組畫廊」預設的顯示方式：
                    --gallery-fit: contain;   圖片完整顯示，可能上下或左右留白（預設）
                    --gallery-fit: cover;     圖片裁切至填滿整個框，不留白但可能切邊
-                   --gallery-position: 50% 30%;   對齊位置，預設 center（正中央）
+                   --gallery-left: 50%;
+                   --gallery-top: 30%;             對齊位置，預設 center（正中央）
 
     單張圖片覆寫（同樣在這個檔案改，不必碰 storymap-example.html）：
                  若某一節的某一張圖片需要跟整組預設不同的裁切／位置／縮放，
@@ -41,12 +42,16 @@
 
                    #intro-1-1 .photo-gallery-frame:nth-of-type(2) {
                      --photo-fit: cover;        （只有第 2 張改成裁切填滿）
-                     --photo-position: center 42%;
+                   --photo-left: 50%;
+                   --photo-top: 42%;
                      --photo-zoom: 1.35;        （額外放大 35%）
                    }
 
-                 --photo-fit / --photo-position / --photo-zoom 只影響指定的
-                 那一張，其餘圖片仍套用整組的 --gallery-fit / --gallery-position。
+                 --photo-fit / --photo-left / --photo-top / --photo-zoom 只影響指定的
+                 那一張，其餘圖片仍套用整組的 --gallery-fit / --gallery-left / --gallery-top。
+                 --photo-fit 控制顯示範圍（contain 或 cover）；--photo-left 與
+                 --photo-top 分別控制圖片在框內的左右及上下位置，使用百分比、px
+                 或 left／center／right、top／center／bottom。
                  --photo-zoom 不寫則預設 1（不放大）。
                  下面「引言 01」區塊後面已附上一個實際範例，可直接參考修改。
 
@@ -125,7 +130,8 @@
   --card-accent: #b66d48;
   --visual-h: 900px;          /*畫廊固定高度，與文字欄相近 */
   --gallery-fit: contain;     /*整組畫廊預設：完整顯示（改 cover 則裁切填滿框） */
-  --gallery-position: center; /*整組畫廊預設對齊位置 */
+  --gallery-left: 50%;
+  --gallery-top: 50%; /*整組畫廊預設對齊位置 */
 }
 
 /* 研究價值卡片與制度卡片之間保留額外上方留白 */
@@ -136,8 +142,9 @@
    小圖飄在大片空白中。 */
 #intro-1-1 .photo-gallery-frame:nth-of-type(2) {
   --photo-fit: contain;
-  --photo-position: center 42%;
-  --photo-zoom: 1;
+  --photo-left: 70%;
+  --photo-top: 42%;
+  --photo-zoom: 1.2;
 }
 
 /* 3 — 研究清代奏折的主要困難｜左側小卡展開、右側對應畫面 */
@@ -286,7 +293,15 @@
 #intro-1-6-a-source .acc-panel[data-acc-panel="case-route"] .photo-gallery,
 #intro-1-6-a-source .acc-panel[data-acc-panel="case-sources"] .photo-gallery {
   --gallery-fit: contain;
-  --gallery-position: center;
+  --gallery-left: 50%;
+  --gallery-top: 50%;
+}
+/* 示範案例第 2 張圖片：軍報傳遞路線圖（intro_8）。 */
+#intro-1-6-a-source .photo-gallery[data-photo-gallery-id="case-route"] .photo-gallery-frame:nth-of-type(1) {
+  --photo-fit: cover;
+  --photo-left: 79%;
+  --photo-top: 50%;
+  --photo-zoom: 1;
 }
 #intro-1-6-a-source > .story-inner > .blk { width: 100%; max-width: none !important; }
 

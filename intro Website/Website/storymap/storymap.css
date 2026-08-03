@@ -421,15 +421,15 @@ img { max-width: 100%; }
 .photo-gallery-frame { position: absolute; inset: 0; opacity: 0; transition: opacity .32s ease; pointer-events: none; }
 .photo-gallery-frame.is-active { opacity: 1; pointer-events: auto; }
 /* 每張圖片的顯示範圍與大小，全部可在 storymap-cards.css 調整：
-     --gallery-fit / --gallery-position   整組畫廊的預設值
-     --photo-fit / --photo-position / --photo-zoom
+     --gallery-fit / --gallery-left / --gallery-top   整組畫廊的預設值
+     --photo-fit / --photo-left / --photo-top / --photo-zoom
        針對「第幾張」圖片的個別覆寫，透過 :nth-of-type(N) 選取器指定
        （N 從 1 開始），寫法請見 storymap-cards.css 開頭的說明。
    個別設定的優先度高於整組預設；若沒有個別設定，就套用整組預設。 */
 .photo-gallery-frame img {
   display: block; width: 100%; height: 100%; background: #e8e1d6;
   object-fit: var(--photo-fit, var(--gallery-fit, contain));
-  object-position: var(--photo-position, var(--gallery-position, center));
+  object-position: var(--photo-left, var(--gallery-left, 50%)) var(--photo-top, var(--gallery-top, 50%));
   transform: scale(var(--photo-zoom, 1));
   cursor: zoom-in;
 }
@@ -895,6 +895,7 @@ img { max-width: 100%; }
   position: absolute;
   left: 0;
   width: 100%;
+  pointer-events: auto;
   padding: 8px 9px 9px;
   color: #2d261d;
   background: rgba(255, 253, 248, .97);
@@ -904,6 +905,22 @@ img { max-width: 100%; }
 }
 .source-callout[hidden] { display: none; }
 .source-callout-label { display: block; color: var(--source-color); font-weight: 800; }
+.source-callout-detail {
+  display: block;
+  max-height: 0;
+  margin-top: 0;
+  overflow: hidden;
+  color: #2d261d;
+  font-weight: 500;
+  opacity: 0;
+  transition: max-height .22s ease, margin-top .22s ease, opacity .18s ease;
+}
+.source-callout:hover .source-callout-detail,
+.source-callout:focus-within .source-callout-detail {
+  max-height: 8em;
+  margin-top: 6px;
+  opacity: 1;
+}
 .source-callout-name { display: block; margin-top: 2px; }
 .source-callout-1 { --source-color: var(--source-1); }
 .source-callout-2 { --source-color: var(--source-2); }

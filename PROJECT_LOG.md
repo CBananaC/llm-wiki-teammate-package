@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (non-Yu click-network focus narrowed in both renderers; human browser validation next)
+- Formal review editor: none (document-click emperor-action origin links added in both renderers; browser validation next)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -6370,6 +6370,56 @@ Remaining: Browser visual and interaction QA remains to be performed in the
 local HTTP preview. No formal or sample review state was touched; no push was
 performed.
 
+### 2026-08-03 12:24 HKT — Codex — Center the route line in the case-study second image
+
+Summary: Adjusted the second 林爽文民變 image to crop toward the eastern map area, placing the red route line nearer the panel center with cover positioning and 1.85× zoom.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Reload the local HTTP preview to confirm the red line visually; no formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 12:09 HKT — Codex — Add controls for the case-study second image
+
+Summary: Added a dedicated card-CSS selector for the `case-route` panel, the second image in 示範案例：林爽文民變, with independent fit, left, top, and zoom controls.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed `git diff --check`.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 11:49 HKT — Codex — Add independent gallery image positioning controls
+
+Summary: Added card-CSS controls for each image's shown area and position: `--photo-fit`, `--photo-left`, `--photo-top`, and `--photo-zoom`, with matching group defaults.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/Website/storymap/storymap.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and variable-reference validation.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 11:42 HKT — Codex — Use the supplied intro_1 image directly
+
+Summary: Updated the first 清代奏折制度 gallery image to load directly from `Visual Material/Done/intro_1.png`, preserving its descriptive alt text.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and supplied-image path validation.
+
+Remaining: Browser visual QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 11:36 HKT — Codex — Add hover explanations to information-source labels
+
+Summary: Added the five requested event explanations beneath 情報來源1–5 in the 硃119 source-flow panel, with hover/focus expansion and connector refresh behavior.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, `git diff --check`, and targeted source-detail validation.
+
+Remaining: Browser visual and hover interaction QA remains to be performed in the local HTTP preview. No formal or sample review state was touched; no push was performed.
+
 ### 2026-08-03 11:26 HKT — Codex — Replace intro images with Done assets
 
 Summary: Replaced the intro's non-GIF images with the requested `Visual Material/Done` set: `intro_1–3` for 清代奏折制度, `intro_4` for the research-difficulty card, and `intro_7–10` for the 林爽文民變 case. The GIF and route SVG remain unchanged.
@@ -6642,3 +6692,13 @@ both StoryMap JavaScript syntax checks and `git diff --check`.
 
 Remaining: None for this image-panel behavior. No formal or sample review data
 were touched; no push was performed.
+
+### 2026-08-03 11:49 HKT — Codex — Show emperor actions from a clicked document origin
+
+Summary: Extended both review-tool click-network renderers so emperor-action events are connected to and included with a clicked document when their `emperorDetail.doc_id` or `emperorDetail.edict_id` identifies that document's emperor-side origin. Existing source links remain unchanged and duplicate origin lines are suppressed.
+
+Files: `review-tools/(1) formal/index.html`, `review-tools/(2) sample/index.html`, and this log.
+
+Verified: Both HTML files' inline scripts parse successfully and `git diff --check` passes. Browser visual validation remains to be performed.
+
+Remaining: Human browser validation of a clicked document and its emperor-action dot/line.

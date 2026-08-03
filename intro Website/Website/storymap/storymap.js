@@ -272,6 +272,12 @@ const scheduleSourceFlowConnectorRefresh = () => {
 window.addEventListener('resize', scheduleSourceFlowConnectorRefresh);
 document.querySelectorAll('[data-source-flow]').forEach((visual) => {
   visual.querySelector('.ip-scroll')?.addEventListener('scroll', scheduleSourceFlowConnectorRefresh, { passive: true });
+  visual.querySelectorAll('.source-callout').forEach((callout) => {
+    callout.addEventListener('pointerenter', scheduleSourceFlowConnectorRefresh);
+    callout.addEventListener('pointerleave', scheduleSourceFlowConnectorRefresh);
+    callout.addEventListener('focusin', scheduleSourceFlowConnectorRefresh);
+    callout.addEventListener('focusout', scheduleSourceFlowConnectorRefresh);
+  });
   if ('ResizeObserver' in window) new ResizeObserver(scheduleSourceFlowConnectorRefresh).observe(visual);
 });
 scheduleSourceFlowConnectorRefresh();

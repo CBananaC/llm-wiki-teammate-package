@@ -2248,6 +2248,99 @@ Verified:
 Remaining:
 - Browser visual and interaction QA remains to be performed in the local HTTP preview.
 
+### 2026-08-03 12:24 HKT — Codex — Center the route line in the case-study second image
+
+Summary:
+- Adjusted the second 林爽文民變 image to crop toward the eastern map area where the red route line appears.
+- Set the route image to `cover`, right-side positioning, centered vertical positioning, and 1.85× zoom.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- Reload the local HTTP preview to confirm the red line is visually centered; fine-tune `--photo-zoom` if necessary.
+
+### 2026-08-03 12:09 HKT — Codex — Add controls for the case-study second image
+
+Summary:
+- Added a dedicated card-CSS selector for the `case-route` panel, the second image in 示範案例：林爽文民變.
+- Exposed independent `--photo-fit`, `--photo-left`, `--photo-top`, and `--photo-zoom` values for the route image.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `git diff --check`.
+
+Remaining:
+- Browser visual QA remains to be performed in the local HTTP preview.
+
+### 2026-08-03 11:49 HKT — Codex — Add independent gallery image positioning controls
+
+Summary:
+- Added card-CSS controls for each image's shown area and position: `--photo-fit`, `--photo-left`, `--photo-top`, and `--photo-zoom`.
+- Added matching group defaults `--gallery-fit`, `--gallery-left`, and `--gallery-top`.
+- Updated the existing gallery example to use separate horizontal and vertical controls.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed StoryMap JavaScript syntax checking and `git diff --check`.
+- Confirmed the old combined position variables are no longer used.
+
+Remaining:
+- Browser visual QA remains to be performed in the local HTTP preview.
+
+### 2026-08-03 11:42 HKT — Codex — Use the supplied intro_1 image directly
+
+Summary:
+- Updated the first 清代奏折制度 gallery image to load directly from `Visual Material/Done/intro_1.png`.
+- Preserved its descriptive alt text: `常青奏摺影像，乾隆五十一年十二月十一日`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed StoryMap JavaScript syntax checking and `git diff --check`.
+- Confirmed the supplied image path is present in the gallery data.
+
+Remaining:
+- Browser visual QA remains to be performed in the local HTTP preview.
+
+### 2026-08-03 11:36 HKT — Codex — Add hover explanations to information-source labels
+
+Summary:
+- Added the requested five explanations beneath 情報來源1–5 in the 硃119 source-flow panel.
+- Sources 1 and 2 share the 清軍抵達臺灣 explanation; sources 3–5 show their corresponding reported events.
+- Made each callout interactive on hover and keyboard focus, with connector positions refreshed during expansion.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed StoryMap JavaScript syntax checking and `git diff --check`.
+- Confirmed five source-detail elements are present.
+
+Remaining:
+- Browser visual and hover interaction QA remains to be performed in the local HTTP preview.
+
 ### 2026-08-03 11:26 HKT — Codex — Replace intro images with Done assets
 
 Summary:
