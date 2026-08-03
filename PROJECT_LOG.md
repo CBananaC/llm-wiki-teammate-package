@@ -6881,3 +6881,13 @@ Files: `intro Website/Website/storymap/storymap.css` and `intro Website/Website/
 Verified: Browser preview showed the enlarged checklist and information-panel text with all five rows and both window headings visible. Passed StoryMap JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this typography adjustment.
+
+### 2026-08-03 19:01 HKT — Codex — Move Part 3 tools sizing controls into card CSS
+
+Summary: Added the checklist and information-panel sizing variables to the `#part-3-tools` block in `intro Website/Website/storymap/storymap-cards.css`, covering overall width, checklist-column width, overall height, row height, and information-photo height.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`.
+
+Verified: StoryMap browser preview loaded the card with one checklist, five rows, one information panel, and two window headings. Passed StoryMap JavaScript syntax checking and `git diff --check`.
+
+Remaining: None for the card-specific sizing controls.

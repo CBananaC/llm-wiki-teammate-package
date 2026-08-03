@@ -113,6 +113,14 @@
                  兩者寫在 .section-hero（或個別的 #part-1／#part-2／#part-3）即可，
                  例：#part-3 { --hero-pad-t: 96px; }
 
+    第三部分「所需的工具與資源」checklist 視窗：
+                 --part3-tools-width       整組 checklist 與資訊視窗的寬度。
+                 --part3-tools-list-width   左側 checklist 佔整組的寬度比例。
+                 --part3-tools-height       整組視窗的最低高度（px）。
+                 --part3-tools-row-height   左側每一列的最低高度（px）。
+                 --part3-tools-photo-height 右側圖片區的高度（px、vh 或其他 CSS 單位）。
+                 這些設定寫在下方的 #part-3-tools 區塊即可。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -322,7 +330,15 @@
 
 /* 第三部分：1. 適合的研究問題／2. 所需的工具與資源（五項 checklist）／3. 重用平台的基本流程 */
 #part-3-research-questions { --card-accent: #c7543f; }
-#part-3-tools { --card-accent: #7e6a39; }
+#part-3-tools {
+  --card-accent: #7e6a39;
+  /* Checklist 與工具資訊視窗的寬度／高度控制，直接在此調整。 */
+  --part3-tools-width: 100%;
+  --part3-tools-list-width: 31%;
+  --part3-tools-height: 680px;
+  --part3-tools-row-height: 88px;
+  --part3-tools-photo-height: 46vh;
+}
 #part-3-basic-flow { --card-accent: #4d817c; }
 
 /* OCR：1. 甚麼是 OCR？至 11. 輸入結構化史料至平台 */
