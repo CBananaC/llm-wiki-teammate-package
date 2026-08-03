@@ -6771,3 +6771,13 @@ Files: `intro Website/Website/storymap/part-1-interface.js`, `intro Website/Webs
 Verified: Browser preview shows the three internal sample-tool columns, four vertical lane headers, dense background relationship lines, scrollable document text, and the real sample-style toolbar order. DOM check confirmed 4 lane columns, 112 presentation-only network lines, and a scrollable document panel; browser console had no warning/error entries. Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
 
 Remaining: Exact chart data density and later guided interactions can be refined after this visual structure is approved. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 17:08 HKT — Codex — Split the remaining Part 3 sections into individual vertical parts
+
+Summary: Divided `3. 選用的AI Model` and `4. Google Cloud` into separate vertical parts, divided the three LLM Wiki paragraphs into three individual parts, and positioned the research-question visual and JSON structure visual on the right beside their cards. Preserved the cover bar, three main step bars, template UI, and all original Part 3 text without adding explanatory copy or visual material.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Original-content comparison found all 45 paragraphs and 23 headings present. Confirmed the new model, cloud, and three LLM Wiki sections exist and the research visual uses the right grid column. Passed StoryMap JavaScript syntax checking and `git diff --check`. Formal and sample review data remain untouched; no push was performed.
+
+Remaining: None for this requested Part 3 layout adjustment.

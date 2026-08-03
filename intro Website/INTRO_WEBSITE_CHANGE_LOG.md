@@ -3005,3 +3005,26 @@ Verified:
 
 Remaining:
 - Exact chart data density and later guided interactions can be refined after this visual structure is approved. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 17:08 HKT — Codex — Split the remaining Part 3 sections into individual vertical parts
+
+Summary:
+- Divided `3. 選用的AI Model` and `4. Google Cloud` into separate vertical parts.
+- Divided the three LLM Wiki paragraphs into three individual vertical parts: `完成 AI 分析及研究者審核後`, `研究者可將已審核的資料`, and `LLM Wiki 於是可以利用這些結構化資料`.
+- Positioned the `適合的研究問題` visual to the right of its card, and kept the JSON structure explanation as the right-side visual element beside `9. 輸出格式：JSON`.
+- Kept the cover bar, the three main step bars, the template UI, and all original text; added no new explanatory website copy or visual material.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Original-content comparison found all 45 original paragraphs and 23 original headings still present.
+- Confirmed the new model, cloud, and three LLM Wiki section IDs exist in the local StoryMap, and the research visual uses the right grid column.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this requested Part 3 layout adjustment. Formal and sample review data remain untouched; no push was performed.

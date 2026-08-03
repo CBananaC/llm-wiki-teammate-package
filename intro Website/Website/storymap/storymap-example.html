@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css">
-  <link rel="stylesheet" href="storymap-cards.css">
+  <link rel="stylesheet" href="storymap.css?v=20260803">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260803">
   <link rel="stylesheet" href="part-1-interface.css">
   <script src="storymap.js" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
@@ -927,15 +927,33 @@
             </div>
           </section>
 
-          <section class="story surface-b" id="part-3-ocr-tools" data-tab="part-3" data-nav="#part-3-ocr-tools">
+          <section class="story surface-b" id="part-3-paddleocr" data-tab="part-3" data-nav="#part-3-paddleocr">
             <div class="story-inner">
-              <div class="part3-card-grid">
-                <article class="copybox blk"><div class="title-row"><h2>2. PaddleOCR</h2></div><div class="body"><p>研究者可使用 PaddleOCR 作為 OCR 的工具。PaddleOCR 是由百度開發，具有以下優點：</p><p>1. 能夠辨識掃描影像或 PDF 中的中文文字，並支援版面分析。</p><p>2. 中文辨識準確率高，而且辨識速度快。</p><p>3. 開源且免費，支援本地部署，可離線運行。</p></div></article>
-                <article class="copybox blk"><div class="title-row"><h2>3. 運用 Agentic AI 使用 PaddleOCR</h2></div><div class="body"><p>PaddleOCR 通常透過 Python API 在本機安裝及運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p></div></article>
-                <article class="copybox blk"><div class="title-row"><h2>4. OCR 前的材料準備</h2></div><div class="body"><p>OCR 所處理的材料通常為 PDF 或 JPG、PNG、TIFF 等影像檔案。因此，如果史料為紙本書籍，研究者可先查找是否已有可合法使用的電子版本，若沒有，則需以掃描器或相機把書頁數位化，轉換為 PDF 等形式的影像檔案。</p><p>研究者應遵守所在地的版權法規及資料庫使用條款，優先使用公有領域、已獲授權或依法可供研究使用的材料。</p></div></article>
-                <article class="copybox blk"><div class="title-row"><h2>5. 執行 OCR 的Python 代碼</h2></div><div class="body"><p>要運行 PaddleOCR，研究者需要指示 Agentic AI撰寫執行 OCR 的 Python 代碼，指定需要辨識的影像檔案，設定辨識方式、輸出格式和儲存位置。但在此之前，研究者首先檢視史料的版面及格式，從而決定 OCR 的方式。</p></div></article>
-                <article class="copybox blk"><div class="title-row"><h2>6. 檢視史料的版面及格式</h2></div><div class="body"><p>研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。</p></div></article>
-              </div>
+              <article class="copybox blk"><div class="title-row"><h2>2. PaddleOCR</h2></div><div class="body"><p>研究者可使用 PaddleOCR 作為 OCR 的工具。PaddleOCR 是由百度開發，具有以下優點：</p><p>1. 能夠辨識掃描影像或 PDF 中的中文文字，並支援版面分析。</p><p>2. 中文辨識準確率高，而且辨識速度快。</p><p>3. 開源且免費，支援本地部署，可離線運行。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-c" id="part-3-agentic-ocr" data-tab="part-3" data-nav="#part-3-agentic-ocr">
+            <div class="story-inner">
+              <article class="copybox blk"><div class="title-row"><h2>3. 運用 Agentic AI 使用 PaddleOCR</h2></div><div class="body"><p>PaddleOCR 通常透過 Python API 在本機安裝及運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-a" id="part-3-material" data-tab="part-3" data-nav="#part-3-material">
+            <div class="story-inner">
+              <article class="copybox blk"><div class="title-row"><h2>4. OCR 前的材料準備</h2></div><div class="body"><p>OCR 所處理的材料通常為 PDF 或 JPG、PNG、TIFF 等影像檔案。因此，如果史料為紙本書籍，研究者可先查找是否已有可合法使用的電子版本，若沒有，則需以掃描器或相機把書頁數位化，轉換為 PDF 等形式的影像檔案。</p><p>研究者應遵守所在地的版權法規及資料庫使用條款，優先使用公有領域、已獲授權或依法可供研究使用的材料。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-b" id="part-3-code" data-tab="part-3" data-nav="#part-3-code">
+            <div class="story-inner">
+              <article class="copybox blk"><div class="title-row"><h2>5. 執行 OCR 的Python 代碼</h2></div><div class="body"><p>要運行 PaddleOCR，研究者需要指示 Agentic AI撰寫執行 OCR 的 Python 代碼，指定需要辨識的影像檔案，設定辨識方式、輸出格式和儲存位置。但在此之前，研究者首先檢視史料的版面及格式，從而決定 OCR 的方式。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-c" id="part-3-format" data-tab="part-3" data-nav="#part-3-format">
+            <div class="story-inner">
+              <article class="copybox blk"><div class="title-row"><h2>6. 檢視史料的版面及格式</h2></div><div class="body"><p>研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。</p></div></article>
             </div>
           </section>
 
@@ -969,7 +987,7 @@
             </div>
           </section>
 
-          <section class="story surface-b" id="part-3-json" data-tab="part-3" data-nav="#part-3-json">
+          <section class="story surface-b part3-json-split" id="part-3-json" data-tab="part-3" data-nav="#part-3-json">
             <div class="story-inner">
               <div class="lay-split text-left" style="--vis-w: 56%;">
                 <div class="lay-copy">
@@ -993,11 +1011,16 @@
             </div>
           </section>
 
-          <section class="story surface-c" id="part-3-last" data-tab="part-3" data-nav="#part-3-last">
-            <div class="story-inner"><div class="part3-two-card-grid">
+          <section class="story surface-c" id="part-3-test" data-tab="part-3" data-nav="#part-3-test">
+            <div class="story-inner">
               <article class="copybox blk"><div class="title-row"><h2>10. OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-a" id="part-3-import" data-tab="part-3" data-nav="#part-3-import">
+            <div class="story-inner">
               <article class="copybox blk"><div class="title-row"><h2>11. 輸入結構化史料至平台</h2></div><div class="body"><p>完成OCR和後續整理後，所有的史料都應儲存在一個完整的 JSON 檔案中，研究者於是可以要求 Agentic AI把 JSON 檔案匯入平台。以本平台為例，只需將整理完成的 JSON 檔案放入網站專案中的 「儲存一手史料」 資料夾，平台便可直接讀取該檔案。</p></div></article>
-            </div></div>
+            </div>
           </section>
         </section>
 
@@ -1028,11 +1051,16 @@
             </div>
           </section>
 
-          <section class="story surface-c" id="part-3-ai-model" data-tab="part-3" data-nav="#part-3-ai-model">
-            <div class="story-inner"><div class="part3-two-card-grid">
+          <section class="story surface-c" id="part-3-model" data-tab="part-3" data-nav="#part-3-model">
+            <div class="story-inner">
               <article class="copybox blk"><div class="title-row"><h2>3. 選用的AI Model</h2></div><div class="body"><p>然而，由於 AI Skills 鏈（Chain）需要對每份史料逐步執行多項的分析，因此需要消耗大量 Token，提高了使用 API 的成本。因此，建議研究者選擇成本較低，但仍具備足夠分析能力的 AI Model，以兼顧研究成本和分析品質。</p><p>目前推薦 Gemini Flash 系列及 DeepSeek 的模型。兩者的 API 成本較低，亦能大致正確理解奏摺、上諭中的文言文，因此適合用來批次執行 AI Skills，分析大量文書。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-a" id="part-3-cloud" data-tab="part-3" data-nav="#part-3-cloud">
+            <div class="story-inner">
               <article class="copybox blk"><div class="title-row"><h2>4. Google Cloud</h2></div><div class="body"><p>研究者可透過 Google Cloud 使用 Gemini Flash 及 DeepSeek 的 API，因為Google Cloud 為新用戶提供一定金額的免費額度（約港幣 2,000 元），足以應付大量的 AI Skills 批次分析工作。</p></div></article>
-            </div></div>
+            </div>
           </section>
         </section>
 
@@ -1041,12 +1069,22 @@
             <div class="section-hero-content"><h1 id="part-3-wiki-title">3. 後續功能：LLM Wiki</h1></div>
           </section>
 
-          <section class="story surface-a" id="part-3-wiki-cards" data-tab="part-3" data-nav="#part-3-wiki-cards">
-            <div class="story-inner"><div class="part3-three-card-grid">
+          <section class="story surface-a" id="part-3-wiki-intro" data-tab="part-3" data-nav="#part-3-wiki-intro">
+            <div class="story-inner">
               <article class="copybox blk"><div class="body"><p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-b" id="part-3-wiki-data" data-tab="part-3" data-nav="#part-3-wiki-data">
+            <div class="story-inner">
               <article class="copybox blk"><div class="body"><p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p></div></article>
+            </div>
+          </section>
+
+          <section class="story surface-c" id="part-3-wiki-analysis" data-tab="part-3" data-nav="#part-3-wiki-analysis">
+            <div class="story-inner">
               <article class="copybox blk"><div class="body"><p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p></div></article>
-            </div></div>
+            </div>
           </section>
         </section>
       </div>

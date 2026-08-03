@@ -321,16 +321,24 @@
 
 /* OCR：1. 甚麼是 OCR？至 11. 輸入結構化史料至平台 */
 #part-3-ocr-definition,
-#part-3-ocr-tools,
+#part-3-paddleocr,
+#part-3-agentic-ocr,
+#part-3-material,
+#part-3-code,
+#part-3-format,
 #part-3-printed,
 #part-3-handwritten,
 #part-3-json,
-#part-3-last { --card-accent: #b66d48; }
+#part-3-test,
+#part-3-import { --card-accent: #b66d48; }
 
 /* AI：1. 修改、建立AI Skills 至 4. Google Cloud */
 #part-3-ai-skills { --card-accent: #ad7a35; }
 #part-3-ai-chain { --card-accent: #c7543f; }
-#part-3-ai-model { --card-accent: #7e6a39; }
+#part-3-model,
+#part-3-cloud { --card-accent: #7e6a39; }
 
 /* 後續功能：LLM Wiki */
-#part-3-wiki-cards { --card-accent: #a45e4c; }
+#part-3-wiki-intro,
+#part-3-wiki-data,
+#part-3-wiki-analysis { --card-accent: #a45e4c; }
