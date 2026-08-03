@@ -9,7 +9,11 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="storymap.css">
   <link rel="stylesheet" href="storymap-cards.css">
+  <link rel="stylesheet" href="part-1-interface.css">
   <script src="storymap.js" defer></script>
+  <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
+  <script src="part-1-interface-data.js" defer></script>
+  <script src="part-1-interface.js" defer></script>
   <title>清代奏摺與上諭分析平台</title>
 </head>
 <body>
@@ -619,65 +623,68 @@
         </div>
       </section>
       <div id="part-1-content">
-        <section class="story content-story" id="part-1-areas" data-tab="part-1" data-nav="#part-1-areas" style="--card-x: 7vw; --card-y: 13vh; --card-w: 620px; --story-height: 1220px; --card-accent: #4d817c;">
-          <div class="backdrop network" data-mark="四"></div>
-          <article class="story-card">
-            <h2>平台的四大區域</h2>
-            <p>平台介面主要由四個區域組成，分別是導覽列、時間與關係圖表、原始史料區，以及AI分析區。</p>
-            <h3>導覽列</h3>
-            <p>介面區域切換、資料輸入與輸出，以及修改顯示設定。</p>
-            <h3>時間與關係圖表</h3>
-            <p>呈現文書與事件的時間順序及相互聯繫。</p>
-            <h3>原始史料區</h3>
-            <p>顯示文書的基本資料及完整原文。</p>
-            <h3>AI 分析區</h3>
-            <p>展示人工智能從文書中提取的資訊，供研究者檢視。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-1-navigation" data-tab="part-1" data-nav="#part-1-navigation" style="--card-x: 49vw; --card-y: 14vh; --card-w: 600px; --story-height: 1320px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="列"></div>
-          <article class="story-card">
-            <h2>導覽列</h2>
-            <h3>1. 輸入與輸出資料</h3>
-            <p>研究者可以從本機輸入結構化的原始文本和AI 分析結果；完成檢視和修改後，亦可以將結構化資料輸出至本機，供後續研究使用。</p>
-            <h3>2. 切換介面區域</h3>
-            <p>研究者可以透過導覽列切換不同的介面區域。例如，在閱讀原文後，開啟 AI 分析區，檢視人工智能提取的資訊，同時開啟筆記頁，記錄閱讀所得，並在完成審閱後，點擊「事件鏈」，沿著事件的時間順序，追蹤戰場消息如何向上傳遞、皇帝的命令如何向下傳達，以及官員如何回應先前的硃批或上諭。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-1-timeline" data-tab="part-1" data-nav="#part-1-timeline" style="--card-x: 7vw; --card-y: 12vh; --card-w: 650px; --story-height: 1420px; --card-accent: #4d817c;">
-          <div class="backdrop river" data-mark="時"></div>
-          <article class="story-card">
-            <h2>時間與關係圖表</h2>
-            <p>時間與關係圖表位於介面的主要區域，用以呈現文書和事件的時間及傳遞關係。</p>
-            <p>時間與關係圖表由四條事件線組成，中間兩條線「官員上奏」及「皇帝硃批下旨」呈現文書的發送及接收時間，資料來源自原始文本中已有的收發時間。一個節點代表一份文書。</p>
-            <p>兩側的事件線是「奏報事件」和「皇帝行動」，其中的節點分別由「官員上奏」和「皇帝硃批下旨」的節點延伸而成。這些事件首先由 AI 從原始文書中提取，再由研究者閱讀原文查證，經確認後，才會以節點形式加入圖表。</p>
-            <p>四條線上的文書和事件節點，會按照時間順序排列，並透過連線呈現彼此的傳遞關係。</p>
-            <p>研究者可以點擊任何節點，查看該文書或事件的詳細資料，或進一步點擊「事件鏈」，沿著時間順序，了解相關文書和事件的具體傳遞關係。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-1-node" data-tab="part-1" data-nav="#part-1-node" style="--card-x: 52vw; --card-y: 15vh; --card-w: 560px; --story-height: 900px; --card-accent: #a45e4c;">
-          <div class="backdrop ink" data-mark="節"></div>
-          <article class="story-card">
-            <h2>節點資訊區</h2>
-            <p>當研究者點擊圖表上的節點時，介面會開啟獨立的資訊面板，顯示該節點的完整 AI 提取結果，包括標題、描述、時間、原文引文及史料來源。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-1-original" data-tab="part-1" data-nav="#part-1-original" style="--card-x: 8vw; --card-y: 13vh; --card-w: 620px; --story-height: 1080px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="原"></div>
-          <article class="story-card">
-            <h2>原始史料區</h2>
-            <p>文書區顯示原始文書的完整原文及基本資料，包括標題、文書類型、作者、收發日期和史料出處。</p>
-            <p>文書區亦設有篩選功能，用以標示不同 AI Skills 的提取結果。研究者可以點擊相關結果的標籤，查看該項結果的完整資訊。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-1-ai" data-tab="part-1" data-nav="#part-1-ai" style="--card-x: 48vw; --card-y: 13vh; --card-w: 650px; --story-height: 1260px; --card-accent: #ad7a35;">
-          <div class="backdrop gold" data-mark="AI"></div>
-          <article class="story-card">
-            <h2>人工智能分析區</h2>
-            <p>研究者可以在本機執行 AI Skills，並將整理後的結構化結果上載至網站。上載後，分析結果會以卡片形式顯示於 AI Chat 面板中。</p>
-            <p>每張卡片均會列出相關原文引文。研究者可以點擊引文，返回原始文書的相應位置進行核對。</p>
-            <p>確認結果後，研究者可以將其加入圖表，作為獨立事件或事件中的相關資訊；如結果需要修正，研究者可以編輯或拒絕該結果，亦可以手動新增事件。</p>
-          </article>
+        <section class="story surface-a" id="part-1-areas" data-tab="part-1" data-nav="#part-1-areas">
+          <div class="story-inner">
+          <div class="blk" style="margin-bottom:var(--head-gap)">
+            <div class="title-row"><span class="option-number">1</span><h2>平台的四大區域</h2></div>
+            <div class="body">
+              <p>平台介面主要由四個區域組成，分別是導覽列、時間與關係圖表、原始史料區，以及AI分析區。下方是平台的互動示範複本，載入的示範文書為硃42〈為彰化諸羅俱失及撥兵等緣由事〉。點擊複本上的編號標籤，或點開右側的說明卡片，即可逐一試用四個區域。</p>
+            </div>
+          </div>
+          <!-- 互動複本＋說明卡片。複本的版面與行為分別在
+               part-1-interface.css 與 part-1-interface.js 調整；
+               複本顯示的史料資料一律來自 part-1-interface-data.js。 -->
+          <div class="lay-acc part1-layout" data-part1>
+            <div class="acc-visual" aria-label="平台介面互動示範複本">
+              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
+            </div>
+            <div class="acc-track part1-track" tabindex="0" aria-label="平台介面說明卡片">
+              <article class="acc-card" id="part-1-navigation" data-part1-card="nav">
+                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="nav"><span class="acc-index">01</span><strong>導覽列</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
+                <div class="acc-body">
+                  <h3>1. 輸入與輸出資料</h3>
+                  <p>研究者可以從本機輸入結構化的原始文本和AI 分析結果；完成檢視和修改後，亦可以將結構化資料輸出至本機，供後續研究使用。</p>
+                  <h3>2. 切換介面區域</h3>
+                  <p>研究者可以透過導覽列切換不同的介面區域。例如，在閱讀原文後，開啟 AI 分析區，檢視人工智能提取的資訊，同時開啟筆記頁，記錄閱讀所得，並在完成審閱後，點擊「事件鏈」，沿著事件的時間順序，追蹤戰場消息如何向上傳遞、皇帝的命令如何向下傳達，以及官員如何回應先前的硃批或上諭。</p>
+                </div>
+              </article>
+              <article class="acc-card" id="part-1-timeline" data-part1-card="chart">
+                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="chart"><span class="acc-index">02</span><strong>時間與關係圖表</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
+                <div class="acc-body">
+                  <p>時間與關係圖表位於介面的主要區域，用以呈現文書和事件的時間及傳遞關係。</p>
+                  <p>時間與關係圖表由四條事件線組成，中間兩條線「官員上奏」及「皇帝硃批下旨」呈現文書的發送及接收時間，資料來源自原始文本中已有的收發時間。一個節點代表一份文書。</p>
+                  <p>兩側的事件線是「戰場事件」和「皇帝行動」，其中的節點分別由「官員上奏」和「皇帝硃批下旨」的節點延伸而成。這些事件首先由 AI 從原始文書中提取，再由研究者閱讀原文查證，經確認後，才會以節點形式加入圖表。</p>
+                  <p>四條線上的文書和事件節點，會按照時間順序排列，並透過連線呈現彼此的傳遞關係。</p>
+                  <p>研究者可以點擊任何節點，查看該文書或事件的詳細資料，或進一步點擊「事件鏈」，沿著時間順序，了解相關文書和事件的具體傳遞關係。</p>
+                  <p class="part1-try">試用：在複本的四條線上各有一個圓點，點擊任何一個，開啟它的節點資訊區。</p>
+                </div>
+              </article>
+              <article class="acc-card" id="part-1-node" data-part1-card="chart">
+                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="chart"><span class="acc-index">03</span><strong>節點資訊區</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
+                <div class="acc-body">
+                  <p>當研究者點擊圖表上的節點時，介面會開啟獨立的資訊面板，顯示該節點的完整 AI 提取結果，包括標題、描述、時間、原文引文及史料來源。</p>
+                </div>
+              </article>
+              <article class="acc-card" id="part-1-original" data-part1-card="doc">
+                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="doc"><span class="acc-index">04</span><strong>原始史料區</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
+                <div class="acc-body">
+                  <p>文書區顯示原始文書的完整原文及基本資料，包括標題、文書類型、作者、收發日期和史料出處。</p>
+                  <p>文書區亦設有篩選功能，用以標示不同 AI Skills 的提取結果。研究者可以點擊相關結果的標籤，查看該項結果的完整資訊。</p>
+                  <p class="part1-try">試用：點擊複本原文上方的 AI Skill 標籤，標示該項結果在硃42原文中的位置。</p>
+                </div>
+              </article>
+              <article class="acc-card" id="part-1-ai" data-part1-card="ai">
+                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="ai"><span class="acc-index">05</span><strong>人工智能分析區</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
+                <div class="acc-body">
+                  <p>研究者可以在本機執行 AI Skills，並將整理後的結構化結果上載至網站。上載後，分析結果會以卡片形式顯示於 AI Chat 面板中。</p>
+                  <p>每張卡片均會列出相關原文引文。研究者可以點擊引文，返回原始文書的相應位置進行核對。</p>
+                  <p>確認結果後，研究者可以將其加入圖表，作為獨立事件或事件中的相關資訊；如結果需要修正，研究者可以編輯或拒絕該結果，亦可以手動新增事件。</p>
+                  <p class="part1-try">試用：依複本內的四個步驟操作一次——在本機執行、上載審閱包、核對引文、把結果加入圖表。</p>
+                </div>
+              </article>
+            </div>
+          </div>
+          </div>
         </section>
       </div>
     </section>
@@ -845,184 +852,163 @@
       <section class="section-hero section-hero-part-3" id="part-3" data-mark="三">
         <div class="section-hero-content">
           <p class="eyebrow">第三部分</p>
-          <h1 id="part-3-title">1. 運用平台於其他的研究問題</h1>
-          <p class="section-hero-note">前文以林爽文事件為例，示範如何運用此平台處理清代奏摺與上諭，重建皇帝與地方之間的資訊溝通網絡。然而，此平台亦可應用於其他歷史事件及研究議題，本節因此會介紹如何調整平台的設定，以運用於不同的研究問題。</p>
+          <h1 id="part-3-title">運用平台於其他研究問題</h1>
+          <p class="section-hero-note">把同一套研究流程調整成可重用的工作坊：先問清楚研究問題，再準備史料、建立 AI 候選，最後由研究者核驗並保存可重用的結果。</p>
         </div>
       </section>
-      <div id="part-3-content">
-        <section class="story content-story" id="part-3-research-questions" data-tab="part-3" data-nav="#part-3-research-questions" style="--card-x: 7vw; --card-y: 14vh; --card-w: 680px; --story-height: 1120px; --card-accent: #c7543f;">
-          <div class="backdrop network" data-mark="題"></div>
-          <article class="story-card">
-            <h2>1. 適合的研究問題</h2>
-            <p>本平台運用 AI 與視覺化工具，重建奏摺與上諭之間的通信關係，並呈現資訊在皇帝與地方官員之間的傳遞網絡。因此，本平台適合用於研究政策如何在皇帝與地方官員的互動過程中逐步形成、調整與落實。</p>
-            <p>研究者可考察地方官員如何回應特定事件、皇帝如何回應地方官員的奏報與行動，以及地方官員如何執行皇帝的命令，從而分析政策形成過程中的中央與地方互動及其權力關係。</p>
-            <p>研究者亦可進一步探討地理距離與文書傳遞所造成的時間差，如何使皇帝與地方官員掌握不同的資訊，並影響雙方的判斷、決策與互動。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-tools" data-tab="part-3" data-nav="#part-3-tools" style="--card-x: 48vw; --card-y: 14vh; --card-w: 700px; --story-height: 1480px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="具"></div>
-          <article class="story-card">
-            <h2>2. 所需的工具與資源</h2>
-            <p>首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills的Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。</p>
-            <p>其次，研究者可以使用 Agentic AI （如ChatGPT Work 和Codex） 閱讀下載的原始碼，並按照 README.md 的說明部署平台，在本機開啟前端網頁。</p>
-            <p>其後，研究者可以利用 Agentic AI 協助整理原始文書、轉換為結構化資料、修改或建立 AI Skills，以及修改網站介面和功能等的程序。</p>
-            <p>此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。</p>
-            <p>最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-basic-flow" data-tab="part-3" data-nav="#part-3-basic-flow" style="--card-x: 7vw; --card-y: 14vh; --card-w: 740px; --story-height: 920px; --card-accent: #4d817c;">
-          <div class="backdrop river" data-mark="流"></div>
-          <article class="story-card">
-            <h2>3. 重用平台的基本流程</h2>
-            <p>有準備好以上的工具後，研究者可以按照以下流程，把平台應用於新的研究主題：</p>
-            <p>選定研究主題與史料 → OCR 並結構化原始史料→ 調整 AI Skills → 執行 AI 分析 → 載入網站核驗 → 修改及擴展平台 → 保存分析結果→後續研究</p>
-          </article>
-        </section>
-        <section class="story content-story cover-bar-story" id="part-3-ocr" data-tab="part-3" data-nav="#part-3-ocr" style="--card-x: 7vw; --card-y: 38vh; --card-w: 680px; --story-height: 1120px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="O"></div>
-          <div class="cover-bar" data-mark="O">
-            <h2>1. OCR 並結構化原始史料</h2>
-          </div>
-          <article class="story-card">
-            <h3>1. 甚麼是 OCR？</h3>
-            <p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p>
-            <p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-paddleocr" data-tab="part-3" data-nav="#part-3-paddleocr" style="--card-x: 48vw; --card-y: 14vh; --card-w: 680px; --story-height: 1080px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="字"></div>
-          <article class="story-card">
-            <h2>2. PaddleOCR</h2>
-            <p>研究者可使用 PaddleOCR 作為 OCR 的工具。PaddleOCR 是由百度開發，具有以下優點：</p>
-            <p>1. 能夠辨識掃描影像或 PDF 中的中文文字，並支援版面分析。</p>
-            <p>2. 中文辨識準確率高，而且辨識速度快。</p>
-            <p>3. 開源且免費，支援本地部署，可離線運行。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-agentic-ocr" data-tab="part-3" data-nav="#part-3-agentic-ocr" style="--card-x: 7vw; --card-y: 14vh; --card-w: 690px; --story-height: 900px; --card-accent: #ad7a35;">
-          <div class="backdrop gold" data-mark="AI"></div>
-          <article class="story-card">
-            <h2>3. 運用 Agentic AI 使用 PaddleOCR</h2>
-            <p>PaddleOCR 通常透過 Python API 在本機安裝及運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-material" data-tab="part-3" data-nav="#part-3-material" style="--card-x: 49vw; --card-y: 14vh; --card-w: 690px; --story-height: 1020px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="材"></div>
-          <article class="story-card">
-            <h2>4. OCR 前的材料準備</h2>
-            <p>OCR 所處理的材料通常為 PDF 或 JPG、PNG、TIFF 等影像檔案。因此，如果史料為紙本書籍，研究者可先查找是否已有可合法使用的電子版本，若沒有，則需以掃描器或相機把書頁數位化，轉換為 PDF 等形式的影像檔案。</p>
-            <p>研究者應遵守所在地的版權法規及資料庫使用條款，優先使用公有領域、已獲授權或依法可供研究使用的材料。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-code" data-tab="part-3" data-nav="#part-3-code" style="--card-x: 7vw; --card-y: 14vh; --card-w: 680px; --story-height: 900px; --card-accent: #c7543f;">
-          <div class="backdrop signal-backdrop" data-mark="流">
-            <div class="signals">
-              <span class="signal-label one">地方奏報</span>
-              <span class="signal-label two">皇帝回應</span>
-              <span class="signal-label three">後續回應</span>
+      <div id="part-3-content" data-part3-workshop>
+        <section class="part3-workshop-intro" aria-labelledby="part3-workshop-title">
+          <div class="part3-workshop-intro-grid">
+            <div>
+              <p class="part3-overline">RESEARCH RECIPE <span>可按研究需要調整</span></p>
+              <h2 id="part3-workshop-title">一個問題，八個檢查點</h2>
+              <p>這裡展示的是一個可調整的研究配方，而不是唯一方法。每一步都保留輸入、輸出和研究者要作的決定，讓 AI 的工作停留在可檢查的候選階段。</p>
+            </div>
+            <div class="part3-status-legend" aria-label="研究結果狀態">
+              <span><i class="status-dot status-testing"></i>測試中</span>
+              <span><i class="status-dot status-candidate"></i>候選</span>
+              <span><i class="status-dot status-confirmed"></i>已確認</span>
+              <span><i class="status-dot status-reusable"></i>可重用</span>
             </div>
           </div>
-          <article class="story-card">
-            <h2>5. 執行 OCR 的Python 代碼</h2>
-            <p>要運行 PaddleOCR，研究者需要指示 Agentic AI撰寫執行 OCR 的 Python 代碼，指定需要辨識的影像檔案，設定辨識方式、輸出格式和儲存位置。但在此之前，研究者首先檢視史料的版面及格式，從而決定 OCR 的方式。</p>
-          </article>
+          <nav class="part3-stepper" aria-label="第三部分主要步驟">
+            <button type="button" class="part3-step is-active" data-part3-step="ocr"><span>01</span><strong>OCR 並結構化原始史料</strong><small>準備可追溯的輸入</small></button>
+            <button type="button" class="part3-step" data-part3-step="ai"><span>02</span><strong>運用AI抽取資訊</strong><small>先測試，再批次分析</small></button>
+            <button type="button" class="part3-step" data-part3-step="wiki"><span>03</span><strong>後續功能：LLM Wiki</strong><small>只保存已核對結果</small></button>
+          </nav>
         </section>
-        <section class="story content-story" id="part-3-format" data-tab="part-3" data-nav="#part-3-format" style="--card-x: 48vw; --card-y: 14vh; --card-w: 680px; --story-height: 900px; --card-accent: #c7543f;">
-          <div class="backdrop network" data-mark="版"></div>
-          <article class="story-card">
-            <h2>6. 檢視史料的版面及格式</h2>
-            <p>研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-printed" data-tab="part-3" data-nav="#part-3-printed" style="--card-x: 7vw; --card-y: 14vh; --card-w: 720px; --story-height: 1140px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="印"></div>
-          <article class="story-card">
-            <h2>7. 辨識印刷字</h2>
-            <p>印刷字的字形統一，字距與行距相對規則，因此一般較容易進行 OCR 辨識。然而，研究者仍需先檢視史料的版面及格式。</p>
-            <p>以圖 1 為例，此史料採用橫排單欄的印刷版面，頁面結構由標題、日期、史料來源及正文組成，研究者因此需要指示agentic ai 在 Python 程式中特別注明相應的版面結構，以便保留原有的版面。此外，圖中的標題符號較為模糊，可能影響準確率，因此 OCR 完成後，需要利用 AI 或人工進行校對，以減少錯誤。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-handwritten" data-tab="part-3" data-nav="#part-3-handwritten" style="--card-x: 48vw; --card-y: 14vh; --card-w: 720px; --story-height: 1510px; --card-accent: #a45e4c;">
-          <div class="backdrop ink" data-mark="寫"></div>
-          <article class="story-card">
-            <h2>8. 辨識手寫字</h2>
-            <p>和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。一般而言，楷書較容易辨識。相反，草書因連筆及字形變化較大，辨識準確率較低，不建議使用 OCR 處理。</p>
-            <p>另外，手寫史料的版面往往與印刷文本不同。以圖 2 為例，它是圖 1 所據原奏摺的掃描本，採用直排、由右至左閱讀及多欄排版，並包含硃批、印章等元素，以及臣字款、抬頭等特殊書寫格式。其中，臣字款指官員自稱「臣」時以小字書寫；抬頭則指涉及皇帝時採用的敬書格式。此外，文末另有以草書書寫的硃批。</p>
-            <p>進行 OCR 時，研究者須先定明清晰的處理規則，除了注明由上至下、由右至左的閱讀方向外，亦應略過難以準確辨識的草書硃批，並將因抬頭而分隔的文字重新合併。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-json" data-tab="part-3" data-nav="#part-3-json" style="--card-x: 7vw; --card-y: 14vh; --card-w: 720px; --story-height: 1180px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="J"></div>
-          <article class="story-card">
-            <h2>9. 輸出格式：JSON</h2>
-            <p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p>
-            <p>每份文書的初步JSON 結構應至少包括標題和正文，在OCR完成後，再後續加入其他欄位，包括文書類型（奏折或上諭）、作者資料（官位和名字）、標題、文書編號（自訂）、文書正文、發送和接收日期，以及史料來源，形成完整的結構化史料。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-test" data-tab="part-3" data-nav="#part-3-test" style="--card-x: 48vw; --card-y: 14vh; --card-w: 720px; --story-height: 1220px; --card-accent: #ad7a35;">
-          <div class="backdrop gold" data-mark="試"></div>
-          <article class="story-card">
-            <h2>10. OCR測試</h2>
-            <p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-import" data-tab="part-3" data-nav="#part-3-import" style="--card-x: 7vw; --card-y: 14vh; --card-w: 720px; --story-height: 1050px; --card-accent: #4d817c;">
-          <div class="backdrop river" data-mark="入"></div>
-          <article class="story-card">
-            <h2>11. 輸入結構化史料至平台</h2>
-            <p>完成OCR和後續整理後，所有的史料都應儲存在一個完整的 JSON 檔案中，研究者於是可以要求 Agentic AI把 JSON 檔案匯入平台。以本平台為例，只需將整理完成的 JSON 檔案放入網站專案中的 「儲存一手史料」 資料夾，平台便可直接讀取該檔案。</p>
-          </article>
-        </section>
-        <section class="story content-story cover-bar-story" id="part-3-ai" data-tab="part-3" data-nav="#part-3-ai" style="--card-x: 48vw; --card-y: 38vh; --card-w: 700px; --story-height: 1220px; --card-accent: #ad7a35;">
-          <div class="backdrop gold" data-mark="AI"></div>
-          <div class="cover-bar" data-mark="AI">
-            <h2>2. 運用AI抽取資訊</h2>
+
+        <section class="part3-module part3-surface-a" id="part-3-research-questions" data-part3-section="questions" aria-labelledby="part3-questions-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">開始之前 / 研究問題</p><h2 id="part3-questions-title">適合的研究問題</h2></div>
+            <p>先決定要追問的關係，再決定要保存哪些欄位。這裡的例子是可探索的問題，不是本平台已完成的研究結論。</p>
           </div>
-          <article class="story-card">
-            <h3>1. 修改、建立AI Skills</h3>
-            <p>完成資料整理後，研究者需要按照新的研究問題，修改或建立新的 Skills。例如，現時系統用於提取林爽文軍事行動的 Skills，可以根據新的研究主題，改為其他的事件類型，例如水災的情況、司法案件的調查進展等。</p>
-            <h3>建立新的 Skill 時，研究者應說明：</h3>
-            <p>- 這項 Skill 要回答哪一個研究問題；</p>
-            <p>- AI 需要從文本中提取哪些資訊；</p>
-            <p>- 每項結果需要保存哪些原文引文等。</p>
-            <p>研究者可以請 Agentic AI修改和建立指令，完成 Skill 後，應先用少量文書測試，檢查 AI 是否能按照要求提取合適的結果，再進行批次處理。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-ai-chain" data-tab="part-3" data-nav="#part-3-ai-chain" style="--card-x: 7vw; --card-y: 14vh; --card-w: 740px; --story-height: 1320px; --card-accent: #c7543f;">
-          <div class="backdrop network" data-mark="鏈"></div>
-          <article class="story-card">
-            <h2>2. 執行 AI Skills的方法</h2>
-            <p>完成修改或建立 AI Skills 後，研究者便可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。</p>
-            <p>為減少重複操作，研究者可要求 Agentic AI 撰寫 Python代碼，將多個 AI Skills 串聯成自動化的分析流程 （Chain）。程式會逐份讀取結構化文書，依序執行各項 AI Skills，並自動將結果儲存至 JSON 檔案，直至完成所有史料的分析，</p>
-            <p>例如，研究者可以建立一條處理奏摺的 AI Chain：</p>
-            <p>文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-model" data-tab="part-3" data-nav="#part-3-model" style="--card-x: 48vw; --card-y: 14vh; --card-w: 700px; --story-height: 1030px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="模"></div>
-          <article class="story-card">
-            <h2>3. 選用的AI Model</h2>
-            <p>然而，由於 AI Skills 鏈（Chain）需要對每份史料逐步執行多項的分析，因此需要消耗大量 Token，提高了使用 API 的成本。因此，建議研究者選擇成本較低，但仍具備足夠分析能力的 AI Model，以兼顧研究成本和分析品質。</p>
-            <p>目前推薦 Gemini Flash 系列及 DeepSeek 的模型。兩者的 API 成本較低，亦能大致正確理解奏摺、上諭中的文言文，因此適合用來批次執行 AI Skills，分析大量文書。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-3-cloud" data-tab="part-3" data-nav="#part-3-cloud" style="--card-x: 7vw; --card-y: 14vh; --card-w: 700px; --story-height: 920px; --card-accent: #4d817c;">
-          <div class="backdrop river" data-mark="雲"></div>
-          <article class="story-card">
-            <h2>4. Google Cloud</h2>
-            <p>研究者可透過 Google Cloud 使用 Gemini Flash 及 DeepSeek 的 API，因為Google Cloud 為新用戶提供一定金額的免費額度（約港幣 2,000 元），足以應付大量的 AI Skills 批次分析工作。</p>
-          </article>
-        </section>
-        <section class="story content-story cover-bar-story" id="part-3-wiki" data-tab="part-3" data-nav="#part-3-wiki" style="--card-x: 48vw; --card-y: 38vh; --card-w: 720px; --story-height: 1260px; --card-accent: #a45e4c;">
-          <div class="backdrop ink" data-mark="知"></div>
-          <div class="cover-bar" data-mark="知">
-            <h2>3. 後續功能：LLM Wiki</h2>
+          <div class="part3-question-layout part3-one-card-layout">
+            <article class="part3-question-card"><div class="part3-preview-top"><span class="part3-state-badge state-draft">示例問題</span><span>研究者先定義範圍</span></div><h3>政策如何形成？</h3><p>本平台可用於觀察政策如何在皇帝與地方官員的互動過程中逐步形成、調整與落實。</p><div class="part3-spec-grid"><div><span>需要的資料</span><strong>文書類型、作者、日期、正文、回應關係</strong></div><div><span>研究者決定</span><strong>哪些關係有原文證據，哪些仍是候選</strong></div></div></article>
+            <div class="part3-policy-chart" aria-label="政策形成研究問題視覺化示意">
+              <div class="policy-chart-heading"><span>可觀察的互動</span><b>從文書關係提出問題</b></div>
+              <div class="policy-chart-flow"><div class="policy-node policy-node-local"><b>地方官員</b><small>回應特定事件</small></div><i>→</i><div class="policy-node policy-node-emperor"><b>皇帝</b><small>回應奏報與行動</small></div><i>→</i><div class="policy-node policy-node-execution"><b>地方執行</b><small>落實皇帝命令</small></div></div>
+              <div class="policy-chart-delay"><span>地理距離／文書傳遞</span><b>時間差</b><span>不同資訊與判斷</span></div>
+              <p>可由時間線與關係網絡同時呈現；圖示只是問題框架，並不代替逐條史料核對。</p>
+            </div>
           </div>
-          <article class="story-card">
-            <p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p>
-            <p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p>
-            <p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p>
-          </article>
+        </section>
+
+        <section class="part3-module part3-surface-c" id="part-3-tools" data-part3-section="tools" aria-labelledby="part3-tools-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">工具箱 / 研究準備</p><h2 id="part3-tools-title">所需的工具與資源</h2></div>
+            <p>工具是支援研究決定的材料，不是把歷史判斷交給自動化流程。五張卡片可以按自己的語料和能力替換。</p>
+          </div>
+          <div class="part3-tools-board">
+            <div class="part3-tools-hub"><span>研究者</span><b>決定問題<br>核對結果</b></div>
+            <article class="part3-tool-card tool-repository"><span>01</span><h3>原始碼與 README</h3><p>下載平台程式碼、AI Skills、結構化史料和分析結果的資料夾，先讀懂專案如何分工。</p><em>輸入：研究語料與規則</em></article>
+            <article class="part3-tool-card tool-agent"><span>02</span><h3>Agentic AI</h3><p>協助閱讀說明、整理文書、轉換資料格式，或按研究者指示修改 Skill 和介面。</p><em>決定：哪些工作可交給代理</em></article>
+            <article class="part3-tool-card tool-ocr"><span>03</span><h3>OCR 與本機程式</h3><p>把掃描頁面轉成可搜尋文本，再依照版面和來源規則整理成 JSON。</p><em>輸出：可檢查的文字草稿</em></article>
+            <article class="part3-tool-card tool-api"><span>04</span><h3>AI API／批次服務</h3><p>按研究需要選擇合適的模型與服務，先用少量文書測試品質，再安排批次處理。</p><em>狀態：測試中／候選</em></article>
+            <article class="part3-tool-card tool-backup"><span>05</span><h3>版本管理與備份</h3><p>用自己的 Repository 管理程式碼、Skills、結構化資料和已審核結果，方便維護與協作。</p><em>保存：研究版本與 provenance</em></article>
+          </div>
+        </section>
+
+        <section class="part3-module part3-surface-b part3-flow-module" id="part-3-basic-flow" data-part3-section="basic-flow" aria-labelledby="part3-basic-flow-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">工作流程 / 一頁總覽</p><h2 id="part3-basic-flow-title">重用平台的基本流程</h2></div>
+            <p>每個箭頭都是一次可以停下來檢查的地方；流程可以因研究問題而增減。</p>
+          </div>
+          <div class="part3-full-flow" aria-label="重用平台的基本流程圖"><div><span>01</span><b>選定研究主題<br>與史料</b></div><i>→</i><div><span>02</span><b>OCR 並結構化<br>原始史料</b></div><i>→</i><div><span>03</span><b>調整<br>AI Skills</b></div><i>→</i><div><span>04</span><b>執行 AI<br>分析</b></div><i>→</i><div><span>05</span><b>載入網站<br>核驗</b></div><i>→</i><div><span>06</span><b>保存結果<br>後續研究</b></div></div>
+          <p class="part3-flow-caption">原始文書 → AI 候選 → 研究者確認 → 可重用資料</p>
+        </section>
+
+        <section class="part3-stage part3-stage-ocr" id="part-3-ocr" data-part3-stage="ocr" aria-labelledby="part3-ocr-title">
+          <div class="part3-main-cover cover-bar" data-mark="O">
+            <div class="part3-main-cover-copy"><span>01 / 主要步驟</span><h2 id="part3-ocr-title">1. OCR 並結構化原始史料</h2><p>把影像轉成可搜尋、可檢查、保留來源位置的結構化輸入。</p></div>
+          </div>
+        <section class="part3-module part3-surface-a" id="part-3-ocr-definition" data-part3-section="ocr-definition" aria-labelledby="part3-ocr-definition-title">
+          <div class="part3-module-header"><div><p class="part3-overline">01 / OCR 起點</p><h2 id="part3-ocr-definition-title">甚麼是 OCR？</h2></div><p>OCR 將影像中的文字辨識為機器可讀文本；兩張卡片分開說明它的技術作用和研究者仍要保留的工作。</p></div>
+          <div class="part3-two-card-grid"><article class="part3-small-card"><span>01 / 技術</span><h3>由影像到文字</h3><p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p><div class="part3-card-tag">輸入：掃描影像／PDF</div></article><article class="part3-small-card"><span>02 / 研究流程</span><h3>文字仍然需要核對</h3><p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p><div class="part3-card-tag">決定：辨識規則／校對方式／來源位置</div></article></div>
+        </section>
+        <section class="part3-module part3-surface-b" id="part-3-preparation" data-part3-section="preparation" aria-labelledby="part3-preparation-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">02 / 史料準備與 OCR</p><h2 id="part3-preparation-title">先看清材料，再讓文字進入流程</h2></div>
+            <p>OCR 只是一個起點。直排、手寫、印章、頁面結構和不確定字元都要留下可追溯的校驗位置。</p>
+          </div>
+          <div class="part3-ocr-lab">
+            <div class="part3-ocr-toolbar"><div class="part3-segmented" role="tablist" aria-label="查看影像或 OCR 草稿"><button type="button" class="is-active" data-part3-ocr-mode="scan">掃描影像</button><button type="button" data-part3-ocr-mode="text">OCR 草稿</button></div><span class="part3-warning"><i class="status-dot status-testing"></i>OCR 候選，仍需對照影像</span></div>
+            <div class="part3-ocr-viewport">
+              <div class="part3-ocr-view is-active" data-part3-ocr-view="scan">
+                <div class="part3-scan-page" aria-label="示意掃描頁面"><span class="scan-seal">史</span><div class="scan-columns"><span>為　查　明　文　書　流　程</span><span>據　來　文　謹　陳　事　由</span><span>臣　謹　按　原　文　核　對</span><span>右　件　合　行　具　奏　者</span></div><div class="scan-footer">頁面結構／直排／印章</div></div>
+                <div class="part3-ocr-callout callout-layout"><b>版面</b><span>直排、分欄、頁碼</span></div>
+                <div class="part3-ocr-callout callout-character"><b>字元</b><span>模糊字與手寫批註</span></div>
+              </div>
+              <div class="part3-ocr-view" data-part3-ocr-view="text" hidden>
+                <div class="part3-ocr-text-card"><div class="part3-mini-toolbar"><span>ocr-draft.txt</span><span class="part3-state-badge state-candidate">候選</span></div><p>為查明文書流程，據來文謹陳事由。<mark>臣謹按原文核對</mark>，右件合行具奏者。</p><p class="uncertain-text">[字元待核]　頁面結構已保留，來源位置尚未填入。</p><div class="part3-source-line">來源路徑：待填／原始檔案／頁碼</div></div>
+                <aside class="part3-ocr-checklist"><strong>研究者檢查</strong><label><input type="checkbox"> 對照掃描影像</label><label><input type="checkbox"> 標記不確定字元</label><label><input type="checkbox"> 保留頁面與來源位置</label></aside>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="part3-module part3-surface-c" id="part-3-ocr-tools" data-part3-section="ocr-tools" aria-labelledby="part3-ocr-tools-title">
+          <div class="part3-module-header"><div><p class="part3-overline">02 / OCR 工具與材料</p><h2 id="part3-ocr-tools-title">選工具，也要先看材料</h2></div><p>以下每張卡片都是一個可以單獨檢查的決定，不把 OCR 當成按一下就完成的黑盒子。</p></div>
+          <div class="part3-card-grid part3-five-card-grid"><article class="part3-small-card"><span>01</span><h3>PaddleOCR</h3><p>可用作 OCR 工具，處理掃描影像或 PDF；實際表現仍須按材料版面和測試結果核對。</p></article><article class="part3-small-card"><span>02</span><h3>運用 Agentic AI 使用 PaddleOCR</h3><p>研究者可用自然語言指示 Agentic AI 協助安裝工具和撰寫 OCR 程式，但規則和輸出仍由研究者檢查。</p></article><article class="part3-small-card"><span>03</span><h3>OCR 前的材料準備</h3><p>先確認影像檔案、使用權限、清晰度、頁面順序和檔案命名，再開始辨識。</p></article><article class="part3-small-card"><span>04</span><h3>執行 OCR 的 Python 程式碼</h3><p>指定影像檔案、閱讀方向、版面規則、輸出格式和儲存位置，並留下可重跑的設定。</p></article><article class="part3-small-card"><span>05</span><h3>檢視史料的版面及格式</h3><p>留意印刷或手寫、橫排或直排、標題、正文、批註、硃批、印章和頁碼等結構。</p></article></div>
+        </section>
+
+        <section class="part3-module part3-surface-a" id="part-3-document-forms" data-part3-section="document-forms" aria-labelledby="part3-document-forms-title">
+          <div class="part3-module-header"><div><p class="part3-overline">03 / 文字形態</p><h2 id="part3-document-forms-title">印刷字與手寫字，需要不同的閱讀規則</h2></div><p>左側是可點選的印刷版面示意；右側保留手寫文書的版面提醒，讓學生看見 OCR 規則如何由材料決定。</p></div>
+          <div class="part3-document-form-layout">
+            <article class="part3-printed-card"><div class="part3-card-heading"><span>7. 辨識印刷字</span><span class="part3-state-badge state-testing">互動示意</span></div><div class="part3-printed-chart"><div class="printed-page" aria-label="橫排單欄印刷史料示意"><span class="printed-label label-title" data-part3-print-feature="title">標題</span><span class="printed-label label-date" data-part3-print-feature="date">日期</span><span class="printed-label label-source" data-part3-print-feature="source">史料來源</span><span class="printed-label label-body" data-part3-print-feature="body">正文</span><div class="printed-page-lines"><b>奏摺標題</b><small>乾隆五十二年　日期</small><i>史料來源：待填</i><p>正文文字與段落結構……</p><p>研究者對照頁面後再保存。</p></div></div><div class="printed-feature-list" role="tablist" aria-label="印刷版面標籤"><button type="button" class="is-active" data-part3-print-feature="title" aria-selected="true">標題</button><button type="button" data-part3-print-feature="date" aria-selected="false">日期</button><button type="button" data-part3-print-feature="source" aria-selected="false">史料來源</button><button type="button" data-part3-print-feature="body" aria-selected="false">正文</button></div></div><p class="part3-printed-description" data-part3-print-description><strong>以圖 1 為例，此史料採用橫排單欄的印刷版面，頁面結構由標題、日期、史料來源及正文組成，研究者因此需要指示agentic ai 在 Python 程式中特別注明相應的版面結構，以便保留原有的版面。此外，圖中的標題符號較為模糊，可能影響準確率，因此 OCR 完成後，需要利用 AI 或人工進行校對，以減少錯誤。</strong></p></article>
+            <article class="part3-small-card part3-handwritten-card"><div class="part3-card-heading"><span>8. 辨識手寫字</span><span class="part3-state-badge state-candidate">規則待定</span></div><p>和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。一般而言，楷書較容易辨識；草書因連筆及字形變化較大，辨識準確率較低。</p><p>手寫史料往往採用直排、由右至左閱讀及多欄排版，並包含硃批、印章、臣字款、抬頭等特殊書寫格式。進行 OCR 時，研究者須先定明閱讀方向和處理規則，並把難以準確辨識的部分標記出來。</p><div class="part3-rule-chips"><span>直排</span><span>由右至左</span><span>硃批</span><span>草書待核</span></div></article>
+          </div>
+        </section>
+
+        <section class="part3-module part3-surface-c" id="part-3-structure" data-part3-section="structure" aria-labelledby="part3-structure-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">03 / 結構化資料</p><h2 id="part3-structure-title">把每個欄位都連回來源</h2></div>
+            <p>JSON 是給程式讀取的容器，不應把來源和不確定性藏起來。下方是示意欄位，真正內容須由研究者按自己的語料補充。</p>
+          </div>
+          <div class="part3-json-layout">
+            <div class="part3-json-card"><div class="part3-json-head"><span>示意資料</span><span class="part3-state-badge state-candidate">需補來源</span></div><pre aria-label="示意 JSON 資料"><code>{
+  <span class="json-key">"doc_type"</span>: <span class="json-string">"奏摺"</span>,
+  <span class="json-key">"author"</span>: <span class="json-string">"待填"</span>,
+  <span class="json-key">"date"</span>: <span class="json-string">"待核"</span>,
+  <span class="json-key">"text"</span>: <span class="json-string">"原文正文……"</span>,
+  <span class="json-key">"source"</span>: <span class="json-string">"待填：檔案／頁碼"</span>
+}</code></pre><div class="part3-json-foot"><i class="status-dot status-testing"></i>每一項 AI 結果都要保存原文引文與來源路徑</div></div>
+            <div class="part3-field-card"><div class="part3-field-head"><span>欄位檢查表</span><small>點選查看研究決定</small></div><div class="part3-field-list" role="tablist" aria-label="JSON 欄位"><button type="button" class="is-active" data-part3-json-field="doc_type" aria-selected="true"><b>文書類型</b><span>奏摺／上諭</span></button><button type="button" data-part3-json-field="author" aria-selected="false"><b>作者</b><span>官位與姓名</span></button><button type="button" data-part3-json-field="date" aria-selected="false"><b>日期</b><span>發送／接收／批示</span></button><button type="button" data-part3-json-field="text" aria-selected="false"><b>正文</b><span>可定位的原文</span></button><button type="button" data-part3-json-field="source" aria-selected="false"><b>史料來源</b><span>版本、檔案、頁碼</span></button></div><div class="part3-field-detail" aria-live="polite"><strong data-part3-json-title>文書類型</strong><p data-part3-json-description>先確認這份材料屬於哪一種文書，避免把不同文件角色混在同一個分析問題裡。</p><span class="part3-decision-label">核對位置</span><b data-part3-json-check>原始影像／目錄／文書標題</b></div></div>
+          </div>
+        </section>
+        </section>
+
+        <section class="part3-stage part3-stage-ai" id="part-3-ai" data-part3-stage="ai" aria-labelledby="part3-ai-stage-title">
+          <div class="part3-main-cover cover-bar" data-mark="AI">
+            <div class="part3-main-cover-copy"><span>02 / 主要步驟</span><h2 id="part3-ai-stage-title">2. 運用AI抽取資訊</h2><p>把研究問題寫成 Skill，讓 AI 產生附有原文路徑的候選結果。</p></div>
+          </div>
+        <section class="part3-module part3-surface-a" id="part-3-ai-workshop" data-part3-section="ai" aria-labelledby="part3-ai-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">04 / AI Skill 與批次分析</p><h2 id="part3-ai-title">先寫清楚規則，再讓模型做候選</h2></div>
+            <p>建立 Skill 時，研究問題、提取欄位、原文引文和核驗方法都要寫明。完成後先以少量文書測試，再考慮批次分析。</p>
+          </div>
+          <div class="part3-ai-sections">
+            <div class="part3-ai-subsection"><div class="part3-subsection-heading"><span>1 / 兩張卡片</span><h3>修改、建立 AI Skills</h3></div><div class="part3-two-card-grid"><article class="part3-small-card"><span>01 / 研究問題</span><h3>按新的問題調整 Skill</h3><p>完成資料整理後，研究者需要按照新的研究問題，修改或建立新的 Skills。原有的事件提取規則，也可以按新的研究主題重新定義。</p><div class="part3-card-tag">輸入：研究問題／語料／抽取範圍</div></article><article class="part3-small-card"><span>02 / Skill 規格</span><h3>建立新的 Skill 時，研究者應說明：</h3><ul class="part3-check-list"><li>這項 Skill 要回答哪一個研究問題；</li><li>AI 需要從文本中提取哪些資訊；</li><li>每項結果需要保存哪些原文引文。</li></ul><div class="part3-card-tag">狀態：草稿 → 測試中</div></article></div></div>
+            <div class="part3-ai-subsection"><div class="part3-subsection-heading"><span>2 / 兩張卡片</span><h3>執行 AI Skills 的方法</h3></div><div class="part3-two-card-grid"><article class="part3-small-card"><span>01 / 執行</span><h3>完成修改或建立 AI Skills 後</h3><p>研究者可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。</p><div class="part3-card-tag">先確認：輸入欄位／輸出格式／來源保存</div></article><article class="part3-small-card"><span>02 / Chain</span><h3>為減少重複操作</h3><p>研究者可要求 Agentic AI 撰寫程式，將多個 AI Skills 串聯成自動化的分析流程（Chain），並逐份儲存結果。</p><div class="part3-card-tag">下一步：查看下方 Chain 示意</div></article></div></div>
+            <div class="part3-chain-explorer"><div class="part3-card-heading"><span>處理奏摺的 AI Chain</span><span class="part3-state-badge state-candidate">互動示意</span></div><p class="part3-card-hint">點選一個節點，查看該步驟的輸入、輸出和檢查點。</p><div class="part3-chain-flow" role="tablist" aria-label="處理奏摺的 AI Chain"><button type="button" class="is-active" data-part3-chain="summary" aria-selected="true"><span>01</span><b>文書總結、分段</b></button><i>→</i><button type="button" data-part3-chain="events" aria-selected="false"><span>02</span><b>抽取事件及官員行動</b></button><i>→</i><button type="button" data-part3-chain="sources" aria-selected="false"><span>03</span><b>追溯資訊來源</b></button><i>→</i><button type="button" data-part3-chain="emperor" aria-selected="false"><span>04</span><b>抽取上諭中皇帝對奏摺的回應</b></button><i>→</i><button type="button" data-part3-chain="official" aria-selected="false"><span>05</span><b>抽取後續官員的回應</b></button><i>→</i><button type="button" data-part3-chain="json" aria-selected="false"><span>06</span><b>輸出結構化 JSON</b></button></div><div class="part3-chain-detail" aria-live="polite"><strong data-part3-chain-title>01．文書總結、分段</strong><p data-part3-chain-description>先整理文書結構，讓後續提取可以回到完整原文和明確段落。</p><div class="part3-chain-arrow" aria-hidden="true">↓</div><span class="part3-research-note">每一步都應保留輸入、輸出和來源路徑</span></div></div>
+            <div class="part3-two-card-grid part3-model-cards"><article class="part3-small-card"><span>3 / 模型選擇</span><h3>選用的 AI Model</h3><p>由於 Chain 需要對每份史料逐步執行多項分析，研究者應按成本、分析能力、速度和資料政策測試合適的模型，不把單一選擇視為所有語料的答案。</p><div class="part3-card-tag">決定：以小批測試結果為準</div></article><article class="part3-small-card"><span>4 / 執行環境</span><h3>Google Cloud</h3><p>研究者可按自己的研究環境選擇本機或雲端服務，並把 API 設定、批次紀錄和輸出檔案分開保存，避免把憑證寫入 Repository。</p><div class="part3-card-tag">安全：憑證不進入程式碼</div></article></div>
+          </div>
+        </section>
+        </section>
+
+        <section class="part3-stage part3-stage-wiki" id="part-3-wiki" data-part3-stage="wiki" aria-labelledby="part3-wiki-stage-title">
+          <div class="part3-main-cover cover-bar" data-mark="知">
+            <div class="part3-main-cover-copy"><span>03 / 主要步驟</span><h2 id="part3-wiki-stage-title">3. 後續功能：LLM Wiki</h2><p>把研究者已確認、具備來源的結構化結果交給後續研究使用。</p></div>
+          </div>
+        <section class="part3-module part3-surface-b" id="part-3-review" data-part3-section="review" aria-labelledby="part3-review-title">
+          <div class="part3-module-header">
+            <div><p class="part3-overline">05 / 研究者核驗與後續研究</p><h2 id="part3-review-title">只有被核對的結果，才進入研究記憶</h2></div>
+            <p>平台可以協助整理大量候選，但不替研究者作最後判斷。點選下面的狀態，查看一項結果如何從候選走向可重用。</p>
+          </div>
+          <div class="part3-wiki-card-grid"><article class="part3-wiki-card wiki-card-knowledge"><span>01 / 研究記憶</span><h3>LLM Wiki 是什麼？</h3><p>完成 AI 分析及研究者審核後，可以把平台與 LLM Wiki 整合。它可作為研究主題的長期知識層，讓後續工作先搜尋已保存的資料。</p><div class="part3-card-tag">位置：平台之外的後續研究層</div></article><article class="part3-wiki-card wiki-card-boundary"><span>02 / 匯入條件</span><h3>只有已確認資料才能進入</h3><p>研究者可將已審核的事件、資訊來源、皇帝及後續官員的回應等結構化資料匯出，再按自己的研究規則匯入 LLM Wiki。</p><div class="part3-wiki-boundary"><i class="status-dot status-confirmed"></i><b>AI 候選不等於研究記憶</b></div></article><article class="part3-wiki-card wiki-card-research"><span>03 / 後續用途</span><h3>由資料支持新的提問</h3><p>當已確認結果保留原文引文和來源路徑，後續研究便可以在較穩定的資料基礎上整合、比較和深化分析。</p><div class="part3-card-tag">狀態：可重用，但仍可回到來源修訂</div></article></div>
+          <div class="part3-final-flow" aria-label="研究資料流向"><span>原始文書</span><b>→</b><span>AI 候選</span><b>→</b><span>人工確認</span><b>→</b><span>可重用資料</span></div>
+          <div class="part3-next-actions"><a class="part3-next-link secondary" href="#part-2">回看第二部分：平台流程</a><a class="part3-next-link primary" href="#part-1">進入平台介面</a></div>
+        </section>
         </section>
       </div>
     </section>

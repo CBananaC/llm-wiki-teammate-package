@@ -2890,3 +2890,54 @@ Verified:
 
 Remaining:
 - None for this date and preview correction. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 15:52 HKT — Claude — Add the Part 1 interactive interface replica
+
+Summary:
+- Replaced the six placeholder `part-1-*` floating-backdrop sections with one sticky `lay-acc` layout: a persistent interactive replica of the sample review tool on the left, and the existing approved explanation cards on the right. All previously approved Traditional Chinese copy was preserved verbatim except the 時間與關係圖表 card, where `奏報事件` was corrected to `戰場事件` to match the real lane label in `review-tools/(2) sample/index.html`.
+- Built the replica with four clickable highlight regions (`導覽列`, `時間與關係圖表`, `原始史料區`, `AI 分析區`), numbered hotspots, floating labels, and a progress readout. Selecting a region dims the others; the explanation cards and the replica hotspots drive the same region state.
+- Wired the requested interactions: two 導覽列 callouts (`輸入與輸出資料`, `切換介面區域`); four fixed chart dots, one per lane, each opening a 節點資訊區; an AI-Skill filter that marks the extracted ranges inside the 硃42 original text; and the four-step AI sequence (local terminal run → upload prompt pointing at 輸入資料 → AI candidate cards → 加入圖表 creates a new lane dot whose panel and quotation resolve back to the highlighted original text).
+- Added `part-1-interface-data.js`, a hand-editable generated data module holding the 硃42 record, the four lane dots, and two AI candidate cards. It is loaded with a plain `<script src>` so the page still works when opened directly from disk.
+- Added `tool/scripts py/build_part1_interface_data.py`, which regenerates that module from `review-tools/shared data/stage1_original_text.json` and `review-tools/(2) sample/sample_all.data`, and fails if any quotation is not a literal substring of the canonical body.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/part-1-interface.css` (new)
+- `Website/storymap/part-1-interface.js` (new)
+- `Website/storymap/part-1-interface-data.js` (new, generated)
+- `../tool/scripts py/build_part1_interface_data.py` (new)
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Provenance audit passed: the replica's 硃42 body, title, send/receive dates and rescript are byte-for-byte identical to `stage1_original_text.json`, and every dot and AI candidate matches its record in `sample_all.data` (subtitle, description and quotation). The 皇帝行動 dot's quotation is sourced from 諭24 and is confirmed present in that document; the replica states this instead of pretending the quote is inside 硃42.
+- Headless DOM QA with jsdom exercised the full flow: 22 checks passed with no runtime errors, covering region switching, all four lane dots, node panels, quotation location, the AI-Skill filter, the terminal sequence, candidate upload, 加入圖表 creating a fifth dot, and 重設示範 restoring the initial four.
+- Passed `node --check` on all three StoryMap JavaScript files and `git diff --check`. No Simplified Chinese was introduced.
+
+Remaining:
+- Human browser QA has not been performed: the Claude in Chrome extension was not connected during this session, so visual layout, sticky behaviour and responsive breakpoints were not confirmed in a real browser.
+- The lane naming conflict between `AGENTS.md`/`CLAUDE.md` (`戰場事件`) and the previous Part 1 copy (`奏報事件`) was resolved in favour of the real tool label; confirm this is the intended terminology.
+- Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 16:06 HKT — Codex — Rebuild the third-part workshop layout
+
+Summary:
+- Reorganized 第三部分 around three retained cover bars: `1. OCR 並結構化原始史料`, `2. 運用AI抽取資訊`, and `3. 後續功能：LLM Wiki`.
+- Divided the long explanatory text into left/right card layouts and added the requested visual treatments: a policy-interaction chart, five-card tools board, full-width reuse flow, OCR two-card explanation, OCR tool cards, interactive printed-page labels, JSON field chart, interactive AI Chain, and three LLM Wiki cards.
+- Kept AI candidates, source paths, researcher decisions, and reusable results visually distinct.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Passed `node --check Website/storymap/storymap.js`, balanced the StoryMap section tags, and passed `git diff --check`.
+- Browser QA on the local HTTP preview confirmed three main cover bars, the OCR image/text switch, printed-page label switching, JSON field switching, and AI Chain node switching with no browser warnings or errors.
+- Checked the 390px responsive layout and corrected the AI Chain/page-flow overflow; restored the default browser viewport afterward.
+- Formal and sample review data remain untouched; no push was performed.
+
+Remaining:
+- Review the complete third-part page content and card spacing in the normal browser preview with the existing Part 1 changes included.

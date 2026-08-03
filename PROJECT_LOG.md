@@ -6703,6 +6703,16 @@ Verified: Both HTML files' inline scripts parse successfully and `git diff --che
 
 Remaining: Human browser validation of a clicked document and its emperor-action dot/line.
 
+### 2026-08-03 16:06 HKT — Codex — Rebuild the introduction website's third-part workshop layout
+
+Summary: Reorganized 第三部分 around three retained cover bars—`1. OCR 並結構化原始史料`, `2. 運用AI抽取資訊`, and `3. 後續功能：LLM Wiki`—and divided the long content into alternating card layouts and interactive charts.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap.js`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Passed StoryMap JavaScript syntax checking, balanced the HTML section tags, and passed `git diff --check`. Local HTTP browser QA confirmed the three cover bars, OCR toggle, printed-page labels, JSON field labels, and AI Chain interaction with no browser warnings/errors. A 390px responsive check found and corrected page-wide overflow from the AI Chain; the default viewport was restored. Formal and sample review data remain untouched; no push was performed.
+
+Remaining: Review the complete third-part page content and spacing in the normal browser preview with the existing Part 1 changes included.
+
 ### 2026-08-03 15:08 HKT — Codex — Add 硃113 communication document panel
 
 Summary: Replaced the second subcard of `研究清代奏折的主要困難` with the light review-tool document-panel replica for 硃113. Added four single source callouts—`收發時間`, `回覆先前上諭1`, `回覆先前上諭2`, and `回覆先前上諭3`—with the latter three linked on hover to the canonical 諭20、諭24、諭28 titles and issue dates. Both send/receive dates use the shared `收發時間` highlight key, and the connector logic now supports multiple highlights per label and page-scroll refreshes.
@@ -6722,3 +6732,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/IN
 Verified: Confirmed both header dates against `review-tools/shared data/stage1_original_text.json`. Browser QA confirmed both headers, the requested ellipsis, the retained dated footer, and removal of the previously displayed continuation text. Passed StoryMap JavaScript syntax checking and `git diff --check`.
 
 Remaining: None for this date and preview correction. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 15:52 HKT — Claude — Add the Part 1 interactive interface replica
+
+Summary: Built the introduction website's 第一部分「平台的整體介面」demonstration. The six placeholder `part-1-*` sections were restructured into one sticky `lay-acc` layout holding a persistent interactive replica of the sample review tool, with the existing approved explanation cards beside it. The replica has four clickable regions (`導覽列`, `時間與關係圖表`, `原始史料區`, `AI 分析區`) with numbered hotspots and floating labels, four fixed lane dots that open 節點資訊區, an AI-Skill filter that marks extracted ranges in the 硃42 original text, and a four-step AI sequence ending with 加入圖表 creating a new lane dot whose quotation resolves back to the highlighted original text. Demonstration content lives in a separate hand-editable module regenerated from the canonical Stage 1 file and the current sample state. In the 時間與關係圖表 card, `奏報事件` was corrected to `戰場事件` to match the real lane label in the sample tool.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, the new `intro Website/Website/storymap/part-1-interface.css`, `part-1-interface.js` and `part-1-interface-data.js`, the new `tool/scripts py/build_part1_interface_data.py`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Provenance audit confirmed the replica's 硃42 body, title, send/receive dates and rescript are byte-for-byte identical to `review-tools/shared data/stage1_original_text.json`, and that every dot and AI candidate matches its record in `review-tools/(2) sample/sample_all.data`. Headless jsdom QA passed 22 interaction checks with no runtime errors. Passed `node --check` on all three StoryMap JavaScript files and `git diff --check`.
+
+Remaining: Human browser QA is outstanding — the Claude in Chrome extension was not connected, so visual layout, sticky behaviour and responsive breakpoints were not confirmed in a real browser. Confirm the `戰場事件` lane terminology. No formal or sample review state was touched; no push was performed.

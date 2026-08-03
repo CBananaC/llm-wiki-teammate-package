@@ -1,0 +1,635 @@
+/* ============================================================================
+   第一部分「平台的整體介面」— 審閱工具互動複本
+
+   這個複本重現 review-tools/(2) sample/index.html 的版面與用語，
+   讓讀者在介紹網站內直接試用四個介面區域，而不需開啟真正的審閱工具。
+
+   重要邊界：
+   - 複本只是教學展示層，不會讀寫任何審閱狀態。
+   - 所有史料內容（引文、日期、AI 結果）一律來自
+     part-1-interface-data.js，該檔由 tool/scripts py/build_part1_interface_data.py
+     依 stage1_original_text.json 與 sample_all.data 產生。
+   - 版面尺寸與位置集中在本檔調整，勿在 storymap.css 內另加覆蓋層。
+   ========================================================================== */
+
+.part1-layout { --panel-w: 33%; }
+
+/* 複本外框 -------------------------------------------------------------- */
+
+.part1-replica {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+  background: #f6f1e6;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  box-shadow: 0 12px 30px rgba(22, 61, 63, .13);
+  overflow: hidden;
+  font-family: var(--sans);
+}
+
+.part1-replica-caption {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 7px 12px;
+  color: #7c705f;
+  background: #ece3d3;
+  border-bottom: 1px solid #ddd1bc;
+  font: 700 calc(11.5px * var(--font-scale))/1.4 var(--sans);
+  letter-spacing: .06em;
+}
+
+.part1-replica-caption .part1-caption-dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--accent); flex: 0 0 auto;
+}
+
+.part1-replica-caption em {
+  margin-left: auto;
+  color: #9a8d79;
+  font: 500 calc(11px * var(--font-scale))/1.4 var(--sans);
+  font-style: normal;
+}
+
+/* 區域外框與高亮 -------------------------------------------------------- */
+
+.part1-region {
+  position: relative;
+  transition: box-shadow .25s, opacity .25s, filter .25s;
+}
+
+.part1-replica[data-active-region] .part1-region { opacity: .48; filter: saturate(.55); }
+.part1-replica[data-active-region] .part1-region.is-active { opacity: 1; filter: none; }
+.part1-replica:not([data-active-region]) .part1-region { opacity: 1; }
+
+.part1-region.is-active {
+  z-index: 4;
+  box-shadow: inset 0 0 0 2px var(--accent), 0 0 0 4px rgba(196, 93, 56, .18);
+}
+
+/* 區域熱點按鈕（未選取時浮在區域上，提示可點） */
+.part1-hotspot {
+  position: absolute;
+  z-index: 6;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 5px 10px;
+  color: #fffaf2;
+  background: rgba(196, 93, 56, .94);
+  border: 0;
+  border-radius: 999px;
+  box-shadow: 0 4px 12px rgba(22, 61, 63, .28);
+  cursor: pointer;
+  font: 700 calc(11.5px * var(--font-scale))/1 var(--sans);
+  letter-spacing: .04em;
+  transition: transform .2s, background-color .2s;
+}
+
+.part1-hotspot:hover,
+.part1-hotspot:focus-visible { transform: translateY(-1px); background: #b04f2c; }
+
+.part1-hotspot .part1-hotspot-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; border-radius: 50%;
+  background: rgba(255, 250, 242, .92); color: var(--accent);
+  font: 800 calc(9.5px * var(--font-scale))/1 var(--sans);
+}
+
+.part1-replica[data-active-region] .part1-hotspot { opacity: 0; pointer-events: none; }
+.part1-replica[data-active-region] .part1-region.is-active .part1-hotspot {
+  opacity: 1; pointer-events: auto; background: #8d3f22;
+}
+
+/* 浮動說明標籤 ---------------------------------------------------------- */
+
+.part1-callout {
+  position: absolute;
+  z-index: 7;
+  width: clamp(160px, 21vw, 236px);
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 3px solid var(--accent);
+  box-shadow: 0 10px 22px rgba(22, 61, 63, .2);
+}
+
+.part1-callout[hidden] { display: none; }
+
+.part1-callout h5 {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font: 700 calc(12.5px * var(--font-scale))/1.35 var(--sans);
+}
+
+.part1-callout p {
+  margin: 0;
+  color: var(--text);
+  font: var(--body-weight) calc(11.5px * var(--font-scale))/1.6 var(--serif);
+}
+
+/* 1. 導覽列 ------------------------------------------------------------- */
+
+.part1-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 7px;
+  padding: 8px 11px;
+  background: linear-gradient(#fffdf8, #f0e7d6);
+  border-bottom: 1px solid #ddd1bc;
+}
+
+.part1-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  padding: 4px 9px;
+  color: #5f5545;
+  background: rgba(255, 255, 255, .72);
+  border: 1px solid #ded2bd;
+  border-radius: 8px;
+  font: 600 calc(11.5px * var(--font-scale))/1.3 var(--sans);
+  white-space: nowrap;
+}
+
+.part1-pill .part1-pl { color: #9a8d79; font-weight: 700; }
+.part1-toolbar-spacer { flex: 1 1 12px; }
+
+.part1-toolgroup { display: inline-flex; gap: 5px; }
+
+.part1-toolbtn {
+  padding: 4px 10px;
+  color: #5f5545;
+  background: rgba(255, 255, 255, .82);
+  border: 1px solid #ded2bd;
+  border-radius: 8px;
+  cursor: default;
+  font: 600 calc(11.5px * var(--font-scale))/1.3 var(--sans);
+}
+
+.part1-toolbtn.is-emphasis { color: #fffaf2; background: #7d6a4d; border-color: #6d5c42; }
+
+/* 2. 時間與關係圖表 ------------------------------------------------------ */
+
+.part1-stage {
+  display: grid;
+  grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr) minmax(0, .92fr);
+  min-height: 0;
+}
+
+.part1-chart {
+  position: relative;
+  padding: 0 0 12px;
+  background: #fbf7ee;
+  border-right: 1px solid #e3d9c7;
+}
+
+.part1-lane-heads {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  padding: 8px 8px 6px;
+  background: #f1e9da;
+  border-bottom: 1px solid #e3d9c7;
+}
+
+.part1-lane-heads span {
+  color: #6f6352;
+  text-align: center;
+  font: 700 calc(10.5px * var(--font-scale))/1.3 var(--sans);
+  letter-spacing: .04em;
+}
+
+.part1-lanes {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 2px;
+  min-height: 268px;
+  padding: 14px 8px 8px;
+}
+
+.part1-lane { position: relative; }
+
+/* 每條線的垂直軸 */
+.part1-lane::before {
+  content: "";
+  position: absolute;
+  top: 0; bottom: 0; left: 50%;
+  width: 1px;
+  background: repeating-linear-gradient(#d9cdb8 0 4px, transparent 4px 8px);
+}
+
+.part1-dot {
+  position: absolute;
+  left: 50%;
+  width: 15px; height: 15px;
+  margin: -7.5px 0 0 -7.5px;
+  padding: 0;
+  border: 2px solid #fffaf2;
+  border-radius: 50%;
+  box-shadow: 0 1px 4px rgba(22, 61, 63, .3);
+  cursor: pointer;
+  transition: transform .18s, box-shadow .18s;
+}
+
+.part1-dot:hover,
+.part1-dot:focus-visible { transform: scale(1.28); }
+.part1-dot.is-selected { box-shadow: 0 0 0 4px rgba(196, 93, 56, .34); transform: scale(1.24); }
+
+.part1-dot[data-actor="lin"] { background: #b5462f; }
+.part1-dot[data-actor="official"] { background: #4d817c; }
+.part1-dot[data-actor="imperial"] { background: #c08a2e; }
+.part1-dot[data-actor="emperor"] { background: #6a5aa8; }
+.part1-dot[data-actor="qing"] { background: #3f6f8f; }
+
+.part1-dot.is-new { animation: part1-dot-pop .6s ease-out; }
+
+@keyframes part1-dot-pop {
+  0% { transform: scale(0); box-shadow: 0 0 0 12px rgba(196, 93, 56, .34); }
+  70% { transform: scale(1.4); }
+  100% { transform: scale(1); }
+}
+
+.part1-dot-date {
+  position: absolute;
+  left: 50%;
+  transform: translate(-50%, 10px);
+  color: #8d8171;
+  white-space: nowrap;
+  pointer-events: none;
+  font: 600 calc(9.5px * var(--font-scale))/1 var(--sans);
+}
+
+/* 節點連線 */
+.part1-chart-links { position: absolute; inset: 0; pointer-events: none; z-index: 1; }
+.part1-chart-link { stroke: #c3b49a; stroke-width: 1.2; stroke-dasharray: 3 3; }
+
+/* 節點資訊區 */
+.part1-nodepanel {
+  margin: 0 10px;
+  padding: 10px 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 6px 16px rgba(22, 61, 63, .14);
+}
+
+.part1-nodepanel[hidden] { display: none; }
+
+.part1-nodepanel-head {
+  display: flex; align-items: center; gap: 7px;
+  margin-bottom: 7px; padding-bottom: 6px;
+  border-bottom: 1px solid var(--line);
+}
+
+.part1-nodepanel-head strong {
+  color: var(--ink);
+  font: 700 calc(12px * var(--font-scale))/1.35 var(--sans);
+}
+
+.part1-nodepanel-close {
+  margin-left: auto; padding: 0 4px;
+  color: #9a8d79; background: none; border: 0; cursor: pointer;
+  font: 600 calc(14px * var(--font-scale))/1 var(--sans);
+}
+
+.part1-nodepanel-desc {
+  margin: 0 0 8px;
+  color: var(--text);
+  font: var(--body-weight) calc(11.5px * var(--font-scale))/1.65 var(--serif);
+}
+
+.part1-nodepanel dl {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 3px 10px;
+  margin: 0 0 8px;
+}
+
+.part1-nodepanel dt {
+  color: #9a8d79;
+  font: 700 calc(10px * var(--font-scale))/1.5 var(--sans);
+  letter-spacing: .05em;
+}
+
+.part1-nodepanel dd {
+  margin: 0;
+  color: var(--text);
+  font: 500 calc(11px * var(--font-scale))/1.5 var(--sans);
+}
+
+.part1-quote {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 7px 9px;
+  color: #6b4a2c;
+  text-align: left;
+  background: #fdf4e2;
+  border: 1px solid #ecd9b6;
+  border-left: 3px solid #d9a441;
+  cursor: pointer;
+  font: var(--body-weight) calc(11.5px * var(--font-scale))/1.6 var(--serif);
+}
+
+.part1-quote:hover,
+.part1-quote:focus-visible { background: #fbedd2; }
+.part1-quote .part1-quote-src { display: block; margin-top: 4px; color: #a08a63; font: 600 calc(10px * var(--font-scale))/1 var(--sans); }
+
+/* 3. 原始史料區 --------------------------------------------------------- */
+
+.part1-doc {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--card);
+  border-right: 1px solid #e3d9c7;
+}
+
+.part1-doc-head {
+  flex: 0 0 auto;
+  padding: 10px 12px 8px;
+  background: linear-gradient(#fffdf8, #f3eada);
+  border-bottom: 1px solid #e6dccb;
+}
+
+.part1-doc-head .part1-doc-title {
+  margin: 0 0 5px;
+  color: var(--ink);
+  font: 700 calc(12.5px * var(--font-scale))/1.4 var(--sans);
+}
+
+.part1-doc-meta {
+  margin: 0;
+  color: #7a6f63;
+  font: 500 calc(10.5px * var(--font-scale))/1.6 var(--sans);
+}
+
+.part1-filterdock {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+  padding: 7px 12px;
+  background: #f8f2e6;
+  border-bottom: 1px solid #e6dccb;
+}
+
+.part1-filterbtn {
+  padding: 3px 9px;
+  color: #6b6152;
+  background: #fffaf2;
+  border: 1px solid #ded2bd;
+  border-radius: 999px;
+  cursor: pointer;
+  font: 600 calc(10.5px * var(--font-scale))/1.4 var(--sans);
+  transition: background-color .18s, color .18s, border-color .18s;
+}
+
+.part1-filterbtn:hover { border-color: #c9bca4; }
+.part1-filterbtn.is-on { color: #fffaf2; background: var(--accent); border-color: var(--accent); }
+
+.part1-doc-scroll {
+  flex: 1;
+  min-height: 0;
+  max-height: 300px;
+  overflow: auto;
+  padding: 10px 12px 16px;
+}
+
+.part1-doc-body {
+  margin: 0;
+  color: var(--text);
+  text-align: justify;
+  font: var(--body-weight) calc(11.5px * var(--font-scale))/1.95 var(--serif);
+}
+
+.part1-doc-body mark {
+  padding: 1px 2px;
+  color: inherit;
+  background: transparent;
+  border-radius: 2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: background-color .25s;
+}
+
+/* 篩選開啟時，依 AI Skill 類別著色 */
+.part1-doc-body mark.is-shown[data-skill="林方行動"] { background: rgba(181, 70, 47, .2); }
+.part1-doc-body mark.is-shown[data-skill^="清軍事"] { background: rgba(63, 111, 143, .2); }
+.part1-doc-body mark.is-shown[data-skill="相關上諭"] { background: rgba(106, 90, 168, .2); }
+
+.part1-doc-body mark.is-located {
+  background: #f7dc8a;
+  box-shadow: 0 0 0 2px rgba(217, 164, 65, .5);
+}
+
+/* 4. AI 分析區 ---------------------------------------------------------- */
+
+.part1-ai {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: #f7f3ea;
+}
+
+.part1-ai-head {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  padding: 9px 12px;
+  background: linear-gradient(#fffdf8, #f1e9da);
+  border-bottom: 1px solid #e6dccb;
+  color: var(--ink);
+  font: 700 calc(12px * var(--font-scale))/1.3 var(--sans);
+}
+
+.part1-ai-head em {
+  margin-left: auto;
+  color: #9a8d79;
+  font: 500 calc(10px * var(--font-scale))/1.3 var(--sans);
+  font-style: normal;
+}
+
+.part1-ai-body { flex: 1; min-height: 0; max-height: 340px; overflow: auto; padding: 10px 11px 14px; }
+
+.part1-step {
+  margin: 0 0 9px;
+  padding: 7px 9px;
+  color: #6f6352;
+  background: rgba(255, 250, 242, .8);
+  border: 1px dashed #ddd1bc;
+  font: 600 calc(10.5px * var(--font-scale))/1.5 var(--sans);
+}
+
+.part1-step-num {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 15px; height: 15px; margin-right: 6px; border-radius: 50%;
+  background: var(--accent); color: #fffaf2;
+  font: 800 calc(9px * var(--font-scale))/1 var(--sans);
+}
+
+/* 本機終端機示意畫面 */
+.part1-terminal {
+  margin: 0 0 10px;
+  background: #1e2422;
+  border: 1px solid #101413;
+  border-radius: 4px;
+  overflow: hidden;
+}
+
+.part1-terminal-bar {
+  display: flex; align-items: center; gap: 5px;
+  padding: 5px 8px;
+  background: #2b3331;
+  color: #9fb0ab;
+  font: 600 calc(9.5px * var(--font-scale))/1.3 var(--sans);
+}
+
+.part1-terminal-bar i {
+  width: 7px; height: 7px; border-radius: 50%; background: #55625e; font-style: normal;
+}
+
+.part1-terminal-body {
+  min-height: 92px;
+  margin: 0;
+  padding: 8px 10px;
+  color: #b9d3c6;
+  white-space: pre-wrap;
+  word-break: break-all;
+  font: 500 calc(10px * var(--font-scale))/1.65 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+}
+
+.part1-terminal-body .part1-term-ok { color: #8fd09a; }
+.part1-terminal-body .part1-term-dim { color: #6f847d; }
+
+.part1-terminal-caret::after {
+  content: "▍";
+  animation: part1-caret 1s steps(1) infinite;
+}
+
+@keyframes part1-caret { 50% { opacity: 0; } }
+
+/* AI 候選卡片 */
+.part1-card {
+  margin: 0 0 8px;
+  padding: 9px 10px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-left: 3px solid #6a8f89;
+  box-shadow: 0 3px 9px rgba(22, 61, 63, .1);
+  transition: opacity .3s, transform .3s;
+}
+
+.part1-card.is-added { border-left-color: #4d817c; opacity: .62; }
+
+.part1-card-head {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 5px;
+  color: #6f6352;
+  font: 700 calc(10px * var(--font-scale))/1.3 var(--sans);
+  letter-spacing: .05em;
+}
+
+.part1-card-skill {
+  padding: 1px 7px;
+  color: #55604f;
+  background: #e7efe6;
+  border-radius: 999px;
+  font: 700 calc(9.5px * var(--font-scale))/1.5 var(--sans);
+}
+
+.part1-card-title {
+  margin: 0 0 4px;
+  color: var(--ink);
+  font: 700 calc(12px * var(--font-scale))/1.4 var(--sans);
+}
+
+.part1-card-desc {
+  margin: 0 0 7px;
+  color: var(--text);
+  font: var(--body-weight) calc(11px * var(--font-scale))/1.6 var(--serif);
+}
+
+.part1-card-acts { display: flex; gap: 6px; align-items: center; }
+
+.part1-act {
+  padding: 4px 11px;
+  border: 1px solid #b9c9c2;
+  border-radius: 6px;
+  background: #eaf2ee;
+  color: #3f6259;
+  cursor: pointer;
+  font: 700 calc(10.5px * var(--font-scale))/1.4 var(--sans);
+}
+
+.part1-act:hover { background: #dfebe5; }
+.part1-act.part1-act-skip { background: #f3efe7; border-color: #ded2bd; color: #857a68; }
+.part1-act[disabled] { cursor: default; opacity: .5; }
+
+.part1-card-status {
+  margin: 6px 0 0;
+  color: #4d817c;
+  font: 600 calc(10px * var(--font-scale))/1.5 var(--sans);
+}
+
+/* 進度提示 -------------------------------------------------------------- */
+
+.part1-progress {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 12px;
+  background: #ece3d3;
+  border-top: 1px solid #ddd1bc;
+}
+
+.part1-progress-text {
+  color: #6f6352;
+  font: 600 calc(11px * var(--font-scale))/1.5 var(--sans);
+}
+
+.part1-progress-reset {
+  margin-left: auto;
+  padding: 3px 10px;
+  color: #6f6352;
+  background: #fffaf2;
+  border: 1px solid #ded2bd;
+  border-radius: 8px;
+  cursor: pointer;
+  font: 600 calc(10.5px * var(--font-scale))/1.4 var(--sans);
+}
+
+/* 「試用」提示句 -------------------------------------------------------- */
+
+.part1-try {
+  margin: 10px 0 0;
+  padding: 8px 10px;
+  color: #6b4a2c;
+  background: #fdf4e2;
+  border-left: 3px solid #d9a441;
+  font: 600 calc(12.5px * var(--font-scale))/1.65 var(--sans);
+}
+
+/* 卡片欄的區域指示 ------------------------------------------------------ */
+
+.part1-track .acc-card.is-region-active {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 1px var(--accent), 0 6px 16px rgba(196, 93, 56, .16);
+}
+
+/* 視窗較窄時：改為單欄，複本置於卡片之上 -------------------------------- */
+
+@media (max-width: 1180px) {
+  .part1-stage { grid-template-columns: 1fr; }
+  .part1-chart, .part1-doc { border-right: 0; border-bottom: 1px solid #e3d9c7; }
+  .part1-callout { position: static; width: auto; margin: 8px 10px 0; box-shadow: none; }
+}
+
+@media (max-width: 900px) {
+  .part1-layout { display: block; }
+  .part1-layout .acc-visual { position: static; margin-bottom: 16px; }
+  .part1-hotspot { position: static; margin: 6px 6px 0; }
+}
