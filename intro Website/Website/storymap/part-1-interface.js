@@ -67,13 +67,13 @@
   const sourceLine = `${doc.series} 冊${doc.compiledIn.book}　頁${doc.compiledIn.page}　${doc.docId}`;
   const dateLine = `${doc.sendDate[0]}上奏　${doc.receiveDate[0]}奉硃批`;
 
-  /* 四條線的固定圓點。top 是圓點在圖表區的垂直位置（百分比），
-     依文書與事件的先後排列，方便讀者看出時間順序。 */
+  /* 四條線的固定圓點。圓點的水平位置由 dateAr 計算，
+     保持與真正樣本工具的橫向時間軸閱讀方式一致。 */
   const laneDots = [
-    { lane: 'events', actor: 'lin', top: 26, dot: data.dots.events, label: data.dots.events.whenCh },
-    { lane: 'official', actor: 'official', top: 52, dot: data.dots.official, label: '十二月十八日' },
-    { lane: 'imperial', actor: 'imperial', top: 72, dot: data.dots.imperial, label: '正月初二日' },
-    { lane: 'emperor', actor: 'emperor', top: 86, dot: data.dots.emperor, label: '正月初二日' }
+    { lane: 'events', actor: 'lin', dot: data.dots.events, label: data.dots.events.whenCh },
+    { lane: 'official', actor: 'official', dot: data.dots.official, label: '十二月十八日' },
+    { lane: 'imperial', actor: 'imperial', dot: data.dots.imperial, label: '正月初二日' },
+    { lane: 'emperor', actor: 'emperor', dot: data.dots.emperor, label: '正月初二日' }
   ];
 
   const laneIndex = Object.fromEntries(data.lanes.map((lane, index) => [lane.key, index]));
@@ -85,27 +85,44 @@
     </div>
 
     <div class="part1-region part1-toolbar" data-region="nav">
-      <button class="part1-hotspot" type="button" data-hotspot="nav" style="top:-2px; right:10px;">
+      <button class="part1-hotspot" type="button" data-hotspot="nav">
         <span class="part1-hotspot-num">1</span>導覽列
       </button>
-      <span class="part1-pill"><span class="part1-pl">檢視</span>時間關係圖</span>
-      <span class="part1-pill"><span class="part1-pl">篩選</span>全部文書</span>
-      <span class="part1-pill"><span class="part1-pl">搜尋</span>　</span>
+      <div class="part1-toolbar-start">
+        <div class="part1-menu">
+          <button class="part1-pill part1-pill-button" type="button" data-type-toggle>點線類型 <span aria-hidden="true">⌄</span></button>
+          <div class="part1-menu-pop part1-type-pop" data-type-pop hidden>
+            <strong>點線類型</strong>
+            <label><input type="checkbox" checked> 戰場事件</label>
+            <label><input type="checkbox" checked> 官員上奏</label>
+            <label><input type="checkbox" checked> 皇帝硃批下旨</label>
+            <label><input type="checkbox" checked> 皇帝行動</label>
+          </div>
+        </div>
+        <span class="part1-pill part1-people-pill">人物 <b>全部</b> <span aria-hidden="true">⌄</span></span>
+        <label class="part1-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="搜尋原文 / 所有欄位…" aria-label="搜尋原文或所有欄位"></label>
+      </div>
       <span class="part1-toolbar-spacer"></span>
       <span class="part1-toolgroup" data-toolgroup="io">
-        <button class="part1-toolbtn" type="button" tabindex="-1">輸入資料</button>
-        <button class="part1-toolbtn" type="button" tabindex="-1">輸出資料</button>
+        <button class="part1-toolbtn" type="button" data-tool-toggle="tools">工具</button>
+        <div class="part1-menu-pop part1-tools-pop" data-tools-pop hidden>
+          <strong>工具</strong>
+          <div class="part1-tools-row"><button type="button">匯出</button><button type="button">分項匯出</button></div>
+          <div class="part1-tools-row"><button type="button" class="is-pointed">輸入資料</button><button type="button">載入技能輸出</button></div>
+          <div class="part1-tools-divider"></div>
+          <span>字級　介面 A− A＋　正文 A− A＋</span>
+        </div>
       </span>
       <span class="part1-toolgroup" data-toolgroup="areas">
-        <button class="part1-toolbtn" type="button" tabindex="-1">Note</button>
-        <button class="part1-toolbtn is-emphasis" type="button" tabindex="-1">AI</button>
-        <button class="part1-toolbtn" type="button" tabindex="-1">事件鏈</button>
+        <button class="part1-toolbtn" type="button" data-region-trigger="doc">Note</button>
+        <button class="part1-toolbtn is-emphasis" type="button" data-region-trigger="ai">AI</button>
+        <button class="part1-toolbtn" type="button" data-region-trigger="chart">事件鏈</button>
       </span>
-      <div class="part1-callout" data-callout="nav-io" hidden style="top:52px; left:calc(58% - 40px);">
+      <div class="part1-callout" data-callout="nav-io" hidden>
         <h5>輸入與輸出資料</h5>
         <p>從本機輸入結構化的原始文本和 AI 分析結果，完成檢視後亦可輸出，供後續研究使用。</p>
       </div>
-      <div class="part1-callout" data-callout="nav-areas" hidden style="top:52px; right:6px;">
+      <div class="part1-callout" data-callout="nav-areas" hidden>
         <h5>切換介面區域</h5>
         <p>開啟或收合筆記、AI 分析區與事件鏈，沿事件的時間順序追蹤資訊如何傳遞。</p>
       </div>
@@ -113,42 +130,50 @@
 
     <div class="part1-stage">
       <div class="part1-region part1-chart" data-region="chart">
-        <button class="part1-hotspot" type="button" data-hotspot="chart" style="top:8px; left:8px;">
+        <button class="part1-hotspot" type="button" data-hotspot="chart">
           <span class="part1-hotspot-num">2</span>時間與關係圖表
         </button>
-        <div class="part1-lane-heads">
-          ${data.lanes.map((lane) => `<span>${escapeHtml(lane.label)}</span>`).join('')}
+        <div class="part1-chart-bar">
+          <strong>時間與關係圖表</strong>
+          <span>4 條線　／　${escapeHtml(doc.docId)} 示範</span>
         </div>
+        <div class="part1-axis-labels"><span>1786/12/11</span><span>1786/12/18</span><span>1787/01/02</span></div>
         <div class="part1-lanes" data-lanes>
           <svg class="part1-chart-links" data-chart-links aria-hidden="true" focusable="false"></svg>
-          ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"></div>`).join('')}
+          ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"><span class="part1-lane-label">${escapeHtml(lane.label)}</span><div class="part1-lane-track"></div></div>`).join('')}
         </div>
         <div class="part1-nodepanel" data-nodepanel hidden></div>
       </div>
 
-      <div class="part1-region part1-doc" data-region="doc">
-        <button class="part1-hotspot" type="button" data-hotspot="doc" style="top:8px; right:8px;">
-          <span class="part1-hotspot-num">3</span>原始史料區
-        </button>
-        <div class="part1-doc-head">
-          <p class="part1-doc-title"><span class="badge">${escapeHtml(doc.docType.slice(0, 1))}</span>${escapeHtml(doc.title)}</p>
-          <p class="part1-doc-meta">${escapeHtml(authorLine)}<br>${escapeHtml(dateLine)}<br>${escapeHtml(sourceLine)}</p>
+      <aside class="part1-dock">
+        <div class="part1-region part1-doc part1-ip" data-region="doc">
+          <button class="part1-hotspot" type="button" data-hotspot="doc">
+            <span class="part1-hotspot-num">3</span>原始史料區
+          </button>
+          <div class="part1-doc-head ip-head">
+            <div class="part1-doc-window-controls" aria-hidden="true"><span>✣</span><span>−</span><span>×</span></div>
+            <p class="part1-doc-title"><span class="badge">${escapeHtml(doc.docType.slice(0, 1))}</span>${escapeHtml(doc.title)}</p>
+            <p class="part1-doc-meta">${escapeHtml(authorLine)}<br>${escapeHtml(dateLine)}<br>${escapeHtml(sourceLine)}</p>
+          </div>
+          <div class="part1-filterdock ip-filterdock" data-filterdock>
+            <button class="part1-filter-icon" type="button" aria-label="篩選">⌕</button>
+            <button class="part1-filterbtn" type="button" data-filter="all">全部標示</button>
+            <button class="part1-filter-gear" type="button" aria-label="原文設定">⚙</button>
+          </div>
+          <div class="part1-doc-scroll ip-scroll" data-doc-scroll>
+            <p class="part1-doc-section-label">原文</p>
+            <p class="part1-doc-body ip-body" data-doc-body>${buildDocumentBody()}</p>
+          </div>
         </div>
-        <div class="part1-filterdock" data-filterdock>
-          <button class="part1-filterbtn" type="button" data-filter="all">全部標示</button>
-        </div>
-        <div class="part1-doc-scroll" data-doc-scroll>
-          <p class="part1-doc-body" data-doc-body>${buildDocumentBody()}</p>
-        </div>
-      </div>
 
-      <div class="part1-region part1-ai" data-region="ai">
-        <button class="part1-hotspot" type="button" data-hotspot="ai" style="top:8px; right:8px;">
-          <span class="part1-hotspot-num">4</span>AI 分析區
-        </button>
-        <div class="part1-ai-head">AI 分析<em>示範：${escapeHtml(doc.docId)}</em></div>
-        <div class="part1-ai-body" data-ai-body></div>
-      </div>
+        <div class="part1-region part1-ai part1-tool-box" data-region="ai">
+          <button class="part1-hotspot" type="button" data-hotspot="ai">
+            <span class="part1-hotspot-num">4</span>AI 分析區
+          </button>
+          <div class="part1-ai-head tool-box-head">AI 分析<em>示範：${escapeHtml(doc.docId)}</em></div>
+          <div class="part1-ai-body tool-box-body" data-ai-body></div>
+        </div>
+      </aside>
     </div>
 
     <div class="part1-progress">
@@ -170,24 +195,36 @@
 
   /* ------------------------------------------------------------ 圖表圓點 */
 
-  const addDot = ({ lane, actor, top, dot, label, isNew }) => {
+  const parseDate = (value) => {
+    const match = String(value || '').match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+    return match ? Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : 0;
+  };
+  const chartStart = parseDate('1786/12/11');
+  const chartEnd = parseDate('1787/01/02');
+  const datePosition = (dateAr) => {
+    const span = chartEnd - chartStart || 1;
+    return Math.max(5, Math.min(95, ((parseDate(dateAr) - chartStart) / span) * 100));
+  };
+
+  const addDot = ({ lane, actor, dot, label, isNew }) => {
     const laneEl = lanesEl.querySelector(`[data-lane="${lane}"]`);
-    if (!laneEl) return null;
+    const track = laneEl?.querySelector('.part1-lane-track');
+    if (!track) return null;
     const button = document.createElement('button');
     button.type = 'button';
     button.className = `part1-dot${isNew ? ' is-new' : ''}`;
     button.dataset.actor = actor;
-    button.style.top = `${top}%`;
+    button.style.left = `${datePosition(dot.dateAr)}%`;
     button.setAttribute('aria-label', `${dot.subtitle || dot.title}（${label}）`);
     button.title = `${dot.subtitle || dot.title}`;
     button._part1 = { dot, lane, label };
-    laneEl.appendChild(button);
+    track.appendChild(button);
 
     const date = document.createElement('span');
     date.className = 'part1-dot-date';
-    date.style.top = `${top}%`;
+    date.style.left = `${datePosition(dot.dateAr)}%`;
     date.textContent = label;
-    laneEl.appendChild(date);
+    track.appendChild(date);
 
     button.addEventListener('click', () => selectDot(button));
     return button;
@@ -449,11 +486,9 @@
     const status = aiBody.querySelector(`[data-status="${index}"]`);
     if (status) status.textContent = '已加入圖表：可在「戰場事件」線上點擊新圓點查看。';
 
-    const top = 34 + addedCandidates.size * 8;
     const button = addDot({
       lane: 'events',
       actor: item.actor === 'lin' ? 'lin' : 'qing',
-      top,
       dot: item,
       label: item.whenCh,
       isNew: true
@@ -495,7 +530,41 @@
     if (!options.silent) setProgress(`${REGION_LABEL[region]}：${REGION_HINT[region]}`);
   }
 
+  /* 導覽列的下拉選單是展示用互動，但保留真正樣本工具的控制層級：
+     點線類型在左側，工具與介面區域切換在右側。 */
+  const typePop = replica.querySelector('[data-type-pop]');
+  const toolsPop = replica.querySelector('[data-tools-pop]');
+  replica.querySelector('[data-type-toggle]')?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (typePop) typePop.hidden = !typePop.hidden;
+    if (toolsPop) toolsPop.hidden = true;
+    setRegion('nav', { silent: true });
+    setProgress('已開啟「點線類型」篩選。真正工具會依研究問題顯示或隱藏不同線型。');
+  });
+  replica.querySelector('[data-tool-toggle]')?.addEventListener('click', (event) => {
+    event.stopPropagation();
+    if (toolsPop) toolsPop.hidden = !toolsPop.hidden;
+    if (typePop) typePop.hidden = true;
+    setRegion('nav', { silent: true });
+    setProgress('已開啟「工具」選單。輸入與輸出資料集中在這裡，字級也可由此調整。');
+  });
+  replica.querySelectorAll('[data-region-trigger]').forEach((button) => {
+    button.addEventListener('click', () => setRegion(button.dataset.regionTrigger));
+  });
+  replica.querySelectorAll('[data-tools-pop] button').forEach((button) => {
+    button.addEventListener('click', () => {
+      toolsPop.hidden = true;
+      replica.querySelector('[data-toolgroup="io"]')?.classList.add('is-pointed');
+      setProgress(`「${button.textContent.trim()}」是導覽列工具中的資料操作示範。`);
+    });
+  });
+
   replica.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-type-toggle]') && !event.target.closest('[data-type-pop]')
+      && !event.target.closest('[data-tool-toggle]') && !event.target.closest('[data-tools-pop]')) {
+      if (typePop) typePop.hidden = true;
+      if (toolsPop) toolsPop.hidden = true;
+    }
     const hotspot = event.target.closest('[data-hotspot]');
     if (hotspot) setRegion(hotspot.dataset.hotspot);
   });

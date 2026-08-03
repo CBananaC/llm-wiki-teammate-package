@@ -2941,3 +2941,24 @@ Verified:
 
 Remaining:
 - Review the complete third-part page content and card spacing in the normal browser preview with the existing Part 1 changes included.
+
+### 2026-08-03 16:33 HKT — Codex — Establish the Part 1 sample-tool visual base
+
+Summary:
+- Reworked the 第一部分「平台的整體介面」replica shell to follow the sample review tool's basic anatomy: a control toolbar, horizontal four-lane time/relationship chart, and docked document and AI/tool windows.
+- Replaced the oversized document preview with a bounded scroll area so 硃42's original text remains available without making the whole replica expand indefinitely.
+- Kept the existing separate `part-1-interface-data.js` source boundary and existing interaction hooks for later refinement; this pass prioritizes the visual base rather than the guided interaction choreography.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview shows the four horizontal lanes, sample-style toolbar, compact docked panels, and a scrollable document body.
+- Browser preview reports no warning/error console entries.
+- Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
+
+Remaining:
+- Later refine the click sequence, callout placement, and exact sample-tool control behavior after the visual base is approved. Formal and sample review data remain untouched; no push was performed.

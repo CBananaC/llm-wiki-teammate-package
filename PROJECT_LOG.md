@@ -6742,3 +6742,13 @@ Files: `intro Website/Website/storymap/storymap-example.html`, the new `intro We
 Verified: Provenance audit confirmed the replica's 硃42 body, title, send/receive dates and rescript are byte-for-byte identical to `review-tools/shared data/stage1_original_text.json`, and that every dot and AI candidate matches its record in `review-tools/(2) sample/sample_all.data`. Headless jsdom QA passed 22 interaction checks with no runtime errors. Passed `node --check` on all three StoryMap JavaScript files and `git diff --check`.
 
 Remaining: Human browser QA is outstanding — the Claude in Chrome extension was not connected, so visual layout, sticky behaviour and responsive breakpoints were not confirmed in a real browser. Confirm the `戰場事件` lane terminology. No formal or sample review state was touched; no push was performed.
+
+### 2026-08-03 16:33 HKT — Codex — Establish the Part 1 sample-tool visual base
+
+Summary: Reworked the 第一部分「平台的整體介面」replica shell to follow the sample review tool's basic anatomy: a control toolbar, horizontal four-lane time/relationship chart, and docked document and AI/tool windows. Replaced the oversized document preview with a bounded scroll area. Kept the separate `part-1-interface-data.js` source boundary and existing interaction hooks for later refinement; this pass prioritizes the visual base.
+
+Files: `intro Website/Website/storymap/part-1-interface.js`, `intro Website/Website/storymap/part-1-interface.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser preview shows the sample-style toolbar, four horizontal lanes, compact docked panels, and a scrollable document body; no browser warning/error console entries. Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
+
+Remaining: Later refine the click sequence, callout placement, and exact sample-tool control behavior after the visual base is approved. Formal and sample review data remain untouched; no push was performed.
