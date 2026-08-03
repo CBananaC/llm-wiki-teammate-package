@@ -2962,3 +2962,46 @@ Verified:
 
 Remaining:
 - Later refine the click sequence, callout placement, and exact sample-tool control behavior after the visual base is approved. Formal and sample review data remain untouched; no push was performed.
+### 2026-08-03 16:49 HKT — Codex — Align Part 3 with UI template and vertical card sequence
+
+Summary:
+- Replaced the previous third-part workshop treatment with the layout structure from `Website/UI Idea/13-combined-preview.html`: the existing cover bar style, template cards, split/chart structure, full-width flow, and vertical reading sequence.
+- Preserved all original 第三部分 headings and paragraphs verbatim. No explanatory copy or visual-material labels were added.
+- Kept the three main step bars: `1. OCR 並結構化原始史料`, `2. 運用AI抽取資訊`, and `3. 後續功能：LLM Wiki`; all cards now appear one after another vertically.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Compared the Part 3 source against the original content: all 45 original paragraphs and 23 original headings are present.
+- Browser QA confirmed the template-style cover bars, vertical card sequence, full-width flow, OCR chart labels, and AI Chain label interaction.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this layout correction. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 16:49 HKT — Codex — Rebuild Part 1 around the real sample-tool workspace
+
+Summary:
+- Replaced the approximate three-row chart treatment with the sample tool's actual visual anatomy: toolbar controls, four vertical type columns, a vertical date ruler, dense relationship-line texture, a linked-information panel, and a right-hand original-document panel.
+- Matched the 硃42 document header more closely to the real sample card, including the compact date `1786/12/18-1/2（15 日）` and `明清台檔30, 113, 硃42` source line.
+- Removed the replica's JavaScript listeners that opened, closed, or retargeted the right-side explanation cards. Those cards remain independent StoryMap content.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview shows the three internal sample-tool columns, four vertical lane headers, dense background relationship lines, scrollable document text, and the real sample-style toolbar order.
+- DOM check confirmed 4 lane columns, 112 presentation-only network lines, and a scrollable document panel; browser console had no warning/error entries.
+- Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
+
+Remaining:
+- Exact chart data density and later guided interactions can be refined after this visual structure is approved. Formal and sample review data remain untouched; no push was performed.

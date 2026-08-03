@@ -311,3 +311,26 @@
     radial-gradient(circle at 74% 22%, rgba(255, 255, 255, .1), transparent 60%),
     linear-gradient(135deg, #173b3f 8%, #315d5a 56%, var(--card-accent, #c45d38) 175%);
 }
+
+/* ============================== 第三部分 ================================= */
+
+/* 第三部分：1. 適合的研究問題／2. 所需的工具與資源／3. 重用平台的基本流程 */
+#part-3-research-questions { --card-accent: #c7543f; }
+#part-3-tools { --card-accent: #7e6a39; }
+#part-3-basic-flow { --card-accent: #4d817c; }
+
+/* OCR：1. 甚麼是 OCR？至 11. 輸入結構化史料至平台 */
+#part-3-ocr-definition,
+#part-3-ocr-tools,
+#part-3-printed,
+#part-3-handwritten,
+#part-3-json,
+#part-3-last { --card-accent: #b66d48; }
+
+/* AI：1. 修改、建立AI Skills 至 4. Google Cloud */
+#part-3-ai-skills { --card-accent: #ad7a35; }
+#part-3-ai-chain { --card-accent: #c7543f; }
+#part-3-ai-model { --card-accent: #7e6a39; }
+
+/* 後續功能：LLM Wiki */
+#part-3-wiki-cards { --card-accent: #a45e4c; }

@@ -19,7 +19,6 @@
   if (!data || !root) return;
 
   const replica = root.querySelector('[data-part1-replica]');
-  const cards = [...root.querySelectorAll('[data-part1-card]')];
   const progressText = root.querySelector('[data-part1-progress]');
 
   const escapeHtml = (value) => String(value == null ? '' : value)
@@ -63,9 +62,10 @@
   /* ------------------------------------------------------------ 版面組裝 */
 
   const doc = data.document;
-  const authorLine = `${doc.author.position}　${doc.author.name}`;
-  const sourceLine = `${doc.series} 冊${doc.compiledIn.book}　頁${doc.compiledIn.page}　${doc.docId}`;
-  const dateLine = `${doc.sendDate[0]}上奏　${doc.receiveDate[0]}奉硃批`;
+  const authorLine = doc.author.name;
+  const sourceLine = `明清台檔${doc.compiledIn.book}, ${doc.compiledIn.page}, ${doc.docId}`;
+  const compactDate = (value) => String(value || '').replace(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/, (_, year, month, day) => `${year}/${Number(month)}/${Number(day)}`);
+  const dateLine = `${compactDate(doc.sendDate[1])}-${compactDate(doc.receiveDate[1]).replace(/^\d{4}\//, '')}（15 日）`;
 
   /* 四條線的固定圓點。圓點的水平位置由 dateAr 計算，
      保持與真正樣本工具的橫向時間軸閱讀方式一致。 */
@@ -79,18 +79,13 @@
   const laneIndex = Object.fromEntries(data.lanes.map((lane, index) => [lane.key, index]));
 
   replica.innerHTML = `
-    <div class="part1-replica-caption">
-      <span class="part1-caption-dot"></span>清代奏摺與上諭分析平台　／　教學示範複本
-      <em>示範文書：${escapeHtml(doc.docId)}（${escapeHtml(doc.title)}）</em>
-    </div>
-
     <div class="part1-region part1-toolbar" data-region="nav">
       <button class="part1-hotspot" type="button" data-hotspot="nav">
         <span class="part1-hotspot-num">1</span>導覽列
       </button>
       <div class="part1-toolbar-start">
         <div class="part1-menu">
-          <button class="part1-pill part1-pill-button" type="button" data-type-toggle>點線類型 <span aria-hidden="true">⌄</span></button>
+          <button class="part1-pill part1-pill-button" type="button" data-type-toggle><span class="part1-pl">點線類型</span><span aria-hidden="true">⌄</span></button>
           <div class="part1-menu-pop part1-type-pop" data-type-pop hidden>
             <strong>點線類型</strong>
             <label><input type="checkbox" checked> 戰場事件</label>
@@ -99,12 +94,12 @@
             <label><input type="checkbox" checked> 皇帝行動</label>
           </div>
         </div>
-        <span class="part1-pill part1-people-pill">人物 <b>全部</b> <span aria-hidden="true">⌄</span></span>
+        <div class="part1-people-control"><span class="part1-pl">人物</span><select aria-label="選擇人物"><option>— 選擇人物 —</option></select><button type="button" aria-label="新增人物">＋</button></div>
         <label class="part1-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="搜尋原文 / 所有欄位…" aria-label="搜尋原文或所有欄位"></label>
       </div>
       <span class="part1-toolbar-spacer"></span>
       <span class="part1-toolgroup" data-toolgroup="io">
-        <button class="part1-toolbtn" type="button" data-tool-toggle="tools">工具</button>
+        <button class="part1-toolbtn part1-gear-btn" type="button" data-tool-toggle="tools" aria-label="工具">⚙</button>
         <div class="part1-menu-pop part1-tools-pop" data-tools-pop hidden>
           <strong>工具</strong>
           <div class="part1-tools-row"><button type="button">匯出</button><button type="button">分項匯出</button></div>
@@ -118,6 +113,7 @@
         <button class="part1-toolbtn is-emphasis" type="button" data-region-trigger="ai">AI</button>
         <button class="part1-toolbtn" type="button" data-region-trigger="chart">事件鏈</button>
       </span>
+      <span class="part1-count">236/363</span>
       <div class="part1-callout" data-callout="nav-io" hidden>
         <h5>輸入與輸出資料</h5>
         <p>從本機輸入結構化的原始文本和 AI 分析結果，完成檢視後亦可輸出，供後續研究使用。</p>
@@ -133,19 +129,27 @@
         <button class="part1-hotspot" type="button" data-hotspot="chart">
           <span class="part1-hotspot-num">2</span>時間與關係圖表
         </button>
-        <div class="part1-chart-bar">
-          <strong>時間與關係圖表</strong>
-          <span>4 條線　／　${escapeHtml(doc.docId)} 示範</span>
+        <div class="part1-chart-axis-note">${escapeHtml(doc.sendDate[1])}　—　${escapeHtml(doc.receiveDate[1])}</div>
+        <div class="part1-lane-heads">
+          ${data.lanes.map((lane) => `<span>${escapeHtml(lane.label)}</span>`).join('')}
         </div>
-        <div class="part1-axis-labels"><span>1786/12/11</span><span>1786/12/18</span><span>1787/01/02</span></div>
         <div class="part1-lanes" data-lanes>
           <svg class="part1-chart-links" data-chart-links aria-hidden="true" focusable="false"></svg>
           ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"><span class="part1-lane-label">${escapeHtml(lane.label)}</span><div class="part1-lane-track"></div></div>`).join('')}
         </div>
+        <div class="part1-ruler-labels" aria-hidden="true"><span>11</span><span>21</span><span>12/18</span><span>21</span><span>1/2</span><span>11</span><span>21</span><span>2/1</span></div>
         <div class="part1-nodepanel" data-nodepanel hidden></div>
       </div>
 
       <aside class="part1-dock">
+        <div class="part1-region part1-ai part1-linked-panel part1-tool-box" data-region="ai">
+          <button class="part1-hotspot" type="button" data-hotspot="ai">
+            <span class="part1-hotspot-num">4</span>AI 分析區
+          </button>
+          <div class="part1-linked-head tool-box-head"><span>☷</span><span>⌄</span><span>↪</span><span class="part1-window-controls">✣　×</span></div>
+          <div class="part1-ai-body tool-box-body" data-ai-body></div>
+        </div>
+
         <div class="part1-region part1-doc part1-ip" data-region="doc">
           <button class="part1-hotspot" type="button" data-hotspot="doc">
             <span class="part1-hotspot-num">3</span>原始史料區
@@ -164,14 +168,6 @@
             <p class="part1-doc-section-label">原文</p>
             <p class="part1-doc-body ip-body" data-doc-body>${buildDocumentBody()}</p>
           </div>
-        </div>
-
-        <div class="part1-region part1-ai part1-tool-box" data-region="ai">
-          <button class="part1-hotspot" type="button" data-hotspot="ai">
-            <span class="part1-hotspot-num">4</span>AI 分析區
-          </button>
-          <div class="part1-ai-head tool-box-head">AI 分析<em>示範：${escapeHtml(doc.docId)}</em></div>
-          <div class="part1-ai-body tool-box-body" data-ai-body></div>
         </div>
       </aside>
     </div>
@@ -214,7 +210,8 @@
     button.type = 'button';
     button.className = `part1-dot${isNew ? ' is-new' : ''}`;
     button.dataset.actor = actor;
-    button.style.left = `${datePosition(dot.dateAr)}%`;
+    button.style.top = `${datePosition(dot.dateAr)}%`;
+    button.style.left = '50%';
     button.setAttribute('aria-label', `${dot.subtitle || dot.title}（${label}）`);
     button.title = `${dot.subtitle || dot.title}`;
     button._part1 = { dot, lane, label };
@@ -222,7 +219,8 @@
 
     const date = document.createElement('span');
     date.className = 'part1-dot-date';
-    date.style.left = `${datePosition(dot.dateAr)}%`;
+    date.style.top = `${datePosition(dot.dateAr)}%`;
+    date.style.left = '50%';
     date.textContent = label;
     track.appendChild(date);
 
@@ -237,6 +235,36 @@
     if (!width || !height) return;
     linksSvg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     linksSvg.innerHTML = '';
+
+    /* The sample tool's chart is intentionally dense: the many faint
+       candidate lines provide the network context behind the selected
+       document. This is presentation texture, not additional historical
+       data; the four source-backed dots and their links are added below. */
+    const plotLeft = 68;
+    const plotWidth = Math.max(80, width - plotLeft - 11);
+    for (let i = 0; i < 112; i += 1) {
+      const fromLane = i % 4;
+      const toLane = (i * 3 + 1) % 4;
+      const y1 = 18 + ((i * 47) % Math.max(30, height - 28));
+      const y2 = 26 + ((i * 83 + 31) % Math.max(30, height - 34));
+      const x1 = plotLeft + ((fromLane + .5) / 4) * plotWidth;
+      const x2 = plotLeft + ((toLane + .5) / 4) * plotWidth;
+      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+      line.setAttribute('class', 'part1-network-line');
+      line.setAttribute('x1', String(Math.round(x1)));
+      line.setAttribute('y1', String(Math.round(y1)));
+      line.setAttribute('x2', String(Math.round(x2)));
+      line.setAttribute('y2', String(Math.round(y2)));
+      linksSvg.appendChild(line);
+      if (i % 2 === 0) {
+        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+        dot.setAttribute('class', 'part1-network-dot');
+        dot.setAttribute('cx', String(Math.round(x1)));
+        dot.setAttribute('cy', String(Math.round(y1)));
+        dot.setAttribute('r', '2');
+        linksSvg.appendChild(dot);
+      }
+    }
     const rootRect = lanesEl.getBoundingClientRect();
     const dots = [...lanesEl.querySelectorAll('.part1-dot')];
     const byLane = new Map();
@@ -389,14 +417,15 @@
 
   const renderAiIdle = () => {
     aiBody.innerHTML = `
-      <div class="part1-step"><span class="part1-step-num">1</span>研究者先在本機執行 AI Skills，再把結果上載到平台。</div>
-      <div class="part1-terminal">
-        <div class="part1-terminal-bar"><i></i><i></i><i></i>本機終端機</div>
-        <pre class="part1-terminal-body" data-terminal>$ <span class="part1-terminal-caret"></span></pre>
+      <div class="part1-linked-source">據奏來源（上諭前 0 日收到）</div>
+      <div class="part1-linked-doc">
+        <p class="part1-linked-title">${escapeHtml(doc.title)}<br><span>徐嗣曾</span></p>
+        <p class="part1-linked-date">${escapeHtml(doc.receiveDate[1])}</p>
+        <blockquote><b>①</b>「${escapeHtml('提臣黃仕簡已於十五日由廈門出口放洋')}」</blockquote>
+        <blockquote><b>②</b>「${escapeHtml('任承恩亦配兵登舟，合之郝壯猷所帶，計共兵六千人')}」</blockquote>
       </div>
-      <button class="part1-act" type="button" data-run-ai>在本機執行 AI Skills</button>
+      <div class="part1-linked-foot"><span>${escapeHtml(doc.docId)}</span><button type="button">功能⌄</button><span>⚙</span></div>
     `;
-    aiBody.querySelector('[data-run-ai]')?.addEventListener('click', runTerminal);
   };
 
   let terminalTimer = 0;
@@ -526,7 +555,6 @@
       if (region === 'nav') callout.hidden = !belongs;
       else if (belongs) callout.hidden = true;
     });
-    cards.forEach((card) => card.classList.toggle('is-region-active', card.dataset.part1Card === region));
     if (!options.silent) setProgress(`${REGION_LABEL[region]}：${REGION_HINT[region]}`);
   }
 
@@ -569,21 +597,8 @@
     if (hotspot) setRegion(hotspot.dataset.hotspot);
   });
 
-  cards.forEach((card) => {
-    const heading = card.querySelector('[data-part1-target]');
-    const body = card.querySelector('.acc-body');
-    card.classList.remove('is-open');
-    heading?.setAttribute('aria-expanded', 'false');
-
-    heading?.addEventListener('click', () => {
-      const willOpen = !card.classList.contains('is-open');
-      card.classList.toggle('is-open', willOpen);
-      heading.setAttribute('aria-expanded', String(willOpen));
-      if (willOpen) setRegion(card.dataset.part1Card);
-    });
-
-    body?.addEventListener('click', () => setRegion(card.dataset.part1Card));
-  });
+  /* The explanation cards remain independent StoryMap content. The replica
+     does not use JavaScript to open, close, or retarget them. */
 
   /* -------------------------------------------------------------- 重設 */
 

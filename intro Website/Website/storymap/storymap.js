@@ -751,111 +751,22 @@ const initGifAnnotations = (block) => {
 document.querySelectorAll('[data-gif-annotate]').forEach(initGifAnnotations);
 
 /* ---------------------------------------------------------------------------
-   第三部分工作坊互動：三個主要步驟導覽、OCR 前後檢視、欄位／版面標籤，以及
-   AI Chain 示意。這些都是教學層，不會寫入 review tool 或研究資料。
+   第三部分互動標籤
    --------------------------------------------------------------------------- */
-const initPart3Workshop = () => {
-  const root = document.querySelector('[data-part3-workshop]');
-  if (!root) return;
-
-  const stepButtons = [...root.querySelectorAll('[data-part3-step]')];
-  const stageMap = new Map([...root.querySelectorAll('[data-part3-stage]')].map((stage) => [stage.dataset.part3Stage, stage]));
-  const activateStage = (name, { scroll = false } = {}) => {
-    stepButtons.forEach((button) => {
-      const active = button.dataset.part3Step === name;
-      button.classList.toggle('is-active', active);
-      button.setAttribute('aria-current', active ? 'step' : 'false');
+const initPart3OriginalCharts = () => {
+  document.querySelectorAll('[data-part3-chart-toggle]').forEach((button) => {
+    const group = button.closest('.part3-chart-frame, .part3-flow-frame');
+    if (!group) return;
+    button.addEventListener('click', () => {
+      group.querySelectorAll('[data-part3-chart-toggle]').forEach((item) => {
+        const active = item === button;
+        item.classList.toggle('is-active', active);
+        item.setAttribute('aria-pressed', String(active));
+      });
     });
-    const stage = stageMap.get(name);
-    if (scroll && stage) stage.scrollIntoView({ behavior: 'smooth', block: 'start' });
-  };
-  stepButtons.forEach((button) => button.addEventListener('click', () => activateStage(button.dataset.part3Step, { scroll: true })));
-  if ('IntersectionObserver' in window) {
-    const stageObserver = new IntersectionObserver((entries) => {
-      const visible = entries.filter((entry) => entry.isIntersecting).sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
-      if (visible) activateStage(visible.target.dataset.part3Stage);
-    }, { threshold: [.15, .35, .6], rootMargin: '-12% 0px -55% 0px' });
-    stageMap.forEach((stage) => stageObserver.observe(stage));
-  }
-
-  const ocrButtons = [...root.querySelectorAll('[data-part3-ocr-mode]')];
-  const ocrViews = [...root.querySelectorAll('[data-part3-ocr-view]')];
-  ocrButtons.forEach((button) => button.addEventListener('click', () => {
-    const mode = button.dataset.part3OcrMode;
-    ocrButtons.forEach((item) => item.classList.toggle('is-active', item === button));
-    ocrViews.forEach((view) => {
-      const active = view.dataset.part3OcrView === mode;
-      view.classList.toggle('is-active', active);
-      view.hidden = !active;
-    });
-  }));
-
-  const jsonDetails = {
-    doc_type: ['文書類型', '先確認這份材料屬於哪一種文書，避免把不同文件角色混在同一個分析問題裡。', '原始影像／目錄／文書標題'],
-    author: ['作者', '保存官位與姓名，讓後續的回應關係和傳遞路徑可以回到具體文書。', '文書署名／發文者欄位'],
-    date: ['日期', '按研究問題分開保存發送、接收和批示日期，不把不同時間點壓成一個日期。', '文末日期／收發記錄／批示日期'],
-    text: ['正文', '保留可以定位的原文，而不是只保存摘要或 AI 改寫後的文字。', '原始影像／頁碼／段落位置'],
-    source: ['史料來源', '記錄版本、檔案、冊頁或其他來源資訊，讓每一項結果都有回查路徑。', '書目／檔案號／頁碼／連結']
-  };
-  const jsonTitle = root.querySelector('[data-part3-json-title]');
-  const jsonDescription = root.querySelector('[data-part3-json-description]');
-  const jsonCheck = root.querySelector('[data-part3-json-check]');
-  root.querySelectorAll('[data-part3-json-field]').forEach((button) => button.addEventListener('click', () => {
-    const detail = jsonDetails[button.dataset.part3JsonField];
-    if (!detail) return;
-    root.querySelectorAll('[data-part3-json-field]').forEach((item) => {
-      const active = item === button;
-      item.classList.toggle('is-active', active);
-      item.setAttribute('aria-selected', String(active));
-    });
-    [jsonTitle, jsonDescription, jsonCheck].forEach((element, index) => { if (element) element.textContent = detail[index]; });
-  }));
-
-  const printDetails = {
-    title: '標題是頁面結構的一部分；先確認標題符號和段落起點，再交給程式辨識。',
-    date: '日期要獨立保存，避免被正文行列或模糊符號吞掉，後續才可用於時間排序。',
-    source: '史料來源欄位要保留版本和頁碼位置，讓 OCR 文字能回到原始頁面。',
-    body: '正文是主要辨識範圍，但仍要保留欄位與段落邊界，方便研究者逐句校對。'
-  };
-  const printDescription = root.querySelector('[data-part3-print-description]');
-  const setPrintFeature = (feature) => {
-    root.querySelectorAll('[data-part3-print-feature]').forEach((item) => {
-      const active = item.dataset.part3PrintFeature === feature;
-      item.classList.toggle('is-active', active);
-      if (item.matches('button')) item.setAttribute('aria-selected', String(active));
-    });
-    if (printDescription && printDetails[feature]) {
-      const lead = '以圖 1 為例，此史料採用橫排單欄的印刷版面，頁面結構由標題、日期、史料來源及正文組成，研究者因此需要指示agentic ai 在 Python 程式中特別注明相應的版面結構，以便保留原有的版面。此外，圖中的標題符號較為模糊，可能影響準確率，因此 OCR 完成後，需要利用 AI 或人工進行校對，以減少錯誤。';
-      printDescription.innerHTML = `<strong>${lead}</strong><span class="part3-feature-detail">目前標籤：${printDetails[feature]}</span>`;
-    }
-  };
-  root.querySelectorAll('[data-part3-print-feature]').forEach((item) => {
-    if (item.matches('button')) item.addEventListener('click', () => setPrintFeature(item.dataset.part3PrintFeature));
   });
-
-  const chainDetails = {
-    summary: ['01．文書總結、分段', '先整理文書結構，讓後續提取可以回到完整原文和明確段落。'],
-    events: ['02．抽取事件及官員行動', '按 Skill 設定提出事件與行動候選，保存每一項對應的原文引文。'],
-    sources: ['03．追溯資訊來源', '追查文書中的消息來源標記，將直接和轉述的來源分開保存。'],
-    emperor: ['04．抽取上諭中皇帝對奏摺的回應', '把上諭中的評論或命令連回相關奏摺，並保留兩邊的證據位置。'],
-    official: ['05．抽取後續官員的回應', '觀察後續文書如何回應皇帝的評論或命令，結果仍要由研究者核驗。'],
-    json: ['06．輸出結構化 JSON', '把候選結果、原文引文、來源路徑和目前狀態一同保存，方便載入審閱。']
-  };
-  const chainTitle = root.querySelector('[data-part3-chain-title]');
-  const chainDescription = root.querySelector('[data-part3-chain-description]');
-  root.querySelectorAll('[data-part3-chain]').forEach((button) => button.addEventListener('click', () => {
-    const detail = chainDetails[button.dataset.part3Chain];
-    if (!detail) return;
-    root.querySelectorAll('[data-part3-chain]').forEach((item) => {
-      const active = item === button;
-      item.classList.toggle('is-active', active);
-      item.setAttribute('aria-selected', String(active));
-    });
-    if (chainTitle) chainTitle.textContent = detail[0];
-    if (chainDescription) chainDescription.textContent = detail[1];
-  }));
 };
-initPart3Workshop();
+initPart3OriginalCharts();
 
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';

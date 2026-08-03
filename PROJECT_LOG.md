@@ -6752,3 +6752,22 @@ Files: `intro Website/Website/storymap/part-1-interface.js`, `intro Website/Webs
 Verified: Browser preview shows the sample-style toolbar, four horizontal lanes, compact docked panels, and a scrollable document body; no browser warning/error console entries. Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
 
 Remaining: Later refine the click sequence, callout placement, and exact sample-tool control behavior after the visual base is approved. Formal and sample review data remain untouched; no push was performed.
+### 2026-08-03 16:49 HKT — Codex — Align Part 3 with UI template and vertical card sequence
+
+Summary: Replaced the previous third-part workshop treatment with the layout structure from `intro Website/Website/UI Idea/13-combined-preview.html`. Preserved all original 第三部分 headings and paragraphs verbatim, retained the three main step bars, and changed all Part 3 cards to one vertical reading sequence. The OCR and AI Chain label controls remain interactive.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap.js`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Original-content comparison found all 45 paragraphs and 23 headings in the new Part 3. Browser QA confirmed the template-style bars, vertical card sequence, full-width flow, and interactive OCR/AI Chain labels. Passed StoryMap JavaScript syntax checking and `git diff --check`. Formal and sample review data remain untouched; no push was performed.
+
+Remaining: None for this layout correction.
+
+### 2026-08-03 16:49 HKT — Codex — Rebuild Part 1 around the real sample-tool workspace
+
+Summary: Replaced the approximate Part 1 chart treatment with the sample tool's actual visual anatomy: toolbar controls, four vertical type columns, a vertical date ruler, dense relationship-line texture, a linked-information panel, and a right-hand original-document panel. Matched the 硃42 document header's compact date and source line. Removed the replica's JavaScript listeners that opened, closed, or retargeted the right-side explanation cards; those cards remain independent StoryMap content.
+
+Files: `intro Website/Website/storymap/part-1-interface.js`, `intro Website/Website/storymap/part-1-interface.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser preview shows the three internal sample-tool columns, four vertical lane headers, dense background relationship lines, scrollable document text, and the real sample-style toolbar order. DOM check confirmed 4 lane columns, 112 presentation-only network lines, and a scrollable document panel; browser console had no warning/error entries. Passed `node --check Website/storymap/part-1-interface.js` and `git diff --check`.
+
+Remaining: Exact chart data density and later guided interactions can be refined after this visual structure is approved. Formal and sample review data remain untouched; no push was performed.
