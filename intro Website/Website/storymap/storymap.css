@@ -211,8 +211,8 @@ img { max-width: 100%; }
    兩個數值可在 storymap-cards.css 用 --hero-pad-t／--hero-pad-b 個別調整。 */
 .section-hero {
   position: relative; display: flex; align-items: center; overflow: hidden;
-  min-height: clamp(230px, 29vh, 320px);
-  padding: var(--hero-pad-t, clamp(96px, 10vh, 140px)) 0 var(--hero-pad-b, clamp(28px, 3vh, 38px));
+  min-height: clamp(280px, 34vh, 380px);
+  padding: var(--hero-pad-t, clamp(96px, 10vh, 140px)) 0 var(--hero-pad-b, clamp(64px, 7vh, 96px));
   color: #f7f3ea;
   border-top: 0; border-bottom: 0;
 }
@@ -1086,6 +1086,86 @@ img { max-width: 100%; }
 .part3-five-card-grid {
   grid-template-columns: 1fr;
 }
+.part3-resource-card {
+  display: grid;
+  grid-template-columns: minmax(210px, 31%) minmax(0, 1fr);
+  max-width: none;
+  min-height: 260px;
+  padding: 0;
+  overflow: hidden;
+  border-left: 4px solid var(--card-accent, var(--accent));
+}
+.part3-resource-card:nth-child(even) {
+  grid-template-columns: minmax(0, 1fr) minmax(210px, 31%);
+}
+.part3-resource-card:nth-child(even) .part3-resource-photo {
+  order: 2;
+}
+.part3-resource-photo {
+  position: relative;
+  min-height: 260px;
+  margin: 0;
+  overflow: hidden;
+  background: #d8cdbb;
+}
+.part3-resource-photo::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(135deg, rgba(22, 61, 63, .08), transparent 48%, rgba(196, 93, 56, .22));
+  mix-blend-mode: multiply;
+}
+.part3-resource-photo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 260px;
+  object-fit: cover;
+  filter: saturate(.82) contrast(.94);
+  transition: transform .35s ease, filter .35s ease;
+}
+.part3-resource-card:hover .part3-resource-photo img {
+  transform: scale(1.035);
+  filter: saturate(1) contrast(1);
+}
+.part3-resource-photo-index {
+  position: absolute;
+  z-index: 1;
+  top: 16px;
+  left: 16px;
+  display: grid;
+  width: 42px;
+  height: 42px;
+  place-items: center;
+  color: #f7f3ea;
+  background: rgba(22, 61, 63, .88);
+  font: 800 13px/1 var(--sans);
+  letter-spacing: .08em;
+}
+.part3-resource-content {
+  display: grid;
+  align-content: center;
+  gap: 8px;
+  min-width: 0;
+  padding: clamp(22px, 3vw, 42px);
+}
+.part3-resource-subtitle {
+  margin: 0;
+  color: var(--accent);
+  font: 800 calc(12px * var(--font-scale))/1.3 var(--sans);
+  letter-spacing: .14em;
+  text-transform: uppercase;
+}
+.part3-resource-content h3 {
+  margin: 0 0 8px;
+  color: var(--ink);
+  font: 500 clamp(24px, 2.7vw, 38px)/1.15 var(--serif);
+  letter-spacing: -.03em;
+}
+.part3-resource-content .body > p {
+  margin-bottom: 0;
+}
 .part3-research-chart {
   grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr);
   gap: clamp(10px, 1.3vw, 20px);
@@ -1212,6 +1292,18 @@ img { max-width: 100%; }
   .part3-card-grid,
   .part3-five-card-grid {
     grid-template-columns: 1fr;
+  }
+  .part3-resource-card,
+  .part3-resource-card:nth-child(even) {
+    grid-template-columns: 1fr;
+  }
+  .part3-resource-card:nth-child(even) .part3-resource-photo {
+    order: 0;
+  }
+  .part3-resource-photo,
+  .part3-resource-photo img {
+    min-height: 210px;
+    height: 210px;
   }
   .part3-chart-frame {
     min-height: 320px;

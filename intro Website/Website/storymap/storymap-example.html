@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260803">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260803">
+  <link rel="stylesheet" href="storymap.css?v=20260803-tools-photo">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260803-tools-photo">
   <link rel="stylesheet" href="part-1-interface.css">
   <script src="storymap.js" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
@@ -887,11 +887,61 @@
               <div class="title-row"><h2>2. 所需的工具與資源</h2></div>
             </div>
             <div class="part3-five-card-grid">
-              <article class="copybox blk"><div class="body"><p>首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills的Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。</p></div></article>
-              <article class="copybox blk"><div class="body"><p>其次，研究者可以使用 Agentic AI （如ChatGPT Work 和Codex） 閱讀下載的原始碼，並按照 README.md 的說明部署平台，在本機開啟前端網頁。</p></div></article>
-              <article class="copybox blk"><div class="body"><p>其後，研究者可以利用 Agentic AI 協助整理原始文書、轉換為結構化資料、修改或建立 AI Skills，以及修改網站介面和功能等的程序。</p></div></article>
-              <article class="copybox blk"><div class="body"><p>此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。</p></div></article>
-              <article class="copybox blk"><div class="body"><p>最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。</p></div></article>
+              <article class="copybox blk part3-resource-card">
+                <figure class="part3-resource-photo">
+                  <img src="../UI%20Idea/demo-review-tool-fullview.png" alt="清代奏摺與上諭分析平台介面" loading="lazy" decoding="async">
+                  <span class="part3-resource-photo-index" aria-hidden="true">01</span>
+                </figure>
+                <div class="part3-resource-content">
+                  <p class="part3-resource-subtitle">原始碼與資料夾</p>
+                  <h3>GitHub Repository</h3>
+                  <div class="body"><p>首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills的Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。</p></div>
+                </div>
+              </article>
+              <article class="copybox blk part3-resource-card">
+                <figure class="part3-resource-photo">
+                  <img src="done-intro-1.png" alt="掃描的奏摺史料頁面" loading="lazy" decoding="async">
+                  <span class="part3-resource-photo-index" aria-hidden="true">02</span>
+                </figure>
+                <div class="part3-resource-content">
+                  <p class="part3-resource-subtitle">閱讀原始碼與部署平台</p>
+                  <h3>Agentic AI</h3>
+                  <div class="body"><p>其次，研究者可以使用 Agentic AI （如ChatGPT Work 和Codex） 閱讀下載的原始碼，並按照 README.md 的說明部署平台，在本機開啟前端網頁。</p></div>
+                </div>
+              </article>
+              <article class="copybox blk part3-resource-card">
+                <figure class="part3-resource-photo">
+                  <img src="done-intro-7.png" alt="印刷史料與圖像材料" loading="lazy" decoding="async">
+                  <span class="part3-resource-photo-index" aria-hidden="true">03</span>
+                </figure>
+                <div class="part3-resource-content">
+                  <p class="part3-resource-subtitle">整理、轉換與建立</p>
+                  <h3>AI Skills 與平台程序</h3>
+                  <div class="body"><p>其後，研究者可以利用 Agentic AI 協助整理原始文書、轉換為結構化資料、修改或建立 AI Skills，以及修改網站介面和功能等的程序。</p></div>
+                </div>
+              </article>
+              <article class="copybox blk part3-resource-card">
+                <figure class="part3-resource-photo">
+                  <img src="done-intro-8.png" alt="史料傳遞路線圖" loading="lazy" decoding="async">
+                  <span class="part3-resource-photo-index" aria-hidden="true">04</span>
+                </figure>
+                <div class="part3-resource-content">
+                  <p class="part3-resource-subtitle">批次處理與分析</p>
+                  <h3>AI API</h3>
+                  <div class="body"><p>此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。</p></div>
+                </div>
+              </article>
+              <article class="copybox blk part3-resource-card">
+                <figure class="part3-resource-photo">
+                  <img src="../Visual%20Material/img2_4_2.jpg" alt="清代史料書冊" loading="lazy" decoding="async">
+                  <span class="part3-resource-photo-index" aria-hidden="true">05</span>
+                </figure>
+                <div class="part3-resource-content">
+                  <p class="part3-resource-subtitle">備份、管理與協作</p>
+                  <h3>自己的 GitHub Repository</h3>
+                  <div class="body"><p>最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。</p></div>
+                </div>
+              </article>
             </div>
           </div>
         </section>

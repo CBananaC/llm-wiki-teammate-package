@@ -6791,3 +6791,13 @@ Files: `intro Website/Website/storymap/part-1-interface.js`, `intro Website/Webs
 Verified: Browser QA confirmed two groups and three event cards, all three source quotations locate the 硃42 original, a confirmed 清方 candidate creates a new chart dot and reveals its source chain, skip leaves the candidate out of the chart, and reset restores the initial linked-document panel. Passed `node --check intro Website/Website/storymap/part-1-interface.js` and `git diff --check`. Formal and sample review data remain untouched; pre-existing StoryMap Part 3 edits were preserved.
 
 Remaining: None for this event-and-source UI pass. No push was performed.
+
+### 2026-08-03 17:59 HKT — Codex — Add a five-photo resource-card sample for 所需的工具與資源
+
+Summary: Kept all five resource descriptions in one `2. 所需的工具與資源` part and reworked them into a stacked creative layout with alternating photo placement, a subtitle, a title, and the original paragraph text in each card. Reused five existing local project photos for the five cards.
+
+Files: `intro Website/Website/storymap/storymap-example.html`, `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`, and this log.
+
+Verified: Browser preview confirmed five stacked cards, five photos, and five subtitles inside the single tools part. Static check confirmed all five original tools paragraphs remain present. Passed StoryMap JavaScript syntax checking and `git diff --check`. Formal and sample review data remain untouched; pre-existing Part 1 changes were preserved; no push was performed.
+
+Remaining: None for this requested resource-card sample.

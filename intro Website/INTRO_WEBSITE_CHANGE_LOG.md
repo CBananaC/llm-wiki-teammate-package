@@ -3049,3 +3049,25 @@ Verified:
 
 Remaining:
 - None for this requested Part 3 layout adjustment. Formal and sample review data remain untouched; no push was performed.
+
+### 2026-08-03 17:59 HKT — Codex — Add a five-photo resource-card sample for 所需的工具與資源
+
+Summary:
+- Kept all five resource descriptions in one `2. 所需的工具與資源` part.
+- Reworked the five cards into a stacked creative layout with alternating photo placement, a subtitle, a title, and the original paragraph text in each card.
+- Reused five existing local project photos: the platform interface, scanned source material, an illustrated historical source, a route map, and a historical book image.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed five stacked cards, five photos, and five subtitles inside the single tools part.
+- Static check confirmed all five original tools paragraphs remain present.
+- Passed `node --check Website/storymap/storymap.js` and `git diff --check`.
+
+Remaining:
+- None for this requested resource-card sample. Formal and sample review data remain untouched; no push was performed.
