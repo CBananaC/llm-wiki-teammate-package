@@ -272,7 +272,7 @@
     .info-copy h2 {
       margin: 0 0 16px;
       color: var(--ink);
-      font: 500 clamp(28px, 3.4vw, 48px)/1.1 var(--serif);
+      font: 500 clamp(32px, 4.2vw, 58px)/1.1 var(--serif);
       letter-spacing: -.045em;
     }
 
@@ -280,7 +280,7 @@
       max-width: 68ch;
       margin: 0;
       color: #31484a;
-      font: 400 clamp(16px, 1.35vw, 20px)/1.9 var(--serif);
+      font: 400 clamp(18px, 1.6vw, 24px)/1.9 var(--serif);
     }
 
     @media (max-width: 760px) {
@@ -308,36 +308,35 @@
       <aside class="checklist-window">
         <div class="window-bar">
           <span>工具清單</span>
-          <span class="window-status">5 ITEMS</span>
         </div>
         <div class="tool-list">
           <label class="tool-row is-active" data-tool-id="repository">
             <input type="checkbox" checked>
-            <span class="tool-index">01</span>
+            <span class="tool-index">1</span>
             <span class="tool-copy"><span class="tool-title">GitHub Repository</span><span class="tool-subtitle">原始碼與資料夾</span></span>
             <span class="tick-box" aria-hidden="true">✓</span>
           </label>
           <label class="tool-row" data-tool-id="agentic-ai">
             <input type="checkbox">
-            <span class="tool-index">02</span>
+            <span class="tool-index">2</span>
             <span class="tool-copy"><span class="tool-title">Agentic AI</span><span class="tool-subtitle">閱讀原始碼與部署平台</span></span>
             <span class="tick-box" aria-hidden="true">✓</span>
           </label>
           <label class="tool-row" data-tool-id="skills">
             <input type="checkbox">
-            <span class="tool-index">03</span>
+            <span class="tool-index">3</span>
             <span class="tool-copy"><span class="tool-title">AI Skills 與平台程序</span><span class="tool-subtitle">整理、轉換與建立</span></span>
             <span class="tick-box" aria-hidden="true">✓</span>
           </label>
           <label class="tool-row" data-tool-id="api">
             <input type="checkbox">
-            <span class="tool-index">04</span>
+            <span class="tool-index">4</span>
             <span class="tool-copy"><span class="tool-title">AI API</span><span class="tool-subtitle">批次處理與分析</span></span>
             <span class="tick-box" aria-hidden="true">✓</span>
           </label>
           <label class="tool-row" data-tool-id="backup">
             <input type="checkbox">
-            <span class="tool-index">05</span>
+            <span class="tool-index">5</span>
             <span class="tool-copy"><span class="tool-title">自己的 GitHub Repository</span><span class="tool-subtitle">備份、管理與協作</span></span>
             <span class="tick-box" aria-hidden="true">✓</span>
           </label>
@@ -347,7 +346,6 @@
       <section class="info-window">
         <div class="window-bar">
           <span>工具資訊</span>
-          <span class="window-status" aria-live="polite" id="active-status">01 / 05</span>
         </div>
         <div class="info-panel">
           <article class="info-view" data-info-id="repository">
@@ -386,7 +384,6 @@
       if (!row || !view) return;
       rows.forEach((item) => item.classList.toggle("is-active", item === row));
       views.forEach((item) => { item.hidden = item !== view; });
-      status.textContent = `${row.querySelector(".tool-index").textContent} / 05`;
     }
 
     rows.forEach((row) => {

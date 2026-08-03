@@ -768,6 +768,29 @@ const initPart3OriginalCharts = () => {
 };
 initPart3OriginalCharts();
 
+const initPart3ToolsChecklist = () => {
+  document.querySelectorAll('[data-part3-tools-checklist]').forEach((workbench) => {
+    const rows = [...workbench.querySelectorAll('[data-part3-tool-id]')];
+    const views = [...workbench.querySelectorAll('[data-part3-tool-info]')];
+    if (!rows.length || !views.length) return;
+
+    const selectTool = (id) => {
+      const row = rows.find((item) => item.dataset.part3ToolId === id);
+      const view = views.find((item) => item.dataset.part3ToolInfo === id);
+      if (!row || !view) return;
+      rows.forEach((item) => item.classList.toggle('is-active', item === row));
+      views.forEach((item) => { item.hidden = item !== view; });
+    };
+
+    rows.forEach((row) => {
+      row.addEventListener('change', () => selectTool(row.dataset.part3ToolId));
+      row.addEventListener('click', () => selectTool(row.dataset.part3ToolId));
+    });
+    selectTool(rows[0].dataset.part3ToolId);
+  });
+};
+initPart3ToolsChecklist();
+
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);
