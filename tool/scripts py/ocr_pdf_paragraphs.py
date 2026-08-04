@@ -21,6 +21,8 @@ DEFAULT_OUTPUT = Path(
     "/Users/creamybanana/Downloads/DH Project/intro Website/"
     "Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json"
 )
+SENTENCE_ENDINGS = set("。！？")
+ZHUPI_ANNOTATION_RE = re.compile(r"（硃批.*?）")
 
 
 # Convert PaddleOCR and NumPy values into JSON-compatible Python values.
@@ -122,6 +124,59 @@ def find_region(page, fragment):
     )
 
 
+# Remove an inline 硃批 annotation from the paragraph display text.
+def remove_zhupi_annotation(text):
+    return ZHUPI_ANNOTATION_RE.sub("", text)
+
+
+# Split an ordered paragraph into sentence objects with source references.
+def build_sentences(part_id, regions):
+    pieces = []
+    text_parts = []
+    cursor = 0
+
+    for region in regions:
+        text = remove_zhupi_annotation(region["text"])
+        if not text:
+            continue
+        start = cursor
+        text_parts.append(text)
+        cursor += len(text)
+        pieces.append((start, cursor, region))
+
+    combined_text = "".join(text_parts)
+    ranges = []
+    sentence_start = 0
+    for index, character in enumerate(combined_text):
+        if character in SENTENCE_ENDINGS:
+            ranges.append((sentence_start, index + 1))
+            sentence_start = index + 1
+    if sentence_start < len(combined_text):
+        ranges.append((sentence_start, len(combined_text)))
+
+    sentences = []
+    for order, (start, end) in enumerate(ranges, start=1):
+        source_region_refs = []
+        for region_start, region_end, region in pieces:
+            if region_start < end and region_end > start:
+                source_region_refs.append(
+                    {
+                        "pdf_page": region["pdf_page"],
+                        "region_index": region["region_index"],
+                    }
+                )
+
+        sentences.append(
+            {
+                "sentence_id": f"{part_id}-sentence-{order}",
+                "text": combined_text[start:end],
+                "source_region_refs": source_region_refs,
+            }
+        )
+
+    return sentences
+
+
 # Package an ordered sequence of OCR regions as one JSON part.
 def make_part(part_id, part_type, regions):
     if not regions:
@@ -138,9 +193,15 @@ def make_part(part_id, part_type, regions):
             }
             for region in regions
         ],
-        "text": "".join(region["text"] for region in regions),
         "regions": regions,
     }
+
+
+# Package a nonparagraph part as one continuous source-text object.
+def make_text_part(part_id, part_type, regions):
+    part = make_part(part_id, part_type, regions)
+    part["text"] = "".join(region["text"] for region in regions)
+    return part
 
 
 # Group source OCR regions into one JSON part per paragraph.
@@ -179,10 +240,86 @@ def build_paragraphs(pages):
         find_region(page_two, "彰化賊匪"),
     ]
 
-    return [
-        make_part("paragraph-1", "paragraph", paragraph_one),
-        make_part("paragraph-2", "paragraph", paragraph_two),
+    paragraph_parts = []
+    for part_id, regions in (
+        ("paragraph-1", paragraph_one),
+        ("paragraph-2", paragraph_two),
+    ):
+        part = make_part(part_id, "paragraph", regions)
+        part["sentences"] = build_sentences(part_id, regions)
+        paragraph_parts.append(part)
+    return paragraph_parts
+
+
+# Build the requested three-row header with readable text and provenance.
+def build_header(page_one):
+    header_rows = [
+        {"row": 1, **find_region(page_one, "《天地會第一冊》")},
+        {"row": 2, **find_region(page_one, "為奏彰化失陷")},
+        {"row": 3, **find_region(page_one, "福建水師提督黃仕簡")},
     ]
+    return {
+        "row_count": 3,
+        "reading_direction": "right_to_left",
+        "rows": header_rows,
+        "opening_formula": make_text_part(
+            "opening-formula",
+            "opening_formula",
+            [find_region(page_one, "福建水師提督一等海澄公")],
+        ),
+    }
+
+
+# Build the selected final two 硃批 lines as a separate readable area.
+def build_zhupi_area(pages):
+    all_zhupi_regions = [
+        region
+        for page in pages
+        for region in page["raw_regions"]
+        if "硃批" in region["text"]
+    ]
+    selected_regions = all_zhupi_regions[-2:]
+
+    lines = []
+    for order, region in enumerate(selected_regions, start=1):
+        source_text = region["text"]
+        inline_match = ZHUPI_ANNOTATION_RE.search(source_text)
+        text = (
+            inline_match.group(0)
+            if inline_match
+            else source_text
+        )
+        position = "inline" if inline_match else "footer"
+        lines.append(
+            {
+                "line_id": f"zhu-{order}",
+                "order": order,
+                "position": position,
+                "text": text,
+                "source_region_ref": {
+                    "pdf_page": region["pdf_page"],
+                    "region_index": region["region_index"],
+                },
+                "source_region_text": source_text,
+                "region": region,
+            }
+        )
+
+    return {
+        "selection": "last_two_zhupi_regions",
+        "lines": lines,
+    }
+
+
+# Keep the footer date separate from the header, paragraphs, and 硃批 area.
+def build_footer(page_two):
+    return {
+        "date": make_text_part(
+            "footer-date",
+            "footer",
+            [find_region(page_two, "乾隆五十一年十二月初十日")],
+        )
+    }
 
 
 # Assemble pages, preserved headers/footers, paragraphs, and OCR metadata.
@@ -194,51 +331,8 @@ def build_output(input_pdf, results):
 
     page_one, page_two = pages
 
-    header_rows = [
-        {"row": 1, **find_region(page_one, "《天地會第一冊》")},
-        {"row": 2, **find_region(page_one, "為奏彰化失陷")},
-        {"row": 3, **find_region(page_one, "福建水師提督黃仕簡")},
-    ]
-
-    all_zhupi_regions = [
-        {
-            **region,
-            "context": region["text"],
-        }
-        for page in pages
-        for region in page["raw_regions"]
-        if "硃批" in region["text"]
-    ]
-
-    last_two_zhupi = all_zhupi_regions[-2:]
-    for order, region in enumerate(last_two_zhupi, start=1):
-        region["order"] = order
-        text = region["text"]
-        if "（硃批" in text and "）" in text:
-            start = text.index("（硃批")
-            end = text.index("）", start) + 1
-            region["text"] = text[start:end]
-
-    other_parts = [
-        make_part(
-            "opening-formula",
-            "opening_formula",
-            [find_region(page_one, "福建水師提督一等海澄公")],
-        ),
-        make_part(
-            "footer-date",
-            "footer",
-            [find_region(page_two, "乾隆五十一年十二月初十日")],
-        ),
-        make_part(
-            "footer-zhupi-note",
-            "footer",
-            [find_region(page_two, "乾隆五十一年十二月二十七日奉硃批")],
-        ),
-    ]
-
     return {
-        "schema_version": "2.0",
+        "schema_version": "3.0",
         "source": {
             "path": str(input_pdf),
             "filename": input_pdf.name,
@@ -264,18 +358,21 @@ def build_output(input_pdf, results):
                 ZoneInfo("Asia/Hong_Kong")
             ).isoformat(timespec="seconds"),
         },
+        "header": build_header(page_one),
+        "page_numbers": [
+            page["page_number_region"]
+            for page in pages
+            if page["page_number_region"] is not None
+        ],
+        "paragraphs": build_paragraphs(pages),
+        "zhu_area": build_zhupi_area(pages),
+        "footer": build_footer(page_two),
         "preserved": {
-            "three_row_header": {
-                "pdf_page": 1,
-                "reading_direction": "right_to_left",
-                "rows": header_rows,
-            },
             "page_numbers": [
-                page["page_number_region"]
-                for page in pages
-                if page["page_number_region"] is not None
+                page["printed_page_number"] for page in pages
             ],
-            "last_two_zhupi_lines": last_two_zhupi,
+            "three_row_header": True,
+            "last_two_zhupi_lines": True,
             "paragraph_boundary_method": (
                 "Source-layout anchors: the indented 竊照 paragraph "
                 "continues across the page break; the indented 查 paragraph "
@@ -286,9 +383,7 @@ def build_output(input_pdf, results):
                 "researcher correction or silent deletion was applied."
             ),
         },
-        "paragraphs": build_paragraphs(pages),
-        "other_parts": other_parts,
-        "pages": pages,
+        "raw_ocr_pages": pages,
     }
 
 
