@@ -701,6 +701,15 @@
 
 /* Part 3.4.5 — OCR 前的材料準備 */
 #part-3-material {
+  /* 右側單張圖片畫廊：改這些變數即可調整尺寸、裁切及圖片位置。 */
+  --part3-material-gallery-width: 48%;
+  --part3-material-gallery-height: 620px;
+  --part3-material-gallery-height-mobile: 520px;
+  --part3-material-gallery-fit: contain;
+  --part3-material-gallery-left: 50%;
+  --part3-material-gallery-top: 50%;
+  --part3-material-gallery-zoom: 1;
+  --part3-material-gallery-body-max-h: 48%;
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
   --part3-card-height: auto;
@@ -709,6 +718,32 @@
   --part3-title-size: clamp(27px, 3.4vw, 46px);
   --part3-body-size: calc(16px * var(--font-scale));
   --part3-body-line-height: 1.9;
+}
+
+/* Part 3.4.5.1 — OCR 前的材料準備（文字卡與書籍掃描器畫廊） */
+#part-3-material-card {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+#part-3-material .part3-material-photo-gallery {
+  --gallery-fit: var(--part3-material-gallery-fit, contain);
+  --gallery-left: var(--part3-material-gallery-left, 50%);
+  --gallery-top: var(--part3-material-gallery-top, 50%);
+  --gallery-body-max-h: var(--part3-material-gallery-body-max-h, 48%);
+}
+
+#part-3-material .part3-material-photo-gallery .photo-gallery-frame:nth-of-type(1) {
+  --photo-fit: var(--part3-material-gallery-fit, contain);
+  --photo-left: var(--part3-material-gallery-left, 50%);
+  --photo-top: var(--part3-material-gallery-top, 50%);
+  --photo-zoom: var(--part3-material-gallery-zoom, 1);
 }
 
 /* Part 3.4.6 — 執行 OCR 的Python 代碼 */

@@ -7520,3 +7520,26 @@ Verified:
 
 Remaining:
 - Regenerate the OCR JSON with the saved OCR code if the extracted data is needed again.
+### 2026-08-04 16:59 HKT — Codex — Add book-scanner gallery to OCR materials preparation
+
+Summary:
+- Replaced the text-only `OCR 前的材料準備` layout with a two-column card and the shared single-image gallery UI used by `研究清代奏折的主要困難`.
+- Added `intro Website/Website/Visual Material/book_scanner_202401.png`, the title `理大圖書館中的掃描器`, a Traditional-Chinese description, and an embedded source link to the PolyU Library book-scanning page.
+- Added card CSS controls for gallery width, height, mobile height, image fit, image position, zoom, and expanded-description height.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/Visual Material/book_scanner_202401.png`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser loaded the supplied 860×639 PNG and rendered the title, description, source link, and `閱讀更多` gallery behavior.
+- Desktop computed layout is a two-column `597.297px 572.625px` card/gallery arrangement with a 620px gallery height.
+- Gallery CSS controls compute to `contain`, centered image position, and 1× zoom; the official PolyU source URL is present in the link.
+- Gallery JSON parses successfully, the image asset exists, `node --check` passes, and `git diff --check` passes.
+
+Remaining:
+- None for this requested gallery addition.
