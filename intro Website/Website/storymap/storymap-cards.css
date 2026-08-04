@@ -176,6 +176,7 @@
 
                    --ocr-output-h      JSON 輸出視窗的固定高度；文字打字時
                                        超過這個高度就會自動往上捲動
+                   --ocr-output-w      JSON 輸出視窗的寬度；預設填滿動畫區
                    --ocr-output-font-size
                                        JSON 文字的字級
                    --ocr-output-line-height
@@ -662,6 +663,7 @@
   --ocr-output-h: 12em;          /* JSON 輸出視窗的固定高度，超過會自動往上捲動 */
   --ocr-output-font-size: 11.5px; /* JSON 文字字級 */
   --ocr-output-line-height: 1.75; /* JSON 文字行距 */
+  --ocr-output-w: 100%;           /* JSON 輸出視窗寬度，可改成 80%、420px 等 */
   --ocr-output-font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
   --ocr-output-file-font-size: 11px; /* 上方檔案名稱字級 */
 }

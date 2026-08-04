@@ -7075,3 +7075,22 @@ Verified:
 
 Remaining:
 - None for the OCR animation font-control request.
+
+### 2026-08-04 14:22 HKT — Codex — Add OCR output-window width control
+
+Summary:
+- Added `--ocr-output-w` to Part 3.4.2.3 so the JSON output window can be adjusted independently from the overall OCR animation width.
+- Kept the default at `100%` of the animation area and documented percentage or fixed-pixel values.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser measurement confirmed the output window is using `--ocr-output-w: 100%` and measures `661.78px` inside the `715.78px` animation scene.
+- Focused `git diff --check` passes for the edited CSS files.
+
+Remaining:
+- None for the OCR output-window width request.
