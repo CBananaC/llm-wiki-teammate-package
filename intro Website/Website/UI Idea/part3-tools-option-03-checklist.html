@@ -66,8 +66,8 @@
       --tools-list-width: 31%;
       --tools-height: 700px;
       --tools-row-height: 72px;
-      --tools-photo-height: 50%;
-      --tools-info-height: 50%;
+      --tools-photo-height: 0px;
+      --tools-info-height: auto;
       display: grid;
       width: min(var(--tools-width), 100%);
       margin-inline: auto;
@@ -233,7 +233,7 @@
     .info-view[hidden] { display: none; }
     .info-view {
       display: grid;
-      grid-template-rows: var(--tools-photo-height) var(--tools-info-height);
+      grid-template-rows: minmax(var(--tools-photo-height), 1fr) var(--tools-info-height);
       height: 100%;
       min-height: 0;
     }

@@ -1299,7 +1299,7 @@ img { max-width: 100%; }
 .part3-tool-info-view[hidden] { display: none; }
 .part3-tool-info-view {
   display: grid;
-  grid-template-rows: var(--part3-tools-photo-height, 46%) var(--part3-tools-info-height, 54%);
+  grid-template-rows: minmax(var(--part3-tools-photo-height, 0px), 1fr) var(--part3-tools-info-height, auto);
   height: 100%;
   min-height: 0;
 }
