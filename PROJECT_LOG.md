@@ -7198,6 +7198,28 @@ Verified:
 Remaining:
 - None for the Agentic AI pet refinement request.
 
+### 2026-08-04 15:22 HKT — Codex — Resize Agentic AI pet and expand work-window source content
+
+Summary:
+- Replaced the window titles with the requested task labels: `Run Python`, `Create Website`, `Process OCR`, and `Write Skills`.
+- Expanded all four animation sequences with longer source-backed content: the actual Python loop command and outputs, sample review-tool loading code, the 硃25 metadata and original-text excerpts, and the full official-document review Skill stages.
+- Added responsive pet-size variables and capped the Codex pet at a readable smaller size; longer terminal content now scrolls without showing a scrollbar.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Four JSON animation blocks parse with 11, 11, 12, and 12 lines; titles match the requested labels.
+- HTTP browser preview shows the longer content animating in all four windows; the pet measures `235px × 255.95px` at the checked viewport and no browser errors or warnings were reported.
+- `node --check` passes for both StoryMap scripts and focused `git diff --check` passes for the edited StoryMap files.
+
+Remaining:
+- None for the Agentic AI title, source-content, and pet-size update.
+
 ### 2026-08-04 15:01 HKT — Codex — Align Part 3 workflow steps and OCR cards
 
 Summary:
@@ -7269,3 +7291,15 @@ Files changed:
 Verified: The citation now begins `黃仕簡，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，《宮中檔奏摺—乾隆朝》` and preserves all verified source details.
 
 Remaining: Browser recheck and local checkpoint.
+
+### 2026-08-04 15:23 HKT — Codex — Remove repeated OCR caption prefix
+
+Summary: Removed the repeated article title, author, sent date, and `第 N 頁` label from both OCR enlarged-image captions. The handwritten and printed source references remain below the image, while the separate page counter and left/right navigation remain available.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified: Browser preview captions now show only the source references: the handwritten archive citation and the printed `《明清台灣檔案匯編》，第30冊，頁80，硃25。` entry.
+
+Remaining: Local checkpoint.

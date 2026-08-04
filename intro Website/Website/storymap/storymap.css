@@ -1223,7 +1223,7 @@ img { max-width: 100%; }
 }
 .part3-tools-list {
   display: grid;
-  grid-auto-rows: minmax(var(--part3-tools-row-height, 88px), max-content);
+  grid-auto-rows: var(--part3-tools-row-height, 88px);
   align-content: start;
   gap: 8px;
   padding: 18px;
@@ -1752,8 +1752,9 @@ img { max-width: 100%; }
 .agentic-window-terminal { left: var(--agentic-terminal-left, 2%); top: var(--agentic-terminal-top, 5%); width: var(--agentic-terminal-width, 45%); height: var(--agentic-terminal-height, 43%); z-index: 1; transform: rotate(var(--agentic-terminal-angle, -5deg)); --agentic-window-title-size: var(--agentic-terminal-font-size, 10px); }
 .agentic-window-terminal .agentic-window-body {
   padding: 10px 12px; font: var(--agentic-terminal-font-size, 10px)/1.65 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color: #d7e0dd;
-  overflow-wrap: anywhere;
+  overflow-x: hidden; overflow-y: auto; scrollbar-width: none; overflow-wrap: anywhere;
 }
+.agentic-window-terminal .agentic-window-body::-webkit-scrollbar { display: none; }
 .agentic-window-terminal .prompt { color: #7fd88f; }
 .agentic-window-terminal .arg { color: #f4ca75; }
 .agentic-window-terminal .out { color: #9aa8a5; }
@@ -1798,7 +1799,7 @@ img { max-width: 100%; }
 
 /* Codex pet：參考藍色毛球、深藍終端面板和小型上半身；下半身可由場景裁切。 */
 .agentic-pet-wrap {
-  position: absolute; z-index: 8; left: 50%; bottom: -7%; transform: translateX(-50%); width: 27%; height: 50%; pointer-events: none;
+  position: absolute; z-index: 8; left: 50%; bottom: -7%; transform: translateX(-50%); width: var(--agentic-pet-width, clamp(175px, 24%, 235px)); height: var(--agentic-pet-height, clamp(195px, 46%, 260px)); pointer-events: none;
 }
 .agentic-pet-desk {
   position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%);

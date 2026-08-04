@@ -456,9 +456,9 @@
   --card-accent: #7e6a39;
   /* Checklist 與工具資訊視窗的寬度／高度控制，直接在此調整。 */
   --part3-tools-width: 100%;
-  --part3-tools-list-width: 25%;
+  --part3-tools-list-width: 100px;
   --part3-tools-height: 1000px;
-  --part3-tools-row-height: 72px;
+  --part3-tools-row-height: 100px;
   --part3-tools-photo-height: 0px;
   --part3-tools-info-height: auto;
 }
@@ -954,7 +954,6 @@
   --part3-tools-width: 100%;
   --part3-tools-list-width: 25%;
   --part3-tools-height: 1000px;
-  --part3-tools-row-height: 72px;
   --part3-tools-photo-height: 0px;
   --part3-tools-info-height: auto;
   --part3-tools-title-size: clamp(21px, 1.8vw, 25px);
@@ -989,6 +988,10 @@
   --agentic-skills-top: 51%;
   --agentic-skills-font-size: 10px;
   --agentic-skills-angle: -4deg;
+
+  /* Codex pet size: keep the head readable without covering the source windows. */
+  --agentic-pet-width: clamp(175px, 24%, 235px);
+  --agentic-pet-height: clamp(195px, 46%, 260px);
 }
 
 /* Part 3.3.2 — Text block: #part-3-basic-flow-card */

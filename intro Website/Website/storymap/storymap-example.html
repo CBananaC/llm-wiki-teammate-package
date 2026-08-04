@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260804-part3-navigation-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260804-part3-navigation-01">
+  <link rel="stylesheet" href="storymap.css?v=20260804-tools-row-height-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260804-tools-row-height-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js?v=20260804-part3-navigation-01" defer></script>
@@ -936,59 +936,83 @@
                            #part-3-tools-card 區塊調整；內容由 storymap.js 逐行播放。 -->
                       <div class="agentic-scene" data-agentic-scene aria-hidden="true">
                         <div class="agentic-mac-window agentic-window-terminal" data-agentic-window="terminal">
-                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">terminal — official loop</span></div>
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Run Python</span></div>
                           <div class="agentic-window-body agentic-terminal-body" data-agentic-sequence>
                             <script type="application/json" data-agentic-lines>
                               [
-                                "<span class=\"prompt\">$</span> python3 &quot;tool/scripts py/run_mass_prompt_chain_test.py&quot;",
-                                "<span class=\"arg\">--doc-ids</span> 硃25,硃42 <span class=\"arg\">--bundle</span> zhu-december-official-loop",
-                                "<span class=\"out\">硃25 → quick-summary → divide-into-parts → extract-lin-actions</span>",
-                                "<span class=\"out\">硃42 → source-chain → emperor-actions → official-response</span>",
-                                "<span class=\"ok\">✓ outputs/summary.json · qing-actions-all.json · official-response.json</span>"
+                                "<span class=\"cmt\"># cwd: /Users/creamybanana/Downloads/DH Project</span>",
+                                "<span class=\"prompt\">$</span> python3 &quot;tool/scripts py/run_mass_prompt_chain_test.py&quot; \\",
+                                "<span class=\"arg\">--model</span> gemini-3.5-flash \\",
+                                "<span class=\"arg\">--doc-ids</span> 硃25,硃42 \\",
+                                "<span class=\"arg\">--bundle</span> zhu-december-official-loop <span class=\"arg\">--skip-done</span>",
+                                "<span class=\"out\">硃25 → summary → division-parts → lin-events</span>",
+                                "<span class=\"out\">硃25 → qing-actions-all → source-chain → official-response</span>",
+                                "<span class=\"out\">硃42 → summary → division-parts → qing-actions-all</span>",
+                                "<span class=\"out\">write: outputs/summary.json · division-parts.json</span>",
+                                "<span class=\"out\">write: outputs/qing-actions-all.json · source-chain.json</span>",
+                                "<span class=\"ok\">✓ review bundle kept for human review</span>"
                               ]
                             </script>
                           </div>
                         </div>
                         <div class="agentic-mac-window agentic-window-html" data-agentic-window="html">
-                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">review-tools/(2) sample/index.html</span></div>
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Create Website</span></div>
                           <div class="agentic-window-body agentic-code" data-agentic-sequence>
                             <script type="application/json" data-agentic-lines>
                                 [
                                   "<span class=\"cmt\">&lt;!-- review-tools/(2) sample/index.html --&gt;</span>",
                                   "<span class=\"kw\">const</span> STAGE1_SOURCE_PATH = <span class=\"str\">'/shared/stage1_original_text.json'</span>;",
-                                  "<span class=\"kw\">const</span> stage1Payload = <span class=\"kw\">await</span> fetch(STAGE1_SOURCE_PATH);",
-                                  "<span class=\"kw\">const</span> stage1ById = <span class=\"kw\">new</span> Map(stage1Docs.map(doc =&gt; [doc.doc_id, doc]));",
-                                  "<span class=\"fn\">renderDualTimeline</span>(stage1ById);"
+                                  "<span class=\"kw\">const</span> stage1Payload = window.__reviewEmbedStage1Docs || <span class=\"kw\">await</span> (async () =&gt; {",
+                                  "  <span class=\"kw\">const</span> stage1Response = <span class=\"kw\">await</span> fetch(STAGE1_SOURCE_PATH, { cache: <span class=\"str\">'no-store'</span> });",
+                                  "  <span class=\"kw\">if</span> (!stage1Response.ok) <span class=\"kw\">throw new</span> Error(<span class=\"str\">'canonical Stage 1 source unavailable'</span>);",
+                                  "  <span class=\"kw\">return</span> stage1Response.json();",
+                                  "})();",
+                                  "<span class=\"kw\">const</span> stage1Docs = Array.isArray(stage1Payload) ? stage1Payload : stage1Payload.documents || [];",
+                                  "<span class=\"kw\">const</span> stage1ById = <span class=\"kw\">new</span> Map(stage1Docs.map(doc =&gt; [String(doc.doc_id || <span class=\"str\">''</span>), doc]));",
+                                  "<span class=\"kw\">const</span> AI_DUAL = [<span class=\"str\">奏2</span>, <span class=\"str\">奏3</span>, <span class=\"str\">奏5</span>].map(id =&gt; stage1ById.get(id));",
+                                  "<span class=\"fn\">renderDualTimeline</span>(stage1ById, AI_DUAL);"
                                 ]
                               </script>
                           </div>
                         </div>
                         <div class="agentic-mac-window agentic-window-ocr" data-agentic-window="ocr">
-                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">OCR → stage1_original_text.json</span></div>
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Process OCR</span></div>
                           <div class="agentic-window-body agentic-code agentic-ocr-text" data-agentic-sequence>
                             <script type="application/json" data-agentic-lines>
                               [
-                                "<span class=\"cmt\">硃25｜OCR output → structured source</span>",
+                                "<span class=\"cmt\">硃25｜stage1_original_text.json｜OCR output → structured source</span>",
                                 "<span class=\"meta\">doc_id:</span> 硃25",
                                 "<span class=\"meta\">title:</span> 為奏彰化失陷已調兵赴臺事",
+                                "<span class=\"meta\">author:</span> 福建水師提督 黃仕簡",
+                                "<span class=\"meta\">send_date:</span> 乾隆五十一年十二月十日 1786/12/10",
+                                "<span class=\"meta\">receive_date:</span> 乾隆五十一年十二月二十七日 1786/12/27",
                                 "<span class=\"ocr-text-line\">福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。</span>",
+                                "<span class=\"ocr-text-line\">竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。</span>",
                                 "<span class=\"ocr-text-line\">茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨。</span>",
+                                "<span class=\"ocr-text-line\">一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械。</span>",
+                                "<span class=\"ocr-text-line\">仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。</span>",
                                 "<span class=\"ok\">rescript_text: 已有旨了。欽此。</span>"
                               ]
                             </script>
                           </div>
                         </div>
                         <div class="agentic-mac-window agentic-window-skills" data-agentic-window="skills">
-                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">tool/skills md/official-document-review-loop.md</span></div>
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Write Skills</span></div>
                           <div class="agentic-window-body agentic-code agentic-skill-text" data-agentic-sequence>
                             <script type="application/json" data-agentic-lines>
                               [
+                                "<span class=\"cmt\"># tool/skills md/official-document-review-loop.md</span>",
                                 "<span class=\"cmt\"># Skill: 官文優先 AI 審閱迴圈</span>",
                                 "<span class=\"kw\">1.</span> 摘要 — quick-summary.md",
                                 "<span class=\"kw\">2.</span> 分段 — divide-into-parts.md",
                                 "<span class=\"kw\">3.</span> 林方事件 — extract-lin-actions.md",
-                                "<span class=\"kw\">4.</span> 清方行動 — extract-qing-actions-all.md",
-                                "<span class=\"ok\">✓ output: review bundle → human review</span>"
+                                "<span class=\"kw\">4.</span> 清方行動（三類合一） — extract-qing-actions-all.md",
+                                "<span class=\"kw\">5.</span> 重複回報 + 來源鏈 — source-chain",
+                                "<span class=\"kw\">6.</span> 回應先前上諭 — confirmed-yu-response-analysis.md",
+                                "<span class=\"kw\">7.</span> 皇帝行動 — emperor-actions-confirmed-zhu-yu.md",
+                                "<span class=\"kw\">8.</span> 重複皇帝行動 — merge_group / merge_title",
+                                "<span class=\"kw\">9.</span> 官員回應 — official_response",
+                                "<span class=\"ok\">✓ AI proposes; researcher accepts, edits, or rejects</span>"
                               ]
                             </script>
                           </div>

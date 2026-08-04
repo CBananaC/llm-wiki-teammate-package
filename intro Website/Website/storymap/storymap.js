@@ -426,18 +426,23 @@ const photoLightbox = (() => {
   const escapeCaptionHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
     '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
   }[char]));
-  const openGallery = (galleryPages, startIndex, { title = '', description = '', descriptionHtml = '' } = {}, triggerEl) => {
+  const openGallery = (galleryPages, startIndex, {
+    title = '', captionTitle = title, showPageNumber = true, description = '', descriptionHtml = ''
+  } = {}, triggerEl) => {
     const validPages = galleryPages.filter(Boolean);
     if (!validPages.length) return;
     lastFocused = triggerEl || null;
-    pages = validPages.map((src, i) => ({
-      src,
-      alt: `${title} 第 ${i + 1} 頁`.trim(),
-      caption: [title, `第 ${i + 1} 頁`, description].filter(Boolean).join('｜'),
-      captionHtml: descriptionHtml
-        ? [title && escapeCaptionHtml(title), `第 ${i + 1} 頁`, descriptionHtml].filter(Boolean).join('｜')
-        : ''
-    }));
+    pages = validPages.map((src, i) => {
+      const pageLabel = showPageNumber ? `第 ${i + 1} 頁` : '';
+      return {
+        src,
+        alt: `${title} ${pageLabel}`.trim(),
+        caption: [captionTitle, pageLabel, description].filter(Boolean).join('｜'),
+        captionHtml: descriptionHtml
+          ? [captionTitle && escapeCaptionHtml(captionTitle), pageLabel, descriptionHtml].filter(Boolean).join('｜')
+          : ''
+      };
+    });
     pageIndex = Math.max(0, Math.min(pages.length - 1, startIndex || 0));
     renderPage();
     overlay.classList.add('is-open');
@@ -614,6 +619,8 @@ document.addEventListener('click', (event) => {
       };
   photoLightbox.openGallery(pages, currentIndex < 0 ? 0 : currentIndex, {
     title: fileStack.getAttribute('data-ocr-document-title') || documentMeta.title,
+    captionTitle: '',
+    showPageNumber: false,
     description: fileStack.getAttribute('data-ocr-document-description') || documentMeta.description,
     descriptionHtml: documentMeta.descriptionHtml
   }, img);
