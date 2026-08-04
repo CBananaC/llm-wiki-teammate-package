@@ -23,6 +23,7 @@ DEFAULT_OUTPUT = Path(
 )
 
 
+# Convert PaddleOCR and NumPy values into JSON-compatible Python values.
 def to_python(value):
     """Convert NumPy values and nested containers into JSON values."""
     if hasattr(value, "tolist"):
@@ -34,6 +35,7 @@ def to_python(value):
     return value
 
 
+# Create one raw OCR region record, including text, confidence, and geometry.
 def make_region(page_data, index, pdf_page):
     boxes = page_data["rec_boxes"]
     polygons = page_data.get("rec_polys", boxes)
@@ -51,6 +53,7 @@ def make_region(page_data, index, pdf_page):
     }
 
 
+# Identify the printed page-number region so it can be preserved separately.
 def find_page_number(page_data):
     for index, text in enumerate(page_data["rec_texts"]):
         if re.fullmatch(r"\d{1,4}", str(text).strip()):
@@ -58,6 +61,7 @@ def find_page_number(page_data):
     return None, None
 
 
+# Build the complete OCR record for one PDF page and its reading order.
 def build_page(result, pdf_page):
     payload = result.json
     if callable(payload):
@@ -107,6 +111,7 @@ def build_page(result, pdf_page):
     }
 
 
+# Find a raw OCR region by a source-text fragment used as a stable anchor.
 def find_region(page, fragment):
     for region in page["raw_regions"]:
         if fragment in region["text"]:
@@ -117,6 +122,7 @@ def find_region(page, fragment):
     )
 
 
+# Package an ordered sequence of OCR regions as one JSON part.
 def make_part(part_id, part_type, regions):
     if not regions:
         raise ValueError(f"Part {part_id} has no OCR regions")
@@ -137,6 +143,7 @@ def make_part(part_id, part_type, regions):
     }
 
 
+# Group source OCR regions into one JSON part per paragraph.
 def build_paragraphs(pages):
     page_one, page_two = pages
 
@@ -178,6 +185,7 @@ def build_paragraphs(pages):
     ]
 
 
+# Assemble pages, preserved headers/footers, paragraphs, and OCR metadata.
 def build_output(input_pdf, results):
     pages = [
         build_page(result, pdf_page)
@@ -284,6 +292,7 @@ def build_output(input_pdf, results):
     }
 
 
+# Parse command-line paths, run PaddleOCR, and write the JSON output.
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--input", type=Path, default=DEFAULT_INPUT)
