@@ -3568,6 +3568,29 @@ Verified:
 Remaining:
 - None for this requested Part 3 numbering and navigation adjustment.
 
+### 2026-08-04 15:23 HKT — Codex — Make 工具清單 row height adjustable
+
+Summary:
+- Changed the Part 3 `工具清單` grid from content-driven `minmax(..., max-content)` rows to the documented fixed `--part3-tools-row-height` value.
+- Removed the duplicate row-height override from `#part-3-tools-card`, so the value in the card CSS control block now reaches the live list items.
+- Added a cache-busting version for the updated StoryMap stylesheets while preserving the existing width and Agentic AI sizing changes.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- At the normal 1280px preview width, the current `--part3-tools-row-height: 100px` produces four 100px list items.
+- At the 700px responsive breakpoint, all four rows retain the 100px minimum height.
+- Reloaded the cache-busted stylesheet URLs and confirmed no browser errors or warnings.
+- `git diff --check` passes.
+
+Remaining:
+- None for the adjustable `工具清單` row-height control.
+
 ### 2026-08-04 15:11 HKT — Codex — Added the Chinese reference-style rule
 
 Summary:
