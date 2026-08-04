@@ -7421,3 +7421,25 @@ Verified:
 
 Remaining:
 - None for this layout adjustment.
+
+### 2026-08-04 15:57 HKT — Codex — Restore the linked PaddleOCR info panel
+
+Summary:
+- Restored the visible info panel beneath the PaddleOCR photo.
+- Made the panel text exactly `PaddleOCR GitHub` and embedded the PaddleOCR GitHub URL directly in that label.
+- Added a reusable gallery `titleHref` field so linked gallery titles render as accessible links.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview shows the text card on the left, the photo on the right, and one visible linked info-panel label reading `PaddleOCR GitHub`.
+- Live-page checks confirm the label text, GitHub href, image path, and panel visibility; no browser errors or warnings were reported.
+- `node --check`, gallery metadata parsing, and `git diff --check` pass.
+
+Remaining:
+- None for this panel correction.

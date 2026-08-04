@@ -573,9 +573,12 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     const source = page.source
       ? `<p class="photo-gallery-source"><a href="${page.source.href}" target="_blank" rel="noopener noreferrer">${page.source.text} ↗</a></p>`
       : '';
+    const title = page.titleHref
+      ? `<a class="photo-gallery-title-link" href="${page.titleHref}" target="_blank" rel="noopener noreferrer">${page.title}</a>`
+      : page.title;
     body.classList.toggle('is-source-only', !hasDescription && hasSource);
     body.innerHTML = `
-      <h3 class="photo-gallery-title">${page.title}</h3>
+      <h3 class="photo-gallery-title">${title}</h3>
       ${hasDescription ? `<div class="photo-gallery-more"><div>
         ${paras}
         ${source}
