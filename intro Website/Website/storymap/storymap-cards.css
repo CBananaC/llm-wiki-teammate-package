@@ -354,9 +354,58 @@
     linear-gradient(135deg, #173b3f 8%, #315d5a 56%, var(--card-accent, #c45d38) 175%);
 }
 
-/* ============================== 第三部分 ================================= */
+/* ============================== PART 3 ================================= */
 
-/* 第三部分：1. 適合的研究問題／2. 所需的工具與資源（五項 checklist）／3. 重用平台的基本流程 */
+/*
+   Part 3 CSS index
+   ─────────────────
+   Part 3.0  Shared card, chart, flow, and stage-bar rules
+   Part 3.1  適合的研究問題
+     Part 3.1.1  Section defaults: #part-3-research-questions
+     Part 3.1.2  Text card:       #part-3-research-card
+     Part 3.1.3  Relationship chart: #part-3-research-chart
+   Part 3.2  所需的工具與資源
+     Part 3.2.1  Section defaults and tool typography: #part-3-tools
+     Part 3.2.2  Tool card: #part-3-tools-card
+   Part 3.3  重用平台的基本流程
+     Part 3.3.1  Section defaults and text layout: #part-3-basic-flow
+     Part 3.3.2  Text block: #part-3-basic-flow-card
+     Part 3.3.3  Workflow: #part-3-basic-flow-chart
+   Part 3.4  OCR 並結構化原始史料
+     Part 3.4.1  Stage bar: #part-3-ocr
+     Part 3.4.2  甚麼是 OCR？ (#part-3-ocr-definition)
+       Part 3.4.2.1  Card 1: #part-3-ocr-definition-card-1
+       Part 3.4.2.2  Card 2: #part-3-ocr-definition-card-2
+     Part 3.4.3–3.4.7  Single-card sections: PaddleOCR, Agentic AI, material,
+                      Python code, and format
+     Part 3.4.8  辨識印刷字 (#part-3-printed)
+       Part 3.4.8.1  Text card: #part-3-printed-card
+       Part 3.4.8.2  Chart: #part-3-printed-chart
+     Part 3.4.9  辨識手寫字 (#part-3-handwritten)
+     Part 3.4.10 輸出格式：JSON (#part-3-json)
+       Part 3.4.10.1 Text card: #part-3-json-card
+       Part 3.4.10.2 Chart: #part-3-json-chart
+     Part 3.4.11–3.4.12  OCR test and structured-material import
+   Part 3.5  運用 AI 抽取資訊
+     Part 3.5.1  Stage bar: #part-3-ai
+     Part 3.5.2  AI Skills (#part-3-ai-skills)
+       Part 3.5.2.1  Card 1: #part-3-ai-skills-card-1
+       Part 3.5.2.2  Card 2: #part-3-ai-skills-card-2
+     Part 3.5.3  AI Skills chain (#part-3-ai-chain)
+       Part 3.5.3.1  Card 1: #part-3-ai-chain-card-1
+       Part 3.5.3.2  Card 2: #part-3-ai-chain-card-2
+       Part 3.5.3.3  Workflow: #part-3-ai-chain-chart
+     Part 3.5.4–3.5.5  AI Model and Google Cloud
+   Part 3.6  後續功能：LLM Wiki
+     Part 3.6.1  Stage bar: #part-3-wiki
+     Part 3.6.2–3.6.4  Wiki intro, data, and analysis cards
+   Part 3.7  Accent colours
+
+   To adjust an individual card, find its numbered block below and edit only
+   the variables in that block. The selector ID is repeated in every heading.
+*/
+
+/* Part 3.0 — Shared section accents */
 #part-3-research-questions { --card-accent: #c7543f; }
 #part-3-tools {
   --card-accent: #7e6a39;
@@ -370,7 +419,8 @@
 }
 #part-3-basic-flow { --card-accent: #4d817c; }
 
-/* 第三部分的內容卡片共用套用層。
+/* Part 3.0.1 — Shared card layer
+   第三部分的內容卡片共用套用層。
    下面每個 #part-3-... 區塊只需改自己的變數，不必修改 storymap.css。 */
 #part-3-content .copybox {
   width: var(--part3-card-width, auto);
@@ -399,28 +449,28 @@
   font-size: var(--part3-stage-title-size, clamp(26px, 3.4vw, 44px));
 }
 
-/* Part 3 階段帶：1. OCR 並結構化原始史料 */
+/* Part 3.4.1 — Stage bar: OCR 並結構化原始史料 */
 #part-3-ocr {
   --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
   --part3-stage-bar-height: clamp(140px, 19vh, 195px);
   --part3-stage-bar-padding: 28px 0;
 }
 
-/* Part 3 階段帶：2. 運用 AI 抽取資訊 */
+/* Part 3.5.1 — Stage bar: 運用 AI 抽取資訊 */
 #part-3-ai {
   --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
   --part3-stage-bar-height: clamp(140px, 19vh, 195px);
   --part3-stage-bar-padding: 28px 0;
 }
 
-/* Part 3 階段帶：3. 後續功能：LLM Wiki */
+/* Part 3.6.1 — Stage bar: 後續功能：LLM Wiki */
 #part-3-wiki {
   --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
   --part3-stage-bar-height: clamp(140px, 19vh, 195px);
   --part3-stage-bar-padding: 28px 0;
 }
 
-/* 1. 適合的研究問題：左側文字卡／右側四線關係圖表 */
+/* Part 3.1.1 — Section defaults: 適合的研究問題 (#part-3-research-questions) */
 #part-3-research-questions {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -433,7 +483,7 @@
   --part3-visual-width: 100%;
 }
 
-/* 2. 所需的工具與資源：checklist ＋工具資訊視窗 */
+/* Part 3.2.1 — Section defaults: 所需的工具與資源 (#part-3-tools) */
 #part-3-tools {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -466,7 +516,7 @@
   font-size: var(--part3-tools-info-body-size, clamp(20px, 1.8vw, 27px));
 }
 
-/* 3. 重用平台的基本流程：說明卡／流程圖 */
+/* Part 3.3.1 — Section defaults: 重用平台的基本流程 (#part-3-basic-flow) */
 #part-3-basic-flow {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -482,7 +532,8 @@
   --part3-flow-node-size: calc(15px * var(--font-scale));
 }
 
-/* 沿用「以數位方法研究清代奏折」的滿版文字排版：標題和說明文字
+/* Part 3.3.1.1 — Full-width text layout inside #part-3-basic-flow
+   沿用「以數位方法研究清代奏折」的滿版文字排版：標題和說明文字
    不使用卡片背景，直接在網站內容寬度內展開。 */
 #part-3-basic-flow .lay-stack > .blk {
   width: 100%;
@@ -507,7 +558,7 @@
   font-size: var(--part3-flow-node-size, calc(15px * var(--font-scale)));
 }
 
-/* OCR：1. 甚麼是 OCR？（兩張卡） */
+/* Part 3.4.2 — Section defaults: 甚麼是 OCR？ (#part-3-ocr-definition) */
 #part-3-ocr-definition {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -519,7 +570,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：2. PaddleOCR */
+/* Part 3.4.3 — Single-card section: PaddleOCR (#part-3-paddleocr) */
 #part-3-paddleocr {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -531,7 +582,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：3. 運用 Agentic AI 使用 PaddleOCR */
+/* Part 3.4.4 — Single-card section: Agentic AI 使用 PaddleOCR (#part-3-agentic-ocr) */
 #part-3-agentic-ocr {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -543,7 +594,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：4. OCR 前的材料準備 */
+/* Part 3.4.5 — Single-card section: OCR 前的材料準備 (#part-3-material) */
 #part-3-material {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -555,7 +606,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：5. 執行 OCR 的 Python 代碼 */
+/* Part 3.4.6 — Single-card section: OCR 的 Python 代碼 (#part-3-code) */
 #part-3-code {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -567,7 +618,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：6. 檢視史料的版面及格式 */
+/* Part 3.4.7 — Single-card section: 史料的版面及格式 (#part-3-format) */
 #part-3-format {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -579,7 +630,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：7. 辨識印刷字（文字卡／互動圖表卡） */
+/* Part 3.4.8 — Section defaults: 辨識印刷字 (#part-3-printed) */
 #part-3-printed {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -595,7 +646,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* OCR：8. 辨識手寫字 */
+/* Part 3.4.9 — Single-card section: 辨識手寫字 (#part-3-handwritten) */
 #part-3-handwritten {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -607,7 +658,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：9. 輸出格式：JSON（文字卡／互動圖表卡） */
+/* Part 3.4.10 — Section defaults: 輸出格式：JSON (#part-3-json) */
 #part-3-json {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -623,7 +674,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* OCR：10. OCR 測試 */
+/* Part 3.4.11 — Single-card section: OCR 測試 (#part-3-test) */
 #part-3-test {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -635,7 +686,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：11. 輸入結構化史料至平台 */
+/* Part 3.4.12 — Single-card section: 輸入結構化史料至平台 (#part-3-import) */
 #part-3-import {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -647,7 +698,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：1. 修改、建立 AI Skills（兩張卡） */
+/* Part 3.5.2 — Section defaults: 修改、建立 AI Skills (#part-3-ai-skills) */
 #part-3-ai-skills {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -659,7 +710,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：2. 執行 AI Skills 的方法（兩張卡／流程圖） */
+/* Part 3.5.3 — Section defaults: 執行 AI Skills 的方法 (#part-3-ai-chain) */
 #part-3-ai-chain {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -684,7 +735,7 @@
   font-size: var(--part3-flow-node-size, calc(15px * var(--font-scale)));
 }
 
-/* AI：3. 選用的 AI Model */
+/* Part 3.5.4 — Single-card section: 選用的 AI Model (#part-3-model) */
 #part-3-model {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -696,7 +747,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：4. Google Cloud */
+/* Part 3.5.5 — Single-card section: Google Cloud (#part-3-cloud) */
 #part-3-cloud {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -708,7 +759,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* 後續功能：LLM Wiki */
+/* Part 3.6.2–3.6.4 — Section defaults: LLM Wiki */
 #part-3-wiki-intro,
 #part-3-wiki-data,
 #part-3-wiki-analysis {
@@ -722,6 +773,7 @@
   --part3-body-line-height: 1.9;
 }
 
+/* Part 3.0.2 — Shared chart, workflow, and question-gallery layer */
 /* Part 3 的特殊視覺卡片同樣由各自所在區塊的變數控制。 */
 #part-3-content .part3-chart-frame {
   width: var(--part3-visual-width, 100%);
@@ -735,14 +787,14 @@
   width: var(--part3-visual-width, 100%);
 }
 
-/* --------------------------------------------------------------------------
+/* ====================== Part 3.1–3.6 card-level controls ==================
    Part 3 實際卡片的獨立設定
    --------------------------------------------------------------------------
    以下每一個 ID 只控制一張卡。要調整某一張卡，只改該 ID 區塊的數值；
    不要改另一張卡的區塊，也不會連帶改到同一部分的其他卡片。
 */
 
-/* 1. 適合的研究問題：文字卡 */
+/* Part 3.1.2 — Text card: #part-3-research-card */
 #part-3-research-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -754,12 +806,12 @@
   --part3-body-line-height: 1.9;
 }
 
-/* 1. 適合的研究問題：四線關係圖表 */
+/* Part 3.1.3 — Relationship chart: #part-3-research-chart */
 #part-3-research-chart {
   --part3-visual-width: 100%;
 }
 
-/* 2. 所需的工具與資源：整組工具卡 */
+/* Part 3.2.2 — Tool card: #part-3-tools-card */
 #part-3-tools-card {
   --part3-tools-width: 100%;
   --part3-tools-list-width: 25%;
@@ -774,7 +826,7 @@
   --part3-tools-info-padding: clamp(24px, 4vw, 48px);
 }
 
-/* 3. 重用平台的基本流程：文字卡 */
+/* Part 3.3.2 — Text block: #part-3-basic-flow-card */
 #part-3-basic-flow-card {
   --part3-card-width: 100%;
   --part3-card-max-width: none;
@@ -794,7 +846,7 @@
   padding: var(--part3-card-padding, 0);
 }
 
-/* 3. 重用平台的基本流程：流程圖 */
+/* Part 3.3.3 — Workflow: #part-3-basic-flow-chart */
 #part-3-basic-flow-chart {
   --part3-flow-width: 100%;
   --part3-flow-min-height: 0;
@@ -802,7 +854,7 @@
   --part3-flow-node-size: calc(15px * var(--font-scale));
 }
 
-/* OCR：1. 甚麼是 OCR？第一張卡 */
+/* Part 3.4.2.1 — Card 1: #part-3-ocr-definition-card-1 */
 #part-3-ocr-definition-card-1 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -814,7 +866,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：1. 甚麼是 OCR？第二張卡 */
+/* Part 3.4.2.2 — Card 2: #part-3-ocr-definition-card-2 */
 #part-3-ocr-definition-card-2 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -826,7 +878,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：7. 辨識印刷字的文字卡 */
+/* Part 3.4.8.1 — Text card: #part-3-printed-card */
 #part-3-printed-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -838,7 +890,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：7. 辨識印刷字的互動圖表 */
+/* Part 3.4.8.2 — Chart: #part-3-printed-chart */
 #part-3-printed-chart {
   --part3-visual-width: 100%;
   --part3-visual-min-height: 360px;
@@ -846,7 +898,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* OCR：9. 輸出格式：JSON 的文字卡 */
+/* Part 3.4.10.1 — Text card: #part-3-json-card */
 #part-3-json-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -858,7 +910,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：9. 輸出格式：JSON 的互動圖表 */
+/* Part 3.4.10.2 — Chart: #part-3-json-chart */
 #part-3-json-chart {
   --part3-visual-width: 100%;
   --part3-visual-min-height: 360px;
@@ -866,7 +918,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* AI：1. 修改、建立 AI Skills 第一張卡 */
+/* Part 3.5.2.1 — Card 1: #part-3-ai-skills-card-1 */
 #part-3-ai-skills-card-1 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -878,7 +930,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：1. 修改、建立 AI Skills 第二張卡 */
+/* Part 3.5.2.2 — Card 2: #part-3-ai-skills-card-2 */
 #part-3-ai-skills-card-2 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -890,7 +942,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：2. 執行 AI Skills 的方法第一張卡 */
+/* Part 3.5.3.1 — Card 1: #part-3-ai-chain-card-1 */
 #part-3-ai-chain-card-1 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -902,7 +954,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：2. 執行 AI Skills 的方法第二張卡 */
+/* Part 3.5.3.2 — Card 2: #part-3-ai-chain-card-2 */
 #part-3-ai-chain-card-2 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -914,7 +966,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* AI：2. 執行 AI Skills 的方法流程圖 */
+/* Part 3.5.3.3 — Workflow: #part-3-ai-chain-chart */
 #part-3-ai-chain-chart {
   --part3-flow-width: 100%;
   --part3-flow-min-height: 0;
@@ -922,7 +974,7 @@
   --part3-flow-node-size: calc(15px * var(--font-scale));
 }
 
-/* LLM Wiki：第一張卡 */
+/* Part 3.6.2 — Card: #part-3-wiki-intro-card */
 #part-3-wiki-intro-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -934,7 +986,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* LLM Wiki：第二張卡 */
+/* Part 3.6.3 — Card: #part-3-wiki-data-card */
 #part-3-wiki-data-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -946,7 +998,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* LLM Wiki：第三張卡 */
+/* Part 3.6.4 — Card: #part-3-wiki-analysis-card */
 #part-3-wiki-analysis-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -958,7 +1010,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* OCR：1. 甚麼是 OCR？至 11. 輸入結構化史料至平台 */
+/* Part 3.7.1 — Accent colours: OCR sections */
 #part-3-ocr-definition,
 #part-3-paddleocr,
 #part-3-agentic-ocr,
@@ -971,13 +1023,13 @@
 #part-3-test,
 #part-3-import { --card-accent: #b66d48; }
 
-/* AI：1. 修改、建立AI Skills 至 4. Google Cloud */
+/* Part 3.7.2 — Accent colours: AI sections */
 #part-3-ai-skills { --card-accent: #ad7a35; }
 #part-3-ai-chain { --card-accent: #c7543f; }
 #part-3-model,
 #part-3-cloud { --card-accent: #7e6a39; }
 
-/* 後續功能：LLM Wiki */
+/* Part 3.7.3 — Accent colours: LLM Wiki */
 #part-3-wiki-intro,
 #part-3-wiki-data,
 #part-3-wiki-analysis { --card-accent: #a45e4c; }

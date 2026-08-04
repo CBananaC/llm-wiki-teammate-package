@@ -6971,3 +6971,32 @@ Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/sto
 Verified: Browser preview loaded `storymap-cards.css?v=20260804-full-info-01`; all four current StoryMap item views and all five standalone sample views reported visible information content with `overflow: visible`. The Agentic AI animation remained active.
 
 Remaining: None for the full-information-pane adjustment.
+
+### 2026-08-04 13:45 HKT — Codex — Organize Part 3 CSS with numbered card controls
+
+Summary:
+- Added a numbered Part 3 CSS index from Part 3.0 through Part 3.7.
+- Renamed section-default, stage-bar, visual-card, and individual-card blocks so each adjustment has a precise label such as Part 3.1.2 or Part 3.4.2.1.
+- Preserved all existing selectors and sizing values; this change only improves navigation and editing clarity.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the numbered index maps to the matching `#part-3-*` selectors.
+- Focused `git diff --check` passes for `intro Website/Website/storymap/storymap-cards.css`.
+
+Remaining:
+- None for the CSS organization request.
+
+### 2026-08-04 13:48 HKT — Codex — Make 工具資訊 height content-driven
+
+Summary: Changed the active tool information view to use an automatic text row. Each item’s information panel now sizes itself from its own description, while the photo fills the remaining height of the fixed tools window. The standalone checklist sample uses the same layout.
+
+Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/Website/storymap/storymap-example.html`, and `intro Website/Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser measurements showed different information heights for repository (340px), Agentic AI (384px), AI API (296px), and the backup item (296px), with no inner scrolling. The standalone sample also reported content-driven heights across all five views, and the Agentic AI animation remained active.
+
+Remaining: None for the content-driven information height adjustment.
