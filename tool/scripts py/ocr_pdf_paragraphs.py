@@ -129,7 +129,7 @@ def remove_zhupi_annotation(text):
     return ZHUPI_ANNOTATION_RE.sub("", text)
 
 
-# Split an ordered paragraph into sentence objects with source references.
+# Split an ordered paragraph into readable sentence objects.
 def build_sentences(part_id, regions):
     pieces = []
     text_parts = []
@@ -156,28 +156,23 @@ def build_sentences(part_id, regions):
 
     sentences = []
     for order, (start, end) in enumerate(ranges, start=1):
-        source_region_refs = []
+        source_pages = set()
         for region_start, region_end, region in pieces:
             if region_start < end and region_end > start:
-                source_region_refs.append(
-                    {
-                        "pdf_page": region["pdf_page"],
-                        "region_index": region["region_index"],
-                    }
-                )
+                source_pages.add(region["pdf_page"])
 
         sentences.append(
             {
                 "sentence_id": f"{part_id}-sentence-{order}",
                 "text": combined_text[start:end],
-                "source_region_refs": source_region_refs,
+                "pdf_pages": sorted(source_pages),
             }
         )
 
     return sentences
 
 
-# Package an ordered sequence of OCR regions as one JSON part.
+# Package an ordered sequence of OCR regions as one readable JSON part.
 def make_part(part_id, part_type, regions):
     if not regions:
         raise ValueError(f"Part {part_id} has no OCR regions")
@@ -186,18 +181,10 @@ def make_part(part_id, part_type, regions):
         "part_id": part_id,
         "part_type": part_type,
         "pdf_pages": sorted({region["pdf_page"] for region in regions}),
-        "source_region_refs": [
-            {
-                "pdf_page": region["pdf_page"],
-                "region_index": region["region_index"],
-            }
-            for region in regions
-        ],
-        "regions": regions,
     }
 
 
-# Package a nonparagraph part as one continuous source-text object.
+# Package a nonparagraph part as one continuous readable text object.
 def make_text_part(part_id, part_type, regions):
     part = make_part(part_id, part_type, regions)
     part["text"] = "".join(region["text"] for region in regions)
@@ -261,7 +248,14 @@ def build_header(page_one):
     return {
         "row_count": 3,
         "reading_direction": "right_to_left",
-        "rows": header_rows,
+        "rows": [
+            {
+                "row": row["row"],
+                "pdf_page": row["pdf_page"],
+                "text": row["text"],
+            }
+            for row in header_rows
+        ],
         "opening_formula": make_text_part(
             "opening-formula",
             "opening_formula",
@@ -296,12 +290,7 @@ def build_zhupi_area(pages):
                 "order": order,
                 "position": position,
                 "text": text,
-                "source_region_ref": {
-                    "pdf_page": region["pdf_page"],
-                    "region_index": region["region_index"],
-                },
-                "source_region_text": source_text,
-                "region": region,
+                "pdf_page": region["pdf_page"],
             }
         )
 
@@ -332,7 +321,7 @@ def build_output(input_pdf, results):
     page_one, page_two = pages
 
     return {
-        "schema_version": "3.0",
+        "schema_version": "4.0",
         "source": {
             "path": str(input_pdf),
             "filename": input_pdf.name,
@@ -360,19 +349,17 @@ def build_output(input_pdf, results):
         },
         "header": build_header(page_one),
         "page_numbers": [
-            page["page_number_region"]
+            {
+                "pdf_page": page["pdf_page"],
+                "printed_page_number": page["printed_page_number"],
+            }
             for page in pages
-            if page["page_number_region"] is not None
+            if page["printed_page_number"] is not None
         ],
         "paragraphs": build_paragraphs(pages),
         "zhu_area": build_zhupi_area(pages),
         "footer": build_footer(page_two),
-        "preserved": {
-            "page_numbers": [
-                page["printed_page_number"] for page in pages
-            ],
-            "three_row_header": True,
-            "last_two_zhupi_lines": True,
+        "notes": {
             "paragraph_boundary_method": (
                 "Source-layout anchors: the indented 竊照 paragraph "
                 "continues across the page break; the indented 查 paragraph "
@@ -383,7 +370,6 @@ def build_output(input_pdf, results):
                 "researcher correction or silent deletion was applied."
             ),
         },
-        "raw_ocr_pages": pages,
     }
 
 
