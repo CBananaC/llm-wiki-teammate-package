@@ -606,7 +606,7 @@ document.addEventListener('click', (event) => {
   const documentMeta = fileStack.classList.contains('handwritten')
     ? {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
-        descriptionHtml: '《宮中檔奏摺—乾隆朝》，黃仕簡 奏，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院 <a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l" target="_blank" rel="noopener noreferrer">《清代檔案檢索系統》</a>（<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l" target="_blank" rel="noopener noreferrer">PDF影像</a>），瀏覽日期：2026/08/04。'
+        descriptionHtml: '黃仕簡，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，《宮中檔奏摺—乾隆朝》，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院，<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l" target="_blank" rel="noopener noreferrer">《清代檔案檢索系統》</a>（<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l" target="_blank" rel="noopener noreferrer">PDF影像</a>），瀏覽日期：2026/08/04。'
       }
     : {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',

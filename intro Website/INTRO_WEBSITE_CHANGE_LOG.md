@@ -3579,3 +3579,15 @@ Files changed:
 Verified: The local preview shows the printed full reference and the handwritten caption shows clickable `《清代檔案檢索系統》` and `PDF影像` links. Both captions remain visible below the image; `node --check` passes for `storymap.js`.
 
 Remaining: None for the OCR enlarged-window citation display.
+
+### 2026-08-04 15:18 HKT — Codex — Apply Chinese reference-style ordering
+
+Summary: Reordered the handwritten OCR citation to follow the PolyU Chinese reference rule: author, article title, source collection, date, archive number and item, then institution/database and access date. The existing embedded archive and PDF links were retained.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified: The citation now begins `黃仕簡，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，《宮中檔奏摺—乾隆朝》` and preserves all verified source details.
+
+Remaining: Browser recheck and local checkpoint.
