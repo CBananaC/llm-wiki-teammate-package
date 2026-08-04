@@ -7000,3 +7000,23 @@ Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/sto
 Verified: Browser measurements showed different information heights for repository (340px), Agentic AI (384px), AI API (296px), and the backup item (296px), with no inner scrolling. The standalone sample also reported content-driven heights across all five views, and the Agentic AI animation remained active.
 
 Remaining: None for the content-driven information height adjustment.
+
+### 2026-08-04 13:59 HKT — Codex — Put OCR card controls in website order
+
+Summary:
+- Reordered the Part 3.4 OCR controls in `intro Website/Website/storymap/storymap-cards.css` to follow the actual StoryMap sequence from the OCR stage through structured-material import.
+- Simplified each CSS heading to the visible card title; untitled OCR definition cards use the first ten-word paragraph excerpt, and paired visual blocks are labelled as text card or chart.
+- Kept all selectors and sizing declarations unchanged while moving the matching card-control blocks beside their displayed section.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the CSS Part 3.4 sequence matches the OCR section order in `intro Website/Website/storymap/storymap-example.html`.
+- `node --check intro Website/Website/storymap/storymap.js` and `node --check intro Website/Website/storymap/part-3-question-gallery.js` passed.
+- Focused `git diff --check` passes for `intro Website/Website/storymap/storymap-cards.css`.
+
+Remaining:
+- None for the OCR CSS organization request.

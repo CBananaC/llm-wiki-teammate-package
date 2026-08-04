@@ -371,20 +371,24 @@
      Part 3.3.2  Text block: #part-3-basic-flow-card
      Part 3.3.3  Workflow: #part-3-basic-flow-chart
    Part 3.4  OCR 並結構化原始史料
-     Part 3.4.1  Stage bar: #part-3-ocr
-     Part 3.4.2  甚麼是 OCR？ (#part-3-ocr-definition)
-       Part 3.4.2.1  Card 1: #part-3-ocr-definition-card-1
-       Part 3.4.2.2  Card 2: #part-3-ocr-definition-card-2
-     Part 3.4.3–3.4.7  Single-card sections: PaddleOCR, Agentic AI, material,
-                      Python code, and format
-     Part 3.4.8  辨識印刷字 (#part-3-printed)
-       Part 3.4.8.1  Text card: #part-3-printed-card
-       Part 3.4.8.2  Chart: #part-3-printed-chart
-     Part 3.4.9  辨識手寫字 (#part-3-handwritten)
-     Part 3.4.10 輸出格式：JSON (#part-3-json)
-       Part 3.4.10.1 Text card: #part-3-json-card
-       Part 3.4.10.2 Chart: #part-3-json-chart
-     Part 3.4.11–3.4.12  OCR test and structured-material import
+     Part 3.4.1  OCR 並結構化原始史料
+     Part 3.4.2  甚麼是 OCR？
+       Part 3.4.2.1  OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字…
+       Part 3.4.2.2  由於 AI 無法直接讀取掃描影像形式的歷史材料…
+     Part 3.4.3  PaddleOCR
+     Part 3.4.4  運用 Agentic AI 使用 PaddleOCR
+     Part 3.4.5  OCR 前的材料準備
+     Part 3.4.6  執行 OCR 的Python 代碼
+     Part 3.4.7  檢視史料的版面及格式
+     Part 3.4.8  辨識印刷字
+       Part 3.4.8.1  辨識印刷字（文字卡）
+       Part 3.4.8.2  辨識印刷字（圖表）
+     Part 3.4.9  辨識手寫字
+     Part 3.4.10 輸出格式：JSON
+       Part 3.4.10.1 輸出格式：JSON（文字卡）
+       Part 3.4.10.2 輸出格式：JSON（圖表）
+     Part 3.4.11 OCR測試
+     Part 3.4.12 輸入結構化史料至平台
    Part 3.5  運用 AI 抽取資訊
      Part 3.5.1  Stage bar: #part-3-ai
      Part 3.5.2  AI Skills (#part-3-ai-skills)
@@ -446,13 +450,6 @@
 }
 #part-3-content .part3-stage-bar h1 {
   font-size: var(--part3-stage-title-size, clamp(26px, 3.4vw, 44px));
-}
-
-/* Part 3.4.1 — Stage bar: OCR 並結構化原始史料 */
-#part-3-ocr {
-  --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
-  --part3-stage-bar-height: clamp(140px, 19vh, 195px);
-  --part3-stage-bar-padding: 28px 0;
 }
 
 /* Part 3.5.1 — Stage bar: 運用 AI 抽取資訊 */
@@ -557,7 +554,14 @@
   font-size: var(--part3-flow-node-size, calc(15px * var(--font-scale)));
 }
 
-/* Part 3.4.2 — Section defaults: 甚麼是 OCR？ (#part-3-ocr-definition) */
+/* Part 3.4.1 — OCR 並結構化原始史料 */
+#part-3-ocr {
+  --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
+  --part3-stage-bar-height: clamp(140px, 19vh, 195px);
+  --part3-stage-bar-padding: 28px 0;
+}
+
+/* Part 3.4.2 — 甚麼是 OCR？ */
 #part-3-ocr-definition {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -569,7 +573,31 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.3 — Single-card section: PaddleOCR (#part-3-paddleocr) */
+/* Part 3.4.2.1 — OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字… */
+#part-3-ocr-definition-card-1 {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* Part 3.4.2.2 — 由於 AI 無法直接讀取掃描影像形式的歷史材料… */
+#part-3-ocr-definition-card-2 {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* Part 3.4.3 — PaddleOCR */
 #part-3-paddleocr {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -581,7 +609,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.4 — Single-card section: Agentic AI 使用 PaddleOCR (#part-3-agentic-ocr) */
+/* Part 3.4.4 — 運用 Agentic AI 使用 PaddleOCR */
 #part-3-agentic-ocr {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -593,7 +621,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.5 — Single-card section: OCR 前的材料準備 (#part-3-material) */
+/* Part 3.4.5 — OCR 前的材料準備 */
 #part-3-material {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -605,7 +633,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.6 — Single-card section: OCR 的 Python 代碼 (#part-3-code) */
+/* Part 3.4.6 — 執行 OCR 的Python 代碼 */
 #part-3-code {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -617,7 +645,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.7 — Single-card section: 史料的版面及格式 (#part-3-format) */
+/* Part 3.4.7 — 檢視史料的版面及格式 */
 #part-3-format {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -629,7 +657,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.8 — Section defaults: 辨識印刷字 (#part-3-printed) */
+/* Part 3.4.8 — 辨識印刷字 */
 #part-3-printed {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -645,7 +673,27 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* Part 3.4.9 — Single-card section: 辨識手寫字 (#part-3-handwritten) */
+/* Part 3.4.8.1 — 辨識印刷字（文字卡） */
+#part-3-printed-card {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* Part 3.4.8.2 — 辨識印刷字（圖表） */
+#part-3-printed-chart {
+  --part3-visual-width: 100%;
+  --part3-visual-min-height: 360px;
+  --part3-visual-padding: clamp(20px, 2.4vw, 34px);
+  --part3-chart-body-size: calc(15px * var(--font-scale));
+}
+
+/* Part 3.4.9 — 辨識手寫字 */
 #part-3-handwritten {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -657,7 +705,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.10 — Section defaults: 輸出格式：JSON (#part-3-json) */
+/* Part 3.4.10 — 輸出格式：JSON */
 #part-3-json {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -673,7 +721,27 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* Part 3.4.11 — Single-card section: OCR 測試 (#part-3-test) */
+/* Part 3.4.10.1 — 輸出格式：JSON（文字卡） */
+#part-3-json-card {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* Part 3.4.10.2 — 輸出格式：JSON（圖表） */
+#part-3-json-chart {
+  --part3-visual-width: 100%;
+  --part3-visual-min-height: 360px;
+  --part3-visual-padding: clamp(20px, 2.4vw, 34px);
+  --part3-chart-body-size: calc(15px * var(--font-scale));
+}
+
+/* Part 3.4.11 — OCR測試 */
 #part-3-test {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -685,7 +753,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.12 — Single-card section: 輸入結構化史料至平台 (#part-3-import) */
+/* Part 3.4.12 — 輸入結構化史料至平台 */
 #part-3-import {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -851,70 +919,6 @@
   --part3-flow-min-height: 0;
   --part3-flow-padding: clamp(18px, 2.4vw, 32px);
   --part3-flow-node-size: calc(15px * var(--font-scale));
-}
-
-/* Part 3.4.2.1 — Card 1: #part-3-ocr-definition-card-1 */
-#part-3-ocr-definition-card-1 {
-  --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
-  --part3-card-height: auto;
-  --part3-card-min-height: 0;
-  --part3-card-padding: clamp(18px, 1.8vw, 26px);
-  --part3-title-size: clamp(27px, 3.4vw, 46px);
-  --part3-body-size: calc(16px * var(--font-scale));
-  --part3-body-line-height: 1.9;
-}
-
-/* Part 3.4.2.2 — Card 2: #part-3-ocr-definition-card-2 */
-#part-3-ocr-definition-card-2 {
-  --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
-  --part3-card-height: auto;
-  --part3-card-min-height: 0;
-  --part3-card-padding: clamp(18px, 1.8vw, 26px);
-  --part3-title-size: clamp(27px, 3.4vw, 46px);
-  --part3-body-size: calc(16px * var(--font-scale));
-  --part3-body-line-height: 1.9;
-}
-
-/* Part 3.4.8.1 — Text card: #part-3-printed-card */
-#part-3-printed-card {
-  --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
-  --part3-card-height: auto;
-  --part3-card-min-height: 0;
-  --part3-card-padding: clamp(18px, 1.8vw, 26px);
-  --part3-title-size: clamp(27px, 3.4vw, 46px);
-  --part3-body-size: calc(16px * var(--font-scale));
-  --part3-body-line-height: 1.9;
-}
-
-/* Part 3.4.8.2 — Chart: #part-3-printed-chart */
-#part-3-printed-chart {
-  --part3-visual-width: 100%;
-  --part3-visual-min-height: 360px;
-  --part3-visual-padding: clamp(20px, 2.4vw, 34px);
-  --part3-chart-body-size: calc(15px * var(--font-scale));
-}
-
-/* Part 3.4.10.1 — Text card: #part-3-json-card */
-#part-3-json-card {
-  --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
-  --part3-card-height: auto;
-  --part3-card-min-height: 0;
-  --part3-card-padding: clamp(18px, 1.8vw, 26px);
-  --part3-title-size: clamp(27px, 3.4vw, 46px);
-  --part3-body-size: calc(16px * var(--font-scale));
-  --part3-body-line-height: 1.9;
-}
-
-/* Part 3.4.10.2 — Chart: #part-3-json-chart */
-#part-3-json-chart {
-  --part3-visual-width: 100%;
-  --part3-visual-min-height: 360px;
-  --part3-visual-padding: clamp(20px, 2.4vw, 34px);
-  --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
 /* Part 3.5.2.1 — Card 1: #part-3-ai-skills-card-1 */
