@@ -3284,3 +3284,13 @@ Files: `Website/storymap/storymap-example.html`, `Website/storymap/storymap-card
 Verified: HTTP browser preview showed the section heading and paragraph outside a card, with transparent background, no border or padding, and the same 1193px content width as the workflow frame. The browser reported no errors or warnings. `node --check Website/storymap/storymap.js` and `node --check Website/storymap/part-3-question-gallery.js` passed. `git diff --check` still reports the pre-existing trailing-space line at `storymap-example.html:1000`; it was preserved.
 
 Remaining: None for the requested Part 3 basic-flow layout.
+
+### 2026-08-04 13:37 HKT — Codex — Show full text in 工具資訊 without inner scrolling
+
+Summary: Changed the Part 3 tools information pane to a 50% photo / 50% text split and removed the inner text scrollbar, so each current item’s full description remains visible in the information panel. Applied the same behavior to the standalone checklist sample.
+
+Files: `Website/storymap/storymap.css`, `Website/storymap/storymap-cards.css`, `Website/storymap/storymap-example.html`, and `Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser preview loaded `storymap-cards.css?v=20260804-full-info-01`; all four current StoryMap item views and all five standalone sample views reported visible information content with `overflow: visible`. The Agentic AI animation remained active.
+
+Remaining: None for the full-information-pane adjustment.
