@@ -989,9 +989,11 @@
   --agentic-skills-font-size: 10px;
   --agentic-skills-angle: -4deg;
 
-  /* Codex pet size: keep the head readable without covering the source windows. */
-  --agentic-pet-width: clamp(175px, 24%, 235px);
-  --agentic-pet-height: clamp(195px, 46%, 260px);
+  /* Codex pet size: fixed pixels so changing the screen width does not resize it. */
+  --agentic-pet-width: 235px;
+  --agentic-pet-height: 256px;
+  --agentic-pet-face-font-size: 22px;
+  --agentic-pet-body-font-size: 12px;
 }
 
 /* Part 3.3.2 — Text block: #part-3-basic-flow-card */

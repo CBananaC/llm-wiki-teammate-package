@@ -7326,3 +7326,15 @@ Files changed:
 Verified: Browser preview captions now show only the source references: the handwritten archive citation and the printed `《明清台灣檔案匯編》，第30冊，頁80，硃25。` entry.
 
 Remaining: Local checkpoint.
+
+### 2026-08-04 15:26 HKT — Codex — Restore title and date inside OCR references
+
+Summary: Added `黃仕簡，〈為奏彰化失陷已調兵赴臺事〉（1786/12/10）` to both OCR source references while keeping the article’s archival citation order and existing embedded links.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified: The reference now contains the requested title, author, and Gregorian date without restoring the repeated caption prefix.
+
+Remaining: Browser recheck and local checkpoint.

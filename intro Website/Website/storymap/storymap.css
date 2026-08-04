@@ -1799,7 +1799,7 @@ img { max-width: 100%; }
 
 /* Codex pet：參考藍色毛球、深藍終端面板和小型上半身；下半身可由場景裁切。 */
 .agentic-pet-wrap {
-  position: absolute; z-index: 8; left: 50%; bottom: -7%; transform: translateX(-50%); width: var(--agentic-pet-width, clamp(175px, 24%, 235px)); height: var(--agentic-pet-height, clamp(195px, 46%, 260px)); pointer-events: none;
+  position: absolute; z-index: 8; left: 50%; bottom: -7%; transform: translateX(-50%); width: var(--agentic-pet-width, 235px); height: var(--agentic-pet-height, 256px); pointer-events: none;
 }
 .agentic-pet-desk {
   position: absolute; left: 50%; bottom: 7%; transform: translateX(-50%);
@@ -1840,7 +1840,7 @@ img { max-width: 100%; }
   box-shadow: inset 0 3px 6px rgba(3, 12, 40, .5), 0 4px 8px rgba(23, 45, 133, .18);
   animation: agentic-pet-blink 5.2s ease-in-out infinite;
 }
-.agentic-pet-face span { color: #bafaff; font: 700 clamp(14px, 3vw, 24px)/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+.agentic-pet-face span { color: #bafaff; font: 700 var(--agentic-pet-face-font-size, 22px)/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
 @keyframes agentic-pet-blink {
   0%, 92%, 100% { transform: translate(-50%, -50%) scaleY(1); }
   95% { transform: translate(-50%, -50%) scaleY(.15); }
@@ -1855,7 +1855,7 @@ img { max-width: 100%; }
   width: 54%; height: 43%; border-radius: 30%; background: #1b2a55;
   display: flex; align-items: center; justify-content: center;
 }
-.agentic-pet-body-face span { color: #f2fbff; font: 700 clamp(9px, 2vw, 14px)/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+.agentic-pet-body-face span { color: #f2fbff; font: 700 var(--agentic-pet-body-font-size, 12px)/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
 .agentic-pet-limb { position: absolute; border-radius: 40%; background: var(--pet-fill); box-shadow: inset -4px -7px 10px rgba(23, 45, 133, .2), inset 4px 4px 8px rgba(255, 255, 255, .2); }
 .agentic-pet-limb.arm { top: 20%; width: 19%; height: 60%; }
 .agentic-pet-limb.arm.l { left: -10%; transform: rotate(14deg); }
