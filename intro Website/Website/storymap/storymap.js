@@ -597,8 +597,14 @@ document.addEventListener('click', (event) => {
   const currentSrc = String(img.getAttribute('src') || img.src || '');
   const currentIndex = pages.findIndex((src) => currentSrc.endsWith(String(src)));
   const documentMeta = fileStack.classList.contains('handwritten')
-    ? { title: '硃25 原奏摺手抄本', description: '國立故宮博物院藏《天地會第一冊》；這份 PDF 共 4 頁。' }
-    : { title: '硃25 刊本', description: '《明清臺灣檔案彙編》第 30 冊，頁 80–81；這份 PDF 共 2 頁。' };
+    ? {
+        title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
+        description: '《宮中檔奏摺—乾隆朝》，黃仕簡〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院《清代檔案檢索系統》。瀏覽日期：2026/08/04。PDF：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l；系統頁：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l'
+      }
+    : {
+        title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
+        description: '明清台檔30, 80, 硃25。'
+      };
   photoLightbox.openGallery(pages, currentIndex < 0 ? 0 : currentIndex, {
     title: fileStack.getAttribute('data-ocr-document-title') || documentMeta.title,
     description: fileStack.getAttribute('data-ocr-document-description') || documentMeta.description
