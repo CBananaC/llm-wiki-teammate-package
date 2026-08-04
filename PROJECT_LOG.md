@@ -7094,3 +7094,42 @@ Verified:
 
 Remaining:
 - None for the OCR output-window width request.
+
+### 2026-08-04 14:28 HKT — Codex — Center OCR output window
+
+Summary:
+- Centered the OCR JSON output window horizontally inside the animation scene when its configured width is narrower than the scene.
+- Kept the existing output-window width and vertical flow unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser measurement confirmed the output window is centered within the animation scene.
+- Focused `git diff --check` passes for the edited CSS file.
+
+Remaining:
+- None for the OCR output-window alignment request.
+
+### 2026-08-04 14:39 HKT — Codex — Add full-screen OCR PDF page viewer
+
+Summary:
+- Added click-to-open full-screen viewing for both OCR document previews: the 硃25 handwritten PDF sequence and the printed PDF sequence.
+- Added description text below the page, X/outside-click/Escape close behavior, page counter, left/right buttons, and keyboard ArrowLeft/ArrowRight navigation through each document’s pages.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passes.
+- `git diff --check` passes for the edited StoryMap files.
+- The animation output window remains horizontally centered at its configured width.
+
+Remaining:
+- Full-screen click navigation should receive a final in-app visual check after the StoryMap scroll position is focused on the OCR section.

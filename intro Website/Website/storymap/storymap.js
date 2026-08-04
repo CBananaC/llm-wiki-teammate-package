@@ -376,26 +376,71 @@ const photoLightbox = (() => {
       <img alt="">
       <figcaption class="photo-lightbox-caption" hidden></figcaption>
     </figure>
+    <button type="button" class="photo-lightbox-nav prev" aria-label="上一頁">‹</button>
+    <button type="button" class="photo-lightbox-nav next" aria-label="下一頁">›</button>
+    <div class="photo-lightbox-counter" aria-live="polite" hidden></div>
   `;
   document.body.appendChild(overlay);
   const img = overlay.querySelector('img');
   const caption = overlay.querySelector('.photo-lightbox-caption');
   const closeBtn = overlay.querySelector('.photo-lightbox-close');
+  const prevBtn = overlay.querySelector('.photo-lightbox-nav.prev');
+  const nextBtn = overlay.querySelector('.photo-lightbox-nav.next');
+  const counter = overlay.querySelector('.photo-lightbox-counter');
   let lastFocused = null;
+  let pages = [];
+  let pageIndex = 0;
 
   const close = () => {
     overlay.classList.remove('is-open');
     img.src = '';
+    pages = [];
+    pageIndex = 0;
+    prevBtn.hidden = true;
+    nextBtn.hidden = true;
+    counter.hidden = true;
     if (lastFocused) lastFocused.focus();
+  };
+  const renderPage = () => {
+    const page = pages[pageIndex];
+    if (!page) return;
+    img.src = page.src;
+    img.alt = page.alt || '';
+    if (page.caption) { caption.textContent = page.caption; caption.hidden = false; }
+    else { caption.textContent = ''; caption.hidden = true; }
+    const hasNavigation = pages.length > 1;
+    prevBtn.hidden = !hasNavigation;
+    nextBtn.hidden = !hasNavigation;
+    counter.hidden = !hasNavigation;
+    counter.textContent = hasNavigation ? `頁 ${pageIndex + 1} / ${pages.length}` : '';
   };
   const open = (src, alt, captionText, triggerEl) => {
     lastFocused = triggerEl || null;
-    img.src = src;
-    img.alt = alt || '';
-    if (captionText) { caption.textContent = captionText; caption.hidden = false; }
-    else { caption.textContent = ''; caption.hidden = true; }
+    pages = [{ src, alt, caption: captionText }];
+    pageIndex = 0;
+    renderPage();
     overlay.classList.add('is-open');
     closeBtn.focus();
+  };
+  const openGallery = (galleryPages, startIndex, { title = '', description = '' } = {}, triggerEl) => {
+    const validPages = galleryPages.filter(Boolean);
+    if (!validPages.length) return;
+    lastFocused = triggerEl || null;
+    pages = validPages.map((src, i) => ({
+      src,
+      alt: `${title} 第 ${i + 1} 頁`.trim(),
+      caption: [title, `第 ${i + 1} 頁`, description].filter(Boolean).join('｜')
+    }));
+    pageIndex = Math.max(0, Math.min(pages.length - 1, startIndex || 0));
+    renderPage();
+    overlay.classList.add('is-open');
+    closeBtn.focus();
+  };
+
+  const showPage = (nextIndex) => {
+    if (pages.length < 2) return;
+    pageIndex = (nextIndex + pages.length) % pages.length;
+    renderPage();
   };
 
   /* 點外部深色區域（不是圖片本身）即關閉 */
@@ -403,11 +448,19 @@ const photoLightbox = (() => {
     if (event.target === overlay || event.target === overlay.firstElementChild) close();
   });
   closeBtn.addEventListener('click', close);
+  prevBtn.addEventListener('click', () => showPage(pageIndex - 1));
+  nextBtn.addEventListener('click', () => showPage(pageIndex + 1));
   document.addEventListener('keydown', (event) => {
-    if (event.key === 'Escape' && overlay.classList.contains('is-open')) close();
+    if (!overlay.classList.contains('is-open')) return;
+    if (event.key === 'Escape') close();
+    if (event.key === 'ArrowLeft') showPage(pageIndex - 1);
+    if (event.key === 'ArrowRight') showPage(pageIndex + 1);
   });
 
-  return { open, close };
+  prevBtn.hidden = true;
+  nextBtn.hidden = true;
+  counter.hidden = true;
+  return { open, openGallery, close };
 })();
 
 /* 圖片畫廊：左右翻頁、乾淨圖片、下方說明（預設只顯示標題，滑鼠移入展開）。
@@ -524,6 +577,32 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     if (event.target.closest('a')) return;
     if (window.matchMedia('(hover: none)').matches) body.classList.toggle('is-expanded');
   });
+});
+
+/* OCR PDF page previews use one delegated listener so the click remains active
+   while the animation replaces the visible page image. */
+document.addEventListener('click', (event) => {
+  const img = event.target;
+  if (!img || img.getAttribute?.('data-ocr-page-img') === null) return;
+  const fileStack = img.parentElement?.parentElement;
+  const script = fileStack?.querySelector('script[data-ocr-pages]');
+  if (!fileStack || !script) return;
+  let pages = [];
+  try {
+    pages = JSON.parse(script.textContent).filter(Boolean);
+  } catch (error) {
+    return;
+  }
+  if (!pages.length) return;
+  const currentSrc = String(img.getAttribute('src') || img.src || '');
+  const currentIndex = pages.findIndex((src) => currentSrc.endsWith(String(src)));
+  const documentMeta = fileStack.classList.contains('handwritten')
+    ? { title: '硃25 原奏摺手抄本', description: '國立故宮博物院藏《天地會第一冊》；這份 PDF 共 4 頁。' }
+    : { title: '硃25 刊本', description: '《明清臺灣檔案彙編》第 30 冊，頁 80–81；這份 PDF 共 2 頁。' };
+  photoLightbox.openGallery(pages, currentIndex < 0 ? 0 : currentIndex, {
+    title: fileStack.getAttribute('data-ocr-document-title') || documentMeta.title,
+    description: fileStack.getAttribute('data-ocr-document-description') || documentMeta.description
+  }, img);
 });
 
 const routeGalleryPages = [
