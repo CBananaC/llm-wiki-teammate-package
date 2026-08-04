@@ -4,12 +4,8 @@
 import argparse
 import json
 import re
-from datetime import datetime
 from pathlib import Path
-from zoneinfo import ZoneInfo
 
-import paddle
-import paddleocr
 from paddleocr import PaddleOCR
 
 
@@ -129,8 +125,8 @@ def remove_zhupi_annotation(text):
     return ZHUPI_ANNOTATION_RE.sub("", text)
 
 
-# Split an ordered paragraph into readable sentence objects.
-def build_sentences(part_id, regions):
+# Split an ordered paragraph into plain sentence strings.
+def build_sentences(regions):
     pieces = []
     text_parts = []
     cursor = 0
@@ -154,41 +150,14 @@ def build_sentences(part_id, regions):
     if sentence_start < len(combined_text):
         ranges.append((sentence_start, len(combined_text)))
 
-    sentences = []
-    for order, (start, end) in enumerate(ranges, start=1):
-        source_pages = set()
-        for region_start, region_end, region in pieces:
-            if region_start < end and region_end > start:
-                source_pages.add(region["pdf_page"])
-
-        sentences.append(
-            {
-                "sentence_id": f"{part_id}-sentence-{order}",
-                "text": combined_text[start:end],
-                "pdf_pages": sorted(source_pages),
-            }
-        )
-
-    return sentences
+    return [combined_text[start:end] for start, end in ranges]
 
 
-# Package an ordered sequence of OCR regions as one readable JSON part.
-def make_part(part_id, part_type, regions):
+# Determine which PDF pages contain an ordered sequence of OCR regions.
+def find_pdf_pages(regions):
     if not regions:
-        raise ValueError(f"Part {part_id} has no OCR regions")
-
-    return {
-        "part_id": part_id,
-        "part_type": part_type,
-        "pdf_pages": sorted({region["pdf_page"] for region in regions}),
-    }
-
-
-# Package a nonparagraph part as one continuous readable text object.
-def make_text_part(part_id, part_type, regions):
-    part = make_part(part_id, part_type, regions)
-    part["text"] = "".join(region["text"] for region in regions)
-    return part
+        raise ValueError("A readable part must have OCR regions")
+    return sorted({region["pdf_page"] for region in regions})
 
 
 # Group source OCR regions into one JSON part per paragraph.
@@ -227,14 +196,26 @@ def build_paragraphs(pages):
         find_region(page_two, "彰化賊匪"),
     ]
 
+    printed_page_numbers = {
+        page["pdf_page"]: page["printed_page_number"]
+        for page in pages
+    }
     paragraph_parts = []
-    for part_id, regions in (
+    for paragraph_number, regions in (
         ("paragraph-1", paragraph_one),
         ("paragraph-2", paragraph_two),
     ):
-        part = make_part(part_id, "paragraph", regions)
-        part["sentences"] = build_sentences(part_id, regions)
-        paragraph_parts.append(part)
+        pdf_pages = find_pdf_pages(regions)
+        paragraph_parts.append(
+            {
+                "paragraph_number": int(paragraph_number.rsplit("-", 1)[1]),
+                "printed_pages": [
+                    printed_page_numbers[pdf_page]
+                    for pdf_page in pdf_pages
+                ],
+                "sentences": build_sentences(regions),
+            }
+        )
     return paragraph_parts
 
 
@@ -246,21 +227,11 @@ def build_header(page_one):
         {"row": 3, **find_region(page_one, "福建水師提督黃仕簡")},
     ]
     return {
-        "row_count": 3,
-        "reading_direction": "right_to_left",
-        "rows": [
-            {
-                "row": row["row"],
-                "pdf_page": row["pdf_page"],
-                "text": row["text"],
-            }
-            for row in header_rows
-        ],
-        "opening_formula": make_text_part(
-            "opening-formula",
-            "opening_formula",
-            [find_region(page_one, "福建水師提督一等海澄公")],
-        ),
+        "rows": [row["text"] for row in header_rows],
+        "opening_formula": find_region(
+            page_one,
+            "福建水師提督一等海澄公",
+        )["text"],
     }
 
 
@@ -275,7 +246,7 @@ def build_zhupi_area(pages):
     selected_regions = all_zhupi_regions[-2:]
 
     lines = []
-    for order, region in enumerate(selected_regions, start=1):
+    for region in selected_regions:
         source_text = region["text"]
         inline_match = ZHUPI_ANNOTATION_RE.search(source_text)
         text = (
@@ -283,31 +254,18 @@ def build_zhupi_area(pages):
             if inline_match
             else source_text
         )
-        position = "inline" if inline_match else "footer"
-        lines.append(
-            {
-                "line_id": f"zhu-{order}",
-                "order": order,
-                "position": position,
-                "text": text,
-                "pdf_page": region["pdf_page"],
-            }
-        )
+        lines.append(text)
 
-    return {
-        "selection": "last_two_zhupi_regions",
-        "lines": lines,
-    }
+    return {"lines": lines}
 
 
 # Keep the footer date separate from the header, paragraphs, and 硃批 area.
 def build_footer(page_two):
     return {
-        "date": make_text_part(
-            "footer-date",
-            "footer",
-            [find_region(page_two, "乾隆五十一年十二月初十日")],
-        )
+        "date": find_region(
+            page_two,
+            "乾隆五十一年十二月初十日",
+        )["text"]
     }
 
 
@@ -321,44 +279,23 @@ def build_output(input_pdf, results):
     page_one, page_two = pages
 
     return {
-        "schema_version": "4.0",
-        "source": {
-            "path": str(input_pdf),
-            "filename": input_pdf.name,
-            "pdf_page_count": len(pages),
-            "printed_page_numbers": [
-                page["printed_page_number"] for page in pages
-            ],
-        },
-        "ocr": {
-            "provider": "PaddleOCR",
-            "paddleocr_version": getattr(
-                paddleocr, "__version__", "unknown"
-            ),
-            "paddlepaddle_version": paddle.__version__,
-            "detection_model": "PP-OCRv6_medium_det",
-            "recognition_model": "PP-OCRv6_medium_rec",
-            "language": "chinese_cht",
-            "device": "cpu",
-            "use_doc_orientation_classify": False,
-            "use_doc_unwarping": False,
-            "use_textline_orientation": False,
-            "generated_at": datetime.now(
-                ZoneInfo("Asia/Hong_Kong")
-            ).isoformat(timespec="seconds"),
-        },
+        "schema_version": "5.0",
         "header": build_header(page_one),
         "page_numbers": [
-            {
-                "pdf_page": page["pdf_page"],
-                "printed_page_number": page["printed_page_number"],
-            }
+            page["printed_page_number"]
             for page in pages
             if page["printed_page_number"] is not None
         ],
         "paragraphs": build_paragraphs(pages),
         "zhu_area": build_zhupi_area(pages),
         "footer": build_footer(page_two),
+        "source": {
+            "filename": input_pdf.name,
+            "pdf_page_count": len(pages),
+            "printed_page_numbers": [
+                page["printed_page_number"] for page in pages
+            ],
+        },
         "notes": {
             "paragraph_boundary_method": (
                 "Source-layout anchors: the indented 竊照 paragraph "
@@ -402,7 +339,7 @@ def main():
     print(
         "Paragraph page spans: "
         + ", ".join(
-            str(part["pdf_pages"])
+            str(part["printed_pages"])
             for part in output["paragraphs"]
         )
     )

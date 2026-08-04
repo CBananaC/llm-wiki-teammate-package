@@ -1,269 +1,74 @@
 {
-  "schema_version": "4.0",
+  "schema_version": "5.0",
+  "header": {
+    "rows": [
+      "《天地會第一冊》",
+      "為奏彰化失陷已調兵赴臺事",
+      "福建水師提督黃仕簡乾隆五十一年十二月二十七日（硃批）"
+    ],
+    "opening_formula": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。"
+  },
+  "page_numbers": [
+    "80",
+    "81"
+  ],
+  "paragraphs": [
+    {
+      "paragraph_number": 1,
+      "printed_pages": [
+        "80",
+        "81"
+      ],
+      "sentences": [
+        "竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。",
+        "茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。",
+        "至午刻，縣城被陷，文武官員不知生死之事。",
+        "查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。",
+        "其謀為不軌，肆行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。",
+        "雖未准臺灣鎮道等報到，未知虛實，急當預為查辦征剿。",
+        "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
+        "一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，封備商哨船只齊足。",
+        "奴才冬間舊染風症雖復時愈時發現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕所有廈門地方札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
+        "又慮賊匪聞拿竄逃內地，飛札撫臣陸路提臣藩臬兩司興泉道及水師各鎮協營並臺灣鎮道一體嚴飭營縣在於各口岸要隘，堵緝盤拿。",
+        "仍擬續調水陸官兵酌由鹿耳門淡水南北兩路夾攻在案。",
+        "現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。",
+        "奴才於初十日帶領官兵登舟候風放洋飛渡之際，接據署北路淡水同知程峻守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐擒捕未獲。",
+        "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜本縣俞在大墩地方拿匪被害二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要「處所，分頭堵禦，一面救援。",
+        "第兵力單薄道路隔絕伏祈迅發大兵拯救再彰城失陷被害文武官員若干，此時探聽維艱未知的實，俟查確另稟。",
+        "等情前來。"
+      ]
+    },
+    {
+      "paragraph_number": 2,
+      "printed_pages": [
+        "81"
+      ],
+      "sentences": [
+        "查，奴才原擬淡水一路，已屬必須由此救援夾攻。",
+        "省城直對淡水，際此北風當令，渡往甚易。",
+        "除星飛咨行陸路提臣水師海壇閩安烽火各鎮協營，立就近省營分續調官兵北路援剿。",
+        "奴才直由鹿耳門郡城南路進兵，會督夾攻。",
+        "容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。",
+        "謹奏。"
+      ]
+    }
+  ],
+  "zhu_area": {
+    "lines": [
+      "（硃批：仍以調養為要勿過勞）",
+      "乾隆五十一年十二月二十七日奉硃批：已有旨了。欽此。〔本文原收錄於軍錄]"
+    ]
+  },
+  "footer": {
+    "date": "乾隆五十一年十二月初十日"
+  },
   "source": {
-    "path": "intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).pdf",
     "filename": "明清台灣檔案匯編 30 (dragged).pdf",
     "pdf_page_count": 2,
     "printed_page_numbers": [
       "80",
       "81"
     ]
-  },
-  "ocr": {
-    "provider": "PaddleOCR",
-    "paddleocr_version": "3.7.0",
-    "paddlepaddle_version": "3.3.1",
-    "detection_model": "PP-OCRv6_medium_det",
-    "recognition_model": "PP-OCRv6_medium_rec",
-    "language": "chinese_cht",
-    "device": "cpu",
-    "use_doc_orientation_classify": false,
-    "use_doc_unwarping": false,
-    "use_textline_orientation": false,
-    "generated_at": "2026-08-04T17:10:24+08:00"
-  },
-  "header": {
-    "row_count": 3,
-    "reading_direction": "right_to_left",
-    "rows": [
-      {
-        "row": 1,
-        "pdf_page": 1,
-        "text": "《天地會第一冊》"
-      },
-      {
-        "row": 2,
-        "pdf_page": 1,
-        "text": "為奏彰化失陷已調兵赴臺事"
-      },
-      {
-        "row": 3,
-        "pdf_page": 1,
-        "text": "福建水師提督黃仕簡乾隆五十一年十二月二十七日（硃批）"
-      }
-    ],
-    "opening_formula": {
-      "part_id": "opening-formula",
-      "part_type": "opening_formula",
-      "pdf_pages": [
-        1
-      ],
-      "text": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。"
-    }
-  },
-  "page_numbers": [
-    {
-      "pdf_page": 1,
-      "printed_page_number": "80"
-    },
-    {
-      "pdf_page": 2,
-      "printed_page_number": "81"
-    }
-  ],
-  "paragraphs": [
-    {
-      "part_id": "paragraph-1",
-      "part_type": "paragraph",
-      "pdf_pages": [
-        1,
-        2
-      ],
-      "sentences": [
-        {
-          "sentence_id": "paragraph-1-sentence-1",
-          "text": "竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-2",
-          "text": "茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-3",
-          "text": "至午刻，縣城被陷，文武官員不知生死之事。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-4",
-          "text": "查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-5",
-          "text": "其謀為不軌，肆行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-6",
-          "text": "雖未准臺灣鎮道等報到，未知虛實，急當預為查辦征剿。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-7",
-          "text": "奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-8",
-          "text": "一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，封備商哨船只齊足。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-9",
-          "text": "奴才冬間舊染風症雖復時愈時發現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕所有廈門地方札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-10",
-          "text": "又慮賊匪聞拿竄逃內地，飛札撫臣陸路提臣藩臬兩司興泉道及水師各鎮協營並臺灣鎮道一體嚴飭營縣在於各口岸要隘，堵緝盤拿。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-11",
-          "text": "仍擬續調水陸官兵酌由鹿耳門淡水南北兩路夾攻在案。",
-          "pdf_pages": [
-            1
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-12",
-          "text": "現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-13",
-          "text": "奴才於初十日帶領官兵登舟候風放洋飛渡之際，接據署北路淡水同知程峻守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐擒捕未獲。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-14",
-          "text": "十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜本縣俞在大墩地方拿匪被害二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要「處所，分頭堵禦，一面救援。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-15",
-          "text": "第兵力單薄道路隔絕伏祈迅發大兵拯救再彰城失陷被害文武官員若干，此時探聽維艱未知的實，俟查確另稟。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-1-sentence-16",
-          "text": "等情前來。",
-          "pdf_pages": [
-            2
-          ]
-        }
-      ]
-    },
-    {
-      "part_id": "paragraph-2",
-      "part_type": "paragraph",
-      "pdf_pages": [
-        2
-      ],
-      "sentences": [
-        {
-          "sentence_id": "paragraph-2-sentence-1",
-          "text": "查，奴才原擬淡水一路，已屬必須由此救援夾攻。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-2-sentence-2",
-          "text": "省城直對淡水，際此北風當令，渡往甚易。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-2-sentence-3",
-          "text": "除星飛咨行陸路提臣水師海壇閩安烽火各鎮協營，立就近省營分續調官兵北路援剿。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-2-sentence-4",
-          "text": "奴才直由鹿耳門郡城南路進兵，會督夾攻。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-2-sentence-5",
-          "text": "容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。",
-          "pdf_pages": [
-            2
-          ]
-        },
-        {
-          "sentence_id": "paragraph-2-sentence-6",
-          "text": "謹奏。",
-          "pdf_pages": [
-            2
-          ]
-        }
-      ]
-    }
-  ],
-  "zhu_area": {
-    "selection": "last_two_zhupi_regions",
-    "lines": [
-      {
-        "line_id": "zhu-1",
-        "order": 1,
-        "position": "inline",
-        "text": "（硃批：仍以調養為要勿過勞）",
-        "pdf_page": 2
-      },
-      {
-        "line_id": "zhu-2",
-        "order": 2,
-        "position": "footer",
-        "text": "乾隆五十一年十二月二十七日奉硃批：已有旨了。欽此。〔本文原收錄於軍錄]",
-        "pdf_page": 2
-      }
-    ]
-  },
-  "footer": {
-    "date": {
-      "part_id": "footer-date",
-      "part_type": "footer",
-      "pdf_pages": [
-        2
-      ],
-      "text": "乾隆五十一年十二月初十日"
-    }
   },
   "notes": {
     "paragraph_boundary_method": "Source-layout anchors: the indented 竊照 paragraph continues across the page break; the indented 查 paragraph starts a new part on page 81.",
