@@ -3545,3 +3545,24 @@ Verified:
 
 Remaining:
 - None for this requested Part 3 numbering and navigation adjustment.
+
+### 2026-08-04 15:11 HKT — Codex — Added the Chinese reference-style rule
+
+Summary:
+- Added a rule requiring AI agents to consult the PolyU Chinese writing-format
+  PDF before writing or revising Chinese footnotes, citations, or bibliographies.
+- Recorded the PDF's key conventions for Chinese quotation marks, title marks,
+  footnote placement, first/subsequent citations, and bibliography forms.
+
+Files changed:
+- `AGENT.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Extracted and visually reviewed the nine-page PDF before writing the rule.
+- Confirmed the rule preserves unresolved source details instead of inventing
+  citation metadata.
+
+Remaining:
+- Apply this reference rule to future Chinese citations and bibliography edits.

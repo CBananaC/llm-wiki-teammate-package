@@ -46,6 +46,49 @@ sample review tool in section 1.5.
   `yu_source`, and `official_reply_to_yu` when they appear in reviewed data or
   documentation.
 
+## Chinese reference style
+
+Whenever writing or revising a Chinese footnote, citation, or bibliography
+entry, first consult:
+
+`/Users/creamybanana/Documents/Poly Info/中文論文格式.pdf`
+
+This PDF is the style authority for Chinese references in this project. Do not
+rely on memory when the PDF is available, and do not invent missing authors,
+titles, publication details, dates, volume numbers, or pages. Mark unresolved
+details explicitly, such as `頁碼待核`, or ask the user for the source data.
+
+Apply these core rules from the PDF:
+
+- Use Traditional Chinese and new-style Chinese punctuation consistently.
+- Use `「」` for ordinary Chinese quotations and `『』` for a quotation inside
+  another quotation.
+- Use `《》` for books, journals, newspapers, and magazines. Use `〈〉` for an
+  article, chapter, thesis title, or newspaper article title. For an ancient
+  work with a chapter title, use the combined form such as
+  `《史記．刺客列傳》`.
+- Put Arabic footnote numbers after the punctuation mark, without square
+  brackets. Do not use `同上`, `同前書`, `ibid.`, `Op. cit.`, `loc. cit.`, or
+  similar cross-reference shortcuts.
+- For a Chinese monograph's first citation, use
+  `作者，《書名》（出版地：出版者，年份），頁15-18。` Subsequent citations
+  omit the publication details. A bibliography entry uses
+  `作者，《書名》。出版地：出版者，年份。`
+- For a Chinese journal article, use
+  `作者，〈篇名〉，《期刊名稱》，卷期（出版地，年月），頁碼。` in a note;
+  follow the PDF's separate bibliography form for the final reference list.
+- For a chapter in an edited volume, preserve the order `作者，〈篇名〉，收入
+  編者編，《書名》` and then give the publication details and page range.
+- For a Chinese master's or doctoral thesis, use the author, `〈論文題名〉`,
+  institution and thesis type, year, and pages in the order shown in the PDF.
+- For multi-volume or reproduced ancient works, include `卷`/`冊` and edition
+  information in the note when required; omit the note-only volume and page
+  details from the bibliography when the PDF instructs it.
+
+Use English quotation marks only when reproducing an English source's own
+title or wording. Keep the reference's source evidence separate from the
+website's interpretation.
+
 ## Website architecture
 
 - Keep `Website/storymap/storymap-example.html` structural. Its main responsibilities
