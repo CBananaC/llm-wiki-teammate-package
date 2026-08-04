@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>3. 重用平台的基本流程 — 箭頭形步驟（數字置頂／單雙數配色）</title>
+<style>
+  :root{
+    --ink:#163d3f;
+    --yellow:#f3c967;
+    --paper:#f4efe6;
+    --card:#fffaf2;
+    --paper-deep:#e8dfd1;
+    --line:rgba(22,61,63,.18);
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, "PingFang TC", sans-serif;
+    --serif: "Noto Serif TC", Georgia, serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:48px 24px 120px; background:#eee7d8; color:var(--ink);
+    font-family:var(--sans);
+  }
+  .page-title{max-width:1200px;margin:0 auto 8px;font:800 26px/1.3 var(--serif);}
+  .page-note{max-width:1200px;margin:0 auto 44px;color:#5a5347;font-size:14px;}
+  .option{max-width:1200px;margin:0 auto 12px;}
+  .frame{padding:28px; background:var(--paper); border:1px solid var(--line); border-radius:2px;}
+
+  .chev{display:flex;}
+  .step{
+    position:relative; flex:1 1 0; min-width:0;
+    display:flex; flex-direction:column; align-items:center; justify-content:flex-start; text-align:center;
+    padding:20px 20px 18px; margin-left:-14px; min-height:112px;
+    clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
+    transition:.18s; color:var(--ink);
+  }
+  .step:first-child{margin-left:0; clip-path:polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%);}
+  .step .step-no{font:800 20px var(--serif); line-height:1; height:20px; margin-bottom:10px;}
+  .step .label{font-size:12.5px; font-weight:600; line-height:1.4;}
+
+  /* unhovered: odd steps one colour, even steps another */
+  .step:nth-child(odd){background:var(--card);}
+  .step:nth-child(odd) .step-no{color:#8a6a1a;}
+  .step:nth-child(even){background:var(--paper-deep);}
+  .step:nth-child(even) .step-no{color:var(--ink); opacity:.6;}
+
+  /* hover: single shared state */
+  .step:hover{background:var(--ink); color:var(--paper);}
+  .step:hover .step-no{color:var(--yellow); opacity:1;}
+
+  /* narrow screens: stack into a vertical chevron chain, V on top and bottom of every middle card */
+  @media (max-width:760px){
+    .chev{flex-direction:column;}
+    .step{
+      flex:none; width:100%; margin-left:0; min-height:0;
+      padding:38px 20px 24px; margin-top:-18px;
+      clip-path:polygon(0 0, 50% 18px, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px));
+    }
+    .step:first-child{
+      margin-top:0; padding-top:22px;
+      clip-path:polygon(0 0, 100% 0, 100% calc(100% - 18px), 50% 100%, 0 calc(100% - 18px));
+    }
+    .step .step-no{margin-bottom:6px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-title">3. 重用平台的基本流程 — 箭頭形步驟</div>
+  <div class="page-note">數字置於卡片上方、名稱在下。未 hover 時：單數步驟用米白底＋赭黃編號，雙數步驟用略深米卡其底＋墨綠編號，兩者交錯呈現節奏感。滑鼠移入時統一變為墨綠底、米白字、黃色編號。</div>
+
+  <div class="option">
+    <div class="frame">
+      <div class="chev">
+        <div class="step"><span class="step-no">1</span><span class="label">選定研究主題與史料</span></div>
+        <div class="step"><span class="step-no">2</span><span class="label">OCR 並結構化原始史料</span></div>
+        <div class="step"><span class="step-no">3</span><span class="label">調整 AI Skills</span></div>
+        <div class="step"><span class="step-no">4</span><span class="label">執行 AI 分析</span></div>
+        <div class="step"><span class="step-no">5</span><span class="label">載入網站核驗</span></div>
+        <div class="step"><span class="step-no">6</span><span class="label">修改及擴展平台</span></div>
+        <div class="step"><span class="step-no">7</span><span class="label">保存分析結果</span></div>
+        <div class="step"><span class="step-no">8</span><span class="label">後續研究</span></div>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

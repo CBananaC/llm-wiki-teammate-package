@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260804-content-height-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260804-content-height-01">
+  <link rel="stylesheet" href="storymap.css?v=20260804-flow-step-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260804-flow-step-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js" defer></script>
+  <script src="storymap.js?v=20260804-agentic-ai-4screens" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -931,47 +931,66 @@
                   </article>
                   <article class="part3-tool-info-view" data-part3-tool-info="agentic-ai" hidden>
                     <figure class="part3-tool-info-photo">
-                      <!-- Agentic AI 動畫場景：寵物機械人＋Terminal＋VS Code，取代原本的靜態照片。
-                           指令與程式碼文字由 storymap.js 的 initAgenticScene() 逐行播放並循環。
-                           外觀與持續性動畫（擺動、眨眼、游標閃爍）定義在 storymap.css 的 9d 節。 -->
+                      <!-- Agentic AI 動畫場景：Codex pet＋四個取自實際專案檔案的工作視窗。
+                           每個視窗的寬度、高度、位置、字級和傾斜角度在 storymap-cards.css 的
+                           #part-3-tools-card 區塊調整；內容由 storymap.js 逐行播放。 -->
                       <div class="agentic-scene" data-agentic-scene aria-hidden="true">
-                        <div class="agentic-mac-window agentic-win-terminal">
-                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span>terminal — ai-skills</span></div>
-                          <div class="agentic-mac-body" data-agentic-terminal>
-                            <script type="application/json" data-agentic-terminal-lines>
+                        <div class="agentic-mac-window agentic-window-terminal" data-agentic-window="terminal">
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">terminal — official loop</span></div>
+                          <div class="agentic-window-body agentic-terminal-body" data-agentic-sequence>
+                            <script type="application/json" data-agentic-lines>
                               [
-                                "<span class=\"prompt\">$</span> run-skill zhu-summary --input 硃110.json",
-                                "<span class=\"out\">載入文書中...</span>",
-                                "<span class=\"out\">呼叫 Agentic AI 分析原文段落</span>",
-                                "<span class=\"ok\">✓ 已提取關鍵資訊，輸出至 result.json</span>"
+                                "<span class=\"prompt\">$</span> python3 &quot;tool/scripts py/run_mass_prompt_chain_test.py&quot;",
+                                "<span class=\"arg\">--doc-ids</span> 硃25,硃42 <span class=\"arg\">--bundle</span> zhu-december-official-loop",
+                                "<span class=\"out\">硃25 → quick-summary → divide-into-parts → extract-lin-actions</span>",
+                                "<span class=\"out\">硃42 → source-chain → emperor-actions → official-response</span>",
+                                "<span class=\"ok\">✓ outputs/summary.json · qing-actions-all.json · official-response.json</span>"
                               ]
                             </script>
                           </div>
                         </div>
-                        <div class="agentic-mac-window agentic-win-vscode">
-                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span>storymap.js — VS Code</span></div>
-                          <div class="agentic-mac-body">
-                            <div class="agentic-code" data-agentic-code>
-                              <script type="application/json" data-agentic-code-lines>
+                        <div class="agentic-mac-window agentic-window-html" data-agentic-window="html">
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">review-tools/(2) sample/index.html</span></div>
+                          <div class="agentic-window-body agentic-code" data-agentic-sequence>
+                            <script type="application/json" data-agentic-lines>
                                 [
-                                  "<span class=\"cmt\">// 讀取 AI Skill 設定，逐份分析結構化文書</span>",
-                                  "<span class=\"kw\">import</span> { extract } <span class=\"kw\">from</span> <span class=\"str\">'./ai-skills.js'</span>;",
-                                  "",
-                                  "<span class=\"kw\">const</span> <span class=\"fn\">runSkill</span> = <span class=\"kw\">async</span> (doc) => {",
-                                  "&nbsp;&nbsp;<span class=\"kw\">const</span> result = <span class=\"kw\">await</span> ai.<span class=\"fn\">extract</span>(doc, <span class=\"str\">\"zhu-summary\"</span>);",
-                                  "&nbsp;&nbsp;<span class=\"kw\">return</span> { id: doc.id, ...result };",
-                                  "};",
-                                  "",
-                                  "<span class=\"cmt\">// 批次處理整個資料夾內的文書</span>",
-                                  "<span class=\"kw\">for</span> (<span class=\"kw\">const</span> doc <span class=\"kw\">of</span> documents) {",
-                                  "&nbsp;&nbsp;<span class=\"kw\">const</span> output = <span class=\"kw\">await</span> <span class=\"fn\">runSkill</span>(doc);",
-                                  "&nbsp;&nbsp;results.<span class=\"fn\">push</span>(output);",
-                                  "}",
-                                  "",
-                                  "<span class=\"kw\">await</span> <span class=\"fn\">writeJSON</span>(<span class=\"str\">'result.json'</span>, results);"
+                                  "<span class=\"cmt\">&lt;!-- review-tools/(2) sample/index.html --&gt;</span>",
+                                  "<span class=\"kw\">const</span> STAGE1_SOURCE_PATH = <span class=\"str\">'/shared/stage1_original_text.json'</span>;",
+                                  "<span class=\"kw\">const</span> stage1Payload = <span class=\"kw\">await</span> fetch(STAGE1_SOURCE_PATH);",
+                                  "<span class=\"kw\">const</span> stage1ById = <span class=\"kw\">new</span> Map(stage1Docs.map(doc =&gt; [doc.doc_id, doc]));",
+                                  "<span class=\"fn\">renderDualTimeline</span>(stage1ById);"
                                 ]
                               </script>
-                            </div>
+                          </div>
+                        </div>
+                        <div class="agentic-mac-window agentic-window-ocr" data-agentic-window="ocr">
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">OCR → stage1_original_text.json</span></div>
+                          <div class="agentic-window-body agentic-code agentic-ocr-text" data-agentic-sequence>
+                            <script type="application/json" data-agentic-lines>
+                              [
+                                "<span class=\"cmt\">硃25｜OCR output → structured source</span>",
+                                "<span class=\"meta\">doc_id:</span> 硃25",
+                                "<span class=\"meta\">title:</span> 為奏彰化失陷已調兵赴臺事",
+                                "<span class=\"ocr-text-line\">福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。</span>",
+                                "<span class=\"ocr-text-line\">茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨。</span>",
+                                "<span class=\"ok\">rescript_text: 已有旨了。欽此。</span>"
+                              ]
+                            </script>
+                          </div>
+                        </div>
+                        <div class="agentic-mac-window agentic-window-skills" data-agentic-window="skills">
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">tool/skills md/official-document-review-loop.md</span></div>
+                          <div class="agentic-window-body agentic-code agentic-skill-text" data-agentic-sequence>
+                            <script type="application/json" data-agentic-lines>
+                              [
+                                "<span class=\"cmt\"># Skill: 官文優先 AI 審閱迴圈</span>",
+                                "<span class=\"kw\">1.</span> 摘要 — quick-summary.md",
+                                "<span class=\"kw\">2.</span> 分段 — divide-into-parts.md",
+                                "<span class=\"kw\">3.</span> 林方事件 — extract-lin-actions.md",
+                                "<span class=\"kw\">4.</span> 清方行動 — extract-qing-actions-all.md",
+                                "<span class=\"ok\">✓ output: review bundle → human review</span>"
+                              ]
+                            </script>
                           </div>
                         </div>
                         <div class="agentic-pet-wrap">
@@ -1020,8 +1039,15 @@
                 <div class="body"><p>有準備好以上的工具後，研究者可以按照以下流程，把平台應用於新的研究主題：</p></div>
               </article>
               <div class="part3-flow-frame" id="part-3-basic-flow-chart" role="group" aria-label="選定研究主題與史料 → OCR 並結構化原始史料→ 調整 AI Skills → 執行 AI 分析 → 載入網站核驗 → 修改及擴展平台 → 保存分析結果→後續研究">
-                <div class="workflow-chain">
-                  <span class="workflow-node">選定研究主題與史料</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">OCR 並結構化原始史料</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">調整 AI Skills</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">執行 AI 分析</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">載入網站核驗</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">修改及擴展平台</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">保存分析結果</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">後續研究</span>
+                <div class="part3-flow-chev">
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">1</span><span class="part3-flow-step-label">選定研究主題與史料</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">2</span><span class="part3-flow-step-label">OCR 並結構化原始史料</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">3</span><span class="part3-flow-step-label">調整 AI Skills</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">4</span><span class="part3-flow-step-label">執行 AI 分析</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">5</span><span class="part3-flow-step-label">載入網站核驗</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">6</span><span class="part3-flow-step-label">修改及擴展平台</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">7</span><span class="part3-flow-step-label">保存分析結果</span></div>
+                  <div class="part3-flow-step"><span class="part3-flow-step-no">8</span><span class="part3-flow-step-label">後續研究</span></div>
                 </div>
               </div>
             </div>
@@ -1038,9 +1064,53 @@
               <div class="blk" style="margin-bottom:var(--head-gap)">
                 <div class="title-row"><h2>1. 甚麼是 OCR？</h2></div>
               </div>
-              <div class="part3-two-card-grid">
-                <article class="copybox blk" id="part-3-ocr-definition-card-1"><div class="body"><p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p></div></article>
-                <article class="copybox blk" id="part-3-ocr-definition-card-2"><div class="body"><p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p></div></article>
+              <div class="part3-ocr-def-layout">
+                <div class="part3-two-card-grid">
+                  <article class="copybox blk" id="part-3-ocr-definition-card-1"><div class="body"><p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p></div></article>
+                  <article class="copybox blk" id="part-3-ocr-definition-card-2"><div class="body"><p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p></div></article>
+                </div>
+
+                <!-- OCR 掃描動畫：兩份同一份文書（硃25）的不同版面（手抄本／刊本）
+                     各自循環翻頁（由右至左），下方以 VS Code 風格視窗逐字打出
+                     結構化後的 JSON。內容與圖片來源見 storymap.js 的 initOcrScanScene()
+                     與本檔內的 <script type="application/json"> 區塊。 -->
+                <div class="ocr-scan-scene" data-ocr-scene aria-hidden="true">
+                  <div class="ocr-pages">
+                    <div class="ocr-filestack handwritten">
+                      <div class="ocr-page">
+                        <img class="ocr-page-img" src="ocr-zhu25-handwritten-1.png" alt="" data-ocr-page-img>
+                        <span class="ocr-scan-line" aria-hidden="true"></span>
+                        <script type="application/json" data-ocr-pages>
+                          ["ocr-zhu25-handwritten-1.png","ocr-zhu25-handwritten-2.png","ocr-zhu25-handwritten-3.png","ocr-zhu25-handwritten-4.png"]
+                        </script>
+                      </div>
+                    </div>
+                    <div class="ocr-filestack printed">
+                      <div class="ocr-page">
+                        <img class="ocr-page-img" src="ocr-zhu25-printed-1.png" alt="" data-ocr-page-img>
+                        <span class="ocr-scan-line" style="--scan-delay: 1.6s" aria-hidden="true"></span>
+                        <script type="application/json" data-ocr-pages>
+                          ["ocr-zhu25-printed-1.png","ocr-zhu25-printed-2.png"]
+                        </script>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="ocr-output">
+                    <div class="ocr-output-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="file">硃25.json</span></div>
+                    <div class="ocr-output-body" data-ocr-output>
+                      <script type="application/json" data-ocr-output-lines>
+                        [
+                          "<span class=\"punc\">{</span>",
+                          "&nbsp;&nbsp;<span class=\"key\">\"doc_id\"</span><span class=\"punc\">:</span> <span class=\"str\">\"硃25\"</span><span class=\"punc\">,</span>",
+                          "&nbsp;&nbsp;<span class=\"key\">\"title\"</span><span class=\"punc\">:</span> <span class=\"str\">\"為奏彰化失陷已調兵赴臺事\"</span><span class=\"punc\">,</span>",
+                          "&nbsp;&nbsp;<span class=\"key\">\"body\"</span><span class=\"punc\">:</span> <span class=\"str\">\"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治，乃該匪等竟膽敢聚眾攻陷城池。其謀為不軌，四行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。雖未准臺灣鎮、道等報到，未知虛實，急當預為查辦征剿。奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。奴才於初十日帶領官兵登舟候風放洋飛渡之際（硃批：仍以調養為要，勿過勞），接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。奴才直由鹿耳門、郡城南路進兵，會督夾攻。容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。謹奏。\"</span>",
+                          "<span class=\"punc\">}</span>"
+                        ]
+                      </script>
+                    </div>
+                  </div>
+                </div>
               </div>
             </div>
           </section>

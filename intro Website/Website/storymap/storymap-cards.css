@@ -557,7 +557,7 @@
 /* Part 3.3.1 — Section defaults: 重用平台的基本流程 (#part-3-basic-flow) */
 #part-3-basic-flow {
   --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
+  --part3-card-max-width: 100ch;
   --part3-card-height: auto;
   --part3-card-min-height: 0;
   --part3-card-padding: clamp(18px, 1.8vw, 26px);
@@ -641,14 +641,14 @@
 
 /* Part 3.4.2.3 — OCR 掃描動畫 */
 #part-3-ocr-definition {
-  --ocr-scene-column-w: 65%;     /* 動畫佔 Part 3.4 內容寬度的比例 */
+  --ocr-scene-column-w: 60%;     /* 動畫佔 Part 3.4 內容寬度的比例 */
 }
 
 #part-3-ocr-definition .ocr-scan-scene {
   --ocr-scene-max-w: 1000px;      /* 整個視覺元素的寬度上限 */
   --ocr-pages-gap: 7%;           /* 兩份文書之間的間距 */
 
-  --ocr-hw-w: 58%;               /* 手抄本佔兩份文書總寬度的比例 */
+  --ocr-hw-w: 55%;               /* 手抄本佔兩份文書總寬度的比例 */
   --ocr-hw-aspect: 1.1 / 1;      /* 手抄本框的寬高比 */
   --ocr-hw-rotate: -2deg;        /* 手抄本的傾斜角度 */
 
@@ -661,11 +661,11 @@
   --ocr-scan-speed: 3.6s;        /* 掃描光暈跑完一輪（頂到底）所需時間 */
 
   --ocr-output-h: 12em;          /* JSON 輸出視窗的固定高度，超過會自動往上捲動 */
-  --ocr-output-font-size: 11.5px; /* JSON 文字字級 */
-  --ocr-output-line-height: 1.75; /* JSON 文字行距 */
-  --ocr-output-w: 100%;           /* JSON 輸出視窗寬度，可改成 80%、420px 等 */
+  --ocr-output-w: 70%;           /* JSON 輸出視窗寬度，可改成 80%、420px 等 */
+  --ocr-output-font-size: 16px; /* JSON 文字字級 */
+  --ocr-output-line-height: 1.5; /* JSON 文字行距 */
   --ocr-output-font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
-  --ocr-output-file-font-size: 11px; /* 上方檔案名稱字級 */
+  --ocr-output-file-font-size: 0px; /* 上方檔案名稱字級 */
 }
 
 /* Part 3.4.3 — PaddleOCR */
@@ -962,6 +962,33 @@
   --part3-tools-info-title-size: clamp(36px, 4.8vw, 66px);
   --part3-tools-info-body-size: clamp(20px, 1.8vw, 27px);
   --part3-tools-info-padding: clamp(24px, 4vw, 48px);
+
+  /* Agentic AI 四個視窗：每個視窗均可獨立調整寬、高、左／上位置、
+     內容字級和傾斜角度。位置用百分比，傾斜角度用 deg。 */
+  --agentic-terminal-width: 45%;
+  --agentic-terminal-height: 43%;
+  --agentic-terminal-left: 2%;
+  --agentic-terminal-top: 5%;
+  --agentic-terminal-font-size: 10px;
+  --agentic-terminal-angle: -5deg;
+  --agentic-html-width: 43%;
+  --agentic-html-height: 46%;
+  --agentic-html-left: 54%;
+  --agentic-html-top: 3%;
+  --agentic-html-font-size: 10px;
+  --agentic-html-angle: 4deg;
+  --agentic-ocr-width: 43%;
+  --agentic-ocr-height: 39%;
+  --agentic-ocr-left: 5%;
+  --agentic-ocr-top: 51%;
+  --agentic-ocr-font-size: 10px;
+  --agentic-ocr-angle: 3deg;
+  --agentic-skills-width: 43%;
+  --agentic-skills-height: 39%;
+  --agentic-skills-left: 54%;
+  --agentic-skills-top: 51%;
+  --agentic-skills-font-size: 10px;
+  --agentic-skills-angle: -4deg;
 }
 
 /* Part 3.3.2 — Text block: #part-3-basic-flow-card */
@@ -990,6 +1017,8 @@
   --part3-flow-min-height: 0;
   --part3-flow-padding: clamp(18px, 2.4vw, 32px);
   --part3-flow-node-size: calc(15px * var(--font-scale));
+  --part3-flow-step-height: 170px;
+  --part3-flow-step-number-gap: 22px;
 }
 
 /* Part 3.5.2.1 — Card 1: #part-3-ai-skills-card-1 */

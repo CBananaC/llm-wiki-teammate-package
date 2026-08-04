@@ -599,7 +599,7 @@ document.addEventListener('click', (event) => {
   const documentMeta = fileStack.classList.contains('handwritten')
     ? {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
-        description: '《宮中檔奏摺—乾隆朝》，黃仕簡〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院《清代檔案檢索系統》。瀏覽日期：2026/08/04。PDF：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l；系統頁：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l'
+        description: '《宮中檔奏摺—乾隆朝》，黃仕簡 奏，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院《清代檔案檢索系統》。瀏覽日期：2026/08/04。PDF：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l；系統頁：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l'
       }
     : {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
@@ -877,9 +877,9 @@ const initPart3ToolsChecklist = () => {
 initPart3ToolsChecklist();
 
 /* ---------------------------------------------------------------------------
-   Agentic AI 動畫場景：Terminal 與 VS Code 逐字「打出來」再整段清空重播。
-   內容（含語法標色用的 <span>）寫在 storymap-example.html 裡對應的
-   <script type="application/json"> 區塊，這裡只負責播放。
+   Agentic AI 動畫場景：四個實際專案工作視窗逐字「打出來」再整段清空重播。
+   每個視窗的內容（含語法標色用的 <span>）寫在 storymap-example.html 裡
+   對應的 <script type="application/json"> 區塊，這裡只負責播放。
    --------------------------------------------------------------------------- */
 const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
 
@@ -946,47 +946,47 @@ const typeAgenticSequence = (host, lines, { charDelay = 26, lineDelay = 450, hol
   return () => { cancelled = true; };
 };
 
+// 讀取一個元素內第一個 <script type="application/json"> 的內容並解析成陣列。
+// Agentic AI 與 OCR 兩組動畫的文字／頁面清單都用這個共用小工具讀取。
+const parseJsonScript = (host) => {
+  const script = host.querySelector('script[type="application/json"]');
+  if (!script) return [];
+  try {
+    return JSON.parse(script.textContent);
+  } catch (error) {
+    return [];
+  }
+};
+
 const initAgenticScene = () => {
   document.querySelectorAll('[data-agentic-scene]').forEach((scene) => {
-    const terminalHost = scene.querySelector('[data-agentic-terminal]');
-    const codeHost = scene.querySelector('[data-agentic-code]');
-    if (!terminalHost || !codeHost) return;
-
-    const parseLines = (host) => {
-      const script = host.querySelector('script[type="application/json"]');
-      if (!script) return [];
-      try {
-        return JSON.parse(script.textContent);
-      } catch (error) {
-        return [];
-      }
-    };
-    const terminalLines = parseLines(terminalHost);
-    const codeLines = parseLines(codeHost);
-    if (!terminalLines.length || !codeLines.length) return;
+    const sequences = [...scene.querySelectorAll('[data-agentic-sequence]')]
+      .map((host) => ({ host, lines: parseJsonScript(host) }))
+      .filter((item) => item.lines.length);
+    if (!sequences.length) return;
 
     // 使用者要求減少動態效果時，直接顯示完整內容，不逐字播放。
     if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
       const renderStatic = (host, lines) => {
         host.innerHTML = lines.map((line) => `<span class="line">${line}</span>`).join('');
       };
-      renderStatic(terminalHost, terminalLines);
-      renderStatic(codeHost, codeLines);
+      sequences.forEach(({ host, lines }) => renderStatic(host, lines));
       return;
     }
 
-    let stopTerminal = null;
-    let stopCode = null;
+    let stops = [];
     const start = () => {
-      if (stopTerminal || stopCode) return;
-      stopTerminal = typeAgenticSequence(terminalHost, terminalLines, { charDelay: 22, lineDelay: 500, holdTime: 2600, clearDelay: 500 });
-      stopCode = typeAgenticSequence(codeHost, codeLines, { charDelay: 30, lineDelay: 380, holdTime: 2600, clearDelay: 500 });
+      if (stops.length) return;
+      stops = sequences.map(({ host, lines }) => typeAgenticSequence(host, lines, {
+        charDelay: Number(host.dataset.agenticCharDelay) || 26,
+        lineDelay: Number(host.dataset.agenticLineDelay) || 420,
+        holdTime: Number(host.dataset.agenticHoldTime) || 2600,
+        clearDelay: Number(host.dataset.agenticClearDelay) || 500
+      }));
     };
     const stop = () => {
-      stopTerminal?.();
-      stopCode?.();
-      stopTerminal = null;
-      stopCode = null;
+      stops.forEach((cancel) => cancel());
+      stops = [];
     };
 
     // 畫面不在可視範圍（包含被 checklist 切到 hidden）時暫停播放，省資源。
@@ -1000,6 +1000,86 @@ const initAgenticScene = () => {
   });
 };
 initAgenticScene();
+
+/* ---------------------------------------------------------------------------
+   OCR 掃描動畫（「甚麼是 OCR？」）：兩份文書的頁面各自循環切換，
+   下方 JSON 輸出區沿用 Agentic AI 動畫同一套逐字打字技巧（typeAgenticSequence）。
+   --------------------------------------------------------------------------- */
+
+// 把一張圖片換成下一頁：先淡出移到左邊，換圖後瞬間跳到右邊（不轉場），
+// 再讓轉場動畫把它帶回中間，畫面上就是「從右邊翻頁進來」的效果。
+const cycleOcrPage = (img, pages, { interval = 3400, turnMs = 420 } = {}) => {
+  if (pages.length < 2) return () => {};
+  let index = 0;
+  let stopped = false;
+  const timer = window.setInterval(() => {
+    if (stopped) return;
+    img.classList.add('is-turning');
+    window.setTimeout(() => {
+      if (stopped) return;
+      index = (index + 1) % pages.length;
+      img.src = pages[index];
+      img.classList.add('is-jumping');
+      void img.offsetWidth; // 強制 reflow，讓「跳到右側」不被轉場動畫拖慢
+      img.classList.remove('is-jumping');
+      img.classList.remove('is-turning');
+    }, turnMs);
+  }, interval);
+  return () => { stopped = true; window.clearInterval(timer); };
+};
+
+const initOcrScanScene = () => {
+  document.querySelectorAll('[data-ocr-scene]').forEach((scene) => {
+    const pageImgs = [...scene.querySelectorAll('[data-ocr-page-img]')];
+    const outputHost = scene.querySelector('[data-ocr-output]');
+    if (!pageImgs.length || !outputHost) return;
+
+    const pageSets = pageImgs.map((img) => {
+      const script = img.parentElement.querySelector('script[data-ocr-pages]');
+      if (!script) return [];
+      try {
+        return JSON.parse(script.textContent);
+      } catch (error) {
+        return [];
+      }
+    });
+
+    const outputLines = parseJsonScript(outputHost);
+    if (!outputLines.length) return;
+
+    // 使用者要求減少動態效果時，只顯示第一頁與完整 JSON，不逐字播放。
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      outputHost.innerHTML = outputLines.map((line) => `<span class="line">${line}</span>`).join('');
+      return;
+    }
+
+    let stopPages = [];
+    let stopOutput = null;
+    const start = () => {
+      if (stopPages.length || stopOutput) return;
+      // 兩份文書的翻頁間隔稍微錯開，避免同時翻頁顯得太整齊、不自然。
+      stopPages = pageImgs.map((img, i) => cycleOcrPage(img, pageSets[i], { interval: 3200 + i * 700 }));
+      // body 欄位是全文，字數較多，打字間隔調快一點，避免跑完一輪要等太久。
+      stopOutput = typeAgenticSequence(outputHost, outputLines, { charDelay: 9, lineDelay: 220, holdTime: 3600, clearDelay: 500 });
+    };
+    const stop = () => {
+      stopPages.forEach((fn) => fn());
+      stopOutput?.();
+      stopPages = [];
+      stopOutput = null;
+    };
+
+    // 畫面不在可視範圍時暫停播放，省資源。
+    if (typeof IntersectionObserver === 'function') {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => { entry.isIntersecting ? start() : stop(); });
+      }, { threshold: .1 }).observe(scene);
+    } else {
+      start();
+    }
+  });
+};
+initOcrScanScene();
 
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';

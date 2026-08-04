@@ -3456,3 +3456,67 @@ Verified:
 
 Remaining:
 - Full-screen click navigation should receive a final in-app visual check after the StoryMap scroll position is focused on the OCR section.
+
+### 2026-08-04 14:46 HKT — Codex — Increase basic-flow step spacing and height
+
+Summary: Increased the vertical gap between each workflow number and its title, and increased the minimum height of every chevron step in `3. 重用平台的基本流程`. The values are controlled by the workflow card’s CSS variables.
+
+Files: `Website/storymap/storymap.css`, `Website/storymap/storymap-cards.css`, `Website/storymap/storymap-example.html`, and this log.
+
+Verified: Browser preview loaded `storymap-cards.css?v=20260804-flow-step-01`; all eight steps measured 170px high with a 22px number-to-title gap. Existing workflow content remained intact.
+
+Remaining: None for the basic-flow spacing and height adjustment.
+
+### 2026-08-04 14:50 HKT — Codex — Correct OCR enlarged-window source references
+
+Summary: Updated the enlarged OCR page viewer so both document sequences show the shared article title, author, and sent date, while the handwritten pages show the full 《宮中檔奏摺—乾隆朝》 reference and both Qing archive links. The printed pages now use the website's concise `明清台檔30, 80, 硃25` reference.
+
+Files: `Website/storymap/storymap.js` and this log.
+
+Verified: `node --check Website/storymap/storymap.js` and `git diff --check` pass. Existing uncommitted workflow, OCR animation, CSS, PDF, and image changes were preserved.
+
+Remaining: None for the OCR enlarged-window reference text.
+
+### 2026-08-04 14:51 HKT — Codex — Rebuild Agentic AI scene with Codex pet and four real-data windows
+
+Summary:
+- Replaced the two-window Agentic AI animation in Part 3 with four independently positioned windows: the official AI loop terminal, review-tool HTML writing, 硃25 OCR output, and the official-document review skill.
+- Used real project commands, file paths, source-record fields, OCR snippets, and skill steps in the animated window data.
+- Restyled the blue robot toward the supplied Codex pet reference, including the fluffy blue head, dark terminal face with `> _`, and a cropped lower body so the full robot does not need to be shown.
+- Added independent CSS controls for each window's width, height, left/top position, font size, and 傾斜角度.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Four embedded Agentic AI data blocks parse successfully.
+- `node --check` passes for both StoryMap scripts.
+- HTTP browser preview shows all four windows animating behind the Codex pet; the configured dimensions, positions, font sizes, and angles are active, with no browser errors or warnings.
+- Focused `git diff --check` passes for all four edited StoryMap files.
+
+Remaining:
+- None for the Agentic AI four-window animation request.
+
+### 2026-08-04 14:54 HKT — Codex — Smooth and reduce the Agentic AI pet
+
+Summary:
+- Replaced the segmented blue-part outlines with continuous radial blue gradients and soft inset shading across the Codex pet’s head, body, and arms.
+- Removed the remaining hard borders from the pet components, including the terminal face panel, and reduced the pet container to `27%` width by `50%` height while keeping the lower body cropped.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- HTTP browser preview shows the smaller, borderless, gradient-shaded pet centered in front of the four animated windows.
+- Browser measurement reports `0px` borders for all eleven pet components and no console errors or warnings.
+- Focused `git diff --check` passes for the edited StoryMap CSS.
+
+Remaining:
+- None for the Agentic AI pet refinement request.

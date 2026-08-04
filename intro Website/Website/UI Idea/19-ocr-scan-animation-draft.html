@@ -34,56 +34,79 @@
   .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
   .copybox p { margin: 0; color: var(--text); font: var(--body-weight) 15px/1.9 var(--serif); }
 
-  /* ---- 正方形視覺元素：掃描動畫舞台 ---- */
+  /* ---- 視覺元素：不再是滿版正方形，改成自然靠左的一塊，
+         寬度小於欄位本身，看起來像放在留白裡的一組實物，而不是撐滿的面板。 ---- */
   .ocr-stage {
-    position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
-    background: radial-gradient(circle at 22% 16%, rgba(196,93,56,.16), transparent 42%),
+    position: relative; width: 88%; max-width: 460px;
+    padding: clamp(20px, 2.4vw, 30px) clamp(18px, 2.2vw, 26px) clamp(24px, 2.6vw, 32px);
+    background: radial-gradient(circle at 22% 16%, rgba(91,141,239,.14), transparent 46%),
                 linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
     border: 1px solid var(--line); box-shadow: 0 16px 34px rgba(22,61,63,.18);
-    display: flex; flex-direction: column;
   }
 
-  /* 上方：兩份文書並排，各自是一個「掃描頁框」 */
-  .ocr-pages { flex: 0 0 62%; display: flex; gap: 3%; padding: 6% 5% 0; min-height: 0; }
+  /* 上方：兩份文書並排，各自「壓著幾張紙」放著，大小不一致，
+     模擬桌上隨手放的兩份文件，而不是兩個等大的面板。 */
+  .ocr-pages { display: flex; align-items: flex-end; gap: 7%; margin-bottom: clamp(18px, 2vw, 26px); }
+
+  .ocr-filestack { position: relative; }
+  .ocr-filestack.handwritten { flex: 0 0 58%; aspect-ratio: 1.1 / 1; transform: rotate(-2deg); }
+  .ocr-filestack.printed { flex: 0 0 34%; aspect-ratio: .63 / 1; transform: rotate(2.5deg); margin-bottom: 4%; }
+
+  /* 墊在下面的幾張紙：用兩個偏移、微旋轉的米色矩形，露出邊角 */
+  .ocr-filestack::before,
+  .ocr-filestack::after {
+    content: ""; position: absolute; inset: 0;
+    background: #efe6d3; border: 1px solid rgba(0,0,0,.08);
+    box-shadow: 0 6px 14px rgba(0,0,0,.28);
+  }
+  .ocr-filestack::before { transform: rotate(-4deg) translate(-4%, 3%); z-index: 1; }
+  .ocr-filestack::after { transform: rotate(3deg) translate(4%, -2%); z-index: 1; }
+
   .ocr-page {
-    position: relative; flex: 1 1 0; min-width: 0; overflow: hidden;
-    background: #2a2f2e; border-radius: 4px;
-    box-shadow: 0 10px 20px rgba(0,0,0,.3);
+    position: relative; z-index: 2; inset: 0; width: 100%; height: 100%;
+    overflow: hidden; background: #efe6d3;
+    box-shadow: 0 10px 22px rgba(0,0,0,.32);
   }
   .ocr-page img {
     display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top;
-    filter: saturate(.9) contrast(1.02);
+    filter: saturate(.92) contrast(1.02);
   }
   .ocr-page-label {
-    position: absolute; z-index: 2; top: 6px; left: 6px;
+    position: absolute; z-index: 3; top: 6px; left: 6px;
     padding: 3px 7px; color: #f7f3ea; background: rgba(22,61,63,.82);
     font: 700 10px/1.3 var(--sans); letter-spacing: .04em;
   }
-  .ocr-page-count {
-    position: absolute; z-index: 2; right: 6px; bottom: 6px;
-    padding: 2px 7px; color: #f7f3ea; background: rgba(0,0,0,.5);
-    font: 700 10px/1 var(--sans); letter-spacing: .04em; border-radius: 2px;
-  }
-  /* 掃描線：草稿先固定在中間，之後動畫會讓它左右／翻頁時移動 */
+  /* 掃描光暈：改成藍色，兩份文書各一條，草稿先固定在頁面中段 */
   .ocr-scan-line {
-    position: absolute; z-index: 3; inset: 0 0 auto 0; height: 34%;
-    background: linear-gradient(180deg, rgba(243,201,103,0) 0%, rgba(243,201,103,.22) 46%, rgba(243,201,103,0) 100%);
+    position: absolute; z-index: 4; inset: 0 0 auto 0; height: 34%;
+    background: linear-gradient(180deg, rgba(110,166,245,0) 0%, rgba(110,166,245,.32) 46%, rgba(110,166,245,0) 100%);
     mix-blend-mode: screen; pointer-events: none;
   }
-  .ocr-page-stack {
-    position: absolute; z-index: 1; inset: 3px 3px auto auto; width: 92%; height: 92%;
-    top: 3px; right: -3px;
-    box-shadow: -6px 6px 0 -3px rgba(255,255,255,.05), -12px 12px 0 -6px rgba(255,255,255,.03);
-    pointer-events: none;
-  }
 
-  /* 下方：OCR 輸出區，樣式呼應 Agentic AI 動畫的 terminal 視窗 */
-  .ocr-output { flex: 1 1 auto; margin: 5% 5% 6%; min-height: 0; display: flex; flex-direction: column; background: #1e1e1e; border-radius: 6px; overflow: hidden; box-shadow: 0 12px 22px rgba(0,0,0,.28); }
-  .ocr-output-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; background: #2b2b2b; border-bottom: 1px solid rgba(255,255,255,.06); }
-  .ocr-output-bar span.tag { color: rgba(255,255,255,.5); font: 700 10px/1 var(--sans); letter-spacing: .06em; }
-  .ocr-output-bar span.doc { color: #7fd88f; font: 700 10px/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
-  .ocr-output-body { flex: 1; min-height: 0; padding: 10px 12px; overflow: hidden; color: #d7e0dd; font: 11.5px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
-  .ocr-output-body .cursor { display: inline-block; width: 6px; height: 1em; background: #d7e0dd; vertical-align: -2px; }
+  /* 下方：OCR 輸出改成 VS Code 風格視窗，不寫「OCR 輸出」這種標籤字樣，
+     文書的編號與標題直接是輸出內容（JSON 的一個欄位），不是視窗的裝飾文字。 */
+  .ocr-output {
+    position: relative; z-index: 2;
+    background: #1e1e1e; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 18px 30px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .ocr-output-bar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 10px; background: #2b2b2b;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .ocr-output-bar .dot { width: 10px; height: 10px; border-radius: 50%; }
+  .ocr-output-bar .dot.red { background: #ff5f57; }
+  .ocr-output-bar .dot.yellow { background: #febc2e; }
+  .ocr-output-bar .dot.green { background: #28c840; }
+  .ocr-output-bar span.file { margin-left: 8px; color: rgba(255,255,255,.5); font: 600 11px/1 var(--sans); letter-spacing: .02em; }
+  .ocr-output-body { padding: 10px 14px; color: #d4d4d4; font: 11.5px/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+  .ocr-output-body .line { display: block; }
+  .ocr-output-body .key { color: #9cdcfe; }
+  .ocr-output-body .str { color: #ce9178; }
+  .ocr-output-body .punc { color: #d4d4d4; }
+  .ocr-output-body .cursor { display: inline-block; width: 6px; height: 1em; background: #d4d4d4; vertical-align: -2px; }
 
   /* 構圖標註（草稿用，正式版不會出現） */
   .draft-tag {
@@ -114,13 +137,16 @@
 
   <h1>「甚麼是 OCR？」新增正方形視覺元素 — 掃描動畫草稿</h1>
   <p class="lead">
-    這一版<b>還沒有任何動畫</b>，先把版面排好：原本兩張文字卡維持不變，右側新增一個正方形視覺元素，
-    上方並排兩份真實史料的掃描頁（手抄本＋刊本），下方是 OCR 輸出區，顯示同一份文書（硃25）辨識出來的文字。
+    這一版<b>還沒有任何動畫</b>。按你最新的意見調整：只顯示兩份文書的第一頁、大小不再相同、
+    每份底下墊了幾張紙讓它看起來像一疊實體文件；輸出區改成 VS Code 風格的程式碼視窗，
+    不再寫「OCR 輸出」這種標籤字，文書編號與標題直接是輸出內容的一部分（JSON 的欄位）；
+    視覺元素本身也不再撐滿整個欄位寬度。
   </p>
   <ul class="note-list">
-    <li>兩份文書刻意選同一份原始文書「硃25．為奏彰化失陷已調兵赴臺事」——左邊是國立故宮博物院的原奏摺手抄影像，右邊是《明清臺灣檔案彙編》第 30 冊頁 80 的刊本影像，兩者文字內容相同，方便呈現「不同版面都能 OCR 成同一段文字」。</li>
-    <li>下方 OCR 輸出區目前顯示的是硃25 原文的<b>前段節錄</b>（逐字取自資料庫，非虛構），用刪節號表示還有更多內容。</li>
-    <li>頁面右下角的「1 / 4」「1 / 2」是頁數指示，之後加動畫時，兩份文書會各自翻頁（由右至左，符合線裝書翻閱方向），停留說明放在下方規劃區。</li>
+    <li>兩份文書刻意選同一份原始文書「硃25．為奏彰化失陷已調兵赴臺事」——左邊是國立故宮博物院的原奏摺手抄影像（較寬），右邊是《明清臺灣檔案彙編》第 30 冊頁 80 的刊本影像（較窄較高，書頁本身比例），兩者大小、角度都刻意不同，看起來更像隨手放著的兩份文件。</li>
+    <li>每份文件底下用兩張微旋轉、露出邊角的米色紙張墊底，暗示「這是一疊裡的其中一頁」，而不是單張平貼的截圖。</li>
+    <li>掃描光暈改成藍色，兩份文書各自一條，草稿先固定在頁面中段，之後可隨翻頁動起來。</li>
+    <li>輸出區的內容對應資料庫實際欄位（<code>doc_id</code>／<code>title</code>／<code>body</code>），<code>body</code> 是硃25 原文的<b>逐字節錄</b>（非虛構），用刪節號表示還有更多內容。</li>
   </ul>
 
   <div class="mock-section">
@@ -133,30 +159,36 @@
 
       <div class="ocr-stage" id="ocr-stage">
         <div class="ocr-pages">
-          <div class="ocr-page">
-            <span class="ocr-page-stack" aria-hidden="true"></span>
-            <img src="ocr-anim-handwritten-p1.png" alt="硃25 原奏摺手抄影像（國立故宮博物院）">
-            <span class="ocr-page-label">手抄本掃描</span>
-            <span class="ocr-scan-line" aria-hidden="true"></span>
-            <span class="ocr-page-count">1 / 4</span>
+          <div class="ocr-filestack handwritten">
+            <div class="ocr-page">
+              <img src="ocr-anim-handwritten-p1.png" alt="硃25 原奏摺手抄影像（國立故宮博物院）">
+              <span class="ocr-page-label">手抄本</span>
+              <span class="ocr-scan-line" aria-hidden="true"></span>
+            </div>
           </div>
-          <div class="ocr-page">
-            <span class="ocr-page-stack" aria-hidden="true"></span>
-            <img src="ocr-anim-printed-p80.png" alt="硃25 刊本影像（《明清臺灣檔案彙編》30冊頁80）">
-            <span class="ocr-page-label">刊本影像</span>
-            <span class="ocr-scan-line" aria-hidden="true"></span>
-            <span class="ocr-page-count">1 / 2</span>
+          <div class="ocr-filestack printed">
+            <div class="ocr-page">
+              <img src="ocr-anim-printed-p80.png" alt="硃25 刊本影像（《明清臺灣檔案彙編》30冊頁80）">
+              <span class="ocr-page-label">刊本</span>
+              <span class="ocr-scan-line" aria-hidden="true"></span>
+            </div>
           </div>
         </div>
+
         <div class="ocr-output">
-          <div class="ocr-output-bar"><span class="tag">OCR 輸出</span><span class="doc">硃25．為奏彰化失陷已調兵赴臺事</span></div>
-          <div class="ocr-output-body">福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨……<span class="cursor"></span></div>
+          <div class="ocr-output-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="file">硃25.json</span></div>
+          <div class="ocr-output-body">
+            <span class="line"><span class="punc">{</span></span>
+            <span class="line">&nbsp;&nbsp;<span class="key">"doc_id"</span><span class="punc">:</span> <span class="str">"硃25"</span><span class="punc">,</span></span>
+            <span class="line">&nbsp;&nbsp;<span class="key">"title"</span><span class="punc">:</span> <span class="str">"為奏彰化失陷已調兵赴臺事"</span><span class="punc">,</span></span>
+            <span class="line">&nbsp;&nbsp;<span class="key">"body"</span><span class="punc">:</span> <span class="str">"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽……"</span><span class="cursor"></span></span>
+          </div>
         </div>
 
         <!-- 構圖標註 -->
-        <div class="draft-tag" style="left: 6%; top: 4%;"><span class="n">1</span>手抄本：由右至左翻頁</div>
-        <div class="draft-tag" style="right: 6%; top: 4%;"><span class="n">2</span>刊本：由右至左翻頁（與左邊同步）</div>
-        <div class="draft-tag" style="left: 50%; bottom: 3%; transform: translateX(-50%);"><span class="n">3</span>OCR 輸出：逐字打出，游標閃爍</div>
+        <div class="draft-tag" style="left: 2%; top: -6%;"><span class="n">1</span>手抄本：由右至左翻頁</div>
+        <div class="draft-tag" style="right: -4%; top: 8%;"><span class="n">2</span>刊本：由右至左翻頁（與左邊同步）</div>
+        <div class="draft-tag" style="left: 50%; bottom: -6%; transform: translateX(-50%);"><span class="n">3</span>JSON 逐字打出，游標閃爍</div>
       </div>
     </div>
   </div>
@@ -164,9 +196,9 @@
   <div class="plan-block">
     <h2>之後加動畫時的規劃（目前尚未實作）</h2>
     <div class="plan-grid">
-      <div class="plan-item"><span class="n">1</span><div><p><b>兩份文書同步翻頁</b>：每隔一段時間，左右兩個頁框「同時」切換到下一頁（由右至左，如同翻線裝書），手抄本共 4 頁、刊本共 2 頁，各自循環；頁數指示（1/4、1/2）跟著更新。</p></div></div>
-      <div class="plan-item"><span class="n">2</span><div><p><b>掃描線</b>：目前先固定畫一條淡黃色掃描光暈在頁面中段，之後可以讓它隨翻頁節奏上下掃過，暗示「正在辨識這一頁」。</p></div></div>
-      <div class="plan-item"><span class="n">3</span><div><p><b>OCR 輸出逐字顯示</b>：沿用 Agentic AI 動畫的逐字打字技巧（保留顏色標籤、跑完自動清空重播），內容固定用硃25 的原文節錄，讓人一眼看出「兩份不同版面的史料，OCR 後變成同一段機器可讀文字」。</p></div></div>
+      <div class="plan-item"><span class="n">1</span><div><p><b>兩份文書同步翻頁</b>：每隔一段時間，兩疊文件「同時」換成下一頁（由右至左，如同翻線裝書），手抄本共 4 頁、刊本共 2 頁，各自循環播放。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>藍色掃描光暈</b>：目前先固定在頁面中段，之後可以讓它隨翻頁節奏上下掃過，暗示「正在辨識這一頁」；兩份文書的光暈各自獨立移動。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>JSON 逐字顯示</b>：沿用 Agentic AI 動畫的逐字打字技巧（保留語法顏色、跑完自動清空重播），<code>body</code> 欄位固定用硃25 的原文節錄，讓人一眼看出「兩份不同版面的史料，OCR 後變成同一筆結構化資料」。</p></div></div>
       <div class="plan-item"><span class="n">4</span><div><p><b>時間安排</b>：翻頁與打字兩個動畫各自獨立循環（不強制同步），比照 Agentic AI 動畫用 <code>IntersectionObserver</code> 只在畫面可見時播放，並支援 <code>prefers-reduced-motion</code>。</p></div></div>
     </div>
   </div>
