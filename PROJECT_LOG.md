@@ -7464,3 +7464,22 @@ Verified:
 
 Remaining:
 - To resize the photo, edit `--paddleocr-photo-width` in the `#part-3-paddleocr` block.
+
+### 2026-08-04 16:26 HKT — Codex — OCR 明清台灣檔案匯編 30 PDF
+
+Summary:
+- Ran PaddleOCR on the specified two-page PDF and created a structured JSON output.
+- Preserved the three-row header on printed page 80, page numbers 80 and 81, and the final two 硃批-containing regions on printed page 81.
+- Kept raw OCR regions, confidence scores, polygons, and right-to-left vertical-column reading order in the JSON; no researcher correction or silent deletion was applied.
+
+Files changed:
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- Rendered and visually inspected both source PDF pages with Poppler.
+- PaddleOCR 3.7.0 / PaddlePaddle 3.3.1 completed both pages using `chinese_cht` on CPU.
+- JSON parses successfully and reports two pages, header rows, page numbers `80`/`81`, and two preserved 硃批 lines.
+
+Remaining:
+- OCR text remains an OCR candidate and should be image-checked before being treated as researcher-confirmed transcription.
