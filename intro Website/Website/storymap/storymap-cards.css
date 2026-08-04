@@ -148,6 +148,39 @@
                  #part-3-wiki 各自調整 --part3-stage-title-size、
                  --part3-stage-bar-height 及 --part3-stage-bar-padding。
 
+    OCR 掃描動畫（「甚麼是 OCR？」旁邊那個會動的視覺元素）：
+                 寫在 #part-3-ocr-definition .ocr-scan-scene 區塊裡（下面已經
+                 附上一份，直接改數字即可）。
+
+                   --ocr-scene-max-w   整個視覺元素的寬度上限
+                   --ocr-scene-column-w
+                                       視覺元素在文字區旁邊所佔的欄位寬度；
+                                       想放大動畫時要一併調大
+                   --ocr-pages-gap     兩份文書之間的間距
+
+                   --ocr-hw-w / --ocr-pr-w
+                                       手抄本／刊本各自佔的寬度比例
+                                       （兩者不需要加起來等於 100%，因為兩者
+                                       中間還有 --ocr-pages-gap 的間距）
+                   --ocr-hw-aspect / --ocr-pr-aspect
+                                       手抄本／刊本框的寬高比，寫法是
+                                       「寬 / 高」，例如 1.1 / 1、.63 / 1
+                   --ocr-hw-rotate / --ocr-pr-rotate
+                                       手抄本／刊本的傾斜角度
+
+                   --ocr-scan-h        掃描光暈的高度（頁面高度的百分比）
+                   --ocr-scan-color    掃描光暈顏色，要寫成「R, G, B」三個
+                                       數字（不要寫 #hex 或 rgb(...)），
+                                       例如 255, 90, 60 是紅橙色
+                   --ocr-scan-speed    掃描光暈跑完一輪（頂到底）的時間
+
+                   --ocr-output-h      JSON 輸出視窗的固定高度；文字打字時
+                                       超過這個高度就會自動往上捲動
+
+                 翻頁的間隔快慢、JSON 逐字打出的速度屬於動畫「時間」而非
+                 大小／位置，寫在 storymap.js 的 initOcrScanScene() 裡，
+                 不在這個檔案。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -595,6 +628,30 @@
   --part3-title-size: clamp(27px, 3.4vw, 46px);
   --part3-body-size: calc(16px * var(--font-scale));
   --part3-body-line-height: 1.9;
+}
+
+/* Part 3.4.2.3 — OCR 掃描動畫 */
+#part-3-ocr-definition {
+  --ocr-scene-column-w: 620px;   /* 動畫所在欄位的寬度；這是突破 440px 上限的關鍵 */
+}
+
+#part-3-ocr-definition .ocr-scan-scene {
+  --ocr-scene-max-w: 1000px;      /* 整個視覺元素的寬度上限 */
+  --ocr-pages-gap: 7%;           /* 兩份文書之間的間距 */
+
+  --ocr-hw-w: 58%;               /* 手抄本佔兩份文書總寬度的比例 */
+  --ocr-hw-aspect: 1.1 / 1;      /* 手抄本框的寬高比 */
+  --ocr-hw-rotate: -2deg;        /* 手抄本的傾斜角度 */
+
+  --ocr-pr-w: 34%;               /* 刊本佔兩份文書總寬度的比例 */
+  --ocr-pr-aspect: .63 / 1;      /* 刊本框的寬高比（書頁本身較窄較高） */
+  --ocr-pr-rotate: 2.5deg;       /* 刊本的傾斜角度 */
+
+  --ocr-scan-h: 18%;             /* 掃描光暈的高度（相對頁面高度） */
+  --ocr-scan-color: 120, 180, 255; /* 掃描光暈顏色，要寫成「R, G, B」三個數字 */
+  --ocr-scan-speed: 3.6s;        /* 掃描光暈跑完一輪（頂到底）所需時間 */
+
+  --ocr-output-h: 12em;          /* JSON 輸出視窗的固定高度，超過會自動往上捲動 */
 }
 
 /* Part 3.4.3 — PaddleOCR */

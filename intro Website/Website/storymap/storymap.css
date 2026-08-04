@@ -1733,6 +1733,126 @@ img { max-width: 100%; }
 }
 
 /* ============================================================================
+   9e · OCR 掃描動畫（「甚麼是 OCR？」文字卡旁邊的視覺元素）
+   兩份同一份文書（硃25）的不同版面各自循環翻頁，下方以 VS Code 風格視窗
+   逐字打出結構化後的 JSON。翻頁與打字都由 storymap.js 的
+   initOcrScanScene() 驅動；本區塊只負責外觀與版面。
+   ========================================================================== */
+.part3-ocr-def-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, min(var(--ocr-scene-column-w, 440px), calc(100% - var(--col-gap))));
+  gap: var(--col-gap); align-items: start;
+}
+
+/* 視覺元素本身不撐滿欄位，維持自然的寬度上限。
+   所有可調數值都有預設值（var 的第二個參數），實際覆寫請在
+   storymap-cards.css 的 #part-3-ocr-definition .ocr-scan-scene 區塊設定。 */
+.ocr-scan-scene {
+  position: relative; width: 100%; max-width: var(--ocr-scene-max-w, 420px); justify-self: start;
+  padding: clamp(20px, 2.4vw, 30px) clamp(18px, 2.2vw, 26px) clamp(24px, 2.6vw, 32px);
+  background: radial-gradient(circle at 22% 16%, rgba(91, 141, 239, .14), transparent 46%),
+              linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+  border: 1px solid var(--line); box-shadow: 0 16px 34px rgba(22, 61, 63, .18);
+}
+
+.ocr-pages { display: flex; align-items: flex-end; gap: var(--ocr-pages-gap, 7%); margin-bottom: clamp(18px, 2vw, 26px); }
+
+.ocr-filestack { position: relative; }
+.ocr-filestack.handwritten {
+  flex: 0 0 var(--ocr-hw-w, 58%); aspect-ratio: var(--ocr-hw-aspect, 1.1 / 1);
+  transform: rotate(var(--ocr-hw-rotate, -2deg));
+}
+.ocr-filestack.printed {
+  flex: 0 0 var(--ocr-pr-w, 34%); aspect-ratio: var(--ocr-pr-aspect, .63 / 1);
+  transform: rotate(var(--ocr-pr-rotate, 2.5deg)); margin-bottom: 4%;
+}
+
+/* 墊在下面的幾張紙：兩個偏移、微旋轉的米色矩形，露出邊角，
+   讓每份文書看起來像一疊裡的其中一頁，而不是單張平貼的截圖。 */
+.ocr-filestack::before,
+.ocr-filestack::after {
+  content: ""; position: absolute; inset: 0;
+  background: #efe6d3; border: 1px solid rgba(0, 0, 0, .08);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .28);
+}
+.ocr-filestack::before { transform: rotate(-4deg) translate(-4%, 3%); z-index: 1; }
+.ocr-filestack::after { transform: rotate(3deg) translate(4%, -2%); z-index: 1; }
+
+.ocr-page {
+  position: relative; z-index: 2; width: 100%; height: 100%;
+  overflow: hidden; background: #efe6d3;
+  box-shadow: 0 10px 22px rgba(0, 0, 0, .32);
+}
+.ocr-page-img {
+  display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top;
+  filter: saturate(.92) contrast(1.02);
+  transition: opacity .42s ease, transform .42s ease;
+}
+/* 翻頁：先淡出並往左移出畫面 */
+.ocr-page-img.is-turning { opacity: 0; transform: translateX(-10%); }
+/* 換圖後瞬間跳到右側（不使用轉場），再由 is-turning 一起移除、回到
+   translateX(0)，畫面上就會看到「從右邊滑進來」的翻頁效果。 */
+.ocr-page-img.is-jumping { transition: none; transform: translateX(10%); opacity: 0; }
+
+/* 掃描光暈：改成清楚可見的藍色亮線＋上下暈光，而不是一片很淡的漸層，
+   在照片上也能明顯看到。兩份文書各自獨立（用 --scan-delay 交錯開始，
+   避免兩條線完全同步顯得呆板）。 */
+.ocr-scan-line {
+  position: absolute; z-index: 4; left: 0; right: 0; top: -10%; height: var(--ocr-scan-h, 18%);
+  pointer-events: none;
+  --ocr-scan-rgb: var(--ocr-scan-color, 120, 180, 255);
+  background:
+    linear-gradient(180deg, rgba(var(--ocr-scan-rgb), 0) 0%, rgba(var(--ocr-scan-rgb), .5) 42%, rgba(var(--ocr-scan-rgb), .95) 50%, rgba(var(--ocr-scan-rgb), .5) 58%, rgba(var(--ocr-scan-rgb), 0) 100%);
+  box-shadow: 0 0 14px 2px rgba(var(--ocr-scan-rgb), .55);
+  animation: ocr-scan-sweep var(--ocr-scan-speed, 3.6s) ease-in-out infinite;
+  animation-delay: var(--scan-delay, 0s);
+}
+@keyframes ocr-scan-sweep {
+  0% { top: -14%; opacity: 0; }
+  10% { opacity: 1; }
+  50% { top: 92%; opacity: 1; }
+  92% { opacity: 1; }
+  100% { top: 92%; opacity: 0; }
+}
+
+/* 輸出區：VS Code 風格視窗，不寫「OCR 輸出」這種標籤字，
+   文書編號與標題直接是輸出內容（JSON 欄位）的一部分。 */
+.ocr-output {
+  position: relative; z-index: 2;
+  background: #1e1e1e; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 18px 30px rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+.ocr-output-bar {
+  display: flex; align-items: center; gap: 7px;
+  padding: 8px 10px; background: #2b2b2b;
+  border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.ocr-output-bar .dot { width: 10px; height: 10px; border-radius: 50%; }
+.ocr-output-bar .dot.red { background: #ff5f57; }
+.ocr-output-bar .dot.yellow { background: #febc2e; }
+.ocr-output-bar .dot.green { background: #28c840; }
+.ocr-output-bar span.file { margin-left: 8px; color: rgba(255, 255, 255, .5); font: 600 11px/1 var(--sans); letter-spacing: .02em; }
+/* 固定高度＋往下捲動：文字打完當下這一行永遠留在可視範圍內，
+   超過高度的舊文字自然被推到上面（捲出畫面），不需要另外裁切內容。
+   捲軸本身隱藏，只保留捲動效果。 */
+.ocr-output-body {
+  height: var(--ocr-output-h, 9.5em); padding: 10px 14px; overflow-x: hidden; overflow-y: auto;
+  color: #d4d4d4; font: 11.5px/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  scrollbar-width: none;
+}
+.ocr-output-body::-webkit-scrollbar { display: none; }
+.ocr-output-body .line { display: block; }
+.ocr-output-body .key { color: #9cdcfe; }
+.ocr-output-body .str { color: #ce9178; }
+.ocr-output-body .punc { color: #d4d4d4; }
+
+@media (prefers-reduced-motion: reduce) {
+  .ocr-scan-line { animation: none; opacity: .55; top: 33%; }
+  .ocr-page-img { transition: none; }
+}
+
+/* ============================================================================
    10 · 響應式
    ========================================================================== */
 @media (max-width: 980px) {
@@ -1750,6 +1870,9 @@ img { max-width: 100%; }
   .annotation-line-layer, .annotation-dot { display: none; }
   .acc-panels.visual-frame, .acc-panels.visual-frame-tall, .acc-panels.visual-frame-wide { height: auto; }
   .acc-panel.is-active { height: 480px; min-height: 0; }
+  /* 小螢幕：OCR 掃描動畫排到文字卡下方，寬度不再受限 */
+  .part3-ocr-def-layout { grid-template-columns: 1fr; }
+  .ocr-scan-scene { max-width: none; margin-top: clamp(18px, 3vw, 28px); }
   .route-info-window { right: 4%; left: 4%; width: auto; }
   .route-info-window-taiwan { top: 12px; bottom: auto; }
   .route-info-window-beijing { top: 12px; width: auto; }

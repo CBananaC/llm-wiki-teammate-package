@@ -7020,3 +7020,23 @@ Verified:
 
 Remaining:
 - None for the OCR CSS organization request.
+
+### 2026-08-04 14:10 HKT — Codex — Make OCR scanning animation width and height adjustable
+
+Summary:
+- Fixed the Part 3.4.2.3 OCR animation sizing control. The animation was capped by the parent grid at `440px`, so changing its child `--ocr-scene-max-w` alone could not make it wider.
+- Added `--ocr-scene-column-w` to the same numbered control block and connected the parent grid to it; increased the default animation column to `620px` and the JSON output window to `12em`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser measurement confirmed the live OCR scene renders at `620px` wide with the updated `1000px` maximum and a visible `12em` output panel.
+- `node --check intro Website/Website/storymap/storymap.js` and `node --check intro Website/Website/storymap/part-3-question-gallery.js` passed.
+- Focused `git diff --check` passes for the edited CSS files.
+
+Remaining:
+- None for the OCR animation sizing fix.
