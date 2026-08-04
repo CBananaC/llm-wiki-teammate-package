@@ -1559,7 +1559,7 @@ img { max-width: 100%; }
 /* Part 3.4.3 — PaddleOCR: point-form explanation on the left, photo-only gallery on the right. */
 .paddleocr-layout {
   display: grid;
-  grid-template-columns: minmax(0, var(--paddleocr-card-width, 74ch)) minmax(250px, var(--paddleocr-photo-width, 42%));
+  grid-template-columns: minmax(0, var(--paddleocr-card-width, 74ch)) minmax(250px, min(var(--paddleocr-photo-width, 42%), var(--paddleocr-photo-max-width, 100%), calc(100% - var(--paddleocr-card-width, 74ch) - var(--col-gap))));
   align-items: start;
   justify-content: space-between;
   gap: var(--col-gap);

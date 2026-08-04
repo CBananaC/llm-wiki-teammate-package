@@ -7483,3 +7483,23 @@ Verified:
 
 Remaining:
 - OCR text remains an OCR candidate and should be image-checked before being treated as researcher-confirmed transcription.
+
+### 2026-08-04 16:29 HKT — Codex — Cap PaddleOCR gallery width by Part 3 percentage
+
+Summary:
+- Added `--paddleocr-photo-max-width` so the adjustable PaddleOCR GitHub gallery cannot exceed a chosen percentage of the Part 3 width.
+- Clamped the gallery against both that percentage cap and the remaining space beside the fixed text card.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview reports `--paddleocr-photo-width: 42%`, `--paddleocr-photo-max-width: 60%`, a 2.00 image aspect ratio, and the visible `PaddleOCR GitHub` label.
+- `node --check` and `git diff --check` pass.
+- Existing concurrent Agentic AI edits remain preserved and uncommitted.
+
+Remaining:
+- Change `--paddleocr-photo-width` or `--paddleocr-photo-max-width` in the `#part-3-paddleocr` block to adjust the current width or its maximum.

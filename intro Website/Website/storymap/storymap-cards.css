@@ -671,9 +671,11 @@
 /* Part 3.4.3 — PaddleOCR：左側文字、右側可調寬度圖片畫廊 */
 #part-3-paddleocr {
   /* 只改 --paddleocr-photo-width，即可調整右側圖片寬度；高度會按原圖比例自動變化。
+     --paddleocr-photo-max-width 設定畫廊不可超過的 Part 3 寬度百分比。
      --paddleocr-card-width 固定文字卡欄位，避免圖片寬度變更時文字卡跟著變。 */
   --paddleocr-card-width: 74ch;
   --paddleocr-photo-width: 42%;
+  --paddleocr-photo-max-width: 60%;
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
   --part3-card-height: auto;
