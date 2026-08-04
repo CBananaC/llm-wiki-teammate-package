@@ -3637,6 +3637,45 @@ Verified: The citation now begins `黃仕簡，〈奏聞臺灣彰化縣賊匪殺
 
 Remaining: Browser recheck and local checkpoint.
 
+### 2026-08-04 15:28 HKT — Codex — Keep Agentic AI pet size fixed across viewport widths
+
+Summary:
+- Changed the Codex pet width and height controls from viewport-relative `clamp()` values to fixed `235px × 256px` values.
+- Fixed the terminal-face and body-face font sizes as well, so the robot’s visual scale does not change when the screen width changes.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser measurements at 1280px and 800px viewport widths both report `235px × 256px` for the pet and `22px` for the face text.
+- No browser errors or warnings were reported.
+- Focused `git diff --check` passes for the edited CSS files.
+
+Remaining:
+- None for the fixed-size Codex pet update.
+
+### 2026-08-04 15:31 HKT — Codex — Show the complete summary Skill in Write Skills
+
+Summary:
+- Replaced the short stage list in the `Write Skills` window with the full source-backed `tool/skills md/quick-summary.md` content.
+- The animated window now shows the Skill name, `Kind: summary`, the complete Traditional-Chinese Website Prompt, purpose, distinction from richer schema Skills, and its terminal, website, and proxy usage paths.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- The four Agentic AI data blocks parse successfully; `Write Skills` contains 18 animated lines.
+- HTTP browser preview completed all 18 lines with scrolling and reported no browser errors or warnings.
+- Focused `git diff --check` passes for the updated StoryMap HTML.
+
+Remaining:
+- None for the full summary Skill display.
+
 ### 2026-08-04 15:23 HKT — Codex — Remove repeated OCR caption prefix
 
 Summary: Removed the repeated article title, author, sent date, and `第 N 頁` label from both OCR enlarged-image captions. The handwritten and printed source references remain below the image, while the separate page counter and left/right navigation remain available.

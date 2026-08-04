@@ -1001,18 +1001,24 @@
                           <div class="agentic-window-body agentic-code agentic-skill-text" data-agentic-sequence>
                             <script type="application/json" data-agentic-lines>
                               [
-                                "<span class=\"cmt\"># tool/skills md/official-document-review-loop.md</span>",
-                                "<span class=\"cmt\"># Skill: 官文優先 AI 審閱迴圈</span>",
-                                "<span class=\"kw\">1.</span> 摘要 — quick-summary.md",
-                                "<span class=\"kw\">2.</span> 分段 — divide-into-parts.md",
-                                "<span class=\"kw\">3.</span> 林方事件 — extract-lin-actions.md",
-                                "<span class=\"kw\">4.</span> 清方行動（三類合一） — extract-qing-actions-all.md",
-                                "<span class=\"kw\">5.</span> 重複回報 + 來源鏈 — source-chain",
-                                "<span class=\"kw\">6.</span> 回應先前上諭 — confirmed-yu-response-analysis.md",
-                                "<span class=\"kw\">7.</span> 皇帝行動 — emperor-actions-confirmed-zhu-yu.md",
-                                "<span class=\"kw\">8.</span> 重複皇帝行動 — merge_group / merge_title",
-                                "<span class=\"kw\">9.</span> 官員回應 — official_response",
-                                "<span class=\"ok\">✓ AI proposes; researcher accepts, edits, or rejects</span>"
+                                "<span class=\"cmt\"># tool/skills md/quick-summary.md</span>",
+                                "<span class=\"cmt\"># Skill: Quick Document Summary</span>",
+                                "<span class=\"meta\">Kind:</span> summary",
+                                "<span class=\"cmt\">## Website Prompt</span>",
+                                "<span class=\"str\">用繁體中文，為上述文書寫一段更精簡、流暢的摘要（約 3-5 句），突出最關鍵的人、事、時、地，避免逐句翻譯。</span>",
+                                "<span class=\"cmt\">## Purpose</span>",
+                                "Fast, generic prose summary of any single document (上奏／硃批／上諭).",
+                                "This is the same instruction used by the terminal batch runner's <span class=\"arg\">summary</span> step and the website's 「進一步摘要」button.",
+                                "One skill file, two ways to trigger it: a large scan on many documents from the terminal, or a single document from the website.",
+                                "This is intentionally a lighter, non-schema summary.",
+                                "For richer per-doc-type structured analysis with quoted evidence, use summarize-shangyu.md, summarize-shangzou.md, or summarize-zhupi.md.",
+                                "<span class=\"cmt\">## Used By</span>",
+                                "<span class=\"kw\">Terminal:</span> tool/scripts py/run_review_bundle_test.py --steps summary",
+                                "<span class=\"out\">reads this file's Website Prompt and sends it as the instruction field</span>",
+                                "<span class=\"kw\">Website:</span> per-document AI panel, 「進一步摘要」button",
+                                "<span class=\"kw\">Proxy:</span> tool/proxy/gemini-proxy/main.py, mode: <span class=\"str\">summary</span>",
+                                "<span class=\"out\">falls back to its own default text if the instruction field is empty</span>",
+                                "<span class=\"ok\">✓ full summary Skill loaded for human review</span>"
                               ]
                             </script>
                           </div>
