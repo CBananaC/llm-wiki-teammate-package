@@ -452,17 +452,23 @@ img { max-width: 100%; }
   opacity: 0; visibility: hidden; transition: opacity .2s ease, visibility 0s linear .2s;
 }
 .photo-lightbox.is-open { opacity: 1; visibility: visible; transition: opacity .2s ease; }
-.photo-lightbox-figure { position: relative; max-width: 100%; max-height: 100%; }
+.photo-lightbox-figure {
+  position: relative; display: flex; flex-direction: column;
+  max-width: 100%; max-height: calc(100vh - 40px);
+}
 .photo-lightbox-figure img {
-  display: block; max-width: min(1400px, 92vw); max-height: 88vh;
+  display: block; max-width: min(1400px, 92vw); max-height: min(78vh, calc(100vh - 190px));
   width: auto; height: auto; object-fit: contain;
   background: #e8e1d6; box-shadow: 0 30px 70px rgba(0, 0, 0, .4);
 }
 .photo-lightbox-caption {
   margin: 12px 2px 0; color: rgba(247, 243, 234, .82);
   font: var(--body-weight) calc(13.5px * var(--font-scale))/1.6 var(--serif);
-  max-width: min(1400px, 92vw); white-space: pre-line;
+  max-width: min(1400px, 92vw); max-height: 150px; overflow: auto;
+  white-space: pre-line; overflow-wrap: anywhere;
 }
+.photo-lightbox-caption a { color: #f5d98a; text-decoration: underline; text-underline-offset: 2px; }
+.photo-lightbox-caption a:hover, .photo-lightbox-caption a:focus-visible { color: #fff4c7; }
 .photo-lightbox-close {
   position: absolute; top: -16px; right: -16px; z-index: 1;
   display: grid; place-items: center; width: 40px; height: 40px;

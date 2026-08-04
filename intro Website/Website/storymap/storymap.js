@@ -406,7 +406,8 @@ const photoLightbox = (() => {
     if (!page) return;
     img.src = page.src;
     img.alt = page.alt || '';
-    if (page.caption) { caption.textContent = page.caption; caption.hidden = false; }
+    if (page.captionHtml) { caption.innerHTML = page.captionHtml; caption.hidden = false; }
+    else if (page.caption) { caption.textContent = page.caption; caption.hidden = false; }
     else { caption.textContent = ''; caption.hidden = true; }
     const hasNavigation = pages.length > 1;
     prevBtn.hidden = !hasNavigation;
@@ -422,14 +423,20 @@ const photoLightbox = (() => {
     overlay.classList.add('is-open');
     closeBtn.focus();
   };
-  const openGallery = (galleryPages, startIndex, { title = '', description = '' } = {}, triggerEl) => {
+  const escapeCaptionHtml = (value) => String(value).replace(/[&<>"']/g, (char) => ({
+    '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;'
+  }[char]));
+  const openGallery = (galleryPages, startIndex, { title = '', description = '', descriptionHtml = '' } = {}, triggerEl) => {
     const validPages = galleryPages.filter(Boolean);
     if (!validPages.length) return;
     lastFocused = triggerEl || null;
     pages = validPages.map((src, i) => ({
       src,
       alt: `${title} 第 ${i + 1} 頁`.trim(),
-      caption: [title, `第 ${i + 1} 頁`, description].filter(Boolean).join('｜')
+      caption: [title, `第 ${i + 1} 頁`, description].filter(Boolean).join('｜'),
+      captionHtml: descriptionHtml
+        ? [title && escapeCaptionHtml(title), `第 ${i + 1} 頁`, descriptionHtml].filter(Boolean).join('｜')
+        : ''
     }));
     pageIndex = Math.max(0, Math.min(pages.length - 1, startIndex || 0));
     renderPage();
@@ -599,15 +606,16 @@ document.addEventListener('click', (event) => {
   const documentMeta = fileStack.classList.contains('handwritten')
     ? {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
-        description: '《宮中檔奏摺—乾隆朝》，黃仕簡 奏，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院《清代檔案檢索系統》。瀏覽日期：2026/08/04。PDF：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l；系統頁：https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l'
+        descriptionHtml: '《宮中檔奏摺—乾隆朝》，黃仕簡 奏，〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院 <a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l" target="_blank" rel="noopener noreferrer">《清代檔案檢索系統》</a>（<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l" target="_blank" rel="noopener noreferrer">PDF影像</a>），瀏覽日期：2026/08/04。'
       }
     : {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
-        description: '明清台檔30, 80, 硃25。'
+        description: '《明清台灣檔案匯編》，第30冊，頁80，硃25。'
       };
   photoLightbox.openGallery(pages, currentIndex < 0 ? 0 : currentIndex, {
     title: fileStack.getAttribute('data-ocr-document-title') || documentMeta.title,
-    description: fileStack.getAttribute('data-ocr-document-description') || documentMeta.description
+    description: fileStack.getAttribute('data-ocr-document-description') || documentMeta.description,
+    descriptionHtml: documentMeta.descriptionHtml
   }, img);
 });
 

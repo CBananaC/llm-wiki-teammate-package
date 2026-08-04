@@ -7244,3 +7244,16 @@ Verified:
 
 Remaining:
 - Apply this reference rule to future Chinese citations and bibliography edits.
+
+### 2026-08-04 15:15 HKT — Codex — Complete OCR enlarged-window Chinese references
+
+Summary: Completed the printed OCR citation from the intro-tab source record as `《明清台灣檔案匯編》，第30冊，頁80，硃25。` and converted the handwritten archive and PDF destinations into embedded links on descriptive text. Adjusted the lightbox image height so the full reference remains visible below the enlarged page.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified: The local preview shows the printed full reference and the handwritten caption shows clickable `《清代檔案檢索系統》` and `PDF影像` links. Both captions remain visible below the image; `node --check` passes for `storymap.js`.
+
+Remaining: None for the OCR enlarged-window citation display.
