@@ -6931,3 +6931,13 @@ Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/sto
 Verified: Browser preview showed compact rows with readable long labels, and the standalone sample loaded all five rows and five information views. Passed StoryMap JavaScript syntax checking and focused `git diff --check`.
 
 Remaining: None for the adjustable row-height fix.
+
+### 2026-08-04 13:24 HKT — Codex — Add per-section Part 3 card controls
+
+Summary: Added clearly labelled per-section variables to `intro Website/Website/storymap/storymap-cards.css` so every Part 3 content card can independently adjust title/body font size, width, height, minimum height, padding, and line height. Added matching controls for the Part 3 chart cards, workflow cards, tools window typography, and OCR/AI/LLM Wiki stage bars. Refreshed the StoryMap stylesheet query version.
+
+Files: `intro Website/Website/storymap/storymap-cards.css`, `intro Website/Website/storymap/storymap-example.html`, and `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+Verified: HTTP browser preview loaded the new stylesheet; all 21 Part 3 content sections reported the card-width control, representative cards had non-zero dimensions and the expected computed font sizes, all three stage bars reported the new sizing layer, and the browser reported no errors or warnings. StoryMap JavaScript syntax checks passed. `git diff --check` still reports a pre-existing trailing-space line in the current user-edited StoryMap HTML; that unrelated line was preserved.
+
+Remaining: None for the requested per-section Part 3 controls. Adjust the variables in the labelled `#part-3-...` blocks when tuning a specific section.

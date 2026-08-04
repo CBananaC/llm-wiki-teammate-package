@@ -4,7 +4,7 @@
   一節一個區塊，改數字即可，不必碰 storymap.css 或 storymap-example.html。
 
   ---------------------------------------------------------------------------
-  只有三個數值可以改：
+  共用版面設定：
 
     --vis-w      視覺元素（地圖／照片／工具畫面）佔的寬度百分比。
                  文字欄自動佔用剩下的部分。
@@ -122,6 +122,28 @@
                  --part3-tools-info-height  右側文字區佔資訊視窗內容區的高度（%）。
                  兩者合計應為 100%。
                  這些設定寫在下方的 #part-3-tools 區塊即可。
+
+    第三部分每一個內容卡片：
+                 每個 #part-3-... 區塊都有自己的設定，可個別調整，不會影響
+                 其他部分：
+                   --part3-card-width       卡片寬度（例如 100%、680px）。
+                   --part3-card-max-width   卡片最大寬度（例如 74ch、none）。
+                   --part3-card-height      固定卡片高度；一般保留 auto。
+                   --part3-card-min-height  卡片最低高度（例如 420px）。
+                   --part3-card-padding     卡片內邊距（例如 32px）。
+                   --part3-title-size       卡片標題字級（例如 34px）。
+                   --part3-body-size        卡片正文該節的字級（例如 18px）。
+                   --part3-body-line-height 正文字行距（例如 1.85）。
+                 這些變數寫在下方對應的 Part 3 區塊內。若要保持正文跟隨
+                 網站右上角的字級控制，請使用 calc(18px * var(--font-scale))。
+                 --part3-card-height 一般不要固定；內容較長時優先使用
+                 --part3-card-min-height，避免文字被截斷。
+
+                 Part 3 的圖表、流程圖和工具視窗也各自有 --part3-visual-*、
+                 --part3-flow-* 及 --part3-tools-* 設定，寫在同一個區塊即可。
+                 OCR／AI／LLM Wiki 的階段帶可在 #part-3-ocr、#part-3-ai、
+                 #part-3-wiki 各自調整 --part3-stage-title-size、
+                 --part3-stage-bar-height 及 --part3-stage-bar-padding。
 
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
@@ -343,6 +365,355 @@
   --part3-tools-info-height: 30%;
 }
 #part-3-basic-flow { --card-accent: #4d817c; }
+
+/* 第三部分的內容卡片共用套用層。
+   下面每個 #part-3-... 區塊只需改自己的變數，不必修改 storymap.css。 */
+#part-3-content .copybox {
+  width: var(--part3-card-width, auto);
+  max-width: var(--part3-card-max-width, 74ch);
+  height: var(--part3-card-height, auto);
+  min-height: var(--part3-card-min-height, 0);
+  padding: var(--part3-card-padding, clamp(18px, 1.8vw, 26px));
+}
+
+#part-3-content .copybox .title-row h2,
+#part-3-content .copybox h2 {
+  font-size: var(--part3-title-size, clamp(27px, 3.4vw, 46px));
+  line-height: var(--part3-title-line-height, 1.12);
+}
+
+#part-3-content .copybox .body > p {
+  font-size: var(--part3-body-size, calc(16px * var(--font-scale)));
+  line-height: var(--part3-body-line-height, 1.9);
+}
+
+#part-3-content .part3-stage-bar {
+  min-height: var(--part3-stage-bar-height, clamp(140px, 19vh, 195px));
+  padding: var(--part3-stage-bar-padding, 28px 0);
+}
+#part-3-content .part3-stage-bar h1 {
+  font-size: var(--part3-stage-title-size, clamp(26px, 3.4vw, 44px));
+}
+
+/* Part 3 階段帶：1. OCR 並結構化原始史料 */
+#part-3-ocr {
+  --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
+  --part3-stage-bar-height: clamp(140px, 19vh, 195px);
+  --part3-stage-bar-padding: 28px 0;
+}
+
+/* Part 3 階段帶：2. 運用 AI 抽取資訊 */
+#part-3-ai {
+  --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
+  --part3-stage-bar-height: clamp(140px, 19vh, 195px);
+  --part3-stage-bar-padding: 28px 0;
+}
+
+/* Part 3 階段帶：3. 後續功能：LLM Wiki */
+#part-3-wiki {
+  --part3-stage-title-size: clamp(26px, 3.4vw, 44px);
+  --part3-stage-bar-height: clamp(140px, 19vh, 195px);
+  --part3-stage-bar-padding: 28px 0;
+}
+
+/* 1. 適合的研究問題：左側文字卡／右側四線關係圖表 */
+#part-3-research-questions {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+  --part3-visual-width: 100%;
+}
+
+/* 2. 所需的工具與資源：checklist ＋工具資訊視窗 */
+#part-3-tools {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+  --part3-tools-title-size: clamp(21px, 1.8vw, 25px);
+  --part3-tools-subtitle-size: 13px;
+  --part3-tools-info-title-size: clamp(36px, 4.8vw, 66px);
+  --part3-tools-info-body-size: clamp(20px, 1.8vw, 27px);
+  --part3-tools-info-padding: clamp(24px, 4vw, 48px);
+}
+
+#part-3-tools .part3-tool-title {
+  font-size: var(--part3-tools-title-size, clamp(21px, 1.8vw, 25px));
+}
+#part-3-tools .part3-tool-subtitle {
+  font-size: var(--part3-tools-subtitle-size, 13px);
+}
+#part-3-tools .part3-tool-info-copy {
+  padding: var(--part3-tools-info-padding, clamp(24px, 4vw, 48px));
+}
+#part-3-tools .part3-tool-info-copy h3 {
+  font-size: var(--part3-tools-info-title-size, clamp(36px, 4.8vw, 66px));
+}
+#part-3-tools .part3-tool-info-copy .body > p {
+  font-size: var(--part3-tools-info-body-size, clamp(20px, 1.8vw, 27px));
+}
+
+/* 3. 重用平台的基本流程：說明卡／流程圖 */
+#part-3-basic-flow {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+  --part3-flow-width: 100%;
+  --part3-flow-min-height: 0;
+  --part3-flow-padding: clamp(18px, 2.4vw, 32px);
+  --part3-flow-node-size: calc(15px * var(--font-scale));
+}
+
+#part-3-basic-flow .part3-flow-frame {
+  width: var(--part3-flow-width, 100%);
+  min-height: var(--part3-flow-min-height, 0);
+  padding: var(--part3-flow-padding, clamp(18px, 2.4vw, 32px));
+}
+#part-3-basic-flow .part3-flow-frame .workflow-node {
+  font-size: var(--part3-flow-node-size, calc(15px * var(--font-scale)));
+}
+
+/* OCR：1. 甚麼是 OCR？（兩張卡） */
+#part-3-ocr-definition {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：2. PaddleOCR */
+#part-3-paddleocr {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：3. 運用 Agentic AI 使用 PaddleOCR */
+#part-3-agentic-ocr {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：4. OCR 前的材料準備 */
+#part-3-material {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：5. 執行 OCR 的 Python 代碼 */
+#part-3-code {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：6. 檢視史料的版面及格式 */
+#part-3-format {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：7. 辨識印刷字（文字卡／互動圖表卡） */
+#part-3-printed {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+  --part3-visual-width: 100%;
+  --part3-visual-min-height: 360px;
+  --part3-visual-padding: clamp(20px, 2.4vw, 34px);
+  --part3-chart-body-size: calc(15px * var(--font-scale));
+}
+
+/* OCR：8. 辨識手寫字 */
+#part-3-handwritten {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：9. 輸出格式：JSON（文字卡／互動圖表卡） */
+#part-3-json {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+  --part3-visual-width: 100%;
+  --part3-visual-min-height: 360px;
+  --part3-visual-padding: clamp(20px, 2.4vw, 34px);
+  --part3-chart-body-size: calc(15px * var(--font-scale));
+}
+
+/* OCR：10. OCR 測試 */
+#part-3-test {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* OCR：11. 輸入結構化史料至平台 */
+#part-3-import {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* AI：1. 修改、建立 AI Skills（兩張卡） */
+#part-3-ai-skills {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* AI：2. 執行 AI Skills 的方法（兩張卡／流程圖） */
+#part-3-ai-chain {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+  --part3-flow-width: 100%;
+  --part3-flow-min-height: 0;
+  --part3-flow-padding: clamp(18px, 2.4vw, 32px);
+  --part3-flow-node-size: calc(15px * var(--font-scale));
+}
+
+#part-3-ai-chain .part3-flow-frame {
+  width: var(--part3-flow-width, 100%);
+  min-height: var(--part3-flow-min-height, 0);
+  padding: var(--part3-flow-padding, clamp(18px, 2.4vw, 32px));
+}
+#part-3-ai-chain .part3-flow-frame .workflow-node {
+  font-size: var(--part3-flow-node-size, calc(15px * var(--font-scale)));
+}
+
+/* AI：3. 選用的 AI Model */
+#part-3-model {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* AI：4. Google Cloud */
+#part-3-cloud {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* 後續功能：LLM Wiki */
+#part-3-wiki-intro,
+#part-3-wiki-data,
+#part-3-wiki-analysis {
+  --part3-card-width: 100%;
+  --part3-card-max-width: 74ch;
+  --part3-card-height: auto;
+  --part3-card-min-height: 0;
+  --part3-card-padding: clamp(18px, 1.8vw, 26px);
+  --part3-title-size: clamp(27px, 3.4vw, 46px);
+  --part3-body-size: calc(16px * var(--font-scale));
+  --part3-body-line-height: 1.9;
+}
+
+/* Part 3 的特殊視覺卡片同樣由各自所在區塊的變數控制。 */
+#part-3-content .part3-chart-frame {
+  width: var(--part3-visual-width, 100%);
+  min-height: var(--part3-visual-min-height, 360px);
+  padding: var(--part3-visual-padding, clamp(20px, 2.4vw, 34px));
+}
+#part-3-content .part3-chart-copy {
+  font-size: var(--part3-chart-body-size, calc(15px * var(--font-scale)));
+}
+#part-3-content .part3-qgallery {
+  width: var(--part3-visual-width, 100%);
+}
 
 /* OCR：1. 甚麼是 OCR？至 11. 輸入結構化史料至平台 */
 #part-3-ocr-definition,
