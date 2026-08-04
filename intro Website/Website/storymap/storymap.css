@@ -1196,6 +1196,8 @@ img { max-width: 100%; }
 }
 .part3-tools-list {
   display: grid;
+  grid-auto-rows: minmax(var(--part3-tools-row-height, 88px), max-content);
+  align-content: start;
   gap: 8px;
   padding: 18px;
   flex: 1 1 auto;
@@ -1209,7 +1211,7 @@ img { max-width: 100%; }
   gap: 12px;
   align-items: center;
   width: 100%;
-  min-height: var(--part3-tools-row-height, 88px);
+  min-height: 0;
   padding: 12px 13px;
   color: var(--ink);
   background: rgba(255, 250, 242, .7);
@@ -1520,8 +1522,13 @@ img { max-width: 100%; }
     overflow: visible;
   }
   .part3-tools-list {
+    grid-auto-rows: auto;
     flex: 0 1 auto;
     overflow: visible;
+  }
+  .part3-tool-row {
+    height: auto;
+    min-height: var(--part3-tools-row-height, 88px);
   }
   .part3-tool-info-view {
     grid-template-rows: 280px auto;

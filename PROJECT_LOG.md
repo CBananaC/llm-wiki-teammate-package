@@ -6921,3 +6921,13 @@ Files: `intro Website/Website/storymap/storymap.css` and `intro Website/Website/
 Verified: Browser preview rendered the current `1000px` card with the `70%` photo / `30%` information split, and the Agentic AI animation remained active after selecting its row. Existing animation and content edits were preserved.
 
 Remaining: None for the card-variable inheritance fix.
+
+### 2026-08-04 13:19 HKT — Codex — Make 工具清單 row height adjustable
+
+Summary: Stopped the checklist grid from stretching every row to fill the full card height. `--part3-tools-row-height` now controls the grid track height, with content-required expansion for long labels; the standalone sample uses the same behavior.
+
+Files: `intro Website/Website/storymap/storymap.css`, `intro Website/Website/storymap/storymap-cards.css`, `intro Website/Website/storymap/storymap-example.html`, and `intro Website/Website/UI Idea/part3-tools-option-03-checklist.html`.
+
+Verified: Browser preview showed compact rows with readable long labels, and the standalone sample loaded all five rows and five information views. Passed StoryMap JavaScript syntax checking and focused `git diff --check`.
+
+Remaining: None for the adjustable row-height fix.

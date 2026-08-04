@@ -117,7 +117,7 @@
                  --part3-tools-width       整組 checklist 與資訊視窗的寬度。
                  --part3-tools-list-width   左側 checklist 佔整組的寬度比例。
                  --part3-tools-height       整組視窗的固定高度（px）。
-                 --part3-tools-row-height   左側每一列的最低高度（px）。
+                 --part3-tools-row-height   左側每一列的固定高度（px）。
                  --part3-tools-photo-height 右側圖片區佔資訊視窗內容區的高度（%）。
                  --part3-tools-info-height  右側文字區佔資訊視窗內容區的高度（%）。
                  兩者合計應為 100%。
@@ -338,7 +338,7 @@
   --part3-tools-width: 100%;
   --part3-tools-list-width: 25%;
   --part3-tools-height: 1000px;
-  --part3-tools-row-height: 20px;
+  --part3-tools-row-height: 72px;
   --part3-tools-photo-height: 70%;
   --part3-tools-info-height: 30%;
 }

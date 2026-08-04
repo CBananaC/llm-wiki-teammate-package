@@ -65,7 +65,7 @@
       --tools-width: 100%;
       --tools-list-width: 31%;
       --tools-height: 700px;
-      --tools-row-height: 88px;
+      --tools-row-height: 72px;
       --tools-photo-height: 46%;
       --tools-info-height: 54%;
       display: grid;
@@ -108,6 +108,8 @@
 
     .tool-list {
       display: grid;
+      grid-auto-rows: minmax(var(--tools-row-height), max-content);
+      align-content: start;
       gap: 8px;
       padding: 18px;
       flex: 1 1 auto;
@@ -122,7 +124,7 @@
       gap: 12px;
       align-items: center;
       width: 100%;
-      min-height: var(--tools-row-height);
+      min-height: 0;
       padding: 12px 13px;
       color: var(--ink);
       background: rgba(255, 250, 242, .7);
@@ -312,7 +314,8 @@
       .page-heading { align-items: start; flex-direction: column; gap: 14px; }
       .workbench { grid-template-columns: 1fr; height: auto; }
       .checklist-window { border-right: 0; border-bottom: 1px solid var(--line); }
-      .tool-list { flex: 0 1 auto; overflow: visible; }
+      .tool-list { grid-auto-rows: auto; flex: 0 1 auto; overflow: visible; }
+      .tool-row { height: auto; min-height: var(--tools-row-height); }
       .info-view { grid-template-rows: 280px auto; height: auto; min-height: 0; }
       .info-window { height: auto; overflow: visible; }
       .info-panel { height: auto; min-height: 0; overflow: visible; }
