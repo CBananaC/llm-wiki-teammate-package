@@ -3847,3 +3847,20 @@ Verified:
 
 Remaining:
 - None for this styling adjustment.
+### 2026-08-04 19:46 HKT — Codex — Make Part 3.7 backdrop white
+
+Summary:
+- Changed the `辨識印刷字` section backdrop from the shared beige `surface-c` color to white.
+- Used a higher-specificity card CSS override so the shared Part 3 surface rule cannot replace it.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser computes `#part-3-printed` background as `rgb(255, 255, 255)` while the title and interactive explorer remain present.
+- `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this backdrop adjustment.

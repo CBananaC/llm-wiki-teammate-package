@@ -778,7 +778,8 @@
 }
 
 /* Part 3.4.8 — 辨識印刷字 */
-#part-3-printed {
+#part-3-content #part-3-printed {
+  background: #fff;
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
   --part3-card-height: auto;
