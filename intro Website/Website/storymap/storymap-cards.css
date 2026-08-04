@@ -732,6 +732,13 @@
   --part3-body-line-height: 1.9;
 }
 
+#part-3-content #part-3-material-card .body > p.part3-material-copyright-note {
+  margin-top: 18px;
+  color: #c45d38;
+  font: 600 calc(12px * var(--font-scale))/1.7 var(--sans);
+  letter-spacing: .01em;
+}
+
 #part-3-material .part3-material-photo-gallery {
   --gallery-fit: var(--part3-material-gallery-fit, contain);
   --gallery-left: var(--part3-material-gallery-left, 50%);

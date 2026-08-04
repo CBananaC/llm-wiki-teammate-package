@@ -7543,3 +7543,21 @@ Verified:
 
 Remaining:
 - None for this requested gallery addition.
+### 2026-08-04 17:46 HKT — Codex — Style the materials copyright note
+
+Summary:
+- Marked the copyright and database-terms reminder in `OCR 前的材料準備` as a separate note.
+- Styled it as smaller orange text without changing the wording or the other body paragraph.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser computes the note as `rgb(196, 93, 56)`, 12px, weight 600, with the original Traditional-Chinese text intact.
+- `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this styling adjustment.
