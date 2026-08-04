@@ -3379,3 +3379,22 @@ Verified:
 
 Remaining:
 - None for the percentage-based OCR width adjustment.
+
+### 2026-08-04 14:16 HKT — Codex — Add OCR animation text font controls
+
+Summary:
+- Added direct controls for the OCR animation’s JSON text font size, line height, font family, and filename label size in Part 3.4.2.3.
+- Preserved the current rendered defaults: `11.5px` JSON text and `11px` filename text.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser measurement confirmed the new controls are active: JSON text `11.5px` with `20.125px` line height, and filename text `11px`.
+- Focused `git diff --check` passes for the edited CSS files.
+
+Remaining:
+- None for the OCR animation font-control request.

@@ -1832,13 +1832,18 @@ img { max-width: 100%; }
 .ocr-output-bar .dot.red { background: #ff5f57; }
 .ocr-output-bar .dot.yellow { background: #febc2e; }
 .ocr-output-bar .dot.green { background: #28c840; }
-.ocr-output-bar span.file { margin-left: 8px; color: rgba(255, 255, 255, .5); font: 600 11px/1 var(--sans); letter-spacing: .02em; }
+.ocr-output-bar span.file {
+  margin-left: 8px; color: rgba(255, 255, 255, .5);
+  font-family: var(--sans); font-size: var(--ocr-output-file-font-size, 11px);
+  font-weight: 600; line-height: 1; letter-spacing: .02em;
+}
 /* 固定高度＋往下捲動：文字打完當下這一行永遠留在可視範圍內，
    超過高度的舊文字自然被推到上面（捲出畫面），不需要另外裁切內容。
    捲軸本身隱藏，只保留捲動效果。 */
 .ocr-output-body {
   height: var(--ocr-output-h, 9.5em); padding: 10px 14px; overflow-x: hidden; overflow-y: auto;
-  color: #d4d4d4; font: 11.5px/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  color: #d4d4d4; font-family: var(--ocr-output-font-family, "SF Mono", ui-monospace, Menlo, Consolas, monospace);
+  font-size: var(--ocr-output-font-size, 11.5px); line-height: var(--ocr-output-line-height, 1.75);
   scrollbar-width: none;
 }
 .ocr-output-body::-webkit-scrollbar { display: none; }

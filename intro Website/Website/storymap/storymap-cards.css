@@ -176,6 +176,14 @@
 
                    --ocr-output-h      JSON 輸出視窗的固定高度；文字打字時
                                        超過這個高度就會自動往上捲動
+                   --ocr-output-font-size
+                                       JSON 文字的字級
+                   --ocr-output-line-height
+                                       JSON 文字的行距
+                   --ocr-output-font-family
+                                       JSON 文字的字體
+                   --ocr-output-file-font-size
+                                       上方檔案名稱的字級
 
                  翻頁的間隔快慢、JSON 逐字打出的速度屬於動畫「時間」而非
                  大小／位置，寫在 storymap.js 的 initOcrScanScene() 裡，
@@ -652,6 +660,10 @@
   --ocr-scan-speed: 3.6s;        /* 掃描光暈跑完一輪（頂到底）所需時間 */
 
   --ocr-output-h: 12em;          /* JSON 輸出視窗的固定高度，超過會自動往上捲動 */
+  --ocr-output-font-size: 11.5px; /* JSON 文字字級 */
+  --ocr-output-line-height: 1.75; /* JSON 文字行距 */
+  --ocr-output-font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --ocr-output-file-font-size: 11px; /* 上方檔案名稱字級 */
 }
 
 /* Part 3.4.3 — PaddleOCR */
