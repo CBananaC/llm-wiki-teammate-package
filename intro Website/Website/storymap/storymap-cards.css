@@ -632,7 +632,7 @@
 
 /* Part 3.4.2.3 — OCR 掃描動畫 */
 #part-3-ocr-definition {
-  --ocr-scene-column-w: 620px;   /* 動畫所在欄位的寬度；這是突破 440px 上限的關鍵 */
+  --ocr-scene-column-w: 65%;     /* 動畫佔 Part 3.4 內容寬度的比例 */
 }
 
 #part-3-ocr-definition .ocr-scan-scene {

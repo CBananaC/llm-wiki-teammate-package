@@ -7040,3 +7040,19 @@ Verified:
 
 Remaining:
 - None for the OCR animation sizing fix.
+
+### 2026-08-04 14:13 HKT — Codex — Set OCR animation width to 65 percent
+
+Summary:
+- Changed `--ocr-scene-column-w` in Part 3.4.2.3 from a fixed `620px` to `65%`, so the OCR animation scales with the Part 3.4 content width.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser measurement confirmed a `775.43px` animation width inside a `1192.97px` Part 3.4 content area, exactly `65%`.
+
+Remaining:
+- None for the percentage-based OCR width adjustment.
