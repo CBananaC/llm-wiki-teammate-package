@@ -112,7 +112,7 @@ const panelForHash = (hash) => {
   if (hash === '#intro' || hash.startsWith('#intro-')) return 'intro';
   if (hash === '#part-1') return 'part-1';
   if (hash === '#part-2') return 'part-2';
-  if (hash === '#part-3') return 'part-3';
+  if (hash === '#part-3' || hash.startsWith('#part-3-')) return 'part-3';
   return 'cover';
 };
 const setActiveTab = (tabName, { updateHash = true, scrollTarget = null } = {}) => {
@@ -876,6 +876,16 @@ const initPart3ToolsChecklist = () => {
 };
 initPart3ToolsChecklist();
 
+const initPart3FlowNavigation = () => {
+  document.querySelectorAll('[data-part3-flow-target]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const target = button.dataset.part3FlowTarget;
+      if (target) setActiveTab('part-3', { scrollTarget: target });
+    });
+  });
+};
+initPart3FlowNavigation();
+
 /* ---------------------------------------------------------------------------
    Agentic AI 動畫場景：四個實際專案工作視窗逐字「打出來」再整段清空重播。
    每個視窗的內容（含語法標色用的 <span>）寫在 storymap-example.html 裡
@@ -1084,7 +1094,8 @@ initOcrScanScene();
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);
-  const nestedTarget = tabName === 'intro' && hash.startsWith('#intro-') ? hash : null;
+  const nestedTarget = (tabName === 'intro' && hash.startsWith('#intro-'))
+    || (tabName === 'part-3' && hash !== '#part-3') ? hash : null;
   setActiveTab(tabName, { updateHash: false, scrollTarget: nestedTarget });
 };
 window.addEventListener('popstate', activateFromLocation);

@@ -414,9 +414,9 @@
      Part 3.3.3  Workflow: #part-3-basic-flow-chart
    Part 3.4  OCR 並結構化原始史料
      Part 3.4.1  OCR 並結構化原始史料
-     Part 3.4.2  甚麼是 OCR？
-       Part 3.4.2.1  OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字…
-       Part 3.4.2.2  由於 AI 無法直接讀取掃描影像形式的歷史材料…
+     Part 3.4.2  甚麼是 OCR？／使用OCR的原因
+       Part 3.4.2.1  甚麼是 OCR？
+       Part 3.4.2.2  使用OCR的原因
      Part 3.4.3  PaddleOCR
      Part 3.4.4  運用 Agentic AI 使用 PaddleOCR
      Part 3.4.5  OCR 前的材料準備
@@ -603,7 +603,7 @@
   --part3-stage-bar-padding: 28px 0;
 }
 
-/* Part 3.4.2 — 甚麼是 OCR？ */
+/* Part 3.4.2 — 甚麼是 OCR？／使用OCR的原因 */
 #part-3-ocr-definition {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -615,7 +615,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.2.1 — OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字… */
+/* Part 3.4.2.1 — 甚麼是 OCR？ */
 #part-3-ocr-definition-card-1 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -627,7 +627,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.2.2 — 由於 AI 無法直接讀取掃描影像形式的歷史材料… */
+/* Part 3.4.2.2 — 使用OCR的原因 */
 #part-3-ocr-definition-card-2 {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;

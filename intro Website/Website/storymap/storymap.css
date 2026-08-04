@@ -1033,7 +1033,9 @@ img { max-width: 100%; }
 }
 #part-3-content .copybox {
   height: 100%;
+  scroll-margin-top: var(--bar-h);
 }
+#part-3-content .part3-stage-bar { scroll-margin-top: var(--bar-h); }
 #part-3-content .title-row h2 {
   overflow-wrap: anywhere;
 }
@@ -1452,6 +1454,10 @@ img { max-width: 100%; }
   min-height: var(--part3-flow-step-height, 112px);
   clip-path: polygon(0 0, calc(100% - 14px) 0, 100% 50%, calc(100% - 14px) 100%, 0 100%, 14px 50%);
   color: var(--ink);
+  appearance: none;
+  border: 0;
+  font: inherit;
+  cursor: pointer;
   transition: color .18s, background-color .18s;
 }
 .part3-flow-step:first-child {

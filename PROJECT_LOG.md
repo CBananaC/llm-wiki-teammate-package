@@ -7197,3 +7197,28 @@ Verified:
 
 Remaining:
 - None for the Agentic AI pet refinement request.
+
+### 2026-08-04 15:01 HKT — Codex — Align Part 3 workflow steps and OCR cards
+
+Summary:
+- Replaced the three detailed Part 3 stage numbers with workflow labels: `步驟二`, `步驟三至五`, and `步驟八`.
+- Made all eight basic-flow chevrons buttons. Step 1 now scrolls to `1. 適合的研究問題`, and the other buttons target their corresponding Part 3 content.
+- Changed Part 3 card headings to use the intro tab's coloured number squares. Moved `1. 甚麼是 OCR？` into the OCR definition card, added `2. 使用OCR的原因`, and renumbered the remaining OCR cards.
+- Added sticky-header scroll offsets for direct card and stage-bar targets.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` and `node --check intro Website/Website/storymap/part-3-question-gallery.js` pass.
+- `git diff --check` passes.
+- In the HTTP browser preview, clicking the first flow button reaches the `適合的研究問題` card and clicking the second reaches the OCR definition card; the cards show 49px coloured squares and the OCR stage bar shows `步驟二`.
+- Reloading the nested Part 3 hash keeps the Part 3 panel active; browser console reports no errors or warnings.
+
+Remaining:
+- None for this requested Part 3 numbering and navigation adjustment.
