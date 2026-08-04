@@ -668,7 +668,7 @@
   --ocr-output-file-font-size: 0px; /* 上方檔案名稱字級 */
 }
 
-/* Part 3.4.3 — PaddleOCR */
+/* Part 3.4.3 — PaddleOCR：左側文字、右側純圖片畫廊 */
 #part-3-paddleocr {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;

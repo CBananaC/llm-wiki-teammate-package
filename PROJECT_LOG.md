@@ -7399,3 +7399,25 @@ Verified:
 
 Remaining:
 - None for the PaddleOCR point-form and visual-link update.
+
+### 2026-08-04 15:52 HKT — Codex — Move PaddleOCR text left and make the visual photo-only
+
+Summary:
+- Reversed the PaddleOCR two-column layout so the text card is on the left and the image is on the right.
+- Replaced the custom repository visual and `PaddleOCR GitHub` info panel with the StoryMap's standard photo-gallery component, using only the supplied photo and no visible title, description, or source panel.
+- Kept the image in `contain` mode so the full screenshot remains visible.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview shows the PaddleOCR text card on the left and the photo-only gallery on the right at 1280px width.
+- Live-page checks confirm the gallery body is hidden, the image loads from `PaddleOCR.png`, and the gallery JSON contains only one image entry.
+- `node --check`, gallery JSON parsing, file existence, and `git diff --check` all pass.
+
+Remaining:
+- None for this layout adjustment.
