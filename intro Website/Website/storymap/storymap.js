@@ -791,6 +791,131 @@ const initPart3ToolsChecklist = () => {
 };
 initPart3ToolsChecklist();
 
+/* ---------------------------------------------------------------------------
+   Agentic AI 動畫場景：Terminal 與 VS Code 逐字「打出來」再整段清空重播。
+   內容（含語法標色用的 <span>）寫在 storymap-example.html 裡對應的
+   <script type="application/json"> 區塊，這裡只負責播放。
+   --------------------------------------------------------------------------- */
+const wait = (ms) => new Promise((resolve) => window.setTimeout(resolve, ms));
+
+// 把一行（可能包含 <span class="..."> 這類語法標色標籤）逐字顯示出來。
+// 做法：先把整行內容放進 DOM（標籤結構都在），再把每個文字節點清空，
+// 之後照文件順序一個字一個字補回去，這樣顏色標籤不會被字元切斷。
+const revealAgenticLine = (host, html, charDelay) => new Promise((resolve) => {
+  const lineEl = document.createElement('span');
+  lineEl.className = 'line';
+  lineEl.innerHTML = html;
+  host.appendChild(lineEl);
+  host.scrollTop = host.scrollHeight;
+
+  const walker = document.createTreeWalker(lineEl, NodeFilter.SHOW_TEXT);
+  const textNodes = [];
+  let current;
+  while ((current = walker.nextNode())) {
+    textNodes.push({ node: current, full: current.textContent });
+    current.textContent = '';
+  }
+  if (!textNodes.length) { resolve(); return; }
+
+  let nodeIndex = 0;
+  let charIndex = 0;
+  const typeNextChar = () => {
+    if (nodeIndex >= textNodes.length) { resolve(); return; }
+    const entry = textNodes[nodeIndex];
+    if (charIndex >= entry.full.length) { nodeIndex += 1; charIndex = 0; typeNextChar(); return; }
+    entry.node.textContent += entry.full[charIndex];
+    charIndex += 1;
+    // 內容比顯示區長時，跟著游標往下捲動，讓正在打的那一行保持可見。
+    host.scrollTop = host.scrollHeight;
+    window.setTimeout(typeNextChar, charDelay);
+  };
+  typeNextChar();
+});
+
+// 播放一組行：逐行打出來、停留一段時間（含閃爍游標），再清空重新開始。
+// 回傳一個「停止」函式，畫面離開可視範圍時呼叫它暫停，不必真的移除內容。
+const typeAgenticSequence = (host, lines, { charDelay = 26, lineDelay = 450, holdTime = 2600, clearDelay = 500 } = {}) => {
+  let cancelled = false;
+
+  const run = async () => {
+    while (!cancelled) {
+      host.innerHTML = '';
+      for (let i = 0; i < lines.length; i += 1) {
+        if (cancelled) return;
+        await revealAgenticLine(host, lines[i], charDelay);
+        if (cancelled) return;
+        if (i < lines.length - 1) await wait(lineDelay);
+      }
+      if (cancelled) return;
+      const caret = document.createElement('span');
+      caret.className = 'agentic-caret';
+      host.appendChild(caret);
+      await wait(holdTime);
+      if (cancelled) return;
+      caret.remove();
+      await wait(clearDelay);
+    }
+  };
+  run();
+
+  return () => { cancelled = true; };
+};
+
+const initAgenticScene = () => {
+  document.querySelectorAll('[data-agentic-scene]').forEach((scene) => {
+    const terminalHost = scene.querySelector('[data-agentic-terminal]');
+    const codeHost = scene.querySelector('[data-agentic-code]');
+    if (!terminalHost || !codeHost) return;
+
+    const parseLines = (host) => {
+      const script = host.querySelector('script[type="application/json"]');
+      if (!script) return [];
+      try {
+        return JSON.parse(script.textContent);
+      } catch (error) {
+        return [];
+      }
+    };
+    const terminalLines = parseLines(terminalHost);
+    const codeLines = parseLines(codeHost);
+    if (!terminalLines.length || !codeLines.length) return;
+
+    // 使用者要求減少動態效果時，直接顯示完整內容，不逐字播放。
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const renderStatic = (host, lines) => {
+        host.innerHTML = lines.map((line) => `<span class="line">${line}</span>`).join('');
+      };
+      renderStatic(terminalHost, terminalLines);
+      renderStatic(codeHost, codeLines);
+      return;
+    }
+
+    let stopTerminal = null;
+    let stopCode = null;
+    const start = () => {
+      if (stopTerminal || stopCode) return;
+      stopTerminal = typeAgenticSequence(terminalHost, terminalLines, { charDelay: 22, lineDelay: 500, holdTime: 2600, clearDelay: 500 });
+      stopCode = typeAgenticSequence(codeHost, codeLines, { charDelay: 30, lineDelay: 380, holdTime: 2600, clearDelay: 500 });
+    };
+    const stop = () => {
+      stopTerminal?.();
+      stopCode?.();
+      stopTerminal = null;
+      stopCode = null;
+    };
+
+    // 畫面不在可視範圍（包含被 checklist 切到 hidden）時暫停播放，省資源。
+    if (typeof IntersectionObserver === 'function') {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => { entry.isIntersecting ? start() : stop(); });
+      }, { threshold: .1 }).observe(scene);
+    } else {
+      start();
+    }
+  });
+};
+initAgenticScene();
+
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);

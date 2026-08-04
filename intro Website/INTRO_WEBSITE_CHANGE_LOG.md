@@ -3264,3 +3264,23 @@ Files: `Website/storymap/storymap-cards.css`, `Website/storymap/storymap-example
 Verified: HTTP browser preview loaded the new stylesheet; all 21 Part 3 content sections reported the card-width control, representative cards had non-zero dimensions and the expected computed font sizes, all three stage bars reported the new sizing layer, and the browser reported no errors or warnings. `node --check Website/storymap/storymap.js` and `node --check Website/storymap/part-3-question-gallery.js` passed. `git diff --check` still reports a pre-existing trailing-space line in the current user-edited `storymap-example.html`; that unrelated line was preserved.
 
 Remaining: None for the requested per-section Part 3 controls. Adjust the variables in the labelled `#part-3-...` blocks when tuning a specific section.
+
+### 2026-08-04 13:34 HKT — Codex — Give each Part 3 card an independent selector
+
+Summary: Added stable IDs to the actual Part 3 multi-card and visual-card elements, including the two OCR definition cards, two AI Skills cards, two AI Chain cards, charts, workflow cards, the tools window, and the three LLM Wiki cards. Added one matching CSS control block per card ID, using the same direct-edit pattern as `#intro-1-2`; single-card sections remain directly adjustable by their section IDs.
+
+Files: `Website/storymap/storymap-example.html`, `Website/storymap/storymap-cards.css`, and this log.
+
+Verified: Confirmed 52 unique Part 3 IDs; every new `-card` and `-chart` ID has a matching selector block. Browser preview loaded `storymap-cards.css?v=20260804-part3-individual-cards`, rendered representative cards with non-zero dimensions, and reported no errors or warnings. `node --check Website/storymap/storymap.js` and `node --check Website/storymap/part-3-question-gallery.js` passed. `git diff --check` still reports the pre-existing trailing-space line in the current user-edited StoryMap HTML; it was preserved.
+
+Remaining: None for individual Part 3 card adjustment.
+
+### 2026-08-04 13:36 HKT — Codex — Match Part 3 basic-flow text to the full-width method layout
+
+Summary: Removed the card treatment from `3. 重用平台的基本流程` and expanded its heading and explanatory paragraph to the full StoryMap content width, matching the text-above-table layout used by `以數位方法研究清代奏折`. The workflow diagram remains below the text as the visual block.
+
+Files: `Website/storymap/storymap-example.html`, `Website/storymap/storymap-cards.css`, and this log.
+
+Verified: HTTP browser preview showed the section heading and paragraph outside a card, with transparent background, no border or padding, and the same 1193px content width as the workflow frame. The browser reported no errors or warnings. `node --check Website/storymap/storymap.js` and `node --check Website/storymap/part-3-question-gallery.js` passed. `git diff --check` still reports the pre-existing trailing-space line at `storymap-example.html:1000`; it was preserved.
+
+Remaining: None for the requested Part 3 basic-flow layout.

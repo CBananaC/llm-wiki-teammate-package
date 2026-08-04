@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260804-part3-card-controls">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260804-part3-card-controls">
+  <link rel="stylesheet" href="storymap.css?v=20260804-full-info-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260804-full-info-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js" defer></script>
@@ -865,7 +865,7 @@
           <div class="story-inner">
             <div class="lay-split text-left" style="--vis-w: 54%;">
               <div class="lay-copy">
-                <article class="copybox blk">
+                <article class="copybox blk" id="part-3-research-card">
                   <div class="title-row"><h2>1. 適合的研究問題</h2></div>
                   <div class="body">
                     <p>本平台運用 AI 與視覺化工具，重建奏摺與上諭之間的通信關係，並呈現資訊在皇帝與地方官員之間的傳遞網絡。</p>
@@ -878,7 +878,7 @@
                 <!-- 互動圖庫：版面在 part-3-question-gallery.css 調整，
                      行為在 part-3-question-gallery.js 調整，
                      內容資料一律來自 part-3-question-gallery-data.js。 -->
-                <div class="part3-qgallery" data-part3-qgallery role="group" aria-label="適合的研究問題：四線關係圖表示範"></div>
+                <div class="part3-qgallery" id="part-3-research-chart" data-part3-qgallery role="group" aria-label="適合的研究問題：四線關係圖表示範"></div>
               </div>
             </div>
           </div>
@@ -889,7 +889,7 @@
             <div class="blk" style="margin-bottom:var(--head-gap)">
               <div class="title-row"><h2>2. 所需的工具與資源</h2></div>
             </div>
-            <div class="part3-tools-checklist" data-part3-tools-checklist>
+            <div class="part3-tools-checklist" id="part-3-tools-card" data-part3-tools-checklist>
               <aside class="part3-tools-list-window">
                 <div class="part3-tools-window-bar"><span>工具清單</span></div>
                 <div class="part3-tools-list">
@@ -905,12 +905,8 @@
                     <span class="part3-tool-copy"><span class="part3-tool-title">Agentic AI</span><span class="part3-tool-subtitle">閱讀原始碼與部署平台</span></span>
                     <span class="part3-tool-tick" aria-hidden="true">✓</span>
                   </label>
-                  <label class="part3-tool-row" data-part3-tool-id="skills">
-                    <input type="checkbox">
-                    <span class="part3-tool-number">3</span>
-                    <span class="part3-tool-copy"><span class="part3-tool-title">AI Skills 與平台程序</span><span class="part3-tool-subtitle">整理、轉換與建立</span></span>
-                    <span class="part3-tool-tick" aria-hidden="true">✓</span>
-                  </label>
+
+
                   <label class="part3-tool-row" data-part3-tool-id="api">
                     <input type="checkbox">
                     <span class="part3-tool-number">4</span>
@@ -934,13 +930,74 @@
                     <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">原始碼與資料夾</p><h3>GitHub Repository</h3><div class="body"><p>首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills的Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。</p></div></div>
                   </article>
                   <article class="part3-tool-info-view" data-part3-tool-info="agentic-ai" hidden>
-                    <figure class="part3-tool-info-photo"><img src="done-intro-1.png" alt="掃描的奏摺史料頁面" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">2</span></figure>
-                    <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">閱讀原始碼與部署平台</p><h3>Agentic AI</h3><div class="body"><p>其次，研究者可以使用 Agentic AI （如ChatGPT Work 和Codex） 閱讀下載的原始碼，並按照 README.md 的說明部署平台，在本機開啟前端網頁。</p></div></div>
+                    <figure class="part3-tool-info-photo">
+                      <!-- Agentic AI 動畫場景：寵物機械人＋Terminal＋VS Code，取代原本的靜態照片。
+                           指令與程式碼文字由 storymap.js 的 initAgenticScene() 逐行播放並循環。
+                           外觀與持續性動畫（擺動、眨眼、游標閃爍）定義在 storymap.css 的 9d 節。 -->
+                      <div class="agentic-scene" data-agentic-scene aria-hidden="true">
+                        <div class="agentic-mac-window agentic-win-terminal">
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span>terminal — ai-skills</span></div>
+                          <div class="agentic-mac-body" data-agentic-terminal>
+                            <script type="application/json" data-agentic-terminal-lines>
+                              [
+                                "<span class=\"prompt\">$</span> run-skill zhu-summary --input 硃110.json",
+                                "<span class=\"out\">載入文書中...</span>",
+                                "<span class=\"out\">呼叫 Agentic AI 分析原文段落</span>",
+                                "<span class=\"ok\">✓ 已提取關鍵資訊，輸出至 result.json</span>"
+                              ]
+                            </script>
+                          </div>
+                        </div>
+                        <div class="agentic-mac-window agentic-win-vscode">
+                          <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span>storymap.js — VS Code</span></div>
+                          <div class="agentic-mac-body">
+                            <div class="agentic-code" data-agentic-code>
+                              <script type="application/json" data-agentic-code-lines>
+                                [
+                                  "<span class=\"cmt\">// 讀取 AI Skill 設定，逐份分析結構化文書</span>",
+                                  "<span class=\"kw\">import</span> { extract } <span class=\"kw\">from</span> <span class=\"str\">'./ai-skills.js'</span>;",
+                                  "",
+                                  "<span class=\"kw\">const</span> <span class=\"fn\">runSkill</span> = <span class=\"kw\">async</span> (doc) => {",
+                                  "&nbsp;&nbsp;<span class=\"kw\">const</span> result = <span class=\"kw\">await</span> ai.<span class=\"fn\">extract</span>(doc, <span class=\"str\">\"zhu-summary\"</span>);",
+                                  "&nbsp;&nbsp;<span class=\"kw\">return</span> { id: doc.id, ...result };",
+                                  "};",
+                                  "",
+                                  "<span class=\"cmt\">// 批次處理整個資料夾內的文書</span>",
+                                  "<span class=\"kw\">for</span> (<span class=\"kw\">const</span> doc <span class=\"kw\">of</span> documents) {",
+                                  "&nbsp;&nbsp;<span class=\"kw\">const</span> output = <span class=\"kw\">await</span> <span class=\"fn\">runSkill</span>(doc);",
+                                  "&nbsp;&nbsp;results.<span class=\"fn\">push</span>(output);",
+                                  "}",
+                                  "",
+                                  "<span class=\"kw\">await</span> <span class=\"fn\">writeJSON</span>(<span class=\"str\">'result.json'</span>, results);"
+                                ]
+                              </script>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="agentic-pet-wrap">
+                          <div class="agentic-pet-desk"></div>
+                          <div class="agentic-pet">
+                            <div class="agentic-pet-head">
+                              <div class="agentic-pet-fluff"><span></span><span></span><span></span><span></span><span></span><span></span></div>
+                              <div class="agentic-pet-head-core"></div>
+                              <div class="agentic-pet-face"><span>&gt;</span><span>_</span></div>
+                            </div>
+                            <div class="agentic-pet-body">
+                              <span class="agentic-pet-limb arm l"></span>
+                              <span class="agentic-pet-limb arm r"></span>
+                              <div class="agentic-pet-body-face"><span>&gt;-</span></div>
+                              <span class="agentic-pet-leg l"></span>
+                              <span class="agentic-pet-leg r"></span>
+                            </div>
+                          </div>
+                          <div class="agentic-pet-keyboard"></div>
+                        </div>
+                      </div>
+                      <span class="part3-tool-info-number" aria-hidden="true">2</span>
+                    </figure>
+                    <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">閱讀原始碼與部署平台</p><h3>Agentic AI</h3><div class="body"><p>其次，研究者可以使用 Agentic AI （如ChatGPT Work 和Codex） 閱讀下載的原始碼，並按照 README.md 的說明部署平台，在本機開啟前端網頁。</p></div><div class="body"><p>其後，研究者可以利用 Agentic AI 協助整理原始文書、轉換為結構化資料、修改或建立 AI Skills，以及修改網站介面和功能等的程序。</p></div></div>
                   </article>
-                  <article class="part3-tool-info-view" data-part3-tool-info="skills" hidden>
-                    <figure class="part3-tool-info-photo"><img src="done-intro-7.png" alt="印刷史料與圖像材料" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">3</span></figure>
-                    <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">整理、轉換與建立</p><h3>AI Skills 與平台程序</h3><div class="body"><p>其後，研究者可以利用 Agentic AI 協助整理原始文書、轉換為結構化資料、修改或建立 AI Skills，以及修改網站介面和功能等的程序。</p></div></div>
-                  </article>
+                
                   <article class="part3-tool-info-view" data-part3-tool-info="api" hidden>
                     <figure class="part3-tool-info-photo"><img src="done-intro-8.png" alt="史料傳遞路線圖" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">4</span></figure>
                     <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">批次處理與分析</p><h3>AI API</h3><div class="body"><p>此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。</p></div></div>
@@ -958,11 +1015,11 @@
         <section class="story surface-c" id="part-3-basic-flow" data-tab="part-3" data-nav="#part-3-basic-flow">
           <div class="story-inner">
             <div class="lay-stack">
-              <article class="copybox blk">
+              <article class="blk" id="part-3-basic-flow-card">
                 <div class="title-row"><h2>3. 重用平台的基本流程</h2></div>
                 <div class="body"><p>有準備好以上的工具後，研究者可以按照以下流程，把平台應用於新的研究主題：</p></div>
               </article>
-              <div class="part3-flow-frame" role="group" aria-label="選定研究主題與史料 → OCR 並結構化原始史料→ 調整 AI Skills → 執行 AI 分析 → 載入網站核驗 → 修改及擴展平台 → 保存分析結果→後續研究">
+              <div class="part3-flow-frame" id="part-3-basic-flow-chart" role="group" aria-label="選定研究主題與史料 → OCR 並結構化原始史料→ 調整 AI Skills → 執行 AI 分析 → 載入網站核驗 → 修改及擴展平台 → 保存分析結果→後續研究">
                 <div class="workflow-chain">
                   <span class="workflow-node">選定研究主題與史料</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">OCR 並結構化原始史料</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">調整 AI Skills</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">執行 AI 分析</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">載入網站核驗</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">修改及擴展平台</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">保存分析結果</span><span class="workflow-link" aria-hidden="true"></span><span class="workflow-node">後續研究</span>
                 </div>
@@ -982,8 +1039,8 @@
                 <div class="title-row"><h2>1. 甚麼是 OCR？</h2></div>
               </div>
               <div class="part3-two-card-grid">
-                <article class="copybox blk"><div class="body"><p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p></div></article>
-                <article class="copybox blk"><div class="body"><p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p></div></article>
+                <article class="copybox blk" id="part-3-ocr-definition-card-1"><div class="body"><p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p></div></article>
+                <article class="copybox blk" id="part-3-ocr-definition-card-2"><div class="body"><p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p></div></article>
               </div>
             </div>
           </section>
@@ -1022,13 +1079,13 @@
             <div class="story-inner">
               <div class="lay-split text-left" style="--vis-w: 56%;">
                 <div class="lay-copy">
-                  <article class="copybox blk">
+                  <article class="copybox blk" id="part-3-printed-card">
                     <div class="title-row"><h2>7. 辨識印刷字</h2></div>
                     <div class="body"><p>印刷字的字形統一，字距與行距相對規則，因此一般較容易進行 OCR 辨識。然而，研究者仍需先檢視史料的版面及格式。</p></div>
                   </article>
                 </div>
                 <div class="lay-visual">
-                  <div class="part3-chart-frame visual-frame" role="group" aria-label="辨識印刷字">
+                  <div class="part3-chart-frame visual-frame" id="part-3-printed-chart" role="group" aria-label="辨識印刷字">
                     <div class="part3-chart-labels">
                       <button type="button" class="part3-chart-label is-active" data-part3-chart-toggle="print-title" aria-pressed="true">標題</button>
                       <button type="button" class="part3-chart-label" data-part3-chart-toggle="print-date" aria-pressed="false">日期</button>
@@ -1052,10 +1109,10 @@
             <div class="story-inner">
               <div class="lay-split text-left" style="--vis-w: 56%;">
                 <div class="lay-copy">
-                  <article class="copybox blk"><div class="title-row"><h2>9. 輸出格式：JSON</h2></div><div class="body"><p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p></div></article>
+                  <article class="copybox blk" id="part-3-json-card"><div class="title-row"><h2>9. 輸出格式：JSON</h2></div><div class="body"><p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p></div></article>
                 </div>
                 <div class="lay-visual">
-                  <div class="part3-chart-frame visual-frame" role="group" aria-label="輸出格式：JSON">
+                  <div class="part3-chart-frame visual-frame" id="part-3-json-chart" role="group" aria-label="輸出格式：JSON">
                     <div class="part3-chart-labels">
                       <button type="button" class="part3-chart-label is-active" data-part3-chart-toggle="json-title" aria-pressed="true">標題</button>
                       <button type="button" class="part3-chart-label" data-part3-chart-toggle="json-text" aria-pressed="false">正文</button>
@@ -1092,18 +1149,18 @@
 
           <section class="story surface-a" id="part-3-ai-skills" data-tab="part-3" data-nav="#part-3-ai-skills">
             <div class="story-inner"><div class="part3-two-card-grid">
-              <article class="copybox blk"><div class="title-row"><h2>1. 修改、建立AI Skills</h2></div><div class="body"><p>完成資料整理後，研究者需要按照新的研究問題，修改或建立新的 Skills。例如，現時系統用於提取林爽文軍事行動的 Skills，可以根據新的研究主題，改為其他的事件類型，例如水災的情況、司法案件的調查進展等。</p></div></article>
-              <article class="copybox blk"><div class="title-row"><h2>建立新的 Skill 時，研究者應說明：</h2></div><div class="body"><p>- 這項 Skill 要回答哪一個研究問題；</p><p>- AI 需要從文本中提取哪些資訊；</p><p>- 每項結果需要保存哪些原文引文等。</p><p>研究者可以請 Agentic AI修改和建立指令，完成 Skill 後，應先用少量文書測試，檢查 AI 是否能按照要求提取合適的結果，再進行批次處理。</p></div></article>
+              <article class="copybox blk" id="part-3-ai-skills-card-1"><div class="title-row"><h2>1. 修改、建立AI Skills</h2></div><div class="body"><p>完成資料整理後，研究者需要按照新的研究問題，修改或建立新的 Skills。例如，現時系統用於提取林爽文軍事行動的 Skills，可以根據新的研究主題，改為其他的事件類型，例如水災的情況、司法案件的調查進展等。</p></div></article>
+              <article class="copybox blk" id="part-3-ai-skills-card-2"><div class="title-row"><h2>建立新的 Skill 時，研究者應說明：</h2></div><div class="body"><p>- 這項 Skill 要回答哪一個研究問題；</p><p>- AI 需要從文本中提取哪些資訊；</p><p>- 每項結果需要保存哪些原文引文等。</p><p>研究者可以請 Agentic AI修改和建立指令，完成 Skill 後，應先用少量文書測試，檢查 AI 是否能按照要求提取合適的結果，再進行批次處理。</p></div></article>
             </div></div>
           </section>
 
           <section class="story surface-b" id="part-3-ai-chain" data-tab="part-3" data-nav="#part-3-ai-chain">
             <div class="story-inner">
               <div class="part3-two-card-grid">
-                <article class="copybox blk"><div class="title-row"><h2>2. 執行 AI Skills的方法</h2></div><div class="body"><p>完成修改或建立 AI Skills 後，研究者便可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。</p></div></article>
-                <article class="copybox blk"><div class="body"><p>為減少重複操作，研究者可要求 Agentic AI 撰寫 Python代碼，將多個 AI Skills 串聯成自動化的分析流程 （Chain）。程式會逐份讀取結構化文書，依序執行各項 AI Skills，並自動將結果儲存至 JSON 檔案，直至完成所有史料的分析，</p></div></article>
+                <article class="copybox blk" id="part-3-ai-chain-card-1"><div class="title-row"><h2>2. 執行 AI Skills的方法</h2></div><div class="body"><p>完成修改或建立 AI Skills 後，研究者便可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。</p></div></article>
+                <article class="copybox blk" id="part-3-ai-chain-card-2"><div class="body"><p>為減少重複操作，研究者可要求 Agentic AI 撰寫 Python代碼，將多個 AI Skills 串聯成自動化的分析流程 （Chain）。程式會逐份讀取結構化文書，依序執行各項 AI Skills，並自動將結果儲存至 JSON 檔案，直至完成所有史料的分析，</p></div></article>
               </div>
-              <div class="part3-flow-frame part3-chain-frame" role="group" aria-label="文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON">
+              <div class="part3-flow-frame part3-chain-frame" id="part-3-ai-chain-chart" role="group" aria-label="文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON">
                 <div class="body"><p>例如，研究者可以建立一條處理奏摺的 AI Chain：</p></div>
                 <div class="workflow-chain">
                   <button type="button" class="workflow-node part3-chain-node" data-part3-chart-toggle="chain-1" aria-pressed="true">文書總結、分段</button><span class="workflow-link" aria-hidden="true"></span><button type="button" class="workflow-node part3-chain-node" data-part3-chart-toggle="chain-2" aria-pressed="false">抽取事件及官員行動</button><span class="workflow-link" aria-hidden="true"></span><button type="button" class="workflow-node part3-chain-node" data-part3-chart-toggle="chain-3" aria-pressed="false">追溯資訊來源</button><span class="workflow-link" aria-hidden="true"></span><button type="button" class="workflow-node part3-chain-node" data-part3-chart-toggle="chain-4" aria-pressed="false">抽取上諭中皇帝對奏摺的回應</button><span class="workflow-link" aria-hidden="true"></span><button type="button" class="workflow-node part3-chain-node" data-part3-chart-toggle="chain-5" aria-pressed="false">抽取後續官員的回應</button><span class="workflow-link" aria-hidden="true"></span><button type="button" class="workflow-node part3-chain-node" data-part3-chart-toggle="chain-6" aria-pressed="false">輸出結構化 JSON</button>
@@ -1132,19 +1189,19 @@
 
           <section class="story surface-a" id="part-3-wiki-intro" data-tab="part-3" data-nav="#part-3-wiki-intro">
             <div class="story-inner">
-              <article class="copybox blk"><div class="body"><p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p></div></article>
+              <article class="copybox blk" id="part-3-wiki-intro-card"><div class="body"><p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p></div></article>
             </div>
           </section>
 
           <section class="story surface-b" id="part-3-wiki-data" data-tab="part-3" data-nav="#part-3-wiki-data">
             <div class="story-inner">
-              <article class="copybox blk"><div class="body"><p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p></div></article>
+              <article class="copybox blk" id="part-3-wiki-data-card"><div class="body"><p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p></div></article>
             </div>
           </section>
 
           <section class="story surface-c" id="part-3-wiki-analysis" data-tab="part-3" data-nav="#part-3-wiki-analysis">
             <div class="story-inner">
-              <article class="copybox blk"><div class="body"><p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p></div></article>
+              <article class="copybox blk" id="part-3-wiki-analysis-card"><div class="body"><p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p></div></article>
             </div>
           </section>
         </section>

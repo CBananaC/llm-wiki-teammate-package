@@ -1,0 +1,241 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>18 · Agentic AI 動畫草稿（僅構圖，尚未加動畫）</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 760px; margin: 0 0 12px; }
+  .lead b { color: var(--accent); }
+  .note-list { max-width: 760px; margin: 0 0 40px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+
+  /* ==========================================================================
+     這是「構圖草稿」：畫面上的每個元素都放對位置，但還沒有任何動畫。
+     每個元素旁邊用編號小卡標出「之後打算怎麼動」，方便討論定案後再寫動畫。
+     ========================================================================== */
+
+  .stage-wrap { max-width: 900px; margin: 0 auto; }
+  .stage {
+    position: relative; aspect-ratio: 4 / 3; overflow: hidden;
+    background: radial-gradient(circle at 22% 18%, rgba(196,93,56,.16), transparent 42%),
+                linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+    border: 1px solid var(--line); box-shadow: 0 16px 34px rgba(22,61,63,.18);
+  }
+
+  /* ---- Mac 風格視窗外框（terminal 與 VS Code 共用） ---- */
+  .mac-window {
+    position: absolute; display: flex; flex-direction: column;
+    background: #1e1e1e; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 18px 30px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .mac-titlebar {
+    display: flex; align-items: center; gap: 7px;
+    padding: 8px 10px; background: #2b2b2b;
+    border-bottom: 1px solid rgba(255,255,255,.06);
+  }
+  .mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .mac-dot.red { background: #ff5f57; }
+  .mac-dot.yellow { background: #febc2e; }
+  .mac-dot.green { background: #28c840; }
+  .mac-titlebar span {
+    margin-left: 8px; color: rgba(255,255,255,.5);
+    font: 600 11px/1 var(--sans); letter-spacing: .02em;
+  }
+
+  /* ---- 視窗 1：Terminal（左後方，執行 AI Skill 指令） ---- */
+  .win-terminal { left: 3%; top: 8%; width: 46%; height: 46%; z-index: 1; transform: rotate(-2deg); }
+  .win-terminal .mac-body { flex: 1; padding: 10px 12px; font: 12px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color: #d7e0dd; overflow: hidden; }
+  .win-terminal .prompt { color: #7fd88f; }
+  .win-terminal .cmd { color: #f3f3f3; }
+  .win-terminal .out { color: #9aa8a5; }
+  .win-terminal .ok { color: #7fd88f; }
+
+  /* ---- 視窗 2：VS Code（右後方，同時編輯程式碼）— 只顯示程式碼，不放檔案側欄 ---- */
+  .win-vscode { right: 3%; top: 4%; width: 54%; height: 54%; z-index: 2; transform: rotate(1.5deg); }
+  .win-vscode .mac-body { flex: 1; min-height: 0; }
+  .win-vscode .code { height: 100%; padding: 10px 14px; font: 11.5px/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color: #d4d4d4; overflow: hidden; }
+  .win-vscode .code .tag { color: #569cd6; }
+  .win-vscode .code .str { color: #ce9178; }
+  .win-vscode .code .cmt { color: #6a9955; }
+  .win-vscode .code .kw { color: #c586c0; }
+  .win-vscode .code .fn { color: #dcdcaa; }
+  .win-vscode .caret { display: inline-block; width: 6px; height: 12px; background: #fff; vertical-align: -2px; }
+
+  /* ---- 寵物型機械人：仿照參考圖的圓潤藍色毛球造型，臉／身體都是終端機風格的 ">_" 面板 ---- */
+  .pet-wrap { position: absolute; z-index: 3; left: 50%; bottom: 5%; transform: translateX(-50%); width: 30%; }
+  .pet {
+    position: relative; width: 100%;
+    --pet-fill: linear-gradient(160deg, #9fbdf5 0%, #6e8fe0 48%, #4a63c4 100%);
+  }
+
+  /* 毛球狀頭部：中心圓 + 六個花瓣狀圓弧疊出蓬鬆的雲朵輪廓 */
+  .pet-head { position: relative; width: 82%; margin: 0 auto; aspect-ratio: 1/1; }
+  .pet-fluff { position: absolute; inset: 0; }
+  .pet-fluff span {
+    position: absolute; top: 50%; left: 50%; width: 52%; height: 52%;
+    margin: -26% 0 0 -26%; border-radius: 50%;
+    background: var(--pet-fill);
+    box-shadow: inset -4px -6px 10px rgba(0,0,0,.12), inset 4px 4px 8px rgba(255,255,255,.18);
+  }
+  .pet-fluff span:nth-child(1) { transform: rotate(0deg)   translateY(-56%); }
+  .pet-fluff span:nth-child(2) { transform: rotate(60deg)  translateY(-56%); }
+  .pet-fluff span:nth-child(3) { transform: rotate(120deg) translateY(-56%); }
+  .pet-fluff span:nth-child(4) { transform: rotate(180deg) translateY(-56%); }
+  .pet-fluff span:nth-child(5) { transform: rotate(240deg) translateY(-56%); }
+  .pet-fluff span:nth-child(6) { transform: rotate(300deg) translateY(-56%); }
+  .pet-head-core {
+    position: absolute; inset: 8%; border-radius: 50%;
+    background: var(--pet-fill);
+    box-shadow: inset -6px -10px 16px rgba(0,0,0,.14), inset 6px 8px 14px rgba(255,255,255,.22);
+  }
+  /* 臉：深色終端機螢幕，裡面是 ">_" 樣式的表情 */
+  .pet-face {
+    position: absolute; left: 50%; top: 48%; transform: translate(-50%, -50%);
+    width: 46%; height: 34%; border-radius: 30%;
+    background: #16232b;
+    display: flex; align-items: center; justify-content: center; gap: 3px;
+    box-shadow: inset 0 2px 4px rgba(0,0,0,.5);
+  }
+  .pet-face span { color: #bfe9e4; font: 700 clamp(11px,2.6vw,20px)/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+
+  /* 身體：較小的同色圓角方塊，同樣有終端機螢幕 */
+  .pet-body {
+    position: relative; width: 46%; margin: -4% auto 0; aspect-ratio: 1.3/1;
+    border-radius: 40%;
+    background: var(--pet-fill);
+    box-shadow: inset -4px -8px 12px rgba(0,0,0,.14), inset 4px 6px 10px rgba(255,255,255,.2);
+  }
+  .pet-body-face {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 56%; height: 40%; border-radius: 30%;
+    background: #16232b;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .pet-body-face span { color: #bfe9e4; font: 700 clamp(9px,2vw,14px)/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+
+  /* 細細的手腳，維持圓潤可愛的比例 */
+  .pet-limb { position: absolute; border-radius: 40%; background: var(--pet-fill); }
+  .pet-limb.arm { top: 20%; width: 16%; height: 62%; }
+  .pet-limb.arm.l { left: -10%; transform: rotate(14deg); }
+  .pet-limb.arm.r { right: -10%; transform: rotate(-14deg); }
+  .pet-leg { position: absolute; bottom: -28%; width: 22%; height: 34%; border-radius: 40%; background: var(--pet-fill); }
+  .pet-leg.l { left: 16%; }
+  .pet-leg.r { right: 16%; }
+
+  /* ---- 編號標註：說明這一版只是構圖，之後才加動畫 ---- */
+  .draft-tag {
+    position: absolute; z-index: 5;
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 9px; background: rgba(255,255,255,.94);
+    border: 1px solid var(--line); border-radius: 3px;
+    font: 700 11px/1 var(--sans); color: var(--ink); white-space: nowrap;
+  }
+  .draft-tag .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--accent); color: #fff; font: 800 9.5px/1 var(--sans);
+  }
+
+  .plan-block { max-width: 900px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+</style>
+</head>
+<body>
+
+  <h1>Agentic AI 資訊面板配圖 — 動畫構圖草稿</h1>
+  <p class="lead">
+    這一版<b>還沒有任何動畫</b>，先把「機械人打字」「Terminal 執行指令」「VS Code 同時改程式碼」
+    三個元素的位置、大小、風格排好，讓你先確認畫面構圖，之後再加上真正的動態效果。
+  </p>
+  <ul class="note-list">
+    <li>畫面比例是 4:3，跟資訊面板目前的照片欄位一致，之後可以直接取代 <code>done-intro-1.png</code>。</li>
+    <li>Terminal 與 VS Code 都做成 Mac 風格視窗（左上三個色點），呼應「多視窗同時工作」的畫面。</li>
+    <li>前景改成你提供的參考圖：藍色毛球寵物機械人，臉部與身體都是終端機風格的 <code>&gt;_</code> 面板。</li>
+    <li>VS Code 視窗移除了檔案側欄，只保留程式碼區塊。</li>
+  </ul>
+
+  <div class="stage-wrap">
+    <div class="stage">
+
+      <!-- 視窗 1：Terminal -->
+      <div class="mac-window win-terminal">
+        <div class="mac-titlebar"><span class="mac-dot red"></span><span class="mac-dot yellow"></span><span class="mac-dot green"></span><span>terminal — ai-skills</span></div>
+        <div class="mac-body">
+<span class="prompt">$</span> <span class="cmd">run-skill zhu-summary --input 硃110.json</span><br>
+<span class="out">載入文書中...</span><br>
+<span class="out">呼叫 Agentic AI 分析原文段落</span><br>
+<span class="ok">✓ 已提取關鍵資訊，輸出至 result.json</span><br>
+<span class="prompt">$</span> <span class="cmd">▍</span>
+        </div>
+      </div>
+
+      <!-- 視窗 2：VS Code（只顯示程式碼，不放檔案側欄） -->
+      <div class="mac-window win-vscode">
+        <div class="mac-titlebar"><span class="mac-dot red"></span><span class="mac-dot yellow"></span><span class="mac-dot green"></span><span>storymap.js — VS Code</span></div>
+        <div class="mac-body">
+          <div class="code">
+<span class="cmt">// 讀取 AI Skill 設定</span><br>
+<span class="kw">const</span> <span class="fn">runSkill</span> = (doc) => {<br>
+&nbsp;&nbsp;<span class="kw">return</span> ai.<span class="fn">extract</span>(doc, <span class="str">"zhu-summary"</span>);<br>
+};<span class="caret"></span>
+          </div>
+        </div>
+      </div>
+
+      <!-- 前景：寵物型機械人操作鍵盤 -->
+      <div class="pet-wrap">
+        <div class="robot-desk"></div>
+        <div class="pet">
+          <div class="pet-head">
+            <div class="pet-fluff">
+              <span></span><span></span><span></span><span></span><span></span><span></span>
+            </div>
+            <div class="pet-head-core"></div>
+            <div class="pet-face"><span>&gt;</span><span>_</span></div>
+          </div>
+          <div class="pet-body">
+            <span class="pet-limb arm l"></span>
+            <span class="pet-limb arm r"></span>
+            <div class="pet-body-face"><span>&gt;-</span></div>
+            <span class="pet-leg l"></span>
+            <span class="pet-leg r"></span>
+          </div>
+        </div>
+        <div class="keyboard"></div>
+      </div>
+
+      <!-- 構圖標註（草稿用，正式版不會出現） -->
+      <div class="draft-tag" style="left:5%; top:4%;"><span class="n">1</span>Terminal：逐行「打字」顯示指令</div>
+      <div class="draft-tag" style="right:4%; top:1%;"><span class="n">2</span>VS Code：游標閃爍＋逐字輸入程式碼</div>
+      <div class="draft-tag" style="left:50%; bottom:2%; transform:translateX(-50%);"><span class="n">3</span>寵物機械人：頭部輕微擺動，像在打字</div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <h2>之後加動畫時的規劃（目前尚未實作）</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>Terminal 逐行輸出</b>：每隔一段時間多顯示一行指令／結果，最後一行的游標閃爍，全部顯示完後淡出重新開始（loop）。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>VS Code 逐字輸入</b>：程式碼一個字一個字「打」出來，搭配閃爍游標，可與 Terminal 稍微錯開時間，製造「同時在忙」的感覺。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>寵物機械人打字動作</b>：頭部做極輕微、規律的上下擺動，臉部 <code>&gt;_</code> 可以偶爾眨一下（壓扁再彈回），暗示正在專心操作鍵盤。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>整體</b>：全部用 CSS <code>@keyframes</code> 純動畫（無需 JS），檔案仍是單一 .png/.gif 大小的靜態替代方案也可以另外準備，避免動畫在舊瀏覽器或列印時失效。</p></div></div>
+    </div>
+  </div>
+
+</body>
+</html>

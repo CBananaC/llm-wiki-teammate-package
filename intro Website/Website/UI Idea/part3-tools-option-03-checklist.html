@@ -66,8 +66,8 @@
       --tools-list-width: 31%;
       --tools-height: 700px;
       --tools-row-height: 72px;
-      --tools-photo-height: 46%;
-      --tools-info-height: 54%;
+      --tools-photo-height: 50%;
+      --tools-info-height: 50%;
       display: grid;
       width: min(var(--tools-width), 100%);
       margin-inline: auto;
@@ -282,7 +282,7 @@
       padding: clamp(24px, 4vw, 48px);
       border-top: 1px solid var(--line);
       min-height: 0;
-      overflow-y: auto;
+      overflow: visible;
     }
 
     .info-subtitle {

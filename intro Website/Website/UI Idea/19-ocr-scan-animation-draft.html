@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>19 · 甚麼是 OCR？掃描動畫草稿（僅構圖，尚未加動畫）</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+    --body-weight: 500;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 780px; margin: 0 0 12px; }
+  .lead b { color: var(--accent); }
+  .note-list { max-width: 780px; margin: 0 0 40px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+  .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
+
+  /* ==========================================================================
+     以下是「甚麼是 OCR？」這一節目前的實際版面：兩張文字卡＋新增的正方形
+     視覺元素。文字卡內容完全沿用網站現有文案，方便直接比對放進去的效果。
+     ========================================================================== */
+  .mock-section { max-width: 1240px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
+  .mock-title-row h2 { margin: 0; color: var(--ink); font: 500 clamp(22px, 2.4vw, 30px)/1.2 var(--serif); letter-spacing: -.02em; }
+
+  .ocr-def-layout { display: grid; grid-template-columns: minmax(0, 1fr) 42%; gap: clamp(18px, 2.2vw, 30px); align-items: start; }
+  .ocr-def-cards { display: grid; gap: 14px; }
+  .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
+  .copybox p { margin: 0; color: var(--text); font: var(--body-weight) 15px/1.9 var(--serif); }
+
+  /* ---- 正方形視覺元素：掃描動畫舞台 ---- */
+  .ocr-stage {
+    position: relative; width: 100%; aspect-ratio: 1 / 1; overflow: hidden;
+    background: radial-gradient(circle at 22% 16%, rgba(196,93,56,.16), transparent 42%),
+                linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+    border: 1px solid var(--line); box-shadow: 0 16px 34px rgba(22,61,63,.18);
+    display: flex; flex-direction: column;
+  }
+
+  /* 上方：兩份文書並排，各自是一個「掃描頁框」 */
+  .ocr-pages { flex: 0 0 62%; display: flex; gap: 3%; padding: 6% 5% 0; min-height: 0; }
+  .ocr-page {
+    position: relative; flex: 1 1 0; min-width: 0; overflow: hidden;
+    background: #2a2f2e; border-radius: 4px;
+    box-shadow: 0 10px 20px rgba(0,0,0,.3);
+  }
+  .ocr-page img {
+    display: block; width: 100%; height: 100%; object-fit: cover; object-position: center top;
+    filter: saturate(.9) contrast(1.02);
+  }
+  .ocr-page-label {
+    position: absolute; z-index: 2; top: 6px; left: 6px;
+    padding: 3px 7px; color: #f7f3ea; background: rgba(22,61,63,.82);
+    font: 700 10px/1.3 var(--sans); letter-spacing: .04em;
+  }
+  .ocr-page-count {
+    position: absolute; z-index: 2; right: 6px; bottom: 6px;
+    padding: 2px 7px; color: #f7f3ea; background: rgba(0,0,0,.5);
+    font: 700 10px/1 var(--sans); letter-spacing: .04em; border-radius: 2px;
+  }
+  /* 掃描線：草稿先固定在中間，之後動畫會讓它左右／翻頁時移動 */
+  .ocr-scan-line {
+    position: absolute; z-index: 3; inset: 0 0 auto 0; height: 34%;
+    background: linear-gradient(180deg, rgba(243,201,103,0) 0%, rgba(243,201,103,.22) 46%, rgba(243,201,103,0) 100%);
+    mix-blend-mode: screen; pointer-events: none;
+  }
+  .ocr-page-stack {
+    position: absolute; z-index: 1; inset: 3px 3px auto auto; width: 92%; height: 92%;
+    top: 3px; right: -3px;
+    box-shadow: -6px 6px 0 -3px rgba(255,255,255,.05), -12px 12px 0 -6px rgba(255,255,255,.03);
+    pointer-events: none;
+  }
+
+  /* 下方：OCR 輸出區，樣式呼應 Agentic AI 動畫的 terminal 視窗 */
+  .ocr-output { flex: 1 1 auto; margin: 5% 5% 6%; min-height: 0; display: flex; flex-direction: column; background: #1e1e1e; border-radius: 6px; overflow: hidden; box-shadow: 0 12px 22px rgba(0,0,0,.28); }
+  .ocr-output-bar { flex: none; display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 6px 10px; background: #2b2b2b; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .ocr-output-bar span.tag { color: rgba(255,255,255,.5); font: 700 10px/1 var(--sans); letter-spacing: .06em; }
+  .ocr-output-bar span.doc { color: #7fd88f; font: 700 10px/1 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+  .ocr-output-body { flex: 1; min-height: 0; padding: 10px 12px; overflow: hidden; color: #d7e0dd; font: 11.5px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; }
+  .ocr-output-body .cursor { display: inline-block; width: 6px; height: 1em; background: #d7e0dd; vertical-align: -2px; }
+
+  /* 構圖標註（草稿用，正式版不會出現） */
+  .draft-tag {
+    position: absolute; z-index: 5;
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 9px; background: rgba(255,255,255,.94);
+    border: 1px solid var(--line); border-radius: 3px;
+    font: 700 11px/1 var(--sans); color: var(--ink); white-space: nowrap;
+  }
+  .draft-tag .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--accent); color: #fff; font: 800 9.5px/1 var(--sans);
+  }
+
+  .plan-block { max-width: 1240px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+
+  .source-note { max-width: 1240px; margin: 20px auto 0; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); font: 500 12.5px/1.7 var(--sans); color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+  <h1>「甚麼是 OCR？」新增正方形視覺元素 — 掃描動畫草稿</h1>
+  <p class="lead">
+    這一版<b>還沒有任何動畫</b>，先把版面排好：原本兩張文字卡維持不變，右側新增一個正方形視覺元素，
+    上方並排兩份真實史料的掃描頁（手抄本＋刊本），下方是 OCR 輸出區，顯示同一份文書（硃25）辨識出來的文字。
+  </p>
+  <ul class="note-list">
+    <li>兩份文書刻意選同一份原始文書「硃25．為奏彰化失陷已調兵赴臺事」——左邊是國立故宮博物院的原奏摺手抄影像，右邊是《明清臺灣檔案彙編》第 30 冊頁 80 的刊本影像，兩者文字內容相同，方便呈現「不同版面都能 OCR 成同一段文字」。</li>
+    <li>下方 OCR 輸出區目前顯示的是硃25 原文的<b>前段節錄</b>（逐字取自資料庫，非虛構），用刪節號表示還有更多內容。</li>
+    <li>頁面右下角的「1 / 4」「1 / 2」是頁數指示，之後加動畫時，兩份文書會各自翻頁（由右至左，符合線裝書翻閱方向），停留說明放在下方規劃區。</li>
+  </ul>
+
+  <div class="mock-section">
+    <div class="mock-title-row"><h2>1. 甚麼是 OCR？</h2></div>
+    <div class="ocr-def-layout">
+      <div class="ocr-def-cards">
+        <article class="copybox"><p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p></article>
+        <article class="copybox"><p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p></article>
+      </div>
+
+      <div class="ocr-stage" id="ocr-stage">
+        <div class="ocr-pages">
+          <div class="ocr-page">
+            <span class="ocr-page-stack" aria-hidden="true"></span>
+            <img src="ocr-anim-handwritten-p1.png" alt="硃25 原奏摺手抄影像（國立故宮博物院）">
+            <span class="ocr-page-label">手抄本掃描</span>
+            <span class="ocr-scan-line" aria-hidden="true"></span>
+            <span class="ocr-page-count">1 / 4</span>
+          </div>
+          <div class="ocr-page">
+            <span class="ocr-page-stack" aria-hidden="true"></span>
+            <img src="ocr-anim-printed-p80.png" alt="硃25 刊本影像（《明清臺灣檔案彙編》30冊頁80）">
+            <span class="ocr-page-label">刊本影像</span>
+            <span class="ocr-scan-line" aria-hidden="true"></span>
+            <span class="ocr-page-count">1 / 2</span>
+          </div>
+        </div>
+        <div class="ocr-output">
+          <div class="ocr-output-bar"><span class="tag">OCR 輸出</span><span class="doc">硃25．為奏彰化失陷已調兵赴臺事</span></div>
+          <div class="ocr-output-body">福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨……<span class="cursor"></span></div>
+        </div>
+
+        <!-- 構圖標註 -->
+        <div class="draft-tag" style="left: 6%; top: 4%;"><span class="n">1</span>手抄本：由右至左翻頁</div>
+        <div class="draft-tag" style="right: 6%; top: 4%;"><span class="n">2</span>刊本：由右至左翻頁（與左邊同步）</div>
+        <div class="draft-tag" style="left: 50%; bottom: 3%; transform: translateX(-50%);"><span class="n">3</span>OCR 輸出：逐字打出，游標閃爍</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <h2>之後加動畫時的規劃（目前尚未實作）</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>兩份文書同步翻頁</b>：每隔一段時間，左右兩個頁框「同時」切換到下一頁（由右至左，如同翻線裝書），手抄本共 4 頁、刊本共 2 頁，各自循環；頁數指示（1/4、1/2）跟著更新。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>掃描線</b>：目前先固定畫一條淡黃色掃描光暈在頁面中段，之後可以讓它隨翻頁節奏上下掃過，暗示「正在辨識這一頁」。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>OCR 輸出逐字顯示</b>：沿用 Agentic AI 動畫的逐字打字技巧（保留顏色標籤、跑完自動清空重播），內容固定用硃25 的原文節錄，讓人一眼看出「兩份不同版面的史料，OCR 後變成同一段機器可讀文字」。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>時間安排</b>：翻頁與打字兩個動畫各自獨立循環（不強制同步），比照 Agentic AI 動畫用 <code>IntersectionObserver</code> 只在畫面可見時播放，並支援 <code>prefers-reduced-motion</code>。</p></div></div>
+    </div>
+  </div>
+
+  <p class="source-note">
+    圖片來源：手抄本影像取自國立故宮博物院藏《天地會第一冊》（現有素材 <code>Visual Material/3.4/npmpdf-2.pdf</code>）；
+    刊本影像取自臺灣史料集成編輯委員會編《明清臺灣檔案彙編》第30冊，頁80–81（現有素材
+    <code>Visual Material/3.4/明清台灣檔案匯編 30 (dragged).pdf</code>）。文字內容均對應資料庫中 <code>doc_id: 硃25</code>。
+  </p>
+
+</body>
+</html>
