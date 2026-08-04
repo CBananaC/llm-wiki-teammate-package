@@ -7443,3 +7443,24 @@ Verified:
 
 Remaining:
 - None for this panel correction.
+
+### 2026-08-04 16:19 HKT — Codex — Add independent PaddleOCR photo-width control
+
+Summary:
+- Added `--paddleocr-photo-width` to control only the PaddleOCR GitHub gallery width in `storymap-cards.css`.
+- Made the gallery image stage use the supplied image's 2:1 aspect ratio, so changing the width automatically changes the image height.
+- Fixed the text-card track at `74ch`, so adjusting the photo width does not resize the text card on desktop.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview reports a 668.9px text card and a 501.0px photo at the default `--paddleocr-photo-width: 42%`; the photo stage ratio is 2.00 and the info panel remains visible.
+- Browser preview shows no errors or warnings.
+- `node --check` and `git diff --check` pass.
+
+Remaining:
+- To resize the photo, edit `--paddleocr-photo-width` in the `#part-3-paddleocr` block.
