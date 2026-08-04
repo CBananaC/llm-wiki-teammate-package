@@ -1546,6 +1546,74 @@ img { max-width: 100%; }
   border: 1px solid var(--line);
   font: var(--body-weight) calc(15px * var(--font-scale))/1.9 var(--serif);
 }
+
+/* Part 3.4.3 — PaddleOCR: repository visual on the left, point-form explanation on the right. */
+.paddleocr-layout {
+  display: grid;
+  grid-template-columns: minmax(250px, var(--paddleocr-visual-width, 42%)) minmax(0, 1fr);
+  align-items: stretch;
+  gap: var(--col-gap);
+}
+.paddleocr-visual-box {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  overflow: hidden;
+  background: var(--card);
+  border: 1px solid var(--line);
+  box-shadow: 0 10px 26px rgba(22, 61, 63, .1);
+}
+.paddleocr-visual-image-link {
+  display: block;
+  flex: 1 1 auto;
+  min-height: 0;
+  background: #fff;
+}
+.paddleocr-visual-image-link:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: -4px;
+}
+.paddleocr-visual-image-link img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  min-height: 220px;
+  object-fit: cover;
+  object-position: center;
+}
+.paddleocr-visual-info {
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 15px 18px 17px;
+  border-top: 1px solid var(--line);
+  background: rgba(255, 255, 255, .58);
+}
+.paddleocr-visual-label {
+  color: var(--muted);
+  font: 700 calc(11px * var(--font-scale))/1.2 var(--sans);
+  letter-spacing: .1em;
+  text-transform: uppercase;
+}
+.paddleocr-visual-info > a {
+  width: fit-content;
+  color: var(--ink);
+  font: 700 calc(18px * var(--font-scale))/1.25 var(--serif);
+  text-decoration: underline;
+  text-decoration-color: var(--accent);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 4px;
+}
+.paddleocr-visual-info > a:hover,
+.paddleocr-visual-info > a:focus-visible {
+  color: var(--accent);
+}
+.paddleocr-point-list {
+  margin-top: 14px;
+  margin-bottom: 0;
+}
 @media (max-width: 980px) {
   #part-3-content #part-3-research-questions .lay-split,
   #part-3-content .part3-json-split .lay-split {
@@ -1560,6 +1628,14 @@ img { max-width: 100%; }
   }
   .part3-three-card-grid {
     grid-template-columns: 1fr;
+  }
+  .paddleocr-layout {
+    grid-template-columns: 1fr;
+  }
+  .paddleocr-visual-image-link img {
+    height: auto;
+    min-height: 0;
+    aspect-ratio: 2 / 1;
   }
   /* AI-chain chart (#part-3-ai-chain-chart): stack the workflow-node buttons */
   .part3-flow-frame .workflow-chain {

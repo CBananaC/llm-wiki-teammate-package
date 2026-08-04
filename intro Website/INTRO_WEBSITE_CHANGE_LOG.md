@@ -3699,3 +3699,25 @@ Files changed:
 Verified: The reference now contains the requested title, author, and Gregorian date without restoring the repeated caption prefix.
 
 Remaining: Browser recheck and local checkpoint.
+
+### 2026-08-04 15:44 HKT — Codex — Add PaddleOCR point-form card and GitHub visual
+
+Summary:
+- Converted the three PaddleOCR advantages into the intro website's dash-led point-form list UI.
+- Added the supplied `PaddleOCR.png` as a visual box on the left of the PaddleOCR text card, with a linked info panel labelled `PaddleOCR GitHub`.
+- Used the visible repository identity in the image (`PaddlePaddle/PaddleOCR`) to link to the canonical GitHub repository.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- HTTP browser preview shows the visual box on the left, the PaddleOCR text card on the right, three point-form items, and the `PaddleOCR GitHub` link.
+- The image path, alt text, GitHub href, three list items, and two-column grid were checked in the live page; no browser errors or warnings were reported.
+- Focused `git diff --check` passes for the updated StoryMap files.
+
+Remaining:
+- None for the PaddleOCR point-form and visual-link update.

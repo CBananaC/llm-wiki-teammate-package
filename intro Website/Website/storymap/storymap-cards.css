@@ -678,6 +678,7 @@
   --part3-title-size: clamp(27px, 3.4vw, 46px);
   --part3-body-size: calc(16px * var(--font-scale));
   --part3-body-line-height: 1.9;
+  --paddleocr-visual-width: 42%;
 }
 
 /* Part 3.4.4 — 運用 Agentic AI 使用 PaddleOCR */
