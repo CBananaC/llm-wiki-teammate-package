@@ -7503,3 +7503,20 @@ Verified:
 
 Remaining:
 - Change `--paddleocr-photo-width` or `--paddleocr-photo-max-width` in the `#part-3-paddleocr` block to adjust the current width or its maximum.
+
+### 2026-08-04 16:40 HKT — Codex — Clear OCR JSON data at user request
+
+Summary:
+- Replaced the contents of the derived OCR JSON with an empty JSON object `{}`.
+- Kept the source PDF and OCR script unchanged; the previous OCR JSON remains recoverable from local commit `0c63cf2`.
+
+Files changed:
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- The cleared file parses as valid JSON and contains `{}`.
+- No source PDF or unrelated StoryMap file was changed by this action.
+
+Remaining:
+- Regenerate the OCR JSON with the saved OCR code if the extracted data is needed again.
