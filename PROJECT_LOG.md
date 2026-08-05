@@ -8033,6 +8033,24 @@ Verified:
 Remaining:
 - None for this page-mapping adjustment.
 
+### 2026-08-05 15:30 HKT — Codex — Remove JSON field names from handwritten guidance
+
+Summary:
+- Removed explicit JSON field and column names from the handwritten Part 3 版面特徵 and AI Prompt text only.
+- Preserved the user's current handwritten feature adjustments and left the Python and OCR JSON examples unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The rendered handwritten feature data contains no technical field names in any `desc` or `prompt` value.
+- All eight handwritten labels remain visible without overlap, and the browser reports no errors or warnings.
+
+Remaining:
+- The OCR examples remain instructional evidence and should still be checked against the scanned images before being treated as confirmed transcription.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:

@@ -1482,8 +1482,8 @@
                         "box": {"left":"60%","top":"46%","width":"11%","height":"50%"},
                         "tag": {"left":"-134px","top":"34%"},
                         "title": "臣字款（小字自稱）",
-                        "desc": "官員在文中自稱「奴才」或「臣」時以小字偏右書寫，字體小於正文。這些字也要 OCR，並作為正文的一部分保留在 body text 中。",
-                        "prompt": "辨識正文中偏右、字體較小的「奴才」或「臣」。\n請將它們一併 OCR，保留在 body 的原有位置，\n不要另行刪除或排除。",
+                        "desc": "官員在文中自稱「奴才」或「臣」時以小字偏右書寫，字體小於正文。這些字也要 OCR，並作為正文的一部分保留。",
+                        "prompt": "辨識正文中偏右、字體較小的「奴才」或「臣」。\n請將它們一併 OCR，保留在原有位置，\n不要另行刪除或排除。",
                         "py": "<span class=\"cmt\"># 臣字款：辨識小字，但保留在正文 body</span>\nsmall_self_refs = [b <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes <span class=\"kw\">if</span> b.height &lt; median_height * <span class=\"num\">0.7</span>]\nbody = <span class=\"fn\">ocr</span>(boxes, preserve_order=<span class=\"kw\">True</span>)\nself_reference = <span class=\"fn\">find_terms</span>(body, terms=[<span class=\"str\">\"奴才\"</span>, <span class=\"str\">\"臣\"</span>])",
                         "json": "{\n  <span class=\"jkey\">\"self_reference\"</span>: [<span class=\"jstr\">\"奴才\"</span>, <span class=\"jstr\">\"臣\"</span>],\n  <span class=\"jkey\">\"style\"</span>: <span class=\"jstr\">\"small_inline\"</span>,\n  <span class=\"jkey\">\"in_body\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       },
@@ -1493,7 +1493,7 @@
                         "tag": {"right":"-142px","top":"38%"},
                         "title": "抬頭",
                         "desc": "當提及皇帝時，會另起一行並提高書寫位置，稱為抬頭。這種格式會把同一句話拆成兩行，OCR 需要把因抬頭而分隔的文字重新合併。",
-                        "prompt": "凡涉及皇帝的詞語會另起一行並抬高書寫（抬頭）。\n請把因抬頭而被分隔的句子重新合併為完整句子，\n並在 honorific_breaks 記錄原本的斷行位置。",
+                        "prompt": "凡涉及皇帝的詞語會另起一行並抬高書寫（抬頭）。\n請把因抬頭而被分隔的句子重新合併為完整句子，\n不要因抬頭而遺漏文字。",
                         "py": "<span class=\"cmt\"># 合併因抬頭而斷開的行</span>\nmerged, breaks = [], []\n<span class=\"kw\">for</span> i, col <span class=\"kw\">in</span> <span class=\"fn\">enumerate</span>(columns):\n    <span class=\"kw\">if</span> col.top &lt; page_top + <span class=\"num\">20</span>:  <span class=\"cmt\"># 位置抬高 = 抬頭</span>\n        breaks.<span class=\"fn\">append</span>(i)\n        merged[-<span class=\"num\">1</span>] += col.text\n    <span class=\"kw\">else</span>:\n        merged.<span class=\"fn\">append</span>(col.text)",
                         "json": "{\n  <span class=\"jkey\">\"honorific_breaks\"</span>: [<span class=\"jnum\">3</span>, <span class=\"jnum\">11</span>],\n  <span class=\"jkey\">\"merged_sentences\"</span>: <span class=\"jnum\">2</span>\n}"
                       },
@@ -1503,7 +1503,7 @@
                         "tag": {"left":"-142px","top":"58%"},
                         "title": "硃批（草書）",
                         "desc": "硃批以紅筆草書書寫，連筆多、字形變化大，辨識準確率低。OCR 時應先辨識紅色筆跡範圍，並將其與正文分開，留待人工判讀。",
-                        "prompt": "第三頁左側有以紅筆草書書寫的硃批，字形難以準確辨識。\n請先依紅色筆跡標出硃批範圍，存入 rescript 欄位，\n不要把硃批誤併入正文。",
+                        "prompt": "第三頁左側有以紅筆草書書寫的硃批，字形難以準確辨識。\n請先依紅色筆跡標出硃批範圍，\n不要把硃批誤併入正文。",
                         "py": "<span class=\"cmt\"># 硃批：以紅色筆跡定位，不強行辨識草書</span>\nred = <span class=\"fn\">detect_red_ink</span>(image)\ndoc[<span class=\"str\">\"rescript\"</span>] = {\n    <span class=\"str\">\"bbox\"</span>: red.bbox,\n    <span class=\"str\">\"text\"</span>: <span class=\"str\">\"\"</span>,\n    <span class=\"str\">\"needs_manual_reading\"</span>: <span class=\"kw\">True</span>\n}",
                         "json": "{\n  <span class=\"jkey\">\"rescript\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"\"</span>,\n    <span class=\"jkey\">\"script\"</span>: <span class=\"jstr\">\"cursive\"</span>,\n    <span class=\"jkey\">\"needs_manual_reading\"</span>: <span class=\"jstr\">\"true\"</span>\n  }\n}"
                       },
