@@ -7737,6 +7737,29 @@ Verified:
 Remaining:
 - None for this Part 3.8 width adjustment.
 
+### 2026-08-05 13:09 HKT — Codex — Enhance OCR handwritten page clarity
+
+Summary:
+- Created clearer, higher-resolution versions of the four `硃25` handwritten OCR pages while preserving the archival page composition, text, annotations, seals, watermark, and paper texture.
+- Saved the originals unchanged and updated the live StoryMap OCR animation and Part 3 feature data to use the enhanced assets.
+
+Files changed:
+- `intro Website/Website/storymap/ocr-zhu25-handwritten-1-enhanced.png`
+- `intro Website/Website/storymap/ocr-zhu25-handwritten-2-enhanced.png`
+- `intro Website/Website/storymap/ocr-zhu25-handwritten-3-enhanced.png`
+- `intro Website/Website/storymap/ocr-zhu25-handwritten-4-enhanced.png`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser loads `ocr-zhu25-handwritten-1-enhanced.png` at `1466×1073` from the updated gallery path.
+- All four enhanced files exist and the gallery metadata references the enhanced filenames.
+- The enhanced outputs were visually inspected for clearer ink edges, page texture, red annotations, seals, watermark, and margins.
+
+Remaining:
+- The original four page images remain available under their original filenames for comparison or rollback.
+
 ### 2026-08-04 16:40 HKT — Codex — Clear OCR JSON data at user request
 
 Summary:
