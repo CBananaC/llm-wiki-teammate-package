@@ -977,13 +977,16 @@
 #part-3-handwritten-explorer [data-fx-feature="vertical"],
 #part-3-handwritten-explorer [data-fx-feature="regular-script"],
 #part-3-handwritten-explorer [data-fx-feature="author"],
-#part-3-handwritten-explorer [data-fx-feature="minister"],
+#part-3-handwritten-explorer [data-fx-feature="minister"] {
+  --fx-tag-left: auto;
+  --fx-tag-right: -70px;
+}
 #part-3-handwritten-explorer [data-fx-feature="respect"],
 #part-3-handwritten-explorer [data-fx-feature="rescript"],
 #part-3-handwritten-explorer [data-fx-feature="watermark"],
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
-  --fx-tag-left: auto;
-  --fx-tag-right: -70px;
+  --fx-tag-left: -70px;
+  --fx-tag-right: auto;
 }
 @media (max-width: 1040px) {
   #part-3-handwritten-explorer .part3-fx-doc-folded {

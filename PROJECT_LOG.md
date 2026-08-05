@@ -8107,6 +8107,26 @@ Verified:
 Remaining:
 - At narrow widths, the existing responsive layout continues to place labels in the normal tag row.
 
+### 2026-08-05 16:09 HKT — Codex — Move later handwritten labels to the left
+
+Summary:
+- Kept `直排單欄`, `正文字體`, `上奏官員`, and `臣字款` on the right.
+- Moved `抬頭`, `硃批`, `浮水印`, and `印章` to the left in their existing vertical sequence.
+- Refreshed the StoryMap CSS cache key.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms the two-sided label arrangement has no overlap.
+- Browser console reports no errors or warnings.
+
+Remaining:
+- At narrow widths, the existing responsive layout continues to place labels in the normal tag row.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
