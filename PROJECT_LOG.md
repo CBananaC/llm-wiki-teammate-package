@@ -8424,3 +8424,25 @@ Verified:
 
 Remaining:
 - None for the JSON field button layout and selection behavior.
+
+### 2026-08-05 18:38 HKT — Codex — Keep completed OCR batch labels visible
+
+Summary:
+- Kept the 4×4/50-page batch track visible during both batch-entry and batch-to-single restart transitions.
+- Made the verified tile state enforce the enlarged blue `50頁` label, so the green tick and completed label remain together until the single-page restart replaces the grid.
+- Refreshed the StoryMap CSS cache key.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Live OCR animation trace shows `trackOpacity: 1` while 16 completed tiles remain in the 50-page screen and during `is-switching-out`.
+- The next single-page tile replaces the batch directly; the 50-page screen no longer fades out first.
+- Verified tiles retain `50頁`, blue enlarged styling, and green ticks; browser console reports no errors or warnings.
+- `node --check storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the OCR batch persistence behavior.

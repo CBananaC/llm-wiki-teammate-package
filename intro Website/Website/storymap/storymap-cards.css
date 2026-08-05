@@ -979,31 +979,46 @@
    要調整標籤本身的寬度或字級時取消註解、填數值即可。 */
 #part-3-printed-explorer [data-fx-feature="text-info"] {
   --fx-color: #cfe0ef;
-  --fx-left: 69%; --fx-top: 8%; --fx-width: 27%; --fx-height: 34%;
+  --fx-left: 69%;
+  --fx-top: 8%;
+  --fx-width: 27%;
+  --fx-height: 34%;
   --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 14%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
 #part-3-printed-explorer [data-fx-feature="single-column"] {
   --fx-color: #cfe3d4;
-  --fx-left: 5%; --fx-top: 10%; --fx-width: 88%; --fx-height: 84%;
+  --fx-left: 5%;
+  --fx-top: 10%;
+  --fx-width: 88%;
+  --fx-height: 84%;
   --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 36%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
 #part-3-printed-explorer [data-fx-feature="paragraphs"] {
   --fx-color: #f5e6bd;
-  --fx-left: 46%; --fx-top: 12%; --fx-width: 13%; --fx-height: 78%;
+  --fx-left: 46%;
+  --fx-top: 12%;
+  --fx-width: 13%;
+  --fx-height: 78%;
   --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 58%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
 #part-3-printed-explorer [data-fx-feature="page"] {
   --fx-color: #ddd6ea;
-  --fx-left: 86%; --fx-top: 94.5%; --fx-width: 8%; --fx-height: 3.6%;
+  --fx-left: 86%;
+  --fx-top: 94.5%;
+  --fx-width: 8%;
+  --fx-height: 3.6%;
   --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 90%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
 #part-3-printed-explorer [data-fx-feature="mark"] {
   --fx-color: #f0d6d0;
-  --fx-left: 77.5%; --fx-top: 6.5%; --fx-width: 9%; --fx-height: 3.2%;
+  --fx-left: 77.5%;
+  --fx-top: 6.5%;
+  --fx-width: 9%;
+  --fx-height: 3.2%;
   --fx-tag-left: -124px; --fx-tag-right: auto; --fx-tag-top: 5%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
@@ -1011,13 +1026,19 @@
 /* 7 辨識印刷字 — 第 2 頁 */
 #part-3-printed-explorer [data-fx-feature="inline-zhu"] {
   --fx-color: #f3ddc4;
-  --fx-left: 68%; --fx-top: 28%; --fx-width: 18%; --fx-height: 20%;
+  --fx-left: 68%;
+  --fx-top: 28%;
+  --fx-width: 18%;
+  --fx-height: 20%;
   --fx-tag-left: -132px; --fx-tag-right: auto; --fx-tag-top: 38%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
 #part-3-printed-explorer [data-fx-feature="tail-zhu"] {
   --fx-color: #d3e5e2;
-  --fx-left: 16%; --fx-top: 72%; --fx-width: 29%; --fx-height: 23%;
+  --fx-left: 16%;
+  --fx-top: 72%;
+  --fx-width: 29%;
+  --fx-height: 23%;
   --fx-tag-left: -132px; --fx-tag-right: auto; --fx-tag-top: 60%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
 }
@@ -1034,42 +1055,66 @@
 /* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */
 #part-3-handwritten-explorer [data-fx-feature="vertical"] {
   --fx-color: #cfe3d4;
-  --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
+  --fx-left: 0%;
+  --fx-top: 0%;
+  --fx-width: 100%;
+  --fx-height: 100%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #cfe0ef;
-  --fx-left: 24%; --fx-top: 10%; --fx-width: 48%; --fx-height: 80%;
+  --fx-left: 24%;
+  --fx-top: 10%;
+  --fx-width: 48%;
+  --fx-height: 80%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #e8d6b7;
-  --fx-left: 12%; --fx-top: 78%; --fx-width: 70%; --fx-height: 14%;
+  --fx-left: 12%;
+  --fx-top: 78%;
+  --fx-width: 70%;
+  --fx-height: 14%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 86%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #f0d6d0;
-  --fx-left: 60%; --fx-top: 46%; --fx-width: 11%; --fx-height: 50%;
+  --fx-left: 60%;
+  --fx-top: 46%;
+  --fx-width: 11%;
+  --fx-height: 50%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #f5e6bd;
-  --fx-left: 10%; --fx-top: 0%; --fx-width: 80%; --fx-height: 16%;
+  --fx-left: 10%;
+  --fx-top: 0%;
+  --fx-width: 80%;
+  --fx-height: 16%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 32%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #f3ddc4;
-  --fx-left: 8%; --fx-top: 8%; --fx-width: 34%; --fx-height: 70%;
+  --fx-left: 8%;
+  --fx-top: 8%;
+  --fx-width: 34%;
+  --fx-height: 70%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 68%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
   --fx-color: #d8e2e0;
-  --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
+  --fx-left: 0%;
+  --fx-top: 0%;
+  --fx-width: 100%;
+  --fx-height: 100%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 17%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
   --fx-color: #ddd6ea;
-  --fx-left: 62%; --fx-top: 0%; --fx-width: 30%; --fx-height: 22%;
+  --fx-left: 62%;
+  --fx-top: 0%;
+  --fx-width: 30%;
+  --fx-height: 22%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
 }
 
