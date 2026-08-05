@@ -1065,7 +1065,8 @@ const initPart3FeatureExplorers = () => {
         tag.dataset.fxFeature = f.key;
         if (positioned) tag.classList.add('is-floating');
         const label = f.title.split('：')[0].split('（')[0];
-        tag.innerHTML = label;
+        const badge = kind === 'printed' ? '' : `<span class="pg">${f.badge}</span>`;
+        tag.innerHTML = other && badge ? `${label}${badge}` : label;
         tag.addEventListener('click', () => showFeature(i));
         tagHost.appendChild(tag);
       });

@@ -4128,3 +4128,23 @@ Verified:
 
 Remaining:
 - None for this label adjustment.
+
+### 2026-08-05 14:00 HKT — Codex — Preserve handwritten fold indicators
+
+Summary:
+- Kept the printed explorer free of `p.2` badges while preserving the handwritten explorer's fold indicators such as `第 4 摺`.
+- Bumped the StoryMap JavaScript cache key again and verified the final rendered labels in both explorers.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Printed labels show no page suffixes.
+- Handwritten labels retain their fold numbers.
+- Printed `夾批` and `落款與尾批` remain on the left side; browser console checks pass.
+
+Remaining:
+- None for this correction.

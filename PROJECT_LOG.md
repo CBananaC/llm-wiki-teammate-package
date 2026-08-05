@@ -7896,6 +7896,25 @@ Verified:
 Remaining:
 - None for this label adjustment.
 
+### 2026-08-05 14:00 HKT — Codex — Preserve handwritten fold indicators while removing printed page badges
+
+Summary:
+- Kept the printed explorer free of `p.2` suffixes while preserving handwritten fold indicators such as `第 4 摺`.
+- Bumped the StoryMap JavaScript cache key and rechecked both explorers in the local browser.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Printed labels have no page suffixes; handwritten labels retain fold numbers.
+- `夾批` and `落款與尾批` compute on the left side, with no browser console errors.
+
+Remaining:
+- None for this correction.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
