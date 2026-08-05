@@ -4248,3 +4248,21 @@ Verified:
 
 Remaining:
 - None for this label adjustment.
+
+### 2026-08-05 15:22 HKT — Codex — Map features to website pages
+
+Summary:
+- Corrected the handwritten feature assignments to use the website's six accordion pages rather than PDF pages or individual scan subparts.
+- Kept page 1 features on panels 0–1, moved `抬頭` and `硃批（草書）` to website page 3, and moved `浮水印` and `印章` to website page 6.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser indicators progress through `頁 1 / 6` to `頁 6 / 6`.
+- Feature mapping resolves to website pages 1, 3, and 6 as requested; labels remain non-overlapping and contain no fold-number text.
+
+Remaining:
+- None for this page-mapping adjustment.
