@@ -1619,18 +1619,28 @@ img { max-width: 100%; }
 }
 .part3-fx-panel.is-open::after { opacity: 0; }
 
-/* --- 標示：只有選取的特徵會著色，標籤永遠可見 --- */
+/* --- 標示：只有選取的特徵會著色，標籤永遠可見 ---
+   位置、大小、顏色由 --fx-* 變數控制：預設值由 storymap.js 依 JSON 產生，
+   要調整請在 storymap-cards.css 的對應區塊覆寫（見該檔案說明）。 */
 .part3-fx-hl {
   position: absolute; z-index: 5; border: 0; pointer-events: none;
-  background: var(--c, rgba(243, 201, 103, .3)); opacity: 0; transition: opacity .25s;
+  left: var(--fx-left, 0%); top: var(--fx-top, 0%);
+  width: var(--fx-width, 0%); height: var(--fx-height, 0%);
+  background: var(--fx-color, rgba(243, 201, 103, .3));
+  opacity: 0; transition: opacity .25s;
 }
 .part3-fx-hl.is-active { opacity: .42; }
 .part3-fx-tag {
-  position: absolute; z-index: 6; white-space: nowrap; cursor: pointer;
+  position: relative; z-index: 6; white-space: nowrap; cursor: pointer;
   padding: 8px 14px; border: 0; border-radius: 4px;
-  background: var(--c, #eee); color: #22403f;
+  background: var(--fx-color, #eee); color: #22403f;
   font: 700 calc(13.5px * var(--font-scale)) var(--sans);
   box-shadow: 0 2px 7px rgba(22, 61, 63, .12); transition: opacity .18s, filter .18s;
+}
+/* 浮貼在原件旁邊的標籤（窄螢幕會改回一般排列，見下方 media query） */
+.part3-fx-tag.is-floating {
+  position: absolute;
+  left: var(--fx-tag-left, auto); right: var(--fx-tag-right, auto); top: var(--fx-tag-top, auto);
 }
 .part3-fx-taglist { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; width: 100%; }
 .part3-fx-taglist .part3-fx-tag { position: static; }
@@ -1744,12 +1754,12 @@ img { max-width: 100%; }
   .part3-feature-explorer { grid-template-columns: 1fr; }
   .part3-fx-doc { border-right: 0; border-bottom: 1px solid var(--line); }
   .part3-fx-out { max-height: none; }
-  /* 窄螢幕：改回頁面下方的標籤列，避免浮貼標籤擠壓頁面 */
-  .part3-fx-doc-pages { padding-inline: clamp(18px, 3vw, 30px); }
-  .part3-fx-doc-pages .part3-fx-tag {
-    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+  /* 窄螢幕：改回原件下方的標籤列，避免浮貼標籤擠壓版面 */
+  .part3-fx-doc { padding-inline: clamp(18px, 3vw, 30px); }
+  .part3-fx-doc .part3-fx-tag.is-floating {
+    position: static; left: auto; right: auto; top: auto;
   }
-  .part3-fx-doc-pages [data-part3-fx-tags] {
+  .part3-fx-doc [data-part3-fx-tags] {
     display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin-top: 14px;
   }
 }
