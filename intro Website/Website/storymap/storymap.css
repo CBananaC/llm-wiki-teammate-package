@@ -2444,37 +2444,31 @@ img { max-width: 100%; }
   grid-template-columns: repeat(4, max-content);
   grid-template-rows: repeat(3, auto);
   grid-auto-flow: row;
-  align-items: stretch;
+  align-items: end;
   justify-content: start;
-  gap: 8px;
+  gap: 4px 18px;
   margin-bottom: var(--json-labels-gap, 10px);
 }
 .part3-json-label {
-  appearance: none; cursor: pointer; border: 1px solid var(--line);
-  padding: 4px 10px; font-family: var(--sans); font-weight: 700;
-  font-size: var(--json-label-font-size, 11px); line-height: 1.4;
-  color: var(--ink); background: var(--card, #fffaf2); opacity: .85;
-  transition: color .15s, background-color .15s, border-color .15s,
-              box-shadow .15s, opacity .15s, transform .1s;
+  appearance: none; cursor: pointer; background: transparent;
+  border: none; border-bottom: 2px solid transparent;
+  padding: 6px 4px 8px; font-family: var(--sans); font-weight: 700;
+  font-size: var(--json-label-font-size, 12.5px); line-height: 1.4;
+  color: rgba(22, 61, 63, .55);
+  transition: color .16s ease, border-color .16s ease;
 }
 .part3-json-label:hover,
 .part3-json-label:focus-visible {
-  opacity: 1;
   color: var(--ink);
-  background: #fffdf7;
-  border-color: var(--accent);
-  box-shadow: 0 3px 10px rgba(22, 61, 63, .16);
+  border-color: rgba(22, 61, 63, .25);
 }
-.part3-json-label:active { transform: translateY(1px); }
+.part3-json-label:active { color: var(--accent); }
 .part3-json-label.is-selected {
-  opacity: 1;
-  color: #fffaf2;
-  background: var(--ink);
-  border-color: var(--ink);
-  box-shadow: 0 4px 12px rgba(22, 61, 63, .24);
+  color: var(--ink);
+  border-color: var(--accent);
 }
 .part3-json-label.is-selected:hover,
-.part3-json-label.is-selected:focus-visible { filter: brightness(1.12); }
+.part3-json-label.is-selected:focus-visible { border-color: var(--accent); }
 
 .part3-json-window {
   display: flex; flex-direction: column; width: var(--json-window-w, 100%);
@@ -2539,13 +2533,23 @@ img { max-width: 100%; }
 .batch-scene:not(.is-batch) .batch-track { display: flex; align-items: center; justify-content: center; }
 .batch-scene:not(.is-batch) .tile { height: var(--single-tile-h, 78%); width: auto; aspect-ratio: var(--tile-aspect, .74 / 1); }
 /* 批次階段：2 欄格線，整層往上移動＝畫面往下捲 */
+/* 重要：列與列之間「不要」用 row-gap，改成每一格自己帶 margin-bottom。
+   因為 8 列用 row-gap 時，整條軌道高 = 8 格 + 7 個間距，translateY(-50%)
+   只會剛好差半個間距，每循環一次畫面就會跳一下、換成時間不同步的複製格
+   （看起來就是綠勾和「50頁」閃掉又冒出來）。
+   改用 margin-bottom 後，軌道高 = 8 ×（格高＋間距），-50% 正好等於 4 列，
+   循環接回時完全對齊。 */
 .batch-scene.is-batch .batch-track {
   inset: var(--batch-pad, 6%) var(--batch-pad, 6%) auto var(--batch-pad, 6%);
-  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--tile-gap, 3%);
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  column-gap: var(--tile-gap, 3%); row-gap: 0;
   animation: batch-scroll var(--scroll-speed, 34s) linear infinite;
   will-change: transform;
 }
-.batch-scene.is-batch .tile { width: 100%; aspect-ratio: var(--tile-aspect, .74 / 1); }
+.batch-scene.is-batch .tile {
+  width: 100%; aspect-ratio: var(--tile-aspect, .74 / 1);
+  margin-bottom: var(--tile-gap, 3%);
+}
 /* translate3d 讓捲動交給 GPU 合成，不會每一格都重繪整張大圖 */
 @keyframes batch-scroll {
   from { transform: translate3d(0, 0, 0); }
@@ -2560,8 +2564,11 @@ img { max-width: 100%; }
 .tile-page { position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: #f0e6d2; }
 .tile-page img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .tile-page .page-dim { opacity: .28; filter: grayscale(1) contrast(.85); }
-.tile-page .page-full { opacity: 1; filter: none; clip-path: inset(0 0 100% 0); will-change: clip-path; }
-.tile.is-scanning .tile-page .page-full { animation: tile-reveal var(--scan-dur, 1.5s) ease-in-out forwards; }
+/* will-change 只在真的正在動的那一刻加上去。若常駐，16 格 × 2 張大圖會被
+   永久提升成 32 個 GPU 圖層，顯存吃緊時瀏覽器會反覆丟棄再重繪，
+   畫面上就會看到「50頁」白字不停閃爍。 */
+.tile-page .page-full { opacity: 1; filter: none; clip-path: inset(0 0 100% 0); }
+.tile.is-scanning .tile-page .page-full { animation: tile-reveal var(--scan-dur, 1.5s) ease-in-out forwards; will-change: clip-path; }
 .tile.is-scanned .tile-page .page-full { clip-path: inset(0 0 0 0); }
 @keyframes tile-reveal {
   from { clip-path: inset(0 0 100% 0); }
@@ -2574,7 +2581,7 @@ img { max-width: 100%; }
    -24/22×100 ≈ -109% 與 100/22×100 ≈ 455%。 */
 .tile-scanline {
   position: absolute; left: 0; right: 0; height: var(--scan-h, 22%); top: 0; z-index: 3;
-  transform: translate3d(0, -109%, 0); will-change: transform;
+  transform: translate3d(0, -109%, 0);
   opacity: 0; pointer-events: none;
   background: linear-gradient(180deg,
     rgba(var(--scan-rgb, 120, 180, 255), 0) 0%,
@@ -2584,7 +2591,7 @@ img { max-width: 100%; }
     rgba(var(--scan-rgb, 120, 180, 255), 0) 100%);
   box-shadow: 0 0 16px 3px rgba(var(--scan-rgb, 120, 180, 255), .55);
 }
-.tile.is-scanning .tile-scanline { animation: tile-scan var(--scan-dur, 1.5s) ease-in-out forwards; }
+.tile.is-scanning .tile-scanline { animation: tile-scan var(--scan-dur, 1.5s) ease-in-out forwards; will-change: transform; }
 @keyframes tile-scan {
   0%   { transform: translate3d(0, -109%, 0); opacity: 0; }
   12%  { opacity: 1; }
@@ -2621,10 +2628,10 @@ img { max-width: 100%; }
    高度 34%，-36%／100% 換算成 -36/34×100 ≈ -106% 與 100/34×100 ≈ 294%。 */
 .tile-readbeam {
   position: absolute; left: 0; right: 0; height: 34%; top: 0; z-index: 2; opacity: 0;
-  transform: translate3d(0, -106%, 0); will-change: transform;
+  transform: translate3d(0, -106%, 0);
   background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .16), rgba(255, 255, 255, 0));
 }
-.tile.is-reading .tile-readbeam { animation: tile-read var(--read-dur, 1.6s) linear forwards; }
+.tile.is-reading .tile-readbeam { animation: tile-read var(--read-dur, 1.6s) linear forwards; will-change: transform; }
 @keyframes tile-read {
   0%   { transform: translate3d(0, -106%, 0); opacity: 0; }
   10%  { opacity: 1; }
@@ -2660,11 +2667,11 @@ img { max-width: 100%; }
 .tile-lens::before {
   content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 260%;
   background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .85) 48%, rgba(255, 255, 255, 0) 66%);
-  transform: translate3d(50%, 0, 0); will-change: transform;
+  transform: translate3d(50%, 0, 0);
 }
 .tile-lens.l { left: var(--lens-l-x, 11%); }
 .tile-lens.r { left: var(--lens-r-x, 62%); }
-.tile.is-reading .tile-lens::before { animation: lens-shine var(--shine-dur, 1.5s) ease-in-out infinite; }
+.tile.is-reading .tile-lens::before { animation: lens-shine var(--shine-dur, 1.5s) ease-in-out infinite; will-change: transform; }
 .tile.is-reading .tile-lens.r::before { animation-delay: .16s; }
 @keyframes lens-shine {
   0%   { transform: translate3d(50%, 0, 0); }

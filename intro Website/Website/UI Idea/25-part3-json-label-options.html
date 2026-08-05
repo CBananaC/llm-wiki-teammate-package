@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>9 輸出格式：JSON — 欄位標籤按鈕設計選項</title>
+<style>
+  :root{
+    --font-scale:1;
+    --ink:#163d3f;
+    --paper:#f4efe6;
+    --card:#fffaf2;
+    --line:rgba(22,61,63,.18);
+    --accent:#c45d38;
+    --yellow:#f3c967;
+    --sans:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:48px 32px 120px; background:var(--paper); color:var(--ink);
+    font-family:var(--sans);
+  }
+  h1{font-size:22px; margin:0 0 6px;}
+  .lead{color:rgba(22,61,63,.7); font-size:14px; margin:0 0 40px; max-width:640px; line-height:1.7;}
+  .option{
+    background:var(--card); border:1px solid var(--line); border-radius:14px;
+    padding:28px 30px 32px; margin-bottom:36px;
+  }
+  .option h2{font-size:15px; margin:0 0 4px; display:flex; align-items:center; gap:8px;}
+  .option h2 .tag{
+    font-size:10.5px; font-weight:700; letter-spacing:.03em; padding:2px 8px;
+    border-radius:20px; background:rgba(22,61,63,.08); color:var(--ink);
+  }
+  .option p.note{font-size:12.5px; color:rgba(22,61,63,.62); margin:0 0 20px; line-height:1.6;}
+  .demo-row{display:flex; align-items:flex-start; gap:36px; flex-wrap:wrap;}
+  .labels{
+    display:grid; grid-template-columns:repeat(4, max-content); grid-auto-flow:row;
+    gap:10px; align-items:stretch;
+  }
+  .hint{font-size:11px; color:rgba(22,61,63,.5); margin-top:14px;}
+  .hint b{color:var(--ink);}
+
+  /* ---------- current (baseline, for comparison) ---------- */
+  .base-label{
+    appearance:none; cursor:pointer; border:1px solid var(--line);
+    padding:4px 10px; font-family:var(--sans); font-weight:700;
+    font-size:11px; line-height:1.4; color:var(--ink); background:var(--card);
+    opacity:.85; transition:color .15s, background-color .15s, border-color .15s, box-shadow .15s, opacity .15s, transform .1s;
+  }
+  .base-label:hover{ opacity:1; background:#fffdf7; border-color:var(--accent); box-shadow:0 3px 10px rgba(22,61,63,.16); }
+  .base-label:active{ transform:translateY(1px); }
+  .base-label.is-selected{ opacity:1; color:#fffaf2; background:var(--ink); border-color:var(--ink); }
+
+  /* ---------- option A: soft pill, accent underline on selected ---------- */
+  .pill-a{
+    appearance:none; cursor:pointer; border:1px solid transparent;
+    padding:7px 16px; border-radius:999px; font-family:var(--sans); font-weight:600;
+    font-size:12px; line-height:1.4; color:var(--ink); background:rgba(22,61,63,.06);
+    transition:background-color .18s ease, color .18s ease, box-shadow .18s ease, transform .12s ease;
+  }
+  .pill-a:hover{ background:rgba(22,61,63,.12); }
+  .pill-a:active{ transform:scale(.96); }
+  .pill-a:focus-visible{ outline:2px solid var(--accent); outline-offset:2px; }
+  .pill-a.is-selected{
+    background:var(--ink); color:#fffaf2;
+    box-shadow:0 6px 16px rgba(22,61,63,.28);
+  }
+  .pill-a.is-selected:hover{ background:#1d4d4f; }
+
+  /* ---------- option B: outlined chip that fills with accent, small dot indicator ---------- */
+  .pill-b{
+    appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+    border:1.5px solid var(--line); border-radius:9px;
+    padding:7px 14px 7px 12px; font-family:var(--sans); font-weight:700;
+    font-size:11.5px; line-height:1.4; color:var(--ink); background:var(--card);
+    transition:border-color .18s ease, background-color .18s ease, box-shadow .18s ease, transform .12s ease;
+  }
+  .pill-b .dot{ width:6px; height:6px; border-radius:50%; background:var(--line); transition:background-color .18s ease, box-shadow .18s ease; flex:0 0 auto; }
+  .pill-b:hover{ border-color:var(--accent); box-shadow:0 4px 12px rgba(196,93,56,.16); }
+  .pill-b:hover .dot{ background:var(--accent); }
+  .pill-b:active{ transform:translateY(1px); }
+  .pill-b.is-selected{
+    border-color:var(--accent); background:#fff3ea;
+    box-shadow:inset 0 0 0 1px var(--accent);
+  }
+  .pill-b.is-selected .dot{ background:var(--accent); box-shadow:0 0 0 3px rgba(196,93,56,.18); }
+
+  /* ---------- option C: minimal underline tab (text-forward, least "buttony") ---------- */
+  .pill-c{
+    appearance:none; cursor:pointer; border:none; border-bottom:2px solid transparent;
+    padding:6px 4px 8px; background:transparent; font-family:var(--sans); font-weight:700;
+    font-size:12.5px; line-height:1.4; color:rgba(22,61,63,.55);
+    transition:color .16s ease, border-color .16s ease;
+  }
+  .pill-c:hover{ color:var(--ink); border-color:rgba(22,61,63,.25); }
+  .pill-c:active{ color:var(--accent); }
+  .pill-c.is-selected{ color:var(--ink); border-color:var(--accent); }
+
+  /* ---------- option D: yellow-accent solid chip, matches site's --yellow highlight language ---------- */
+  .pill-d{
+    appearance:none; cursor:pointer; border:1px solid var(--line);
+    padding:6px 14px; border-radius:7px; font-family:var(--sans); font-weight:700;
+    font-size:11.5px; line-height:1.4; color:var(--ink); background:var(--card);
+    box-shadow:0 1px 0 rgba(22,61,63,.06);
+    transition:border-color .16s ease, background-color .16s ease, box-shadow .16s ease, transform .1s ease;
+  }
+  .pill-d:hover{ border-color:rgba(22,61,63,.34); background:#fffdf7; box-shadow:0 3px 10px rgba(22,61,63,.14); }
+  .pill-d:active{ transform:translateY(1px); box-shadow:none; }
+  .pill-d.is-selected{
+    background:var(--yellow); border-color:#d9a83f; color:#3b2a0c;
+    box-shadow:0 3px 10px rgba(196,150,45,.35);
+  }
+  .pill-d.is-selected:hover{ background:#f0bd52; }
+
+  .json-preview{
+    display:flex; flex-direction:column; width:260px; background:#1e1e1e; border-radius:8px;
+    overflow:hidden; box-shadow:0 12px 26px rgba(0,0,0,.3); border:1px solid rgba(255,255,255,.08);
+    flex:0 0 auto;
+  }
+  .json-preview .bar{ display:flex; gap:6px; padding:8px 10px; background:#2b2b2b; }
+  .json-preview .bar span{ width:9px; height:9px; border-radius:50%; }
+  .json-preview .bar span:nth-child(1){ background:#ff5f57; }
+  .json-preview .bar span:nth-child(2){ background:#febc2e; }
+  .json-preview .bar span:nth-child(3){ background:#28c840; }
+  .json-preview .body{ padding:12px 14px; font:12px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color:#d4d4d4; }
+  .json-preview .key{ color:#9cdcfe; }
+  .json-preview .str{ color:#ce9178; }
+  .json-preview .loc{ display:block; border-radius:3px; transition:background-color .3s ease; }
+  .json-preview .loc.is-hit{ background:rgba(120,180,255,.28); }
+</style>
+</head>
+<body>
+
+<h1>9 輸出格式：JSON — 欄位標籤按鈕設計選項</h1>
+<p class="lead">目前 <code>.part3-json-label</code> 只有細邊框＋純白底，四個方案都保留原本「點擊後對應 JSON 那一行反白並保持選取」的行為，差別只在按鈕本身的視覺語言。滑鼠移到按鈕上可看 hover，點擊可看 clicked／selected 狀態（此範例點擊會切換選取，模擬實際行為）。</p>
+
+<div class="option">
+  <h2>基準（目前網站上的樣式）<span class="tag">BEFORE</span></h2>
+  <p class="note">純白底、細邊框、方形直角；hover 時邊框變橘、加陰影；選取時整塊填深綠。使用者反映「按鈕標籤很醜」。</p>
+  <div class="demo-row">
+    <div class="labels">
+      <button class="base-label">來源</button>
+      <button class="base-label">標題</button>
+      <button class="base-label">官職</button>
+      <button class="base-label">姓名</button>
+      <button class="base-label">具奏日期</button>
+      <button class="base-label">硃批日期</button>
+      <button class="base-label is-selected">硃批內容</button>
+      <button class="base-label">頁碼</button>
+      <button class="base-label">段落一</button>
+      <button class="base-label">段落二</button>
+      <button class="base-label">段落三</button>
+    </div>
+  </div>
+</div>
+
+<div class="option">
+  <h2>方案 A — 圓角膠囊（Pill）<span class="tag">推薦</span></h2>
+  <p class="note">實心淡底膠囊，字重加粗、字級略放大，去除邊框改用背景色深淺表達狀態。選取時整顆填深綠色並帶陰影，點擊時有輕微縮放回饋。最貼近一般網站「篩選標籤」的常見語彙，最容易辨識可點擊。</p>
+  <div class="demo-row">
+    <div class="labels">
+      <button class="pill-a">來源</button>
+      <button class="pill-a">標題</button>
+      <button class="pill-a">官職</button>
+      <button class="pill-a">姓名</button>
+      <button class="pill-a">具奏日期</button>
+      <button class="pill-a">硃批日期</button>
+      <button class="pill-a is-selected">硃批內容</button>
+      <button class="pill-a">頁碼</button>
+      <button class="pill-a">段落一</button>
+      <button class="pill-a">段落二</button>
+      <button class="pill-a">段落三</button>
+    </div>
+    <div class="json-preview">
+      <div class="bar"><span></span><span></span><span></span></div>
+      <div class="body">
+        <span class="loc">&nbsp;&nbsp;<span class="key">"zhu_text"</span>: <span class="str">"依議欽此"</span>,</span>
+        <span class="loc is-hit">&nbsp;&nbsp;<span class="key">"zhu_date"</span>: <span class="str">"乾隆五十二年正月"</span>,</span>
+        <span class="loc">&nbsp;&nbsp;<span class="key">"pages"</span>: <span class="str">"3"</span></span>
+      </div>
+    </div>
+  </div>
+  <p class="hint">適合：想要最直覺、最不需要說明就懂「這是可切換的標籤」。</p>
+</div>
+
+<div class="option">
+  <h2>方案 B — 描邊卡片 ＋ 指示點<span class="tag">層次分明</span></h2>
+  <p class="note">維持白底與邊框的「文件感」，但加上一顆小圓點作為狀態指示（未選取：灰點；hover／選取：橘點並帶暈光）。選取時邊框與底色轉為淡橘，呼應 <code>--accent</code> 色。比方案 A 更沉穩、更貼近目前网站已有的「卡片」語彙。</p>
+  <div class="demo-row">
+    <div class="labels">
+      <button class="pill-b"><span class="dot"></span>來源</button>
+      <button class="pill-b"><span class="dot"></span>標題</button>
+      <button class="pill-b"><span class="dot"></span>官職</button>
+      <button class="pill-b"><span class="dot"></span>姓名</button>
+      <button class="pill-b"><span class="dot"></span>具奏日期</button>
+      <button class="pill-b"><span class="dot"></span>硃批日期</button>
+      <button class="pill-b is-selected"><span class="dot"></span>硃批內容</button>
+      <button class="pill-b"><span class="dot"></span>頁碼</button>
+      <button class="pill-b"><span class="dot"></span>段落一</button>
+      <button class="pill-b"><span class="dot"></span>段落二</button>
+      <button class="pill-b"><span class="dot"></span>段落三</button>
+    </div>
+  </div>
+  <p class="hint">適合：想要保留目前「卡片＋邊框」的文件質感，只是把它做得更精緻，而非換成完全不同的形狀語言。</p>
+</div>
+
+<div class="option">
+  <h2>方案 C — 底線頁籤（Underline Tab）<span class="tag">最輕量</span></h2>
+  <p class="note">拿掉背景與邊框，只用文字顏色深淺＋底線表達狀態，很像分頁籤（tab）。視覺最安靜、不會搶走 JSON 視窗的注意力，但可點擊性稍弱，需要 hover 才明顯感覺到互動。</p>
+  <div class="demo-row">
+    <div class="labels">
+      <button class="pill-c">來源</button>
+      <button class="pill-c">標題</button>
+      <button class="pill-c">官職</button>
+      <button class="pill-c">姓名</button>
+      <button class="pill-c">具奏日期</button>
+      <button class="pill-c">硃批日期</button>
+      <button class="pill-c is-selected">硃批內容</button>
+      <button class="pill-c">頁碼</button>
+      <button class="pill-c">段落一</button>
+      <button class="pill-c">段落二</button>
+      <button class="pill-c">段落三</button>
+    </div>
+  </div>
+  <p class="hint">適合：如果覺得目前按鈕視覺太重、想要更接近「純文字索引列」的感覺。</p>
+</div>
+
+<div class="option">
+  <h2>方案 D — 沿用網站黃色重點色<span class="tag">品牌一致</span></h2>
+  <p class="note">未選取時是稍微精緻化的白底卡片（圓角、更柔和陰影）；選取時改用網站既有的 <code>--yellow</code> 強調色填滿，呼應網站其他地方（如摺頁效果指示）已經用黃色表達「目前焦點」的視覺語言，讓這個區塊感覺是網站設計系統的一部分而非獨立元件。</p>
+  <div class="demo-row">
+    <div class="labels">
+      <button class="pill-d">來源</button>
+      <button class="pill-d">標題</button>
+      <button class="pill-d">官職</button>
+      <button class="pill-d">姓名</button>
+      <button class="pill-d">具奏日期</button>
+      <button class="pill-d">硃批日期</button>
+      <button class="pill-d is-selected">硃批內容</button>
+      <button class="pill-d">頁碼</button>
+      <button class="pill-d">段落一</button>
+      <button class="pill-d">段落二</button>
+      <button class="pill-d">段落三</button>
+    </div>
+  </div>
+  <p class="hint">適合：想要選取狀態更醒目突出，且與網站其他黃色強調元素呼應。</p>
+</div>
+
+<script>
+  document.querySelectorAll('.labels').forEach((group) => {
+    group.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      group.querySelectorAll('button').forEach((b) => b.classList.remove('is-selected'));
+      btn.classList.add('is-selected');
+    });
+  });
+</script>
+</body>
+</html>

@@ -1584,7 +1584,7 @@ const initBatchTestScene = () => {
 
   const DOCS = [
     {
-      page: 'ocr-zhu25-handwritten-1-enhanced.png',
+      pageLg: 'ocr-anim-1-lg.jpg', pageSm: 'ocr-anim-1-sm.jpg',
       json: {
         doc_id: '硃25', doc_type: '硃批',
         title: '為奏彰化失陷已調兵赴臺事',
@@ -1595,7 +1595,7 @@ const initBatchTestScene = () => {
       }
     },
     {
-      page: 'ocr-zhu25-handwritten-2-enhanced.png',
+      pageLg: 'ocr-anim-2-lg.jpg', pageSm: 'ocr-anim-2-sm.jpg',
       json: {
         doc_id: '奏2', doc_type: '上奏',
         title: '為奏林爽文結黨失陷彰城事',
@@ -1606,7 +1606,7 @@ const initBatchTestScene = () => {
       }
     },
     {
-      page: 'ocr-zhu25-handwritten-3-enhanced.png',
+      pageLg: 'ocr-anim-3-lg.jpg', pageSm: 'ocr-anim-3-sm.jpg',
       json: {
         doc_id: '奏5', doc_type: '上奏',
         title: '為奏辦理赴剿臺灣匪徒事',
@@ -1617,7 +1617,7 @@ const initBatchTestScene = () => {
       }
     },
     {
-      page: 'ocr-zhu25-handwritten-4-enhanced.png',
+      pageLg: 'ocr-anim-4-lg.jpg', pageSm: 'ocr-anim-4-sm.jpg',
       json: {
         doc_id: '台1', doc_type: '其他',
         title: '天地會林爽文起事告示',
@@ -1637,13 +1637,17 @@ const initBatchTestScene = () => {
     return ['{', ...rows, '}'].join('<br>');
   };
 
-  const makeTile = (doc, countLabel) => {
+  /* 兩種尺寸的頁面影像：單頁階段那一頁很大，用 lg（約 1290×940）；
+     2×2 批次階段每格只有一百多 px 寬，用 sm（約 495×360）就綽綽有餘。
+     這樣批次階段要點陣化的像素量大幅下降，畫面才不會卡。 */
+  const makeTile = (doc, countLabel, { big = false } = {}) => {
+    const src = big ? doc.pageLg : doc.pageSm;
     const tile = document.createElement('div');
     tile.className = 'tile';
     tile.innerHTML = `
       <div class="tile-page">
-        <img class="page-dim" src="${doc.page}" alt="" decoding="async" fetchpriority="low">
-        <img class="page-full" src="${doc.page}" alt="" decoding="async" fetchpriority="low">
+        <img class="page-dim" src="${src}" alt="" decoding="async" fetchpriority="low">
+        <img class="page-full" src="${src}" alt="" decoding="async" fetchpriority="low">
         <span class="tile-scanline"></span>
       </div>
       <div class="tile-json">
@@ -1725,7 +1729,7 @@ const initBatchTestScene = () => {
       scene.classList.remove('is-batch');
       track.style.removeProperty('--scroll-speed');
       track.innerHTML = '';
-      const single = makeTile(DOCS[0], '1頁');
+      const single = makeTile(DOCS[0], '1頁', { big: true });
       track.appendChild(single);
       await wait(30);
       scene.classList.remove('is-switching-out');
@@ -1748,8 +1752,10 @@ const initBatchTestScene = () => {
       /* ---- 第二階段：批次（50頁），2×2 並持續往下捲 ---- */
       track.innerHTML = '';
       const tiles = [];
-      /* 2 欄 × 8 列＝16 格；捲動 -50% 時剛好接回開頭，看起來是無限往下 */
-      for (let i = 0; i < 16; i += 1) {
+      /* 2 欄 × 4 列＝8 格（畫面上一次仍然看到 4 格）；捲動 -50% 時剛好
+         接回開頭，看起來是無限往下。格數從 16 減到 8，同時要點陣化的
+         大圖也少了一半。 */
+      for (let i = 0; i < 8; i += 1) {
         const t = makeTile(DOCS[i % DOCS.length], '50頁');
         track.appendChild(t);
         tiles.push(t);
@@ -1762,9 +1768,9 @@ const initBatchTestScene = () => {
       if (stale()) return;
 
       /* 捲動是 translateY(-50%) 無限循環，也就是「第 i 格」接回的位置正好是
-         「第 i+8 格」。因此這兩格必須用同一個時間點跑動畫，否則循環接回的
-         瞬間，剛驗證完的格子會被還沒驗證的複製格取代，看起來就像綠勾和
-         「50頁」忽然消失又重新出現。這裡只替前 8 格排時間，後 8 格跟著同步。 */
+         「第 i + 半數 格」。因此這兩格必須用同一個時間點跑動畫，否則循環
+         接回的瞬間，剛驗證完的格子會被還沒驗證的複製格取代，看起來就像
+         綠勾和「50頁」忽然消失又重新出現。這裡只替前半排時間，後半跟著同步。 */
       const half = tiles.length / 2;
       for (let i = 0; i < half; i += 1) {
         const pair = [tiles[i], tiles[i + half]];
@@ -1782,7 +1788,7 @@ const initBatchTestScene = () => {
 
   /* 靜態版本：不動畫，直接顯示第一頁掃描完成後的 JSON 與綠勾 */
   if (reduceMotion) {
-    const still = makeTile(DOCS[0], '1頁');
+    const still = makeTile(DOCS[0], '1頁', { big: true });
     still.classList.add('is-scanned', 'is-json', 'is-verified');
     track.appendChild(still);
     return;
