@@ -8,10 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="storymap.css?v=20260804-part3-format-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260804-part3-format-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260805-handwritten-features-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260805-part3-labels-04" defer></script>
+  <script src="storymap.js?v=20260805-handwritten-features-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1450,72 +1450,82 @@
                       {
                         "key": "vertical", "panel": 0, "colour": "#cfe3d4",
                         "box": {"left":"0%","top":"0%","width":"100%","height":"100%"},
-                        "tag": {"left":"-134px","top":"6%"},
-                        "title": "直排、由右至左",
-                        "desc": "手寫奏摺採直排書寫，並由右至左閱讀，與印刷書冊的閱讀方向相反。若不指明方向，OCR 會依預設由左至右輸出，導致整篇文字順序顛倒。",
-                        "prompt": "這份手寫奏摺是直排書寫、由右至左閱讀。\n請依「由上至下、由右至左」的順序輸出文字，\n不要使用預設的橫排左至右順序。",
+                        "tag": {"right":"-142px","top":"6%"},
+                        "title": "直排單欄",
+                        "desc": "奏摺採用直排書寫，閱讀方向由右至左、由上至下。OCR 必須按此順序輸出文字，而非由左至右的閱讀方式。",
+                        "prompt": "這份奏摺採用直排書寫，閱讀方向由右至左、由上至下。\n請按此順序輸出文字，\n不要使用由左至右的預設閱讀方式。",
                         "py": "<span class=\"cmt\"># 直排、由右至左：指定文字方向與排序規則</span>\nboxes = <span class=\"fn\">sorted</span>(\n    result.boxes,\n    key=<span class=\"kw\">lambda</span> b: (-b.x_center, b.y_top),  <span class=\"cmt\"># x 由大到小 = 由右至左</span>\n)",
                         "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>\n}"
                       },
                       {
-                        "key": "opening", "panel": 0, "colour": "#cfe0ef",
-                        "box": {"left":"52%","top":"4%","width":"22%","height":"26%"},
-                        "tag": {"right":"-142px","top":"6%"},
-                        "title": "首行「奏為奏聞事」",
-                        "desc": "首摺右方的「奏」字與起首套語「奏為奏聞事」標示文書類型與事由，屬於程式化的公文格式，應抽出為獨立欄位而非併入正文。",
-                        "prompt": "首摺開頭的「奏」字與「奏為奏聞事」是公文套語，\n請抽出為 doc_type 與 subject 兩個欄位，\n不要混入正文 body。",
-                        "py": "<span class=\"cmt\"># 起首套語：判斷文書類型與事由</span>\n<span class=\"kw\">if</span> first_line.<span class=\"fn\">startswith</span>(<span class=\"str\">\"奏\"</span>):\n    doc[<span class=\"str\">\"doc_type\"</span>] = <span class=\"str\">\"上奏\"</span>\n    doc[<span class=\"str\">\"subject\"</span>] = <span class=\"fn\">extract_subject</span>(first_line)",
-                        "json": "{\n  <span class=\"jkey\">\"doc_type\"</span>: <span class=\"jstr\">\"上奏\"</span>,\n  <span class=\"jkey\">\"subject\"</span>: <span class=\"jstr\">\"奏為奏聞事\"</span>\n}"
+                        "key": "regular-script", "panel": 0, "colour": "#cfe0ef",
+                        "box": {"left":"24%","top":"10%","width":"48%","height":"80%"},
+                        "tag": {"right":"-142px","top":"19%"},
+                        "title": "正文字體",
+                        "desc": "這份奏摺使用楷書書寫，字跡清楚可讀，字與字、行與行之間有明確間距，且每個字的大小相近，具備 OCR 辨識的可能。",
+                        "prompt": "這份奏摺使用楷書書寫，字體清楚，字與字、行與行之間有明確間距，且字體大小相近。\n請利用這些特徵辨識正文，並保留原有閱讀順序。",
+                        "py": "<span class=\"cmt\"># 楷書正文：清楚字距與行距有助於 OCR</span>\nbody_regions = [\n    r <span class=\"kw\">for</span> r <span class=\"kw\">in</span> regions\n    <span class=\"kw\">if</span> r.script == <span class=\"str\">\"regular_kai_shu\"</span>\n]\nbody = <span class=\"fn\">ocr</span>(body_regions, preserve_order=<span class=\"kw\">True</span>)",
+                        "json": "{\n  <span class=\"jkey\">\"body_script\"</span>: <span class=\"jstr\">\"regular_kai_shu\"</span>,\n  <span class=\"jkey\">\"legibility\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"word_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"line_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"ocr_possible\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
+                      },
+                      {
+                        "key": "author", "panel": 0, "colour": "#e8d6b7",
+                        "box": {"left":"12%","top":"78%","width":"70%","height":"14%"},
+                        "tag": {"right":"-142px","top":"72%"},
+                        "title": "上奏官員",
+                        "desc": "奏摺第二頁的首行記載上奏官員為「福建水師提督 黃仕簡」。這項姓名資料應獨立標記，並保存於輸出結果的 author 欄位。",
+                        "prompt": "辨識奏摺第二頁首行的上奏官員姓名「福建水師提督 黃仕簡」。\n請將官職與姓名保存於 author 欄位，\n不要只把它留在正文文字中。",
+                        "py": "<span class=\"cmt\"># 從第二頁首行抽取上奏官員</span>\nauthor_line = <span class=\"fn\">first_line</span>(page_results[<span class=\"num\">1</span>])\ndoc[<span class=\"str\">\"author\"</span>] = <span class=\"fn\">parse_author</span>(author_line)",
+                        "json": "{\n  <span class=\"jkey\">\"author\"</span>: {\n    <span class=\"jkey\">\"office\"</span>: <span class=\"jstr\">\"福建水師提督\"</span>,\n    <span class=\"jkey\">\"name\"</span>: <span class=\"jstr\">\"黃仕簡\"</span>\n  },\n  <span class=\"jkey\">\"saved_individually\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       },
                       {
                         "key": "minister", "panel": 0, "colour": "#f0d6d0",
                         "box": {"left":"60%","top":"46%","width":"11%","height":"50%"},
                         "tag": {"left":"-134px","top":"29%"},
                         "title": "臣字款（小字自稱）",
-                        "desc": "官員自稱「奴才」或「臣」時以小字偏右書寫，字級明顯小於正文。OCR 若不加區分，會把這些小字誤判為正文的一部分或漏字。",
-                        "prompt": "官員自稱的「奴才」「臣」以小字書寫，字級比正文小。\n請依字高把小字款識與正文分開，存入 self_reference 欄位，\n並在正文中保留原有位置。",
-                        "py": "<span class=\"cmt\"># 依字高分辨臣字款小字</span>\nheights = [b.height <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes]\nmed = <span class=\"fn\">statistics</span>.<span class=\"fn\">median</span>(heights)\nsmall = [b.text <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes <span class=\"kw\">if</span> b.height &lt; med * <span class=\"num\">0.7</span>]",
-                        "json": "{\n  <span class=\"jkey\">\"self_reference\"</span>: <span class=\"jstr\">\"奴才\"</span>,\n  <span class=\"jkey\">\"style\"</span>: <span class=\"jstr\">\"small_inline\"</span>\n}"
+                        "desc": "官員在文中自稱「奴才」或「臣」時以小字偏右書寫，字體小於正文。這些字也要 OCR，並作為正文的一部分保留在 body text 中。",
+                        "prompt": "辨識正文中偏右、字體較小的「奴才」或「臣」。\n請將它們一併 OCR，保留在 body 的原有位置，\n不要另行刪除或排除。",
+                        "py": "<span class=\"cmt\"># 臣字款：辨識小字，但保留在正文 body</span>\nsmall_self_refs = [b <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes <span class=\"kw\">if</span> b.height &lt; median_height * <span class=\"num\">0.7</span>]\nbody = <span class=\"fn\">ocr</span>(boxes, preserve_order=<span class=\"kw\">True</span>)\nself_reference = <span class=\"fn\">find_terms</span>(body, terms=[<span class=\"str\">\"奴才\"</span>, <span class=\"str\">\"臣\"</span>])",
+                        "json": "{\n  <span class=\"jkey\">\"self_reference\"</span>: [<span class=\"jstr\">\"奴才\"</span>, <span class=\"jstr\">\"臣\"</span>],\n  <span class=\"jkey\">\"style\"</span>: <span class=\"jstr\">\"small_inline\"</span>,\n  <span class=\"jkey\">\"in_body\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       },
                       {
-                        "key": "respect", "panel": 3, "colour": "#f5e6bd",
+                        "key": "respect", "panel": 2, "colour": "#f5e6bd",
                         "box": {"left":"10%","top":"0%","width":"80%","height":"16%"},
                         "tag": {"right":"-142px","top":"29%"},
-                        "title": "抬頭（敬書格式）",
-                        "desc": "涉及皇帝時另起一行並提高書寫位置，稱為抬頭。這種格式會把同一句話拆成兩行，OCR 需要把因抬頭而分隔的文字重新合併，否則語句會斷裂。",
+                        "title": "抬頭",
+                        "desc": "當提及皇帝時，會另起一行並提高書寫位置，稱為抬頭。這種格式會把同一句話拆成兩行，OCR 需要把因抬頭而分隔的文字重新合併。",
                         "prompt": "凡涉及皇帝的詞語會另起一行並抬高書寫（抬頭）。\n請把因抬頭而被分隔的句子重新合併為完整句子，\n並在 honorific_breaks 記錄原本的斷行位置。",
                         "py": "<span class=\"cmt\"># 合併因抬頭而斷開的行</span>\nmerged, breaks = [], []\n<span class=\"kw\">for</span> i, col <span class=\"kw\">in</span> <span class=\"fn\">enumerate</span>(columns):\n    <span class=\"kw\">if</span> col.top &lt; page_top + <span class=\"num\">20</span>:  <span class=\"cmt\"># 位置抬高 = 抬頭</span>\n        breaks.<span class=\"fn\">append</span>(i)\n        merged[-<span class=\"num\">1</span>] += col.text\n    <span class=\"kw\">else</span>:\n        merged.<span class=\"fn\">append</span>(col.text)",
                         "json": "{\n  <span class=\"jkey\">\"honorific_breaks\"</span>: [<span class=\"jnum\">3</span>, <span class=\"jnum\">11</span>],\n  <span class=\"jkey\">\"merged_sentences\"</span>: <span class=\"jnum\">2</span>\n}"
                       },
                       {
-                        "key": "seal", "panel": 4, "colour": "#ddd6ea",
-                        "box": {"left":"22%","top":"34%","width":"46%","height":"22%"},
-                        "tag": {"left":"-134px","top":"52%"},
-                        "title": "印章與騎縫",
-                        "desc": "奏摺上蓋有官印，並常見跨摺縫的騎縫印。印章為圖像而非文字，OCR 容易將其筆畫誤判為字元，需要指明略過並單獨標記位置。",
-                        "prompt": "文書上有官印與騎縫印，屬於圖像不是文字。\n請不要把印章內的筆畫辨識為文字，\n改以 seals 欄位記錄印章出現的摺號與位置。",
-                        "py": "<span class=\"cmt\"># 印章區域：以顏色與形狀偵測，排除於文字辨識之外</span>\nseals = <span class=\"fn\">detect_seals</span>(image, hue_range=(<span class=\"num\">345</span>, <span class=\"num\">15</span>))\n<span class=\"kw\">for</span> s <span class=\"kw\">in</span> seals:\n    mask.<span class=\"fn\">fill</span>(s.bbox)  <span class=\"cmt\"># 遮蔽後再送入 OCR</span>",
-                        "json": "{\n  <span class=\"jkey\">\"seals\"</span>: [{<span class=\"jkey\">\"fold\"</span>: <span class=\"jnum\">5</span>, <span class=\"jkey\">\"type\"</span>: <span class=\"jstr\">\"騎縫印\"</span>}],\n  <span class=\"jkey\">\"excluded_from_text\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
-                      },
-                      {
-                        "key": "rescript", "panel": 7, "colour": "#f3ddc4",
+                        "key": "rescript", "panel": 2, "colour": "#f3ddc4",
                         "box": {"left":"8%","top":"8%","width":"34%","height":"70%"},
-                        "tag": {"right":"-142px","top":"52%"},
+                        "tag": {"left":"-142px","top":"52%"},
                         "title": "硃批（草書）",
-                        "desc": "文末的硃批以紅筆草書書寫，連筆多、字形變化大，辨識準確率低。建議不強行辨識，改以顏色偵測標記其位置，留待人工判讀。",
-                        "prompt": "文末有以紅筆草書書寫的硃批，字形難以準確辨識。\n請依紅色筆跡標出硃批範圍，存入 rescript 欄位，\n並把 text 留空、標記 needs_manual_reading 為 true。",
-                        "py": "<span class=\"cmt\"># 硃批：以紅色筆跡定位，不強行辨識草書</span>\nred = <span class=\"fn\">detect_red_ink</span>(image)\ndoc[<span class=\"str\">\"rescript\"</span>] = {\n    <span class=\"str\">\"bbox\"</span>: red.bbox,\n    <span class=\"str\">\"text\"</span>: <span class=\"str\">\"\"</span>,\n    <span class=\"str\">\"needs_manual_reading\"</span>: <span class=\"kw\">True</span>,\n}",
+                        "desc": "硃批以紅筆草書書寫，連筆多、字形變化大，辨識準確率低。OCR 時應先辨識紅色筆跡範圍，並將其與正文分開，留待人工判讀。",
+                        "prompt": "第三頁左側有以紅筆草書書寫的硃批，字形難以準確辨識。\n請先依紅色筆跡標出硃批範圍，存入 rescript 欄位，\n不要把硃批誤併入正文。",
+                        "py": "<span class=\"cmt\"># 硃批：以紅色筆跡定位，不強行辨識草書</span>\nred = <span class=\"fn\">detect_red_ink</span>(image)\ndoc[<span class=\"str\">\"rescript\"</span>] = {\n    <span class=\"str\">\"bbox\"</span>: red.bbox,\n    <span class=\"str\">\"text\"</span>: <span class=\"str\">\"\"</span>,\n    <span class=\"str\">\"needs_manual_reading\"</span>: <span class=\"kw\">True</span>\n}",
                         "json": "{\n  <span class=\"jkey\">\"rescript\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"\"</span>,\n    <span class=\"jkey\">\"script\"</span>: <span class=\"jstr\">\"cursive\"</span>,\n    <span class=\"jkey\">\"needs_manual_reading\"</span>: <span class=\"jstr\">\"true\"</span>\n  }\n}"
                       },
                       {
-                        "key": "crease", "panel": 2, "colour": "#e3dcc9",
-                        "box": {"left":"0%","top":"0%","width":"6%","height":"100%"},
-                        "tag": {"left":"-134px","top":"75%"},
-                        "title": "摺縫",
-                        "desc": "摺縫是文書實體摺疊留下的痕跡，掃描後會呈現為一條縱向陰影線。它不是版面分欄，若被當成欄界，正文會被錯誤切割。",
-                        "prompt": "畫面中的縱向陰影是摺縫，不是欄界或分隔線。\n請不要依摺縫切分文字區塊，\n並在 folds 欄位記錄摺縫的位置。",
-                        "py": "<span class=\"cmt\"># 摺縫僅記錄位置，不作為分欄依據</span>\nfolds = <span class=\"fn\">detect_fold_lines</span>(image)\nocr = <span class=\"fn\">PaddleOCR</span>(use_doc_unwarping=<span class=\"kw\">False</span>)  <span class=\"cmt\"># 保留摺痕，不做展平校正</span>",
-                        "json": "{\n  <span class=\"jkey\">\"folds\"</span>: [<span class=\"jnum\">1</span>, <span class=\"jnum\">2</span>, <span class=\"jnum\">3</span>],\n  <span class=\"jkey\">\"used_as_column_break\"</span>: <span class=\"jstr\">\"false\"</span>\n}"
+                        "key": "watermark", "panel": 5, "colour": "#d8e2e0",
+                        "box": {"left":"0%","top":"0%","width":"100%","height":"100%"},
+                        "tag": {"right":"-142px","top":"28%"},
+                        "title": "浮水印",
+                        "desc": "第六頁有「國立故宮博物院」及「NATIONAL PALACE MUSEUM」浮水印。這是機構標記，不是奏摺正文，OCR 時應忽略。",
+                        "prompt": "第六頁的「國立故宮博物院」及「NATIONAL PALACE MUSEUM」是浮水印，不是史料文字。\n請在 OCR 前遮蔽或排除這兩組文字，\n不要把它們寫入輸出結果。",
+                        "py": "<span class=\"cmt\"># 浮水印：先遮蔽中英文機構名稱，再進行 OCR</span>\nwatermark = [<span class=\"str\">\"國立故宮博物院\"</span>, <span class=\"str\">\"NATIONAL PALACE MUSEUM\"</span>]\nimage = <span class=\"fn\">mask_text_regions</span>(image, watermark)\nocr = <span class=\"fn\">PaddleOCR</span>()",
+                        "json": "{\n  <span class=\"jkey\">\"watermark\"</span>: [<span class=\"jstr\">\"國立故宮博物院\"</span>, <span class=\"jstr\">\"NATIONAL PALACE MUSEUM\"</span>],\n  <span class=\"jkey\">\"excluded_from_text\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
+                      },
+                      {
+                        "key": "stamp", "panel": 5, "colour": "#ddd6ea",
+                        "box": {"left":"62%","top":"0%","width":"30%","height":"22%"},
+                        "tag": {"left":"-142px","top":"10%"},
+                        "title": "印章",
+                        "desc": "第六頁左上方蓋有印章。印章是圖像而非文字，OCR 時應忽略，不要把印章內的筆畫辨識成文字。",
+                        "prompt": "第六頁左上方的印章不是正文文字。\n請在 OCR 前遮蔽印章區域，\n不要辨識或輸出印章內的字樣。",
+                        "py": "<span class=\"cmt\"># 印章：遮蔽圖像區域，不送入文字辨識</span>\nstamp = <span class=\"fn\">detect_stamp</span>(image, region=<span class=\"str\">\"top_left\"</span>)\nimage = <span class=\"fn\">mask_region</span>(image, stamp.bbox)\nocr = <span class=\"fn\">PaddleOCR</span>()",
+                        "json": "{\n  <span class=\"jkey\">\"stamp\"</span>: {\n    <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">6</span>,\n    <span class=\"jkey\">\"position\"</span>: <span class=\"jstr\">\"top_left\"</span>\n  },\n  <span class=\"jkey\">\"excluded_from_text\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       }
                     ]
                   }

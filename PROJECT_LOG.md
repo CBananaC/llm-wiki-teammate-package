@@ -7954,6 +7954,27 @@ Verified:
 Remaining:
 - The displayed excerpts remain OCR evidence and should not be treated as researcher-confirmed transcription without image checking.
 
+### 2026-08-05 15:07 HKT — Codex — Rework handwritten OCR feature labels
+
+Summary:
+- Removed `首行「奏為奏聞事」`, `摺縫`, and the old combined seal feature.
+- Added `正文字體`, `上奏官員`, `浮水印`, and `印章`; revised `直排單欄`, `臣字款`, `抬頭`, and `硃批（草書）` guidance.
+- Assigned the features to the requested first, third, and sixth pages and placed their labels on the requested left or right sides.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Handwritten labels now render as `直排單欄`, `正文字體`, `上奏官員`, `臣字款`, `抬頭`, `硃批`, `浮水印`, and `印章`.
+- Feature data contains matching AI prompts, Python examples, and OCR JSON output; removed feature keys are absent.
+- Browser placement checks and console checks pass.
+
+Remaining:
+- OCR guidance remains a teaching example; the scan should still be image-checked before treating extracted text as confirmed transcription.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
