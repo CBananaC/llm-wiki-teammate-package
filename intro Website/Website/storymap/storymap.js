@@ -1578,8 +1578,18 @@ const initJsonViewer = () => {
     });
   });
 
-  previousButton?.addEventListener('click', () => showCarouselLabel(carouselIndex - 1));
-  nextButton?.addEventListener('click', () => showCarouselLabel(carouselIndex + 1));
+  previousButton?.addEventListener('click', () => {
+    carouselIndex = 0;
+    if (labelViewport) labelViewport.scrollTo({ left: 0, behavior: 'smooth' });
+    updateCarouselButtons();
+  });
+  nextButton?.addEventListener('click', () => {
+    carouselIndex = Math.max(0, labelButtons.length - 1);
+    if (labelViewport) {
+      labelViewport.scrollTo({ left: labelViewport.scrollWidth, behavior: 'smooth' });
+    }
+    updateCarouselButtons();
+  });
   const refreshCarouselState = () => {
     updateCarouselButtons();
     window.requestAnimationFrame(updateCarouselButtons);
@@ -1708,22 +1718,9 @@ const initBatchTestScene = () => {
     if (badge) badge.classList.remove('is-bump');
   };
 
-  /* 等捲動動畫跑回起點（offset 0）。那一刻畫面正好是完整的 2 列
-     ＋下一列露出 10%，也就是要停下來切回單頁的構圖。 */
-  const waitForScrollHome = async (trackEl) => {
-    const anim = trackEl.getAnimations ? trackEl.getAnimations()[0] : null;
-    if (!anim || !anim.effect) return;
-    const dur = Number(anim.effect.getTiming().duration);
-    if (!(dur > 0)) return;
-    const phase = Number(anim.currentTime || 0) % dur;
-    await wait(dur - phase + 40);
-  };
-
-
-  /* 一格的完整流程：掃描 → 上色 → 翻成 JSON → 眼鏡閱讀 → 綠勾。
-     綠勾出現的同一刻，這一格右下角的頁數標示也會放大變藍，
-     跟單頁測試「1頁 → 50頁」那次轉換用同一個 .is-bump 效果。 */
-  const runTile = async (tile, { scanDur = 1500, readDur = 1600, holdDur = 900 } = {}) => {
+  /* 一格的完整流程：掃描 → 上色 → 翻成 JSON → 閱讀 → 綠勾。
+     綠勾出現的同一刻，頁數標示也放大變藍，跟 1頁→50頁 那次轉換同一個效果。 */
+  const runTile = async (tile, { scanDur = 1500, readDur = 1600 } = {}) => {
     reset(tile);
     tile.style.setProperty('--scan-dur', `${scanDur}ms`);
     tile.style.setProperty('--read-dur', `${readDur}ms`);
@@ -1740,42 +1737,22 @@ const initBatchTestScene = () => {
     tile.classList.add('is-verified');
     const badge = tile.querySelector('.tile-count');
     if (badge) badge.classList.add('is-bump');
-    /* 綠勾＋藍色「50頁」在這裡停留 holdDur，之後 tile 仍然維持這個狀態
-       （不會自動還原），只是持續往上捲的畫面最終會把它捲出視野。 */
-    await wait(holdDur);
-  };
-
-  /* 頁數標示從「1頁」換成「50頁」：先淡出縮小、換好文字、再放大淡入變藍，
-     避免文字寬度瞬間變寬造成的跳動感。 */
-  const swapBadge = async (badge, newText) => {
-    badge.classList.add('is-swapping');
-    await wait(220);
-    badge.textContent = newText;
-    badge.classList.remove('is-swapping');
-    badge.classList.add('is-bump');
-    await wait(320);
+    await wait(900);
   };
 
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-  /* 每一次啟動都拿一個新的編號。捲出畫面時編號 +1，舊的流程一發現
-     自己的編號過期就自行結束——否則捲進捲出幾次之後，會有好幾個
-     流程同時在操作同一個 track，互相清空、重建格子，看起來就像綠勾
-     和「50頁」不斷閃掉又冒出來。 */
+  /* 每一次啟動拿一個新編號；捲出畫面時編號 +1，舊流程發現自己過期就結束，
+     避免捲進捲出後有兩個流程同時操作同一個 track。 */
   let runId = 0;
   let running = false;
-  const pendingTimers = [];
-  const clearTimers = () => {
-    while (pendingTimers.length) window.clearTimeout(pendingTimers.pop());
-  };
 
   const runLoop = async (id) => {
-    const stale = () => id !== runId;
-    while (!stale()) {
-      /* ---- 第一階段：單頁測試（1頁） ---- */
+    const cancelled = () => id !== runId;
+    while (!cancelled()) {
+      /* ---- 第一階段：單頁測試 1頁（回到開頭時也用同樣的轉場淡入） ---- */
       scene.classList.add('is-switching-out');
       await wait(420);
-      if (stale()) return;
       scene.classList.remove('is-batch');
       track.style.removeProperty('--scroll-speed');
       track.innerHTML = '';
@@ -1784,65 +1761,47 @@ const initBatchTestScene = () => {
       await wait(30);
       scene.classList.remove('is-switching-out');
       await wait(480);
-      if (stale()) return;
+      if (cancelled()) return;
       await runTile(single, { scanDur: 1700, readDur: 1900 });
-      if (stale()) return;
+      if (cancelled()) return;
 
-      /* 標示從「1頁」平順換成「50頁」（淡出→換字→放大淡入變藍） */
+      /* 徽章從 1頁 跳成 50頁 */
       const badge = single.querySelector('.tile-count');
-      await swapBadge(badge, '50頁');
-      await wait(500);
-      if (stale()) return;
+      badge.classList.add('is-bump');
+      badge.textContent = '50頁';
+      await wait(700);
 
       /* ---- 轉場：單頁縮小淡出 ---- */
       scene.classList.add('is-switching-out');
       await wait(520);
-      if (stale()) return;
+      if (cancelled()) return;
 
-      /* ---- 第二階段：批次（50頁）----
-         2 欄 × 4 列＝8 格，畫面持續往下捲。可視範圍是「2 整列（4 格）
-         ＋ 下一列露出 10%」，每一格的寬高比和單頁階段一模一樣，只是縮小。 */
+      /* ---- 第二階段：批次 50頁，2×2 並持續往下捲 ---- */
       track.innerHTML = '';
       const tiles = [];
-      for (let i = 0; i < 8; i += 1) {
+      /* 做 2 欄 × 8 列＝16 格；捲動 -50% 時剛好接回開頭，看起來是無限往下 */
+      for (let i = 0; i < 16; i += 1) {
         const t = makeTile(DOCS[i % DOCS.length], '50頁');
         track.appendChild(t);
         tiles.push(t);
       }
+      /* 切換成 2×2 版面，先放大隱藏，再淡入還原 */
       scene.classList.remove('is-switching-out');
       scene.classList.add('is-batch', 'is-switching-in');
+      track.style.setProperty('--scroll-speed', '22s');
       await wait(30);
       scene.classList.remove('is-switching-in');
       await wait(480);
-      if (stale()) return;
+      if (cancelled()) return;
 
-      /* 一格接一格開始，但不是等前一格完全跑完才輪到下一格——彼此只差
-         STAGGER 這幾秒，所以畫面上會有好幾格同時在不同階段，綠勾也就
-         一個接一個亮起來。
-         另外，捲動是 translateY(-50%) 無限循環，「第 i 格」接回的位置正好是
-         「第 i+4 格」，這兩格必須同時開始，否則循環接回的瞬間，剛驗證完的
-         格子會被還沒驗證的複製格取代，看起來就像綠勾忽然消失又出現。 */
-      const STAGGER = 2200;
-      const half = tiles.length / 2;
-      const runs = [];
-      for (let i = 0; i < half; i += 1) {
-        const pair = [tiles[i], tiles[i + half]];
-        runs.push(new Promise((resolve) => {
-          pendingTimers.push(window.setTimeout(() => {
-            if (stale()) { resolve(); return; }
-            Promise.all(pair.map((t) => runTile(t, { scanDur: 1800, readDur: 1400, holdDur: 600 })))
-              .then(resolve);
-          }, i * STAGGER));
-        }));
-      }
+      tiles.forEach((t, i) => {
+        window.setTimeout(() => {
+          if (!cancelled()) runTile(t, { scanDur: 2200, readDur: 1500 });
+        }, i * 620);
+      });
 
-      /* 等 4 格都打上綠勾…… */
-      await Promise.all(runs);
-      if (stale()) return;
-      /* ……再等捲動回到起點，也就是畫面上正好是完整 2 列的綠勾
-         ＋下一列露出 10% 的那一刻，才切回單頁。 */
-      await waitForScrollHome(track);
-      if (stale()) return;
+      await wait(16 * 620 + 6200);
+      if (cancelled()) return;
       await wait(600);
     }
   };
@@ -1855,8 +1814,7 @@ const initBatchTestScene = () => {
     return;
   }
 
-  /* 只在看得見的時候跑；離開畫面時除了停掉流程，也把 CSS 動畫暫停
-     （is-paused），避免捲動列與掃描光線在看不到的地方繼續耗繪圖資源。 */
+  /* 進入畫面才開始跑，捲出畫面就停下來並暫停 CSS 動畫 */
   const observer = new IntersectionObserver((entries) => {
     entries.forEach((entry) => {
       if (entry.isIntersecting) {
@@ -1868,9 +1826,7 @@ const initBatchTestScene = () => {
         scene.classList.add('is-paused');
         if (!running) return;
         running = false;
-        /* 讓目前這個流程過期，並清掉還沒觸發的排程 */
         runId += 1;
-        clearTimers();
       }
     });
   }, { threshold: .2 });

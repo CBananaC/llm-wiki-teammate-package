@@ -2531,89 +2531,66 @@ img { max-width: 100%; }
 
 /* ============================================================================
    9g · OCR測試 — 批次掃描／驗證動畫（#part-3-test 右側視覺元素）
-   單頁階段：一頁置中放大，右下角標示「1頁」。
-   批次階段：2×2 格線持續往下捲，標示改為「50頁」。
-   每一格的流程：掃描 → 掃過的地方立刻上色 → 翻成 JSON 視窗 → 眼鏡閱讀 → 綠勾。
-   大小、顏色寫在 storymap-cards.css 的 #part-3-test .batch-scene 區塊；
-   時間快慢在 storymap.js 的 initBatchTestScene() 裡。
+   這一段直接沿用 UI Idea/24-ocr-batch-test-animation-draft.html 的版本，
+   只把寫死的數值換成 storymap-cards.css 可調的變數，行為完全相同。
    ========================================================================== */
 .batch-scene {
+  /* 大小、顏色一律在 storymap-cards.css 的 #part-3-test .batch-scene 調整 */
   position: relative; width: var(--batch-w, 100%); aspect-ratio: var(--batch-aspect, 1 / 1);
   overflow: hidden; border: 1px solid var(--line); border-radius: 6px;
   background:
-    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, .06), transparent 60%),
+    radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.06), transparent 60%),
     linear-gradient(180deg, #1d3b3a 0%, #16302f 100%);
-  box-shadow: inset 0 0 40px rgba(0, 0, 0, .35);
+  box-shadow: inset 0 0 40px rgba(0,0,0,.35);
 }
 
-/* ---- 捲動層與兩個階段之間的轉場 ---- */
+/* ---- 捲動層 ---- */
 .batch-track {
   position: absolute; inset: var(--batch-pad, 6%);
   opacity: 1; transition: opacity var(--switch-dur, .5s) ease, transform var(--switch-dur, .5s) ease;
 }
-/* Keep the completed 50-page grid visible while the next single-page tile is
-   prepared. The DOM swap then happens directly, so the green ticks and blue
-   50-page labels never fade out before the restart appears. */
-.batch-scene.is-switching-out .batch-track { opacity: 1; transform: none; }
-/* The 50-page grid also enters already visible: its labels must progress
-   continuously from white to enlarged blue instead of fading out and back in. */
-.batch-scene.is-switching-in .batch-track { opacity: 1; transform: none; }
-/* 單頁階段：flex 置中，tile 高度固定、寬度由比例推算 */
+/* 兩個階段之間的轉場：單頁往內縮小淡出，2×2 由稍大淡入 */
+.batch-scene.is-switching-out .batch-track { opacity: 0; transform: scale(.82); }
+.batch-scene.is-switching-in .batch-track { opacity: 0; transform: scale(1.14); }
+/* 單頁階段：flex 置中，tile 高度固定，寬度由 aspect-ratio 推算出來 */
 .batch-scene:not(.is-batch) .batch-track { display: flex; align-items: center; justify-content: center; }
 .batch-scene:not(.is-batch) .tile { height: var(--single-tile-h, 78%); width: auto; aspect-ratio: var(--tile-aspect, .74 / 1); }
-/* 批次階段：2 欄 × 4 列＝8 格，持續往下捲。
-   每一格的寬高比與單頁階段完全相同（--tile-aspect），只是等比縮小——
-   格高由寬高比決定，不要另外指定高度，否則格子會被壓扁。
-   格線寬度用 --batch-grid-w 收窄並置中，讓可視範圍剛好是
-   「2 整列 ＋ 下一列露出 10%」：
-     格寬 w =（格線寬 − 欄距）/ 2，格高 h = w / 0.74，
-     2 ×（h + 列距）+ 0.1 × h ≒ 可視高度。
-   列距不用 row-gap 而是每格自帶 margin-bottom，這樣整條軌道高
-   ＝ 4 ×（格高＋列距），translateY(-50%) 正好等於 2 列，循環接回時完全對齊。 */
+
+/* 批次階段：2 欄格線，整層往上移動＝畫面往下捲 */
 .batch-scene.is-batch .batch-track {
   inset: var(--batch-pad, 6%) var(--batch-pad, 6%) auto var(--batch-pad, 6%);
-  display: grid; grid-template-columns: repeat(2, 1fr);
-  max-width: var(--batch-grid-w, 74%); margin-inline: auto;
-  column-gap: var(--tile-gap, 3%); row-gap: 0;
-  animation: batch-scroll var(--scroll-speed, 30s) linear infinite;
-  will-change: transform;
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--tile-gap, 3%);
+  animation: batch-scroll var(--scroll-speed, 20s) linear infinite;
 }
-.batch-scene.is-batch .tile {
-  width: 100%; aspect-ratio: var(--tile-aspect, .74 / 1);
-  margin-bottom: var(--tile-gap, 3%);
-}
-/* translate3d 讓捲動交給 GPU 合成，不會每一格都重繪整張大圖 */
+.batch-scene.is-batch .tile { width: 100%; aspect-ratio: var(--tile-aspect, .74 / 1); }
 @keyframes batch-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to   { transform: translate3d(0, -50%, 0); }
+  from { transform: translateY(0); }
+  to   { transform: translateY(-50%); }
 }
 
-/* contain 把每一格的重繪範圍鎖在自己格子裡，一格在動不會連累其他 15 格 */
-.tile { position: relative; flex: none; contain: layout paint style; }
+.tile { position: relative; flex: none; }
 
-/* 兩張同樣的頁面疊在一起：底下是「還沒掃到」的半透明去飽和版本，上面是完整
-   彩色版本，用 clip-path 由上往下露出，與掃描線同步，所以掃過就立刻變彩色。 */
+/* 兩張同樣的頁面疊在一起：底下那張是「還沒掃到」的半透明去飽和版本，
+   上面那張是完整彩色版本，用 clip-path 由上往下逐漸露出。
+   露出的速度與藍色掃描線同步，所以掃描線掃過的地方會立刻變成正常顏色。 */
 .tile-page { position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: #f0e6d2; }
 .tile-page img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
 .tile-page .page-dim { opacity: .28; filter: grayscale(1) contrast(.85); }
-/* will-change 只在真的正在動的那一刻加上去。若常駐，16 格 × 2 張大圖會被
-   永久提升成 32 個 GPU 圖層，顯存吃緊時瀏覽器會反覆丟棄再重繪，
-   畫面上就會看到「50頁」白字不停閃爍。 */
-.tile-page .page-full { opacity: 1; filter: none; clip-path: inset(0 0 100% 0); }
-.tile.is-scanning .tile-page .page-full { animation: tile-reveal var(--scan-dur, 1.5s) ease-in-out forwards; will-change: clip-path; }
+.tile-page .page-full {
+  opacity: 1; filter: none;
+  clip-path: inset(0 0 100% 0);   /* 一開始完全遮住，等掃描線經過才露出 */
+}
+.tile.is-scanning .tile-page .page-full { animation: tile-reveal var(--scan-dur, 1.5s) ease-in-out forwards; }
 .tile.is-scanned .tile-page .page-full { clip-path: inset(0 0 0 0); }
 @keyframes tile-reveal {
   from { clip-path: inset(0 0 100% 0); }
   to   { clip-path: inset(0 0 0 0); }
 }
 
-/* 掃描光線：放在 .tile-page 裡面，光暈會被紙張邊界裁掉，不會超出上下範圍。
-   移動用 transform（GPU 合成）而不是 top，否則每一格每一幀都會重繪整張大圖。
-   translateY 的百分比是相對「自己的高度」，所以 -24%／100% 的位置換算成
-   -24/22×100 ≈ -109% 與 100/22×100 ≈ 455%。 */
+/* 掃描光線：由上往下掃過整頁。放在 .tile-page 裡面，
+   所以光暈會被頁面邊界裁掉，不會超出紙張的上下範圍。 */
 .tile-scanline {
-  position: absolute; left: 0; right: 0; height: var(--scan-h, 22%); top: 0; z-index: 3;
-  transform: translate3d(0, -109%, 0);
+  position: absolute; left: 0; right: 0; height: var(--scan-h, 22%); top: -24%; z-index: 3;
   opacity: 0; pointer-events: none;
   background: linear-gradient(180deg,
     rgba(var(--scan-rgb, 120, 180, 255), 0) 0%,
@@ -2623,21 +2600,21 @@ img { max-width: 100%; }
     rgba(var(--scan-rgb, 120, 180, 255), 0) 100%);
   box-shadow: 0 0 16px 3px rgba(var(--scan-rgb, 120, 180, 255), .55);
 }
-.tile.is-scanning .tile-scanline { animation: tile-scan var(--scan-dur, 1.5s) ease-in-out forwards; will-change: transform; }
+.tile.is-scanning .tile-scanline { animation: tile-scan var(--scan-dur, 1.5s) ease-in-out forwards; }
 @keyframes tile-scan {
-  0%   { transform: translate3d(0, -109%, 0); opacity: 0; }
+  0%   { top: -24%; opacity: 0; }
   12%  { opacity: 1; }
   88%  { opacity: 1; }
-  100% { transform: translate3d(0, 455%, 0); opacity: 0; }
+  100% { top: 100%; opacity: 0; }
 }
 
 /* JSON 視窗：與頁面同樣大小，掃描完成後翻面蓋在原頁上 */
 .tile-json {
   position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column;
   background: #1e1e1e; border-radius: 3px; overflow: hidden;
-  border: 1px solid rgba(255, 255, 255, .1);
+  border: 1px solid rgba(255,255,255,.1);
   opacity: 0; transform: rotateY(90deg); transform-origin: center;
-  transition: opacity .35s ease, transform .45s cubic-bezier(.4, 0, .2, 1);
+  transition: opacity .35s ease, transform .45s cubic-bezier(.4,0,.2,1);
 }
 .tile.is-json .tile-json { opacity: 1; transform: rotateY(0deg); }
 .tile-json-bar { display: flex; align-items: center; gap: 3px; padding: 4px 5px; background: #2b2b2b; flex: none; }
@@ -2656,22 +2633,20 @@ img { max-width: 100%; }
 .tile-json-body .key { color: #9cdcfe; }
 .tile-json-body .str { color: #ce9178; }
 
-/* 閱讀階段：一道亮光由上而下掃過 JSON 文字。同樣改用 transform 移動：
-   高度 34%，-36%／100% 換算成 -36/34×100 ≈ -106% 與 100/34×100 ≈ 294%。 */
+/* 閱讀階段：一道亮光由上而下掃過 JSON 文字，代表 AI 正在讀 */
 .tile-readbeam {
-  position: absolute; left: 0; right: 0; height: 34%; top: 0; z-index: 2; opacity: 0;
-  transform: translate3d(0, -106%, 0);
-  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .16), rgba(255, 255, 255, 0));
+  position: absolute; left: 0; right: 0; height: 34%; top: -36%; z-index: 2; opacity: 0;
+  background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.16), rgba(255,255,255,0));
 }
-.tile.is-reading .tile-readbeam { animation: tile-read var(--read-dur, 1.6s) linear forwards; will-change: transform; }
+.tile.is-reading .tile-readbeam { animation: tile-read var(--read-dur, 1.6s) linear forwards; }
 @keyframes tile-read {
-  0%   { transform: translate3d(0, -106%, 0); opacity: 0; }
+  0%   { top: -36%; opacity: 0; }
   10%  { opacity: 1; }
   90%  { opacity: 1; }
-  100% { transform: translate3d(0, 294%, 0); opacity: 0; }
+  100% { top: 100%; opacity: 0; }
 }
 
-/* ---- 閱讀中的眼鏡：PNG 當遮罩重新上色，兩片鏡片有反覆掃過的反光 ---- */
+/* ---- 閱讀中的眼鏡（用 PNG 當遮罩重新上色，可自由改顏色） ---- */
 .tile-glasses {
   position: absolute; z-index: 6; left: 50%; top: 50%;
   width: var(--glass-w, 62%); aspect-ratio: 3.1 / 1;
@@ -2679,7 +2654,7 @@ img { max-width: 100%; }
   opacity: 0; transition: opacity .32s ease, transform .32s ease;
 }
 .tile.is-reading .tile-glasses { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-/* 綠勾出現的同時眼鏡就淡出 */
+/* 綠勾出現的同時眼鏡就淡出（讀完了，換成驗證結果） */
 .tile.is-verified .tile-glasses { opacity: 0; transform: translate(-50%, -50%) scale(.86); }
 .tile-glasses-shape {
   position: absolute; inset: 0; background: var(--glass-color, #7fd4ff);
@@ -2687,77 +2662,54 @@ img { max-width: 100%; }
           mask: url('anim-glasses.png') center / contain no-repeat;
   filter: drop-shadow(0 0 6px rgba(127, 212, 255, .75));
 }
-/* 鏡片反光：原本是動 background-position，那不是合成屬性，16 格同時跑會
-   每一幀重繪。改成外框固定、裡面一條漸層用 transform 滑過去，外觀完全一樣
-   但交給 GPU 合成。 */
+/* 兩片鏡片的反光：位置用變數控制，方便對準 PNG 的鏡片 */
 .tile-lens {
   position: absolute; top: var(--lens-y, 26%);
   width: var(--lens-w, 27%); height: var(--lens-h, 46%);
-  border-radius: 42% 42% 46% 46%; overflow: hidden;
+  border-radius: 42% 42% 46% 46%;
+  background: linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.85) 48%, rgba(255,255,255,0) 66%);
+  background-size: 260% 100%; background-position: 130% 0;
   mix-blend-mode: screen; opacity: .9;
-}
-.tile-lens::before {
-  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 260%;
-  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .85) 48%, rgba(255, 255, 255, 0) 66%);
-  transform: translate3d(50%, 0, 0);
 }
 .tile-lens.l { left: var(--lens-l-x, 11%); }
 .tile-lens.r { left: var(--lens-r-x, 62%); }
-.tile.is-reading .tile-lens::before { animation: lens-shine var(--shine-dur, 1.5s) ease-in-out infinite; will-change: transform; }
-.tile.is-reading .tile-lens.r::before { animation-delay: .16s; }
+.tile.is-reading .tile-lens { animation: lens-shine var(--shine-dur, 1.5s) ease-in-out infinite; }
+.tile.is-reading .tile-lens.r { animation-delay: .16s; }
 @keyframes lens-shine {
-  0%   { transform: translate3d(50%, 0, 0); }
-  55%  { transform: translate3d(-100%, 0, 0); }
-  100% { transform: translate3d(-100%, 0, 0); }
+  0%   { background-position: 130% 0; }
+  55%  { background-position: -60% 0; }
+  100% { background-position: -60% 0; }
 }
 
 /* 綠色勾號：驗證完成 */
 .tile-tick {
   position: absolute; z-index: 8; inset: 0; display: grid; place-items: center;
-  opacity: 0; transform: scale(.5); transition: opacity .3s ease, transform .3s cubic-bezier(.34, 1.56, .64, 1);
+  opacity: 0; transform: scale(.5); transition: opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
 }
 .tile.is-verified .tile-tick { opacity: 1; transform: scale(1); }
-.tile-tick svg { width: 42%; height: 42%; filter: drop-shadow(0 0 8px rgba(79, 191, 114, .65)); }
-.tile-tick circle { fill: rgba(79, 191, 114, .16); stroke: var(--tick-color, #4fbf72); stroke-width: 4; }
+.tile-tick svg { width: 42%; height: 42%; filter: drop-shadow(0 0 8px rgba(79,191,114,.65)); }
+.tile-tick circle { fill: rgba(79,191,114,.16); stroke: var(--tick-color, #4fbf72); stroke-width: 4; }
 .tile-tick path { fill: none; stroke: var(--tick-color, #4fbf72); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
 
-/* 頁數標示（1頁／50頁）：每一格的右下角，沒有外框和底色，
+/* 頁數徽章：在每一頁／視窗的右下角，沒有外框和底色，
    用深色描邊讓白字在淺色紙張和深色視窗上都看得清楚。 */
 .tile-count {
   position: absolute; z-index: 10; right: 5%; bottom: 4%;
   color: #ffffff; font-family: var(--sans); font-weight: 800;
   font-size: var(--count-font-size, 13px); line-height: 1; letter-spacing: .03em;
-  text-shadow: 0 0 4px rgba(0, 0, 0, .9), 0 1px 3px rgba(0, 0, 0, .85);
-  transition: transform .35s ease, color .35s ease, opacity .22s ease;
+  text-shadow: 0 0 4px rgba(0,0,0,.9), 0 1px 3px rgba(0,0,0,.85);
+  transition: transform .35s ease, color .35s ease;
 }
 .batch-scene:not(.is-batch) .tile-count { font-size: var(--count-font-size-single, 22px); }
-/* JSON 視窗翻上來、正在閱讀的期間先把頁數藏起來，不要壓在程式碼上；
-   驗證完成（綠勾出現）時再放大變藍重新出現，並保持到回到單頁畫面為止。 */
-.tile.is-json .tile-count { opacity: 0; }
-.tile.is-verified .tile-count { opacity: 1; }
-.tile-count.is-bump,
-.tile.is-verified .tile-count { transform: scale(1.35); color: #9fd8ff; }
-/* 「1頁」換成「50頁」中間那一刻：先淡出，換好文字後再放大淡入，
-   避免文字寬度瞬間變寬造成的跳動感（見 storymap.js 的 initBatchTestScene）。 */
-.tile-count.is-swapping { opacity: 0; transform: scale(.7); }
+.tile-count.is-bump { transform: scale(1.35); color: #9fd8ff; }
 
-/* 尚未輪到的格子先淡出，避免整片同時滿版閃動。
-   注意：淡出的是裡面的紙張與 JSON 視窗，不是整個 .tile——因為父層一旦設了
-   opacity，子層就無法再調回全不透明，那樣頁數標示也會跟著一起變淡。
-   這樣「50頁」從一開始就是清楚的白色，驗證完成後才放大變藍並一直保持。 */
-.batch-scene.is-batch .tile-page { opacity: .34; transition: opacity .5s ease; }
-.batch-scene.is-batch .tile.is-active .tile-page,
-.batch-scene.is-batch .tile.is-verified .tile-page { opacity: 1; }
-
-/* 捲出畫面時把所有動畫暫停，不再佔用繪圖資源 */
-.batch-scene.is-paused .batch-track,
-.batch-scene.is-paused .tile-scanline,
-.batch-scene.is-paused .tile-readbeam,
-.batch-scene.is-paused .tile-lens::before,
-.batch-scene.is-paused .tile-page .page-full { animation-play-state: paused; }
+/* 尚未輪到的格子先淡出，避免整片同時滿版閃動 */
+.batch-scene.is-batch .tile { opacity: .34; transition: opacity .5s ease; }
+.batch-scene.is-batch .tile.is-active { opacity: 1; }
 
 @media (prefers-reduced-motion: reduce) {
-  .tile-scanline, .tile-readbeam, .tile-lens::before { animation: none !important; }
+  .batch-scene.is-batch .batch-track { animation: none; }
+  .tile-scanline, .tile-readbeam, .tile-lens { animation: none !important; }
   .tile-page .page-full { clip-path: inset(0 0 0 0); animation: none !important; }
   .tile-json { opacity: 1; transform: none; }
   .tile-tick { opacity: 1; transform: none; }
