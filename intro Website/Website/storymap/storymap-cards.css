@@ -936,7 +936,7 @@
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #cfe0ef;
   --fx-left: 24%; --fx-top: 10%; --fx-width: 48%; --fx-height: 80%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 19%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 20%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #e8d6b7;
@@ -946,22 +946,22 @@
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #f0d6d0;
   --fx-left: 60%; --fx-top: 46%; --fx-width: 11%; --fx-height: 50%;
-  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 29%;
+  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 34%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #f5e6bd;
   --fx-left: 10%; --fx-top: 0%; --fx-width: 80%; --fx-height: 16%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 29%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 38%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #f3ddc4;
   --fx-left: 8%; --fx-top: 8%; --fx-width: 34%; --fx-height: 70%;
-  --fx-tag-left: -142px; --fx-tag-right: auto; --fx-tag-top: 52%;
+  --fx-tag-left: -142px; --fx-tag-right: auto; --fx-tag-top: 58%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
   --fx-color: #d8e2e0;
   --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 28%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 56%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
   --fx-color: #ddd6ea;

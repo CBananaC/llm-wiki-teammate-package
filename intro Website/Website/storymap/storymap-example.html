@@ -8,10 +8,10 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="storymap.css?v=20260804-part3-format-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260805-handwritten-features-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260805-handwritten-features-02">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260805-handwritten-features-01" defer></script>
+  <script src="storymap.js?v=20260805-handwritten-features-02" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1460,7 +1460,7 @@
                       {
                         "key": "regular-script", "panel": 0, "colour": "#cfe0ef",
                         "box": {"left":"24%","top":"10%","width":"48%","height":"80%"},
-                        "tag": {"right":"-142px","top":"19%"},
+                        "tag": {"right":"-142px","top":"20%"},
                         "title": "正文字體",
                         "desc": "這份奏摺使用楷書書寫，字跡清楚可讀，字與字、行與行之間有明確間距，且每個字的大小相近，具備 OCR 辨識的可能。",
                         "prompt": "這份奏摺使用楷書書寫，字體清楚，字與字、行與行之間有明確間距，且字體大小相近。\n請利用這些特徵辨識正文，並保留原有閱讀順序。",
@@ -1480,7 +1480,7 @@
                       {
                         "key": "minister", "panel": 0, "colour": "#f0d6d0",
                         "box": {"left":"60%","top":"46%","width":"11%","height":"50%"},
-                        "tag": {"left":"-134px","top":"29%"},
+                        "tag": {"left":"-134px","top":"34%"},
                         "title": "臣字款（小字自稱）",
                         "desc": "官員在文中自稱「奴才」或「臣」時以小字偏右書寫，字體小於正文。這些字也要 OCR，並作為正文的一部分保留在 body text 中。",
                         "prompt": "辨識正文中偏右、字體較小的「奴才」或「臣」。\n請將它們一併 OCR，保留在 body 的原有位置，\n不要另行刪除或排除。",
@@ -1490,7 +1490,7 @@
                       {
                         "key": "respect", "panel": 2, "colour": "#f5e6bd",
                         "box": {"left":"10%","top":"0%","width":"80%","height":"16%"},
-                        "tag": {"right":"-142px","top":"29%"},
+                        "tag": {"right":"-142px","top":"38%"},
                         "title": "抬頭",
                         "desc": "當提及皇帝時，會另起一行並提高書寫位置，稱為抬頭。這種格式會把同一句話拆成兩行，OCR 需要把因抬頭而分隔的文字重新合併。",
                         "prompt": "凡涉及皇帝的詞語會另起一行並抬高書寫（抬頭）。\n請把因抬頭而被分隔的句子重新合併為完整句子，\n並在 honorific_breaks 記錄原本的斷行位置。",
@@ -1500,7 +1500,7 @@
                       {
                         "key": "rescript", "panel": 2, "colour": "#f3ddc4",
                         "box": {"left":"8%","top":"8%","width":"34%","height":"70%"},
-                        "tag": {"left":"-142px","top":"52%"},
+                        "tag": {"left":"-142px","top":"58%"},
                         "title": "硃批（草書）",
                         "desc": "硃批以紅筆草書書寫，連筆多、字形變化大，辨識準確率低。OCR 時應先辨識紅色筆跡範圍，並將其與正文分開，留待人工判讀。",
                         "prompt": "第三頁左側有以紅筆草書書寫的硃批，字形難以準確辨識。\n請先依紅色筆跡標出硃批範圍，存入 rescript 欄位，\n不要把硃批誤併入正文。",
@@ -1510,7 +1510,7 @@
                       {
                         "key": "watermark", "panel": 5, "colour": "#d8e2e0",
                         "box": {"left":"0%","top":"0%","width":"100%","height":"100%"},
-                        "tag": {"right":"-142px","top":"28%"},
+                        "tag": {"right":"-142px","top":"56%"},
                         "title": "浮水印",
                         "desc": "第六頁有「國立故宮博物院」及「NATIONAL PALACE MUSEUM」浮水印。這是機構標記，不是奏摺正文，OCR 時應忽略。",
                         "prompt": "第六頁的「國立故宮博物院」及「NATIONAL PALACE MUSEUM」是浮水印，不是史料文字。\n請在 OCR 前遮蔽或排除這兩組文字，\n不要把它們寫入輸出結果。",

@@ -4129,6 +4129,25 @@ Verified:
 Remaining:
 - None for this label adjustment.
 
+### 2026-08-05 15:19 HKT — Codex — Separate handwritten labels to prevent overlap
+
+Summary:
+- Re-spaced the handwritten labels on both sides so labels from different pages do not occupy the same vertical position.
+- Refreshed the CSS cache key after the position adjustment.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser reports zero intersecting label rectangles.
+- Labels display without `第 x 摺` text and without console errors.
+
+Remaining:
+- None for this label adjustment.
+
 ### 2026-08-05 14:00 HKT — Codex — Preserve handwritten fold indicators
 
 Summary:
@@ -4208,3 +4227,24 @@ Verified:
 
 Remaining:
 - OCR guidance remains a teaching example; the scan should still be image-checked before treating extracted text as confirmed transcription.
+
+### 2026-08-05 15:18 HKT — Codex — Remove fold numbers from handwritten labels
+
+Summary:
+- Removed the `第 x 摺` badge text from handwritten Part 3 labels.
+- Kept the feature names and their page/side positions unchanged.
+- Refreshed the StoryMap script cache key.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Handwritten labels display only `直排單欄`, `正文字體`, `上奏官員`, `臣字款`, `抬頭`, `硃批`, `浮水印`, and `印章`.
+- Printed labels remain without page badges.
+- JavaScript syntax and browser console checks pass.
+
+Remaining:
+- None for this label adjustment.
