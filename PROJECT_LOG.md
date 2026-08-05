@@ -8051,6 +8051,25 @@ Verified:
 Remaining:
 - The OCR examples remain instructional evidence and should still be checked against the scanned images before being treated as confirmed transcription.
 
+### 2026-08-05 15:39 HKT — Codex — Add source-text samples to printed OCR features
+
+Summary:
+- Replaced the printed-feature JSON keys `text_sample` and `paragraph_samples` with direct `text` and `paragraphs` entries.
+- Added the source sequence beginning with `福建水師提督…`, followed by two paragraph samples under `分段`; each displayed sample shows four sentences followed by `……`.
+- Added original punctuation-bearing text to `標題符號` while preserving the existing OCR guidance.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser-rendered printed feature data contains no `_sample` keys in the three requested features.
+- The live page shows the expected source text and printed labels without console errors or warnings.
+
+Remaining:
+- The displayed excerpts remain source-text teaching examples and should be checked against the scanned page when used as evidence.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
