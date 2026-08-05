@@ -7875,6 +7875,27 @@ Verified:
 Remaining:
 - Provide a separate handwritten feature replacement list before changing `辨識手寫字`.
 
+### 2026-08-05 13:54 HKT — Codex — Remove Part 3 page badges and reposition printed 硃批 labels
+
+Summary:
+- Removed the `p.2` suffix from off-page Part 3 feature labels.
+- Moved the printed `夾批` and `落款與尾批` labels to the left side of the document explorer.
+- Updated the StoryMap JavaScript cache key to ensure the revised label renderer is loaded.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Page-two labels render without page badges and both computed to the left side.
+- JavaScript syntax, `git diff --check`, and browser console checks pass.
+
+Remaining:
+- None for this label adjustment.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:

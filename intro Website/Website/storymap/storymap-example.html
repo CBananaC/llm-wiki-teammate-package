@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="storymap-cards.css?v=20260804-part3-format-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260804-part3-format-01" defer></script>
+  <script src="storymap.js?v=20260805-part3-labels-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1343,7 +1343,7 @@
                         "box": {"left":"69%","top":"8%","width":"27%","height":"34%"},
                         "tag": {"right":"-132px","top":"14%"},
                         "title": "文本資訊",
-                        "desc": "《明清臺灣檔案彙編》所收錄的每份奏摺，應先在正文前保存清楚的基本資料，包括史料來源、標題、作者與日期。這些資料是後續檢索與排序的依據，必須先由 OCR 辨識，並以清楚、固定的結構保存。",
+                        "desc": "圖為《明清臺灣檔案彙編》的書影，書中會在每篇文本的正文前，列出該文本的基本資料，包括史料來源、標題、作者與日期。這些資料是後續檢索與排序的依據，因此必須 OCR ，並以清楚、固定的結構保存。",
                         "prompt": "這是《明清臺灣檔案彙編》第30冊的印刷奏摺。請先辨識正文前的文本資訊：史料來源、標題、作者、日期。\n請把四項資料分別放入 source、title、author、date 欄位，\n再輸出正文；不要把文本資訊混入 body。",
                         "py": "<span class=\"cmt\"># 先抽取文本資訊，再處理正文</span>\nheader = <span class=\"fn\">extract_header</span>(result)\ndoc = {\n    <span class=\"str\">\"source\"</span>: <span class=\"str\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n    <span class=\"str\">\"title\"</span>:  header[<span class=\"str\">\"title\"</span>],\n    <span class=\"str\">\"author\"</span>: header[<span class=\"str\">\"author\"</span>],\n    <span class=\"str\">\"date\"</span>:   header[<span class=\"str\">\"date\"</span>],\n}",
                         "json": "{\n  <span class=\"jkey\">\"source\"</span>: <span class=\"jstr\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n  <span class=\"jkey\">\"title\"</span>: <span class=\"jstr\">\"為奏彰化失陷已調兵赴臺事\"</span>,\n  <span class=\"jkey\">\"author\"</span>: <span class=\"jstr\">\"福建水師提督 黃仕簡\"</span>,\n  <span class=\"jkey\">\"date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>\n}"

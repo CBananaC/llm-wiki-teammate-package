@@ -4106,3 +4106,25 @@ Verified:
 
 Remaining:
 - The handwritten labels/content remain unchanged because no replacement list was specified for that section.
+
+### 2026-08-05 13:54 HKT — Codex — Remove page badges and move printed 硃批 labels left
+
+Summary:
+- Removed the off-page `p.2` badges from Part 3 explorer labels.
+- Moved `夾批` and `落款與尾批` to the left side of the printed-page explorer.
+- Bumped the StoryMap JavaScript cache key so the browser loads the updated label renderer.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Page-two labels display as `夾批` and `落款與尾批` without `p.2`.
+- Computed label geometry places both labels on the left side.
+- JavaScript syntax, diff whitespace, and browser console checks pass.
+
+Remaining:
+- None for this label adjustment.

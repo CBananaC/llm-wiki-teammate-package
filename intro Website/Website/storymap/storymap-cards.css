@@ -906,12 +906,12 @@
 #part-3-printed-explorer [data-fx-feature="inline-zhu"] {
   --fx-color: #f3ddc4;
   --fx-left: 68%; --fx-top: 28%; --fx-width: 18%; --fx-height: 20%;
-  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 38%;
+  --fx-tag-left: -132px; --fx-tag-right: auto; --fx-tag-top: 38%;
 }
 #part-3-printed-explorer [data-fx-feature="tail-zhu"] {
   --fx-color: #d3e5e2;
   --fx-left: 16%; --fx-top: 72%; --fx-width: 29%; --fx-height: 23%;
-  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 60%;
+  --fx-tag-left: -132px; --fx-tag-right: auto; --fx-tag-top: 60%;
 }
 
 /* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */

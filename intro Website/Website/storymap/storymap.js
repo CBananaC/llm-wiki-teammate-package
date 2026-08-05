@@ -941,6 +941,34 @@ const initPart3FeatureExplorers = () => {
     const features = (data && data.features) || [];
     if (!features.length) return;
 
+    /* 標籤與標示區的位置、大小、顏色全部走 CSS 變數。
+       這裡把 JSON 內的數值寫成「低優先度」的預設樣式（選擇器只用屬性，
+       不用 id），storymap-cards.css 便可以用 #id 選擇器覆寫任何一項，
+       不必改動 HTML 或這支程式。 */
+    const kind = root.dataset.part3Explorer;
+    const injectDefaults = () => {
+      const rules = features.map((f) => {
+        const box = f.box || {};
+        const tag = f.tag || {};
+        const decls = [
+          `--fx-color: ${f.colour || '#e6e0d4'}`,
+          `--fx-left: ${box.left || '0%'}`,
+          `--fx-top: ${box.top || '0%'}`,
+          `--fx-width: ${box.width || '0%'}`,
+          `--fx-height: ${box.height || '0%'}`,
+          `--fx-tag-left: ${tag.left || 'auto'}`,
+          `--fx-tag-right: ${tag.right || 'auto'}`,
+          `--fx-tag-top: ${tag.top || 'auto'}`
+        ].join('; ');
+        return `[data-part3-explorer="${kind}"] [data-fx-feature="${f.key}"] { ${decls}; }`;
+      });
+      const style = document.createElement('style');
+      style.dataset.part3FxDefaults = kind;
+      style.textContent = rules.join('\n');
+      document.head.appendChild(style);
+    };
+    injectDefaults();
+
     const out = root.querySelector('[data-part3-fx-out]');
     out.innerHTML = outMarkup;
     const elTitle = out.querySelector('[data-fx-title]');
@@ -1032,14 +1060,12 @@ const initPart3FeatureExplorers = () => {
         tag.className = 'part3-fx-tag'
           + (i === cur ? ' is-active' : ' is-dim')
           + (other ? ' is-other' : '');
-        tag.style.setProperty('--c', f.colour);
+        // 位置與顏色一律交由 CSS 變數決定（預設值見下方 injectDefaults()，
+        // 實際微調請改 storymap-cards.css），這裡只標上是哪一個特徵。
+        tag.dataset.fxFeature = f.key;
+        if (positioned) tag.classList.add('is-floating');
         const label = f.title.split('：')[0].split('（')[0];
-        tag.innerHTML = other ? `${label}<span class="pg">${f.badge}</span>` : label;
-        if (positioned && f.tag) {
-          if (f.tag.left) tag.style.left = f.tag.left;
-          if (f.tag.right) tag.style.right = f.tag.right;
-          if (f.tag.top) tag.style.top = f.tag.top;
-        }
+        tag.innerHTML = label;
         tag.addEventListener('click', () => showFeature(i));
         tagHost.appendChild(tag);
       });
@@ -1069,8 +1095,7 @@ const initPart3FeatureExplorers = () => {
         if (f && (f.page || 0) === page) {
           const hl = document.createElement('div');
           hl.className = 'part3-fx-hl is-active';
-          Object.assign(hl.style, f.box);
-          hl.style.setProperty('--c', f.colour);
+          hl.dataset.fxFeature = f.key;
           hlHost.appendChild(hl);
         }
         buildTags((f) => (f.page || 0) === page, true);
@@ -1156,8 +1181,7 @@ const initPart3FeatureExplorers = () => {
           if (open && f && (f.panel || 0) === i) {
             const hl = document.createElement('div');
             hl.className = 'part3-fx-hl is-active';
-            Object.assign(hl.style, f.box);
-            hl.style.setProperty('--c', f.colour);
+            hl.dataset.fxFeature = f.key;
             el.appendChild(hl);
           }
         });
