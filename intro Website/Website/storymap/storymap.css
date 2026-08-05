@@ -1605,6 +1605,7 @@ img { max-width: 100%; }
 .part3-fx-panel:nth-child(even) { transform: rotateY(-52deg); }
 .part3-fx-panel:not(.is-open) {
   margin-inline: -1.5px;
+  opacity: .56;
   box-shadow: 0 0 0 2px #cdb894;
 }
 /* 摺痕陰影：暖褐色明暗交替，讀起來像一疊摺起來的紙邊 */
@@ -1637,10 +1638,13 @@ img { max-width: 100%; }
   font: 700 calc(13.5px * var(--font-scale)) var(--sans);
   box-shadow: 0 2px 7px rgba(22, 61, 63, .12); transition: opacity .18s, filter .18s;
 }
-/* 浮貼在原件旁邊的標籤（窄螢幕會改回一般排列，見下方 media query） */
+/* 浮貼在原件旁邊的標籤（窄螢幕會改回一般排列，見下方 media query）。
+   寬度與字級也可用變數覆寫：預設 max-content（跟文字一樣寬、不換行），
+   設定 --fx-tag-w 後會改成自動換行，方便做成較窄的直式標籤。 */
 .part3-fx-tag.is-floating {
-  position: absolute;
+  position: absolute; width: var(--fx-tag-w, max-content); white-space: normal;
   left: var(--fx-tag-left, auto); right: var(--fx-tag-right, auto); top: var(--fx-tag-top, auto);
+  font-size: var(--fx-tag-font, calc(13.5px * var(--font-scale)));
 }
 .part3-fx-taglist { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; width: 100%; }
 .part3-fx-taglist .part3-fx-tag { position: static; }
@@ -2422,6 +2426,57 @@ img { max-width: 100%; }
 }
 
 /* ============================================================================
+   9f · 輸出格式：JSON — 真實 JSON 檢視器（#part-3-json 右側視覺元素）
+   標籤列在視窗外面、上方，是硃25 這份真實 OCR JSON 的欄位中文名稱；
+   點擊會捲動到 JSON 裡對應那一行並短暫反白。段落二有摺疊／展開機制。
+   大小可調的變數寫在 storymap-cards.css 的
+   #part-3-json .part3-json-viewer-wrap 區塊。
+   ========================================================================== */
+.part3-json-viewer-wrap { width: 100%; }
+.part3-json-labels {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: var(--json-labels-gap, 10px);
+}
+.part3-json-label {
+  appearance: none; cursor: pointer; border: 1px solid var(--line);
+  padding: 4px 10px; font-family: var(--sans); font-weight: 700;
+  font-size: var(--json-label-font-size, 11px); line-height: 1.4;
+  color: var(--ink); background: var(--card, #fffaf2); opacity: .85;
+  transition: opacity .15s, filter .15s;
+}
+.part3-json-label:hover { opacity: 1; filter: brightness(.97); }
+
+.part3-json-window {
+  display: flex; flex-direction: column;
+  background: #1e1e1e; border-radius: 8px; overflow: hidden;
+  box-shadow: 0 18px 34px rgba(0, 0, 0, .35);
+  border: 1px solid rgba(255, 255, 255, .08);
+}
+.part3-json-titlebar { display: flex; align-items: center; gap: 7px; padding: 8px 10px; background: #2b2b2b; border-bottom: 1px solid rgba(255, 255, 255, .06); }
+.part3-json-dot { width: 10px; height: 10px; border-radius: 50%; }
+.part3-json-dot.red { background: #ff5f57; }
+.part3-json-dot.yellow { background: #febc2e; }
+.part3-json-dot.green { background: #28c840; }
+.part3-json-file { margin-left: 8px; color: rgba(255, 255, 255, .5); font-family: var(--sans); font-size: 11px; font-weight: 600; line-height: 1; letter-spacing: .02em; }
+
+.part3-json-body {
+  height: var(--json-body-h, 420px); padding: 12px 16px; overflow-x: hidden; overflow-y: auto;
+  color: #d4d4d4; font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: var(--json-body-font-size, 12px); line-height: 1.7;
+  scrollbar-width: thin;
+}
+.part3-json-body .line { display: block; white-space: pre-wrap; word-break: break-word; }
+.part3-json-body .key { color: #9cdcfe; }
+.part3-json-body .str { color: #ce9178; }
+.part3-json-body .loc { display: block; transition: background-color .3s ease; border-radius: 3px; }
+.part3-json-body .loc.is-flash { background: rgba(120, 180, 255, .28); }
+
+/* 段落二的展開／收合按鈕：同一個按鈕，收起來顯示「...」，
+   展開後文字換成「收合」，點擊在兩種狀態間切換。 */
+.para-toggle { all: unset; cursor: pointer; color: #6fa8dc; text-decoration: underline; padding: 0 2px; }
+.para-hidden[hidden] { display: none; }
+
+/* ============================================================================
    10 · 響應式
    ========================================================================== */
 @media (max-width: 980px) {
@@ -2445,6 +2500,8 @@ img { max-width: 100%; }
   /* 小螢幕：OCR 掃描動畫排到文字卡下方，寬度不再受限 */
   .part3-ocr-def-layout { grid-template-columns: 1fr; }
   .ocr-scan-scene { max-width: none; margin-top: clamp(18px, 3vw, 28px); }
+  /* 小螢幕：JSON 檢視器高度縮短，避免佔太多版面 */
+  .part3-json-body { height: 300px; }
   .route-info-window { right: 4%; left: 4%; width: auto; }
   .route-info-window-taiwan { top: 12px; bottom: auto; }
   .route-info-window-beijing { top: 12px; width: auto; }

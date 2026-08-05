@@ -4341,6 +4341,26 @@ Verified:
 Remaining:
 - At narrow widths, the existing responsive layout continues to place labels in the normal tag row.
 
+### 2026-08-05 16:12 HKT — Codex — Increase transparency of handwritten folded bars
+
+Summary:
+- Reduced the opacity of collapsed `.part3-fx-panel` bars to `0.56`, affecting the folded bars on either side while leaving the two open scanned pages unchanged.
+- Refreshed the StoryMap CSS cache key so the opacity adjustment loads immediately.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview shows the `辨識手寫字` visual with 10 collapsed panels at computed opacity `0.56`.
+- The visual remains visible and the browser reports no console errors or warnings.
+- `git diff --check` passes.
+
+Remaining:
+- None for the folded-bar transparency adjustment.
+
 ### 2026-08-05 16:09 HKT — Codex — Move later handwritten labels to the left
 
 Summary:
@@ -4360,3 +4380,22 @@ Verified:
 
 Remaining:
 - At narrow widths, the existing responsive layout continues to place labels in the normal tag row.
+
+### 2026-08-05 16:13 HKT — Codex — Widen Part 3.7 and 3.8 feature boxes
+
+Summary:
+- Increased the combined visual-plus-text box width for `辨識印刷字` and `辨識手寫字` from 90vw to 96vw.
+- Refreshed the StoryMap CSS cache key while keeping the two-column visual/text balance unchanged.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- At a 1280px desktop viewport, both feature boxes render at 1228.8px wide with equal visual and text columns.
+- Browser console reports no errors or warnings.
+
+Remaining:
+- The existing responsive breakpoint continues to stack the two columns on narrow screens.

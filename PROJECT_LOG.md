@@ -7854,6 +7854,26 @@ Verified:
 Remaining:
 - The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
 
+### 2026-08-05 16:12 HKT — Codex — Increase transparency of handwritten folded bars
+
+Summary:
+- Reduced the opacity of collapsed `.part3-fx-panel` bars to `0.56`, affecting the folded bars on either side while leaving the two open scanned pages unchanged.
+- Refreshed the StoryMap CSS cache key so the opacity adjustment loads immediately.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview shows the `辨識手寫字` visual with 10 collapsed panels at computed opacity `0.56`.
+- The visual remains visible and the browser reports no console errors or warnings.
+- `git diff --check` passes.
+
+Remaining:
+- None for the folded-bar transparency adjustment.
+
 ### 2026-08-05 13:48 HKT — Codex — Rework Part 3 printed-text feature guidance
 
 Summary:
@@ -8127,6 +8147,25 @@ Verified:
 Remaining:
 - At narrow widths, the existing responsive layout continues to place labels in the normal tag row.
 
+### 2026-08-05 16:13 HKT — Codex — Widen Part 3.7 and 3.8 feature boxes
+
+Summary:
+- Increased the combined visual-plus-text box width for `辨識印刷字` and `辨識手寫字` from 90vw to 96vw.
+- Refreshed the StoryMap CSS cache key while keeping the two-column visual/text balance unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- At a 1280px desktop viewport, both feature boxes render at 1228.8px wide with equal visual and text columns.
+- Browser console reports no errors or warnings.
+
+Remaining:
+- The existing responsive breakpoint continues to stack the two columns on narrow screens.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
@@ -8187,3 +8226,28 @@ Verified:
 
 Remaining:
 - The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
+
+### 2026-08-05 16:13 HKT — Claude — Add real JSON viewer to "9. 輸出格式：JSON"
+
+Summary:
+- Drafted and applied a VS Code–style JSON viewer to `#part-3-json` in the intro website, replacing the abstract schema-field toggle diagram. Shows a simplified, real 8-field JSON for 硃25 (source, title, official_post, author, sent_date, zhu_date, zhu_text, page_numbers, paragraphs with 3 entries), all verbatim from the dataset.
+- Label toolbar sits outside/above the window (not in the titlebar); each button is a JSON field's Chinese name and scrolls/flashes the matching line via `initJsonViewer()` in storymap.js.
+- Paragraph 2 (段落二) truncates after "...罪惡至此已極，殊堪痛恨。" with a single toggle button that reads "..." when collapsed and "收合" when expanded.
+- Removed the leftover descriptive paragraph below the window per user request.
+- Sizing/position controls documented and exposed in storymap-cards.css (`--json-labels-gap`, `--json-label-font-size`, `--json-body-h`, `--json-body-font-size`).
+
+Files changed:
+- `intro Website/Website/UI Idea/20-json-output-viewer-draft.html` (draft, iterated through several rounds before approval)
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Brace/tag balance checks passed for all four storymap files (Python brace count, div/span/button tag count) and the draft HTML.
+- `node --check storymap.js` passed.
+- All JSON field values cross-checked against `review-tools/shared data/stage1_original_text.json` and `Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json` — no invented content.
+
+Remaining:
+- Local git commit for these files not yet made.

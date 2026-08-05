@@ -190,6 +190,23 @@
                  大小／位置，寫在 storymap.js 的 initOcrScanScene() 裡，
                  不在這個檔案。
 
+    輸出格式：JSON（#part-3-json 右側真實 JSON 檢視器，硃25 的完整 JSON）：
+                 寫在 #part-3-json .part3-json-labels / .part3-json-label /
+                 .part3-json-body 三個區塊裡（下面已經附上一份）。
+
+                   --json-labels-gap  標籤列（在視窗外面、上方）與下方
+                                       視窗之間的間距
+                   --json-label-font-size
+                                       每個標籤按鈕的文字字級
+                   --json-body-h      JSON 視窗的固定高度，超過會自動
+                                       往上捲動
+                   --json-body-font-size
+                                       JSON 文字的字級
+
+                 標籤點擊後的捲動＋反白效果、段落二的展開／收合，都是純
+                 互動（沒有時間快慢可調），寫在 storymap.js 的
+                 initJsonViewer() 裡。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -667,6 +684,18 @@
   --ocr-output-file-font-size: 0px; /* 上方檔案名稱字級 */
 }
 
+/* Part 3.6 — 輸出格式：JSON（#part-3-json 右側真實 JSON 檢視器） */
+#part-3-json .part3-json-labels {
+  --json-labels-gap: 10px;       /* 標籤列與下方視窗的間距 */
+}
+#part-3-json .part3-json-label {
+  --json-label-font-size: 11px;  /* 標籤文字字級 */
+}
+#part-3-json .part3-json-body {
+  --json-body-h: 420px;          /* JSON 視窗固定高度，超過會自動往上捲動 */
+  --json-body-font-size: 12px;   /* JSON 文字字級 */
+}
+
 /* Part 3.4.3 — PaddleOCR：左側文字、右側可調寬度圖片畫廊 */
 #part-3-paddleocr {
   /* 只改 --paddleocr-photo-width，即可調整右側圖片寬度；高度會按原圖比例自動變化。
@@ -925,6 +954,15 @@
   --fx-left: 16%; --fx-top: 72%; --fx-width: 29%; --fx-height: 23%;
   --fx-tag-left: -132px; --fx-tag-right: auto; --fx-tag-top: 60%;
   /* --fx-tag-w: 120px; --fx-tag-font: 13.5px; */
+}
+
+/* 7／8 辨識印刷字、辨識手寫字 — widen the combined visual + text box. */
+#part-3-printed-explorer,
+#part-3-handwritten-explorer {
+  width: 96vw;
+  max-width: 96vw;
+  margin-left: calc(50% - 48vw);
+  margin-right: calc(50% - 48vw);
 }
 
 /* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */

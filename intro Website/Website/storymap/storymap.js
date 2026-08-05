@@ -1524,6 +1524,39 @@ const initOcrScanScene = () => {
 };
 initOcrScanScene();
 
+/* 9. 輸出格式：JSON — 標籤點擊捲動＋反白，段落二展開／收合。
+   純互動，沒有動畫迴圈，不需要 IntersectionObserver。 */
+const initJsonViewer = () => {
+  const wrap = document.querySelector('.part3-json-viewer-wrap');
+  if (!wrap) return;
+
+  wrap.querySelectorAll('[data-json-target]').forEach((button) => {
+    button.addEventListener('click', () => {
+      const ids = button.dataset.jsonTarget.split(/\s+/);
+      const targets = ids.map((id) => document.getElementById(id)).filter(Boolean);
+      if (!targets.length) return;
+      targets[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+      targets.forEach((el) => {
+        el.classList.add('is-flash');
+        window.setTimeout(() => el.classList.remove('is-flash'), 900);
+      });
+    });
+  });
+
+  /* 一個按鈕，兩種功能：收起來時顯示「...」（點擊＝展開），
+     展開時顯示「收合」（點擊＝收起來）。 */
+  wrap.querySelectorAll('.para-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const rest = wrap.querySelector(`[data-para-rest="${btn.dataset.paraToggle}"]`);
+      if (!rest) return;
+      const isHidden = rest.hidden;
+      rest.hidden = !isHidden;
+      btn.textContent = isHidden ? '收合' : '...';
+    });
+  });
+};
+initJsonViewer();
+
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);

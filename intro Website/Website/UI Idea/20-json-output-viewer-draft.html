@@ -1,0 +1,186 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>20 · 輸出格式：JSON — 真實 OCR JSON 檢視器草稿（簡化版）</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+    --body-weight: 500;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 800px; margin: 0 0 12px; }
+  .lead b { color: var(--accent); }
+  .note-list { max-width: 800px; margin: 0 0 36px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+  .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
+
+  /* ==========================================================================
+     版面示意：沿用現有「9. 輸出格式：JSON」左文右圖的結構（.lay-split），
+     右側是這個 VS Code 風格的 JSON 檢視器。
+     這一版改成精簡過的 JSON 結構（8 個欄位），標籤直接用欄位中文名稱，
+     不再套用 7／8 節版面特徵的標籤分類。
+     ========================================================================== */
+  .mock-section { max-width: 1320px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-layout { display: grid; grid-template-columns: minmax(0, 1fr) 54%; gap: clamp(20px, 2.4vw, 34px); align-items: start; }
+  .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
+  .copybox .title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .copybox .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: var(--accent); color: #fff; font: 800 13px var(--sans); border-radius: 3px; }
+  .copybox h2 { margin: 0; color: var(--ink); font: 500 22px/1.3 var(--serif); }
+  .copybox p { margin: 0; color: var(--text); font: var(--body-weight) 15px/1.9 var(--serif); }
+
+  /* ---- JSON 檢視器 ---- */
+  .json-viewer {
+    display: flex; flex-direction: column;
+    background: #1e1e1e; border-radius: 8px; overflow: hidden;
+    box-shadow: 0 18px 34px rgba(0,0,0,.35);
+    border: 1px solid rgba(255,255,255,.08);
+  }
+  .json-titlebar { display: flex; align-items: center; gap: 7px; padding: 8px 10px; background: #2b2b2b; border-bottom: 1px solid rgba(255,255,255,.06); }
+  .json-dot { width: 10px; height: 10px; border-radius: 50%; }
+  .json-dot.red { background: #ff5f57; }
+  .json-dot.yellow { background: #febc2e; }
+  .json-dot.green { background: #28c840; }
+  .json-titlebar span.file { margin-left: 8px; color: rgba(255,255,255,.5); font: 600 11px/1 var(--sans); letter-spacing: .02em; }
+
+  /* 標籤列：現在放在視窗「外面、上方」，不是 VS Code 視窗本身的一部分。
+     每個按鈕就是 JSON 裡一個欄位的中文名稱，點擊會捲動到 JSON 裡對應的
+     那一行並短暫閃一下底色。段落分成三個按鈕，依序對應
+     「福建水師提督…」「竊照臺灣近來屢…」「查，奴才原擬淡水一路…」。 */
+  .json-labels-outer { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+  .json-label {
+    appearance: none; cursor: pointer; border: 1px solid var(--line);
+    padding: 4px 10px; font: 700 11px/1.4 var(--sans);
+    color: var(--ink); background: var(--card); opacity: .85;
+    transition: opacity .15s, filter .15s;
+  }
+  .json-label:hover { opacity: 1; filter: brightness(.97); }
+
+  .json-body { flex: 1; min-height: 0; height: 420px; overflow-y: auto; overflow-x: hidden; padding: 12px 16px; font: 12px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color: #d4d4d4; scrollbar-width: thin; }
+  .json-body .line { display: block; white-space: pre-wrap; word-break: break-word; }
+  .json-body .key { color: #9cdcfe; }
+  .json-body .str { color: #ce9178; }
+  .json-body .loc { display: block; transition: background-color .3s ease; border-radius: 3px; }
+  .json-body .loc.is-flash { background: rgba(120, 180, 255, .28); }
+  .para-toggle { all: unset; cursor: pointer; color: #6fa8dc; text-decoration: underline; padding: 0 2px; }
+  .para-hidden[hidden] { display: none; }
+
+  .plan-block { max-width: 1320px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+
+  .source-note { max-width: 1320px; margin: 20px auto 0; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); font: 500 12.5px/1.7 var(--sans); color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+  <h1>「輸出格式：JSON」新增視覺元素 — 精簡版 JSON 檢視器草稿</h1>
+  <p class="lead">
+    JSON 結構改為 8 個精簡欄位（<code>source / title / official_post / author / zhu_date / zhu_text / page_numbers / paragraphs</code>），
+    內容逐字取自 <code>stage1_original_text.json</code>／<code>明清台灣檔案匯編 30 (dragged).ocr.json</code> 中硃25「為奏彰化失陷已調兵赴臺事」，未經改寫。
+    上方標籤直接使用每個 JSON 欄位的中文名稱，不再套用 7／8 節的版面特徵標籤。
+  </p>
+  <ul class="note-list">
+    <li><code>author</code> 只保留姓名（黃仕簡），官職拆到新的 <code>official_post</code> 欄位（福建水師提督）。</li>
+    <li>新增 <code>zhu_date</code>（奉硃批日期）與 <code>zhu_text</code>（硃批內容「已有旨了。欽此。」）。</li>
+    <li><code>paragraphs</code> 共三段：第一段是開頭套語「福建水師提督…」，第二段是「竊照臺灣近來屢…」，第三段是「查，奴才原擬淡水一路…」——對應三個獨立標籤按鈕。</li>
+  </ul>
+
+  <div class="mock-section">
+    <div class="mock-layout">
+      <article class="copybox">
+        <div class="title-row"><span class="num">9</span><h2>輸出格式：JSON</h2></div>
+        <p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p>
+      </article>
+
+      <div>
+        <div class="json-labels-outer">
+          <button class="json-label" type="button" data-json-target="loc-source">來源</button>
+          <button class="json-label" type="button" data-json-target="loc-title">標題</button>
+          <button class="json-label" type="button" data-json-target="loc-official-post">官職</button>
+          <button class="json-label" type="button" data-json-target="loc-author">姓名</button>
+          <button class="json-label" type="button" data-json-target="loc-sent-date">具奏日期</button>
+          <button class="json-label" type="button" data-json-target="loc-zhu-date">硃批日期</button>
+          <button class="json-label" type="button" data-json-target="loc-zhu-text">硃批內容</button>
+          <button class="json-label" type="button" data-json-target="loc-pages">頁碼</button>
+          <button class="json-label" type="button" data-json-target="loc-para-0">段落一</button>
+          <button class="json-label" type="button" data-json-target="loc-para-1">段落二</button>
+          <button class="json-label" type="button" data-json-target="loc-para-2">段落三</button>
+        </div>
+
+      <div class="json-viewer">
+        <div class="json-titlebar"><span class="json-dot red"></span><span class="json-dot yellow"></span><span class="json-dot green"></span><span class="file">硃25.ocr.json</span></div>
+
+        <div class="json-body" id="json-body">
+<span class="line">{</span>
+<span class="line"><span class="loc" id="loc-source">  <span class="key">"source"</span>: <span class="str">"《明清臺灣檔案彙編》第30冊"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-title">  <span class="key">"title"</span>: <span class="str">"為奏彰化失陷已調兵赴臺事"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-official-post">  <span class="key">"official_post"</span>: <span class="str">"福建水師提督"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-author">  <span class="key">"author"</span>: <span class="str">"黃仕簡"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-sent-date">  <span class="key">"sent_date"</span>: <span class="str">"乾隆五十一年十二月初十日"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-zhu-date">  <span class="key">"zhu_date"</span>: <span class="str">"乾隆五十一年十二月二十七日"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-zhu-text">  <span class="key">"zhu_text"</span>: <span class="str">"已有旨了。欽此。"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-pages">  <span class="key">"page_numbers"</span>: [<span class="str">"80"</span>, <span class="str">"81"</span>],</span></span>
+<span class="line">  <span class="key">"paragraphs"</span>: [</span>
+<span class="line"><span class="loc" id="loc-para-0">    <span class="str">"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-para-1">    <span class="str">"<span class="para-visible">竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。其謀為不軌，肆行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。</span><button class="para-toggle" type="button" data-para-toggle="para-1-rest">...</button><span class="para-hidden" data-para-rest="para-1-rest" hidden>雖未准臺灣鎮道等報到，未知虛實，急當預為查辦征剿。奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，封備商哨船只齊足。奴才冬間舊染風症雖復時愈時發現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕所有廈門地方札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。又慮賊匪聞拿竄逃內地，飛札撫臣陸路提臣藩臬兩司興泉道及水師各鎮協營並臺灣鎮道一體嚴飭營縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門淡水南北兩路夾攻在案。現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。奴才於初十日帶領官兵登舟候風放洋飛渡之際，接據署北路淡水同知程峻守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜本縣俞在大墩地方拿匪被害二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要「處所，分頭堵禦，一面救援。第兵力單薄道路隔絕伏祈迅發大兵拯救再彰城失陷被害文武官員若干，此時探聽維艱未知的實，俟查確另稟。等情前來。</span>"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-para-2">    <span class="str">"查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣水師海壇閩安烽火各鎮協營，立就近省營分續調官兵北路援剿。奴才直由鹿耳門郡城南路進兵，會督夾攻。容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。謹奏。"</span></span></span>
+<span class="line">  ]</span>
+<span class="line">}</span>
+        </div>
+      </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <h2>套用到正式網站前，還需要確認的事</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>擺放位置</b>：已套用到正式網站，取代原本「9. 輸出格式：JSON」右側的抽象欄位示意圖。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>段落二展開</b>：「…罪惡至此已極，殊堪痛恨。」後面接一個「...」按鈕，點擊後才顯示段落二剩下的全文，按鈕本身也會跟著隱藏。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>標籤列位置</b>：標籤已經移到視窗外面、上方，不再是 VS Code 視窗標題列的一部分。</p></div></div>
+    </div>
+  </div>
+
+  <p class="source-note">
+    內容逐字取自 <code>review-tools/shared data/stage1_original_text.json</code>（硃25）與 <code>Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json</code>，未經刪改。
+  </p>
+
+  <script>
+    const body = document.getElementById('json-body');
+    document.querySelectorAll('[data-json-target]').forEach((button) => {
+      button.addEventListener('click', () => {
+        const ids = button.dataset.jsonTarget.split(/\s+/);
+        const targets = ids.map((id) => document.getElementById(id)).filter(Boolean);
+        if (!targets.length) return;
+        targets[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+        targets.forEach((el) => {
+          el.classList.add('is-flash');
+          window.setTimeout(() => el.classList.remove('is-flash'), 900);
+        });
+      });
+    });
+
+    document.querySelectorAll('.para-toggle').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const rest = document.querySelector(`[data-para-rest="${btn.dataset.paraToggle}"]`);
+        if (!rest) return;
+        const isHidden = rest.hidden;
+        rest.hidden = !isHidden;
+        btn.textContent = isHidden ? '收合' : '...';
+      });
+    });
+  </script>
+
+</body>
+</html>
