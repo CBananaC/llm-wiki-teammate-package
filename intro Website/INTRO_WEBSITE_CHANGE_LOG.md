@@ -4548,3 +4548,46 @@ Verified:
 
 Remaining:
 - None for the OCR batch persistence behavior.
+
+### 2026-08-05 19:07 HKT — Codex — Fit Part 7/8 visual explorers to the viewport
+
+Summary:
+- Constrained the Part 7 and Part 8 visual explorers to a viewport-based height and fitted the printed page and folded handwritten document inside that height.
+- Removed the `版面特徵` label from the feature result box and replaced it with an orange numbered square before the active feature title.
+- Made the Python and OCR JSON VS Code-style bodies internally scrollable so all four result windows remain visible in the explorer.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms both explorers use a 78vh maximum height and the Part 8 folded strip fills its constrained document area.
+- Both Python/JSON body pairs report `overflow: auto` and have scrollable content at the tested viewport.
+- The generated feature box has no `版面特徵` label and shows the orange number box; `git diff --check` and `node --check storymap.js` pass.
+
+Remaining:
+- None for this Part 7/8 layout adjustment.
+
+### 2026-08-05 19:08 HKT — Codex — Convert JSON field labels to one-line carousel
+
+Summary:
+- Preserved the latest borderless JSON field-button design.
+- Changed the 11 JSON field buttons from three rows into one horizontal strip with `‹` and `›` controls at the ends.
+- Kept the selected JSON field highlight persistent while the arrows reveal previous or next fields.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser check reports one label row, horizontal overflow, working arrow scrolling, persistent selection, and no console errors or warnings.
+- `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the JSON field navigation adjustment.

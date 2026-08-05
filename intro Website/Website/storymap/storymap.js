@@ -911,8 +911,7 @@ const initPart3FeatureExplorers = () => {
 
   const outMarkup = `
     <div class="part3-fx-feat">
-      <span class="k">版面特徵</span>
-      <h3 data-fx-title></h3>
+      <h3 class="part3-fx-feat-title"><span class="part3-fx-feature-number" data-fx-number></span><span data-fx-title></span></h3>
       <p data-fx-desc></p>
     </div>
     <div class="part3-fx-arrow" aria-hidden="true">↓</div>
@@ -971,6 +970,7 @@ const initPart3FeatureExplorers = () => {
 
     const out = root.querySelector('[data-part3-fx-out]');
     out.innerHTML = outMarkup;
+    const elNumber = out.querySelector('[data-fx-number]');
     const elTitle = out.querySelector('[data-fx-title]');
     const elDesc = out.querySelector('[data-fx-desc]');
     const elPrompt = out.querySelector('[data-fx-prompt]');
@@ -1034,6 +1034,7 @@ const initPart3FeatureExplorers = () => {
       syncToCurrent();
       render();
       stopTyping();
+      elNumber.textContent = String(index + 1);
       elTitle.textContent = f.title;
       elDesc.textContent = f.desc;
       if (reduceMotion) {

@@ -1050,6 +1050,17 @@
   max-width: 96vw;
   margin-left: calc(50% - 48vw);
   margin-right: calc(50% - 48vw);
+  /* Keep the complete visual window within one browser viewport. */
+  --part3-fx-explorer-height: min(78vh, 760px);
+  --part3-fx-code-body-min-height: clamp(48px, 8vh, 86px);
+  --part3-fx-doc-padding-y: clamp(12px, 1.6vw, 22px);
+  --part3-fx-doc-padding-x: clamp(48px, 4.8vw, 86px);
+  --part3-fx-doc-nav-space: clamp(48px, 7vh, 62px);
+  --part3-fx-out-padding: clamp(8px, 1vw, 14px);
+  --part3-fx-arrow-height: clamp(16px, 2.4vh, 24px);
+  --part3-fx-feature-padding: clamp(8px, .9vw, 12px);
+  --part3-fx-chat-body-padding: clamp(4px, .6vw, 8px);
+  --part3-fx-chat-min-height: clamp(48px, 8vh, 72px);
 }
 
 /* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */
