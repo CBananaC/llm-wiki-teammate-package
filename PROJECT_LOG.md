@@ -7915,6 +7915,26 @@ Verified:
 Remaining:
 - None for this correction.
 
+### 2026-08-05 14:04 HKT — Codex — Remove the remaining printed page suffix
+
+Summary:
+- Confirmed that printed Part 3 labels should use plain feature names with neither `p.1` nor `p.2`.
+- Refreshed the StoryMap script cache key so the browser loads the no-badge renderer consistently.
+- Preserved handwritten fold indicators such as `第 4 摺` and the existing left-side placement of `夾批` and `落款與尾批`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser output: printed labels are `文本資訊`, `直排單欄`, `分段`, `頁碼`, `標題符號`, `夾批`, and `落款與尾批`, with no page suffix.
+- Handwritten labels retain their fold indicators.
+- Browser console has no errors or warnings.
+
+Remaining:
+- None for this label adjustment.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
