@@ -7935,6 +7935,25 @@ Verified:
 Remaining:
 - None for this label adjustment.
 
+### 2026-08-05 14:37 HKT — Codex — Add source-text samples to printed OCR JSON
+
+Summary:
+- Added short original-text excerpts to the OCR JSON windows for `直排單欄`, `分段`, and `標題符號`.
+- Used source wording from the OCR evidence so the examples demonstrate reading order, paragraph grouping, and punctuation in context.
+- Refreshed the StoryMap script cache key for the updated JSON windows.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The embedded data for the three feature windows contains the new original-text samples in their JSON panels.
+- The embedded page data remains valid, JavaScript syntax passes, and diff whitespace checks pass.
+
+Remaining:
+- The displayed excerpts remain OCR evidence and should not be treated as researcher-confirmed transcription without image checking.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
