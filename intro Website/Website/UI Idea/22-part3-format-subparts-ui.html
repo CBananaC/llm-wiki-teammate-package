@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>6 檢視史料的版面及格式（含 7／8 子項）— UI 草稿</title>
+<style>
+  :root{
+    --ink:#163d3f;
+    --ink-2:#12363a;
+    --yellow:#f3c967;
+    --rust:#c45d38;
+    --paper:#f4efe6;
+    --paper-deep:#e8dfd1;
+    --card:#fffaf2;
+    --line:rgba(22,61,63,.18);
+    --muted:#6d756f;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, "PingFang TC", sans-serif;
+    --serif: "Noto Serif TC", Georgia, serif;
+    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:0 0 120px; background:var(--paper); color:var(--ink);
+    font-family:var(--sans);
+  }
+  .wrap{max-width:1560px; margin:0 auto; padding:0 clamp(20px,3vw,48px);}
+
+  /* ============ 6 · parent section (full-width text, no box) ============ */
+  .stage-6{padding:clamp(48px,6vw,88px) 0 clamp(28px,3vw,44px);}
+  .sec-num{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:44px;height:44px;background:var(--ink);color:var(--yellow);
+    font:800 17px var(--sans); flex:none;
+  }
+  .sec-head{display:flex; align-items:flex-start; gap:18px; margin-bottom:20px;}
+  .sec-head h1{margin:0; font:700 clamp(28px,3.4vw,46px)/1.25 var(--serif);}
+  .sec-lead{margin:0; max-width:92ch; font:400 clamp(16px,1.35vw,20px)/1.95 var(--serif); color:#31484a;}
+
+  .subrail{display:flex; align-items:stretch; margin:34px 0 0; border-top:1px solid var(--line); padding-top:22px;}
+  .subrail-label{
+    flex:none; padding-right:26px; margin-right:26px; border-right:1px solid var(--line);
+    display:flex; flex-direction:column; justify-content:center;
+  }
+  .subrail-label b{font:800 11px var(--sans); letter-spacing:.16em; color:var(--muted);}
+  .subrail-label span{font:600 13px var(--sans); margin-top:5px;}
+  .subtabs{display:flex; gap:12px; flex:1; min-width:0;}
+  .subtab{
+    flex:1 1 0; min-width:0; text-align:left; cursor:pointer;
+    display:flex; align-items:center; gap:13px;
+    padding:15px 18px; background:var(--card); border:1px solid var(--line);
+    color:var(--ink); font-family:var(--sans); transition:.18s;
+  }
+  .subtab .n{
+    flex:none; width:27px;height:27px; border-radius:50%;
+    display:flex; align-items:center; justify-content:center;
+    background:var(--paper-deep); font:800 12px var(--sans);
+  }
+  .subtab .t{font:700 14.5px var(--sans);}
+  .subtab .s{display:block; font:500 11.5px var(--sans); color:var(--muted); margin-top:3px;}
+  .subtab:hover{border-color:var(--yellow);}
+  .subtab.is-active{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+  .subtab.is-active .n{background:var(--yellow); color:var(--ink-2);}
+  .subtab.is-active .s{color:rgba(244,239,230,.7);}
+
+  /* ============ 7 · sub-section ============ */
+  .stage-7{padding:clamp(30px,3.5vw,52px) 0 0;}
+  .sub-head{display:flex; align-items:flex-start; gap:16px; margin-bottom:16px;}
+  .sub-num{
+    display:inline-flex; align-items:center; justify-content:center; flex:none;
+    width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--yellow);
+    font:800 14px var(--sans);
+  }
+  .sub-head h2{margin:0; font:700 clamp(22px,2.4vw,32px)/1.3 var(--serif);}
+  .sub-head .crumb{display:block; font:600 11px var(--sans); letter-spacing:.14em; color:var(--muted); margin-bottom:7px;}
+  .sub-lead{margin:0 0 clamp(26px,3vw,40px); max-width:92ch; font:400 clamp(15px,1.25vw,18.5px)/1.95 var(--serif); color:#31484a;}
+
+  /* ============ explorer 50 / 50 ============ */
+  .explorer{display:grid; grid-template-columns:50% 50%; border:1px solid var(--line); background:var(--card);}
+
+  /* ---- left: PDF ---- */
+  .pdf-pane{
+    position:relative; padding:clamp(22px,2.4vw,34px) clamp(80px,7vw,120px);
+    background:var(--paper-deep); border-right:1px solid var(--line);
+    display:flex; flex-direction:column; align-items:center; gap:16px;
+  }
+  .pdf-stack{position:relative; width:100%; max-width:400px;}
+  .pdf-stack::before,
+  .pdf-stack::after{
+    content:""; position:absolute; inset:0; background:#fdfbf6;
+    border:1px solid rgba(22,61,63,.14); box-shadow:0 6px 14px rgba(22,61,63,.09);
+  }
+  .pdf-stack::before{transform:translate(9px,9px) rotate(1.1deg);}
+  .pdf-stack::after{transform:translate(4.5px,4.5px) rotate(.5deg);}
+  .pdf-page{
+    position:relative; z-index:2; background:#fff;
+    border:1px solid rgba(22,61,63,.18); box-shadow:0 14px 30px rgba(22,61,63,.16); overflow:hidden;
+  }
+  .pdf-page img{display:block; width:100%; height:auto;}
+  /* the turning sheet: a full page that slides across on top of the one below */
+  .turn-sheet{
+    position:absolute; inset:0; z-index:7; background:#fff; overflow:hidden;
+    box-shadow:-14px 0 26px rgba(22,61,63,.22);
+    will-change:transform;
+  }
+  .turn-sheet img{display:block; width:100%; height:auto;}
+
+  /* highlight: only the selected feature's area is tinted; others stay hidden */
+  .hl{
+    position:absolute; z-index:5; border:0; pointer-events:none;
+    background:var(--c, rgba(243,201,103,.3));
+    opacity:0; transition:opacity .22s;
+  }
+  .hl.is-active{opacity:.42;}
+
+  /* labels: no border, no leader line, tinted to match their highlight */
+  .hl-tag{
+    position:absolute; z-index:6; white-space:nowrap; cursor:pointer;
+    padding:8px 14px; border:0; border-radius:4px;
+    background:var(--c, #eee); color:#22403f;
+    font:700 13.5px var(--sans); transition:.16s; box-shadow:0 2px 7px rgba(22,61,63,.12);
+  }
+  .hl-tag:hover{filter:brightness(.95); opacity:1;}
+  /* selected label stays solid; every other label fades back */
+  .hl-tag.is-active{font-weight:800; opacity:1; filter:brightness(.94);}
+  .hl-tag.is-dim{opacity:.32;}
+  .hl-tag.is-other{opacity:.45;}
+  .hl-tag.is-other.is-dim{opacity:.22;}
+  .hl-tag .pg{
+    display:inline-block; margin-left:7px; padding:1px 5px; border-radius:2px;
+    background:rgba(22,61,63,.16); font-size:11px; font-weight:700;
+  }
+
+  .pdf-nav{display:flex; align-items:center; gap:14px;}
+  .pdf-nav button{
+    cursor:pointer; padding:6px 13px; background:var(--card); border:1px solid var(--line);
+    color:var(--ink); font:600 12px var(--sans);
+  }
+  .pdf-nav button:hover:not(:disabled){border-color:var(--ink); background:#fff;}
+  .pdf-nav button:disabled{opacity:.38; cursor:default;}
+  .pdf-nav .ind{font:600 12px var(--sans); color:var(--muted);}
+
+  /* ---- right: causal chain ---- */
+  .out-pane{padding:clamp(20px,2vw,28px); max-height:940px; overflow-y:auto;}
+  .out-pane::-webkit-scrollbar{width:8px;}
+  .out-pane::-webkit-scrollbar-thumb{background:rgba(22,61,63,.2); border-radius:4px;}
+
+  /* the chain: a plain downward arrow centred between each block */
+  .chain{position:relative;}
+  .flow-arrow{
+    display:flex; align-items:center; justify-content:center;
+    height:34px; color:var(--rust); font-size:19px; line-height:1; user-select:none;
+  }
+
+  .feat-card{padding:17px 19px; background:var(--paper); border:1px solid var(--line);}
+  .feat-card .k{font:800 10.5px var(--sans); letter-spacing:.15em; color:var(--rust);}
+  .feat-card h3{margin:7px 0 8px; font:700 19px var(--serif);}
+  .feat-card p{margin:0; font:400 13.5px/1.85 var(--serif); color:#31484a;}
+
+  /* AI chat window: light app-style panel, not a terminal */
+  .win-chat{border:1px solid var(--line); border-radius:7px; overflow:hidden; background:var(--card);}
+  .win-chat .win-bar{background:#efe8dc; border-bottom:1px solid var(--line);}
+  .win-chat .win-bar .ttl{color:#5d564a; font:700 13px var(--sans);}
+  .chat-body{padding:14px 15px;}
+  .chat-input{
+    border:1px solid rgba(22,61,63,.2); border-radius:16px; background:#fff;
+    padding:14px 15px 11px; min-height:92px;
+    display:flex; flex-direction:column; justify-content:space-between;
+  }
+  .chat-text{
+    font:400 13px/1.75 var(--sans); color:var(--ink); white-space:pre-wrap; word-break:break-word;
+  }
+  .chat-row{display:flex; align-items:center; gap:14px; margin-top:14px;}
+  .chat-ic{
+    width:19px;height:19px; flex:none; display:flex; align-items:center; justify-content:center;
+    color:#8d8574; font-size:15px; line-height:1;
+  }
+  .chat-ic svg{width:16px;height:16px;stroke:#8d8574;fill:none;stroke-width:1.5;}
+  .chat-model{
+    margin-left:auto; display:flex; align-items:center; gap:5px;
+    font:600 12px var(--sans); color:var(--ink);
+  }
+  .chat-model .spin{
+    width:11px;height:11px;border-radius:50%; flex:none;
+    border:1.6px solid rgba(22,61,63,.25); border-top-color:var(--ink);
+    animation:spin 1s linear infinite;
+  }
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .chat-model .chev{color:#8d8574; font-size:10px;}
+  .chat-send{
+    width:27px;height:27px;border-radius:50%; background:#d8d2c4; color:#3a4644;
+    display:flex; align-items:center; justify-content:center; font-size:14px; flex:none;
+  }
+  .chat-caret{display:inline-block;width:2px;height:1.05em;background:var(--ink);vertical-align:-.18em;animation:bl 1s step-end infinite;}
+
+  .win{border:1px solid rgba(255,255,255,.08); border-radius:7px; overflow:hidden; background:#1e1e1e;}
+  .win-bar{display:flex; align-items:center; gap:7px; padding:8px 11px; background:#2b2b2b; border-bottom:1px solid rgba(255,255,255,.06);}
+  .win-bar .dot{width:9px;height:9px;border-radius:50%;}
+  .dot.red{background:#ff5f57;} .dot.yellow{background:#febc2e;} .dot.green{background:#28c840;}
+  .win-bar .ttl{margin-left:8px; color:rgba(255,255,255,.72); font:700 13px var(--sans);}
+  .win-body{
+    padding:12px 14px; font:11.5px/1.8 var(--mono); color:#d4d4d4;
+    min-height:80px; max-height:186px; overflow:auto; white-space:pre-wrap; word-break:break-word;
+  }
+  .win-body::-webkit-scrollbar{width:7px;}
+  .win-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16); border-radius:4px;}
+  .caret{display:inline-block;width:6px;height:1em;background:#d4d4d4;vertical-align:-.14em;animation:bl 1s step-end infinite;}
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+  .prompt-sym{color:#7fd88f;}
+  .kw{color:#c586c0;} .fn{color:#dcdcaa;} .str{color:#ce9178;} .num{color:#b5cea8;} .cmt{color:#6a9955;}
+  .jkey{color:#9cdcfe;} .jstr{color:#ce9178;} .jnum{color:#b5cea8;} .jpunc{color:#d4d4d4;}
+
+  @media (max-width:1040px){
+    .explorer{grid-template-columns:1fr;}
+    .pdf-pane{border-right:none; border-bottom:1px solid var(--line);}
+    .out-pane{max-height:none;}
+    .subtabs{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- ================= 6 (parent) ================= -->
+  <section class="stage-6">
+    <div class="sec-head"><span class="sec-num">6</span><h1>檢視史料的版面及格式</h1></div>
+    <p class="sec-lead">研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。掌握這些特徵後，才能在指示 Agentic AI 撰寫 OCR 程式時準確描述版面規則，讓輸出的結構化資料保留原有的文書結構。</p>
+
+    <div class="subrail">
+      <div class="subrail-label"><b>本節包含</b><span>兩種字體的處理方式</span></div>
+      <div class="subtabs">
+        <button class="subtab is-active" type="button">
+          <span class="n">7</span>
+          <span><span class="t">辨識印刷字</span><span class="s">版面規則、字形統一，辨識難度較低</span></span>
+        </button>
+        <button class="subtab" type="button">
+          <span class="n">8</span>
+          <span><span class="t">辨識手寫字</span><span class="s">直排、抬頭、硃批等特殊格式</span></span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ================= 7 (worked example) ================= -->
+  <section class="stage-7">
+    <div class="sub-head">
+      <span class="sub-num">7</span>
+      <div><span class="crumb">6 檢視史料的版面及格式 ／ 子項一</span><h2>辨識印刷字</h2></div>
+    </div>
+    <p class="sub-lead">印刷字的字形統一，字距與行距相對規則，因此一般較容易進行 OCR 辨識。然而，研究者仍需先檢視史料的版面及格式，逐項確認需要保留的結構，再把這些規則寫進給 Agentic AI 的指示中。點擊左方文書上的色塊或標籤，可查看該項特徵如何一路影響指示、程式碼與輸出結果。</p>
+
+    <div class="explorer">
+      <!-- ---------- left ---------- -->
+      <div class="pdf-pane">
+        <div class="pdf-stack">
+          <div class="pdf-page">
+            <img id="pdfImg" src="../storymap/ocr-zhu25-printed-1.png" alt="印刷本奏摺頁面">
+            <div id="hlLayer"></div>
+          </div>
+          <div id="tagLayer"></div>
+        </div>
+        <div class="pdf-nav">
+          <button type="button" id="prevBtn">← 上一頁</button>
+          <span class="ind" id="pageInd">頁 1 / 2</span>
+          <button type="button" id="nextBtn">下一頁 →</button>
+        </div>
+      </div>
+
+      <!-- ---------- right ---------- -->
+      <div class="out-pane">
+        <div class="chain" id="chain">
+          <div class="feat-card" id="featCard">
+            <span class="k">版面特徵</span>
+            <h3 id="fTitle"></h3>
+            <p id="fDesc"></p>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+
+          <div class="win-chat">
+            <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">AI Prompt</span></div>
+            <div class="chat-body">
+              <div class="chat-input">
+                <div class="chat-text" id="promptBody"></div>
+                <div class="chat-row">
+                  <span class="chat-ic">+</span>
+                  <span class="chat-ic" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1.5 1 4.5 1 6 0"/></svg>
+                  </span>
+                  <span class="chat-model"><span class="spin"></span>5.6<span class="chev">▾</span></span>
+                  <span class="chat-ic" aria-hidden="true">
+                    <svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+                  </span>
+                  <span class="chat-send">↑</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+
+          <div class="win">
+            <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">AI 生成的 Python 代碼</span></div>
+            <div class="win-body" id="pyBody"></div>
+          </div>
+
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+
+          <div class="win">
+            <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">OCR 的輸出結果</span></div>
+            <div class="win-body" id="jsonBody"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  const PAGES = ['../storymap/ocr-zhu25-printed-1.png', '../storymap/ocr-zhu25-printed-2.png'];
+
+  /* highlight geometry / tag position are per-feature; page = which sheet it lives on */
+  const FEATURES = {
+    layout: {
+      page:0, colour:'#cfe3d4',
+      box:{left:'4%',top:'10%',width:'66%',height:'86%'},
+      tag:{left:'-104px',top:'40%'},
+      title:'橫排單欄',
+      desc:'此史料採用單欄印刷版面，全頁只有一個文字區塊，沒有分欄或跨欄的圖表。辨識時需要說明閱讀順序，避免 OCR 把同一段文字拆成多欄。',
+      prompt:'這份 PDF 是單欄印刷版面，全頁只有一個文字區塊。\n請在 OCR 時保持單欄閱讀順序，不要自動分欄，\n也不要把換行誤判成新的段落。',
+      py:[['cmt','# 單欄版面：關閉版面分欄，保留原有閱讀順序'],['plain','\nocr = '],['fn','PaddleOCR'],['plain','('],['plain','\n    lang='],['str','"chinese_cht"'],['plain',','],['plain','\n    use_doc_unwarping='],['kw','False'],['plain',','],['plain','\n    use_textline_orientation='],['kw','False'],['plain',','],['plain','\n)']],
+      json:[['jpunc','{'],['jkey','\n  "layout"'],['jpunc',': '],['jstr','"single_column"'],['jpunc',','],['jkey','\n  "reading_order"'],['jpunc',': '],['jstr','"top_to_bottom"'],['jpunc',','],['jkey','\n  "text_blocks"'],['jpunc',': '],['jnum','1'],['jpunc','\n}']]
+    },
+    mark: {
+      page:0, colour:'#f0d6d0',
+      box:{left:'77.5%',top:'6.5%',width:'9%',height:'3.2%'},
+      tag:{left:'-104px',top:'4%'},
+      title:'標題符號',
+      desc:'標題上方的實心符號屬於版面裝飾，並非文字內容。這類符號常被 OCR 誤判為文字或標點，需要明確要求略過，並在完成後人工或以 AI 校對。',
+      prompt:'標題上方的黑色實心符號是版面裝飾，不是文字。\n請在輸出時略過這個符號，不要當成標點或文字，\n並在 notes 欄標記此處需要人工校對。',
+      py:[['cmt','# 過濾版面裝飾符號，避免誤判為文字'],['plain','\nDECOR = {'],['str','"■"'],['plain',', '],['str','"▬"'],['plain',', '],['str','"—"'],['plain','}'],['plain','\ntexts = [t '],['kw','for'],['plain',' t '],['kw','in'],['plain',' data['],['str','"rec_texts"'],['plain',']'],['plain','\n         '],['kw','if'],['plain',' t.'],['fn','strip'],['plain','() '],['kw','not in'],['plain',' DECOR]']],
+      json:[['jpunc','{'],['jkey','\n  "decoration_skipped"'],['jpunc',': '],['jnum','1'],['jpunc',','],['jkey','\n  "notes"'],['jpunc',': '],['jstr','"標題符號模糊，需人工校對"'],['jpunc','\n}']]
+    },
+    header: {
+      page:0, colour:'#cfe0ef',
+      box:{left:'70%',top:'9.5%',width:'24%',height:'29%'},
+      tag:{right:'-112px',top:'17%'},
+      title:'頁首資訊：標題、日期、史料來源',
+      desc:'頁首集中了標題「為奏彰化失陷已調兵赴臺事」、上奏者、日期與史料來源。這些欄位是後續檢索與排序的依據，必須與正文分開儲存，而非混入內文。',
+      prompt:'頁首包含標題、上奏者、日期與史料來源四項資訊。\n請把它們分別抽取為 title、author、date、source 四個欄位，\n不要併入正文 body。',
+      py:[['cmt','# 頁首欄位獨立抽取，不併入正文'],['plain','\nheader = '],['fn','extract_header'],['plain','(result)'],['plain','\ndoc = {'],['plain','\n    '],['str','"title"'],['plain',':  header['],['str','"title"'],['plain','],'],['plain','\n    '],['str','"author"'],['plain',': header['],['str','"author"'],['plain','],'],['plain','\n    '],['str','"date"'],['plain',':   header['],['str','"date"'],['plain','],'],['plain','\n    '],['str','"source"'],['plain',': header['],['str','"source"'],['plain','],'],['plain','\n}']],
+      json:[['jpunc','{'],['jkey','\n  "title"'],['jpunc',': '],['jstr','"為奏彰化失陷已調兵赴臺事"'],['jpunc',','],['jkey','\n  "author"'],['jpunc',': '],['jstr','"福建水師提督 黃仕簡"'],['jpunc',','],['jkey','\n  "date"'],['jpunc',': '],['jstr','"乾隆五十一年十二月二十七日"'],['jpunc',','],['jkey','\n  "source"'],['jpunc',': '],['jstr','"《天地會第一冊》"'],['jpunc','\n}']]
+    },
+    body: {
+      page:0, colour:'#f5e6bd',
+      box:{left:'4%',top:'12%',width:'65%',height:'82%'},
+      tag:{left:'-104px',top:'66%'},
+      title:'正文',
+      desc:'正文是文書的主體內容，需要完整保留段落與句讀。辨識後應以純文字儲存於 body 欄位，並保留每行的信心分數，方便後續判斷哪些段落需要校對。',
+      prompt:'正文請完整辨識並存入 body 欄位，保留原有段落。\n同時輸出每一行的信心分數（rec_scores），\n低於 0.90 的行請另外標記出來。',
+      py:[['cmt','# 正文與逐行信心分數一併輸出'],['plain','\nlines = []'],['plain','\n'],['kw','for'],['plain',' text, score '],['kw','in'],['plain',' '],['fn','zip'],['plain','(data['],['str','"rec_texts"'],['plain','], data['],['str','"rec_scores"'],['plain',']'],['plain','):'],['plain','\n    lines.'],['fn','append'],['plain','({'],['str','"text"'],['plain',': text, '],['str','"score"'],['plain',': '],['fn','round'],['plain','(score, '],['num','3'],['plain',')})'],['plain','\nlow = [l '],['kw','for'],['plain',' l '],['kw','in'],['plain',' lines '],['kw','if'],['plain',' l['],['str','"score"'],['plain','] < '],['num','0.90'],['plain',']']],
+      json:[['jpunc','{'],['jkey','\n  "body"'],['jpunc',': '],['jstr','"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。…"'],['jpunc',','],['jkey','\n  "line_count"'],['jpunc',': '],['jnum','42'],['jpunc',','],['jkey','\n  "low_confidence_lines"'],['jpunc',': '],['jnum','3'],['jpunc','\n}']]
+    },
+    page1: {
+      page:0, colour:'#ddd6ea',
+      box:{left:'86%',top:'94.5%',width:'8%',height:'3.6%'},
+      tag:{right:'-112px',top:'93%'},
+      title:'頁碼',
+      desc:'頁碼位於頁面外緣，屬於書冊的排版資訊而非文書內容。應單獨存為 page 欄位，既可保留出處，又不會污染正文文字。',
+      prompt:'頁面外緣的數字是書冊頁碼，不屬於文書內容。\n請把它抽出存為 page 欄位，並從 body 中移除，\n以免混入正文文字。',
+      py:[['cmt','# 頁碼獨立成欄，並自正文移除'],['plain','\npage = '],['fn','match_page_number'],['plain','(data['],['str','"rec_texts"'],['plain','][-'],['num','1'],['plain','])'],['plain','\n'],['kw','if'],['plain',' page:'],['plain','\n    doc['],['str','"page"'],['plain','] = '],['fn','int'],['plain','(page)'],['plain','\n    body_lines.'],['fn','pop'],['plain','()']],
+      json:[['jpunc','{'],['jkey','\n  "page"'],['jpunc',': '],['jnum','80'],['jpunc',','],['jkey','\n  "page_in_body"'],['jpunc',': '],['jstr','"removed"'],['jpunc','\n}']]
+    },
+
+    /* ---- page 2 ---- */
+    zhupi: {
+      page:1, colour:'#f3ddc4',
+      box:{left:'55%',top:'33%',width:'6.5%',height:'22%'},
+      tag:{right:'-112px',top:'34%'},
+      title:'夾註硃批（小字）',
+      desc:'正文中以小字夾註的硃批「仍以調養為要，勿過勞」與正文字級不同，屬於皇帝的批示。應與正文分開儲存，否則會被誤併入奏摺原文。',
+      prompt:'正文中有以小字夾註的硃批，字級比正文小。\n請依字級把它與正文分開，存入 rescript_inline 欄位，\n不要混入 body。',
+      py:[['cmt','# 依字高分辨夾註小字（硃批）與正文'],['plain','\nheights = [b['],['num','3'],['plain','] - b['],['num','1'],['plain','] '],['kw','for'],['plain',' b '],['kw','in'],['plain',' boxes]'],['plain','\nmedian = '],['fn','statistics'],['plain','.'],['fn','median'],['plain','(heights)'],['plain','\ninline = [t '],['kw','for'],['plain',' t, h '],['kw','in'],['plain',' '],['fn','zip'],['plain','(texts, heights) '],['kw','if'],['plain',' h < median * '],['num','0.72'],['plain',']']],
+      json:[['jpunc','{'],['jkey','\n  "rescript_inline"'],['jpunc',': '],['jstr','"仍以調養為要，勿過勞"'],['jpunc',','],['jkey','\n  "merged_into_body"'],['jpunc',': '],['jstr','"false"'],['jpunc','\n}']]
+    },
+    signoff: {
+      page:1, colour:'#d3e5e2',
+      box:{left:'27%',top:'22%',width:'11%',height:'52%'},
+      tag:{left:'-104px',top:'30%'},
+      title:'落款與奉批日期',
+      desc:'文末的落款日期與「奉硃批」日期分屬兩個時間點，前者是上奏日，後者是皇帝批覆日。兩者需分開存欄，才能在時間軸上正確排序。',
+      prompt:'文末有兩個日期：落款的上奏日期，以及「奉硃批」的批覆日期。\n請分別存為 send_date 與 rescript_date 兩個欄位，\n並同時保留原文與西曆換算。',
+      py:[['cmt','# 落款日期與奉批日期分開抽取'],['plain','\ndoc['],['str','"send_date"'],['plain','] = '],['fn','parse_reign_date'],['plain','('],['str','"乾隆五十一年十二月初十日"'],['plain',')'],['plain','\ndoc['],['str','"rescript_date"'],['plain','] = '],['fn','parse_reign_date'],['plain','('],['str','"乾隆五十一年十二月二十七日"'],['plain',')']],
+      json:[['jpunc','{'],['jkey','\n  "send_date"'],['jpunc',': '],['jstr','"乾隆五十一年十二月初十日"'],['jpunc',','],['jkey','\n  "rescript_date"'],['jpunc',': '],['jstr','"乾隆五十一年十二月二十七日"'],['jpunc',','],['jkey','\n  "rescript_text"'],['jpunc',': '],['jstr','"已有旨了。欽此。"'],['jpunc','\n}']]
+    },
+    archive: {
+      page:1, colour:'#e3dcc9',
+      box:{left:'20%',top:'62%',width:'6%',height:'14%'},
+      tag:{left:'-104px',top:'62%'},
+      title:'收錄註記',
+      desc:'頁末方括號中的「本文原收錄於軍錄」是編者附加的出處說明，並非原奏摺文字。應存為 archive_note，以保留版本資訊而不影響原文。',
+      prompt:'方括號內的「本文原收錄於軍錄」是編者註記，不是原文。\n請存入 archive_note 欄位，並從 body 中排除。',
+      py:[['cmt','# 編者註記（方括號）另存，不計入原文'],['plain','\nnote = '],['fn','re'],['plain','.'],['fn','search'],['plain','('],['str','r"〔(.+?)〕"'],['plain',', tail_text)'],['plain','\n'],['kw','if'],['plain',' note:'],['plain','\n    doc['],['str','"archive_note"'],['plain','] = note.'],['fn','group'],['plain','('],['num','1'],['plain',')']],
+      json:[['jpunc','{'],['jkey','\n  "archive_note"'],['jpunc',': '],['jstr','"本文原收錄於軍錄"'],['jpunc',','],['jkey','\n  "excluded_from_body"'],['jpunc',': '],['jstr','"true"'],['jpunc','\n}']]
+    },
+    page2: {
+      page:1, colour:'#ddd6ea',
+      box:{left:'6%',top:'94.5%',width:'8%',height:'3.6%'},
+      tag:{left:'-104px',top:'93%'},
+      title:'頁碼（續頁）',
+      desc:'續頁的頁碼與首頁採用同一套規則處理：抽出為 page 欄位，並在合併跨頁正文時作為排序依據。',
+      prompt:'這是同一份文書的續頁，頁碼在左下角。\n請沿用首頁的規則抽出 page 欄位，\n並依頁碼順序合併兩頁的正文。',
+      py:[['cmt','# 跨頁合併：依頁碼排序後串接正文'],['plain','\npages = '],['fn','sorted'],['plain','(docs, key='],['kw','lambda'],['plain',' d: d['],['str','"page"'],['plain','])'],['plain','\nfull_body = '],['str','"\\n"'],['plain','.'],['fn','join'],['plain','(d['],['str','"body"'],['plain','] '],['kw','for'],['plain',' d '],['kw','in'],['plain',' pages)']],
+      json:[['jpunc','{'],['jkey','\n  "page"'],['jpunc',': '],['jnum','81'],['jpunc',','],['jkey','\n  "merged_pages"'],['jpunc',': ['],['jnum','80'],['jpunc',', '],['jnum','81'],['jpunc',']'],['jpunc','\n}']]
+    }
+  };
+
+  const KEYS = Object.keys(FEATURES);
+  let curPage = 0;
+  let curFeat = 'layout';
+
+  /* ---------------- typing ---------------- */
+  const timers = [];
+  const clearTimers = () => { while(timers.length) clearTimeout(timers.pop()); };
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+
+  // plain text typing (AI chat window) — several chars per tick so it stays fast
+  function typePlain(host, text, speed, caretCls, chunk){
+    const step = 1;
+    let i = 0;
+    const per = chunk || 2;
+    const tick = () => {
+      i = Math.min(i + per, text.length);
+      host.innerHTML = esc(text.slice(0,i)) + `<span class="${caretCls||'caret'}"></span>`;
+      if (i < text.length) timers.push(setTimeout(tick, speed));
+      else host.innerHTML = esc(text);
+    };
+    tick();
+  }
+  function typeSegs(host, segs, speed, chunk){
+    const total = segs.reduce((n,[,t]) => n + t.length, 0);
+    const per = chunk || 3;
+    let shown = 0;
+    const render = n => {
+      let out = '', left = n;
+      for (const [cls, txt] of segs){
+        if (left <= 0) break;
+        const take = txt.slice(0, left);
+        out += cls === 'plain' ? esc(take) : `<span class="${cls}">${esc(take)}</span>`;
+        left -= take.length;
+      }
+      return out;
+    };
+    const tick = () => {
+      shown = Math.min(shown + per, total);
+      host.innerHTML = render(shown) + '<span class="caret"></span>';
+      if (shown < total) timers.push(setTimeout(tick, speed));
+      else host.innerHTML = render(total);
+    };
+    tick();
+  }
+
+  /* ---------------- render ---------------- */
+  const img = document.getElementById('pdfImg');
+  const hlLayer = document.getElementById('hlLayer');
+  const tagLayer = document.getElementById('tagLayer');
+  const pageInd = document.getElementById('pageInd');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  /* Page turn: a sheet physically slides across on top of the sheet below,
+     like lifting a page in a paper file. dir = 1 (next) / -1 (prev). */
+  let turning = false;
+  function turnTo(nextPage, dir){
+    if (turning || nextPage === curPage) return;
+    turning = true;
+    const pageEl = img.parentElement;
+    const sheet = document.createElement('div');
+    sheet.className = 'turn-sheet';
+    const sImg = document.createElement('img');
+    sheet.appendChild(sImg);
+
+    if (dir > 0){
+      // next: the new page sweeps in from the right, landing on top
+      sImg.src = PAGES[nextPage];
+      sheet.style.transform = 'translateX(102%)';
+      pageEl.appendChild(sheet);
+      requestAnimationFrame(() => {
+        sheet.style.transition = 'transform .5s cubic-bezier(.33,.9,.3,1)';
+        sheet.style.transform = 'translateX(0)';
+      });
+    } else {
+      // prev: the current page lifts away to the right, revealing the one under it
+      sImg.src = PAGES[curPage];
+      sheet.style.transform = 'translateX(0)';
+      pageEl.appendChild(sheet);
+      img.src = PAGES[nextPage];
+      requestAnimationFrame(() => {
+        sheet.style.transition = 'transform .5s cubic-bezier(.33,.9,.3,1)';
+        sheet.style.transform = 'translateX(102%)';
+      });
+    }
+
+    setTimeout(() => {
+      curPage = nextPage;
+      img.src = PAGES[curPage];
+      sheet.remove();
+      turning = false;
+      drawPage();
+    }, 520);
+
+    // keep the pager in sync while the sheet is still moving
+    pageInd.textContent = `頁 ${nextPage+1} / ${PAGES.length}`;
+    prevBtn.disabled = nextPage === 0;
+    nextBtn.disabled = nextPage === PAGES.length - 1;
+  }
+
+  function drawPage(){
+    img.src = PAGES[curPage];
+    pageInd.textContent = `頁 ${curPage+1} / ${PAGES.length}`;
+    prevBtn.disabled = curPage === 0;
+    nextBtn.disabled = curPage === PAGES.length - 1;
+
+    // highlight: only the selected feature is tinted, and only on its own sheet
+    hlLayer.innerHTML = '';
+    if (FEATURES[curFeat] && FEATURES[curFeat].page === curPage){
+      const f = FEATURES[curFeat];
+      const d = document.createElement('div');
+      d.className = 'hl is-active';
+      d.style.cssText = `left:${f.box.left};top:${f.box.top};width:${f.box.width};height:${f.box.height};--c:${f.colour};`;
+      hlLayer.appendChild(d);
+    }
+
+    // tags: every feature from every page is always visible
+    tagLayer.innerHTML = '';
+    KEYS.forEach(k => {
+      const f = FEATURES[k];
+      const t = document.createElement('div');
+      const other = f.page !== curPage;
+      t.className = 'hl-tag'
+        + (k === curFeat ? ' is-active' : ' is-dim')
+        + (other ? ' is-other' : '');
+      t.dataset.feat = k;
+      t.innerHTML = esc(f.title.split('：')[0]) + (other ? `<span class="pg">p.${f.page+1}</span>` : '');
+      const pos = f.tag;
+      t.style.cssText = `${pos.left ? `left:${pos.left};` : ''}${pos.right ? `right:${pos.right};` : ''}top:${pos.top};--c:${f.colour};`;
+      t.addEventListener('click', () => select(k));
+      tagLayer.appendChild(t);
+    });
+  }
+
+  function select(key){
+    const f = FEATURES[key];
+    if (!f) return;
+    curFeat = key;
+    // a label from another sheet turns the page first, then highlights
+    if (f.page !== curPage) turnTo(f.page, f.page > curPage ? 1 : -1);
+    else drawPage();
+
+    clearTimers();
+    document.getElementById('fTitle').textContent = f.title;
+    document.getElementById('fDesc').textContent = f.desc;
+    const promptBody = document.getElementById('promptBody');
+    const pyBody = document.getElementById('pyBody');
+    const jsonBody = document.getElementById('jsonBody');
+    promptBody.innerHTML = ''; pyBody.innerHTML = ''; jsonBody.innerHTML = '';
+
+    // all three windows fill in at the same time, quickly
+    typePlain(promptBody, f.prompt, 18, 'chat-caret', 2);
+    typeSegs(pyBody, f.py, 14, 4);
+    typeSegs(jsonBody, f.json, 14, 4);
+  }
+
+  prevBtn.addEventListener('click', () => turnTo(curPage - 1, -1));
+  nextBtn.addEventListener('click', () => turnTo(curPage + 1, 1));
+
+  document.querySelectorAll('.subtab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.subtab').forEach(t => t.classList.toggle('is-active', t === tab));
+    });
+  });
+
+  select('layout');
+})();
+</script>
+</body>
+</html>

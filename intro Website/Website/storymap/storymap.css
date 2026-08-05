@@ -1088,6 +1088,21 @@ img { max-width: 100%; }
   position: relative;
   top: auto;
 }
+/* The Agentic AI × PaddleOCR demonstration keeps its text card on the left
+   and uses the larger right column for the overlapping visual windows. */
+#part-3-content #part-3-agentic-ocr .lay-split {
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--vis-w, 56%));
+}
+#part-3-content #part-3-agentic-ocr .lay-copy {
+  order: 1;
+  grid-column: 1;
+}
+#part-3-content #part-3-agentic-ocr .lay-visual {
+  order: 2;
+  grid-column: 2;
+  position: relative;
+  top: auto;
+}
 .part3-stage {
   border-top: 1px solid rgba(22, 61, 63, .16);
 }
@@ -1511,6 +1526,234 @@ img { max-width: 100%; }
   color: var(--yellow);
   opacity: 1;
 }
+/* ============================================================================
+   Part 3.6 · 版面特徵探索器（7 辨識印刷字 / 8 辨識手寫字）
+   左半為原件（書冊翻頁或風琴摺展開），右半為該項特徵引出的 AI 指示、
+   Python 代碼與 JSON 輸出。內容由 storymap-example.html 的
+   data-part3-feature-data JSON 提供，storymap.js 負責互動與逐字播放。
+   ========================================================================== */
+/* 標題／說明與下方互動元素之間留出較舒適的距離（與草稿版一致） */
+#part-3-printed-card, #part-3-handwritten-card { margin-bottom: clamp(22px, 2.6vw, 38px); }
+#part-3-printed-card .body p, #part-3-handwritten-card .body p { max-width: 92ch; }
+
+/* 佔螢幕寬度 90%：從 .story-inner 的內距中「掙脫」出來，改以視窗寬度定位 */
+.part3-feature-explorer {
+  display: grid;
+  grid-template-columns: 50% 50%;
+  width: 90vw;
+  max-width: 90vw;
+  margin-left: calc(50% - 45vw);
+  margin-right: calc(50% - 45vw);
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+/* 兩份原件都是暖褐色紙張，配深綠底（與 Agentic AI 動畫場景同一組綠）
+   才能把紙張推到前景。標籤浮貼在原件兩側，因此左右另留出標籤的空白。 */
+.part3-fx-doc {
+  position: relative;
+  padding: clamp(24px, 2.4vw, 38px) clamp(118px, 9vw, 190px);
+  background: radial-gradient(circle at 22% 18%, rgba(196, 93, 56, .16), transparent 42%),
+              linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+  border-right: 1px solid var(--line);
+  /* 原件在左欄垂直置中：右欄較長時，紙張不會被推到頂端 */
+  display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 18px;
+}
+.part3-fx-caption { align-self: flex-start; color: var(--muted); font: 600 calc(11px * var(--font-scale)) var(--sans); letter-spacing: .13em; }
+
+/* --- 7 印刷字：書冊頁面，翻頁時新頁自右滑入疊上舊頁 --- */
+.part3-fx-pagestack { position: relative; width: 100%; max-width: none; }
+.part3-fx-pagestack::before,
+.part3-fx-pagestack::after {
+  content: ""; position: absolute; inset: 0; background: #fdfbf6;
+  border: 1px solid rgba(22, 61, 63, .14); box-shadow: 0 6px 14px rgba(22, 61, 63, .09);
+}
+.part3-fx-pagestack::before { transform: translate(9px, 9px) rotate(1.1deg); }
+.part3-fx-pagestack::after { transform: translate(4.5px, 4.5px) rotate(.5deg); }
+.part3-fx-page {
+  position: relative; z-index: 2; overflow: hidden; background: #fff;
+  border: 1px solid rgba(22, 61, 63, .18); box-shadow: 0 14px 30px rgba(22, 61, 63, .16);
+}
+.part3-fx-page img { display: block; width: 100%; height: auto; }
+.part3-fx-turn {
+  position: absolute; inset: 0; z-index: 7; overflow: hidden; background: #fff;
+  box-shadow: -14px 0 26px rgba(22, 61, 63, .22); will-change: transform;
+}
+.part3-fx-turn img { display: block; width: 100%; height: auto; }
+
+/* --- 8 手寫字：風琴摺，展開的兩摺保持掃描原比例，其餘收成摺痕 --- */
+/* 摺子與其浮貼標籤共用同一個定位框，標籤才能落在摺子兩側 */
+.part3-fx-striparea { position: relative; width: 100%; }
+.part3-fx-strip {
+  --fold-slivers: 60px;
+  --fold-h: min(calc((var(--fold-w, 520px) - var(--fold-slivers)) / 0.921), 76vh);
+  display: flex; flex-direction: row-reverse; align-items: stretch; justify-content: flex-start;
+  width: 100%; height: var(--fold-h); margin: 0 auto; overflow: hidden;
+  perspective: 900px; perspective-origin: 70% 50%;
+}
+/* 收摺的部分維持紙張本身的褐色（不透明），否則深綠底會透出來變成灰綠條紋 */
+.part3-fx-panel {
+  position: relative; flex: 0 1 auto; width: 7px; min-width: 2px; height: 100%;
+  background-color: #cdb894;
+  background-image: var(--src); background-size: 300% 100%; background-position: var(--posx) 0;
+  background-repeat: no-repeat; cursor: pointer; transform-style: preserve-3d;
+  transition: width .55s cubic-bezier(.4, .85, .3, 1), aspect-ratio .55s cubic-bezier(.4, .85, .3, 1),
+              transform .55s cubic-bezier(.4, .85, .3, 1), filter .35s;
+}
+/* 每一摺以 3D 傾斜構成鋸齒狀；傾斜後彼此之間會露出縫隙，
+   因此收摺的部分向兩側各外擴一點，並加上同色紙邊，讓深綠底不會透出來。 */
+.part3-fx-panel:nth-child(odd) { transform: rotateY(52deg); }
+.part3-fx-panel:nth-child(even) { transform: rotateY(-52deg); }
+.part3-fx-panel:not(.is-open) {
+  margin-inline: -1.5px;
+  box-shadow: 0 0 0 2px #cdb894;
+}
+/* 摺痕陰影：暖褐色明暗交替，讀起來像一疊摺起來的紙邊 */
+.part3-fx-panel::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: 1;
+  background: linear-gradient(90deg, rgba(84, 60, 26, .5) 0%, rgba(233, 214, 178, .42) 48%, rgba(84, 60, 26, .46) 100%);
+  transition: opacity .45s;
+}
+.part3-fx-panel.is-open {
+  flex: 0 0 auto; width: auto; aspect-ratio: var(--fold-aspect, 344 / 747);
+  transform: rotateY(0deg) !important; filter: none; background-color: transparent;
+}
+.part3-fx-panel.is-open::after { opacity: 0; }
+
+/* --- 標示：只有選取的特徵會著色，標籤永遠可見 --- */
+.part3-fx-hl {
+  position: absolute; z-index: 5; border: 0; pointer-events: none;
+  background: var(--c, rgba(243, 201, 103, .3)); opacity: 0; transition: opacity .25s;
+}
+.part3-fx-hl.is-active { opacity: .42; }
+.part3-fx-tag {
+  position: absolute; z-index: 6; white-space: nowrap; cursor: pointer;
+  padding: 8px 14px; border: 0; border-radius: 4px;
+  background: var(--c, #eee); color: #22403f;
+  font: 700 calc(13.5px * var(--font-scale)) var(--sans);
+  box-shadow: 0 2px 7px rgba(22, 61, 63, .12); transition: opacity .18s, filter .18s;
+}
+.part3-fx-taglist { display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; width: 100%; }
+.part3-fx-taglist .part3-fx-tag { position: static; }
+/* 深綠底上的標籤：未選取時降低不透明度仍需可讀，因此加一層底色 */
+.part3-fx-doc .part3-fx-tag { box-shadow: 0 2px 10px rgba(0, 0, 0, .25); }
+.part3-fx-tag:hover { filter: brightness(.95); opacity: 1; }
+.part3-fx-tag.is-active { opacity: 1; font-weight: 800; filter: brightness(.94); }
+.part3-fx-tag.is-dim { opacity: .32; }
+.part3-fx-tag.is-other { opacity: .45; }
+.part3-fx-tag.is-other.is-dim { opacity: .22; }
+.part3-fx-tag .pg {
+  display: inline-block; margin-left: 7px; padding: 1px 5px; border-radius: 2px;
+  background: rgba(22, 61, 63, .16); font-size: .82em; font-weight: 700;
+}
+
+.part3-fx-nav { display: flex; align-items: center; gap: 14px; margin-top: 4px; }
+.part3-fx-nav button {
+  flex: none; width: 34px; height: 34px; padding: 0; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  color: var(--paper); background: rgba(255, 255, 255, .1);
+  border: 1px solid rgba(244, 239, 230, .3);
+  font: 600 calc(15px * var(--font-scale))/1 var(--sans);
+}
+.part3-fx-nav button:hover:not(:disabled) { color: var(--yellow); border-color: var(--yellow); background: rgba(255, 255, 255, .16); }
+.part3-fx-nav button:disabled { opacity: .3; cursor: default; }
+.part3-fx-ind { color: rgba(244, 239, 230, .62); font: 600 calc(12px * var(--font-scale)) var(--sans); }
+
+/* --- 右半：特徵 → 指示 → 代碼 → 輸出，以向下箭頭串起因果關係 --- */
+/* 右半自行撐高以完整顯示四個區塊，不再限制高度／內部捲動 */
+.part3-fx-out {
+  padding: clamp(24px, 2.4vw, 40px);
+  display: flex; flex-direction: column; justify-content: center;
+}
+.part3-fx-arrow {
+  display: flex; align-items: center; justify-content: center;
+  height: 40px; color: var(--accent); font-size: calc(19px * var(--font-scale)); line-height: 1;
+}
+.part3-fx-feat { padding: 20px 22px; background: var(--paper); border: 1px solid var(--line); }
+.part3-fx-feat .k { color: var(--accent); font: 800 calc(10.5px * var(--font-scale)) var(--sans); letter-spacing: .15em; }
+.part3-fx-feat h3 { margin: 9px 0 10px; font: 700 calc(19px * var(--font-scale)) var(--serif); }
+.part3-fx-feat p { margin: 0; color: #31484a; font: 400 calc(13.5px * var(--font-scale))/1.9 var(--serif); }
+
+.part3-fx-win { overflow: hidden; background: #1e1e1e; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px; }
+.part3-fx-win-bar {
+  display: flex; align-items: center; gap: 7px; padding: 10px 13px;
+  background: #2b2b2b; border-bottom: 1px solid rgba(255, 255, 255, .06);
+}
+.part3-fx-win-bar .dot { width: 9px; height: 9px; border-radius: 50%; }
+.part3-fx-win-bar .dot.red { background: #ff5f57; }
+.part3-fx-win-bar .dot.yellow { background: #febc2e; }
+.part3-fx-win-bar .dot.green { background: #28c840; }
+.part3-fx-win-bar .ttl { margin-left: 8px; color: rgba(255, 255, 255, .72); font: 700 calc(13px * var(--font-scale)) var(--sans); }
+.part3-fx-win-body {
+  padding: 14px 16px; min-height: 80px;
+  color: #d4d4d4; white-space: pre-wrap; word-break: break-word;
+  font: calc(11.5px * var(--font-scale))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+.part3-fx-win-body .kw { color: #c586c0; }
+.part3-fx-win-body .fn { color: #dcdcaa; }
+.part3-fx-win-body .str { color: #ce9178; }
+.part3-fx-win-body .num { color: #b5cea8; }
+.part3-fx-win-body .cmt { color: #6a9955; }
+.part3-fx-win-body .jkey { color: #9cdcfe; }
+.part3-fx-win-body .jstr { color: #ce9178; }
+.part3-fx-win-body .jnum { color: #b5cea8; }
+
+/* AI 對話視窗：淺色應用程式面板，不是終端機 */
+/* AI 對話視窗整體為灰色，只有中央的輸入框保持白色 */
+.part3-fx-chat { overflow: hidden; background: #f0efed; border: 1px solid rgba(22, 61, 63, .16); border-radius: 14px; }
+.part3-fx-chat .part3-fx-win-bar { background: #e4e3e0; border-bottom: 1px solid rgba(22, 61, 63, .12); }
+.part3-fx-chat .part3-fx-win-bar .ttl { color: #575654; }
+.part3-fx-chat-body { padding: 16px 18px; }
+.part3-fx-chat-input {
+  display: flex; flex-direction: column; justify-content: space-between;
+  min-height: 96px; padding: 16px 17px 12px;
+  background: #fff; border: 1px solid rgba(22, 61, 63, .14); border-radius: 16px;
+}
+.part3-fx-chat-text {
+  color: var(--ink); white-space: pre-wrap; word-break: break-word;
+  font: 400 calc(13px * var(--font-scale))/1.75 var(--sans);
+}
+.part3-fx-chat-row { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
+.part3-fx-chat-ic {
+  flex: none; width: 19px; height: 19px; display: flex; align-items: center; justify-content: center;
+  color: #8a8987; font-size: 15px; line-height: 1;
+}
+.part3-fx-chat-ic svg { width: 16px; height: 16px; fill: none; stroke: #8a8987; stroke-width: 1.5; }
+.part3-fx-chat-model {
+  margin-left: auto; display: flex; align-items: center; gap: 5px;
+  color: var(--ink); font: 600 calc(12px * var(--font-scale)) var(--sans);
+}
+.part3-fx-chat-model .spin {
+  flex: none; width: 11px; height: 11px; border-radius: 50%;
+  border: 1.6px solid rgba(22, 61, 63, .25); border-top-color: var(--ink);
+  animation: part3-fx-spin 1s linear infinite;
+}
+@keyframes part3-fx-spin { to { transform: rotate(360deg); } }
+.part3-fx-chat-model .chev { color: #8a8987; font-size: 10px; }
+.part3-fx-chat-send {
+  flex: none; width: 27px; height: 27px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  background: #d6d5d2; color: #3b3b39; font-size: 14px;
+}
+.part3-fx-caret {
+  display: inline-block; width: 6px; height: 1em; background: #d4d4d4; vertical-align: -.14em;
+  animation: agentic-caret-blink 1s step-end infinite;
+}
+.part3-fx-caret-chat { width: 2px; height: 1.05em; background: var(--ink); vertical-align: -.18em; }
+
+@media (max-width: 1040px) {
+  .part3-feature-explorer { grid-template-columns: 1fr; }
+  .part3-fx-doc { border-right: 0; border-bottom: 1px solid var(--line); }
+  .part3-fx-out { max-height: none; }
+  /* 窄螢幕：改回頁面下方的標籤列，避免浮貼標籤擠壓頁面 */
+  .part3-fx-doc-pages { padding-inline: clamp(18px, 3vw, 30px); }
+  .part3-fx-doc-pages .part3-fx-tag {
+    position: static !important; left: auto !important; right: auto !important; top: auto !important;
+  }
+  .part3-fx-doc-pages [data-part3-fx-tags] {
+    display: flex; flex-wrap: wrap; justify-content: center; gap: 9px; margin-top: 14px;
+  }
+}
+
 .part3-chart-frame {
   display: grid;
   align-content: center;
@@ -1559,7 +1802,7 @@ img { max-width: 100%; }
 /* Part 3.4.3 — PaddleOCR: point-form explanation on the left, photo-only gallery on the right. */
 .paddleocr-layout {
   display: grid;
-  grid-template-columns: minmax(0, var(--paddleocr-card-width, 74ch)) minmax(250px, min(var(--paddleocr-photo-width, 42%), var(--paddleocr-photo-max-width, 100%), calc(100% - var(--paddleocr-card-width, 74ch) - var(--col-gap))));
+  grid-template-columns: minmax(0, var(--paddleocr-card-width, 200ch)) minmax(250px, min(var(--paddleocr-photo-width, 70%), var(--paddleocr-photo-max-width, 100%), calc(100% - var(--paddleocr-card-width, 200ch) - var(--col-gap))));
   align-items: start;
   justify-content: space-between;
   gap: var(--col-gap);
@@ -1864,7 +2107,103 @@ img { max-width: 100%; }
 .agentic-code .ocr-text-line { color: #3c5754; }
 .agentic-code .line { display: block; min-height: 1.55em; }
 
-/* 游標：四個視窗都用同一個閃爍節奏，暗示「正在輸入」 */
+/* ----------------------------------------------------------------------------
+   運用 Agentic AI 使用 PaddleOCR：淺色 Codex 對話視窗 + 深色 PaddleOCR Python 視窗，
+   重疊排列，點擊任一視窗即可切換前後層（見 storymap.js 的 initPart3AgenticOcrWindows()）。
+   尺寸與位置變數見 storymap-cards.css 的 #part-3-agentic-ocr-chart 區塊。
+
+   注意：外層容器刻意不用 .part3-chart-frame（那是 display:grid + auto 高度的
+   欄位列容器）。.agentic-scene 內的視窗都是 position:absolute（不會撐開版面高
+   度），放進自動列高的 grid 裡，欄位列會塌陷成 0 高度，導致整個場景「看不見」。
+   這裡改用一般的 block 容器＋沿用 .visual-frame 的明確高度，讓 .agentic-scene 的
+   height:100% 有真正的高度可以繼承。 */
+.part3-agentic-ocr-frame {
+  position: relative; display: flex; flex-direction: column;
+  height: var(--visual-size);
+  padding: clamp(16px, 2vw, 26px);
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+}
+.part3-agentic-ocr-frame > .agentic-scene { flex: 1 1 auto; min-height: 0; }
+.agentic-scene-paddleocr { background: transparent; }
+.agentic-window-pyocr,
+.agentic-window-codex { cursor: pointer; }
+.agentic-window-pyocr {
+  left: var(--agentic-pyocr-left, 34%); top: var(--agentic-pyocr-top, -4%);
+  width: var(--agentic-pyocr-width, 66%); height: var(--agentic-pyocr-height, 56%);
+  z-index: 1; transform: rotate(var(--agentic-pyocr-angle, 0deg)) scale(.97);
+  --agentic-window-title-size: var(--agentic-pyocr-font-size, 11px);
+}
+.agentic-window-codex {
+  left: var(--agentic-codex-left, 0%); top: var(--agentic-codex-top, 16%);
+  width: var(--agentic-codex-width, 74%); height: var(--agentic-codex-height, 84%);
+  z-index: 2; transform: rotate(var(--agentic-codex-angle, 0deg));
+  background: var(--card); --agentic-window-title-size: var(--agentic-codex-font-size, 11px);
+}
+.agentic-window-pyocr,
+.agentic-window-codex {
+  opacity: .92;
+  transition: transform .32s ease, opacity .24s ease, box-shadow .32s ease;
+}
+.agentic-window-pyocr.is-agentic-front {
+  opacity: 1;
+  transform: rotate(var(--agentic-pyocr-angle, 0deg)) scale(1);
+  box-shadow: 0 22px 38px rgba(0, 0, 0, .42);
+}
+.agentic-window-codex.is-agentic-front {
+  opacity: 1;
+  transform: rotate(var(--agentic-codex-angle, 0deg)) translateY(-4px) scale(1);
+  box-shadow: 0 22px 38px rgba(0, 0, 0, .18);
+}
+.agentic-window-codex .agentic-mac-titlebar { background: #efe8dc; border-bottom-color: rgba(22, 61, 63, .14); cursor: pointer; }
+.agentic-window-pyocr .agentic-mac-titlebar { cursor: pointer; }
+.agentic-window-codex .agentic-window-title { color: #7a7263; }
+.agentic-window-pyocr .agentic-window-body,
+.agentic-window-codex .agentic-window-body {
+  padding: 12px 15px; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; overflow-wrap: anywhere;
+}
+.agentic-window-pyocr .agentic-window-body::-webkit-scrollbar,
+.agentic-window-codex .agentic-window-body::-webkit-scrollbar { display: none; }
+.agentic-window-pyocr .agentic-window-body {
+  color: #d4d4d4; font: var(--agentic-window-font-size, 12px)/1.85 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+.agentic-window-codex .agentic-window-body {
+  color: var(--ink); font: var(--agentic-codex-text-size, 16px)/1.75 var(--sans);
+}
+.agentic-codex-phase[hidden] { display: none; }
+.agentic-codex-thinking,
+.agentic-codex-result { font-size: var(--agentic-codex-text-size, 16px); line-height: 1.75; }
+.agentic-codex-status {
+  margin-bottom: 12px; color: #8d8574; font-size: .86em; font-weight: 700;
+}
+.agentic-codex-user-row { flex: none; padding: 14px 16px 0; display: flex; justify-content: flex-end; }
+.agentic-codex-user-bubble {
+  max-width: 84%; padding: 9px 13px; border-radius: 12px 12px 3px 12px;
+  background: #e7e7e7; color: #262626; font: 500 var(--agentic-codex-text-size, 16px)/1.6 var(--sans);
+}
+.agentic-codex-worked {
+  display: block; margin: 0 0 12px; color: #8d8574;
+  font-size: .86em; font-weight: 700;
+}
+.agentic-prose .line { display: block; margin-bottom: 11px; }
+.agentic-prose .meta-line { display: flex; align-items: center; gap: 6px; margin-bottom: 11px; color: #8d8574; font-size: .88em; }
+.agentic-prose .meta-line .ic {
+  flex: none; width: 13px; height: 13px; border-radius: 3px; border: 1px solid rgba(22, 61, 63, .3);
+  display: inline-flex; align-items: center; justify-content: center; font-size: 8px;
+}
+.agentic-prose .final-lead { display: block; font-weight: 700; }
+.agentic-prose .final-label { display: block; margin: 2px 0 2px; color: #7a7263; font-weight: 700; font-size: .84em; }
+.agentic-prose .final-item { display: block; padding-left: 14px; position: relative; }
+.agentic-prose .final-item::before { content: "•"; position: absolute; left: 2px; }
+.agentic-prose .final-item code,
+.agentic-prose .final-note code {
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; background: rgba(22, 61, 63, .08);
+  padding: 1px 5px; border-radius: 4px; font-size: .84em;
+}
+.agentic-prose .final-note { display: block; color: #7a7263; }
+
+/* 游標：四個視窗都用同一個閃爍節奏，暗示「正在輸入」*/
 .agentic-caret {
   display: inline-block; width: 6px; height: 1em; margin-left: 1px;
   background: currentColor; vertical-align: -.15em;
@@ -2080,6 +2419,9 @@ img { max-width: 100%; }
   /* 小螢幕：文字一律排在視覺元素之上 */
   .lay-split > .lay-copy, .lay-split.text-left > .lay-copy { order: 1; grid-column: 1; }
   .lay-split > .lay-visual, .lay-split.text-left > .lay-visual { order: 2; grid-column: 1; }
+  #part-3-content #part-3-agentic-ocr .lay-split { grid-template-columns: 1fr; }
+  #part-3-content #part-3-agentic-ocr .lay-copy { grid-column: 1; }
+  #part-3-content #part-3-agentic-ocr .lay-visual { grid-column: 1; }
   .lay-acc > .acc-track { order: 1; }
   .lay-acc > .acc-visual { order: 2; }
   .lay-visual, .acc-visual { position: relative; top: auto; }

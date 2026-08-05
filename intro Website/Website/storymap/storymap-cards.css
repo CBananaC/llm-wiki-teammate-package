@@ -420,17 +420,16 @@
      Part 3.4.3  PaddleOCR
      Part 3.4.4  運用 Agentic AI 使用 PaddleOCR
      Part 3.4.5  OCR 前的材料準備
-     Part 3.4.6  執行 OCR 的Python 代碼
-     Part 3.4.7  檢視史料的版面及格式
-     Part 3.4.8  辨識印刷字
-       Part 3.4.8.1  辨識印刷字（文字卡）
-       Part 3.4.8.2  辨識印刷字（圖表）
-     Part 3.4.9  辨識手寫字
-     Part 3.4.10 輸出格式：JSON
-       Part 3.4.10.1 輸出格式：JSON（文字卡）
-       Part 3.4.10.2 輸出格式：JSON（圖表）
-     Part 3.4.11 OCR測試
-     Part 3.4.12 輸入結構化史料至平台
+     Part 3.4.6  檢視史料的版面及格式
+     Part 3.4.7  辨識印刷字
+       Part 3.4.7.1  辨識印刷字（文字卡）
+       Part 3.4.7.2  辨識印刷字（圖表）
+     Part 3.4.8  辨識手寫字
+     Part 3.4.9  輸出格式：JSON
+       Part 3.4.9.1  輸出格式：JSON（文字卡）
+       Part 3.4.9.2  輸出格式：JSON（圖表）
+     Part 3.4.10 OCR測試
+     Part 3.4.11 輸入結構化史料至平台
    Part 3.5  運用 AI 抽取資訊
      Part 3.5.1  Stage bar: #part-3-ai
      Part 3.5.2  AI Skills (#part-3-ai-skills)
@@ -673,9 +672,9 @@
   /* 只改 --paddleocr-photo-width，即可調整右側圖片寬度；高度會按原圖比例自動變化。
      --paddleocr-photo-max-width 設定畫廊不可超過的 Part 3 寬度百分比。
      --paddleocr-card-width 固定文字卡欄位，避免圖片寬度變更時文字卡跟著變。 */
-  --paddleocr-card-width: 74ch;
-  --paddleocr-photo-width: 42%;
-  --paddleocr-photo-max-width: 60%;
+  --paddleocr-card-width: 75ch;
+  --paddleocr-photo-width: 50%;
+  --paddleocr-photo-max-width: 100%;
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
   --part3-card-height: auto;
@@ -753,22 +752,10 @@
   --photo-zoom: var(--part3-material-gallery-zoom, 1);
 }
 
-/* Part 3.4.6 — 執行 OCR 的Python 代碼 */
-#part-3-code {
-  --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
-  --part3-card-height: auto;
-  --part3-card-min-height: 0;
-  --part3-card-padding: clamp(18px, 1.8vw, 26px);
-  --part3-title-size: clamp(27px, 3.4vw, 46px);
-  --part3-body-size: calc(16px * var(--font-scale));
-  --part3-body-line-height: 1.9;
-}
-
-/* Part 3.4.7 — 檢視史料的版面及格式 */
+/* Part 3.4.6 — 檢視史料的版面及格式：滿版文字、無卡片背景 */
 #part-3-format {
   --part3-card-width: 100%;
-  --part3-card-max-width: 74ch;
+  --part3-card-max-width: none;
   --part3-card-height: auto;
   --part3-card-min-height: 0;
   --part3-card-padding: clamp(18px, 1.8vw, 26px);
@@ -776,8 +763,25 @@
   --part3-body-size: calc(16px * var(--font-scale));
   --part3-body-line-height: 1.9;
 }
+#part-3-format .lay-stack > .blk {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
+#part-3-format .lay-stack > .blk .title-row h2 {
+  font-size: var(--part3-title-size, clamp(27px, 3.4vw, 46px));
+  line-height: var(--part3-title-line-height, 1.12);
+}
+#part-3-format .lay-stack > .blk .body {
+  width: 100%;
+  max-width: none;
+}
+#part-3-format .lay-stack > .blk .body > p {
+  font-size: var(--part3-body-size, calc(16px * var(--font-scale)));
+  line-height: var(--part3-body-line-height, 1.9);
+}
 
-/* Part 3.4.8 — 辨識印刷字 */
+/* Part 3.4.7 — 辨識印刷字 */
 #part-3-content #part-3-printed {
   background: #fff;
   --part3-card-width: 100%;
@@ -794,7 +798,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* Part 3.4.8.1 — 辨識印刷字（文字卡） */
+/* Part 3.4.7.1 — 辨識印刷字（文字卡） */
 #part-3-printed-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -806,7 +810,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.8.2 — 辨識印刷字（圖表） */
+/* Part 3.4.7.2 — 辨識印刷字（圖表） */
 #part-3-printed-chart {
   --part3-visual-width: 100%;
   --part3-visual-min-height: 360px;
@@ -814,7 +818,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* Part 3.4.9 — 辨識手寫字 */
+/* Part 3.4.8 — 辨識手寫字 */
 #part-3-handwritten {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -826,7 +830,18 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.10 — 輸出格式：JSON */
+/* Part 3.8：手寫字說明文字展開至整個網站內容寬度。 */
+#part-3-content #part-3-handwritten-card {
+  width: 100%;
+  max-width: none;
+}
+#part-3-content #part-3-handwritten-card .body,
+#part-3-content #part-3-handwritten-card .body > p {
+  width: 100%;
+  max-width: none;
+}
+
+/* Part 3.4.9 — 輸出格式：JSON */
 #part-3-json {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -842,7 +857,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* Part 3.4.10.1 — 輸出格式：JSON（文字卡） */
+/* Part 3.4.9.1 — 輸出格式：JSON（文字卡） */
 #part-3-json-card {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -854,7 +869,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.10.2 — 輸出格式：JSON（圖表） */
+/* Part 3.4.9.2 — 輸出格式：JSON（圖表） */
 #part-3-json-chart {
   --part3-visual-width: 100%;
   --part3-visual-min-height: 360px;
@@ -862,7 +877,7 @@
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }
 
-/* Part 3.4.11 — OCR測試 */
+/* Part 3.4.10 — OCR測試 */
 #part-3-test {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -874,7 +889,7 @@
   --part3-body-line-height: 1.9;
 }
 
-/* Part 3.4.12 — 輸入結構化史料至平台 */
+/* Part 3.4.11 — 輸入結構化史料至平台 */
 #part-3-import {
   --part3-card-width: 100%;
   --part3-card-max-width: 74ch;
@@ -1046,6 +1061,26 @@
   --agentic-pet-body-font-size: 12px;
 }
 
+/* Part 3.4.4 — 運用 Agentic AI 使用 PaddleOCR：Codex 對話視窗＋PaddleOCR Python 視窗
+   #part-3-agentic-ocr-chart */
+#part-3-agentic-ocr-chart {
+  --agentic-frame-height: clamp(560px, 52vw, 680px);
+  --visual-h: var(--agentic-frame-height);
+  --agentic-pyocr-width: 72%;
+  --agentic-pyocr-height: 54%;
+  --agentic-pyocr-left: 28%;
+  --agentic-pyocr-top: 2%;
+  --agentic-pyocr-font-size: 11px;
+  --agentic-pyocr-angle: 0deg;
+  --agentic-codex-width: 82%;
+  --agentic-codex-height: 84%;
+  --agentic-codex-left: 0%;
+  --agentic-codex-top: 14%;
+  --agentic-codex-font-size: 20px;
+  --agentic-codex-text-size: 20px;
+  --agentic-codex-angle: 0deg;
+}
+
 /* Part 3.3.2 — Text block: #part-3-basic-flow-card */
 #part-3-basic-flow-card {
   --part3-card-width: 100%;
@@ -1173,7 +1208,6 @@
 #part-3-paddleocr,
 #part-3-agentic-ocr,
 #part-3-material,
-#part-3-code,
 #part-3-format,
 #part-3-printed,
 #part-3-handwritten,

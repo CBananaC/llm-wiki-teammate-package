@@ -894,6 +894,299 @@ const initPart3ToolsChecklist = () => {
 };
 initPart3ToolsChecklist();
 
+/* ---------------------------------------------------------------------------
+   版面特徵探索器（7 辨識印刷字 / 8 辨識手寫字）
+   左半是原件：印刷本為書冊翻頁，手寫本為風琴摺（每張掃描分三摺，
+   固定兩摺一組展開）。點擊標籤會標示該特徵所在位置，右半同時逐字播出
+   「AI 指示 → AI 生成的 Python 代碼 → OCR 的輸出結果」三個視窗。
+   內容全部來自 storymap-example.html 的 data-part3-feature-data JSON。
+   --------------------------------------------------------------------------- */
+const initPart3FeatureExplorers = () => {
+  const CHAT_ICONS = `
+    <span class="part3-fx-chat-ic">+</span>
+    <span class="part3-fx-chat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1.5 1 4.5 1 6 0"/></svg></span>
+    <span class="part3-fx-chat-model"><span class="spin"></span>5.6<span class="chev">▾</span></span>
+    <span class="part3-fx-chat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
+    <span class="part3-fx-chat-send">↑</span>`;
+
+  const outMarkup = `
+    <div class="part3-fx-feat">
+      <span class="k">版面特徵</span>
+      <h3 data-fx-title></h3>
+      <p data-fx-desc></p>
+    </div>
+    <div class="part3-fx-arrow" aria-hidden="true">↓</div>
+    <div class="part3-fx-chat">
+      <div class="part3-fx-win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">AI Prompt</span></div>
+      <div class="part3-fx-chat-body">
+        <div class="part3-fx-chat-input">
+          <div class="part3-fx-chat-text" data-fx-prompt></div>
+          <div class="part3-fx-chat-row">${CHAT_ICONS}</div>
+        </div>
+      </div>
+    </div>
+    <div class="part3-fx-arrow" aria-hidden="true">↓</div>
+    <div class="part3-fx-win">
+      <div class="part3-fx-win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">AI 生成的 Python 代碼</span></div>
+      <div class="part3-fx-win-body" data-fx-py></div>
+    </div>
+    <div class="part3-fx-arrow" aria-hidden="true">↓</div>
+    <div class="part3-fx-win">
+      <div class="part3-fx-win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">OCR 的輸出結果</span></div>
+      <div class="part3-fx-win-body" data-fx-json></div>
+    </div>`;
+
+  document.querySelectorAll('[data-part3-explorer]').forEach((root) => {
+    const data = parseJsonScript(root);
+    const features = (data && data.features) || [];
+    if (!features.length) return;
+
+    const out = root.querySelector('[data-part3-fx-out]');
+    out.innerHTML = outMarkup;
+    const elTitle = out.querySelector('[data-fx-title]');
+    const elDesc = out.querySelector('[data-fx-desc]');
+    const elPrompt = out.querySelector('[data-fx-prompt]');
+    const elPy = out.querySelector('[data-fx-py]');
+    const elJson = out.querySelector('[data-fx-json]');
+
+    const tagHost = root.querySelector('[data-part3-fx-tags]');
+    const indEl = root.querySelector('[data-part3-fx-ind]');
+    const prevBtn = root.querySelector('[data-part3-fx-prev]');
+    const nextBtn = root.querySelector('[data-part3-fx-next]');
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    let cur = 0;
+    const timers = [];
+    const stopTyping = () => { while (timers.length) window.clearTimeout(timers.pop()); };
+
+    // 逐字播出：純文字（AI 指示）與含語法標色的 HTML（代碼／JSON）分開處理。
+    const typeText = (host, text, speed, caretClass, perTick) => {
+      let i = 0;
+      const step = () => {
+        i = Math.min(i + perTick, text.length);
+        host.textContent = text.slice(0, i);
+        if (i < text.length) {
+          const caret = document.createElement('span');
+          caret.className = caretClass;
+          host.appendChild(caret);
+          timers.push(window.setTimeout(step, speed));
+        }
+      };
+      step();
+    };
+    // 含標色標籤的內容：先整段放進 DOM，再把文字節點清空後逐字補回，
+    // 這樣顏色標籤不會被切斷（與 revealAgenticLine 相同做法）。
+    const typeHtml = (host, html, speed, perTick) => {
+      host.innerHTML = html;
+      const walker = document.createTreeWalker(host, NodeFilter.SHOW_TEXT);
+      const nodes = [];
+      let node;
+      while ((node = walker.nextNode())) { nodes.push({ node, full: node.textContent }); node.textContent = ''; }
+      if (!nodes.length) return;
+      let ni = 0;
+      const step = () => {
+        let budget = perTick;
+        while (budget > 0 && ni < nodes.length) {
+          const entry = nodes[ni];
+          const shown = entry.node.textContent.length;
+          if (shown >= entry.full.length) { ni += 1; continue; }
+          const take = Math.min(budget, entry.full.length - shown);
+          entry.node.textContent = entry.full.slice(0, shown + take);
+          budget -= take;
+        }
+        if (ni < nodes.length) timers.push(window.setTimeout(step, speed));
+      };
+      step();
+    };
+
+    const showFeature = (index) => {
+      const f = features[index];
+      if (!f) return;
+      cur = index;
+      syncToCurrent();
+      render();
+      stopTyping();
+      elTitle.textContent = f.title;
+      elDesc.textContent = f.desc;
+      if (reduceMotion) {
+        elPrompt.textContent = f.prompt;
+        elPy.innerHTML = f.py;
+        elJson.innerHTML = f.json;
+        return;
+      }
+      elPrompt.textContent = '';
+      elPy.innerHTML = '';
+      elJson.innerHTML = '';
+      // 三個視窗同時開始，速度較快
+      typeText(elPrompt, f.prompt, 18, 'part3-fx-caret part3-fx-caret-chat', 2);
+      typeHtml(elPy, f.py, 14, 4);
+      typeHtml(elJson, f.json, 14, 4);
+    };
+
+    const buildTags = (isOnScreen, positioned) => {
+      tagHost.innerHTML = '';
+      features.forEach((f, i) => {
+        const tag = document.createElement('button');
+        tag.type = 'button';
+        const other = !isOnScreen(f);
+        tag.className = 'part3-fx-tag'
+          + (i === cur ? ' is-active' : ' is-dim')
+          + (other ? ' is-other' : '');
+        tag.style.setProperty('--c', f.colour);
+        const label = f.title.split('：')[0].split('（')[0];
+        tag.innerHTML = other ? `${label}<span class="pg">${f.badge}</span>` : label;
+        if (positioned && f.tag) {
+          if (f.tag.left) tag.style.left = f.tag.left;
+          if (f.tag.right) tag.style.right = f.tag.right;
+          if (f.tag.top) tag.style.top = f.tag.top;
+        }
+        tag.addEventListener('click', () => showFeature(i));
+        tagHost.appendChild(tag);
+      });
+    };
+
+    let render = () => {};
+    let syncToCurrent = () => {};
+
+    /* ---------- 7 印刷字：書冊翻頁 ---------- */
+    if (root.dataset.part3Explorer === 'printed') {
+      const pages = data.pages || [];
+      const img = root.querySelector('[data-part3-fx-img]');
+      const hlHost = root.querySelector('[data-part3-fx-hl]');
+      const pageEl = img.parentElement;
+      let page = 0;
+      let turning = false;
+      features.forEach((f) => { f.badge = `p.${(f.page || 0) + 1}`; });
+
+      const paintPage = () => {
+        img.src = pages[page];
+        indEl.textContent = `頁 ${page + 1} / ${pages.length}`;
+
+        prevBtn.disabled = page === 0;
+        nextBtn.disabled = page === pages.length - 1;
+        hlHost.innerHTML = '';
+        const f = features[cur];
+        if (f && (f.page || 0) === page) {
+          const hl = document.createElement('div');
+          hl.className = 'part3-fx-hl is-active';
+          Object.assign(hl.style, f.box);
+          hl.style.setProperty('--c', f.colour);
+          hlHost.appendChild(hl);
+        }
+        buildTags((f) => (f.page || 0) === page, true);
+      };
+      render = paintPage;
+
+      // 翻頁：新的一頁自右滑入疊在舊頁之上，像翻動檔案夾裡的紙張。
+      const turnTo = (next, dir) => {
+        if (turning || next === page || next < 0 || next >= pages.length) return;
+        if (reduceMotion) { page = next; paintPage(); return; }
+        turning = true;
+        const sheet = document.createElement('div');
+        sheet.className = 'part3-fx-turn';
+        const sImg = document.createElement('img');
+        sheet.appendChild(sImg);
+        if (dir > 0) {
+          sImg.src = pages[next];
+          sheet.style.transform = 'translateX(102%)';
+          pageEl.appendChild(sheet);
+          window.requestAnimationFrame(() => {
+            sheet.style.transition = 'transform .5s cubic-bezier(.33,.9,.3,1)';
+            sheet.style.transform = 'translateX(0)';
+          });
+        } else {
+          sImg.src = pages[page];
+          sheet.style.transform = 'translateX(0)';
+          pageEl.appendChild(sheet);
+          img.src = pages[next];
+          window.requestAnimationFrame(() => {
+            sheet.style.transition = 'transform .5s cubic-bezier(.33,.9,.3,1)';
+            sheet.style.transform = 'translateX(102%)';
+          });
+        }
+        window.setTimeout(() => { page = next; sheet.remove(); turning = false; paintPage(); }, 520);
+      };
+      prevBtn.addEventListener('click', () => turnTo(page - 1, -1));
+      nextBtn.addEventListener('click', () => turnTo(page + 1, 1));
+      // 選到其他頁的特徵時，先翻到該頁，翻頁動畫結束後再標示
+      render = () => {
+        const f = features[cur];
+        const target = f ? (f.page || 0) : page;
+        if (target !== page && !turning) { turnTo(target, target > page ? 1 : -1); return; }
+        paintPage();
+      };
+      paintPage();
+    }
+
+    /* ---------- 8 手寫字：風琴摺 ---------- */
+    if (root.dataset.part3Explorer === 'folded') {
+      const strip = root.querySelector('[data-part3-fx-strip]');
+      const sheets = data.sheets || [];
+      const panels = [];
+      sheets.forEach((src) => { [2, 1, 0].forEach((part) => panels.push({ src, part })); });
+      const pairCount = Math.ceil(panels.length / 2);
+      const pairOf = (i) => Math.floor(i / 2);
+      let pair = 0;
+      features.forEach((f) => { f.badge = `第 ${(f.panel || 0) + 1} 摺`; });
+
+      panels.forEach((p, i) => {
+        const el = document.createElement('div');
+        el.className = 'part3-fx-panel';
+        el.style.setProperty('--src', `url("${p.src}")`);
+        el.style.setProperty('--posx', `${p.part * 50}%`);
+        if (data.foldAspect) el.style.setProperty('--fold-aspect', data.foldAspect);
+        el.addEventListener('click', () => { pair = pairOf(i); render(); });
+        strip.appendChild(el);
+      });
+
+      // 只有「選取特徵」時才跳到該摺所在的組；上一組／下一組按鈕自行翻頁，
+      // 不可在 render() 內重設 pair，否則按鈕會被立刻覆蓋回原位。
+      syncToCurrent = () => {
+        const f = features[cur];
+        if (f) pair = pairOf(f.panel || 0);
+      };
+      render = () => {
+        const f = features[cur];
+        const start = pair * 2;
+        [...strip.children].forEach((el, i) => {
+          const open = i === start || i === start + 1;
+          el.classList.toggle('is-open', open);
+          const old = el.querySelector('.part3-fx-hl');
+          if (old) old.remove();
+          if (open && f && (f.panel || 0) === i) {
+            const hl = document.createElement('div');
+            hl.className = 'part3-fx-hl is-active';
+            Object.assign(hl.style, f.box);
+            hl.style.setProperty('--c', f.colour);
+            el.appendChild(hl);
+          }
+        });
+        indEl.textContent = `頁 ${pair + 1} / ${pairCount}`;
+        prevBtn.disabled = pair === 0;
+        nextBtn.disabled = pair >= pairCount - 1;
+        buildTags((ft) => pairOf(ft.panel || 0) === pair, true);
+      };
+
+      prevBtn.addEventListener('click', () => { if (pair > 0) { pair -= 1; render(); } });
+      nextBtn.addEventListener('click', () => { if (pair < pairCount - 1) { pair += 1; render(); } });
+
+      // 摺子寬度依可用寬度換算，確保展開的兩摺完整顯示且不變形
+      const sizeStrip = () => {
+        const pane = strip.parentElement;
+        const cs = window.getComputedStyle(pane);
+        const avail = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+        strip.style.setProperty('--fold-w', `${Math.max(avail, 240)}px`);
+      };
+      sizeStrip();
+      window.addEventListener('resize', sizeStrip);
+      if (typeof ResizeObserver === 'function') new ResizeObserver(sizeStrip).observe(strip.parentElement);
+    }
+
+    showFeature(0);
+  });
+};
+// 呼叫寫在 parseJsonScript 定義之後（見 initAgenticScene 下方），避免 TDZ 錯誤。
+
 const initPart3FlowNavigation = () => {
   document.querySelectorAll('[data-part3-flow-target]').forEach((button) => {
     button.addEventListener('click', () => {
@@ -1028,6 +1321,104 @@ const initAgenticScene = () => {
   });
 };
 initAgenticScene();
+
+// 版面特徵探索器：函式定義在上方，但要等 parseJsonScript 宣告後才能執行。
+initPart3FeatureExplorers();
+
+// Codex 視窗分成兩個階段：先逐步顯示工作／思考過程，完成後隱藏該過程，
+// 只保留安裝結果。離開可視範圍時取消本次播放，重新進入時從頭開始。
+const renderAgenticLines = (host, lines) => {
+  host.innerHTML = lines.map((line) => `<span class="line">${line}</span>`).join('');
+};
+
+const typeAgenticCodexPhases = (thinkingPhase, thinkingHost, resultPhase, resultHost, thinkingLines, resultLines, options = {}) => {
+  let cancelled = false;
+  const charDelay = Number(options.charDelay) || 12;
+  const lineDelay = Number(options.lineDelay) || 320;
+
+  const run = async () => {
+    thinkingPhase.hidden = false;
+    resultPhase.hidden = true;
+    thinkingHost.innerHTML = '';
+    resultHost.innerHTML = '';
+    for (let i = 0; i < thinkingLines.length; i += 1) {
+      if (cancelled) return;
+      await revealAgenticLine(thinkingHost, thinkingLines[i], charDelay);
+      if (cancelled) return;
+      if (i < thinkingLines.length - 1) await wait(lineDelay);
+    }
+    if (cancelled) return;
+    await wait(520);
+    if (cancelled) return;
+    thinkingPhase.hidden = true;
+    resultPhase.hidden = false;
+    renderAgenticLines(resultHost, resultLines);
+  };
+  run();
+
+  return () => { cancelled = true; };
+};
+
+const initAgenticCodexPhases = () => {
+  document.querySelectorAll('[data-agentic-codex-phases]').forEach((body) => {
+    const scene = body.closest('[data-agentic-scene]');
+    const thinkingPhase = body.querySelector('[data-agentic-codex-thinking]');
+    const thinkingHost = body.querySelector('[data-agentic-codex-thinking-sequence]');
+    const resultPhase = body.querySelector('[data-agentic-codex-result]');
+    const resultHost = body.querySelector('[data-agentic-codex-result-lines]');
+    if (!scene || !thinkingPhase || !thinkingHost || !resultPhase || !resultHost) return;
+    const thinkingLines = parseJsonScript(thinkingHost);
+    const resultLines = parseJsonScript(resultHost);
+    if (!thinkingLines.length || !resultLines.length) return;
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      thinkingPhase.hidden = true;
+      resultPhase.hidden = false;
+      renderAgenticLines(resultHost, resultLines);
+      return;
+    }
+
+    let cancel = null;
+    const start = () => {
+      if (cancel) return;
+      cancel = typeAgenticCodexPhases(thinkingPhase, thinkingHost, resultPhase, resultHost, thinkingLines, resultLines, {
+        charDelay: thinkingHost.dataset.agenticCodexCharDelay,
+        lineDelay: thinkingHost.dataset.agenticCodexLineDelay
+      });
+    };
+    const stop = () => {
+      if (!cancel) return;
+      cancel();
+      cancel = null;
+    };
+
+    if (typeof IntersectionObserver === 'function') {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => { entry.isIntersecting ? start() : stop(); });
+      }, { threshold: .1 }).observe(scene);
+    } else {
+      start();
+    }
+  });
+};
+initAgenticCodexPhases();
+
+// 運用 Agentic AI 使用 PaddleOCR：Codex 對話視窗與 PaddleOCR Python 視窗重疊排列，
+// 點擊任一視窗即可把該視窗切換到最上層。
+const initPart3AgenticOcrWindows = () => {
+  document.querySelectorAll('[data-agentic-window]').forEach((windowEl) => {
+    windowEl.addEventListener('click', () => {
+      const scene = windowEl.closest('.agentic-scene-paddleocr');
+      if (!scene) return;
+      const target = windowEl.dataset.agenticWindow;
+      scene.querySelectorAll('[data-agentic-window]').forEach((win) => {
+        win.style.zIndex = win.dataset.agenticWindow === target ? 3 : 2;
+        win.classList.toggle('is-agentic-front', win.dataset.agenticWindow === target);
+      });
+    });
+  });
+};
+initPart3AgenticOcrWindows();
 
 /* ---------------------------------------------------------------------------
    OCR 掃描動畫（「甚麼是 OCR？」）：兩份文書的頁面各自循環切換，

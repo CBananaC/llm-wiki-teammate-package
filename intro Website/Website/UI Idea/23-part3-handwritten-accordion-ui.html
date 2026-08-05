@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>8 辨識手寫字（風琴摺）— UI 草稿</title>
+<style>
+  :root{
+    --ink:#163d3f;
+    --ink-2:#12363a;
+    --yellow:#f3c967;
+    --rust:#c45d38;
+    --paper:#f4efe6;
+    --paper-deep:#e8dfd1;
+    --card:#fffaf2;
+    --line:rgba(22,61,63,.18);
+    --muted:#6d756f;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, "PingFang TC", sans-serif;
+    --serif: "Noto Serif TC", Georgia, serif;
+    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; padding:0 0 120px; background:var(--paper); color:var(--ink); font-family:var(--sans);}
+  .wrap{max-width:1560px; margin:0 auto; padding:0 clamp(20px,3vw,48px);}
+
+  /* ============ 6 parent ============ */
+  .stage-6{padding:clamp(48px,6vw,88px) 0 clamp(28px,3vw,44px);}
+  .sec-num{display:inline-flex; align-items:center; justify-content:center; width:44px;height:44px;background:var(--ink);color:var(--yellow);font:800 17px var(--sans); flex:none;}
+  .sec-head{display:flex; align-items:flex-start; gap:18px; margin-bottom:20px;}
+  .sec-head h1{margin:0; font:700 clamp(28px,3.4vw,46px)/1.25 var(--serif);}
+  .sec-lead{margin:0; max-width:92ch; font:400 clamp(16px,1.35vw,20px)/1.95 var(--serif); color:#31484a;}
+  .subrail{display:flex; margin:34px 0 0; border-top:1px solid var(--line); padding-top:22px;}
+  .subrail-label{flex:none; padding-right:26px; margin-right:26px; border-right:1px solid var(--line); display:flex; flex-direction:column; justify-content:center;}
+  .subrail-label b{font:800 11px var(--sans); letter-spacing:.16em; color:var(--muted);}
+  .subrail-label span{font:600 13px var(--sans); margin-top:5px;}
+  .subtabs{display:flex; gap:12px; flex:1; min-width:0;}
+  .subtab{flex:1 1 0; min-width:0; text-align:left; cursor:pointer; display:flex; align-items:center; gap:13px; padding:15px 18px; background:var(--card); border:1px solid var(--line); color:var(--ink); font-family:var(--sans); transition:.18s;}
+  .subtab .n{flex:none; width:27px;height:27px; border-radius:50%; display:flex; align-items:center; justify-content:center; background:var(--paper-deep); font:800 12px var(--sans);}
+  .subtab .t{font:700 14.5px var(--sans);}
+  .subtab .s{display:block; font:500 11.5px var(--sans); color:var(--muted); margin-top:3px;}
+  .subtab:hover{border-color:var(--yellow);}
+  .subtab.is-active{background:var(--ink); color:var(--paper); border-color:var(--ink);}
+  .subtab.is-active .n{background:var(--yellow); color:var(--ink-2);}
+  .subtab.is-active .s{color:rgba(244,239,230,.7);}
+
+  /* ============ 8 sub-section ============ */
+  .stage-8{padding:clamp(30px,3.5vw,52px) 0 0;}
+  .sub-head{display:flex; align-items:flex-start; gap:16px; margin-bottom:16px;}
+  .sub-num{display:inline-flex; align-items:center; justify-content:center; flex:none; width:34px;height:34px;border-radius:50%;background:var(--ink);color:var(--yellow);font:800 14px var(--sans);}
+  .sub-head h2{margin:0; font:700 clamp(22px,2.4vw,32px)/1.3 var(--serif);}
+  .sub-head .crumb{display:block; font:600 11px var(--sans); letter-spacing:.14em; color:var(--muted); margin-bottom:7px;}
+  .sub-lead{margin:0 0 clamp(26px,3vw,40px); max-width:92ch; font:400 clamp(15px,1.25vw,18.5px)/1.95 var(--serif); color:#31484a;}
+
+  .explorer{display:grid; grid-template-columns:50% 50%; border:1px solid var(--line); background:var(--card);}
+
+  /* ---------- left: 風琴摺 accordion ---------- */
+  /* white ground: the 奏摺 is warm cream/brown, so a warm beige backdrop
+     flattened it — plain white keeps the paper reading as the subject. */
+  .fold-pane{
+    position:relative; padding:clamp(22px,2.4vw,34px) clamp(28px,3vw,42px);
+    background:#fff; border-right:1px solid var(--line);
+    display:flex; flex-direction:column; align-items:center; gap:18px;
+  }
+  .fold-caption{
+    align-self:flex-start; font:600 11px var(--sans); letter-spacing:.13em; color:var(--muted);
+  }
+
+  /* the strip: one continuous folded sheet, unfolding right → left.
+     --fold-h drives everything; open folds keep the scan's true 1:3-page
+     proportion via aspect-ratio, so nothing is stretched. */
+  /* Height is derived from the available width so the two open folds always fit
+     whole: 2 folds ≈ 0.921 × height wide, plus the folded slivers' allowance.
+     --fold-w is measured from the pane in JS and updated on resize. */
+  .fold-strip{
+    --fold-slivers:70px;
+    --fold-h:min(
+      calc((var(--fold-w, 520px) - var(--fold-slivers)) / 0.921),
+      76vh
+    );
+    display:flex; flex-direction:row-reverse; align-items:stretch; justify-content:flex-start;
+    height:var(--fold-h); width:100%; margin:0 auto; overflow:hidden;
+    background:transparent; padding:0;
+    perspective:900px; perspective-origin:70% 50%;
+  }
+  .panel{
+    position:relative; flex:0 1 auto;
+    width:7px; min-width:2px; height:100%;
+    background-image:var(--src); background-size:300% 100%; background-position:var(--posx) 0;
+    background-repeat:no-repeat; cursor:pointer;
+    transition:width .55s cubic-bezier(.4,.85,.3,1), aspect-ratio .55s cubic-bezier(.4,.85,.3,1),
+               transform .55s cubic-bezier(.4,.85,.3,1), opacity .45s, filter .35s;
+    transform-style:preserve-3d;
+    opacity:.18; filter:brightness(.97) saturate(.7);
+  }
+  /* 風琴 concertina: folded panels alternate their tilt so the strip zigzags */
+  .panel:nth-child(odd){transform:rotateY(52deg);}
+  .panel:nth-child(even){transform:rotateY(-52deg);}
+  .panel::after{
+    content:""; position:absolute; inset:0; pointer-events:none;
+    background:linear-gradient(90deg, rgba(70,52,24,.26) 0%, rgba(255,250,240,.14) 50%, rgba(70,52,24,.26) 100%);
+    transition:opacity .45s; opacity:1;
+  }
+  .panel.is-open{
+    flex:0 0 auto;
+    width:auto; aspect-ratio:344 / 747;   /* one third of the ~1031×747 scan */
+    transform:rotateY(0deg) !important;
+    opacity:1; filter:none;
+  }
+  .panel.is-open::after{opacity:0;}
+  .panel-tip{display:none;}
+
+  /* highlight lives inside an opened panel */
+  .hl{
+    position:absolute; z-index:5; border:0; pointer-events:none;
+    background:var(--c, rgba(243,201,103,.3)); opacity:0; transition:opacity .25s;
+  }
+  .hl.is-active{opacity:.42;}
+
+  .fold-tags{position:relative; width:100%; display:flex; flex-wrap:wrap; gap:9px; justify-content:center;}
+  .hl-tag{
+    cursor:pointer; padding:8px 14px; border:0; border-radius:4px;
+    background:var(--c,#eee); color:#22403f; font:700 13.5px var(--sans);
+    transition:.16s; box-shadow:0 2px 7px rgba(22,61,63,.12);
+  }
+  .hl-tag:hover{filter:brightness(.95); opacity:1;}
+  .hl-tag.is-active{font-weight:800; opacity:1; filter:brightness(.94);}
+  .hl-tag.is-dim{opacity:.32;}
+  .hl-tag .pg{display:inline-block; margin-left:7px; padding:1px 5px; border-radius:2px; background:rgba(22,61,63,.16); font-size:11px; font-weight:700;}
+
+  .fold-nav{display:flex; align-items:center; gap:14px;}
+  .fold-nav button{cursor:pointer; padding:6px 13px; background:var(--card); border:1px solid var(--line); color:var(--ink); font:600 12px var(--sans);}
+  .fold-nav button:hover:not(:disabled){border-color:var(--ink); background:var(--paper);}
+  .fold-nav button:disabled{opacity:.38; cursor:default;}
+  .fold-nav .ind{font:600 12px var(--sans); color:var(--muted);}
+
+  /* ---------- right: same chain as 印刷字 ---------- */
+  .out-pane{padding:clamp(20px,2vw,28px); max-height:940px; overflow-y:auto;}
+  .out-pane::-webkit-scrollbar{width:8px;}
+  .out-pane::-webkit-scrollbar-thumb{background:rgba(22,61,63,.2); border-radius:4px;}
+  .flow-arrow{display:flex; align-items:center; justify-content:center; height:34px; color:var(--rust); font-size:19px; line-height:1;}
+  .feat-card{padding:17px 19px; background:var(--paper); border:1px solid var(--line);}
+  .feat-card .k{font:800 10.5px var(--sans); letter-spacing:.15em; color:var(--rust);}
+  .feat-card h3{margin:7px 0 8px; font:700 19px var(--serif);}
+  .feat-card p{margin:0; font:400 13.5px/1.85 var(--serif); color:#31484a;}
+
+  .win-chat{border:1px solid var(--line); border-radius:7px; overflow:hidden; background:var(--card);}
+  .win-chat .win-bar{background:#efe8dc; border-bottom:1px solid var(--line);}
+  .win-chat .win-bar .ttl{color:#5d564a; font:700 13px var(--sans);}
+  .chat-body{padding:14px 15px;}
+  .chat-input{border:1px solid rgba(22,61,63,.2); border-radius:16px; background:#fff; padding:14px 15px 11px; min-height:92px; display:flex; flex-direction:column; justify-content:space-between;}
+  .chat-text{font:400 13px/1.75 var(--sans); color:var(--ink); white-space:pre-wrap; word-break:break-word;}
+  .chat-row{display:flex; align-items:center; gap:14px; margin-top:14px;}
+  .chat-ic{width:19px;height:19px; flex:none; display:flex; align-items:center; justify-content:center; color:#8d8574; font-size:15px; line-height:1;}
+  .chat-ic svg{width:16px;height:16px;stroke:#8d8574;fill:none;stroke-width:1.5;}
+  .chat-model{margin-left:auto; display:flex; align-items:center; gap:5px; font:600 12px var(--sans); color:var(--ink);}
+  .chat-model .spin{width:11px;height:11px;border-radius:50%; flex:none; border:1.6px solid rgba(22,61,63,.25); border-top-color:var(--ink); animation:spin 1s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .chat-model .chev{color:#8d8574; font-size:10px;}
+  .chat-send{width:27px;height:27px;border-radius:50%; background:#d8d2c4; color:#3a4644; display:flex; align-items:center; justify-content:center; font-size:14px; flex:none;}
+  .chat-caret{display:inline-block;width:2px;height:1.05em;background:var(--ink);vertical-align:-.18em;animation:bl 1s step-end infinite;}
+
+  .win{border:1px solid rgba(255,255,255,.08); border-radius:7px; overflow:hidden; background:#1e1e1e;}
+  .win-bar{display:flex; align-items:center; gap:7px; padding:8px 11px; background:#2b2b2b; border-bottom:1px solid rgba(255,255,255,.06);}
+  .win-bar .dot{width:9px;height:9px;border-radius:50%;}
+  .dot.red{background:#ff5f57;} .dot.yellow{background:#febc2e;} .dot.green{background:#28c840;}
+  .win-bar .ttl{margin-left:8px; color:rgba(255,255,255,.72); font:700 13px var(--sans);}
+  .win-body{padding:12px 14px; font:11.5px/1.8 var(--mono); color:#d4d4d4; min-height:80px; max-height:186px; overflow:auto; white-space:pre-wrap; word-break:break-word;}
+  .win-body::-webkit-scrollbar{width:7px;}
+  .win-body::-webkit-scrollbar-thumb{background:rgba(255,255,255,.16); border-radius:4px;}
+  .caret{display:inline-block;width:6px;height:1em;background:#d4d4d4;vertical-align:-.14em;animation:bl 1s step-end infinite;}
+  @keyframes bl{0%,100%{opacity:1}50%{opacity:0}}
+  .kw{color:#c586c0;} .fn{color:#dcdcaa;} .str{color:#ce9178;} .num{color:#b5cea8;} .cmt{color:#6a9955;}
+  .jkey{color:#9cdcfe;} .jstr{color:#ce9178;} .jnum{color:#b5cea8;} .jpunc{color:#d4d4d4;}
+
+  @media (max-width:1040px){
+    .explorer{grid-template-columns:1fr;}
+    .fold-pane{border-right:none; border-bottom:1px solid var(--line);}
+    .out-pane{max-height:none;}
+    .subtabs{flex-direction:column;}
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <section class="stage-6">
+    <div class="sec-head"><span class="sec-num">6</span><h1>檢視史料的版面及格式</h1></div>
+    <p class="sec-lead">研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。掌握這些特徵後，才能在指示 Agentic AI 撰寫 OCR 程式時準確描述版面規則，讓輸出的結構化資料保留原有的文書結構。</p>
+    <div class="subrail">
+      <div class="subrail-label"><b>本節包含</b><span>兩種字體的處理方式</span></div>
+      <div class="subtabs">
+        <button class="subtab" type="button"><span class="n">7</span><span><span class="t">辨識印刷字</span><span class="s">版面規則、字形統一，辨識難度較低</span></span></button>
+        <button class="subtab is-active" type="button"><span class="n">8</span><span><span class="t">辨識手寫字</span><span class="s">直排、抬頭、硃批等特殊格式</span></span></button>
+      </div>
+    </div>
+  </section>
+
+  <section class="stage-8">
+    <div class="sub-head">
+      <span class="sub-num">8</span>
+      <div><span class="crumb">6 檢視史料的版面及格式 ／ 子項二</span><h2>辨識手寫字</h2></div>
+    </div>
+    <p class="sub-lead">和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。一般而言，楷書較容易辨識；草書因連筆及字形變化較大，辨識準確率較低。此外，手寫奏摺並非一頁一頁的書冊，而是可以摺疊展開的長幅文書，版面採直排、由右至左閱讀，並包含抬頭、臣字款、硃批與印章等特殊格式。點擊下方標籤，可查看每項特徵如何影響指示、程式碼與輸出結果。</p>
+
+    <div class="explorer">
+      <!-- ---------- left: accordion ---------- -->
+      <div class="fold-pane">
+        <span class="fold-caption">原件為摺疊長幅，由右至左展開 · 每次展開兩摺</span>
+        <div class="fold-strip" id="strip"></div>
+        <div class="fold-nav">
+          <button type="button" id="prevBtn">← 向右收摺</button>
+          <span class="ind" id="foldInd">第 1–2 摺 / 共 9 摺</span>
+          <button type="button" id="nextBtn">向左展開 →</button>
+        </div>
+        <div class="fold-tags" id="tagLayer"></div>
+      </div>
+
+      <!-- ---------- right ---------- -->
+      <div class="out-pane">
+        <div class="chain">
+          <div class="feat-card">
+            <span class="k">版面特徵</span>
+            <h3 id="fTitle"></h3>
+            <p id="fDesc"></p>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+          <div class="win-chat">
+            <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">AI Prompt</span></div>
+            <div class="chat-body">
+              <div class="chat-input">
+                <div class="chat-text" id="promptBody"></div>
+                <div class="chat-row">
+                  <span class="chat-ic">+</span>
+                  <span class="chat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 10h.01M15 10h.01M9 15c1.5 1 4.5 1 6 0"/></svg></span>
+                  <span class="chat-model"><span class="spin"></span>5.6<span class="chev">▾</span></span>
+                  <span class="chat-ic" aria-hidden="true"><svg viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg></span>
+                  <span class="chat-send">↑</span>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+          <div class="win">
+            <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">AI 生成的 Python 代碼</span></div>
+            <div class="win-body" id="pyBody"></div>
+          </div>
+          <div class="flow-arrow" aria-hidden="true">↓</div>
+          <div class="win">
+            <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">OCR 的輸出結果</span></div>
+            <div class="win-body" id="jsonBody"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+
+<script>
+(() => {
+  /* three scanned sheets, each physically divided into 3 folds of equal width.
+     Reading order is right → left, so fold 1 is the rightmost third of sheet 1. */
+  const SHEETS = [
+    '../storymap/ocr-zhu25-handwritten-1.png',
+    '../storymap/ocr-zhu25-handwritten-2.png',
+    '../storymap/ocr-zhu25-handwritten-3.png',
+    '../storymap/ocr-zhu25-handwritten-4.png'
+  ];
+  const PANELS = [];
+  SHEETS.forEach((src, s) => {
+    [2,1,0].forEach(part => {            // rightmost third first
+      PANELS.push({ src, part, sheet:s, label:`第 ${PANELS.length+1} 摺` });
+    });
+  });
+
+  const FEATURES = {
+    vertical: {
+      panel:0, colour:'#cfe3d4',
+      box:{left:'0%',top:'0%',width:'100%',height:'100%'},
+      title:'直排、由右至左',
+      desc:'手寫奏摺採直排書寫，並由右至左閱讀，與印刷書冊的閱讀方向相反。若不指明方向，OCR 會依預設由左至右輸出，導致整篇文字順序顛倒。',
+      prompt:'這份手寫奏摺是直排書寫、由右至左閱讀。\n請依「由上至下、由右至左」的順序輸出文字，\n不要使用預設的橫排左至右順序。',
+      py:[['cmt','# 直排、由右至左：指定文字方向與排序規則'],['plain','\nboxes = '],['fn','sorted'],['plain','('],['plain','\n    result.boxes,'],['plain','\n    key='],['kw','lambda'],['plain',' b: (-b.x_center, b.y_top),'],['cmt','  # x 由大到小 = 由右至左'],['plain','\n)']],
+      json:[['jpunc','{'],['jkey','\n  "text_direction"'],['jpunc',': '],['jstr','"vertical_rtl"'],['jpunc',','],['jkey','\n  "column_count"'],['jpunc',': '],['jnum','9'],['jpunc','\n}']]
+    },
+    opening: {
+      panel:0, colour:'#cfe0ef',
+      box:{left:'52%',top:'4%',width:'22%',height:'26%'},
+      title:'首行「奏為奏聞事」',
+      desc:'首摺右方的「奏」字與起首套語「奏為奏聞事」標示文書類型與事由，屬於程式化的公文格式，應抽出為獨立欄位而非併入正文。',
+      prompt:'首摺開頭的「奏」字與「奏為奏聞事」是公文套語，\n請抽出為 doc_type 與 subject 兩個欄位，\n不要混入正文 body。',
+      py:[['cmt','# 起首套語：判斷文書類型與事由'],['plain','\n'],['kw','if'],['plain',' first_line.'],['fn','startswith'],['plain','('],['str','"奏"'],['plain','):'],['plain','\n    doc['],['str','"doc_type"'],['plain','] = '],['str','"上奏"'],['plain','\n    doc['],['str','"subject"'],['plain','] = '],['fn','extract_subject'],['plain','(first_line)']],
+      json:[['jpunc','{'],['jkey','\n  "doc_type"'],['jpunc',': '],['jstr','"上奏"'],['jpunc',','],['jkey','\n  "subject"'],['jpunc',': '],['jstr','"奏為奏聞事"'],['jpunc','\n}']]
+    },
+    minister: {
+      panel:0, colour:'#f0d6d0',
+      box:{left:'60%',top:'46%',width:'11%',height:'50%'},
+      title:'臣字款（小字自稱）',
+      desc:'官員自稱「奴才」或「臣」時以小字偏右書寫，字級明顯小於正文。OCR 若不加區分，會把這些小字誤判為正文的一部分或漏字。',
+      prompt:'官員自稱的「奴才」「臣」以小字書寫，字級比正文小。\n請依字高把小字款識與正文分開，存入 self_reference 欄位，\n並在正文中保留原有位置。',
+      py:[['cmt','# 依字高分辨臣字款小字'],['plain','\nheights = [b.height '],['kw','for'],['plain',' b '],['kw','in'],['plain',' boxes]'],['plain','\nmed = '],['fn','statistics'],['plain','.'],['fn','median'],['plain','(heights)'],['plain','\nsmall = [b.text '],['kw','for'],['plain',' b '],['kw','in'],['plain',' boxes '],['kw','if'],['plain',' b.height < med * '],['num','0.7'],['plain',']']],
+      json:[['jpunc','{'],['jkey','\n  "self_reference"'],['jpunc',': '],['jstr','"奴才"'],['jpunc',','],['jkey','\n  "style"'],['jpunc',': '],['jstr','"small_inline"'],['jpunc','\n}']]
+    },
+    respect: {
+      panel:3, colour:'#f5e6bd',
+      box:{left:'10%',top:'0%',width:'80%',height:'16%'},
+      title:'抬頭（敬書格式）',
+      desc:'涉及皇帝時另起一行並提高書寫位置，稱為抬頭。這種格式會把同一句話拆成兩行，OCR 需要把因抬頭而分隔的文字重新合併，否則語句會斷裂。',
+      prompt:'凡涉及皇帝的詞語會另起一行並抬高書寫（抬頭）。\n請把因抬頭而被分隔的句子重新合併為完整句子，\n並在 honorific_breaks 記錄原本的斷行位置。',
+      py:[['cmt','# 合併因抬頭而斷開的行'],['plain','\nmerged, breaks = [], []'],['plain','\n'],['kw','for'],['plain',' i, col '],['kw','in'],['plain',' '],['fn','enumerate'],['plain','(columns):'],['plain','\n    '],['kw','if'],['plain',' col.top < page_top + '],['num','20'],['plain',':'],['cmt','  # 位置抬高 = 抬頭'],['plain','\n        breaks.'],['fn','append'],['plain','(i)'],['plain','\n        merged[-'],['num','1'],['plain','] += col.text'],['plain','\n    '],['kw','else'],['plain',':'],['plain','\n        merged.'],['fn','append'],['plain','(col.text)']],
+      json:[['jpunc','{'],['jkey','\n  "honorific_breaks"'],['jpunc',': ['],['jnum','3'],['jpunc',', '],['jnum','11'],['jpunc','],'],['jkey','\n  "merged_sentences"'],['jpunc',': '],['jnum','2'],['jpunc','\n}']]
+    },
+    seal: {
+      panel:4, colour:'#ddd6ea',
+      box:{left:'22%',top:'34%',width:'46%',height:'22%'},
+      title:'印章與騎縫',
+      desc:'奏摺上蓋有官印，並常見跨摺縫的騎縫印。印章為圖像而非文字，OCR 容易將其筆畫誤判為字元，需要指明略過並單獨標記位置。',
+      prompt:'文書上有官印與騎縫印，屬於圖像不是文字。\n請不要把印章內的筆畫辨識為文字，\n改以 seals 欄位記錄印章出現的摺號與位置。',
+      py:[['cmt','# 印章區域：以顏色與形狀偵測，排除於文字辨識之外'],['plain','\nseals = '],['fn','detect_seals'],['plain','(image, hue_range=('],['num','345'],['plain',', '],['num','15'],['plain','))'],['plain','\n'],['kw','for'],['plain',' s '],['kw','in'],['plain',' seals:'],['plain','\n    mask.'],['fn','fill'],['plain','(s.bbox)'],['cmt','  # 遮蔽後再送入 OCR']],
+      json:[['jpunc','{'],['jkey','\n  "seals"'],['jpunc',': [{'],['jkey','"fold"'],['jpunc',': '],['jnum','5'],['jpunc',', '],['jkey','"type"'],['jpunc',': '],['jstr','"騎縫印"'],['jpunc','}],'],['jkey','\n  "excluded_from_text"'],['jpunc',': '],['jstr','"true"'],['jpunc','\n}']]
+    },
+    rescript: {
+      panel:7, colour:'#f3ddc4',
+      box:{left:'8%',top:'8%',width:'34%',height:'70%'},
+      title:'硃批（草書）',
+      desc:'文末的硃批以紅筆草書書寫，連筆多、字形變化大，辨識準確率低。建議不強行辨識，改以顏色偵測標記其位置，留待人工判讀。',
+      prompt:'文末有以紅筆草書書寫的硃批，字形難以準確辨識。\n請依紅色筆跡標出硃批範圍，存入 rescript 欄位，\n並把 text 留空、標記 needs_manual_reading 為 true。',
+      py:[['cmt','# 硃批：以紅色筆跡定位，不強行辨識草書'],['plain','\nred = '],['fn','detect_red_ink'],['plain','(image)'],['plain','\ndoc['],['str','"rescript"'],['plain','] = {'],['plain','\n    '],['str','"bbox"'],['plain',': red.bbox,'],['plain','\n    '],['str','"text"'],['plain',': '],['str','""'],['plain',','],['plain','\n    '],['str','"needs_manual_reading"'],['plain',': '],['kw','True'],['plain',','],['plain','\n}']],
+      json:[['jpunc','{'],['jkey','\n  "rescript"'],['jpunc',': {'],['jkey','\n    "text"'],['jpunc',': '],['jstr','""'],['jpunc',','],['jkey','\n    "script"'],['jpunc',': '],['jstr','"cursive"'],['jpunc',','],['jkey','\n    "needs_manual_reading"'],['jpunc',': '],['jstr','"true"'],['jpunc','\n  }\n}']]
+    },
+    crease: {
+      panel:2, colour:'#e3dcc9',
+      box:{left:'0%',top:'0%',width:'6%',height:'100%'},
+      title:'摺縫',
+      desc:'摺縫是文書實體摺疊留下的痕跡，掃描後會呈現為一條縱向陰影線。它不是版面分欄，若被當成欄界，正文會被錯誤切割。',
+      prompt:'畫面中的縱向陰影是摺縫，不是欄界或分隔線。\n請不要依摺縫切分文字區塊，\n並在 folds 欄位記錄摺縫的位置。',
+      py:[['cmt','# 摺縫僅記錄位置，不作為分欄依據'],['plain','\nfolds = '],['fn','detect_fold_lines'],['plain','(image)'],['plain','\nocr = '],['fn','PaddleOCR'],['plain','(use_doc_unwarping='],['kw','False'],['plain',')'],['cmt','  # 保留摺痕，不做展平校正']],
+      json:[['jpunc','{'],['jkey','\n  "folds"'],['jpunc',': ['],['jnum','1'],['jpunc',', '],['jnum','2'],['jpunc',', '],['jnum','3'],['jpunc','],'],['jkey','\n  "used_as_column_break"'],['jpunc',': '],['jstr','"false"'],['jpunc','\n}']]
+    }
+  };
+
+  const KEYS = Object.keys(FEATURES);
+  /* folds open in fixed, non-overlapping pairs — (1,2)(3,4)(5,6)… — so the
+     document is read two folds at a time, never straddling a pair boundary. */
+  const PAIRS = Math.ceil(PANELS.length / 2);
+  let pair = 0;                     // which pair is unfolded
+  let curFeat = 'vertical';
+  const pairOf = i => Math.floor(i / 2);
+  const startOf = p => p * 2;
+
+  /* ---------- typing ---------- */
+  const timers = [];
+  const clearTimers = () => { while(timers.length) clearTimeout(timers.pop()); };
+  const esc = s => s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  function typePlain(host, text, speed, caretCls, chunk){
+    let i = 0; const per = chunk || 2;
+    const tick = () => {
+      i = Math.min(i + per, text.length);
+      host.innerHTML = esc(text.slice(0,i)) + `<span class="${caretCls||'caret'}"></span>`;
+      if (i < text.length) timers.push(setTimeout(tick, speed)); else host.innerHTML = esc(text);
+    };
+    tick();
+  }
+  function typeSegs(host, segs, speed, chunk){
+    const total = segs.reduce((n,[,t]) => n + t.length, 0); const per = chunk || 3;
+    let shown = 0;
+    const render = n => {
+      let out = '', left = n;
+      for (const [cls, txt] of segs){
+        if (left <= 0) break;
+        const take = txt.slice(0, left);
+        out += cls === 'plain' ? esc(take) : `<span class="${cls}">${esc(take)}</span>`;
+        left -= take.length;
+      }
+      return out;
+    };
+    const tick = () => {
+      shown = Math.min(shown + per, total);
+      host.innerHTML = render(shown) + '<span class="caret"></span>';
+      if (shown < total) timers.push(setTimeout(tick, speed)); else host.innerHTML = render(total);
+    };
+    tick();
+  }
+
+  /* ---------- build strip ---------- */
+  const strip = document.getElementById('strip');
+  const tagLayer = document.getElementById('tagLayer');
+  const foldInd = document.getElementById('foldInd');
+  const prevBtn = document.getElementById('prevBtn');
+  const nextBtn = document.getElementById('nextBtn');
+
+  PANELS.forEach((p, i) => {
+    const d = document.createElement('div');
+    d.className = 'panel';
+    d.dataset.i = i;
+    d.style.setProperty('--src', `url("${p.src}")`);
+    d.style.setProperty('--posx', `${p.part * 50}%`);
+    d.title = p.label;
+    d.addEventListener('click', () => { pair = pairOf(i); draw(); });
+    strip.appendChild(d);
+  });
+
+  function draw(){
+    const start = startOf(pair);
+    [...strip.children].forEach((el, i) => {
+      const open = i === start || i === start + 1;
+      el.classList.toggle('is-open', open);
+      // highlight sits inside its own fold, only when that fold is open
+      const old = el.querySelector('.hl');
+      if (old) old.remove();
+      const f = FEATURES[curFeat];
+      if (open && f && f.panel === i){
+        const h = document.createElement('div');
+        h.className = 'hl is-active';
+        h.style.cssText = `left:${f.box.left};top:${f.box.top};width:${f.box.width};height:${f.box.height};--c:${f.colour};`;
+        el.appendChild(h);
+      }
+    });
+    foldInd.textContent = `第 ${start+1}–${Math.min(start+2, PANELS.length)} 摺 / 共 ${PANELS.length} 摺（第 ${pair+1} / ${PAIRS} 組）`;
+    prevBtn.disabled = pair === 0;
+    nextBtn.disabled = pair >= PAIRS - 1;
+
+    tagLayer.innerHTML = '';
+    KEYS.forEach(k => {
+      const f = FEATURES[k];
+      const t = document.createElement('div');
+      t.className = 'hl-tag' + (k === curFeat ? ' is-active' : ' is-dim');
+      t.style.cssText = `--c:${f.colour};`;
+      const onScreen = pairOf(f.panel) === pair;
+      t.innerHTML = esc(f.title.split('（')[0]) + (onScreen ? '' : `<span class="pg">第 ${f.panel+1} 摺</span>`);
+      t.addEventListener('click', () => select(k));
+      tagLayer.appendChild(t);
+    });
+  }
+
+  function select(key){
+    const f = FEATURES[key];
+    if (!f) return;
+    curFeat = key;
+    // unfold to the pair containing this feature
+    pair = pairOf(f.panel);
+    draw();
+
+    clearTimers();
+    document.getElementById('fTitle').textContent = f.title;
+    document.getElementById('fDesc').textContent = f.desc;
+    const pb = document.getElementById('promptBody');
+    const py = document.getElementById('pyBody');
+    const js = document.getElementById('jsonBody');
+    pb.innerHTML = ''; py.innerHTML = ''; js.innerHTML = '';
+    typePlain(pb, f.prompt, 18, 'chat-caret', 2);
+    typeSegs(py, f.py, 14, 4);
+    typeSegs(js, f.json, 14, 4);
+  }
+
+  /* keep the 奏摺 sized to the pane: feed the measured width into --fold-w so
+     both open folds always render whole, at the largest size that fits. */
+  const sizeStrip = () => {
+    const pane = strip.parentElement;
+    const cs = getComputedStyle(pane);
+    const avail = pane.clientWidth - parseFloat(cs.paddingLeft) - parseFloat(cs.paddingRight);
+    strip.style.setProperty('--fold-w', `${Math.max(avail, 240)}px`);
+  };
+  sizeStrip();
+  window.addEventListener('resize', sizeStrip);
+  if (typeof ResizeObserver === 'function') new ResizeObserver(sizeStrip).observe(strip.parentElement);
+
+  prevBtn.addEventListener('click', () => { if (pair > 0){ pair--; draw(); } });
+  nextBtn.addEventListener('click', () => { if (pair < PAIRS-1){ pair++; draw(); } });
+
+  document.querySelectorAll('.subtab').forEach(tab => {
+    tab.addEventListener('click', () => {
+      document.querySelectorAll('.subtab').forEach(t => t.classList.toggle('is-active', t === tab));
+    });
+  });
+
+  select('vertical');
+})();
+</script>
+</body>
+</html>

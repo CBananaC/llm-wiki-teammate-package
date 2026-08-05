@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260804-tools-row-height-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260804-tools-row-height-01">
+  <link rel="stylesheet" href="storymap.css?v=20260804-part3-format-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260804-part3-format-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260804-part3-navigation-01" defer></script>
+  <script src="storymap.js?v=20260804-part3-format-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1178,7 +1178,87 @@
 
           <section class="story surface-c" id="part-3-agentic-ocr" data-tab="part-3" data-nav="#part-3-agentic-ocr">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">4</span><h2>運用 Agentic AI 使用 PaddleOCR</h2></div><div class="body"><p>PaddleOCR 通常透過 Python API 在本機安裝及運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p></div></article>
+              <div class="lay-split text-left" style="--vis-w: 56%;">
+                <div class="lay-copy">
+                  <article class="copybox blk" id="part-3-agentic-ocr-card">
+                    <div class="title-row"><span class="option-number">4</span><h2>運用 Agentic AI 使用 PaddleOCR</h2></div>
+                    <div class="body"><p>PaddleOCR 通常透過 Python在本機安裝和運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p></div>
+                  </article>
+                </div>
+                <div class="lay-visual">
+                  <!-- Agentic AI × PaddleOCR 示範動畫：淺色 Codex 對話視窗（使用者指令＋AI
+                       思考過程＋安裝完成摘要）與深色 PaddleOCR Python 視窗重疊排列，點擊
+                       任一視窗標題列可切換上下層。逐字播放沿用 storymap.js 既有的
+                       typeAgenticSequence／initAgenticScene() 與 Codex 兩階段播放，內容陣列見下方 JSON 區塊。
+                       視窗尺寸與位置在 storymap-cards.css 的 #part-3-agentic-ocr-chart 區塊調整。 -->
+                  <div class="part3-agentic-ocr-frame visual-frame" id="part-3-agentic-ocr-chart" role="group" aria-label="運用 Agentic AI 使用 PaddleOCR 示範動畫">
+                    <div class="agentic-scene agentic-scene-paddleocr" data-agentic-scene aria-hidden="true">
+                      <div class="agentic-mac-window agentic-window-pyocr" data-agentic-window="pyocr">
+                        <div class="agentic-mac-titlebar" data-agentic-bring-front="pyocr"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">PaddleOCR Python</span></div>
+                        <div class="agentic-window-body agentic-code" data-agentic-sequence>
+                          <script type="application/json" data-agentic-lines>
+                            [
+                              "<span class=\"kw\">from</span> paddleocr <span class=\"kw\">import</span> PaddleOCR",
+                              "ocr = <span class=\"fn\">PaddleOCR</span>(",
+                              "    lang=<span class=\"str\">\"chinese_cht\"</span>,",
+                              "    device=<span class=\"str\">\"cpu\"</span>,",
+                              "    use_doc_orientation_classify=<span class=\"kw\">False</span>,",
+                              "    use_doc_unwarping=<span class=\"kw\">False</span>,",
+                              "    use_textline_orientation=<span class=\"kw\">False</span>,",
+                              ")",
+                              "<span class=\"kw\">for</span> result <span class=\"kw\">in</span> ocr.<span class=\"fn\">predict</span>(<span class=\"str\">\"/path/to/image.png\"</span>):",
+                              "    result.<span class=\"fn\">print</span>()",
+                              "    result.<span class=\"fn\">save_to_json</span>(<span class=\"str\">\"/Users/creamybanana/Downloads/PaddleOCR-output\"</span>)",
+                              "    result.<span class=\"fn\">save_to_img</span>(<span class=\"str\">\"/Users/creamybanana/Downloads/PaddleOCR-output\"</span>)",
+                              "    data = result.json",
+                              "    <span class=\"kw\">for</span> text, score <span class=\"kw\">in</span> <span class=\"fn\">zip</span>(data[<span class=\"str\">\"rec_texts\"</span>], data[<span class=\"str\">\"rec_scores\"</span>]):",
+                              "        <span class=\"fn\">print</span>(f<span class=\"str\">\"{score:.3f}\\t{text}\"</span>)",
+                              "<span class=\"ok\">✓ OCR complete — JSON and annotated image saved</span>"
+                            ]
+                          </script>
+                        </div>
+                      </div>
+                      <div class="agentic-mac-window agentic-window-codex is-agentic-front" data-agentic-window="codex">
+                        <div class="agentic-mac-titlebar" data-agentic-bring-front="codex"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Codex</span></div>
+                        <div class="agentic-codex-user-row"><div class="agentic-codex-user-bubble">set up PaddleOCR on my mac, and use it to OCR '/Users/mymac/Downloads/Text/奏摺1.pdf'</div></div>
+                        <div class="agentic-window-body agentic-prose agentic-codex-body" data-agentic-codex-phases>
+                          <div class="agentic-codex-phase agentic-codex-thinking" data-agentic-codex-thinking>
+                            <div class="agentic-codex-status">Working…</div>
+                            <div class="agentic-codex-thinking-sequence" data-agentic-codex-thinking-sequence data-agentic-codex-char-delay="12" data-agentic-codex-line-delay="320">
+                              <script type="application/json" data-agentic-lines>
+                                [
+                                  "I’ll set up PaddleOCR in an isolated macOS virtual environment, run a first OCR test, and cover common Apple Silicon, Intel, and PDF/image issues. I’m checking the latest installation guide first since compatibility changes frequently.",
+                                  "<span class=\"meta-line\"><span class=\"ic\">⊙</span>Ran commands, searched the web</span>",
+                                  "I confirmed your Mac is Apple Silicon with Python 3.14 by default and Python 3.13 installed. Since PaddlePaddle supports Python 3.13, we’ll use that.",
+                                  "<span class=\"meta-line\"><span class=\"ic\">⊙</span>Read files, ran commands, searched the web</span>",
+                                  "I created an isolated virtual environment at ~/.venvs/paddleocr to keep it separate from your project and Python 3.14. I’m now installing PaddlePaddle and PaddleOCR.",
+                                  "<span class=\"meta-line\"><span class=\"ic\">⊙</span>Ran command</span>",
+                                  "Installation completed successfully (paddlepaddle 3.3.1, paddleocr 3.7.0). Next, I’m verifying the installation and running a quick OCR test, which will download the required models on first use."
+                                ]
+                              </script>
+                            </div>
+                          </div>
+                          <div class="agentic-codex-phase agentic-codex-result" data-agentic-codex-result hidden>
+                            <div class="agentic-codex-result-lines" data-agentic-codex-result-lines>
+                              <script type="application/json" data-agentic-lines>
+                                [
+                                  "<span class=\"agentic-codex-worked\">Worked for 5m 44s</span>",
+                                  "<span class=\"final-lead\">PaddleOCR is now installed and verified on your Apple Silicon Mac.</span>",
+                                  "<span class=\"final-label\">Installed:</span>",
+                                  "<span class=\"final-item\">PaddlePaddle <code>3.3.1</code></span>",
+                                  "<span class=\"final-item\">PaddleOCR <code>3.7.0</code></span>",
+                                  "<span class=\"final-item\">Python <code>3.13</code></span>",
+                                  "<span class=\"final-note\">Activate it whenever you want to use OCR.</span>"
+                                ]
+                              </script>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -1210,45 +1290,258 @@
             </div>
           </section>
 
-          <section class="story surface-b" id="part-3-code" data-tab="part-3" data-nav="#part-3-code">
-            <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">6</span><h2>執行 OCR 的Python 代碼</h2></div><div class="body"><p>要運行 PaddleOCR，研究者需要指示 Agentic AI撰寫執行 OCR 的 Python 代碼，指定需要辨識的影像檔案，設定辨識方式、輸出格式和儲存位置。但在此之前，研究者首先檢視史料的版面及格式，從而決定 OCR 的方式。</p></div></article>
-            </div>
-          </section>
-
           <section class="story surface-c" id="part-3-format" data-tab="part-3" data-nav="#part-3-format">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">7</span><h2>檢視史料的版面及格式</h2></div><div class="body"><p>研究者需要留意史料的字體（印刷或手寫）、字體的清晰度、文字方向（橫排或直排），以及文書的結構，例如標題、正文、批註、硃批和頁碼等。</p></div></article>
+              <div class="lay-stack">
+                <article class="blk" id="part-3-format-card">
+                  <div class="title-row"><span class="option-number">6</span><h2>檢視史料的版面及格式</h2></div>
+                  <div class="body">
+                    <p>要使用 PaddleOCR，研究者首先需要檢視史料的版面及格式，以便要求 Agentic AI 撰寫合適的 Python OCR 規則。</p>
+                    <p>研究者需要留意字體類型（印刷或手寫）、字體清晰度、文字方向（橫排或直排），以及文書結構，如標題、正文、批註、硃批和頁碼等。</p>
+                  </div>
+                </article>
+              </div>
             </div>
           </section>
 
+          <!-- 7 辨識印刷字：標題與說明佔滿版寬（不放在卡片框內），
+               下方為互動視覺元素：左半為書冊頁面（可翻頁），右半為該項版面特徵
+               對應的 AI 指示、Python 代碼與 JSON 輸出。資料見 data-part3-feature-data。 -->
           <section class="story surface-c" id="part-3-printed" data-tab="part-3" data-nav="#part-3-printed">
             <div class="story-inner">
-              <div class="lay-split text-left" style="--vis-w: 56%;">
-                <div class="lay-copy">
-                  <article class="copybox blk" id="part-3-printed-card">
-                    <div class="title-row"><span class="option-number">8</span><h2>辨識印刷字</h2></div>
-                    <div class="body"><p>印刷字的字形統一，字距與行距相對規則，因此一般較容易進行 OCR 辨識。然而，研究者仍需先檢視史料的版面及格式。</p></div>
-                  </article>
-                </div>
-                <div class="lay-visual">
-                  <div class="part3-chart-frame visual-frame" id="part-3-printed-chart" role="group" aria-label="辨識印刷字">
-                    <div class="part3-chart-labels">
-                      <button type="button" class="part3-chart-label is-active" data-part3-chart-toggle="print-title" aria-pressed="true">標題</button>
-                      <button type="button" class="part3-chart-label" data-part3-chart-toggle="print-date" aria-pressed="false">日期</button>
-                      <button type="button" class="part3-chart-label" data-part3-chart-toggle="print-source" aria-pressed="false">史料來源</button>
-                      <button type="button" class="part3-chart-label" data-part3-chart-toggle="print-body" aria-pressed="false">正文</button>
-                    </div>
-                    <p class="part3-chart-copy">以圖 1 為例，此史料採用橫排單欄的印刷版面，頁面結構由標題、日期、史料來源及正文組成，研究者因此需要指示agentic ai 在 Python 程式中特別注明相應的版面結構，以便保留原有的版面。此外，圖中的標題符號較為模糊，可能影響準確率，因此 OCR 完成後，需要利用 AI 或人工進行校對，以減少錯誤。</p>
+              <div class="lay-stack">
+                <article class="blk" id="part-3-printed-card">
+                  <div class="title-row"><span class="option-number">7</span><h2>辨識印刷字</h2></div>
+                  <div class="body">
+                    <p>印刷字的字形較為統一，因此較容易進行 OCR。然而，研究者仍需檢視史料的版面和格式，確認需要保留的結構，再要求 Agentic AI 撰寫相應的 Python OCR 規則。</p>
                   </div>
+                </article>
+
+                <div class="part3-feature-explorer" id="part-3-printed-explorer" data-part3-explorer="printed">
+                  <div class="part3-fx-doc part3-fx-doc-pages">
+                    <div class="part3-fx-pagestack">
+                      <div class="part3-fx-page">
+                        <img data-part3-fx-img src="ocr-zhu25-printed-1.png" alt="印刷本奏摺頁面" loading="lazy" decoding="async">
+                        <div data-part3-fx-hl></div>
+                      </div>
+                      <div data-part3-fx-tags></div>
+                    </div>
+                    <div class="part3-fx-nav">
+                      <button type="button" data-part3-fx-prev aria-label="上一頁">←</button>
+                      <span class="part3-fx-ind" data-part3-fx-ind></span>
+                      <button type="button" data-part3-fx-next aria-label="下一頁">→</button>
+                    </div>
+                  </div>
+                  <div class="part3-fx-out" data-part3-fx-out></div>
+
+                  <script type="application/json" data-part3-feature-data>
+                  {
+                    "pages": ["ocr-zhu25-printed-1.png", "ocr-zhu25-printed-2.png"],
+                    "features": [
+                      {
+                        "key": "layout", "page": 0, "colour": "#cfe3d4",
+                        "box": {"left":"4%","top":"10%","width":"66%","height":"86%"},
+                        "tag": {"left":"-124px","top":"30%"},
+                        "title": "橫排單欄",
+                        "desc": "此史料採用單欄印刷版面，全頁只有一個文字區塊，沒有分欄或跨欄的圖表。辨識時需要說明閱讀順序，避免 OCR 把同一段文字拆成多欄。",
+                        "prompt": "這份 PDF 是單欄印刷版面，全頁只有一個文字區塊。\n請在 OCR 時保持單欄閱讀順序，不要自動分欄，\n也不要把換行誤判成新的段落。",
+                        "py": "<span class=\"cmt\"># 單欄版面：關閉版面分欄，保留原有閱讀順序</span>\nocr = <span class=\"fn\">PaddleOCR</span>(\n    lang=<span class=\"str\">\"chinese_cht\"</span>,\n    use_doc_unwarping=<span class=\"kw\">False</span>,\n    use_textline_orientation=<span class=\"kw\">False</span>,\n)",
+                        "json": "{\n  <span class=\"jkey\">\"layout\"</span>: <span class=\"jstr\">\"single_column\"</span>,\n  <span class=\"jkey\">\"reading_order\"</span>: <span class=\"jstr\">\"top_to_bottom\"</span>,\n  <span class=\"jkey\">\"text_blocks\"</span>: <span class=\"jnum\">1</span>\n}"
+                      },
+                      {
+                        "key": "mark", "page": 0, "colour": "#f0d6d0",
+                        "box": {"left":"77.5%","top":"6.5%","width":"9%","height":"3.2%"},
+                        "tag": {"left":"-124px","top":"5%"},
+                        "title": "標題符號",
+                        "desc": "標題上方的實心符號屬於版面裝飾，並非文字內容。這類符號常被 OCR 誤判為文字或標點，需要明確要求略過，並在完成後人工或以 AI 校對。",
+                        "prompt": "標題上方的黑色實心符號是版面裝飾，不是文字。\n請在輸出時略過這個符號，不要當成標點或文字，\n並在 notes 欄標記此處需要人工校對。",
+                        "py": "<span class=\"cmt\"># 過濾版面裝飾符號，避免誤判為文字</span>\nDECOR = {<span class=\"str\">\"■\"</span>, <span class=\"str\">\"▬\"</span>, <span class=\"str\">\"—\"</span>}\ntexts = [t <span class=\"kw\">for</span> t <span class=\"kw\">in</span> data[<span class=\"str\">\"rec_texts\"</span>]\n         <span class=\"kw\">if</span> t.<span class=\"fn\">strip</span>() <span class=\"kw\">not in</span> DECOR]",
+                        "json": "{\n  <span class=\"jkey\">\"decoration_skipped\"</span>: <span class=\"jnum\">1</span>,\n  <span class=\"jkey\">\"notes\"</span>: <span class=\"jstr\">\"標題符號模糊，需人工校對\"</span>\n}"
+                      },
+                      {
+                        "key": "header", "page": 0, "colour": "#cfe0ef",
+                        "box": {"left":"70%","top":"9.5%","width":"24%","height":"29%"},
+                        "tag": {"right":"-132px","top":"14%"},
+                        "title": "頁首資訊：標題、日期、史料來源",
+                        "desc": "頁首集中了標題「為奏彰化失陷已調兵赴臺事」、上奏者、日期與史料來源。這些欄位是後續檢索與排序的依據，必須與正文分開儲存，而非混入內文。",
+                        "prompt": "頁首包含標題、上奏者、日期與史料來源四項資訊。\n請把它們分別抽取為 title、author、date、source 四個欄位，\n不要併入正文 body。",
+                        "py": "<span class=\"cmt\"># 頁首欄位獨立抽取，不併入正文</span>\nheader = <span class=\"fn\">extract_header</span>(result)\ndoc = {\n    <span class=\"str\">\"title\"</span>:  header[<span class=\"str\">\"title\"</span>],\n    <span class=\"str\">\"author\"</span>: header[<span class=\"str\">\"author\"</span>],\n    <span class=\"str\">\"date\"</span>:   header[<span class=\"str\">\"date\"</span>],\n    <span class=\"str\">\"source\"</span>: header[<span class=\"str\">\"source\"</span>],\n}",
+                        "json": "{\n  <span class=\"jkey\">\"title\"</span>: <span class=\"jstr\">\"為奏彰化失陷已調兵赴臺事\"</span>,\n  <span class=\"jkey\">\"author\"</span>: <span class=\"jstr\">\"福建水師提督 黃仕簡\"</span>,\n  <span class=\"jkey\">\"date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月二十七日\"</span>,\n  <span class=\"jkey\">\"source\"</span>: <span class=\"jstr\">\"《天地會第一冊》\"</span>\n}"
+                      },
+                      {
+                        "key": "body", "page": 0, "colour": "#f5e6bd",
+                        "box": {"left":"4%","top":"12%","width":"65%","height":"82%"},
+                        "tag": {"left":"-124px","top":"55%"},
+                        "title": "正文",
+                        "desc": "正文是文書的主體內容，需要完整保留段落與句讀。辨識後應以純文字儲存於 body 欄位，並保留每行的信心分數，方便後續判斷哪些段落需要校對。",
+                        "prompt": "正文請完整辨識並存入 body 欄位，保留原有段落。\n同時輸出每一行的信心分數（rec_scores），\n低於 0.90 的行請另外標記出來。",
+                        "py": "<span class=\"cmt\"># 正文與逐行信心分數一併輸出</span>\nlines = []\n<span class=\"kw\">for</span> text, score <span class=\"kw\">in</span> <span class=\"fn\">zip</span>(data[<span class=\"str\">\"rec_texts\"</span>], data[<span class=\"str\">\"rec_scores\"</span>]):\n    lines.<span class=\"fn\">append</span>({<span class=\"str\">\"text\"</span>: text, <span class=\"str\">\"score\"</span>: <span class=\"fn\">round</span>(score, <span class=\"num\">3</span>)})\nlow = [l <span class=\"kw\">for</span> l <span class=\"kw\">in</span> lines <span class=\"kw\">if</span> l[<span class=\"str\">\"score\"</span>] &lt; <span class=\"num\">0.90</span>]",
+                        "json": "{\n  <span class=\"jkey\">\"body\"</span>: <span class=\"jstr\">\"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。…\"</span>,\n  <span class=\"jkey\">\"line_count\"</span>: <span class=\"jnum\">42</span>,\n  <span class=\"jkey\">\"low_confidence_lines\"</span>: <span class=\"jnum\">3</span>\n}"
+                      },
+                      {
+                        "key": "page1", "page": 0, "colour": "#ddd6ea",
+                        "box": {"left":"86%","top":"94.5%","width":"8%","height":"3.6%"},
+                        "tag": {"right":"-132px","top":"92%"},
+                        "title": "頁碼",
+                        "desc": "頁碼位於頁面外緣，屬於書冊的排版資訊而非文書內容。應單獨存為 page 欄位，既可保留出處，又不會污染正文文字。",
+                        "prompt": "頁面外緣的數字是書冊頁碼，不屬於文書內容。\n請把它抽出存為 page 欄位，並從 body 中移除，\n以免混入正文文字。",
+                        "py": "<span class=\"cmt\"># 頁碼獨立成欄，並自正文移除</span>\npage = <span class=\"fn\">match_page_number</span>(data[<span class=\"str\">\"rec_texts\"</span>][-<span class=\"num\">1</span>])\n<span class=\"kw\">if</span> page:\n    doc[<span class=\"str\">\"page\"</span>] = <span class=\"fn\">int</span>(page)\n    body_lines.<span class=\"fn\">pop</span>()",
+                        "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">80</span>,\n  <span class=\"jkey\">\"page_in_body\"</span>: <span class=\"jstr\">\"removed\"</span>\n}"
+                      },
+                      {
+                        "key": "zhupi2", "page": 1, "colour": "#f3ddc4",
+                        "box": {"left":"55%","top":"33%","width":"6.5%","height":"22%"},
+                        "tag": {"right":"-132px","top":"38%"},
+                        "title": "夾註硃批（小字）",
+                        "desc": "正文中以小字夾註的硃批「仍以調養為要，勿過勞」與正文字級不同，屬於皇帝的批示。應與正文分開儲存，否則會被誤併入奏摺原文。",
+                        "prompt": "正文中有以小字夾註的硃批，字級比正文小。\n請依字級把它與正文分開，存入 rescript_inline 欄位，\n不要混入 body。",
+                        "py": "<span class=\"cmt\"># 依字高分辨夾註小字（硃批）與正文</span>\nheights = [b[<span class=\"num\">3</span>] - b[<span class=\"num\">1</span>] <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes]\nmedian = <span class=\"fn\">statistics</span>.<span class=\"fn\">median</span>(heights)\ninline = [t <span class=\"kw\">for</span> t, h <span class=\"kw\">in</span> <span class=\"fn\">zip</span>(texts, heights) <span class=\"kw\">if</span> h &lt; median * <span class=\"num\">0.72</span>]",
+                        "json": "{\n  <span class=\"jkey\">\"rescript_inline\"</span>: <span class=\"jstr\">\"仍以調養為要，勿過勞\"</span>,\n  <span class=\"jkey\">\"merged_into_body\"</span>: <span class=\"jstr\">\"false\"</span>\n}"
+                      },
+                      {
+                        "key": "signoff", "page": 1, "colour": "#d3e5e2",
+                        "box": {"left":"27%","top":"22%","width":"11%","height":"52%"},
+                        "tag": {"left":"-124px","top":"42%"},
+                        "title": "落款與奉批日期",
+                        "desc": "文末的落款日期與「奉硃批」日期分屬兩個時間點，前者是上奏日，後者是皇帝批覆日。兩者需分開存欄，才能在時間軸上正確排序。",
+                        "prompt": "文末有兩個日期：落款的上奏日期，以及「奉硃批」的批覆日期。\n請分別存為 send_date 與 rescript_date 兩個欄位，\n並同時保留原文與西曆換算。",
+                        "py": "<span class=\"cmt\"># 落款日期與奉批日期分開抽取</span>\ndoc[<span class=\"str\">\"send_date\"</span>] = <span class=\"fn\">parse_reign_date</span>(<span class=\"str\">\"乾隆五十一年十二月初十日\"</span>)\ndoc[<span class=\"str\">\"rescript_date\"</span>] = <span class=\"fn\">parse_reign_date</span>(<span class=\"str\">\"乾隆五十一年十二月二十七日\"</span>)",
+                        "json": "{\n  <span class=\"jkey\">\"send_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>,\n  <span class=\"jkey\">\"rescript_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月二十七日\"</span>,\n  <span class=\"jkey\">\"rescript_text\"</span>: <span class=\"jstr\">\"已有旨了。欽此。\"</span>\n}"
+                      },
+                      {
+                        "key": "archive", "page": 1, "colour": "#e3dcc9",
+                        "box": {"left":"20%","top":"62%","width":"6%","height":"14%"},
+                        "tag": {"left":"-124px","top":"67%"},
+                        "title": "收錄註記",
+                        "desc": "頁末方括號中的「本文原收錄於軍錄」是編者附加的出處說明，並非原奏摺文字。應存為 archive_note，以保留版本資訊而不影響原文。",
+                        "prompt": "方括號內的「本文原收錄於軍錄」是編者註記，不是原文。\n請存入 archive_note 欄位，並從 body 中排除。",
+                        "py": "<span class=\"cmt\"># 編者註記（方括號）另存，不計入原文</span>\nnote = <span class=\"fn\">re</span>.<span class=\"fn\">search</span>(<span class=\"str\">r\"〔(.+?)〕\"</span>, tail_text)\n<span class=\"kw\">if</span> note:\n    doc[<span class=\"str\">\"archive_note\"</span>] = note.<span class=\"fn\">group</span>(<span class=\"num\">1</span>)",
+                        "json": "{\n  <span class=\"jkey\">\"archive_note\"</span>: <span class=\"jstr\">\"本文原收錄於軍錄\"</span>,\n  <span class=\"jkey\">\"excluded_from_body\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
+                      },
+                      {
+                        "key": "page2", "page": 1, "colour": "#ddd6ea",
+                        "box": {"left":"6%","top":"94.5%","width":"8%","height":"3.6%"},
+                        "tag": {"left":"-124px","top":"80%"},
+                        "title": "頁碼（續頁）",
+                        "desc": "續頁的頁碼與首頁採用同一套規則處理：抽出為 page 欄位，並在合併跨頁正文時作為排序依據。",
+                        "prompt": "這是同一份文書的續頁，頁碼在左下角。\n請沿用首頁的規則抽出 page 欄位，\n並依頁碼順序合併兩頁的正文。",
+                        "py": "<span class=\"cmt\"># 跨頁合併：依頁碼排序後串接正文</span>\npages = <span class=\"fn\">sorted</span>(docs, key=<span class=\"kw\">lambda</span> d: d[<span class=\"str\">\"page\"</span>])\nfull_body = <span class=\"str\">\"\\n\"</span>.<span class=\"fn\">join</span>(d[<span class=\"str\">\"body\"</span>] <span class=\"kw\">for</span> d <span class=\"kw\">in</span> pages)",
+                        "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">81</span>,\n  <span class=\"jkey\">\"merged_pages\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>]\n}"
+                      }
+                    ]
+                  }
+                  </script>
                 </div>
               </div>
             </div>
           </section>
 
+          <!-- 8 辨識手寫字：標題與說明佔滿版寬。左半為原件的風琴摺展開效果
+               （4 張掃描各分 3 摺、共 12 摺，每次展開一組兩摺），右半與 7 相同。 -->
           <section class="story surface-a" id="part-3-handwritten" data-tab="part-3" data-nav="#part-3-handwritten">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">9</span><h2>辨識手寫字</h2></div><div class="body"><p>和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。一般而言，楷書較容易辨識。相反，草書因連筆及字形變化較大，辨識準確率較低，不建議使用 OCR 處理。</p><p>另外，手寫史料的版面往往與印刷文本不同。以圖 2 為例，它是圖 1 所據原奏摺的掃描本，採用直排、由右至左閱讀及多欄排版，並包含硃批、印章等元素，以及臣字款、抬頭等特殊書寫格式。其中，臣字款指官員自稱「臣」時以小字書寫；抬頭則指涉及皇帝時採用的敬書格式。此外，文末另有以草書書寫的硃批。</p><p>進行 OCR 時，研究者須先定明清晰的處理規則，除了注明由上至下、由右至左的閱讀方向外，亦應略過難以準確辨識的草書硃批，並將因抬頭而分隔的文字重新合併。</p></div></article>
+              <div class="lay-stack">
+                <article class="blk" id="part-3-handwritten-card">
+                  <div class="title-row"><span class="option-number">8</span><h2>辨識手寫字</h2></div>
+                  <div class="body">
+                    <p>和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。</p>
+                  </div>
+                </article>
+
+                <div class="part3-feature-explorer" id="part-3-handwritten-explorer" data-part3-explorer="folded">
+                  <div class="part3-fx-doc part3-fx-doc-folded">
+                    <div class="part3-fx-striparea">
+                      <div class="part3-fx-strip" data-part3-fx-strip></div>
+                      <div data-part3-fx-tags></div>
+                    </div>
+                    <div class="part3-fx-nav">
+                      <button type="button" data-part3-fx-prev aria-label="向右收摺">←</button>
+                      <span class="part3-fx-ind" data-part3-fx-ind></span>
+                      <button type="button" data-part3-fx-next aria-label="向左展開">→</button>
+                    </div>
+                  </div>
+                  <div class="part3-fx-out" data-part3-fx-out></div>
+
+                  <script type="application/json" data-part3-feature-data>
+                  {
+                    "sheets": ["ocr-zhu25-handwritten-1.png", "ocr-zhu25-handwritten-2.png", "ocr-zhu25-handwritten-3.png", "ocr-zhu25-handwritten-4.png"],
+                    "foldAspect": "344 / 747",
+                    "features": [
+                      {
+                        "key": "vertical", "panel": 0, "colour": "#cfe3d4",
+                        "box": {"left":"0%","top":"0%","width":"100%","height":"100%"},
+                        "tag": {"left":"-134px","top":"6%"},
+                        "title": "直排、由右至左",
+                        "desc": "手寫奏摺採直排書寫，並由右至左閱讀，與印刷書冊的閱讀方向相反。若不指明方向，OCR 會依預設由左至右輸出，導致整篇文字順序顛倒。",
+                        "prompt": "這份手寫奏摺是直排書寫、由右至左閱讀。\n請依「由上至下、由右至左」的順序輸出文字，\n不要使用預設的橫排左至右順序。",
+                        "py": "<span class=\"cmt\"># 直排、由右至左：指定文字方向與排序規則</span>\nboxes = <span class=\"fn\">sorted</span>(\n    result.boxes,\n    key=<span class=\"kw\">lambda</span> b: (-b.x_center, b.y_top),  <span class=\"cmt\"># x 由大到小 = 由右至左</span>\n)",
+                        "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>\n}"
+                      },
+                      {
+                        "key": "opening", "panel": 0, "colour": "#cfe0ef",
+                        "box": {"left":"52%","top":"4%","width":"22%","height":"26%"},
+                        "tag": {"right":"-142px","top":"6%"},
+                        "title": "首行「奏為奏聞事」",
+                        "desc": "首摺右方的「奏」字與起首套語「奏為奏聞事」標示文書類型與事由，屬於程式化的公文格式，應抽出為獨立欄位而非併入正文。",
+                        "prompt": "首摺開頭的「奏」字與「奏為奏聞事」是公文套語，\n請抽出為 doc_type 與 subject 兩個欄位，\n不要混入正文 body。",
+                        "py": "<span class=\"cmt\"># 起首套語：判斷文書類型與事由</span>\n<span class=\"kw\">if</span> first_line.<span class=\"fn\">startswith</span>(<span class=\"str\">\"奏\"</span>):\n    doc[<span class=\"str\">\"doc_type\"</span>] = <span class=\"str\">\"上奏\"</span>\n    doc[<span class=\"str\">\"subject\"</span>] = <span class=\"fn\">extract_subject</span>(first_line)",
+                        "json": "{\n  <span class=\"jkey\">\"doc_type\"</span>: <span class=\"jstr\">\"上奏\"</span>,\n  <span class=\"jkey\">\"subject\"</span>: <span class=\"jstr\">\"奏為奏聞事\"</span>\n}"
+                      },
+                      {
+                        "key": "minister", "panel": 0, "colour": "#f0d6d0",
+                        "box": {"left":"60%","top":"46%","width":"11%","height":"50%"},
+                        "tag": {"left":"-134px","top":"29%"},
+                        "title": "臣字款（小字自稱）",
+                        "desc": "官員自稱「奴才」或「臣」時以小字偏右書寫，字級明顯小於正文。OCR 若不加區分，會把這些小字誤判為正文的一部分或漏字。",
+                        "prompt": "官員自稱的「奴才」「臣」以小字書寫，字級比正文小。\n請依字高把小字款識與正文分開，存入 self_reference 欄位，\n並在正文中保留原有位置。",
+                        "py": "<span class=\"cmt\"># 依字高分辨臣字款小字</span>\nheights = [b.height <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes]\nmed = <span class=\"fn\">statistics</span>.<span class=\"fn\">median</span>(heights)\nsmall = [b.text <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes <span class=\"kw\">if</span> b.height &lt; med * <span class=\"num\">0.7</span>]",
+                        "json": "{\n  <span class=\"jkey\">\"self_reference\"</span>: <span class=\"jstr\">\"奴才\"</span>,\n  <span class=\"jkey\">\"style\"</span>: <span class=\"jstr\">\"small_inline\"</span>\n}"
+                      },
+                      {
+                        "key": "respect", "panel": 3, "colour": "#f5e6bd",
+                        "box": {"left":"10%","top":"0%","width":"80%","height":"16%"},
+                        "tag": {"right":"-142px","top":"29%"},
+                        "title": "抬頭（敬書格式）",
+                        "desc": "涉及皇帝時另起一行並提高書寫位置，稱為抬頭。這種格式會把同一句話拆成兩行，OCR 需要把因抬頭而分隔的文字重新合併，否則語句會斷裂。",
+                        "prompt": "凡涉及皇帝的詞語會另起一行並抬高書寫（抬頭）。\n請把因抬頭而被分隔的句子重新合併為完整句子，\n並在 honorific_breaks 記錄原本的斷行位置。",
+                        "py": "<span class=\"cmt\"># 合併因抬頭而斷開的行</span>\nmerged, breaks = [], []\n<span class=\"kw\">for</span> i, col <span class=\"kw\">in</span> <span class=\"fn\">enumerate</span>(columns):\n    <span class=\"kw\">if</span> col.top &lt; page_top + <span class=\"num\">20</span>:  <span class=\"cmt\"># 位置抬高 = 抬頭</span>\n        breaks.<span class=\"fn\">append</span>(i)\n        merged[-<span class=\"num\">1</span>] += col.text\n    <span class=\"kw\">else</span>:\n        merged.<span class=\"fn\">append</span>(col.text)",
+                        "json": "{\n  <span class=\"jkey\">\"honorific_breaks\"</span>: [<span class=\"jnum\">3</span>, <span class=\"jnum\">11</span>],\n  <span class=\"jkey\">\"merged_sentences\"</span>: <span class=\"jnum\">2</span>\n}"
+                      },
+                      {
+                        "key": "seal", "panel": 4, "colour": "#ddd6ea",
+                        "box": {"left":"22%","top":"34%","width":"46%","height":"22%"},
+                        "tag": {"left":"-134px","top":"52%"},
+                        "title": "印章與騎縫",
+                        "desc": "奏摺上蓋有官印，並常見跨摺縫的騎縫印。印章為圖像而非文字，OCR 容易將其筆畫誤判為字元，需要指明略過並單獨標記位置。",
+                        "prompt": "文書上有官印與騎縫印，屬於圖像不是文字。\n請不要把印章內的筆畫辨識為文字，\n改以 seals 欄位記錄印章出現的摺號與位置。",
+                        "py": "<span class=\"cmt\"># 印章區域：以顏色與形狀偵測，排除於文字辨識之外</span>\nseals = <span class=\"fn\">detect_seals</span>(image, hue_range=(<span class=\"num\">345</span>, <span class=\"num\">15</span>))\n<span class=\"kw\">for</span> s <span class=\"kw\">in</span> seals:\n    mask.<span class=\"fn\">fill</span>(s.bbox)  <span class=\"cmt\"># 遮蔽後再送入 OCR</span>",
+                        "json": "{\n  <span class=\"jkey\">\"seals\"</span>: [{<span class=\"jkey\">\"fold\"</span>: <span class=\"jnum\">5</span>, <span class=\"jkey\">\"type\"</span>: <span class=\"jstr\">\"騎縫印\"</span>}],\n  <span class=\"jkey\">\"excluded_from_text\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
+                      },
+                      {
+                        "key": "rescript", "panel": 7, "colour": "#f3ddc4",
+                        "box": {"left":"8%","top":"8%","width":"34%","height":"70%"},
+                        "tag": {"right":"-142px","top":"52%"},
+                        "title": "硃批（草書）",
+                        "desc": "文末的硃批以紅筆草書書寫，連筆多、字形變化大，辨識準確率低。建議不強行辨識，改以顏色偵測標記其位置，留待人工判讀。",
+                        "prompt": "文末有以紅筆草書書寫的硃批，字形難以準確辨識。\n請依紅色筆跡標出硃批範圍，存入 rescript 欄位，\n並把 text 留空、標記 needs_manual_reading 為 true。",
+                        "py": "<span class=\"cmt\"># 硃批：以紅色筆跡定位，不強行辨識草書</span>\nred = <span class=\"fn\">detect_red_ink</span>(image)\ndoc[<span class=\"str\">\"rescript\"</span>] = {\n    <span class=\"str\">\"bbox\"</span>: red.bbox,\n    <span class=\"str\">\"text\"</span>: <span class=\"str\">\"\"</span>,\n    <span class=\"str\">\"needs_manual_reading\"</span>: <span class=\"kw\">True</span>,\n}",
+                        "json": "{\n  <span class=\"jkey\">\"rescript\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"\"</span>,\n    <span class=\"jkey\">\"script\"</span>: <span class=\"jstr\">\"cursive\"</span>,\n    <span class=\"jkey\">\"needs_manual_reading\"</span>: <span class=\"jstr\">\"true\"</span>\n  }\n}"
+                      },
+                      {
+                        "key": "crease", "panel": 2, "colour": "#e3dcc9",
+                        "box": {"left":"0%","top":"0%","width":"6%","height":"100%"},
+                        "tag": {"left":"-134px","top":"75%"},
+                        "title": "摺縫",
+                        "desc": "摺縫是文書實體摺疊留下的痕跡，掃描後會呈現為一條縱向陰影線。它不是版面分欄，若被當成欄界，正文會被錯誤切割。",
+                        "prompt": "畫面中的縱向陰影是摺縫，不是欄界或分隔線。\n請不要依摺縫切分文字區塊，\n並在 folds 欄位記錄摺縫的位置。",
+                        "py": "<span class=\"cmt\"># 摺縫僅記錄位置，不作為分欄依據</span>\nfolds = <span class=\"fn\">detect_fold_lines</span>(image)\nocr = <span class=\"fn\">PaddleOCR</span>(use_doc_unwarping=<span class=\"kw\">False</span>)  <span class=\"cmt\"># 保留摺痕，不做展平校正</span>",
+                        "json": "{\n  <span class=\"jkey\">\"folds\"</span>: [<span class=\"jnum\">1</span>, <span class=\"jnum\">2</span>, <span class=\"jnum\">3</span>],\n  <span class=\"jkey\">\"used_as_column_break\"</span>: <span class=\"jstr\">\"false\"</span>\n}"
+                      }
+                    ]
+                  }
+                  </script>
+                </div>
+              </div>
             </div>
           </section>
 
@@ -1256,7 +1549,7 @@
             <div class="story-inner">
               <div class="lay-split text-left" style="--vis-w: 56%;">
                 <div class="lay-copy">
-                  <article class="copybox blk" id="part-3-json-card"><div class="title-row"><span class="option-number">10</span><h2>輸出格式：JSON</h2></div><div class="body"><p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p></div></article>
+                  <article class="copybox blk" id="part-3-json-card"><div class="title-row"><span class="option-number">9</span><h2>輸出格式：JSON</h2></div><div class="body"><p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p></div></article>
                 </div>
                 <div class="lay-visual">
                   <div class="part3-chart-frame visual-frame" id="part-3-json-chart" role="group" aria-label="輸出格式：JSON">
@@ -1278,13 +1571,13 @@
 
           <section class="story surface-c" id="part-3-test" data-tab="part-3" data-nav="#part-3-test">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">11</span><h2>OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
+              <article class="copybox blk"><div class="title-row"><span class="option-number">10</span><h2>OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
             </div>
           </section>
 
           <section class="story surface-a" id="part-3-import" data-tab="part-3" data-nav="#part-3-import">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">12</span><h2>輸入結構化史料至平台</h2></div><div class="body"><p>完成OCR和後續整理後，所有的史料都應儲存在一個完整的 JSON 檔案中，研究者於是可以要求 Agentic AI把 JSON 檔案匯入平台。以本平台為例，只需將整理完成的 JSON 檔案放入網站專案中的 「儲存一手史料」 資料夾，平台便可直接讀取該檔案。</p></div></article>
+              <article class="copybox blk"><div class="title-row"><span class="option-number">11</span><h2>輸入結構化史料至平台</h2></div><div class="body"><p>完成OCR和後續整理後，所有的史料都應儲存在一個完整的 JSON 檔案中，研究者於是可以要求 Agentic AI把 JSON 檔案匯入平台。以本平台為例，只需將整理完成的 JSON 檔案放入網站專案中的 「儲存一手史料」 資料夾，平台便可直接讀取該檔案。</p></div></article>
             </div>
           </section>
         </section>

@@ -1,0 +1,301 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>運用 Agentic AI 使用 PaddleOCR — 動畫草稿</title>
+<style>
+  :root{
+    --ink:#163d3f;
+    --yellow:#f3c967;
+    --paper:#f4efe6;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, "PingFang TC", sans-serif;
+    --serif: "Noto Serif TC", Georgia, serif;
+    --mono: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:56px 24px 140px; background:#eee7d8; color:var(--ink);
+    font-family:var(--sans);
+  }
+  .page-title{max-width:1100px;margin:0 auto 8px;font:800 24px/1.3 var(--serif);}
+  .page-note{max-width:1100px;margin:0 auto 40px;color:#5a5347;font-size:13.5px;}
+
+  /* ===== layout mimicking the site section: text left, animation right ===== */
+  .demo-row{
+    max-width:1100px; margin:0 auto; display:grid;
+    grid-template-columns: minmax(0,1fr) minmax(0,1.15fr); gap:40px; align-items:start;
+  }
+  .demo-copy{padding-top:6px;}
+  .demo-copy .option-number{
+    display:inline-flex; align-items:center; justify-content:center;
+    width:26px;height:26px;border-radius:50%;background:var(--ink);color:var(--yellow);
+    font-size:12px;font-weight:800; margin-right:8px; vertical-align:middle;
+  }
+  .demo-copy h2{display:inline; font:700 19px var(--serif); vertical-align:middle;}
+  .demo-copy p{font-size:14px; line-height:1.9; color:#31484a; max-width:44ch;}
+
+  /* ===== stacked window stage ===== */
+  .stage{
+    position:relative; height:600px;
+  }
+  .win{
+    position:absolute; width:92%; border-radius:10px; overflow:hidden;
+    background:#1e1e1e; box-shadow:0 24px 46px rgba(0,0,0,.4);
+    border:1px solid rgba(255,255,255,.08);
+    transition: transform .35s ease, box-shadow .35s ease;
+  }
+  .win-bar{
+    display:flex; align-items:center; gap:8px; padding:9px 12px;
+    background:#2b2b2b; border-bottom:1px solid rgba(255,255,255,.06);
+    cursor:pointer; user-select:none;
+  }
+  .win-bar .dot{width:10px;height:10px;border-radius:50%;}
+  .win-bar .dot.red{background:#ff5f57;}
+  .win-bar .dot.yellow{background:#febc2e;}
+  .win-bar .dot.green{background:#28c840;}
+  .win-bar .win-title{
+    margin-left:6px; color:rgba(255,255,255,.55); font-size:11.5px; font-weight:600; letter-spacing:.02em;
+  }
+
+  /* --- python/terminal window: sits behind, upper-right — its bottom-left
+       area overlaps the codex window's top-right area --- */
+  .win-py{
+    top:-34px; left:34%; width:66%; z-index:1;
+    transform: scale(.97);
+  }
+  .win-py .win-body{
+    padding:16px 18px 20px; font-family:var(--mono); font-size:12px; line-height:1.85; color:#d4d4d4;
+    height:300px; overflow:hidden;
+  }
+  .py-kw{color:#c586c0;}
+  .py-fn{color:#dcdcaa;}
+  .py-str{color:#ce9178;}
+  .py-num{color:#b5cea8;}
+  .py-com{color:#6a9955;}
+  .py-plain{color:#d4d4d4;}
+  .py-cursor{
+    display:inline-block; width:6px; height:1em; background:#d4d4d4; vertical-align:text-bottom;
+    animation:blink 1s steps(1) infinite;
+  }
+  @keyframes blink{50%{opacity:0;}}
+
+  /* --- codex chat window: light version, sits in front, lower-left --- */
+  .win-codex{
+    top:70px; left:0; width:74%; z-index:2;
+    background:#fffaf2;
+    border:1px solid var(--line, rgba(22,61,63,.18));
+  }
+  .win-codex .win-bar{
+    background:#efe8dc; border-bottom:1px solid rgba(22,61,63,.14);
+  }
+  .win-codex .win-bar .win-title{ color:#7a7263; }
+  .win-codex .win-body{
+    padding:20px 20px 22px; height:470px; overflow-y:auto; scrollbar-width:none;
+  }
+  .win-codex .win-body::-webkit-scrollbar{display:none;}
+  .codex-user-row{display:flex; justify-content:flex-end; margin-bottom:18px;}
+  .codex-user-bubble{
+    max-width:82%; padding:11px 15px; border-radius:14px 14px 3px 14px;
+    background:#e7e7e7; color:#262626; font-size:12.5px; line-height:1.65;
+  }
+  .codex-worked{
+    display:flex; align-items:center; gap:6px; color:#8d8574;
+    font-size:11.5px; padding-bottom:10px; margin-bottom:14px; border-bottom:1px solid rgba(22,61,63,.14);
+  }
+  .codex-worked .chev{font-size:9px;}
+  .codex-block{margin-bottom:14px;}
+  .codex-block p{
+    margin:0; color:var(--ink); font-size:12.5px; line-height:1.85;
+  }
+  .codex-meta{
+    display:flex; align-items:center; gap:7px; margin:14px 0;
+    color:#8d8574; font-size:11px;
+  }
+  .codex-meta .ic{
+    width:14px;height:14px; border-radius:3px; border:1px solid rgba(22,61,63,.3);
+    display:inline-flex; align-items:center; justify-content:center; font-size:9px; color:var(--ink);
+  }
+  .type-cursor{
+    display:inline-block; width:5px; height:.95em; background:var(--ink); vertical-align:text-bottom;
+    margin-left:1px; animation:blink 1s steps(1) infinite;
+  }
+
+  @media (max-width:880px){
+    .demo-row{grid-template-columns:1fr;}
+    .stage{height:520px;}
+  }
+</style>
+</head>
+<body>
+
+  <div class="page-title">運用 Agentic AI 使用 PaddleOCR — 動畫草稿</div>
+  <div class="page-note">右側為兩個可互相切換前後順序的視窗：上層是 Codex 風格對話面板（顯示使用者指令與 AI 思考過程），下層是同步「打字」中的 PaddleOCR Python 程式碼視窗。點擊任一視窗的標題列，可將該視窗切換至最上層。文字會自動循環播放，模擬 AI 即時輸出。</div>
+
+  <div class="demo-row">
+    <div class="demo-copy">
+      <div><span class="option-number">4</span><h2>運用 Agentic AI 使用 PaddleOCR</h2></div>
+      <p>PaddleOCR 通常透過 Python API 在本機安裝及運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p>
+    </div>
+
+    <div class="stage">
+      <!-- Python / terminal window (behind) -->
+      <div class="win win-py" data-win="py" tabindex="0">
+        <div class="win-bar" data-bring-front="py">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="win-title">PaddleOCR Python</span>
+        </div>
+        <div class="win-body" id="pyBody"></div>
+      </div>
+
+      <!-- Codex chat window (front) -->
+      <div class="win win-codex" data-win="codex" tabindex="0">
+        <div class="win-bar" data-bring-front="codex">
+          <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+          <span class="win-title">Codex</span>
+        </div>
+        <div class="win-body">
+          <div class="codex-user-row">
+            <div class="codex-user-bubble">set up PaddleOCR on my mac, and use it to OCR &#39;/Users/mymac/Downloads/Text/&#22913;&#25945;1.pdf&#39;</div>
+          </div>
+          <div class="codex-worked"><span class="chev">▾</span><span id="workedLabel">Working…</span></div>
+          <div id="codexStream"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<script>
+(() => {
+  const winPy = document.querySelector('.win-py');
+  const winCodex = document.querySelector('.win-codex');
+  document.querySelectorAll('[data-bring-front]').forEach(bar => {
+    bar.addEventListener('click', () => {
+      const target = bar.dataset.bringFront;
+      if (target === 'py') { winPy.style.zIndex = 3; winCodex.style.zIndex = 2; }
+      else { winCodex.style.zIndex = 3; winPy.style.zIndex = 2; }
+    });
+  });
+
+  /* ---------- Codex thinking stream ---------- */
+  const parts = [
+    { meta: null, text: "I’ll set up PaddleOCR in an isolated macOS virtual environment, run a first OCR test, and cover common Apple Silicon, Intel, and PDF/image issues. I’m checking the latest installation guide first since compatibility changes frequently." },
+    { meta: "Ran commands, searched the web", text: "I confirmed your Mac is Apple Silicon with Python 3.14 by default and Python 3.13 installed. Since PaddlePaddle supports Python 3.13, we’ll use that." },
+    { meta: "Read files, ran commands, searched the web", text: "I created an isolated virtual environment at ~/.venvs/paddleocr to keep it separate from your project and Python 3.14. I’m now installing PaddlePaddle and PaddleOCR." },
+    { meta: "Ran command", text: "Installation completed successfully (paddlepaddle 3.3.1, paddleocr 3.7.0). Next, I’m verifying the installation and running a quick OCR test, which will download the required models on first use." }
+  ];
+
+  const streamEl = document.getElementById('codexStream');
+  const workedLabel = document.getElementById('workedLabel');
+
+  /* ---------- Python code typing ---------- */
+  const pyBody = document.getElementById('pyBody');
+  const pyLines = [
+    [["kw","from"]," ",["plain","paddleocr"]," ",["kw","import"]," ",["plain","PaddleOCR"]],
+    [["plain","ocr"]," ",["plain","="]," ",["fn","PaddleOCR"],["plain","("]],
+    [["plain","    lang"],["plain","="],["str","\"chinese_cht\""],["plain",","]],
+    [["plain","    device"],["plain","="],["str","\"cpu\""],["plain",","]],
+    [["plain","    use_doc_orientation_classify"],["plain","="],["kw","False"],["plain",","]],
+    [["plain","    use_doc_unwarping"],["plain","="],["kw","False"],["plain",","]],
+    [["plain","    use_textline_orientation"],["plain","="],["kw","False"],["plain",","]],
+    [["plain",")"]],
+    [["kw","for"]," ",["plain","result"]," ",["kw","in"]," ",["plain","ocr"],["plain","."],["fn","predict"],["plain","("],["str","\"/path/to/image.png\""],["plain","):"]],
+    [["plain","    result"],["plain","."],["fn","print"],["plain","()"]],
+    [["plain","    result"],["plain","."],["fn","save_to_json"],["plain","("],["str","\"/Users/creamybanana/Downloads/PaddleOCR-output\""],["plain",")"]],
+    [["plain","    result"],["plain","."],["fn","save_to_img"],["plain","("],["str","\"/Users/creamybanana/Downloads/PaddleOCR-output\""],["plain",")"]],
+    [["plain","    data"]," ",["plain","="]," ",["plain","result"],["plain","."],["plain","json"]],
+    [["kw","    for"]," ",["plain","text, score"]," ",["kw","in"]," ",["fn","zip"],["plain","(data["],["str","\"rec_texts\""],["plain","], data["],["str","\"rec_scores\""],["plain","]):"]],
+    [["plain","        "],["fn","print"],["plain","(f"],["str","\"{score:.3f}\\t{text}\""],["plain",")"]]
+  ];
+
+  function segClass(tag){
+    return { kw:"py-kw", fn:"py-fn", str:"py-str", num:"py-num", com:"py-com", plain:"py-plain" }[tag] || "py-plain";
+  }
+
+  let stopped = false;
+
+  async function sleep(ms){ return new Promise(r => setTimeout(r, ms)); }
+
+  async function typeCodexParagraph(container, text, speed){
+    const p = document.createElement('p');
+    container.appendChild(p);
+    for (let i = 0; i < text.length; i++){
+      p.textContent += text[i];
+      if (i % 3 === 0) await sleep(speed);
+    }
+  }
+
+  async function typePyLine(lineIdx, speed){
+    const lineEl = document.createElement('div');
+    pyBody.appendChild(lineEl);
+    const segs = pyLines[lineIdx];
+    let full = "";
+    segs.forEach(([tag, str]) => { full += str; });
+    let shown = "";
+    for (let i = 0; i < full.length; i++){
+      shown += full[i];
+      lineEl.innerHTML = renderSegsUpTo(segs, shown.length);
+      await sleep(speed);
+    }
+    // trim old lines so it looks like a scrolling terminal, keep last ~9
+    while (pyBody.children.length > 9){ pyBody.removeChild(pyBody.firstChild); }
+  }
+
+  function renderSegsUpTo(segs, n){
+    let out = "";
+    let remaining = n;
+    for (const [tag, str] of segs){
+      if (remaining <= 0) break;
+      const take = str.slice(0, remaining);
+      out += `<span class="${segClass(tag)}">${escapeHtml(take)}</span>`;
+      remaining -= take.length;
+    }
+    return out + '<span class="py-cursor"></span>';
+  }
+  function escapeHtml(s){
+    return s.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;");
+  }
+
+  async function runPython(){
+    for (let i = 0; i < pyLines.length; i++){
+      if (stopped) return;
+      await typePyLine(i, 16);
+      await sleep(90);
+    }
+  }
+
+  async function runCodex(){
+    streamEl.innerHTML = "";
+    workedLabel.textContent = "Working…";
+    for (const part of parts){
+      if (stopped) return;
+      if (part.meta){
+        const meta = document.createElement('div');
+        meta.className = 'codex-meta';
+        meta.innerHTML = `<span class="ic">⊙</span><span>${part.meta}</span>`;
+        streamEl.appendChild(meta);
+        await sleep(500);
+      }
+      const block = document.createElement('div');
+      block.className = 'codex-block';
+      streamEl.appendChild(block);
+      await typeCodexParagraph(block, part.text, 14);
+      streamEl.scrollTop = streamEl.scrollHeight;
+      await sleep(650);
+    }
+    workedLabel.textContent = "Worked for 10m 1s";
+  }
+
+  async function loop(){
+    while (!stopped){
+      pyBody.innerHTML = "";
+      await Promise.all([runCodex(), runPython()]);
+      await sleep(2400);
+    }
+  }
+
+  loop();
+})();
+</script>
+
+</body>
+</html>

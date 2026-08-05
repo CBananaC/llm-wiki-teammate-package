@@ -7504,22 +7504,159 @@ Verified:
 Remaining:
 - Change `--paddleocr-photo-width` or `--paddleocr-photo-max-width` in the `#part-3-paddleocr` block to adjust the current width or its maximum.
 
-### 2026-08-04 16:40 HKT — Codex — Clear OCR JSON data at user request
+### 2026-08-04 16:40 HKT — Codex — Fix the invisible Agentic AI × PaddleOCR animation
 
 Summary:
-- Replaced the contents of the derived OCR JSON with an empty JSON object `{}`.
-- Kept the source PDF and OCR script unchanged; the previous OCR JSON remains recoverable from local commit `0c63cf2`.
+- Fixed the Part 3 Agentic AI × PaddleOCR animation frame so its absolutely positioned windows receive a real inner height.
+- Preserved the existing `.visual-frame` height control and the independent window size/position variables.
 
 Files changed:
-- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
 - `PROJECT_LOG.md`
 
 Verified:
-- The cleared file parses as valid JSON and contains `{}`.
-- No source PDF or unrelated StoryMap file was changed by this action.
+- Browser geometry now reports a 266.8px visible `.agentic-scene` with rendered PaddleOCR Python and Codex windows; both animation sequences contain generated `.line` elements.
+- Browser console reports no errors or warnings.
+- `node --check` and `git diff --check` pass.
 
 Remaining:
-- Regenerate the OCR JSON with the saved OCR code if the extracted data is needed again.
+- None for the visibility bug. Existing concurrent Agentic AI HTML, JavaScript, and card-control edits remain preserved and uncommitted.
+
+### 2026-08-04 16:48 HKT — Codex — Place and enlarge the Agentic AI × PaddleOCR visual
+
+Summary:
+- Restored the Part 3 text-card/visual two-column layout, placing the animation on the right of its text card on desktop.
+- Added an independently adjustable `--agentic-frame-height` control, enlarged the overlapping windows, and made the animation frame backdrop transparent.
+- Added a cache-busting stylesheet version so the updated card controls load reliably after CSS edits.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry reports a 501.9px text column beside a 668.1px visual column; the transparent frame is 665.6px tall and the inner scene is 612.4px tall.
+- Both PaddleOCR Python and Codex windows fit within the scene, and the browser console reports no errors or warnings.
+- `node --check` and `git diff --check` pass.
+
+Remaining:
+- Adjust `--agentic-frame-height` and the window variables in `#part-3-agentic-ocr-chart` if a different desktop composition is preferred. The mobile override keeps the card above the visual.
+
+### 2026-08-04 16:57 HKT — Codex — Make Agentic AI windows clickable and remove the frame border
+
+Summary:
+- Removed the border from the transparent Agentic AI × PaddleOCR visual frame.
+- Made the whole Codex and PaddleOCR Python windows clickable so the selected window is brought to the front; the exposed title bars remain available when the windows overlap.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser reports `0px none` for the frame border and a transparent frame background.
+- Clicking the visible `PaddleOCR Python` and `Codex` window labels switches z-index between `3` and `2` as intended.
+- Browser console reports no errors or warnings; `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this interaction and frame styling change.
+
+### 2026-08-04 17:00 HKT — Codex — Add Codex working and completed-result phases
+
+Summary:
+- Removed the incorrect static `Worked for 10m 1s` text.
+- Split the Codex animation into a larger-text working/thinking phase and a completed-result phase.
+- When the work phase finishes, it is hidden and only the PaddleOCR installation result remains visible; re-entering the scene starts the work phase again.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- During playback, `Working…` is visible, the thinking font computes to `16px`, and the result phase is hidden.
+- After completion, the thinking phase is hidden and six result lines are visible; `Worked for 10m 1s` is absent.
+- Browser console reports no errors or warnings; `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for the Codex phase behavior.
+
+### 2026-08-04 17:11 HKT — Codex — Add Codex completion footer and window transitions
+
+Summary:
+- Added `Worked for 5m 44s` to the completed Codex output footer.
+- Added linked `PaddleOCR quick start` and `OCR pipeline guide` file items plus four compact Codex/Python/PaddlePaddle/PaddleOCR brand marks.
+- Matched the user prompt and output text at `16px` and added card-like transform, opacity, and shadow transitions when switching windows.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- During thinking, the footer is hidden, the prompt and thinking text both compute to `16px`, and the result is hidden.
+- After completion, the footer displays with the requested duration, two guide links, four logos, and six result lines; the thinking phase is hidden.
+- Window switching toggles the front class and z-index for both windows; transitions compute as `transform .32s`, `opacity .24s`, and `box-shadow .32s`.
+- Browser console reports no errors or warnings; `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this Codex output-footer and switching transition change.
+
+### 2026-08-04 17:32 HKT — Codex — Simplify the completed Codex output
+
+Summary:
+- Removed the Files links, file icons, and four logo marks from the completed Codex state.
+- Moved `Worked for 5m 44s` into the result body above the PaddleOCR installation-complete message.
+- Kept the working phase free of the completion line and preserved the matching `16px` prompt/output typography.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- During playback, the result is hidden and `Worked for 5m 44s` is not visible.
+- After completion, the result begins with `Worked for 5m 44s`, followed by `PaddleOCR is now installed and verified on your Apple Silicon Mac.`
+- No footer, Files links, file icons, or brand-logo elements remain; browser console reports no errors or warnings.
+- `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this output simplification.
+
+### 2026-08-04 17:48 HKT — Codex — Remove the Python-code section and expand format guidance
+
+Summary:
+- Removed the `執行 OCR 的Python 代碼` section from Part 3.
+- Renumbered the following Part 3 OCR sections from 6 through 11.
+- Rebuilt `檢視史料的版面及格式` as a no-card, full-width text section matching the research-results presentation.
+- Split the content into the requested two paragraphs: using PaddleOCR and checking font/layout characteristics.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser confirms `#part-3-code` is absent, `#part-3-format` has two paragraphs, and the title/body article spans the full 1192.97px website content width.
+- The format article has transparent background and no border.
+- Browser console reports no errors or warnings; `git diff --check` passes.
+
+Remaining:
+- None for this Part 3 sequence and full-width text change.
+
 ### 2026-08-04 16:59 HKT — Codex — Add book-scanner gallery to OCR materials preparation
 
 Summary:
@@ -7543,6 +7680,7 @@ Verified:
 
 Remaining:
 - None for this requested gallery addition.
+
 ### 2026-08-04 17:46 HKT — Codex — Style the materials copyright note
 
 Summary:
@@ -7561,6 +7699,7 @@ Verified:
 
 Remaining:
 - None for this styling adjustment.
+
 ### 2026-08-04 19:46 HKT — Codex — Make Part 3.7 backdrop white
 
 Summary:
@@ -7578,3 +7717,156 @@ Verified:
 
 Remaining:
 - None for this backdrop adjustment.
+
+### 2026-08-05 12:58 HKT — Codex — Expand Part 3.8 handwritten-text body
+
+Summary:
+- Expanded only the `辨識手寫字` article and body paragraph to the full website content width.
+- Left Part 3.7 `辨識印刷字` and the handwritten interactive explorer unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser computes the Part 3.8 article, body, and paragraph at `1192.97px`, matching the website content width.
+- The handwritten explorer remains present below at `1152px`.
+- `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this Part 3.8 width adjustment.
+
+### 2026-08-04 16:40 HKT — Codex — Clear OCR JSON data at user request
+
+Summary:
+- Replaced the contents of the derived OCR JSON with an empty JSON object `{}`.
+- Kept the source PDF and OCR script unchanged; the previous OCR JSON remains recoverable from local commit `0c63cf2`.
+
+Files changed:
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- The cleared file parses as valid JSON and contains `{}`.
+- No source PDF or unrelated StoryMap file was changed by this action.
+
+Remaining:
+- Regenerate the OCR JSON with the saved OCR code if the extracted data is needed again.
+
+### 2026-08-04 16:49 HKT — Codex — Re-OCR PDF with paragraph-preserving JSON
+
+Summary:
+- Added a reusable PaddleOCR Python script under `tool/scripts py/ocr_pdf_paragraphs.py`.
+- Re-OCRed the two-page PDF and regenerated the JSON with one object per source paragraph.
+- Kept paragraph 1 across the page break from `竊照` through `等情前來。`, paragraph 2 from `查，奴才原擬` through `謹奏。`, plus all raw OCR regions, header rows, page numbers, and 硃批 lines.
+
+Files changed:
+- `tool/scripts py/ocr_pdf_paragraphs.py`
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- OCR completed using PaddleOCR 3.7.0 / PaddlePaddle 3.3.1 with `chinese_cht` on CPU.
+- JSON parses successfully with schema version `2.0`, two paragraph parts, and all 31 raw OCR regions retained.
+- Source PDF pages were rendered and visually inspected before paragraph grouping.
+
+Remaining:
+- The paragraph text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
+
+### 2026-08-04 16:58 HKT — Codex — Add function-purpose comments to OCR script
+
+Summary:
+- Added `#` comments naming the function of each major function in the paragraph-preserving OCR script.
+
+Files changed:
+- `tool/scripts py/ocr_pdf_paragraphs.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- Comments are limited to function-purpose labels; OCR behavior and output format are unchanged.
+
+Remaining:
+- None for this documentation-only adjustment.
+
+### 2026-08-04 17:04 HKT — Codex — Reshape OCR JSON into readable document sections
+
+Summary:
+- Changed the OCR output to expose a three-row header, sentence-by-sentence paragraph parts, a separate final-two-line 硃批 area, page numbers, and footer date.
+- Kept raw OCR pages and source-region references for traceability; removed the inline 硃批 annotation from paragraph display sentences while retaining its source region.
+
+Files changed:
+- `tool/scripts py/ocr_pdf_paragraphs.py`
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- OCR regenerated successfully with schema version `3.0`, 2 paragraphs, 16 and 6 sentences, 2 page numbers, 2 硃批 lines, and all 31 raw OCR regions.
+- Source PDF pages were re-rendered and visually inspected.
+
+Remaining:
+- The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
+
+### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
+
+Summary:
+- Added `tool/scripts py/ocr_filtered_pdf.py` for landscape archival scans.
+- OCRed `npmpdf-2.pdf` in right-to-left, top-to-bottom column order.
+- Filtered the 國立故宮博物院 / NATIONAL PALACE MUSEUM watermark, red handwritten/red-ink OCR, and the scanner calibration strip.
+
+Files changed:
+- `tool/scripts py/ocr_filtered_pdf.py`
+- `intro Website/Website/Visual Material/3.4/npmpdf-2.ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- JSON parses successfully with 4 pages and no watermark, calibration-label, or red-handwriting text in the page output.
+- The final pass kept the printed text overlapping the page-2 red annotation.
+- All four source PDF pages were rendered and visually inspected.
+
+Remaining:
+- The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
+
+### 2026-08-04 17:36 HKT — Codex — Simplify JSON to paragraph-and-sentence text arrays
+
+Summary:
+- Changed each paragraph to a plain object with `paragraph_number`, `printed_pages`, and a `sentences` array of text strings.
+- Changed the header and 硃批 area to plain text arrays and kept technical region metadata out of the visible JSON.
+
+Files changed:
+- `tool/scripts py/ocr_pdf_paragraphs.py`
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- OCR completed successfully with schema version `5.0`.
+- JSON contains 2 paragraph objects with 16 and 6 plain sentence strings, plus the header, page numbers, 硃批 lines, and footer date.
+- Source PDF pages were re-rendered and visually inspected.
+
+Remaining:
+- The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
+
+### 2026-08-04 17:10 HKT — Codex — Remove region-by-region fields from visible OCR JSON
+
+Summary:
+- Removed region objects, boxes, confidences, and raw page-region arrays from the saved JSON presentation.
+- Kept the readable header, paragraph sentences, 硃批 area, page numbers, and footer date with page-level references only.
+
+Files changed:
+- `tool/scripts py/ocr_pdf_paragraphs.py`
+- `intro Website/Website/Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json`
+- `PROJECT_LOG.md`
+
+Verified:
+- Python compilation passed.
+- OCR regenerated with schema version `4.0`.
+- JSON contains no `region_index`, `box`, `confidence`, `regions`, `source_region`, or `raw_ocr_pages` fields.
+- The two source PDF pages were re-rendered and visually inspected.
+
+Remaining:
+- The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
