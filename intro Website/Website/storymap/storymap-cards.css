@@ -936,37 +936,64 @@
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #cfe0ef;
   --fx-left: 24%; --fx-top: 10%; --fx-width: 48%; --fx-height: 80%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 20%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 18%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #e8d6b7;
   --fx-left: 12%; --fx-top: 78%; --fx-width: 70%; --fx-height: 14%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 72%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 30%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #f0d6d0;
   --fx-left: 60%; --fx-top: 46%; --fx-width: 11%; --fx-height: 50%;
-  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 34%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #f5e6bd;
   --fx-left: 10%; --fx-top: 0%; --fx-width: 80%; --fx-height: 16%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 38%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #f3ddc4;
   --fx-left: 8%; --fx-top: 8%; --fx-width: 34%; --fx-height: 70%;
-  --fx-tag-left: -142px; --fx-tag-right: auto; --fx-tag-top: 58%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 66%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
   --fx-color: #d8e2e0;
   --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 56%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 78%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
   --fx-color: #ddd6ea;
   --fx-left: 62%; --fx-top: 0%; --fx-width: 30%; --fx-height: 22%;
-  --fx-tag-left: -142px; --fx-tag-right: auto; --fx-tag-top: 10%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 90%;
+}
+
+/* 8 辨識手寫字 — 放大原件，讓標籤只在邊緣輕微疊入頁面。 */
+#part-3-handwritten-explorer .part3-fx-doc-folded {
+  --part3-handwritten-doc-padding: clamp(54px, 5vw, 72px);
+  padding-inline: var(--part3-handwritten-doc-padding);
+}
+#part-3-handwritten-explorer [data-fx-feature="vertical"],
+#part-3-handwritten-explorer [data-fx-feature="regular-script"],
+#part-3-handwritten-explorer [data-fx-feature="author"],
+#part-3-handwritten-explorer [data-fx-feature="minister"],
+#part-3-handwritten-explorer [data-fx-feature="respect"],
+#part-3-handwritten-explorer [data-fx-feature="rescript"],
+#part-3-handwritten-explorer [data-fx-feature="watermark"],
+#part-3-handwritten-explorer [data-fx-feature="stamp"] {
+  --fx-tag-left: auto;
+  --fx-tag-right: -70px;
+}
+@media (max-width: 1040px) {
+  #part-3-handwritten-explorer .part3-fx-doc-folded {
+    --part3-handwritten-doc-padding: clamp(18px, 3vw, 30px);
+  }
+  #part-3-handwritten-explorer [data-fx-feature] {
+    --fx-tag-left: auto;
+    --fx-tag-right: auto;
+    --fx-tag-top: auto;
+  }
 }
 
 /* Part 3.4.9 — 輸出格式：JSON */

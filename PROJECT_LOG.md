@@ -8088,6 +8088,25 @@ Verified:
 Remaining:
 - The handwritten excerpt remains an OCR teaching example and should be checked against the scan before being treated as confirmed transcription.
 
+### 2026-08-05 16:05 HKT — Codex — Arrange handwritten labels in one right-side sequence
+
+Summary:
+- Repositioned all handwritten Part 3 labels to the right side in the requested order: `直排單欄`, `正文字體`, `上奏官員`, `臣字款`, `抬頭`, `硃批`, `浮水印`, `印章`.
+- Refreshed the StoryMap CSS cache key so the new label positions load immediately.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry shows all eight handwritten labels on the right with no overlap.
+- Browser console reports no errors or warnings.
+
+Remaining:
+- At narrow widths, the existing responsive layout continues to place labels in the normal tag row.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
