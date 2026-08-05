@@ -4062,3 +4062,24 @@ Verified:
 
 Remaining:
 - The original four page images remain available under their original filenames for comparison or rollback.
+
+### 2026-08-05 13:20 HKT — Codex — Enhance OCR printed page clarity
+
+Summary:
+- Created clearer, higher-resolution versions of the two `硃25` printed OCR pages while preserving the printed characters, headings, page numbers, margins, and clean page composition.
+- Saved the originals unchanged and updated the live StoryMap OCR animation and Part 3 printed-text panel to use the enhanced assets.
+
+Files changed:
+- `Website/storymap/ocr-zhu25-printed-1-enhanced.png`
+- `Website/storymap/ocr-zhu25-printed-2-enhanced.png`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser loads `ocr-zhu25-printed-1-enhanced.png` at `995×1580` in both the OCR animation and the Part 3 printed-text panel.
+- The OCR page list references both enhanced printed assets.
+- The enhanced outputs were visually inspected for sharper type edges, preserved headings, page numbers, margins, and page layout.
+
+Remaining:
+- The original two printed page images remain available under their original filenames for comparison or rollback.
