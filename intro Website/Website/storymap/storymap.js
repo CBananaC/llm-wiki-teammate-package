@@ -1524,38 +1524,292 @@ const initOcrScanScene = () => {
 };
 initOcrScanScene();
 
-/* 9. 輸出格式：JSON — 標籤點擊捲動＋反白，段落二展開／收合。
+/* 9. 輸出格式：JSON — 標籤點擊捲動＋持續反白，段落二展開／收合。
    純互動，沒有動畫迴圈，不需要 IntersectionObserver。 */
 const initJsonViewer = () => {
   const wrap = document.querySelector('.part3-json-viewer-wrap');
   if (!wrap) return;
 
+  let selectedButton = null;
+  let selectedTargets = [];
   wrap.querySelectorAll('[data-json-target]').forEach((button) => {
+    button.setAttribute('aria-pressed', 'false');
     button.addEventListener('click', () => {
       const ids = button.dataset.jsonTarget.split(/\s+/);
       const targets = ids.map((id) => document.getElementById(id)).filter(Boolean);
       if (!targets.length) return;
+
+      if (selectedButton) {
+        selectedButton.classList.remove('is-selected');
+        selectedButton.setAttribute('aria-pressed', 'false');
+      }
+      selectedTargets.forEach((el) => el.classList.remove('is-selected'));
+
       targets[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
-      targets.forEach((el) => {
-        el.classList.add('is-flash');
-        window.setTimeout(() => el.classList.remove('is-flash'), 900);
-      });
+      button.classList.add('is-selected');
+      button.setAttribute('aria-pressed', 'true');
+      targets.forEach((el) => el.classList.add('is-selected'));
+      selectedButton = button;
+      selectedTargets = targets;
     });
   });
 
   /* 一個按鈕，兩種功能：收起來時顯示「...」（點擊＝展開），
-     展開時顯示「收合」（點擊＝收起來）。 */
+     展開時顯示向上的「⌃」（點擊＝收起來）。按鈕放在完整段落之後，
+     因此展開時會自然移到「等情前來。」之後。 */
   wrap.querySelectorAll('.para-toggle').forEach((btn) => {
     btn.addEventListener('click', () => {
       const rest = wrap.querySelector(`[data-para-rest="${btn.dataset.paraToggle}"]`);
       if (!rest) return;
       const isHidden = rest.hidden;
       rest.hidden = !isHidden;
-      btn.textContent = isHidden ? '收合' : '...';
+      const expanded = isHidden;
+      btn.textContent = expanded ? '⌃' : '...';
+      btn.setAttribute('aria-label', expanded ? '收合' : '展開');
+      btn.setAttribute('title', expanded ? '收合' : '展開');
     });
   });
 };
 initJsonViewer();
+
+/* 10. OCR測試 — 批次掃描／驗證動畫。
+   先單頁測試（1頁），再變成 2×2 持續往下捲的批次處理（50頁）。
+   四份文書的內容逐字取自 review-tools/shared data/stage1_original_text.json。
+   時間快慢在這裡調整；大小、顏色在 storymap-cards.css 的
+   #part-3-test .batch-scene 區塊。 */
+const initBatchTestScene = () => {
+  const scene = document.querySelector('[data-batch-scene]');
+  const track = scene && scene.querySelector('[data-batch-track]');
+  if (!scene || !track) return;
+
+  const DOCS = [
+    {
+      page: 'ocr-zhu25-handwritten-1-enhanced.png',
+      json: {
+        doc_id: '硃25', doc_type: '硃批',
+        title: '為奏彰化失陷已調兵赴臺事',
+        official_post: '福建水師提督', author: '黃仕簡',
+        send_date: '乾隆五十一年十二月十日',
+        rescript_text: '已有旨了。欽此。',
+        body: '福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。'
+      }
+    },
+    {
+      page: 'ocr-zhu25-handwritten-2-enhanced.png',
+      json: {
+        doc_id: '奏2', doc_type: '上奏',
+        title: '為奏林爽文結黨失陷彰城事',
+        official_post: '福建陸路提督', author: '任承恩',
+        send_date: '乾隆五十一年十二月十日',
+        rescript_text: '已有旨了。',
+        body: '福建陸路提督革職留任奴才任承恩跪奏，為奏聞事。本年十二月初九日亥刻，奴才接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱。'
+      }
+    },
+    {
+      page: 'ocr-zhu25-handwritten-3-enhanced.png',
+      json: {
+        doc_id: '奏5', doc_type: '上奏',
+        title: '為奏辦理赴剿臺灣匪徒事',
+        official_post: '福建水師提督', author: '黃仕簡',
+        send_date: '乾隆五十一年十二月十日',
+        rescript_text: '已有旨了。',
+        body: '茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻縣城被陷，文武官員不知生死之事。'
+      }
+    },
+    {
+      page: 'ocr-zhu25-handwritten-4-enhanced.png',
+      json: {
+        doc_id: '台1', doc_type: '其他',
+        title: '天地會林爽文起事告示',
+        official_post: null, author: '林爽文',
+        send_date: null,
+        rescript_text: null,
+        body: '順天盟主林，為祝天瀝示，以安民心，以保農業事。照得居官愛民如子，才稱為民父母也。今據臺灣皆貪官污吏，擾害生靈，本帥不忍不誅，以救吾民。'
+      }
+    }
+  ];
+
+  const renderJson = (obj) => {
+    const rows = Object.entries(obj).map(([k, v]) => {
+      const val = v === null ? '<span class="key">null</span>' : `<span class="str">"${v}"</span>`;
+      return `&nbsp;&nbsp;<span class="key">"${k}"</span>: ${val},`;
+    });
+    return ['{', ...rows, '}'].join('<br>');
+  };
+
+  const makeTile = (doc, countLabel) => {
+    const tile = document.createElement('div');
+    tile.className = 'tile';
+    tile.innerHTML = `
+      <div class="tile-page">
+        <img class="page-dim" src="${doc.page}" alt="" decoding="async" fetchpriority="low">
+        <img class="page-full" src="${doc.page}" alt="" decoding="async" fetchpriority="low">
+        <span class="tile-scanline"></span>
+      </div>
+      <div class="tile-json">
+        <div class="tile-json-bar"><span class="tile-json-dot r"></span><span class="tile-json-dot y"></span><span class="tile-json-dot g"></span></div>
+        <div class="tile-json-body">${renderJson(doc.json)}<span class="tile-readbeam"></span></div>
+      </div>
+      <div class="tile-glasses">
+        <span class="tile-glasses-shape"></span>
+        <span class="tile-lens l"></span>
+        <span class="tile-lens r"></span>
+      </div>
+      <div class="tile-tick"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20"></circle><path d="M15 24.5 L21.5 31 L33 19"></path></svg></div>
+      <div class="tile-count">${countLabel}</div>`;
+    return tile;
+  };
+
+  const reset = (tile) => {
+    tile.classList.remove('is-scanning', 'is-scanned', 'is-json', 'is-reading', 'is-verified', 'is-active');
+    const badge = tile.querySelector('.tile-count');
+    if (badge) badge.classList.remove('is-bump');
+  };
+
+  /* 一格的完整流程：掃描 → 上色 → 翻成 JSON → 眼鏡閱讀 → 綠勾。
+     綠勾出現的同一刻，這一格右下角的頁數標示也會放大變藍，
+     跟單頁測試「1頁 → 50頁」那次轉換用同一個 .is-bump 效果。 */
+  const runTile = async (tile, { scanDur = 1500, readDur = 1600, holdDur = 900 } = {}) => {
+    reset(tile);
+    tile.style.setProperty('--scan-dur', `${scanDur}ms`);
+    tile.style.setProperty('--read-dur', `${readDur}ms`);
+    tile.classList.add('is-active');
+    await wait(120);
+    tile.classList.add('is-scanning');
+    await wait(scanDur);
+    tile.classList.add('is-scanned');
+    await wait(340);
+    tile.classList.add('is-json');
+    await wait(520);
+    tile.classList.add('is-reading');
+    await wait(readDur);
+    tile.classList.add('is-verified');
+    const badge = tile.querySelector('.tile-count');
+    if (badge) badge.classList.add('is-bump');
+    /* 綠勾＋藍色「50頁」在這裡停留 holdDur，之後 tile 仍然維持這個狀態
+       （不會自動還原），只是持續往上捲的畫面最終會把它捲出視野。 */
+    await wait(holdDur);
+  };
+
+  /* 頁數標示從「1頁」換成「50頁」：先淡出縮小、換好文字、再放大淡入變藍，
+     避免文字寬度瞬間變寬造成的跳動感。 */
+  const swapBadge = async (badge, newText) => {
+    badge.classList.add('is-swapping');
+    await wait(220);
+    badge.textContent = newText;
+    badge.classList.remove('is-swapping');
+    badge.classList.add('is-bump');
+    await wait(320);
+  };
+
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* 每一次啟動都拿一個新的編號。捲出畫面時編號 +1，舊的流程一發現
+     自己的編號過期就自行結束——否則捲進捲出幾次之後，會有好幾個
+     流程同時在操作同一個 track，互相清空、重建格子，看起來就像綠勾
+     和「50頁」不斷閃掉又冒出來。 */
+  let runId = 0;
+  let running = false;
+  const pendingTimers = [];
+  const clearTimers = () => {
+    while (pendingTimers.length) window.clearTimeout(pendingTimers.pop());
+  };
+
+  const runLoop = async (id) => {
+    const stale = () => id !== runId;
+    while (!stale()) {
+      /* ---- 第一階段：單頁測試（1頁） ---- */
+      scene.classList.add('is-switching-out');
+      await wait(420);
+      if (stale()) return;
+      scene.classList.remove('is-batch');
+      track.style.removeProperty('--scroll-speed');
+      track.innerHTML = '';
+      const single = makeTile(DOCS[0], '1頁');
+      track.appendChild(single);
+      await wait(30);
+      scene.classList.remove('is-switching-out');
+      await wait(480);
+      if (stale()) return;
+      await runTile(single, { scanDur: 1700, readDur: 1900 });
+      if (stale()) return;
+
+      /* 標示從「1頁」平順換成「50頁」（淡出→換字→放大淡入變藍） */
+      const badge = single.querySelector('.tile-count');
+      await swapBadge(badge, '50頁');
+      await wait(500);
+      if (stale()) return;
+
+      /* ---- 轉場：單頁縮小淡出 ---- */
+      scene.classList.add('is-switching-out');
+      await wait(520);
+      if (stale()) return;
+
+      /* ---- 第二階段：批次（50頁），2×2 並持續往下捲 ---- */
+      track.innerHTML = '';
+      const tiles = [];
+      /* 2 欄 × 8 列＝16 格；捲動 -50% 時剛好接回開頭，看起來是無限往下 */
+      for (let i = 0; i < 16; i += 1) {
+        const t = makeTile(DOCS[i % DOCS.length], '50頁');
+        track.appendChild(t);
+        tiles.push(t);
+      }
+      scene.classList.remove('is-switching-out');
+      scene.classList.add('is-batch', 'is-switching-in');
+      await wait(30);
+      scene.classList.remove('is-switching-in');
+      await wait(480);
+      if (stale()) return;
+
+      /* 捲動是 translateY(-50%) 無限循環，也就是「第 i 格」接回的位置正好是
+         「第 i+8 格」。因此這兩格必須用同一個時間點跑動畫，否則循環接回的
+         瞬間，剛驗證完的格子會被還沒驗證的複製格取代，看起來就像綠勾和
+         「50頁」忽然消失又重新出現。這裡只替前 8 格排時間，後 8 格跟著同步。 */
+      const half = tiles.length / 2;
+      for (let i = 0; i < half; i += 1) {
+        const pair = [tiles[i], tiles[i + half]];
+        pendingTimers.push(window.setTimeout(() => {
+          if (stale()) return;
+          pair.forEach((t) => runTile(t, { scanDur: 2200, readDur: 1500, holdDur: 2600 }));
+        }, i * 760));
+      }
+
+      await wait(half * 760 + 9000);
+      if (stale()) return;
+      await wait(600);
+    }
+  };
+
+  /* 靜態版本：不動畫，直接顯示第一頁掃描完成後的 JSON 與綠勾 */
+  if (reduceMotion) {
+    const still = makeTile(DOCS[0], '1頁');
+    still.classList.add('is-scanned', 'is-json', 'is-verified');
+    track.appendChild(still);
+    return;
+  }
+
+  /* 只在看得見的時候跑；離開畫面時除了停掉流程，也把 CSS 動畫暫停
+     （is-paused），避免捲動列與掃描光線在看不到的地方繼續耗繪圖資源。 */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        scene.classList.remove('is-paused');
+        if (running) return;
+        running = true;
+        runLoop(runId);
+      } else {
+        scene.classList.add('is-paused');
+        if (!running) return;
+        running = false;
+        /* 讓目前這個流程過期，並清掉還沒觸發的排程 */
+        runId += 1;
+        clearTimers();
+      }
+    });
+  }, { threshold: .2 });
+  observer.observe(scene);
+};
+initBatchTestScene();
 
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';

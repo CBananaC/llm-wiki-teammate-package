@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260804-part3-format-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260805-handwritten-features-06">
+  <link rel="stylesheet" href="storymap.css?v=20260805-ocr-batch-persistence-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260805-json-buttons-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260805-handwritten-features-02" defer></script>
+  <script src="storymap.js?v=20260805-json-buttons-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1455,7 +1455,7 @@
                         "desc": "奏摺採用直排書寫，閱讀方向由右至左、由上至下。OCR 必須按此順序輸出文字，而非由左至右的閱讀方式。",
                         "prompt": "奏摺用直排書寫，閱讀方向由右至左、由上至下。\n按此順序輸出文字，而非由左至右。",
                         "py": "<span class=\"cmt\"># 直排、由右至左：指定文字方向與排序規則</span>\nboxes = <span class=\"fn\">sorted</span>(\n    result.boxes,\n    key=<span class=\"kw\">lambda</span> b: (-b.x_center, b.y_top),  <span class=\"cmt\"># x 由大到小 = 由右至左</span>\n)",
-                        "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>\n}"
+                        "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事奴才時刻留心察查不敢稍有懈忽茲本年十二月初五日戌刻訪聞得臺灣彰化縣屬又有匪徒聚集會黨於十一月二十九日辰刻攻打彰化縣城至午刻縣城被陷文武官員不知生死之事查臺灣不法民番甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池\"</span>\n}"
                       },
                       {
                         "key": "regular-script", "panel": 0, "colour": "#cfe0ef",
@@ -1465,7 +1465,7 @@
                         "desc": "這份奏摺採用楷書書寫，字跡清晰，字與字、行與行之間間距明確，且字體大小一致，容易進行 OCR 辨識。。",
                         "prompt": "請辨識奏摺中的所有中文字，並按照原有順序輸出。\n不要輸出任何其他語言的文字和阿拉伯數字。 ",
                         "py": "<span class=\"cmt\"># 楷書正文：清楚字距與行距有助於 OCR</span>\nbody_regions = [\n    r <span class=\"kw\">for</span> r <span class=\"kw\">in</span> regions\n    <span class=\"kw\">if</span> r.script == <span class=\"str\">\"regular_kai_shu\"</span>\n]\nbody = <span class=\"fn\">ocr</span>(body_regions, preserve_order=<span class=\"kw\">True</span>)",
-                        "json": "{\n  <span class=\"jkey\">\"body_script\"</span>: <span class=\"jstr\">\"regular_kai_shu\"</span>,\n  <span class=\"jkey\">\"legibility\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"word_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"line_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"ocr_possible\"</span>: <span class=\"jstr\">\"true\"</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>\n}"
+                        "json": "{\n  <span class=\"jkey\">\"body_script\"</span>: <span class=\"jstr\">\"regular_kai_shu\"</span>,\n  <span class=\"jkey\">\"legibility\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"word_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"line_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"ocr_possible\"</span>: <span class=\"jstr\">\"true\"</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事奴才時刻留心察查不敢稍有懈忽茲本年十二月初五日戌刻訪聞得臺灣彰化縣屬又有匪徒聚集會黨於十一月二十九日辰刻攻打彰化縣城至午刻縣城被陷文武官員不知生死之事查臺灣不法民番甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池\"</span>\n}"
                       },
                       {
                         "key": "author", "panel": 0, "colour": "#e8d6b7",
@@ -1570,7 +1570,7 @@
 <span class="line"><span class="loc" id="loc-pages">  <span class="key">"page_numbers"</span>: [<span class="str">"80"</span>, <span class="str">"81"</span>],</span></span>
 <span class="line">  <span class="key">"paragraphs"</span>: [</span>
 <span class="line"><span class="loc" id="loc-para-0">    <span class="str">"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。"</span>,</span></span>
-<span class="line"><span class="loc" id="loc-para-1">    <span class="str">"<span class="para-visible">竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。其謀為不軌，肆行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。</span><button class="para-toggle" type="button" data-para-toggle="para-1-rest">...</button><span class="para-hidden" data-para-rest="para-1-rest" hidden>雖未准臺灣鎮道等報到，未知虛實，急當預為查辦征剿。奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，封備商哨船只齊足。奴才冬間舊染風症雖復時愈時發現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕所有廈門地方札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。又慮賊匪聞拿竄逃內地，飛札撫臣陸路提臣藩臬兩司興泉道及水師各鎮協營並臺灣鎮道一體嚴飭營縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門淡水南北兩路夾攻在案。現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。奴才於初十日帶領官兵登舟候風放洋飛渡之際，接據署北路淡水同知程峻守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜本縣俞在大墩地方拿匪被害二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要「處所，分頭堵禦，一面救援。第兵力單薄道路隔絕伏祈迅發大兵拯救再彰城失陷被害文武官員若干，此時探聽維艱未知的實，俟查確另稟。等情前來。</span>"</span>,</span></span>
+<span class="line"><span class="loc" id="loc-para-1">    <span class="str">"<span class="para-visible">竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。其謀為不軌，肆行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。</span><span class="para-hidden" data-para-rest="para-1-rest" hidden>雖未准臺灣鎮道等報到，未知虛實，急當預為查辦征剿。奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火器械，封備商哨船只齊足。奴才冬間舊染風症雖復時愈時發現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕所有廈門地方札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。又慮賊匪聞拿竄逃內地，飛札撫臣陸路提臣藩臬兩司興泉道及水師各鎮協營並臺灣鎮道一體嚴飭營縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門淡水南北兩路夾攻在案。現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。奴才於初十日帶領官兵登舟候風放洋飛渡之際，接據署北路淡水同知程峻守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜本縣俞在大墩地方拿匪被害二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要「處所，分頭堵禦，一面救援。第兵力單薄道路隔絕伏祈迅發大兵拯救再彰城失陷被害文武官員若干，此時探聽維艱未知的實，俟查確另稟。等情前來。</span><button class="para-toggle" type="button" data-para-toggle="para-1-rest" aria-label="展開" title="展開">...</button>"</span>,</span></span>
 <span class="line"><span class="loc" id="loc-para-2">    <span class="str">"查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣水師海壇閩安烽火各鎮協營，立就近省營分續調官兵北路援剿。奴才直由鹿耳門郡城南路進兵，會督夾攻。容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。謹奏。"</span></span></span>
 <span class="line">  ]</span>
 <span class="line">}</span>
@@ -1582,18 +1582,31 @@
             </div>
           </section>
 
-          <section class="story surface-c" id="part-3-test" data-tab="part-3" data-nav="#part-3-test">
+          <section class="story surface-c part3-test-split" id="part-3-test" data-tab="part-3" data-nav="#part-3-test">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">10</span><h2>OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
+              <div class="lay-split text-left" style="--vis-w: 46%;">
+                <div class="lay-copy">
+                  <article class="copybox blk" id="part-3-test-card"><div class="title-row"><span class="option-number">10</span><h2>OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
+                </div>
+                <div class="lay-visual">
+                  <!-- 批次掃描／驗證動畫。所有尺寸、顏色在 storymap-cards.css 的
+                       #part-3-test .batch-scene 區塊調整；時間快慢在 storymap.js 的
+                       initBatchTestScene() 裡。四份文書內容逐字取自 stage1_original_text.json。 -->
+                  <div class="batch-scene" data-batch-scene aria-hidden="true">
+                    <div class="batch-track" data-batch-track></div>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
 
+          <!--
           <section class="story surface-a" id="part-3-import" data-tab="part-3" data-nav="#part-3-import">
             <div class="story-inner">
               <article class="copybox blk"><div class="title-row"><span class="option-number">11</span><h2>輸入結構化史料至平台</h2></div><div class="body"><p>完成OCR和後續整理後，所有的史料都應儲存在一個完整的 JSON 檔案中，研究者於是可以要求 Agentic AI把 JSON 檔案匯入平台。以本平台為例，只需將整理完成的 JSON 檔案放入網站專案中的 「儲存一手史料」 資料夾，平台便可直接讀取該檔案。</p></div></article>
             </div>
           </section>
-        </section>
+        </section> -->
 
         <section class="part3-stage" id="part-3-ai" data-tab="part-3" data-nav="#part-3-ai">
           <section class="section-hero section-hero-part-3 part3-stage-bar" id="part-3-ai-bar" aria-labelledby="part-3-ai-title">

@@ -191,21 +191,63 @@
                  不在這個檔案。
 
     輸出格式：JSON（#part-3-json 右側真實 JSON 檢視器，硃25 的完整 JSON）：
-                 寫在 #part-3-json .part3-json-labels / .part3-json-label /
-                 .part3-json-body 三個區塊裡（下面已經附上一份）。
+                 全部寫在 #part-3-json-chart 區塊裡（下面已經附上一份），
+                 不要分別寫在子元素上，避免子元素預設值蓋過設定。
 
+                   --json-window-max-w
+                                       整個視窗（含上方標籤列）的寬度上限，
+                                       例如 480px；預設 none（不限制）
+                   --json-window-w    VS Code 視窗本身的寬度，例如 90%、
+                                       420px；預設 100%（填滿容器）
                    --json-labels-gap  標籤列（在視窗外面、上方）與下方
                                        視窗之間的間距
                    --json-label-font-size
                                        每個標籤按鈕的文字字級
+                   --json-file-font-size
+                                       標題列「硃25.ocr.json」檔名字級
                    --json-body-h      JSON 視窗的固定高度，超過會自動
                                        往上捲動
                    --json-body-font-size
                                        JSON 文字的字級
+                   --json-body-line-height
+                                       JSON 文字的行距
 
                  標籤點擊後的捲動＋反白效果、段落二的展開／收合，都是純
                  互動（沒有時間快慢可調），寫在 storymap.js 的
                  initJsonViewer() 裡。
+
+    OCR測試 批次動畫（#part-3-test 右側那個會動的方形視覺元素）：
+                 寫在 #part-3-test .batch-scene 區塊裡（下面已經附上一份，
+                 直接改數字即可）。
+
+                   --batch-w          整個動畫舞台的寬度，例如 80%、420px
+                   --batch-aspect     整個舞台的寬高比
+                   --batch-pad        舞台內邊距
+                   --tile-gap         2×2 之間的間距
+                   --single-tile-h    單頁階段那一頁的高度（佔舞台）
+                   --tile-aspect      每一頁／每個視窗的寬高比
+
+                   --scan-rgb         掃描光線顏色，要寫成「R, G, B」三個
+                                       數字（不要寫 #hex 或 rgb(...)）
+                   --scan-h           掃描光線的厚度
+                   --tick-color       綠色勾號的顏色
+
+                   --glass-color      眼鏡的顏色
+                   --glass-w          眼鏡的寬度
+                   --lens-l-x / --lens-r-x / --lens-y / --lens-w / --lens-h
+                                       兩片鏡片反光的位置與大小；如果反光
+                                       沒對準眼鏡圖片，就調這幾個
+
+                   --tile-json-font-size / --tile-json-font-size-single
+                                       批次階段／單頁階段的 JSON 文字字級
+                   --count-font-size / --count-font-size-single
+                                       批次階段「50頁」／單頁階段「1頁」的字級
+
+                   --scroll-speed     2×2 往下捲動一輪的時間
+                   --switch-dur       兩個階段之間轉場的時間
+
+                 掃描、閱讀、綠勾各自停留多久，以及每一格錯開的時間，屬於
+                 動畫流程，寫在 storymap.js 的 initBatchTestScene() 裡。
 
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
@@ -684,16 +726,40 @@
   --ocr-output-file-font-size: 0px; /* 上方檔案名稱字級 */
 }
 
-/* Part 3.6 — 輸出格式：JSON（#part-3-json 右側真實 JSON 檢視器） */
-#part-3-json .part3-json-labels {
-  --json-labels-gap: 10px;       /* 標籤列與下方視窗的間距 */
-}
-#part-3-json .part3-json-label {
-  --json-label-font-size: 11px;  /* 標籤文字字級 */
-}
-#part-3-json .part3-json-body {
-  --json-body-h: 420px;          /* JSON 視窗固定高度，超過會自動往上捲動 */
-  --json-body-font-size: 12px;   /* JSON 文字字級 */
+/* Part 3.6 — 輸出格式：JSON（#part-3-json 右側真實 JSON 檢視器）
+   所有 JSON 視覺元素的可調設定集中在下方 #part-3-json-chart 區塊，
+   避免子元素上的預設值蓋過外層設定。 */
+
+/* Part 3.4.4 — OCR測試：批次掃描／驗證動畫（#part-3-test 右側視覺元素） */
+#part-3-test .batch-scene {
+  --batch-w: 90%;                /* 整個動畫舞台的寬度，例如 80%、420px */
+  --batch-aspect: 1 / 1;         /* 整個舞台的寬高比 */
+  --batch-pad: 6%;               /* 舞台內邊距 */
+  --tile-gap: 3%;                /* 2×2 之間的間距 */
+  --single-tile-h: 78%;          /* 單頁階段那一頁的高度（佔舞台） */
+  --tile-aspect: .74 / 1;        /* 每一頁／每個視窗的寬高比 */
+
+  --scan-rgb: 120, 180, 255;     /* 掃描光線顏色，要寫成「R, G, B」三個數字 */
+  --scan-h: 22%;                 /* 掃描光線的厚度（相對頁面高度） */
+  --tick-color: #4fbf72;         /* 綠色勾號顏色 */
+
+  --glass-color: #7fd4ff;        /* 眼鏡顏色（PNG 用遮罩重新上色） */
+  --glass-w: 62%;                /* 眼鏡寬度（相對每一格） */
+  --lens-l-x: 11%;               /* 左鏡片反光的左邊位置 */
+  --lens-r-x: 62%;               /* 右鏡片反光的左邊位置 */
+  --lens-y: 26%;                 /* 兩片反光的上邊位置 */
+  --lens-w: 27%;                 /* 反光寬度 */
+  --lens-h: 46%;                 /* 反光高度 */
+
+  --tile-json-font-size: 20px;        /* 批次階段 JSON 文字字級 */
+  --tile-json-font-size-single: 20px; /* 單頁階段 JSON 文字字級 */
+  --count-font-size: 50px;             /* 批次階段「50頁」字級 */
+  --count-font-size-single: 50px;      /* 單頁階段「1頁」字級 */
+
+  --scroll-speed: 34s;           /* 2×2 往下捲動一輪的時間；調大＝捲更慢，
+                                     完成驗證（綠勾＋藍色「50頁」）的格子會
+                                     停留久一點才被捲出畫面 */
+  --switch-dur: .5s;             /* 兩個階段之間轉場的時間 */
 }
 
 /* Part 3.4.3 — PaddleOCR：左側文字、右側可調寬度圖片畫廊 */
@@ -969,45 +1035,46 @@
 #part-3-handwritten-explorer [data-fx-feature="vertical"] {
   --fx-color: #cfe3d4;
   --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 6%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #cfe0ef;
   --fx-left: 24%; --fx-top: 10%; --fx-width: 48%; --fx-height: 80%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 18%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #e8d6b7;
   --fx-left: 12%; --fx-top: 78%; --fx-width: 70%; --fx-height: 14%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 30%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 86%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #f0d6d0;
   --fx-left: 60%; --fx-top: 46%; --fx-width: 11%; --fx-height: 50%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #f5e6bd;
   --fx-left: 10%; --fx-top: 0%; --fx-width: 80%; --fx-height: 16%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 32%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #f3ddc4;
   --fx-left: 8%; --fx-top: 8%; --fx-width: 34%; --fx-height: 70%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 66%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 68%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
   --fx-color: #d8e2e0;
   --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 78%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 17%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
   --fx-color: #ddd6ea;
   --fx-left: 62%; --fx-top: 0%; --fx-width: 30%; --fx-height: 22%;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 90%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
 }
 
-/* 8 辨識手寫字 — 放大原件，讓標籤只在邊緣輕微疊入頁面。 */
+/* 8 辨識手寫字 — 標籤以錯落的固定垂直位置分布整個 PDF 高度，
+   並與 PDF 邊緣保持 10px 間距；位置穩定，不會每次重新整理都跳動。 */
 #part-3-handwritten-explorer .part3-fx-doc-folded {
   --part3-handwritten-doc-padding: clamp(54px, 5vw, 72px);
   padding-inline: var(--part3-handwritten-doc-padding);
@@ -1017,14 +1084,23 @@
 #part-3-handwritten-explorer [data-fx-feature="author"],
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-tag-left: auto;
-  --fx-tag-right: -70px;
+  --fx-tag-right: -10px;
+  --fx-tag-shift: translateX(100%);
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"],
 #part-3-handwritten-explorer [data-fx-feature="rescript"],
-#part-3-handwritten-explorer [data-fx-feature="watermark"],
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
-  --fx-tag-left: -70px;
+  --fx-tag-left: -10px;
   --fx-tag-right: auto;
+  --fx-tag-shift: translateX(-100%);
+}
+#part-3-handwritten-explorer [data-fx-feature="watermark"] {
+  --fx-tag-left: -10px;
+  --fx-tag-right: auto;
+  --fx-tag-shift: translateX(-100%);
+}
+#part-3-handwritten-explorer .part3-fx-tag.is-floating {
+  transform: var(--fx-tag-shift, none);
 }
 @media (max-width: 1040px) {
   #part-3-handwritten-explorer .part3-fx-doc-folded {
@@ -1034,6 +1110,10 @@
     --fx-tag-left: auto;
     --fx-tag-right: auto;
     --fx-tag-top: auto;
+    --fx-tag-shift: none;
+  }
+  #part-3-handwritten-explorer .part3-fx-tag.is-floating {
+    transform: none;
   }
 }
 
@@ -1067,8 +1147,16 @@
 
 /* Part 3.4.9.2 — 輸出格式：JSON（圖表） */
 #part-3-json-chart {
+  --json-window-max-w: none;     /* 整個視窗（含上方標籤列）的寬度上限 */
+  --json-window-w: 100%;         /* VS Code 視窗本身的寬度 */
+  --json-labels-gap: 10px;       /* 標籤列與下方視窗的間距 */
+  --json-label-font-size: 25px;  /* 標籤文字字級 */
+  --json-file-font-size: 0px;   /* 標題列「硃25.ocr.json」檔名字級 */
+  --json-body-h: 600px;          /* JSON 視窗固定高度 */
+  --json-body-font-size: 20px;   /* JSON 文字字級 */
+  --json-body-line-height: 1.7;  /* JSON 文字行距 */
   --part3-visual-width: 100%;
-  --part3-visual-min-height: 360px;
+  --part3-visual-min-height: 400px;
   --part3-visual-padding: clamp(20px, 2.4vw, 34px);
   --part3-chart-body-size: calc(15px * var(--font-scale));
 }

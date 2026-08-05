@@ -1,0 +1,454 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>24 · OCR測試 — 批次掃描／驗證動畫草稿（第二版）</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 860px; margin: 0 0 12px; }
+  .note-list { max-width: 860px; margin: 0 0 32px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+  .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
+
+  .mock-section { max-width: 1320px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-layout { display: grid; grid-template-columns: minmax(0, 1fr) 46%; gap: clamp(20px, 2.4vw, 34px); align-items: start; }
+  .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
+  .copybox .title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .copybox .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: var(--accent); color: #fff; font: 800 13px var(--sans); border-radius: 3px; }
+  .copybox h2 { margin: 0; color: var(--ink); font: 500 22px/1.3 var(--serif); }
+  .copybox p { margin: 0; color: var(--text); font: 500 15px/1.9 var(--serif); }
+
+  /* ==========================================================================
+     OCR測試 批次動畫
+     單頁階段：一頁置中放大（flex 置中，高度固定、寬度由比例決定）。
+     批次階段：2×2 的格線，往下持續捲動，每格錯開時間跑同一套流程。
+     ========================================================================== */
+  .batch-scene {
+    --batch-aspect: 1 / 1;         /* 整個舞台的寬高比 */
+    --batch-pad: 6%;               /* 舞台內邊距 */
+    --tile-gap: 3%;                /* 2×2 之間的間距 */
+    --single-tile-h: 78%;          /* 單頁階段那一頁的高度（佔舞台） */
+    --tile-aspect: .74 / 1;        /* 每一頁／每個視窗的寬高比 */
+    --scan-rgb: 120, 180, 255;     /* 掃描光暈顏色（R, G, B 三個數字） */
+    --tick-color: #4fbf72;         /* 綠色勾號顏色 */
+    --glass-color: #7fd4ff;        /* 眼鏡的顏色（PNG 用遮罩重新上色） */
+
+    position: relative; width: 100%; aspect-ratio: var(--batch-aspect);
+    overflow: hidden; border: 1px solid var(--line); border-radius: 6px;
+    background:
+      radial-gradient(120% 90% at 50% 0%, rgba(255,255,255,.06), transparent 60%),
+      linear-gradient(180deg, #1d3b3a 0%, #16302f 100%);
+    box-shadow: inset 0 0 40px rgba(0,0,0,.35);
+  }
+
+  /* ---- 捲動層 ---- */
+  .batch-track {
+    position: absolute; inset: var(--batch-pad);
+    opacity: 1; transition: opacity var(--switch-dur, .5s) ease, transform var(--switch-dur, .5s) ease;
+  }
+  /* 兩個階段之間的轉場：單頁往內縮小淡出，2×2 由稍大淡入 */
+  .batch-scene.is-switching-out .batch-track { opacity: 0; transform: scale(.82); }
+  .batch-scene.is-switching-in .batch-track { opacity: 0; transform: scale(1.14); }
+  /* 單頁階段：flex 置中，tile 高度固定，寬度由 aspect-ratio 推算出來 */
+  .batch-scene:not(.is-batch) .batch-track { display: flex; align-items: center; justify-content: center; }
+  .batch-scene:not(.is-batch) .tile { height: var(--single-tile-h); width: auto; aspect-ratio: var(--tile-aspect); }
+
+  /* 批次階段：2 欄格線，整層往上移動＝畫面往下捲 */
+  .batch-scene.is-batch .batch-track {
+    inset: var(--batch-pad) var(--batch-pad) auto var(--batch-pad);
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--tile-gap);
+    animation: batch-scroll var(--scroll-speed, 20s) linear infinite;
+  }
+  .batch-scene.is-batch .tile { width: 100%; aspect-ratio: var(--tile-aspect); }
+  @keyframes batch-scroll {
+    from { transform: translateY(0); }
+    to   { transform: translateY(-50%); }
+  }
+
+  .tile { position: relative; flex: none; }
+
+  /* 兩張同樣的頁面疊在一起：底下那張是「還沒掃到」的半透明去飽和版本，
+     上面那張是完整彩色版本，用 clip-path 由上往下逐漸露出。
+     露出的速度與藍色掃描線同步，所以掃描線掃過的地方會立刻變成正常顏色。 */
+  .tile-page { position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: #f0e6d2; }
+  .tile-page img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .tile-page .page-dim { opacity: .28; filter: grayscale(1) contrast(.85); }
+  .tile-page .page-full {
+    opacity: 1; filter: none;
+    clip-path: inset(0 0 100% 0);   /* 一開始完全遮住，等掃描線經過才露出 */
+  }
+  .tile.is-scanning .tile-page .page-full { animation: tile-reveal var(--scan-dur, 1.5s) ease-in-out forwards; }
+  .tile.is-scanned .tile-page .page-full { clip-path: inset(0 0 0 0); }
+  @keyframes tile-reveal {
+    from { clip-path: inset(0 0 100% 0); }
+    to   { clip-path: inset(0 0 0 0); }
+  }
+
+  /* 掃描光線：由上往下掃過整頁。放在 .tile-page 裡面，
+     所以光暈會被頁面邊界裁掉，不會超出紙張的上下範圍。 */
+  .tile-scanline {
+    position: absolute; left: 0; right: 0; height: 22%; top: -24%; z-index: 3;
+    opacity: 0; pointer-events: none;
+    background: linear-gradient(180deg,
+      rgba(var(--scan-rgb), 0) 0%,
+      rgba(var(--scan-rgb), .55) 42%,
+      rgba(var(--scan-rgb), .95) 50%,
+      rgba(var(--scan-rgb), .55) 58%,
+      rgba(var(--scan-rgb), 0) 100%);
+    box-shadow: 0 0 16px 3px rgba(var(--scan-rgb), .55);
+  }
+  .tile.is-scanning .tile-scanline { animation: tile-scan var(--scan-dur, 1.5s) ease-in-out forwards; }
+  @keyframes tile-scan {
+    0%   { top: -24%; opacity: 0; }
+    12%  { opacity: 1; }
+    88%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  /* JSON 視窗：與頁面同樣大小，掃描完成後翻面蓋在原頁上 */
+  .tile-json {
+    position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column;
+    background: #1e1e1e; border-radius: 3px; overflow: hidden;
+    border: 1px solid rgba(255,255,255,.1);
+    opacity: 0; transform: rotateY(90deg); transform-origin: center;
+    transition: opacity .35s ease, transform .45s cubic-bezier(.4,0,.2,1);
+  }
+  .tile.is-json .tile-json { opacity: 1; transform: rotateY(0deg); }
+  .tile-json-bar { display: flex; align-items: center; gap: 3px; padding: 4px 5px; background: #2b2b2b; flex: none; }
+  .tile-json-dot { width: 4px; height: 4px; border-radius: 50%; }
+  .tile-json-dot.r { background: #ff5f57; }
+  .tile-json-dot.y { background: #febc2e; }
+  .tile-json-dot.g { background: #28c840; }
+  .tile-json-body {
+    position: relative; flex: 1; min-height: 0; overflow: hidden;
+    padding: 5px 6px; color: #d4d4d4;
+    font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    font-size: var(--json-font-size, 4.4px); line-height: 1.65;
+    word-break: break-all;
+  }
+  .batch-scene:not(.is-batch) .tile-json-body { --json-font-size: 6.6px; }
+  .tile-json-body .key { color: #9cdcfe; }
+  .tile-json-body .str { color: #ce9178; }
+
+  /* 閱讀階段：一道亮光由上而下掃過 JSON 文字，代表 AI 正在讀 */
+  .tile-readbeam {
+    position: absolute; left: 0; right: 0; height: 34%; top: -36%; z-index: 2; opacity: 0;
+    background: linear-gradient(180deg, rgba(255,255,255,0), rgba(255,255,255,.16), rgba(255,255,255,0));
+  }
+  .tile.is-reading .tile-readbeam { animation: tile-read var(--read-dur, 1.6s) linear forwards; }
+  @keyframes tile-read {
+    0%   { top: -36%; opacity: 0; }
+    10%  { opacity: 1; }
+    90%  { opacity: 1; }
+    100% { top: 100%; opacity: 0; }
+  }
+
+  /* ---- 閱讀中的眼鏡（用 PNG 當遮罩重新上色，可自由改顏色） ---- */
+  .tile-glasses {
+    position: absolute; z-index: 6; left: 50%; top: 50%;
+    width: var(--glass-w, 62%); aspect-ratio: 3.1 / 1;
+    transform: translate(-50%, -50%) scale(.82);
+    opacity: 0; transition: opacity .32s ease, transform .32s ease;
+  }
+  .tile.is-reading .tile-glasses { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  /* 綠勾出現的同時眼鏡就淡出（讀完了，換成驗證結果） */
+  .tile.is-verified .tile-glasses { opacity: 0; transform: translate(-50%, -50%) scale(.86); }
+  .tile-glasses-shape {
+    position: absolute; inset: 0; background: var(--glass-color);
+    -webkit-mask: url('anim-glasses.png') center / contain no-repeat;
+            mask: url('anim-glasses.png') center / contain no-repeat;
+    filter: drop-shadow(0 0 6px rgba(127, 212, 255, .75));
+  }
+  /* 兩片鏡片的反光：位置用變數控制，方便對準 PNG 的鏡片 */
+  .tile-lens {
+    position: absolute; top: var(--lens-y, 26%);
+    width: var(--lens-w, 27%); height: var(--lens-h, 46%);
+    border-radius: 42% 42% 46% 46%;
+    background: linear-gradient(115deg, rgba(255,255,255,0) 30%, rgba(255,255,255,.85) 48%, rgba(255,255,255,0) 66%);
+    background-size: 260% 100%; background-position: 130% 0;
+    mix-blend-mode: screen; opacity: .9;
+  }
+  .tile-lens.l { left: var(--lens-l-x, 11%); }
+  .tile-lens.r { left: var(--lens-r-x, 62%); }
+  .tile.is-reading .tile-lens { animation: lens-shine var(--shine-dur, 1.5s) ease-in-out infinite; }
+  .tile.is-reading .tile-lens.r { animation-delay: .16s; }
+  @keyframes lens-shine {
+    0%   { background-position: 130% 0; }
+    55%  { background-position: -60% 0; }
+    100% { background-position: -60% 0; }
+  }
+
+  /* 綠色勾號：驗證完成 */
+  .tile-tick {
+    position: absolute; z-index: 8; inset: 0; display: grid; place-items: center;
+    opacity: 0; transform: scale(.5); transition: opacity .3s ease, transform .3s cubic-bezier(.34,1.56,.64,1);
+  }
+  .tile.is-verified .tile-tick { opacity: 1; transform: scale(1); }
+  .tile-tick svg { width: 42%; height: 42%; filter: drop-shadow(0 0 8px rgba(79,191,114,.65)); }
+  .tile-tick circle { fill: rgba(79,191,114,.16); stroke: var(--tick-color); stroke-width: 4; }
+  .tile-tick path { fill: none; stroke: var(--tick-color); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+
+  /* 頁數徽章：在每一頁／視窗的右下角，沒有外框和底色，
+     用深色描邊讓白字在淺色紙張和深色視窗上都看得清楚。 */
+  .tile-count {
+    position: absolute; z-index: 10; right: 5%; bottom: 4%;
+    color: #ffffff; font-family: var(--sans); font-weight: 800;
+    font-size: var(--count-font-size, 13px); line-height: 1; letter-spacing: .03em;
+    text-shadow: 0 0 4px rgba(0,0,0,.9), 0 1px 3px rgba(0,0,0,.85);
+    transition: transform .35s ease, color .35s ease;
+  }
+  .batch-scene:not(.is-batch) .tile-count { --count-font-size: 22px; }
+  .tile-count.is-bump { transform: scale(1.35); color: #9fd8ff; }
+
+  /* 尚未輪到的格子先淡出，避免整片同時滿版閃動 */
+  .batch-scene.is-batch .tile { opacity: .34; transition: opacity .5s ease; }
+  .batch-scene.is-batch .tile.is-active { opacity: 1; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .batch-scene.is-batch .batch-track { animation: none; }
+    .tile-scanline, .tile-readbeam, .tile-lens { animation: none !important; }
+    .tile-page .page-full { clip-path: inset(0 0 0 0); animation: none !important; }
+    .tile-json { opacity: 1; transform: none; }
+    .tile-tick { opacity: 1; transform: none; }
+  }
+
+  .plan-block { max-width: 1320px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+</style>
+</head>
+<body>
+
+  <h1>「10. OCR測試」新增視覺元素 — 批次掃描／驗證動畫草稿（第二版）</h1>
+  <p class="lead">
+    先用一頁測試（右下角 <code>1頁</code>）：掃描 → 上色 → 翻成 JSON 視窗 → 戴上眼鏡閱讀 → 綠勾驗證；
+    確認沒問題後畫面變成 2×2 持續往下捲的批次處理，徽章換成 <code>50頁</code>，代表一次處理 50 頁。
+  </p>
+  <ul class="note-list">
+    <li>四格用<b>不同的手抄本頁面</b>（硃25 的第 1–4 頁）和<b>不同文書的 JSON</b>（奏2 任承恩、奏5 黃仕簡、硃25 黃仕簡、台1 林爽文），全部逐字取自 <code>stage1_original_text.json</code>。</li>
+    <li>眼鏡用 <code>glasses-png-you-nerd-thoughts-expert-deskmate-33.png</code> 當<b>遮罩</b>重新上色（改 <code>--glass-color</code> 就能換色），兩片鏡片上有反覆掃過的反光，代表正在讀。</li>
+    <li>鏡片反光的位置若對不準 PNG，可調 <code>--lens-l-x</code>、<code>--lens-r-x</code>、<code>--lens-y</code>、<code>--lens-w</code>、<code>--lens-h</code>。</li>
+  </ul>
+
+  <div class="mock-section">
+    <div class="mock-layout">
+      <article class="copybox">
+        <div class="title-row"><span class="num">10</span><h2>OCR測試</h2></div>
+        <p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p>
+      </article>
+
+      <div class="batch-scene" id="batch-scene" aria-hidden="true">
+        <div class="batch-track" id="batch-track"></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <h2>動畫流程（每一輪）</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>單頁測試（1頁）</b>：一頁半透明的手抄本置中放大，藍色掃描線由上往下掃過，頁面隨之變成完整彩色。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>翻成 JSON</b>：同樣大小的 VS Code 風格視窗翻面蓋上，裡面是這份文書真實的 JSON 內容。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>閱讀＋驗證</b>：一副會反光的眼鏡浮現在視窗上，亮光掃過整段文字，接著彈出綠色勾號代表通過檢查。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>轉為批次（50頁）</b>：徽章跳成 50頁，畫面變成 2×2 並持續往下捲動，每一格用不同的頁面和不同的文書 JSON，錯開時間重複同一套流程。</p></div></div>
+    </div>
+  </div>
+
+  <script>
+    /* 四份真實文書，逐字取自 review-tools/shared data/stage1_original_text.json */
+    const DOCS = [
+      {
+        page: 'ocr-anim-handwritten-p1.png',
+        json: {
+          doc_id: '硃25', doc_type: '硃批',
+          title: '為奏彰化失陷已調兵赴臺事',
+          official_post: '福建水師提督', author: '黃仕簡',
+          send_date: '乾隆五十一年十二月十日',
+          rescript_text: '已有旨了。欽此。',
+          body: '福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。'
+        }
+      },
+      {
+        page: 'ocr-anim-handwritten-p2.png',
+        json: {
+          doc_id: '奏2', doc_type: '上奏',
+          title: '為奏林爽文結黨失陷彰城事',
+          official_post: '福建陸路提督', author: '任承恩',
+          send_date: '乾隆五十一年十二月十日',
+          rescript_text: '已有旨了。',
+          body: '福建陸路提督革職留任奴才任承恩跪奏，為奏聞事。本年十二月初九日亥刻，奴才接據署臺灣府淡水同知程峻、竹塹營守備董得魁會銜差役楊添投稟報稱。'
+        }
+      },
+      {
+        page: 'ocr-anim-handwritten-p3.png',
+        json: {
+          doc_id: '奏5', doc_type: '上奏',
+          title: '為奏辦理赴剿臺灣匪徒事',
+          official_post: '福建水師提督', author: '黃仕簡',
+          send_date: '乾隆五十一年十二月十日',
+          rescript_text: '已有旨了。',
+          body: '茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻攻打彰化縣城，至午刻縣城被陷，文武官員不知生死之事。'
+        }
+      },
+      {
+        page: 'ocr-anim-handwritten-p4.png',
+        json: {
+          doc_id: '台1', doc_type: '其他',
+          title: '天地會林爽文起事告示',
+          official_post: null, author: '林爽文',
+          send_date: null,
+          rescript_text: null,
+          body: '順天盟主林，為祝天瀝示，以安民心，以保農業事。照得居官愛民如子，才稱為民父母也。今據臺灣皆貪官污吏，擾害生靈，本帥不忍不誅，以救吾民。'
+        }
+      }
+    ];
+
+    /* 把一份文書物件轉成有顏色的 JSON 片段 */
+    const renderJson = (obj) => {
+      const rows = Object.entries(obj).map(([k, v]) => {
+        const val = v === null
+          ? '<span class="key">null</span>'
+          : `<span class="str">"${v}"</span>`;
+        return `&nbsp;&nbsp;<span class="key">"${k}"</span>: ${val},`;
+      });
+      return ['{', ...rows, '}'].join('<br>');
+    };
+
+    const scene = document.getElementById('batch-scene');
+    const track = document.getElementById('batch-track');
+
+    const makeTile = (doc, countLabel) => {
+      const tile = document.createElement('div');
+      tile.className = 'tile';
+      tile.innerHTML = `
+        <div class="tile-page">
+          <img class="page-dim" src="${doc.page}" alt="">
+          <img class="page-full" src="${doc.page}" alt="">
+          <span class="tile-scanline"></span>
+        </div>
+        <div class="tile-json">
+          <div class="tile-json-bar"><span class="tile-json-dot r"></span><span class="tile-json-dot y"></span><span class="tile-json-dot g"></span></div>
+          <div class="tile-json-body">${renderJson(doc.json)}<span class="tile-readbeam"></span></div>
+        </div>
+        <div class="tile-glasses">
+          <span class="tile-glasses-shape"></span>
+          <span class="tile-lens l"></span>
+          <span class="tile-lens r"></span>
+        </div>
+        <div class="tile-tick"><svg viewBox="0 0 48 48"><circle cx="24" cy="24" r="20"></circle><path d="M15 24.5 L21.5 31 L33 19"></path></svg></div>
+        <div class="tile-count">${countLabel}</div>`;
+      return tile;
+    };
+
+    const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+    const reset = (tile) => {
+      tile.classList.remove('is-scanning', 'is-scanned', 'is-json', 'is-reading', 'is-verified', 'is-active');
+      const badge = tile.querySelector('.tile-count');
+      if (badge) badge.classList.remove('is-bump');
+    };
+
+    /* 一格的完整流程：掃描 → 上色 → 翻成 JSON → 閱讀 → 綠勾。
+       綠勾出現的同一刻，頁數標示也放大變藍，跟 1頁→50頁 那次轉換同一個效果。 */
+    const runTile = async (tile, { scanDur = 1500, readDur = 1600 } = {}) => {
+      reset(tile);
+      tile.style.setProperty('--scan-dur', `${scanDur}ms`);
+      tile.style.setProperty('--read-dur', `${readDur}ms`);
+      tile.classList.add('is-active');
+      await wait(120);
+      tile.classList.add('is-scanning');
+      await wait(scanDur);
+      tile.classList.add('is-scanned');
+      await wait(340);
+      tile.classList.add('is-json');
+      await wait(520);
+      tile.classList.add('is-reading');
+      await wait(readDur);
+      tile.classList.add('is-verified');
+      const badge = tile.querySelector('.tile-count');
+      if (badge) badge.classList.add('is-bump');
+      await wait(900);
+    };
+
+    let cancelled = false;
+
+    const runLoop = async () => {
+      while (!cancelled) {
+        /* ---- 第一階段：單頁測試 1頁（回到開頭時也用同樣的轉場淡入） ---- */
+        scene.classList.add('is-switching-out');
+        await wait(420);
+        scene.classList.remove('is-batch');
+        track.style.removeProperty('--scroll-speed');
+        track.innerHTML = '';
+        const single = makeTile(DOCS[0], '1頁');
+        track.appendChild(single);
+        await wait(30);
+        scene.classList.remove('is-switching-out');
+        await wait(480);
+        if (cancelled) return;
+        await runTile(single, { scanDur: 1700, readDur: 1900 });
+        if (cancelled) return;
+
+        /* 徽章從 1頁 跳成 50頁 */
+        const badge = single.querySelector('.tile-count');
+        badge.classList.add('is-bump');
+        badge.textContent = '50頁';
+        await wait(700);
+
+        /* ---- 轉場：單頁縮小淡出 ---- */
+        scene.classList.add('is-switching-out');
+        await wait(520);
+        if (cancelled) return;
+
+        /* ---- 第二階段：批次 50頁，2×2 並持續往下捲 ---- */
+        track.innerHTML = '';
+        const tiles = [];
+        /* 做 2 欄 × 8 列＝16 格；捲動 -50% 時剛好接回開頭，看起來是無限往下 */
+        for (let i = 0; i < 16; i += 1) {
+          const t = makeTile(DOCS[i % DOCS.length], '50頁');
+          track.appendChild(t);
+          tiles.push(t);
+        }
+        /* 切換成 2×2 版面，先放大隱藏，再淡入還原 */
+        scene.classList.remove('is-switching-out');
+        scene.classList.add('is-batch', 'is-switching-in');
+        track.style.setProperty('--scroll-speed', '22s');
+        await wait(30);
+        scene.classList.remove('is-switching-in');
+        await wait(480);
+        if (cancelled) return;
+
+        tiles.forEach((t, i) => {
+          setTimeout(() => {
+            if (!cancelled) runTile(t, { scanDur: 2200, readDur: 1500 });
+          }, i * 620);
+        });
+
+        await wait(16 * 620 + 6200);
+        if (cancelled) return;
+        await wait(600);
+      }
+    };
+
+    /* 進入畫面才開始跑（正式網站版本會做成完整的啟停控制） */
+    let started = false;
+    new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting && !started) { started = true; runLoop(); }
+      });
+    }, { threshold: .2 }).observe(scene);
+  </script>
+
+</body>
+</html>

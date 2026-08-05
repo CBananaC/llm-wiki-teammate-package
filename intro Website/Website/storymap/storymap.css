@@ -1070,19 +1070,22 @@ img { max-width: 100%; }
   position: relative;
   top: auto;
 }
-/* The research-question and JSON sections keep the card left and visual right. */
+/* The research-question, JSON, and OCR測試 sections keep the card left and visual right. */
 #part-3-content #part-3-research-questions .lay-split,
-#part-3-content .part3-json-split .lay-split {
+#part-3-content .part3-json-split .lay-split,
+#part-3-content .part3-test-split .lay-split {
   grid-template-columns: minmax(0, 1fr) minmax(0, var(--vis-w, 54%));
   align-items: stretch;
 }
 #part-3-content #part-3-research-questions .lay-copy,
-#part-3-content #part-3-json .lay-copy {
+#part-3-content #part-3-json .lay-copy,
+#part-3-content #part-3-test .lay-copy {
   order: 1;
   grid-column: 1;
 }
 #part-3-content #part-3-research-questions .lay-visual,
-#part-3-content #part-3-json .lay-visual {
+#part-3-content #part-3-json .lay-visual,
+#part-3-content #part-3-test .lay-visual {
   order: 2;
   grid-column: 2;
   position: relative;
@@ -1867,11 +1870,13 @@ img { max-width: 100%; }
 }
 @media (max-width: 980px) {
   #part-3-content #part-3-research-questions .lay-split,
-  #part-3-content .part3-json-split .lay-split {
+  #part-3-content .part3-json-split .lay-split,
+  #part-3-content .part3-test-split .lay-split {
     grid-template-columns: 1fr;
   }
   #part-3-content #part-3-research-questions .lay-visual,
-  #part-3-content .part3-json-split .lay-visual {
+  #part-3-content .part3-json-split .lay-visual,
+  #part-3-content .part3-test-split .lay-visual {
     grid-column: 1;
   }
   .part3-five-card-grid {
@@ -2428,13 +2433,20 @@ img { max-width: 100%; }
 /* ============================================================================
    9f · 輸出格式：JSON — 真實 JSON 檢視器（#part-3-json 右側視覺元素）
    標籤列在視窗外面、上方，是硃25 這份真實 OCR JSON 的欄位中文名稱；
-   點擊會捲動到 JSON 裡對應那一行並短暫反白。段落二有摺疊／展開機制。
+   點擊會捲動到 JSON 裡對應那一行並持續反白，直到選取另一個欄位。
+   段落二有摺疊／展開機制。
    大小可調的變數寫在 storymap-cards.css 的
    #part-3-json .part3-json-viewer-wrap 區塊。
    ========================================================================== */
-.part3-json-viewer-wrap { width: 100%; }
+.part3-json-viewer-wrap { width: 100%; max-width: var(--json-window-max-w, none); }
 .part3-json-labels {
-  display: flex; flex-wrap: wrap; gap: 6px;
+  display: grid;
+  grid-template-columns: repeat(4, max-content);
+  grid-template-rows: repeat(3, auto);
+  grid-auto-flow: row;
+  align-items: stretch;
+  justify-content: start;
+  gap: 8px;
   margin-bottom: var(--json-labels-gap, 10px);
 }
 .part3-json-label {
@@ -2442,12 +2454,30 @@ img { max-width: 100%; }
   padding: 4px 10px; font-family: var(--sans); font-weight: 700;
   font-size: var(--json-label-font-size, 11px); line-height: 1.4;
   color: var(--ink); background: var(--card, #fffaf2); opacity: .85;
-  transition: opacity .15s, filter .15s;
+  transition: color .15s, background-color .15s, border-color .15s,
+              box-shadow .15s, opacity .15s, transform .1s;
 }
-.part3-json-label:hover { opacity: 1; filter: brightness(.97); }
+.part3-json-label:hover,
+.part3-json-label:focus-visible {
+  opacity: 1;
+  color: var(--ink);
+  background: #fffdf7;
+  border-color: var(--accent);
+  box-shadow: 0 3px 10px rgba(22, 61, 63, .16);
+}
+.part3-json-label:active { transform: translateY(1px); }
+.part3-json-label.is-selected {
+  opacity: 1;
+  color: #fffaf2;
+  background: var(--ink);
+  border-color: var(--ink);
+  box-shadow: 0 4px 12px rgba(22, 61, 63, .24);
+}
+.part3-json-label.is-selected:hover,
+.part3-json-label.is-selected:focus-visible { filter: brightness(1.12); }
 
 .part3-json-window {
-  display: flex; flex-direction: column;
+  display: flex; flex-direction: column; width: var(--json-window-w, 100%);
   background: #1e1e1e; border-radius: 8px; overflow: hidden;
   box-shadow: 0 18px 34px rgba(0, 0, 0, .35);
   border: 1px solid rgba(255, 255, 255, .08);
@@ -2457,24 +2487,239 @@ img { max-width: 100%; }
 .part3-json-dot.red { background: #ff5f57; }
 .part3-json-dot.yellow { background: #febc2e; }
 .part3-json-dot.green { background: #28c840; }
-.part3-json-file { margin-left: 8px; color: rgba(255, 255, 255, .5); font-family: var(--sans); font-size: 11px; font-weight: 600; line-height: 1; letter-spacing: .02em; }
+.part3-json-file { margin-left: 8px; color: rgba(255, 255, 255, .5); font-family: var(--sans); font-size: var(--json-file-font-size, 11px); font-weight: 600; line-height: 1; letter-spacing: .02em; }
 
 .part3-json-body {
   height: var(--json-body-h, 420px); padding: 12px 16px; overflow-x: hidden; overflow-y: auto;
   color: #d4d4d4; font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
-  font-size: var(--json-body-font-size, 12px); line-height: 1.7;
+  font-size: var(--json-body-font-size, 12px); line-height: var(--json-body-line-height, 1.7);
   scrollbar-width: thin;
 }
 .part3-json-body .line { display: block; white-space: pre-wrap; word-break: break-word; }
 .part3-json-body .key { color: #9cdcfe; }
 .part3-json-body .str { color: #ce9178; }
 .part3-json-body .loc { display: block; transition: background-color .3s ease; border-radius: 3px; }
-.part3-json-body .loc.is-flash { background: rgba(120, 180, 255, .28); }
+.part3-json-body .loc.is-selected { background: rgba(120, 180, 255, .28); }
 
-/* 段落二的展開／收合按鈕：同一個按鈕，收起來顯示「...」，
-   展開後文字換成「收合」，點擊在兩種狀態間切換。 */
-.para-toggle { all: unset; cursor: pointer; color: #6fa8dc; text-decoration: underline; padding: 0 2px; }
+/* 段落二的展開／收合按鈕：收起來顯示「...」，展開後顯示向上的符號。 */
+.para-toggle { all: unset; cursor: pointer; color: #6fa8dc; text-decoration: none; padding: 0 2px; }
+.para-toggle[aria-label="收合"] { font-size: 1.15em; line-height: .9; vertical-align: .04em; }
 .para-hidden[hidden] { display: none; }
+
+/* ============================================================================
+   9g · OCR測試 — 批次掃描／驗證動畫（#part-3-test 右側視覺元素）
+   單頁階段：一頁置中放大，右下角標示「1頁」。
+   批次階段：2×2 格線持續往下捲，標示改為「50頁」。
+   每一格的流程：掃描 → 掃過的地方立刻上色 → 翻成 JSON 視窗 → 眼鏡閱讀 → 綠勾。
+   大小、顏色寫在 storymap-cards.css 的 #part-3-test .batch-scene 區塊；
+   時間快慢在 storymap.js 的 initBatchTestScene() 裡。
+   ========================================================================== */
+.batch-scene {
+  position: relative; width: var(--batch-w, 100%); aspect-ratio: var(--batch-aspect, 1 / 1);
+  overflow: hidden; border: 1px solid var(--line); border-radius: 6px;
+  background:
+    radial-gradient(120% 90% at 50% 0%, rgba(255, 255, 255, .06), transparent 60%),
+    linear-gradient(180deg, #1d3b3a 0%, #16302f 100%);
+  box-shadow: inset 0 0 40px rgba(0, 0, 0, .35);
+}
+
+/* ---- 捲動層與兩個階段之間的轉場 ---- */
+.batch-track {
+  position: absolute; inset: var(--batch-pad, 6%);
+  opacity: 1; transition: opacity var(--switch-dur, .5s) ease, transform var(--switch-dur, .5s) ease;
+}
+/* Keep the completed 50-page grid visible while the next single-page tile is
+   prepared. The DOM swap then happens directly, so the green ticks and blue
+   50-page labels never fade out before the restart appears. */
+.batch-scene.is-switching-out .batch-track { opacity: 1; transform: none; }
+/* The 50-page grid also enters already visible: its labels must progress
+   continuously from white to enlarged blue instead of fading out and back in. */
+.batch-scene.is-switching-in .batch-track { opacity: 1; transform: none; }
+/* 單頁階段：flex 置中，tile 高度固定、寬度由比例推算 */
+.batch-scene:not(.is-batch) .batch-track { display: flex; align-items: center; justify-content: center; }
+.batch-scene:not(.is-batch) .tile { height: var(--single-tile-h, 78%); width: auto; aspect-ratio: var(--tile-aspect, .74 / 1); }
+/* 批次階段：2 欄格線，整層往上移動＝畫面往下捲 */
+.batch-scene.is-batch .batch-track {
+  inset: var(--batch-pad, 6%) var(--batch-pad, 6%) auto var(--batch-pad, 6%);
+  display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--tile-gap, 3%);
+  animation: batch-scroll var(--scroll-speed, 34s) linear infinite;
+  will-change: transform;
+}
+.batch-scene.is-batch .tile { width: 100%; aspect-ratio: var(--tile-aspect, .74 / 1); }
+/* translate3d 讓捲動交給 GPU 合成，不會每一格都重繪整張大圖 */
+@keyframes batch-scroll {
+  from { transform: translate3d(0, 0, 0); }
+  to   { transform: translate3d(0, -50%, 0); }
+}
+
+/* contain 把每一格的重繪範圍鎖在自己格子裡，一格在動不會連累其他 15 格 */
+.tile { position: relative; flex: none; contain: layout paint style; }
+
+/* 兩張同樣的頁面疊在一起：底下是「還沒掃到」的半透明去飽和版本，上面是完整
+   彩色版本，用 clip-path 由上往下露出，與掃描線同步，所以掃過就立刻變彩色。 */
+.tile-page { position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: #f0e6d2; }
+.tile-page img { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+.tile-page .page-dim { opacity: .28; filter: grayscale(1) contrast(.85); }
+.tile-page .page-full { opacity: 1; filter: none; clip-path: inset(0 0 100% 0); will-change: clip-path; }
+.tile.is-scanning .tile-page .page-full { animation: tile-reveal var(--scan-dur, 1.5s) ease-in-out forwards; }
+.tile.is-scanned .tile-page .page-full { clip-path: inset(0 0 0 0); }
+@keyframes tile-reveal {
+  from { clip-path: inset(0 0 100% 0); }
+  to   { clip-path: inset(0 0 0 0); }
+}
+
+/* 掃描光線：放在 .tile-page 裡面，光暈會被紙張邊界裁掉，不會超出上下範圍。
+   移動用 transform（GPU 合成）而不是 top，否則每一格每一幀都會重繪整張大圖。
+   translateY 的百分比是相對「自己的高度」，所以 -24%／100% 的位置換算成
+   -24/22×100 ≈ -109% 與 100/22×100 ≈ 455%。 */
+.tile-scanline {
+  position: absolute; left: 0; right: 0; height: var(--scan-h, 22%); top: 0; z-index: 3;
+  transform: translate3d(0, -109%, 0); will-change: transform;
+  opacity: 0; pointer-events: none;
+  background: linear-gradient(180deg,
+    rgba(var(--scan-rgb, 120, 180, 255), 0) 0%,
+    rgba(var(--scan-rgb, 120, 180, 255), .55) 42%,
+    rgba(var(--scan-rgb, 120, 180, 255), .95) 50%,
+    rgba(var(--scan-rgb, 120, 180, 255), .55) 58%,
+    rgba(var(--scan-rgb, 120, 180, 255), 0) 100%);
+  box-shadow: 0 0 16px 3px rgba(var(--scan-rgb, 120, 180, 255), .55);
+}
+.tile.is-scanning .tile-scanline { animation: tile-scan var(--scan-dur, 1.5s) ease-in-out forwards; }
+@keyframes tile-scan {
+  0%   { transform: translate3d(0, -109%, 0); opacity: 0; }
+  12%  { opacity: 1; }
+  88%  { opacity: 1; }
+  100% { transform: translate3d(0, 455%, 0); opacity: 0; }
+}
+
+/* JSON 視窗：與頁面同樣大小，掃描完成後翻面蓋在原頁上 */
+.tile-json {
+  position: absolute; inset: 0; z-index: 4; display: flex; flex-direction: column;
+  background: #1e1e1e; border-radius: 3px; overflow: hidden;
+  border: 1px solid rgba(255, 255, 255, .1);
+  opacity: 0; transform: rotateY(90deg); transform-origin: center;
+  transition: opacity .35s ease, transform .45s cubic-bezier(.4, 0, .2, 1);
+}
+.tile.is-json .tile-json { opacity: 1; transform: rotateY(0deg); }
+.tile-json-bar { display: flex; align-items: center; gap: 3px; padding: 4px 5px; background: #2b2b2b; flex: none; }
+.tile-json-dot { width: 4px; height: 4px; border-radius: 50%; }
+.tile-json-dot.r { background: #ff5f57; }
+.tile-json-dot.y { background: #febc2e; }
+.tile-json-dot.g { background: #28c840; }
+.tile-json-body {
+  position: relative; flex: 1; min-height: 0; overflow: hidden;
+  padding: 5px 6px; color: #d4d4d4;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font-size: var(--tile-json-font-size, 4.4px); line-height: 1.65;
+  word-break: break-all;
+}
+.batch-scene:not(.is-batch) .tile-json-body { font-size: var(--tile-json-font-size-single, 6.6px); }
+.tile-json-body .key { color: #9cdcfe; }
+.tile-json-body .str { color: #ce9178; }
+
+/* 閱讀階段：一道亮光由上而下掃過 JSON 文字。同樣改用 transform 移動：
+   高度 34%，-36%／100% 換算成 -36/34×100 ≈ -106% 與 100/34×100 ≈ 294%。 */
+.tile-readbeam {
+  position: absolute; left: 0; right: 0; height: 34%; top: 0; z-index: 2; opacity: 0;
+  transform: translate3d(0, -106%, 0); will-change: transform;
+  background: linear-gradient(180deg, rgba(255, 255, 255, 0), rgba(255, 255, 255, .16), rgba(255, 255, 255, 0));
+}
+.tile.is-reading .tile-readbeam { animation: tile-read var(--read-dur, 1.6s) linear forwards; }
+@keyframes tile-read {
+  0%   { transform: translate3d(0, -106%, 0); opacity: 0; }
+  10%  { opacity: 1; }
+  90%  { opacity: 1; }
+  100% { transform: translate3d(0, 294%, 0); opacity: 0; }
+}
+
+/* ---- 閱讀中的眼鏡：PNG 當遮罩重新上色，兩片鏡片有反覆掃過的反光 ---- */
+.tile-glasses {
+  position: absolute; z-index: 6; left: 50%; top: 50%;
+  width: var(--glass-w, 62%); aspect-ratio: 3.1 / 1;
+  transform: translate(-50%, -50%) scale(.82);
+  opacity: 0; transition: opacity .32s ease, transform .32s ease;
+}
+.tile.is-reading .tile-glasses { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+/* 綠勾出現的同時眼鏡就淡出 */
+.tile.is-verified .tile-glasses { opacity: 0; transform: translate(-50%, -50%) scale(.86); }
+.tile-glasses-shape {
+  position: absolute; inset: 0; background: var(--glass-color, #7fd4ff);
+  -webkit-mask: url('anim-glasses.png') center / contain no-repeat;
+          mask: url('anim-glasses.png') center / contain no-repeat;
+  filter: drop-shadow(0 0 6px rgba(127, 212, 255, .75));
+}
+/* 鏡片反光：原本是動 background-position，那不是合成屬性，16 格同時跑會
+   每一幀重繪。改成外框固定、裡面一條漸層用 transform 滑過去，外觀完全一樣
+   但交給 GPU 合成。 */
+.tile-lens {
+  position: absolute; top: var(--lens-y, 26%);
+  width: var(--lens-w, 27%); height: var(--lens-h, 46%);
+  border-radius: 42% 42% 46% 46%; overflow: hidden;
+  mix-blend-mode: screen; opacity: .9;
+}
+.tile-lens::before {
+  content: ""; position: absolute; top: 0; bottom: 0; left: 0; width: 260%;
+  background: linear-gradient(115deg, rgba(255, 255, 255, 0) 30%, rgba(255, 255, 255, .85) 48%, rgba(255, 255, 255, 0) 66%);
+  transform: translate3d(50%, 0, 0); will-change: transform;
+}
+.tile-lens.l { left: var(--lens-l-x, 11%); }
+.tile-lens.r { left: var(--lens-r-x, 62%); }
+.tile.is-reading .tile-lens::before { animation: lens-shine var(--shine-dur, 1.5s) ease-in-out infinite; }
+.tile.is-reading .tile-lens.r::before { animation-delay: .16s; }
+@keyframes lens-shine {
+  0%   { transform: translate3d(50%, 0, 0); }
+  55%  { transform: translate3d(-100%, 0, 0); }
+  100% { transform: translate3d(-100%, 0, 0); }
+}
+
+/* 綠色勾號：驗證完成 */
+.tile-tick {
+  position: absolute; z-index: 8; inset: 0; display: grid; place-items: center;
+  opacity: 0; transform: scale(.5); transition: opacity .3s ease, transform .3s cubic-bezier(.34, 1.56, .64, 1);
+}
+.tile.is-verified .tile-tick { opacity: 1; transform: scale(1); }
+.tile-tick svg { width: 42%; height: 42%; filter: drop-shadow(0 0 8px rgba(79, 191, 114, .65)); }
+.tile-tick circle { fill: rgba(79, 191, 114, .16); stroke: var(--tick-color, #4fbf72); stroke-width: 4; }
+.tile-tick path { fill: none; stroke: var(--tick-color, #4fbf72); stroke-width: 6; stroke-linecap: round; stroke-linejoin: round; }
+
+/* 頁數標示（1頁／50頁）：每一格的右下角，沒有外框和底色，
+   用深色描邊讓白字在淺色紙張和深色視窗上都看得清楚。 */
+.tile-count {
+  position: absolute; z-index: 10; right: 5%; bottom: 4%;
+  color: #ffffff; font-family: var(--sans); font-weight: 800;
+  font-size: var(--count-font-size, 13px); line-height: 1; letter-spacing: .03em;
+  text-shadow: 0 0 4px rgba(0, 0, 0, .9), 0 1px 3px rgba(0, 0, 0, .85);
+  transition: transform .35s ease, color .35s ease, opacity .22s ease;
+}
+.batch-scene:not(.is-batch) .tile-count { font-size: var(--count-font-size-single, 22px); }
+.tile-count.is-bump,
+.tile.is-verified .tile-count { transform: scale(1.35); color: #9fd8ff; }
+/* 「1頁」換成「50頁」中間那一刻：先淡出，換好文字後再放大淡入，
+   避免文字寬度瞬間變寬造成的跳動感（見 storymap.js 的 initBatchTestScene）。 */
+.tile-count.is-swapping { opacity: 0; transform: scale(.7); }
+
+/* 尚未輪到的格子先淡出，避免整片同時滿版閃動。
+   注意：淡出的是裡面的紙張與 JSON 視窗，不是整個 .tile——因為父層一旦設了
+   opacity，子層就無法再調回全不透明，那樣頁數標示也會跟著一起變淡。
+   這樣「50頁」從一開始就是清楚的白色，驗證完成後才放大變藍並一直保持。 */
+.batch-scene.is-batch .tile-page { opacity: .34; transition: opacity .5s ease; }
+.batch-scene.is-batch .tile.is-active .tile-page,
+.batch-scene.is-batch .tile.is-verified .tile-page { opacity: 1; }
+
+/* 捲出畫面時把所有動畫暫停，不再佔用繪圖資源 */
+.batch-scene.is-paused .batch-track,
+.batch-scene.is-paused .tile-scanline,
+.batch-scene.is-paused .tile-readbeam,
+.batch-scene.is-paused .tile-lens::before,
+.batch-scene.is-paused .tile-page .page-full { animation-play-state: paused; }
+
+@media (prefers-reduced-motion: reduce) {
+  .batch-scene.is-batch .batch-track { animation: none; }
+  .tile-scanline, .tile-readbeam, .tile-lens::before { animation: none !important; }
+  .tile-page .page-full { clip-path: inset(0 0 0 0); animation: none !important; }
+  .tile-json { opacity: 1; transform: none; }
+  .tile-tick { opacity: 1; transform: none; }
+}
 
 /* ============================================================================
    10 · 響應式
@@ -2502,6 +2747,8 @@ img { max-width: 100%; }
   .ocr-scan-scene { max-width: none; margin-top: clamp(18px, 3vw, 28px); }
   /* 小螢幕：JSON 檢視器高度縮短，避免佔太多版面 */
   .part3-json-body { height: 300px; }
+  /* 小螢幕：批次動畫排到文字卡下方，並留一點上方間距 */
+  .batch-scene { margin-top: clamp(18px, 3vw, 28px); }
   .route-info-window { right: 4%; left: 4%; width: auto; }
   .route-info-window-taiwan { top: 12px; bottom: auto; }
   .route-info-window-beijing { top: 12px; width: auto; }

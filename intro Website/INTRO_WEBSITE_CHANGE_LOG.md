@@ -4399,3 +4399,130 @@ Verified:
 
 Remaining:
 - The existing responsive breakpoint continues to stack the two columns on narrow screens.
+
+### 2026-08-05 16:21 HKT — Codex — Tighten handwritten PDF and label spacing
+
+Summary:
+- Kept the widened `辨識手寫字` visual and reduced the document-side padding so the two open PDF panels use more of the left column.
+- Pulled the labels toward the page edges, with approximately 12px of intentional overlap on both sides; the responsive layout still returns labels to a normal row on narrow screens.
+- Refreshed the StoryMap card stylesheet cache key.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- At a 1280px desktop viewport, the explorer is `1228.8px` wide, the open PDF panels are `212px` wide each, and the side padding is `64px`.
+- Label geometry shows the right labels overlap the PDF edge by 12px; the left labels are tucked to the page edge with the same small overlap.
+- Browser console reports no errors or warnings; `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this spacing adjustment.
+
+### 2026-08-05 16:47 HKT — Codex — Remove punctuation from handwritten JSON text
+
+Summary:
+- Removed punctuation marks from the two handwritten OCR JSON text examples shown for `直排單欄` and `正文字體`.
+- Kept punctuation in the feature descriptions, AI prompts, and Python examples.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser output for `辨識手寫字` shows the text examples without punctuation.
+- `git diff --check` passes.
+
+Remaining:
+- None for this JSON display adjustment.
+
+### 2026-08-05 17:22 HKT — Codex — Fix JSON viewer font-size controls
+
+Summary:
+- Moved the JSON label, filename, body-text, line-height, window width, and height variables onto the `#part-3-json-chart` visual block.
+- Removed child-level defaults that overrode adjustments made on the visual block.
+- Refreshed the StoryMap card stylesheet cache key.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- The browser inherits the controls from `#part-3-json-chart` and renders the label at 14px, filename at 11px, and JSON body at 15px.
+- Browser console reports no errors or warnings; `git diff --check` passes.
+
+Remaining:
+- None for the JSON viewer font-size control fix.
+
+### 2026-08-05 17:34 HKT — Codex — Spread handwritten labels around the PDF
+
+Summary:
+- Redistributed the eight handwritten feature labels across varied, stable vertical positions over the full PDF height.
+- Kept the four labels on the right and four on the left, with each label positioned 10px outside the PDF edge.
+- Reset the outward label transform at the responsive breakpoint so the mobile label row remains unchanged.
+- Refreshed the StoryMap card stylesheet cache key.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry reports a 10px gap from every floating label to the PDF edge.
+- Browser screenshot shows the labels distributed across the visual instead of clustered in two vertical groups.
+- Browser console reports no errors or warnings; `git diff --check` passes.
+
+Remaining:
+- None for the handwritten label layout adjustment.
+
+### 2026-08-05 18:25 HKT — Codex — Move JSON paragraph collapse control
+
+Summary:
+- Moved the paragraph toggle after the hidden continuation so the expanded control appears after `等情前來。`.
+- Replaced the expanded `收合` text with the upward chevron `⌃`; the collapsed state remains `...`.
+- Added matching accessible labels and titles for both states.
+- Refreshed the StoryMap CSS and JavaScript cache keys.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser test confirms expanded DOM order ends with `等情前來。` followed by `⌃`.
+- Collapse returns the button to `...` and hides the continuation.
+- `node --check storymap.js`, `git diff --check`, and browser console checks pass.
+
+Remaining:
+- None for the JSON paragraph toggle adjustment.
+
+### 2026-08-05 18:34 HKT — Codex — Reorganize JSON field buttons
+
+Summary:
+- Arranged the JSON field buttons in three rows: 來源／標題／官職／姓名; 具奏日期／硃批日期／硃批內容／頁碼; and 段落一／段落二／段落三.
+- Added hover, focus, pressed, and selected styles to every button.
+- Changed JSON line highlighting from a timed flash to persistent selection that moves to the next clicked field.
+- Refreshed the StoryMap CSS and JavaScript cache keys.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms three rows with 4, 4, and 3 buttons.
+- Clicking 來源 selects its button and JSON line; clicking 標題 removes the previous selection and keeps the new one.
+- Hover transition is present; browser console reports no errors or warnings; `node --check storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the JSON field button layout and selection behavior.

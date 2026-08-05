@@ -8166,6 +8166,27 @@ Verified:
 Remaining:
 - The existing responsive breakpoint continues to stack the two columns on narrow screens.
 
+### 2026-08-05 16:21 HKT — Codex — Tighten handwritten PDF and label spacing
+
+Summary:
+- Kept the widened `辨識手寫字` visual and reduced the document-side padding so the two open PDF panels use more of the left column.
+- Pulled the labels toward the page edges, with approximately 12px of intentional overlap on both sides; the responsive layout still returns labels to a normal row on narrow screens.
+- Refreshed the StoryMap card stylesheet cache key.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- At a 1280px desktop viewport, the explorer is `1228.8px` wide, the open PDF panels are `212px` wide each, and the side padding is `64px`.
+- Label geometry shows the right labels overlap the PDF edge by 12px; the left labels are tucked to the page edge with the same small overlap.
+- Browser console reports no errors or warnings; `node --check` and `git diff --check` pass.
+
+Remaining:
+- None for this spacing adjustment.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
@@ -8250,4 +8271,156 @@ Verified:
 - All JSON field values cross-checked against `review-tools/shared data/stage1_original_text.json` and `Visual Material/3.4/明清台灣檔案匯編 30 (dragged).ocr.json` — no invented content.
 
 Remaining:
-- Local git commit for these files not yet made.
+- None; committed locally as `786903c`.
+
+### 2026-08-05 16:20 HKT — Claude — Expose JSON viewer window/font size in card CSS
+
+Summary:
+- Added `--json-window-max-w` and `--json-window-w` so the whole viewer's max width and the VS Code window's own width can be adjusted in storymap-cards.css.
+- Added `--json-file-font-size` (titlebar filename) and `--json-body-line-height` (JSON text line spacing) alongside the existing `--json-body-font-size`.
+- Updated the top-of-file documentation block in storymap-cards.css to list all six variables under `#part-3-json`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Brace/comment balance checks passed for both CSS files.
+
+Remaining:
+- Local git commit for this change not yet made.
+
+### 2026-08-05 18:25 HKT — Codex — Move JSON paragraph collapse control
+
+Summary:
+- Moved the paragraph toggle after the hidden continuation so the expanded control appears after `等情前來。`.
+- Replaced the expanded `收合` text with the upward chevron `⌃`; the collapsed state remains `...`.
+- Added matching accessible labels and titles for both states.
+- Refreshed the StoryMap CSS and JavaScript cache keys.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser test confirms expanded DOM order ends with `等情前來。` followed by `⌃`.
+- Collapse returns the button to `...` and hides the continuation.
+- `node --check storymap.js`, `git diff --check`, and browser console checks pass.
+
+Remaining:
+- None for the JSON paragraph toggle adjustment.
+
+### 2026-08-05 16:47 HKT — Codex — Remove punctuation from handwritten JSON text
+
+Summary:
+- Removed punctuation marks from the two handwritten OCR JSON text examples shown for `直排單欄` and `正文字體`.
+- Kept punctuation in the feature descriptions, AI prompts, and Python examples.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser output for `辨識手寫字` shows the text examples without punctuation.
+- `git diff --check` passes.
+
+Remaining:
+- None for this JSON display adjustment.
+
+### 2026-08-05 17:22 HKT — Codex — Fix JSON viewer font-size controls
+
+Summary:
+- Moved the JSON label, filename, body-text, line-height, window width, and height variables onto the `#part-3-json-chart` visual block.
+- Removed child-level defaults that overrode adjustments made on the visual block.
+- Refreshed the StoryMap card stylesheet cache key.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The browser inherits the controls from `#part-3-json-chart` and renders the label at 14px, filename at 11px, and JSON body at 15px.
+- Browser console reports no errors or warnings; `git diff --check` passes.
+
+Remaining:
+- None for the JSON viewer font-size control fix.
+
+### 2026-08-05 17:34 HKT — Codex — Spread handwritten labels around the PDF
+
+Summary:
+- Redistributed the eight handwritten feature labels across varied, stable vertical positions over the full PDF height.
+- Kept the four labels on the right and four on the left, with each label positioned 10px outside the PDF edge.
+- Reset the outward label transform at the responsive breakpoint so the mobile label row remains unchanged.
+- Refreshed the StoryMap card stylesheet cache key.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry reports a 10px gap from every floating label to the PDF edge.
+- Browser screenshot shows the labels distributed across the visual instead of clustered in two vertical groups.
+- Browser console reports no errors or warnings; `git diff --check` passes.
+
+Remaining:
+- None for the handwritten label layout adjustment.
+
+### 2026-08-05 17:55 HKT — Claude — Add batch scan/verify animation to "10. OCR測試"
+
+Summary:
+- Restructured `#part-3-test` from a single full-width card into a `lay-split text-left` layout, adding an animated square stage to the right of the text card.
+- Animation loop: one enlarged translucent handwritten page marked "1頁" → blue scan line sweeps down and everything it passes turns to full colour immediately (two stacked images revealed by an animated `clip-path`) → a same-size VS Code window flips in with that document's real JSON → a recoloured glasses graphic with sweeping lens glare appears while a light band reads the text → glasses fade as a green tick pops → zoom crossfade to a 2×2 grid scrolling downward with the badge changed to "50頁", each tile running the same sequence staggered.
+- Four tiles use four different enhanced handwritten scans and four different documents (硃25, 奏2, 奏5, 台1), all field values verbatim from `stage1_original_text.json`.
+- Gated by `IntersectionObserver` (stops when scrolled out of view) with a static `prefers-reduced-motion` fallback.
+- Copied the glasses artwork to `storymap/anim-glasses.png` and used it as a CSS mask so its colour is controlled by `--glass-color`.
+- All sizes, colours, and lens-glare positions exposed as CSS variables under `#part-3-test .batch-scene` in storymap-cards.css and documented in the top-of-file comment block; cache-busting version strings bumped on all three assets.
+
+Files changed:
+- `intro Website/Website/UI Idea/24-ocr-batch-test-animation-draft.html` (draft, iterated through four rounds before approval)
+- `intro Website/Website/UI Idea/ocr-anim-handwritten-p1..p4.png`, `anim-glasses.png` (draft assets)
+- `intro Website/Website/storymap/anim-glasses.png` (new)
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passed.
+- Brace and comment-termination checks passed for both CSS files; div/span/section tag counts balanced in the HTML.
+- All four documents' fields cross-checked against `review-tools/shared data/stage1_original_text.json` — no invented content.
+
+Remaining:
+- Local git commit for this change not yet made.
+
+### 2026-08-05 18:34 HKT — Codex — Reorganize JSON field buttons
+
+Summary:
+- Arranged the JSON field buttons in three rows: 來源／標題／官職／姓名; 具奏日期／硃批日期／硃批內容／頁碼; and 段落一／段落二／段落三.
+- Added hover, focus, pressed, and selected styles to every button.
+- Changed JSON line highlighting from a timed flash to persistent selection that moves to the next clicked field.
+- Refreshed the StoryMap CSS and JavaScript cache keys.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms three rows with 4, 4, and 3 buttons.
+- Clicking 來源 selects its button and JSON line; clicking 標題 removes the previous selection and keeps the new one.
+- Hover transition is present; browser console reports no errors or warnings; `node --check storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the JSON field button layout and selection behavior.
