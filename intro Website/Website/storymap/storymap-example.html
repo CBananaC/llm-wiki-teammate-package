@@ -1455,7 +1455,7 @@
                         "desc": "奏摺採用直排書寫，閱讀方向由右至左、由上至下。OCR 必須按此順序輸出文字，而非由左至右的閱讀方式。",
                         "prompt": "這份奏摺採用直排書寫，閱讀方向由右至左、由上至下。\n請按此順序輸出文字，\n不要使用由左至右的預設閱讀方式。",
                         "py": "<span class=\"cmt\"># 直排、由右至左：指定文字方向與排序規則</span>\nboxes = <span class=\"fn\">sorted</span>(\n    result.boxes,\n    key=<span class=\"kw\">lambda</span> b: (-b.x_center, b.y_top),  <span class=\"cmt\"># x 由大到小 = 由右至左</span>\n)",
-                        "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>\n}"
+                        "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>\n}"
                       },
                       {
                         "key": "regular-script", "panel": 0, "colour": "#cfe0ef",
@@ -1465,7 +1465,7 @@
                         "desc": "這份奏摺使用楷書書寫，字跡清楚可讀，字與字、行與行之間有明確間距，且每個字的大小相近，具備 OCR 辨識的可能。",
                         "prompt": "這份奏摺使用楷書書寫，字體清楚，字與字、行與行之間有明確間距，且字體大小相近。\n請利用這些特徵辨識正文，並保留原有閱讀順序。",
                         "py": "<span class=\"cmt\"># 楷書正文：清楚字距與行距有助於 OCR</span>\nbody_regions = [\n    r <span class=\"kw\">for</span> r <span class=\"kw\">in</span> regions\n    <span class=\"kw\">if</span> r.script == <span class=\"str\">\"regular_kai_shu\"</span>\n]\nbody = <span class=\"fn\">ocr</span>(body_regions, preserve_order=<span class=\"kw\">True</span>)",
-                        "json": "{\n  <span class=\"jkey\">\"body_script\"</span>: <span class=\"jstr\">\"regular_kai_shu\"</span>,\n  <span class=\"jkey\">\"legibility\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"word_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"line_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"ocr_possible\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
+                        "json": "{\n  <span class=\"jkey\">\"body_script\"</span>: <span class=\"jstr\">\"regular_kai_shu\"</span>,\n  <span class=\"jkey\">\"legibility\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"word_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"line_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"ocr_possible\"</span>: <span class=\"jstr\">\"true\"</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>\n}"
                       },
                       {
                         "key": "author", "panel": 0, "colour": "#e8d6b7",

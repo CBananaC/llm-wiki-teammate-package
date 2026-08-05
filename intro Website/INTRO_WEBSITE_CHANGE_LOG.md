@@ -4303,3 +4303,21 @@ Verified:
 
 Remaining:
 - The displayed excerpts remain source-text teaching examples and should be checked against the scanned page when used as evidence.
+
+### 2026-08-05 15:56 HKT — Codex — Add source-text examples to handwritten OCR features
+
+Summary:
+- Added direct source text under `text` in the handwritten `直排單欄` and `正文字體` JSON windows.
+- Used the same four-sentence source excerpt followed by `……`, without changing the existing handwritten layout and script metadata.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser-rendered handwritten features contain the new text examples and ellipsis.
+- The live page reports no console errors or warnings.
+
+Remaining:
+- The handwritten excerpt remains an OCR teaching example and should be checked against the scan before being treated as confirmed transcription.
