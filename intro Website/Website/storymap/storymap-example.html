@@ -1339,94 +1339,74 @@
                     "pages": ["ocr-zhu25-printed-1-enhanced.png", "ocr-zhu25-printed-2-enhanced.png"],
                     "features": [
                       {
-                        "key": "layout", "page": 0, "colour": "#cfe3d4",
-                        "box": {"left":"4%","top":"10%","width":"66%","height":"86%"},
-                        "tag": {"left":"-124px","top":"30%"},
+                        "key": "text-info", "page": 0, "colour": "#cfe0ef",
+                        "box": {"left":"69%","top":"8%","width":"27%","height":"34%"},
+                        "tag": {"right":"-132px","top":"14%"},
+                        "title": "文本資訊",
+                        "desc": "《明清臺灣檔案彙編》所收錄的每份奏摺，應先在正文前保存清楚的基本資料，包括史料來源、標題、作者與日期。這些資料是後續檢索與排序的依據，必須先由 OCR 辨識，並以清楚、固定的結構保存。",
+                        "prompt": "這是《明清臺灣檔案彙編》第30冊的印刷奏摺。請先辨識正文前的文本資訊：史料來源、標題、作者、日期。\n請把四項資料分別放入 source、title、author、date 欄位，\n再輸出正文；不要把文本資訊混入 body。",
+                        "py": "<span class=\"cmt\"># 先抽取文本資訊，再處理正文</span>\nheader = <span class=\"fn\">extract_header</span>(result)\ndoc = {\n    <span class=\"str\">\"source\"</span>: <span class=\"str\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n    <span class=\"str\">\"title\"</span>:  header[<span class=\"str\">\"title\"</span>],\n    <span class=\"str\">\"author\"</span>: header[<span class=\"str\">\"author\"</span>],\n    <span class=\"str\">\"date\"</span>:   header[<span class=\"str\">\"date\"</span>],\n}",
+                        "json": "{\n  <span class=\"jkey\">\"source\"</span>: <span class=\"jstr\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n  <span class=\"jkey\">\"title\"</span>: <span class=\"jstr\">\"為奏彰化失陷已調兵赴臺事\"</span>,\n  <span class=\"jkey\">\"author\"</span>: <span class=\"jstr\">\"福建水師提督 黃仕簡\"</span>,\n  <span class=\"jkey\">\"date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>\n}"
+                      },
+                      {
+                        "key": "single-column", "page": 0, "colour": "#cfe3d4",
+                        "box": {"left":"5%","top":"10%","width":"88%","height":"84%"},
+                        "tag": {"right":"-132px","top":"36%"},
                         "title": "橫排單欄",
-                        "desc": "此史料採用單欄印刷版面，全頁只有一個文字區塊，沒有分欄或跨欄的圖表。辨識時需要說明閱讀順序，避免 OCR 把同一段文字拆成多欄。",
-                        "prompt": "這份 PDF 是單欄印刷版面，全頁只有一個文字區塊。\n請在 OCR 時保持單欄閱讀順序，不要自動分欄，\n也不要把換行誤判成新的段落。",
-                        "py": "<span class=\"cmt\"># 單欄版面：關閉版面分欄，保留原有閱讀順序</span>\nocr = <span class=\"fn\">PaddleOCR</span>(\n    lang=<span class=\"str\">\"chinese_cht\"</span>,\n    use_doc_unwarping=<span class=\"kw\">False</span>,\n    use_textline_orientation=<span class=\"kw\">False</span>,\n)",
-                        "json": "{\n  <span class=\"jkey\">\"layout\"</span>: <span class=\"jstr\">\"single_column\"</span>,\n  <span class=\"jkey\">\"reading_order\"</span>: <span class=\"jstr\">\"top_to_bottom\"</span>,\n  <span class=\"jkey\">\"text_blocks\"</span>: <span class=\"jnum\">1</span>\n}"
+                        "desc": "《明清臺灣檔案彙編》採用單欄印刷，閱讀方向由右至左、由上至下。OCR 必須依照這個順序整理文字，不能套用由左至右的預設順序，也不能把同一頁自行拆成多欄。",
+                        "prompt": "這份《明清臺灣檔案彙編》印刷奏摺採用單欄閱讀。\n請按照由右至左、由上至下的順序排列 OCR 結果，\n不要套用由左至右的預設順序，也不要自行分欄。",
+                        "py": "<span class=\"cmt\"># 單欄印刷：由右至左、由上至下排序</span>\nregions = <span class=\"fn\">sorted</span>(\n    data[<span class=\"str\">\"raw_regions\"</span>],\n    key=<span class=\"kw\">lambda</span> r: (-r[<span class=\"str\">\"box\"</span>][<span class=\"num\">0</span>], r[<span class=\"str\">\"box\"</span>][<span class=\"num\">1</span>])\n)",
+                        "json": "{\n  <span class=\"jkey\">\"layout\"</span>: <span class=\"jstr\">\"single_column\"</span>,\n  <span class=\"jkey\">\"reading_order\"</span>: <span class=\"jstr\">\"right_to_left_top_to_bottom\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">1</span>\n}"
+                      },
+                      {
+                        "key": "paragraphs", "page": 0, "colour": "#f5e6bd",
+                        "box": {"left":"46%","top":"12%","width":"13%","height":"78%"},
+                        "tag": {"right":"-132px","top":"58%"},
+                        "title": "分段",
+                        "desc": "本書以縮排分隔段落。OCR 時需要辨認縮排所表示的段落起點，保留每一段的完整內容，不要把每一個直欄或換行誤當成新的段落。",
+                        "prompt": "這份印刷奏摺使用縮排來分隔段落。\n請把縮排視為段落起點，保留每段的完整文字，\n不要因直排欄位或一般換行而錯誤切斷段落。",
+                        "py": "<span class=\"cmt\"># 以縮排辨識段落，不把每個直欄誤切成新段落</span>\nparagraphs = <span class=\"fn\">split_paragraphs_by_indent</span>(\n    reading_order_regions,\n    indent_tolerance=<span class=\"num\">12</span>\n)\nbody = <span class=\"str\">\"\\n\\n\"</span>.<span class=\"fn\">join</span>(paragraphs)",
+                        "json": "{\n  <span class=\"jkey\">\"paragraph_break\"</span>: <span class=\"jstr\">\"indentation\"</span>,\n  <span class=\"jkey\">\"paragraph_count\"</span>: <span class=\"jnum\">2</span>,\n  <span class=\"jkey\">\"printed_pages\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>]\n}"
+                      },
+                      {
+                        "key": "page", "page": 0, "colour": "#ddd6ea",
+                        "box": {"left":"86%","top":"94.5%","width":"8%","height":"3.6%"},
+                        "tag": {"right":"-132px","top":"90%"},
+                        "title": "頁碼",
+                        "desc": "頁碼位於頁面右下角。為方便日後引用與查考，每一頁、每一份奏摺的頁碼都要一併 OCR，另存於 page 或 printed_page_numbers 欄位，不可混入正文。",
+                        "prompt": "請辨識每一頁右下角的頁碼，並從正文文字中分離出來。\n請把所有奏摺頁碼依原本順序存入 printed_page_numbers，\n同時保留目前頁碼於 page 欄位，方便日後引用與查考。",
+                        "py": "<span class=\"cmt\"># 擷取所有頁碼，與正文分開保存</span>\npage_numbers = []\n<span class=\"kw\">for</span> page_result <span class=\"kw\">in</span> pages:\n    number = <span class=\"fn\">match_page_number</span>(page_result, corner=<span class=\"str\">\"bottom_right\"</span>)\n    page_numbers.<span class=\"fn\">append</span>(number)\ndoc[<span class=\"str\">\"printed_page_numbers\"</span>] = page_numbers",
+                        "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">80</span>,\n  <span class=\"jkey\">\"printed_page_numbers\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>],\n  <span class=\"jkey\">\"page_in_body\"</span>: <span class=\"jstr\">\"removed\"</span>\n}"
                       },
                       {
                         "key": "mark", "page": 0, "colour": "#f0d6d0",
                         "box": {"left":"77.5%","top":"6.5%","width":"9%","height":"3.2%"},
                         "tag": {"left":"-124px","top":"5%"},
                         "title": "標題符號",
-                        "desc": "標題上方的實心符號屬於版面裝飾，並非文字內容。這類符號常被 OCR 誤判為文字或標點，需要明確要求略過，並在完成後人工或以 AI 校對。",
-                        "prompt": "標題上方的黑色實心符號是版面裝飾，不是文字。\n請在輸出時略過這個符號，不要當成標點或文字，\n並在 notes 欄標記此處需要人工校對。",
-                        "py": "<span class=\"cmt\"># 過濾版面裝飾符號，避免誤判為文字</span>\nDECOR = {<span class=\"str\">\"■\"</span>, <span class=\"str\">\"▬\"</span>, <span class=\"str\">\"—\"</span>}\ntexts = [t <span class=\"kw\">for</span> t <span class=\"kw\">in</span> data[<span class=\"str\">\"rec_texts\"</span>]\n         <span class=\"kw\">if</span> t.<span class=\"fn\">strip</span>() <span class=\"kw\">not in</span> DECOR]",
-                        "json": "{\n  <span class=\"jkey\">\"decoration_skipped\"</span>: <span class=\"jnum\">1</span>,\n  <span class=\"jkey\">\"notes\"</span>: <span class=\"jstr\">\"標題符號模糊，需人工校對\"</span>\n}"
+                        "desc": "這份 PDF 的標題符號目前清楚可見，但同類史料中的符號可能十分模糊，從而影響 OCR 結果。完成辨識後，需要由研究者人工檢查，或再由 AI 協助核對符號及其附近文字。",
+                        "prompt": "標題上方的符號目前清楚可見，但請不要假定所有頁面的符號都同樣清晰。\n請在 OCR 後保留標題符號的辨識結果與信心資訊，\n對模糊或低信心部分標記為需要人工或 AI 後續檢查。",
+                        "py": "<span class=\"cmt\"># 標題符號清晰度不固定：保留後續檢查標記</span>\nsymbol = <span class=\"fn\">detect_title_mark</span>(image)\nreview_needed = symbol.confidence &lt; <span class=\"num\">0.90</span>\ndoc[<span class=\"str\">\"title_mark\"</span>] = {\n    <span class=\"str\">\"present\"</span>: symbol.found,\n    <span class=\"str\">\"confidence\"</span>: <span class=\"fn\">round</span>(symbol.confidence, <span class=\"num\">3</span>),\n    <span class=\"str\">\"review_needed\"</span>: review_needed\n}",
+                        "json": "{\n  <span class=\"jkey\">\"title_mark\"</span>: {\n    <span class=\"jkey\">\"present\"</span>: <span class=\"jstr\">\"true\"</span>,\n    <span class=\"jkey\">\"clarity\"</span>: <span class=\"jstr\">\"clear_in_this_pdf\"</span>,\n    <span class=\"jkey\">\"review_needed\"</span>: <span class=\"jstr\">\"manual_or_ai_check\"</span>\n  }\n}"
                       },
                       {
-                        "key": "header", "page": 0, "colour": "#cfe0ef",
-                        "box": {"left":"70%","top":"9.5%","width":"24%","height":"29%"},
-                        "tag": {"right":"-132px","top":"14%"},
-                        "title": "頁首資訊：標題、日期、史料來源",
-                        "desc": "頁首集中了標題「為奏彰化失陷已調兵赴臺事」、上奏者、日期與史料來源。這些欄位是後續檢索與排序的依據，必須與正文分開儲存，而非混入內文。",
-                        "prompt": "頁首包含標題、上奏者、日期與史料來源四項資訊。\n請把它們分別抽取為 title、author、date、source 四個欄位，\n不要併入正文 body。",
-                        "py": "<span class=\"cmt\"># 頁首欄位獨立抽取，不併入正文</span>\nheader = <span class=\"fn\">extract_header</span>(result)\ndoc = {\n    <span class=\"str\">\"title\"</span>:  header[<span class=\"str\">\"title\"</span>],\n    <span class=\"str\">\"author\"</span>: header[<span class=\"str\">\"author\"</span>],\n    <span class=\"str\">\"date\"</span>:   header[<span class=\"str\">\"date\"</span>],\n    <span class=\"str\">\"source\"</span>: header[<span class=\"str\">\"source\"</span>],\n}",
-                        "json": "{\n  <span class=\"jkey\">\"title\"</span>: <span class=\"jstr\">\"為奏彰化失陷已調兵赴臺事\"</span>,\n  <span class=\"jkey\">\"author\"</span>: <span class=\"jstr\">\"福建水師提督 黃仕簡\"</span>,\n  <span class=\"jkey\">\"date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月二十七日\"</span>,\n  <span class=\"jkey\">\"source\"</span>: <span class=\"jstr\">\"《天地會第一冊》\"</span>\n}"
-                      },
-                      {
-                        "key": "body", "page": 0, "colour": "#f5e6bd",
-                        "box": {"left":"4%","top":"12%","width":"65%","height":"82%"},
-                        "tag": {"left":"-124px","top":"55%"},
-                        "title": "正文",
-                        "desc": "正文是文書的主體內容，需要完整保留段落與句讀。辨識後應以純文字儲存於 body 欄位，並保留每行的信心分數，方便後續判斷哪些段落需要校對。",
-                        "prompt": "正文請完整辨識並存入 body 欄位，保留原有段落。\n同時輸出每一行的信心分數（rec_scores），\n低於 0.90 的行請另外標記出來。",
-                        "py": "<span class=\"cmt\"># 正文與逐行信心分數一併輸出</span>\nlines = []\n<span class=\"kw\">for</span> text, score <span class=\"kw\">in</span> <span class=\"fn\">zip</span>(data[<span class=\"str\">\"rec_texts\"</span>], data[<span class=\"str\">\"rec_scores\"</span>]):\n    lines.<span class=\"fn\">append</span>({<span class=\"str\">\"text\"</span>: text, <span class=\"str\">\"score\"</span>: <span class=\"fn\">round</span>(score, <span class=\"num\">3</span>)})\nlow = [l <span class=\"kw\">for</span> l <span class=\"kw\">in</span> lines <span class=\"kw\">if</span> l[<span class=\"str\">\"score\"</span>] &lt; <span class=\"num\">0.90</span>]",
-                        "json": "{\n  <span class=\"jkey\">\"body\"</span>: <span class=\"jstr\">\"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。…\"</span>,\n  <span class=\"jkey\">\"line_count\"</span>: <span class=\"jnum\">42</span>,\n  <span class=\"jkey\">\"low_confidence_lines\"</span>: <span class=\"jnum\">3</span>\n}"
-                      },
-                      {
-                        "key": "page1", "page": 0, "colour": "#ddd6ea",
-                        "box": {"left":"86%","top":"94.5%","width":"8%","height":"3.6%"},
-                        "tag": {"right":"-132px","top":"92%"},
-                        "title": "頁碼",
-                        "desc": "頁碼位於頁面外緣，屬於書冊的排版資訊而非文書內容。應單獨存為 page 欄位，既可保留出處，又不會污染正文文字。",
-                        "prompt": "頁面外緣的數字是書冊頁碼，不屬於文書內容。\n請把它抽出存為 page 欄位，並從 body 中移除，\n以免混入正文文字。",
-                        "py": "<span class=\"cmt\"># 頁碼獨立成欄，並自正文移除</span>\npage = <span class=\"fn\">match_page_number</span>(data[<span class=\"str\">\"rec_texts\"</span>][-<span class=\"num\">1</span>])\n<span class=\"kw\">if</span> page:\n    doc[<span class=\"str\">\"page\"</span>] = <span class=\"fn\">int</span>(page)\n    body_lines.<span class=\"fn\">pop</span>()",
-                        "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">80</span>,\n  <span class=\"jkey\">\"page_in_body\"</span>: <span class=\"jstr\">\"removed\"</span>\n}"
-                      },
-                      {
-                        "key": "zhupi2", "page": 1, "colour": "#f3ddc4",
-                        "box": {"left":"55%","top":"33%","width":"6.5%","height":"22%"},
+                        "key": "inline-zhu", "page": 1, "colour": "#f3ddc4",
+                        "box": {"left":"68%","top":"28%","width":"18%","height":"20%"},
                         "tag": {"right":"-132px","top":"38%"},
-                        "title": "夾註硃批（小字）",
-                        "desc": "正文中以小字夾註的硃批「仍以調養為要，勿過勞」與正文字級不同，屬於皇帝的批示。應與正文分開儲存，否則會被誤併入奏摺原文。",
-                        "prompt": "正文中有以小字夾註的硃批，字級比正文小。\n請依字級把它與正文分開，存入 rescript_inline 欄位，\n不要混入 body。",
-                        "py": "<span class=\"cmt\"># 依字高分辨夾註小字（硃批）與正文</span>\nheights = [b[<span class=\"num\">3</span>] - b[<span class=\"num\">1</span>] <span class=\"kw\">for</span> b <span class=\"kw\">in</span> boxes]\nmedian = <span class=\"fn\">statistics</span>.<span class=\"fn\">median</span>(heights)\ninline = [t <span class=\"kw\">for</span> t, h <span class=\"kw\">in</span> <span class=\"fn\">zip</span>(texts, heights) <span class=\"kw\">if</span> h &lt; median * <span class=\"num\">0.72</span>]",
-                        "json": "{\n  <span class=\"jkey\">\"rescript_inline\"</span>: <span class=\"jstr\">\"仍以調養為要，勿過勞\"</span>,\n  <span class=\"jkey\">\"merged_into_body\"</span>: <span class=\"jstr\">\"false\"</span>\n}"
+                        "title": "夾批",
+                        "desc": "正文內有小字夾註的皇帝硃批「仍以調養為要，勿過勞」。這是皇帝的批示，不是官員原奏文字；OCR 後應保留內容，並明確標記為 zhu，與 body 分開儲存。",
+                        "prompt": "正文內有小字夾註的皇帝硃批「仍以調養為要，勿過勞」。\n請保留這段文字，標記為皇帝的 zhu，\n不要把它當成官員原奏文字，也不要併入 body。",
+                        "py": "<span class=\"cmt\"># 小字夾批另存為皇帝硃批，不併入官員正文</span>\ninline_zhu = <span class=\"fn\">find_inline_annotation</span>(\n    text, pattern=<span class=\"str\">\"仍以調養為要\"</span>\n)\ndoc[<span class=\"str\">\"zhu\"</span>] = {\n    <span class=\"str\">\"text\"</span>: inline_zhu.text,\n    <span class=\"str\">\"type\"</span>: <span class=\"str\">\"emperor_rescript\"</span>\n}\nbody = <span class=\"fn\">remove_annotation</span>(text, inline_zhu)",
+                        "json": "{\n  <span class=\"jkey\">\"zhu\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"仍以調養為要，勿過勞\"</span>,\n    <span class=\"jkey\">\"type\"</span>: <span class=\"jstr\">\"emperor_rescript\"</span>,\n    <span class=\"jkey\">\"in_original_body\"</span>: <span class=\"jstr\">\"false\"</span>\n  }\n}"
                       },
                       {
-                        "key": "signoff", "page": 1, "colour": "#d3e5e2",
-                        "box": {"left":"27%","top":"22%","width":"11%","height":"52%"},
-                        "tag": {"left":"-124px","top":"42%"},
-                        "title": "落款與奉批日期",
-                        "desc": "文末的落款日期與「奉硃批」日期分屬兩個時間點，前者是上奏日，後者是皇帝批覆日。兩者需分開存欄，才能在時間軸上正確排序。",
-                        "prompt": "文末有兩個日期：落款的上奏日期，以及「奉硃批」的批覆日期。\n請分別存為 send_date 與 rescript_date 兩個欄位，\n並同時保留原文與西曆換算。",
-                        "py": "<span class=\"cmt\"># 落款日期與奉批日期分開抽取</span>\ndoc[<span class=\"str\">\"send_date\"</span>] = <span class=\"fn\">parse_reign_date</span>(<span class=\"str\">\"乾隆五十一年十二月初十日\"</span>)\ndoc[<span class=\"str\">\"rescript_date\"</span>] = <span class=\"fn\">parse_reign_date</span>(<span class=\"str\">\"乾隆五十一年十二月二十七日\"</span>)",
-                        "json": "{\n  <span class=\"jkey\">\"send_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>,\n  <span class=\"jkey\">\"rescript_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月二十七日\"</span>,\n  <span class=\"jkey\">\"rescript_text\"</span>: <span class=\"jstr\">\"已有旨了。欽此。\"</span>\n}"
-                      },
-                      {
-                        "key": "archive", "page": 1, "colour": "#e3dcc9",
-                        "box": {"left":"20%","top":"62%","width":"6%","height":"14%"},
-                        "tag": {"left":"-124px","top":"67%"},
-                        "title": "收錄註記",
-                        "desc": "頁末方括號中的「本文原收錄於軍錄」是編者附加的出處說明，並非原奏摺文字。應存為 archive_note，以保留版本資訊而不影響原文。",
-                        "prompt": "方括號內的「本文原收錄於軍錄」是編者註記，不是原文。\n請存入 archive_note 欄位，並從 body 中排除。",
-                        "py": "<span class=\"cmt\"># 編者註記（方括號）另存，不計入原文</span>\nnote = <span class=\"fn\">re</span>.<span class=\"fn\">search</span>(<span class=\"str\">r\"〔(.+?)〕\"</span>, tail_text)\n<span class=\"kw\">if</span> note:\n    doc[<span class=\"str\">\"archive_note\"</span>] = note.<span class=\"fn\">group</span>(<span class=\"num\">1</span>)",
-                        "json": "{\n  <span class=\"jkey\">\"archive_note\"</span>: <span class=\"jstr\">\"本文原收錄於軍錄\"</span>,\n  <span class=\"jkey\">\"excluded_from_body\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
-                      },
-                      {
-                        "key": "page2", "page": 1, "colour": "#ddd6ea",
-                        "box": {"left":"6%","top":"94.5%","width":"8%","height":"3.6%"},
-                        "tag": {"left":"-124px","top":"80%"},
-                        "title": "頁碼（續頁）",
-                        "desc": "續頁的頁碼與首頁採用同一套規則處理：抽出為 page 欄位，並在合併跨頁正文時作為排序依據。",
-                        "prompt": "這是同一份文書的續頁，頁碼在左下角。\n請沿用首頁的規則抽出 page 欄位，\n並依頁碼順序合併兩頁的正文。",
-                        "py": "<span class=\"cmt\"># 跨頁合併：依頁碼排序後串接正文</span>\npages = <span class=\"fn\">sorted</span>(docs, key=<span class=\"kw\">lambda</span> d: d[<span class=\"str\">\"page\"</span>])\nfull_body = <span class=\"str\">\"\\n\"</span>.<span class=\"fn\">join</span>(d[<span class=\"str\">\"body\"</span>] <span class=\"kw\">for</span> d <span class=\"kw\">in</span> pages)",
-                        "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">81</span>,\n  <span class=\"jkey\">\"merged_pages\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>]\n}"
+                        "key": "tail-zhu", "page": 1, "colour": "#d3e5e2",
+                        "box": {"left":"16%","top":"72%","width":"29%","height":"23%"},
+                        "tag": {"right":"-132px","top":"60%"},
+                        "title": "落款與尾批",
+                        "desc": "正文後有兩行日期資料：一行記錄上奏日期，另一行記錄帶有硃批的日期與尾批。兩者必須與正文 OCR 分開保存，分別記錄 send_date、zhu_date 及 zhu_text，方便日後分析文書傳遞與批覆時間。",
+                        "prompt": "正文結束後有兩行日期資料：上奏落款日期，以及帶有硃批的日期與尾批。\n請分別抽取為 send_date、zhu_date 和 zhu_text，\n不要把這些日期或尾批混入 body。",
+                        "py": "<span class=\"cmt\"># 落款日期、硃批日期與尾批分開抽取</span>\nfooter = <span class=\"fn\">extract_footer</span>(result)\ndoc[<span class=\"str\">\"footer\"</span>] = {\n    <span class=\"str\">\"send_date\"</span>: footer[<span class=\"str\">\"send_date\"</span>],\n    <span class=\"str\">\"zhu_date\"</span>: footer[<span class=\"str\">\"zhu_date\"</span>],\n    <span class=\"str\">\"zhu_text\"</span>: footer[<span class=\"str\">\"zhu_text\"</span>]\n}",
+                        "json": "{\n  <span class=\"jkey\">\"footer\"</span>: {\n    <span class=\"jkey\">\"send_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>,\n    <span class=\"jkey\">\"zhu_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月二十七日\"</span>,\n    <span class=\"jkey\">\"zhu_text\"</span>: <span class=\"jstr\">\"已有旨了。欽此。\"</span>\n  },\n  <span class=\"jkey\">\"footer_in_body\"</span>: <span class=\"jstr\">\"false\"</span>\n}"
                       }
                     ]
                   }

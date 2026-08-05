@@ -841,6 +841,116 @@
   max-width: none;
 }
 
+/* ===========================================================================
+   Part 3.4.9 — 版面特徵標籤與標示區（7 辨識印刷字 / 8 辨識手寫字）
+   ---------------------------------------------------------------------------
+   每一個特徵（標籤＋它在原件上的色塊）都由下面這一組變數控制，
+   改數字即可，不必碰 storymap.css、storymap.js 或 storymap-example.html。
+
+     --fx-color       標籤與色塊的顏色（同一個顏色，兩者自動一致）
+     --fx-left        色塊左邊位置（相對於該頁／該摺的百分比）
+     --fx-top         色塊上邊位置
+     --fx-width       色塊寬度
+     --fx-height      色塊高度
+     --fx-tag-left    標籤距原件「左」邊多遠；負值＝移到原件左外側
+     --fx-tag-right   標籤距原件「右」邊多遠；負值＝移到原件右外側
+     --fx-tag-top     標籤的垂直位置（百分比，0% 是原件頂端）
+
+   注意：--fx-tag-left 與 --fx-tag-right 只用其中一個，另一個要留 auto，
+   否則標籤會被兩邊同時拉扯。
+
+   ── 怎麼「編輯」一個標籤 ─────────────────────────────────
+   找到下面對應的 [data-fx-feature="..."] 區塊，直接改數值即可。
+
+   ── 怎麼「移除」一個標籤 ─────────────────────────────────
+   到 storymap-example.html 該節的 data-part3-feature-data JSON 裡，
+   刪掉那一個 { "key": ... } 物件（標籤、色塊、右側三個視窗會一起消失），
+   再把下面對應的區塊一併刪掉。
+
+   ── 怎麼「新增」一個標籤 ─────────────────────────────────
+   1. 在同一個 JSON 陣列裡加一個新物件，必須有 key、title、desc、
+      prompt、py、json；印刷字要寫 page（第幾頁，0 起算），
+      手寫字要寫 panel（第幾摺，0 起算）。
+   2. 在下面照樣加一個 [data-fx-feature="你的 key"] 區塊設定位置。
+      （JSON 內也可以寫 colour／box／tag 當預設值，但以這裡的設定為準。）
+   ========================================================================= */
+
+/* 7 辨識印刷字 — 第 1 頁 */
+#part-3-printed-explorer [data-fx-feature="text-info"] {
+  --fx-color: #cfe0ef;
+  --fx-left: 69%; --fx-top: 8%; --fx-width: 27%; --fx-height: 34%;
+  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 14%;
+}
+#part-3-printed-explorer [data-fx-feature="single-column"] {
+  --fx-color: #cfe3d4;
+  --fx-left: 5%; --fx-top: 10%; --fx-width: 88%; --fx-height: 84%;
+  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 36%;
+}
+#part-3-printed-explorer [data-fx-feature="paragraphs"] {
+  --fx-color: #f5e6bd;
+  --fx-left: 46%; --fx-top: 12%; --fx-width: 13%; --fx-height: 78%;
+  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 58%;
+}
+#part-3-printed-explorer [data-fx-feature="page"] {
+  --fx-color: #ddd6ea;
+  --fx-left: 86%; --fx-top: 94.5%; --fx-width: 8%; --fx-height: 3.6%;
+  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 90%;
+}
+#part-3-printed-explorer [data-fx-feature="mark"] {
+  --fx-color: #f0d6d0;
+  --fx-left: 77.5%; --fx-top: 6.5%; --fx-width: 9%; --fx-height: 3.2%;
+  --fx-tag-left: -124px; --fx-tag-right: auto; --fx-tag-top: 5%;
+}
+
+/* 7 辨識印刷字 — 第 2 頁 */
+#part-3-printed-explorer [data-fx-feature="inline-zhu"] {
+  --fx-color: #f3ddc4;
+  --fx-left: 68%; --fx-top: 28%; --fx-width: 18%; --fx-height: 20%;
+  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 38%;
+}
+#part-3-printed-explorer [data-fx-feature="tail-zhu"] {
+  --fx-color: #d3e5e2;
+  --fx-left: 16%; --fx-top: 72%; --fx-width: 29%; --fx-height: 23%;
+  --fx-tag-left: auto; --fx-tag-right: -132px; --fx-tag-top: 60%;
+}
+
+/* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */
+#part-3-handwritten-explorer [data-fx-feature="vertical"] {
+  --fx-color: #cfe3d4;
+  --fx-left: 0%; --fx-top: 0%; --fx-width: 100%; --fx-height: 100%;
+  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 6%;
+}
+#part-3-handwritten-explorer [data-fx-feature="opening"] {
+  --fx-color: #cfe0ef;
+  --fx-left: 52%; --fx-top: 4%; --fx-width: 22%; --fx-height: 26%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 6%;
+}
+#part-3-handwritten-explorer [data-fx-feature="minister"] {
+  --fx-color: #f0d6d0;
+  --fx-left: 60%; --fx-top: 46%; --fx-width: 11%; --fx-height: 50%;
+  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 29%;
+}
+#part-3-handwritten-explorer [data-fx-feature="respect"] {
+  --fx-color: #f5e6bd;
+  --fx-left: 10%; --fx-top: 0%; --fx-width: 80%; --fx-height: 16%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 29%;
+}
+#part-3-handwritten-explorer [data-fx-feature="seal"] {
+  --fx-color: #ddd6ea;
+  --fx-left: 22%; --fx-top: 34%; --fx-width: 46%; --fx-height: 22%;
+  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 52%;
+}
+#part-3-handwritten-explorer [data-fx-feature="rescript"] {
+  --fx-color: #f3ddc4;
+  --fx-left: 8%; --fx-top: 8%; --fx-width: 34%; --fx-height: 70%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 52%;
+}
+#part-3-handwritten-explorer [data-fx-feature="crease"] {
+  --fx-color: #e3dcc9;
+  --fx-left: 0%; --fx-top: 0%; --fx-width: 6%; --fx-height: 100%;
+  --fx-tag-left: -134px; --fx-tag-right: auto; --fx-tag-top: 75%;
+}
+
 /* Part 3.4.9 — 輸出格式：JSON */
 #part-3-json {
   --part3-card-width: 100%;

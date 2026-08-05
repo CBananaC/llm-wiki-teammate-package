@@ -4083,3 +4083,26 @@ Verified:
 
 Remaining:
 - The original two printed page images remain available under their original filenames for comparison or rollback.
+
+### 2026-08-05 13:48 HKT — Codex — Rework printed-text feature labels and OCR guidance
+
+Summary:
+- Replaced the printed-text explorer's old labels with `文本資訊`, `橫排單欄`, `分段`, `頁碼`, `標題符號`, `夾批`, and `落款與尾批`.
+- Updated every feature's description, AI prompt, Python example, and JSON output to match the requested 《明清臺灣檔案彙編》 workflow, including metadata extraction, right-to-left reading order, indentation-based paragraphs, page numbers, emperor's inline 硃批, and separate footer dates.
+- Removed the unrequested printed-text labels for `正文`, `收錄註記`, and the old `頁碼（續頁）` presentation.
+- Updated the individual label and highlight coordinates in the Part 3 CSS; left the handwritten feature data unchanged.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Both embedded Part 3 feature JSON blocks parse successfully.
+- The printed explorer renders seven requested labels; clicking `夾批` switches to page 2 and clicking `落款與尾批` shows the separate date/尾批 output.
+- The handwritten explorer still renders its original seven labels and two-fold interaction.
+- `node --check Website/storymap/storymap.js`, `git diff --check`, and browser console checks pass.
+
+Remaining:
+- The handwritten labels/content remain unchanged because no replacement list was specified for that section.

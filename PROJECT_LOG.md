@@ -7854,6 +7854,27 @@ Verified:
 Remaining:
 - The text remains OCR evidence and should be image-checked before researcher-confirmed transcription.
 
+### 2026-08-05 13:48 HKT — Codex — Rework Part 3 printed-text feature guidance
+
+Summary:
+- Replaced the printed-text explorer labels with `文本資訊`, `橫排單欄`, `分段`, `頁碼`, `標題符號`, `夾批`, and `落款與尾批`.
+- Rewrote the paired feature descriptions, AI prompts, Python snippets, and JSON examples around 《明清臺灣檔案彙編》 metadata, right-to-left single-column reading, indentation-based paragraphs, page-number capture, title-symbol review, inline emperor 硃批, and separate footer dates.
+- Added matching per-feature label and highlight coordinate overrides; preserved the handwritten explorer because its requested replacements were not specified.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Embedded Part 3 JSON parses; the printed explorer has seven requested features and no old unrequested labels.
+- Browser verification passed for first-page labels, page-two `夾批`, `落款與尾批`, highlight changes, and handwritten-section preservation.
+- `node --check`, `git diff --check`, and browser console error checks pass.
+
+Remaining:
+- Provide a separate handwritten feature replacement list before changing `辨識手寫字`.
+
 ### 2026-08-04 18:10 HKT — Codex — OCR npmpdf-2 with watermark and red-ink filtering
 
 Summary:
