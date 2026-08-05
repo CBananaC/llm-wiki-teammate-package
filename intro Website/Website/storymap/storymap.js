@@ -911,7 +911,8 @@ const initPart3FeatureExplorers = () => {
 
   const outMarkup = `
     <div class="part3-fx-feat">
-      <h3 class="part3-fx-feat-title"><span class="part3-fx-feature-number" data-fx-number></span><span data-fx-title></span></h3>
+      <span class="k">版面特徵</span>
+      <h3 data-fx-title></h3>
       <p data-fx-desc></p>
     </div>
     <div class="part3-fx-arrow" aria-hidden="true">↓</div>
@@ -970,7 +971,6 @@ const initPart3FeatureExplorers = () => {
 
     const out = root.querySelector('[data-part3-fx-out]');
     out.innerHTML = outMarkup;
-    const elNumber = out.querySelector('[data-fx-number]');
     const elTitle = out.querySelector('[data-fx-title]');
     const elDesc = out.querySelector('[data-fx-desc]');
     const elPrompt = out.querySelector('[data-fx-prompt]');
@@ -1034,7 +1034,6 @@ const initPart3FeatureExplorers = () => {
       syncToCurrent();
       render();
       stopTyping();
-      elNumber.textContent = String(index + 1);
       elTitle.textContent = f.title;
       elDesc.textContent = f.desc;
       if (reduceMotion) {
@@ -1533,7 +1532,30 @@ const initJsonViewer = () => {
 
   let selectedButton = null;
   let selectedTargets = [];
-  wrap.querySelectorAll('[data-json-target]').forEach((button) => {
+  const labelViewport = wrap.querySelector('.part3-json-label-viewport');
+  const labelButtons = [...wrap.querySelectorAll('[data-json-target]')];
+  const previousButton = wrap.querySelector('[data-json-nav="prev"]');
+  const nextButton = wrap.querySelector('[data-json-nav="next"]');
+  let carouselIndex = 0;
+
+  const updateCarouselButtons = () => {
+    const canScroll = labelViewport && labelViewport.scrollWidth > labelViewport.clientWidth + 1;
+    if (previousButton) previousButton.disabled = !canScroll || carouselIndex <= 0;
+    if (nextButton) nextButton.disabled = !canScroll || carouselIndex >= labelButtons.length - 1;
+  };
+
+  const showCarouselLabel = (index) => {
+    if (!labelButtons.length) return;
+    carouselIndex = Math.max(0, Math.min(labelButtons.length - 1, index));
+    const button = labelButtons[carouselIndex];
+    if (labelViewport && button) {
+      const left = button.offsetLeft - (labelViewport.clientWidth - button.offsetWidth) / 2;
+      labelViewport.scrollTo({ left: Math.max(0, left), behavior: 'smooth' });
+    }
+    updateCarouselButtons();
+  };
+
+  labelButtons.forEach((button, index) => {
     button.setAttribute('aria-pressed', 'false');
     button.addEventListener('click', () => {
       const ids = button.dataset.jsonTarget.split(/\s+/);
@@ -1546,6 +1568,7 @@ const initJsonViewer = () => {
       }
       selectedTargets.forEach((el) => el.classList.remove('is-selected'));
 
+      showCarouselLabel(index);
       targets[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
       button.classList.add('is-selected');
       button.setAttribute('aria-pressed', 'true');
@@ -1554,6 +1577,20 @@ const initJsonViewer = () => {
       selectedTargets = targets;
     });
   });
+
+  previousButton?.addEventListener('click', () => showCarouselLabel(carouselIndex - 1));
+  nextButton?.addEventListener('click', () => showCarouselLabel(carouselIndex + 1));
+  const refreshCarouselState = () => {
+    updateCarouselButtons();
+    window.requestAnimationFrame(updateCarouselButtons);
+  };
+  window.addEventListener('resize', refreshCarouselState);
+  window.addEventListener('load', refreshCarouselState);
+  if (labelViewport && 'ResizeObserver' in window) {
+    const carouselObserver = new ResizeObserver(refreshCarouselState);
+    carouselObserver.observe(labelViewport);
+  }
+  refreshCarouselState();
 
   /* 一個按鈕，兩種功能：收起來時顯示「...」（點擊＝展開），
      展開時顯示向上的「⌃」（點擊＝收起來）。按鈕放在完整段落之後，
@@ -1671,6 +1708,18 @@ const initBatchTestScene = () => {
     if (badge) badge.classList.remove('is-bump');
   };
 
+  /* 等捲動動畫跑回起點（offset 0）。那一刻畫面正好是完整的 2 列
+     ＋下一列露出 10%，也就是要停下來切回單頁的構圖。 */
+  const waitForScrollHome = async (trackEl) => {
+    const anim = trackEl.getAnimations ? trackEl.getAnimations()[0] : null;
+    if (!anim || !anim.effect) return;
+    const dur = Number(anim.effect.getTiming().duration);
+    if (!(dur > 0)) return;
+    const phase = Number(anim.currentTime || 0) % dur;
+    await wait(dur - phase + 40);
+  };
+
+
   /* 一格的完整流程：掃描 → 上色 → 翻成 JSON → 眼鏡閱讀 → 綠勾。
      綠勾出現的同一刻，這一格右下角的頁數標示也會放大變藍，
      跟單頁測試「1頁 → 50頁」那次轉換用同一個 .is-bump 效果。 */
@@ -1750,12 +1799,11 @@ const initBatchTestScene = () => {
       await wait(520);
       if (stale()) return;
 
-      /* ---- 第二階段：批次（50頁），2×2 並持續往下捲 ---- */
+      /* ---- 第二階段：批次（50頁）----
+         2 欄 × 4 列＝8 格，畫面持續往下捲。可視範圍是「2 整列（4 格）
+         ＋ 下一列露出 10%」，每一格的寬高比和單頁階段一模一樣，只是縮小。 */
       track.innerHTML = '';
       const tiles = [];
-      /* 2 欄 × 4 列＝8 格（畫面上一次仍然看到 4 格）；捲動 -50% 時剛好
-         接回開頭，看起來是無限往下。格數從 16 減到 8，同時要點陣化的
-         大圖也少了一半。 */
       for (let i = 0; i < 8; i += 1) {
         const t = makeTile(DOCS[i % DOCS.length], '50頁');
         track.appendChild(t);
@@ -1768,20 +1816,32 @@ const initBatchTestScene = () => {
       await wait(480);
       if (stale()) return;
 
-      /* 捲動是 translateY(-50%) 無限循環，也就是「第 i 格」接回的位置正好是
-         「第 i + 半數 格」。因此這兩格必須用同一個時間點跑動畫，否則循環
-         接回的瞬間，剛驗證完的格子會被還沒驗證的複製格取代，看起來就像
-         綠勾和「50頁」忽然消失又重新出現。這裡只替前半排時間，後半跟著同步。 */
+      /* 一格接一格開始，但不是等前一格完全跑完才輪到下一格——彼此只差
+         STAGGER 這幾秒，所以畫面上會有好幾格同時在不同階段，綠勾也就
+         一個接一個亮起來。
+         另外，捲動是 translateY(-50%) 無限循環，「第 i 格」接回的位置正好是
+         「第 i+4 格」，這兩格必須同時開始，否則循環接回的瞬間，剛驗證完的
+         格子會被還沒驗證的複製格取代，看起來就像綠勾忽然消失又出現。 */
+      const STAGGER = 2200;
       const half = tiles.length / 2;
+      const runs = [];
       for (let i = 0; i < half; i += 1) {
         const pair = [tiles[i], tiles[i + half]];
-        pendingTimers.push(window.setTimeout(() => {
-          if (stale()) return;
-          pair.forEach((t) => runTile(t, { scanDur: 2200, readDur: 1500, holdDur: 2600 }));
-        }, i * 760));
+        runs.push(new Promise((resolve) => {
+          pendingTimers.push(window.setTimeout(() => {
+            if (stale()) { resolve(); return; }
+            Promise.all(pair.map((t) => runTile(t, { scanDur: 1800, readDur: 1400, holdDur: 600 })))
+              .then(resolve);
+          }, i * STAGGER));
+        }));
       }
 
-      await wait(half * 760 + 9000);
+      /* 等 4 格都打上綠勾…… */
+      await Promise.all(runs);
+      if (stale()) return;
+      /* ……再等捲動回到起點，也就是畫面上正好是完整 2 列的綠勾
+         ＋下一列露出 10% 的那一刻，才切回單頁。 */
+      await waitForScrollHome(track);
       if (stale()) return;
       await wait(600);
     }

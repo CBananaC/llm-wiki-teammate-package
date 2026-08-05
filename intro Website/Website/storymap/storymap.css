@@ -1545,9 +1545,6 @@ img { max-width: 100%; }
   grid-template-columns: 50% 50%;
   width: 90vw;
   max-width: 90vw;
-  height: var(--part3-fx-explorer-height, min(78vh, 760px));
-  min-height: 0;
-  box-sizing: border-box;
   margin-left: calc(50% - 45vw);
   margin-right: calc(50% - 45vw);
   background: var(--card);
@@ -1557,9 +1554,7 @@ img { max-width: 100%; }
    才能把紙張推到前景。標籤浮貼在原件兩側，因此左右另留出標籤的空白。 */
 .part3-fx-doc {
   position: relative;
-  min-height: 0;
-  box-sizing: border-box;
-  padding: var(--part3-fx-doc-padding-y, clamp(24px, 2.4vw, 38px)) var(--part3-fx-doc-padding-x, clamp(118px, 9vw, 190px));
+  padding: clamp(24px, 2.4vw, 38px) clamp(118px, 9vw, 190px);
   background: radial-gradient(circle at 22% 18%, rgba(196, 93, 56, .16), transparent 42%),
               linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
   border-right: 1px solid var(--line);
@@ -1569,11 +1564,7 @@ img { max-width: 100%; }
 .part3-fx-caption { align-self: flex-start; color: var(--muted); font: 600 calc(11px * var(--font-scale)) var(--sans); letter-spacing: .13em; }
 
 /* --- 7 印刷字：書冊頁面，翻頁時新頁自右滑入疊上舊頁 --- */
-.part3-fx-doc-pages { display: flex; flex: 1 1 auto; flex-direction: column; align-items: center; min-height: 0; width: 100%; }
-.part3-fx-pagestack {
-  position: relative; flex: 0 1 auto; width: auto; height: calc(100% - var(--part3-fx-doc-nav-space, 56px));
-  max-width: 100%; max-height: calc(100% - var(--part3-fx-doc-nav-space, 56px)); aspect-ratio: 995 / 1580;
-}
+.part3-fx-pagestack { position: relative; width: 100%; max-width: none; }
 .part3-fx-pagestack::before,
 .part3-fx-pagestack::after {
   content: ""; position: absolute; inset: 0; background: #fdfbf6;
@@ -1582,10 +1573,10 @@ img { max-width: 100%; }
 .part3-fx-pagestack::before { transform: translate(9px, 9px) rotate(1.1deg); }
 .part3-fx-pagestack::after { transform: translate(4.5px, 4.5px) rotate(.5deg); }
 .part3-fx-page {
-  position: relative; z-index: 2; width: 100%; height: 100%; overflow: hidden; background: #fff;
+  position: relative; z-index: 2; overflow: hidden; background: #fff;
   border: 1px solid rgba(22, 61, 63, .18); box-shadow: 0 14px 30px rgba(22, 61, 63, .16);
 }
-.part3-fx-page img { display: block; width: 100%; height: 100%; object-fit: contain; }
+.part3-fx-page img { display: block; width: 100%; height: auto; }
 .part3-fx-turn {
   position: absolute; inset: 0; z-index: 7; overflow: hidden; background: #fff;
   box-shadow: -14px 0 26px rgba(22, 61, 63, .22); will-change: transform;
@@ -1594,10 +1585,10 @@ img { max-width: 100%; }
 
 /* --- 8 手寫字：風琴摺，展開的兩摺保持掃描原比例，其餘收成摺痕 --- */
 /* 摺子與其浮貼標籤共用同一個定位框，標籤才能落在摺子兩側 */
-.part3-fx-striparea { position: relative; display: flex; flex: 1 1 auto; align-items: center; min-height: 0; width: 100%; }
+.part3-fx-striparea { position: relative; width: 100%; }
 .part3-fx-strip {
   --fold-slivers: 60px;
-  --fold-h: min(calc((var(--fold-w, 520px) - var(--fold-slivers)) / 0.921), calc(100% - var(--part3-fx-doc-nav-space, 56px)));
+  --fold-h: min(calc((var(--fold-w, 520px) - var(--fold-slivers)) / 0.921), 76vh);
   display: flex; flex-direction: row-reverse; align-items: stretch; justify-content: flex-start;
   width: 100%; height: var(--fold-h); margin: 0 auto; overflow: hidden;
   perspective: 900px; perspective-origin: 70% 50%;
@@ -1685,27 +1676,21 @@ img { max-width: 100%; }
 .part3-fx-ind { color: rgba(244, 239, 230, .62); font: 600 calc(12px * var(--font-scale)) var(--sans); }
 
 /* --- 右半：特徵 → 指示 → 代碼 → 輸出，以向下箭頭串起因果關係 --- */
+/* 右半自行撐高以完整顯示四個區塊，不再限制高度／內部捲動 */
 .part3-fx-out {
-  min-height: 0; box-sizing: border-box; overflow: hidden;
-  padding: var(--part3-fx-out-padding, clamp(24px, 2.4vw, 40px));
-  display: grid;
-  grid-template-rows: auto var(--part3-fx-arrow-height, 40px) auto var(--part3-fx-arrow-height, 40px) minmax(var(--part3-fx-code-body-min-height, 48px), 1fr) var(--part3-fx-arrow-height, 40px) minmax(var(--part3-fx-code-body-min-height, 48px), 1fr);
+  padding: clamp(24px, 2.4vw, 40px);
+  display: flex; flex-direction: column; justify-content: center;
 }
 .part3-fx-arrow {
   display: flex; align-items: center; justify-content: center;
-  min-height: 0; color: var(--accent); font-size: calc(19px * var(--font-scale)); line-height: 1;
+  height: 40px; color: var(--accent); font-size: calc(19px * var(--font-scale)); line-height: 1;
 }
-.part3-fx-feat { min-height: 0; overflow: auto; padding: var(--part3-fx-feature-padding, 20px 22px); background: var(--paper); border: 1px solid var(--line); }
-.part3-fx-feat-title { display: flex; align-items: center; gap: .55em; margin: 0 0 10px; font: 700 calc(19px * var(--font-scale)) var(--serif); }
-.part3-fx-feature-number {
-  flex: 0 0 1.45em; width: 1.45em; height: 1.45em;
-  display: inline-flex; align-items: center; justify-content: center;
-  color: #fffaf2; background: #d86f3d; border-radius: 2px;
-  font: inherit; line-height: 1;
-}
-.part3-fx-feat p { margin: 0; color: #31484a; font: 400 calc(13.5px * var(--font-scale))/1.7 var(--serif); }
+.part3-fx-feat { padding: 20px 22px; background: var(--paper); border: 1px solid var(--line); }
+.part3-fx-feat .k { color: var(--accent); font: 800 calc(10.5px * var(--font-scale)) var(--sans); letter-spacing: .15em; }
+.part3-fx-feat h3 { margin: 9px 0 10px; font: 700 calc(19px * var(--font-scale)) var(--serif); }
+.part3-fx-feat p { margin: 0; color: #31484a; font: 400 calc(13.5px * var(--font-scale))/1.9 var(--serif); }
 
-.part3-fx-win { min-height: 0; display: flex; flex-direction: column; overflow: hidden; background: #1e1e1e; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px; }
+.part3-fx-win { overflow: hidden; background: #1e1e1e; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px; }
 .part3-fx-win-bar {
   display: flex; align-items: center; gap: 7px; padding: 10px 13px;
   background: #2b2b2b; border-bottom: 1px solid rgba(255, 255, 255, .06);
@@ -1716,7 +1701,7 @@ img { max-width: 100%; }
 .part3-fx-win-bar .dot.green { background: #28c840; }
 .part3-fx-win-bar .ttl { margin-left: 8px; color: rgba(255, 255, 255, .72); font: 700 calc(13px * var(--font-scale)) var(--sans); }
 .part3-fx-win-body {
-  flex: 1 1 auto; min-height: 0; max-height: none; overflow: auto; padding: 14px 16px;
+  padding: 14px 16px; min-height: 80px;
   color: #d4d4d4; white-space: pre-wrap; word-break: break-word;
   font: calc(11.5px * var(--font-scale))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
 }
@@ -1734,17 +1719,17 @@ img { max-width: 100%; }
 .part3-fx-chat { overflow: hidden; background: #f0efed; border: 1px solid rgba(22, 61, 63, .16); border-radius: 14px; }
 .part3-fx-chat .part3-fx-win-bar { background: #e4e3e0; border-bottom: 1px solid rgba(22, 61, 63, .12); }
 .part3-fx-chat .part3-fx-win-bar .ttl { color: #575654; }
-.part3-fx-chat-body { min-height: 0; padding: var(--part3-fx-chat-body-padding, 16px 18px); }
+.part3-fx-chat-body { padding: 16px 18px; }
 .part3-fx-chat-input {
   display: flex; flex-direction: column; justify-content: space-between;
-  min-height: var(--part3-fx-chat-min-height, 96px); padding: 8px 10px 6px;
+  min-height: 96px; padding: 16px 17px 12px;
   background: #fff; border: 1px solid rgba(22, 61, 63, .14); border-radius: 16px;
 }
 .part3-fx-chat-text {
   color: var(--ink); white-space: pre-wrap; word-break: break-word;
   font: 400 calc(13px * var(--font-scale))/1.75 var(--sans);
 }
-.part3-fx-chat-row { display: flex; align-items: center; gap: 14px; margin-top: 8px; }
+.part3-fx-chat-row { display: flex; align-items: center; gap: 14px; margin-top: 14px; }
 .part3-fx-chat-ic {
   flex: none; width: 19px; height: 19px; display: flex; align-items: center; justify-content: center;
   color: #8a8987; font-size: 15px; line-height: 1;
@@ -1773,10 +1758,9 @@ img { max-width: 100%; }
 .part3-fx-caret-chat { width: 2px; height: 1.05em; background: var(--ink); vertical-align: -.18em; }
 
 @media (max-width: 1040px) {
-  .part3-feature-explorer { grid-template-columns: 1fr; height: auto; max-height: none; }
+  .part3-feature-explorer { grid-template-columns: 1fr; }
   .part3-fx-doc { border-right: 0; border-bottom: 1px solid var(--line); }
-  .part3-fx-out { max-height: none; overflow: visible; display: flex; flex-direction: column; }
-  .part3-fx-win-body { max-height: var(--part3-fx-code-body-min-height, 86px); flex: 0 1 auto; }
+  .part3-fx-out { max-height: none; }
   /* 窄螢幕：改回原件下方的標籤列，避免浮貼標籤擠壓版面 */
   .part3-fx-doc { padding-inline: clamp(18px, 3vw, 30px); }
   .part3-fx-doc .part3-fx-tag.is-floating {
@@ -2455,16 +2439,45 @@ img { max-width: 100%; }
    #part-3-json .part3-json-viewer-wrap 區塊。
    ========================================================================== */
 .part3-json-viewer-wrap { width: 100%; max-width: var(--json-window-max-w, none); }
-.part3-json-labels {
+.part3-json-label-carousel {
   display: grid;
-  grid-template-columns: repeat(4, max-content);
-  grid-template-rows: repeat(3, auto);
-  grid-auto-flow: row;
-  align-items: end;
-  justify-content: start;
-  gap: 4px 18px;
+  grid-template-columns: auto minmax(0, 1fr) auto;
+  align-items: center;
+  column-gap: 8px;
   margin-bottom: var(--json-labels-gap, 10px);
 }
+.part3-json-label-viewport {
+  min-width: 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none;
+}
+.part3-json-label-viewport::-webkit-scrollbar { display: none; }
+.part3-json-labels {
+  display: flex;
+  flex-wrap: nowrap;
+  align-items: end;
+  gap: 4px 18px;
+  width: max-content;
+  min-width: 100%;
+}
+.part3-json-nav {
+  appearance: none;
+  flex: 0 0 auto;
+  width: 26px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  color: rgba(22, 61, 63, .55);
+  background: transparent;
+  font: 600 28px/1 var(--sans);
+  cursor: pointer;
+  transition: color .16s ease, opacity .16s ease, transform .1s ease;
+}
+.part3-json-nav:hover,
+.part3-json-nav:focus-visible { color: var(--ink); }
+.part3-json-nav:active { color: var(--accent); transform: translateY(1px); }
+.part3-json-nav:disabled { opacity: .22; cursor: default; }
 .part3-json-label {
   appearance: none; cursor: pointer; background: transparent;
   border: none; border-bottom: 2px solid transparent;
@@ -2548,18 +2561,21 @@ img { max-width: 100%; }
 /* 單頁階段：flex 置中，tile 高度固定、寬度由比例推算 */
 .batch-scene:not(.is-batch) .batch-track { display: flex; align-items: center; justify-content: center; }
 .batch-scene:not(.is-batch) .tile { height: var(--single-tile-h, 78%); width: auto; aspect-ratio: var(--tile-aspect, .74 / 1); }
-/* 批次階段：2 欄格線，整層往上移動＝畫面往下捲 */
-/* 重要：列與列之間「不要」用 row-gap，改成每一格自己帶 margin-bottom。
-   因為 8 列用 row-gap 時，整條軌道高 = 8 格 + 7 個間距，translateY(-50%)
-   只會剛好差半個間距，每循環一次畫面就會跳一下、換成時間不同步的複製格
-   （看起來就是綠勾和「50頁」閃掉又冒出來）。
-   改用 margin-bottom 後，軌道高 = 8 ×（格高＋間距），-50% 正好等於 4 列，
-   循環接回時完全對齊。 */
+/* 批次階段：2 欄 × 4 列＝8 格，持續往下捲。
+   每一格的寬高比與單頁階段完全相同（--tile-aspect），只是等比縮小——
+   格高由寬高比決定，不要另外指定高度，否則格子會被壓扁。
+   格線寬度用 --batch-grid-w 收窄並置中，讓可視範圍剛好是
+   「2 整列 ＋ 下一列露出 10%」：
+     格寬 w =（格線寬 − 欄距）/ 2，格高 h = w / 0.74，
+     2 ×（h + 列距）+ 0.1 × h ≒ 可視高度。
+   列距不用 row-gap 而是每格自帶 margin-bottom，這樣整條軌道高
+   ＝ 4 ×（格高＋列距），translateY(-50%) 正好等於 2 列，循環接回時完全對齊。 */
 .batch-scene.is-batch .batch-track {
   inset: var(--batch-pad, 6%) var(--batch-pad, 6%) auto var(--batch-pad, 6%);
   display: grid; grid-template-columns: repeat(2, 1fr);
+  max-width: var(--batch-grid-w, 74%); margin-inline: auto;
   column-gap: var(--tile-gap, 3%); row-gap: 0;
-  animation: batch-scroll var(--scroll-speed, 34s) linear infinite;
+  animation: batch-scroll var(--scroll-speed, 30s) linear infinite;
   will-change: transform;
 }
 .batch-scene.is-batch .tile {
@@ -2715,6 +2731,10 @@ img { max-width: 100%; }
   transition: transform .35s ease, color .35s ease, opacity .22s ease;
 }
 .batch-scene:not(.is-batch) .tile-count { font-size: var(--count-font-size-single, 22px); }
+/* JSON 視窗翻上來、正在閱讀的期間先把頁數藏起來，不要壓在程式碼上；
+   驗證完成（綠勾出現）時再放大變藍重新出現，並保持到回到單頁畫面為止。 */
+.tile.is-json .tile-count { opacity: 0; }
+.tile.is-verified .tile-count { opacity: 1; }
 .tile-count.is-bump,
 .tile.is-verified .tile-count { transform: scale(1.35); color: #9fd8ff; }
 /* 「1頁」換成「50頁」中間那一刻：先淡出，換好文字後再放大淡入，
@@ -2737,7 +2757,6 @@ img { max-width: 100%; }
 .batch-scene.is-paused .tile-page .page-full { animation-play-state: paused; }
 
 @media (prefers-reduced-motion: reduce) {
-  .batch-scene.is-batch .batch-track { animation: none; }
   .tile-scanline, .tile-readbeam, .tile-lens::before { animation: none !important; }
   .tile-page .page-full { clip-path: inset(0 0 0 0); animation: none !important; }
   .tile-json { opacity: 1; transform: none; }

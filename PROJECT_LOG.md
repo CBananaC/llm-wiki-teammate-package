@@ -8446,29 +8446,6 @@ Verified:
 
 Remaining:
 - None for the OCR batch persistence behavior.
-
-### 2026-08-05 19:07 HKT — Codex — Fit Part 7/8 visual explorers to the viewport
-
-Summary:
-- Constrained the Part 7 and Part 8 visual explorers to a viewport-based height and fitted the printed page and folded handwritten document inside that height.
-- Removed the `版面特徵` label from the feature result box and replaced it with an orange numbered square before the active feature title.
-- Made the Python and OCR JSON VS Code-style bodies internally scrollable so all four result windows remain visible in the explorer.
-
-Files changed:
-- `intro Website/Website/storymap/storymap-cards.css`
-- `intro Website/Website/storymap/storymap.css`
-- `intro Website/Website/storymap/storymap.js`
-- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
-- `PROJECT_LOG.md`
-
-Verified:
-- Browser geometry confirms both explorers use a 78vh maximum height and the Part 8 folded strip fills its constrained document area.
-- Both Python/JSON body pairs report `overflow: auto` and have scrollable content at the tested viewport.
-- The generated feature box has no `版面特徵` label and shows the orange number box; `git diff --check` and `node --check storymap.js` pass.
-
-Remaining:
-- None for this Part 7/8 layout adjustment.
-
 ### 2026-08-05 19:08 HKT — Codex — Convert JSON field labels to one-line carousel
 
 Summary:
@@ -8489,3 +8466,21 @@ Verified:
 
 Remaining:
 - None for the JSON field navigation adjustment.
+
+### 2026-08-05 19:12 HKT — Codex — Fix JSON carousel arrow initialization
+
+Summary:
+- Fixed the `‹` and `›` controls being disabled when the JSON label strip had not finished laying out.
+- Added layout, page-load, resize, and resize-observer refreshes so the controls reflect the actual strip width.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh browser load enables `›`, and both arrows scroll the one-line field strip in their respective directions.
+- Browser console reports no errors or warnings; `node --check intro Website/Website/storymap/storymap.js` passes.
+
+Remaining:
+- None for the JSON carousel controls.

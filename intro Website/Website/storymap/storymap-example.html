@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260805-ocr-batch-seamless-02">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260805-json-buttons-01">
+  <link rel="stylesheet" href="storymap.css?v=20260805-ocr-batch-static6-05">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260805-ocr-batch-static6-05">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260805-ocr-batch-light-03" defer></script>
+  <script src="storymap.js?v=20260805-ocr-batch-static6-05" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1543,7 +1543,10 @@
                 </div>
                 <div class="lay-visual">
                   <div class="part3-json-viewer-wrap" id="part-3-json-chart" role="group" aria-label="輸出格式：JSON——硃25 完整 OCR JSON">
-                    <div class="part3-json-labels">
+                    <div class="part3-json-label-carousel" role="group" aria-label="JSON欄位導覽">
+                      <button type="button" class="part3-json-nav" data-json-nav="prev" aria-label="上一個欄位" title="上一個欄位">‹</button>
+                      <div class="part3-json-label-viewport">
+                        <div class="part3-json-labels">
                       <button type="button" class="part3-json-label" data-json-target="loc-source">來源</button>
                       <button type="button" class="part3-json-label" data-json-target="loc-title">標題</button>
                       <button type="button" class="part3-json-label" data-json-target="loc-official-post">官職</button>
@@ -1555,6 +1558,9 @@
                       <button type="button" class="part3-json-label" data-json-target="loc-para-0">段落一</button>
                       <button type="button" class="part3-json-label" data-json-target="loc-para-1">段落二</button>
                       <button type="button" class="part3-json-label" data-json-target="loc-para-2">段落三</button>
+                        </div>
+                      </div>
+                      <button type="button" class="part3-json-nav" data-json-nav="next" aria-label="下一個欄位" title="下一個欄位">›</button>
                     </div>
                     <div class="part3-json-window">
                       <div class="part3-json-titlebar"><span class="part3-json-dot red"></span><span class="part3-json-dot yellow"></span><span class="part3-json-dot green"></span><span class="part3-json-file">硃25.ocr.json</span></div>

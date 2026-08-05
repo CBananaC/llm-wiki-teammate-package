@@ -243,11 +243,13 @@
                    --count-font-size / --count-font-size-single
                                        批次階段「50頁」／單頁階段「1頁」的字級
 
-                   --scroll-speed     2×2 往下捲動一輪的時間
+                   --batch-grid-w     批次階段 2 欄格線的寬度；數字越小＝
+                                       格子越小、第 3 列露出越多。用來對出
+                                       「2 整列 ＋ 第 3 列露出 10%」的畫面
                    --switch-dur       兩個階段之間轉場的時間
 
-                 掃描、閱讀、綠勾各自停留多久，以及每一格錯開的時間，屬於
-                 動畫流程，寫在 storymap.js 的 initBatchTestScene() 裡。
+                 掃描、閱讀、綠勾各自停留多久，以及 4 格依序執行的順序，
+                 屬於動畫流程，寫在 storymap.js 的 initBatchTestScene() 裡。
 
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
@@ -756,9 +758,10 @@
   --count-font-size: 50px;             /* 批次階段「50頁」字級 */
   --count-font-size-single: 50px;      /* 單頁階段「1頁」字級 */
 
-  --scroll-speed: 34s;           /* 2×2 往下捲動一輪的時間；調大＝捲更慢，
-                                     完成驗證（綠勾＋藍色「50頁」）的格子會
-                                     停留久一點才被捲出畫面 */
+  --batch-grid-w: 74%;           /* 批次階段 2 欄格線的寬度（相對舞台內寬）。
+                                     數字越小＝格子越小、下一列露出越多；
+                                     用來對出「2 整列 ＋ 下一列露出 10%」 */
+  --scroll-speed: 30s;           /* 批次階段往下捲一輪的時間；調大＝捲更慢 */
   --switch-dur: .5s;             /* 兩個階段之間轉場的時間 */
 }
 
@@ -979,7 +982,7 @@
    要調整標籤本身的寬度或字級時取消註解、填數值即可。 */
 #part-3-printed-explorer [data-fx-feature="text-info"] {
   --fx-color: #cfe0ef;
-  --fx-left: 69%;
+  --fx-left: 79%;
   --fx-top: 8%;
   --fx-width: 27%;
   --fx-height: 34%;
@@ -1050,17 +1053,6 @@
   max-width: 96vw;
   margin-left: calc(50% - 48vw);
   margin-right: calc(50% - 48vw);
-  /* Keep the complete visual window within one browser viewport. */
-  --part3-fx-explorer-height: min(78vh, 760px);
-  --part3-fx-code-body-min-height: clamp(48px, 8vh, 86px);
-  --part3-fx-doc-padding-y: clamp(12px, 1.6vw, 22px);
-  --part3-fx-doc-padding-x: clamp(48px, 4.8vw, 86px);
-  --part3-fx-doc-nav-space: clamp(48px, 7vh, 62px);
-  --part3-fx-out-padding: clamp(8px, 1vw, 14px);
-  --part3-fx-arrow-height: clamp(16px, 2.4vh, 24px);
-  --part3-fx-feature-padding: clamp(8px, .9vw, 12px);
-  --part3-fx-chat-body-padding: clamp(4px, .6vw, 8px);
-  --part3-fx-chat-min-height: clamp(48px, 8vh, 72px);
 }
 
 /* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */
