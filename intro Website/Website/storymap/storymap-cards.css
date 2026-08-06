@@ -1558,7 +1558,7 @@
          --try-diff-h          第三步比對結果那一欄的高度
 
    二、字級（全部會再乘上網站的字級設定 --font-scale）
-         --try-switch-font-size   標題旁「印刷字／手寫字」切換鈕
+         --try-switch-font-size   進度列最右側「印刷字／手寫字」切換鈕
          --try-dot-size           進度圓點的直徑
          --try-dot-font-size      進度圓點裡數字的字級
          --try-rpg-font-size      底部引導對話框的內文

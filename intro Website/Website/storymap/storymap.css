@@ -2938,11 +2938,12 @@ img { max-width: 100%; }
    「Part 3.4.10 — 試一試」區塊；此處只是預設值。
    ========================================================================== */
 
-/* 標題列旁的印刷字／手寫字切換 */
+/* 進度列最右側的印刷字／手寫字切換 */
 .part3-try-switch {
   margin-left: auto; display: inline-flex; gap: 3px; padding: 3px;
   background: rgba(22, 61, 63, .07); border-radius: 999px;
 }
+.part3-try-progress .part3-try-switch { margin-left: auto; flex: 0 0 auto; }
 .part3-try-switch button {
   appearance: none; border: none; cursor: pointer; background: transparent; border-radius: 999px;
   padding: 6px 16px; font-family: var(--sans); font-weight: 700;

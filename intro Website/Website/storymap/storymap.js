@@ -2010,6 +2010,8 @@ const initPart3TryIt = () => {
       return `<span class="part3-try-dot is-${state}" aria-hidden="true">${n}</span>`;
     }).join('');
     todoHost.innerHTML = `<div class="part3-try-progress"><span class="cap">進度</span>${dots}</div>`;
+    const progressRow = todoHost.firstElementChild;
+    if (switchHost && progressRow) progressRow.appendChild(switchHost);
   };
 
   /* ---------- 第一步：下載史料 ---------- */
