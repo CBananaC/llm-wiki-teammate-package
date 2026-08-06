@@ -6981,6 +6981,7 @@ Summary:
 
 Files changed:
 - `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
 - `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
 - `PROJECT_LOG.md`
 
@@ -8547,3 +8548,56 @@ Verified:
 
 Remaining:
 - None for the Part 8 annotated-image interaction.
+
+### 2026-08-06 15:41 HKT — Codex — Center Part 8 PDF and tighten handwritten labels
+
+Summary:
+- Centered the folded handwritten PDF within its document panel using symmetric layout spacing.
+- Reduced the label-to-PDF gap from 10px to 4px on both sides.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry shows the PDF centered in the document panel and all labels 4px from the corresponding PDF edge.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Part 8 PDF and label positioning.
+
+### 2026-08-06 15:43 HKT — Codex — Move Part 7 夾批 and 落款 labels to the left
+
+Summary:
+- Moved the `夾批` and `落款與尾批` labels in `7. 辨識印刷字` from the right side of the printed page to the left side.
+- Preserved their existing vertical positions at 38% and 60%.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the feature data now uses left-side anchors while retaining both original `top` values.
+
+Remaining:
+- Browser visual verification of the two moved labels.
+
+### 2026-08-06 15:49 HKT — Codex — Reorder Part 8 handwritten labels
+
+Summary:
+- Reordered the Part 8 handwritten labels so the right side reads `直排單欄 → 正文字體 → 臣字款 → 上奏官員` from top to bottom.
+- Reordered the left side to `抬頭 → 硃批 → 浮水印 → 印章` from top to bottom.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms the requested left/right and top-to-bottom label order at the desktop layout.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Part 8 label ordering.
