@@ -993,7 +993,7 @@
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #cfe0ef;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #e8d6b7;
@@ -1001,48 +1001,65 @@
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #f0d6d0;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #f5e6bd;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 32%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #f3ddc4;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 68%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 28%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
   --fx-color: #d8e2e0;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 17%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
   --fx-color: #ddd6ea;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 72%;
 }
 
 /* 8 辨識手寫字 — 標籤以錯落的固定垂直位置分布整個 PDF 高度，
-   並與 PDF 邊緣保持 10px 間距；位置穩定，不會每次重新整理都跳動。 */
+   並與可見的兩摺 PDF 邊緣保持 4px 間距；位置穩定，不會每次重新整理都跳動。
+   風琴摺左側的收摺紙邊以半個 sliver 寬度向左校正，讓可見 PDF 本身置中。 */
 #part-3-handwritten-explorer .part3-fx-doc-folded {
-  --part3-handwritten-doc-padding: clamp(54px, 5vw, 72px);
+  --part3-handwritten-doc-padding: clamp(78px, 7vw, 120px);
+  --part3-handwritten-fold-slivers: 60px;
+  --part3-handwritten-fold-offset: -30px;
+  --part3-handwritten-label-anchor: 26px;
+  --part3-handwritten-label-gap: 4px;
+  box-sizing: border-box;
   padding-inline: var(--part3-handwritten-doc-padding);
+}
+#part-3-handwritten-explorer .part3-fx-striparea {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#part-3-handwritten-explorer .part3-fx-strip {
+  --fold-slivers: var(--part3-handwritten-fold-slivers);
+  align-self: center;
+  margin-inline: auto;
+  transform: translateX(var(--part3-handwritten-fold-offset));
 }
 #part-3-handwritten-explorer [data-fx-feature="vertical"],
 #part-3-handwritten-explorer [data-fx-feature="regular-script"],
 #part-3-handwritten-explorer [data-fx-feature="author"],
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-tag-left: auto;
-  --fx-tag-right: -10px;
+  --fx-tag-right: var(--part3-handwritten-label-anchor);
   --fx-tag-shift: translateX(100%);
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"],
 #part-3-handwritten-explorer [data-fx-feature="rescript"],
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
-  --fx-tag-left: -10px;
+  --fx-tag-left: var(--part3-handwritten-label-anchor);
   --fx-tag-right: auto;
   --fx-tag-shift: translateX(-100%);
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
-  --fx-tag-left: -10px;
+  --fx-tag-left: var(--part3-handwritten-label-anchor);
   --fx-tag-right: auto;
   --fx-tag-shift: translateX(-100%);
 }
