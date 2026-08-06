@@ -8675,3 +8675,44 @@ Verified:
 
 Remaining:
 - The working tree also contains the concurrently-developed Part 3 section 11「試一試」feature from another agent session (already documented in the 17:58 HKT entry above). Both features are complete, verified, and non-overlapping in the same files, so this checkpoint commit covers both together rather than splitting by feature.
+
+### 2026-08-06 18:12 HKT — Claude — Switch 試一試 progress indicator to numbered dots
+
+Summary:
+- Replaced the text-row to-do list ("1 下載史料 ✓") above the active window with a compact numbered dot strip (done = solid green, current = accent outline, pending = grey), per user's choice of design option D from the drafted comparison sample.
+- `renderProgress()` in `storymap.js` replaces `addTodo()`; the three fixed phases (下載史料 / 撰寫 Prompt / 比對結果) always render, so the strip is stable regardless of step count within phase 2.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/UI Idea/27-part3-try-todo-options.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passes.
+- Brace balance is 0 for `storymap.css`.
+- No remaining references to `addTodo` or `.part3-try-todo` in either file.
+
+Remaining:
+- Same outstanding items as the previous entry (placeholder PDFs/reference text for 試一試).
+
+### 2026-08-06 18:30 HKT — Claude — Bound 試一試 window height and rework progress dots
+
+Summary:
+- Capped the whole 試一試 game window (document + info panel) at `--try-explorer-h` (default `calc(95svh - var(--bar-h))`, i.e. 95% of viewport height below the sticky top bar) instead of letting it grow to the tall printed-page image's natural height. Both columns now share this height and scroll internally; the document image scales to fit (object-fit: contain) without distortion or cropping.
+- This also fixes the guide box not sitting at the panel's true bottom: with the panel now height-bound, `.part3-try-scroll` (progress dots + current window) scrolls internally while `.part3-try-guidehost` is genuinely pinned below it, separated by a border line and `--try-guide-gap` spacing.
+- Progress dots: switched to green-only (done = solid green, current = pale green fill with green outline, pending = grey — dropped the orange accent outline), enlarged (`--try-dot-size` 22px → 30px, `--try-dot-font-size` 11px → 14px), and separated from the step window below by a border line + `--try-progress-gap` spacing.
+- Mobile (`max-width: 1040px`, stacked single column) reverts explorer/doc/panel back to natural auto height since the fixed-height/scroll layout only makes sense in the two-column desktop view.
+- All new sizes documented and exposed as variables in `storymap-cards.css`'s existing 「Part 3.4.10 — 試一試」 block; removed the now-unused `--try-panel-min-h` / `--try-panel-max-h`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Brace balance is 0 for both CSS files; `node --check storymap.js` still passes (JS untouched).
+- Grepped for `--try-panel-min-h` / `--try-panel-max-h` — no remaining references.
+
+Remaining:
+- Same outstanding items as previous entries (placeholder PDFs/reference text for 試一試).

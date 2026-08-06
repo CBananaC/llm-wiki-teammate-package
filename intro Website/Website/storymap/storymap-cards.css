@@ -981,6 +981,12 @@
    注意：--fx-tag-left 與 --fx-tag-right 只用其中一個，另一個要留 auto，
    否則標籤會被兩邊同時拉扯。
 
+   --fx-explorer-h    整個遊戲視窗（原件＋右側資訊面板）的高度上限，
+                       預設「瀏覽器可視高度的 95%，扣掉頂部導覽列」。
+                       原件圖片會依比例縮放置中（不裁切、不變形），
+                       右側資訊面板放不下時在內部捲動，兩欄一起套用
+                       同一個高度，整個區塊不會把頁面往下撐得很長。
+
    ── 怎麼「編輯」一個標籤 ─────────────────────────────────
    找到下面對應的 [data-fx-feature="..."] 區塊，直接改數值即可。
 
@@ -997,9 +1003,11 @@
       （JSON 內也可以寫 colour／box／tag 當預設值，但以這裡的設定為準。）
    ========================================================================= */
 
-/* 7／8 辨識印刷字、辨識手寫字 — widen the combined visual + text box. */
+/* 7／8 辨識印刷字、辨識手寫字 — widen the combined visual + text box,
+   and cap the whole game window's height so it fits the viewport. */
 #part-3-printed-explorer,
 #part-3-handwritten-explorer {
+  --fx-explorer-h: calc(95svh - var(--bar-h, 62px));
   width: 96vw;
   max-width: 96vw;
   margin-left: calc(50% - 48vw);
@@ -1521,20 +1529,30 @@
    一、整體尺寸與版面
        在 #part-3-try-explorer 區塊裡改：
 
+         --try-explorer-h      整個遊戲視窗（原件＋資訊面板）的高度，
+                                預設是「瀏覽器可視高度的 95%，扣掉頂部導覽列」，
+                                左右兩欄都會跟著這個高度走，各自在內部捲動，
+                                不會把頁面往下撐得很長。
          --try-explorer-cols   左右兩半的比例，例如 48% 52%
          --try-doc-pad         左半（史料）的內邊距
          --try-doc-gap         史料與翻頁按鈕之間的距離
          --try-page-w          史料圖片的寬度，例如 100%、86%
+                                （圖片高度固定跟著 --try-explorer-h 縮放，
+                                不會變形、也不會被裁切）
          --try-hl-opacity      標示區的透明度，0 全透明、1 全不透明
          --try-panel-pad       右半（資訊面板）的內邊距
-         --try-panel-min-h     資訊面板最矮多少（撐開版面用）
-         --try-panel-max-h     資訊面板最高多少，超過就在面板內捲動
+         --try-progress-gap    進度圓點列下面的留白，以及它跟目前視窗
+                                之間那條分隔線的間距
+         --try-guide-gap       目前視窗跟底部引導對話框之間的留白，
+                                以及它們之間那條分隔線的間距
          --try-chat-max-h      第二步聊天視窗最高多少
          --try-cmp-area-h      第三步貼上結果的輸入框高度
          --try-diff-h          第三步比對結果那一欄的高度
 
    二、字級（全部會再乘上網站的字級設定 --font-scale）
          --try-switch-font-size   標題旁「印刷字／手寫字」切換鈕
+         --try-dot-size           進度圓點的直徑
+         --try-dot-font-size      進度圓點裡數字的字級
          --try-rpg-font-size      底部引導對話框的內文
          --try-bubble-font-size   第二步每一句 prompt 的字級
          --try-cmp-font-size      第三步的等寬字（貼上的結果與比對結果）
@@ -1543,7 +1561,9 @@
    三、顏色
          --try-rpg-bg       引導對話框的底色（可寫漸層）
          --try-rpg-border   引導對話框的外框與四角小方塊
-         --try-ok           完成打勾、比對「多出來」的綠色
+         --try-ok           進度圓點「已完成／目前」、完成打勾、
+                             比對「多出來」共用的綠色（進度圓點只用這一種顏色，
+                             不再使用橘色強調色）
 
    四、標示區（左半史料上那幾塊半透明色塊）
        這一節「不顯示標籤」，只顯示標示區。每一塊寫成一個區塊：
@@ -1577,20 +1597,23 @@
 
 #part-3-try-explorer {
   /* 版面 */
+  --try-explorer-h: calc(95svh - var(--bar-h, 62px));
   --try-explorer-cols: 48% 52%;
   --try-doc-pad: clamp(24px, 2.4vw, 38px);
   --try-doc-gap: 18px;
   --try-page-w: 100%;
   --try-hl-opacity: .45;
   --try-panel-pad: 24px 26px;
-  --try-panel-min-h: 640px;
-  --try-panel-max-h: 860px;
+  --try-progress-gap: 16px;
+  --try-guide-gap: 16px;
   --try-chat-max-h: 420px;
   --try-cmp-area-h: 96px;
   --try-diff-h: 180px;
 
   /* 字級 */
   --try-switch-font-size: 12.5px;
+  --try-dot-size: 30px;
+  --try-dot-font-size: 14px;
   --try-rpg-font-size: 13px;
   --try-bubble-font-size: 13.5px;
   --try-cmp-font-size: 12px;

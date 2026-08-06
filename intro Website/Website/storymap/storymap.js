@@ -2000,11 +2000,16 @@ const initPart3TryIt = () => {
     tick();
   };
 
-  const addTodo = (n, label) => {
-    const row = document.createElement('div');
-    row.className = 'part3-try-todo';
-    row.innerHTML = `<span class="n">${n}</span>${label}<span class="tick" aria-hidden="true">✓</span>`;
-    todoHost.appendChild(row);
+  /* 進度改用純數字圓點：不重複顯示步驟名稱，注意力留給下面目前的視窗。
+     三個階段固定：1 下載史料 · 2 撰寫 Prompt · 3 比對結果。 */
+  const PHASE_COUNT = 3;
+  const renderProgress = () => {
+    const dots = Array.from({ length: PHASE_COUNT }, (_, i) => {
+      const n = i + 1;
+      const state = n < phase ? 'done' : n === phase ? 'current' : 'pending';
+      return `<span class="part3-try-dot is-${state}" aria-hidden="true">${n}</span>`;
+    }).join('');
+    todoHost.innerHTML = `<div class="part3-try-progress"><span class="cap">進度</span>${dots}</div>`;
   };
 
   /* ---------- 第一步：下載史料 ---------- */
@@ -2021,8 +2026,8 @@ const initPart3TryIt = () => {
     showGuide('第一步', '先把左邊這份史料下載到你的電腦。稍後要讓 Agentic AI 在你的電腦上找到這個檔案。');
     stageHost.querySelector('[data-try-dl]').addEventListener('click', () => {
       if (set.href) window.open(set.href, '_blank', 'noopener');
-      addTodo(1, '下載史料');
       phase = 2; cur = 0; answers = [];
+      renderProgress();
       renderPhase2();
     });
     syncDoc();
@@ -2065,7 +2070,7 @@ const initPart3TryIt = () => {
         if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
         btn.classList.add('is-done');
         btn.innerHTML = COPY_IC + '已複製';
-        setTimeout(() => { addTodo(2, '撰寫 Prompt'); phase = 3; renderPhase3(); }, 500);
+        setTimeout(() => { phase = 3; renderProgress(); renderPhase3(); }, 500);
       });
       syncDoc();
       return;
@@ -2229,7 +2234,7 @@ const initPart3TryIt = () => {
   const resetAll = () => {
     clearTimeout(typingTimer);
     phase = 1; cur = 0; answers = []; pageIdx = 0;
-    todoHost.innerHTML = '';
+    renderProgress();
     renderPhase1();
   };
 

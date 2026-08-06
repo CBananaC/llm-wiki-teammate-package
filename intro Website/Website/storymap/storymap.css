@@ -1550,10 +1550,22 @@ img { max-width: 100%; }
   background: var(--card);
   border: 1px solid var(--line);
 }
+/* 7／8：整個遊戲視窗（原件＋右側資訊面板）限制在瀏覽器可視高度內，
+   不會把整個頁面往下撐得很長；左右兩欄都用同一個高度，各自在內部
+   縮放或捲動。高度數值在 storymap-cards.css 的
+   #part-3-printed-explorer / #part-3-handwritten-explorer 區塊可調
+   （變數 --fx-explorer-h）。 */
+#part-3-printed-explorer,
+#part-3-handwritten-explorer {
+  height: var(--fx-explorer-h, calc(95svh - var(--bar-h, 62px)));
+  grid-template-rows: minmax(0, 1fr);
+  overflow: hidden;
+}
 /* 兩份原件都是暖褐色紙張，配深綠底（與 Agentic AI 動畫場景同一組綠）
    才能把紙張推到前景。標籤浮貼在原件兩側，因此左右另留出標籤的空白。 */
 .part3-fx-doc {
   position: relative;
+  height: 100%; min-height: 0;
   padding: clamp(24px, 2.4vw, 38px) clamp(118px, 9vw, 190px);
   background: radial-gradient(circle at 22% 18%, rgba(196, 93, 56, .16), transparent 42%),
               linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
@@ -1563,8 +1575,14 @@ img { max-width: 100%; }
 }
 .part3-fx-caption { align-self: flex-start; color: var(--muted); font: 600 calc(11px * var(--font-scale)) var(--sans); letter-spacing: .13em; }
 
-/* --- 7 印刷字：書冊頁面，翻頁時新頁自右滑入疊上舊頁 --- */
-.part3-fx-pagestack { position: relative; width: 100%; max-width: none; }
+/* --- 7 印刷字：書冊頁面，翻頁時新頁自右滑入疊上舊頁 ---
+   pagestack／page 用 width: fit-content 讓外框自動貼合縮放後的圖片：
+   這樣「疊頁」陰影（::before／::after）與浮貼標籤的定位基準才會跟著
+   縮小後的實際頁面邊緣走，不會露出比頁面本身更寬的陰影。 */
+.part3-fx-pagestack {
+  position: relative; height: 100%; min-height: 0;
+  width: fit-content; max-width: 100%; margin-inline: auto;
+}
 .part3-fx-pagestack::before,
 .part3-fx-pagestack::after {
   content: ""; position: absolute; inset: 0; background: #fdfbf6;
@@ -1574,23 +1592,26 @@ img { max-width: 100%; }
 .part3-fx-pagestack::after { transform: translate(4.5px, 4.5px) rotate(.5deg); }
 .part3-fx-page {
   position: relative; z-index: 2; overflow: hidden; background: #fff;
+  height: 100%; width: fit-content; max-width: 100%;
   border: 1px solid rgba(22, 61, 63, .18); box-shadow: 0 14px 30px rgba(22, 61, 63, .16);
 }
-.part3-fx-page img { display: block; width: 100%; height: auto; }
+.part3-fx-page img { display: block; width: auto; height: 100%; max-width: 100%; object-fit: contain; }
 .part3-fx-turn {
   position: absolute; inset: 0; z-index: 7; overflow: hidden; background: #fff;
   box-shadow: -14px 0 26px rgba(22, 61, 63, .22); will-change: transform;
 }
-.part3-fx-turn img { display: block; width: 100%; height: auto; }
+.part3-fx-turn img { display: block; width: auto; height: 100%; max-width: 100%; object-fit: contain; }
 
 /* --- 8 手寫字：風琴摺，展開的兩摺保持掃描原比例，其餘收成摺痕 --- */
 /* 摺子與其浮貼標籤共用同一個定位框，標籤才能落在摺子兩側 */
-.part3-fx-striparea { position: relative; width: 100%; }
+.part3-fx-striparea { position: relative; width: 100%; height: 100%; min-height: 0; }
 .part3-fx-strip {
   --fold-slivers: 60px;
-  --fold-h: min(calc((var(--fold-w, 520px) - var(--fold-slivers)) / 0.921), 76vh);
+  /* 摺子高度以「目前可用寬度」與「掃描比例」換算，並以整欄實際可用高度
+     （100%）為上限，避免超出遊戲視窗的高度限制。 */
+  --fold-h: min(calc((var(--fold-w, 520px) - var(--fold-slivers)) / 0.921), 76vh, 100%);
   display: flex; flex-direction: row-reverse; align-items: stretch; justify-content: flex-start;
-  width: 100%; height: var(--fold-h); margin: 0 auto; overflow: hidden;
+  width: 100%; height: var(--fold-h); max-height: 100%; margin: 0 auto; overflow: hidden;
   perspective: 900px; perspective-origin: 70% 50%;
 }
 /* 收摺的部分維持紙張本身的褐色（不透明），否則深綠底會透出來變成灰綠條紋 */
@@ -1675,11 +1696,14 @@ img { max-width: 100%; }
 .part3-fx-nav button:disabled { opacity: .3; cursor: default; }
 .part3-fx-ind { color: rgba(244, 239, 230, .62); font: 600 calc(12px * var(--font-scale)) var(--sans); }
 
-/* --- 右半：特徵 → 指示 → 代碼 → 輸出，以向下箭頭串起因果關係 --- */
-/* 右半自行撐高以完整顯示四個區塊，不再限制高度／內部捲動 */
+/* --- 右半：特徵 → 指示 → 代碼 → 輸出，以向下箭頭串起因果關係 ---
+   高度跟著整個遊戲視窗（見 #part-3-printed-explorer／#part-3-handwritten-explorer
+   的 --fx-explorer-h）走；四個區塊放不下時在這一欄內部捲動，
+   不再把整個頁面往下撐長。 */
 .part3-fx-out {
+  height: 100%; min-height: 0; overflow-y: auto; scrollbar-width: thin;
   padding: clamp(24px, 2.4vw, 40px);
-  display: flex; flex-direction: column; justify-content: center;
+  display: flex; flex-direction: column;
 }
 .part3-fx-arrow {
   display: flex; align-items: center; justify-content: center;
@@ -1759,8 +1783,15 @@ img { max-width: 100%; }
 
 @media (max-width: 1040px) {
   .part3-feature-explorer { grid-template-columns: 1fr; }
-  .part3-fx-doc { border-right: 0; border-bottom: 1px solid var(--line); }
-  .part3-fx-out { max-height: none; }
+  /* 窄螢幕改上下堆疊，固定高度／內部捲動沒有意義，改回自然高度。 */
+  #part-3-printed-explorer,
+  #part-3-handwritten-explorer { height: auto; grid-template-rows: none; overflow: visible; }
+  .part3-fx-doc { height: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .part3-fx-pagestack { height: auto; }
+  .part3-fx-page { height: auto; }
+  .part3-fx-page img { width: 100%; height: auto; }
+  .part3-fx-striparea { height: auto; }
+  .part3-fx-out { height: auto; max-height: none; overflow: visible; }
   /* 窄螢幕：改回原件下方的標籤列，避免浮貼標籤擠壓版面 */
   .part3-fx-doc { padding-inline: clamp(18px, 3vw, 30px); }
   .part3-fx-doc .part3-fx-tag.is-floating {
@@ -2891,12 +2922,26 @@ img { max-width: 100%; }
 .part3-try-switch button:hover { color: var(--ink); }
 .part3-try-switch button.is-on { background: var(--ink); color: var(--card); }
 
-/* 左半：史料 */
+/* 整個「試一試」遊戲視窗（原件＋資訊面板）限制在瀏覽器可視高度內，
+   不會無止盡往下長：兩欄一起用同一個高度，各自在內部捲動。 */
+.part3-try-explorer {
+  height: var(--try-explorer-h, calc(95svh - var(--bar-h, 62px)));
+  grid-template-rows: minmax(0, 1fr);
+  overflow: hidden;
+}
+
+/* 左半：史料——高度跟著整個遊戲視窗走，圖片依比例縮放置中，不裁切。 */
 .part3-try-doc {
+  height: 100%; min-height: 0;
   padding: var(--try-doc-pad, clamp(24px, 2.4vw, 38px));
   gap: var(--try-doc-gap, 18px);
 }
-.part3-try-pagestack { position: relative; width: var(--try-page-w, 100%); }
+.part3-try-pagestack {
+  position: relative; width: var(--try-page-w, 100%); height: 100%; min-height: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.part3-try-explorer .part3-fx-page { height: 100%; max-height: 100%; display: flex; }
+.part3-try-explorer .part3-fx-page img { width: auto; height: 100%; max-width: 100%; object-fit: contain; }
 .part3-try-hl {
   position: absolute; z-index: 5; border: 0; pointer-events: none; border-radius: 2px;
   left: var(--fx-left, 0%); top: var(--fx-top, 0%);
@@ -2906,27 +2951,41 @@ img { max-width: 100%; }
 }
 .part3-try-hl.is-active { opacity: var(--try-hl-opacity, .45); }
 
-/* 右半：資訊面板 */
+/* 右半：資訊面板——高度等同左半，內部分成「可捲動內容」與
+   「固定在最下面的引導對話框」兩塊。 */
 .part3-try-panel {
   display: flex; flex-direction: column;
+  height: 100%; min-height: 0;
   padding: var(--try-panel-pad, 24px 26px);
-  min-height: var(--try-panel-min-h, 640px);
-  max-height: var(--try-panel-max-h, 860px);
 }
 .part3-try-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 2px; scrollbar-width: thin; }
-.part3-try-guidehost { flex: 0 0 auto; padding-top: 14px; }
+.part3-try-guidehost {
+  flex: 0 0 auto;
+  margin-top: var(--try-guide-gap, 16px);
+  padding-top: var(--try-guide-gap, 16px);
+  border-top: 1px solid var(--line);
+}
 
-/* 完成的步驟收合成待辦清單一行 */
-.part3-try-todo {
-  display: flex; align-items: center; gap: 10px; padding: 9px 14px; margin-bottom: 8px;
-  border: 1px solid var(--line); border-radius: 10px; background: rgba(46, 125, 91, .06);
-  font-size: calc(12.5px * var(--font-scale)); font-weight: 700; color: rgba(22, 61, 63, .72);
+/* 進度改用純數字圓點：全部只用綠色系表達狀態——
+   已完成＝實心綠、目前＝淺綠底描邊、未開始＝灰底。 */
+.part3-try-progress {
+  display: flex; align-items: center; gap: 9px;
+  margin-bottom: var(--try-progress-gap, 16px);
+  padding-bottom: var(--try-progress-gap, 16px);
+  border-bottom: 1px solid var(--line);
 }
-.part3-try-todo .n {
-  width: 20px; height: 20px; border-radius: 50%; background: rgba(22, 61, 63, .12); flex: 0 0 auto;
-  display: inline-flex; align-items: center; justify-content: center; font-size: calc(11px * var(--font-scale));
+.part3-try-progress .cap {
+  margin-right: 4px; font-size: calc(12px * var(--font-scale)); color: rgba(22, 61, 63, .45);
 }
-.part3-try-todo .tick { margin-left: auto; color: var(--try-ok, #2e7d5b); font-size: calc(14px * var(--font-scale)); }
+.part3-try-dot {
+  width: var(--try-dot-size, 30px); height: var(--try-dot-size, 30px); border-radius: 50%; flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: calc(var(--try-dot-font-size, 14px) * var(--font-scale)); font-weight: 700;
+  border: 2px solid transparent; transition: background-color .2s, color .2s, border-color .2s;
+}
+.part3-try-dot.is-done { background: var(--try-ok, #2e7d5b); color: #fff; }
+.part3-try-dot.is-current { background: rgba(46, 125, 91, .14); border-color: var(--try-ok, #2e7d5b); color: var(--try-ok, #2e7d5b); }
+.part3-try-dot.is-pending { background: rgba(22, 61, 63, .09); color: rgba(22, 61, 63, .38); }
 
 /* RPG 引導對話框（固定於面板底部） */
 .part3-try-rpg {
@@ -3101,7 +3160,13 @@ img { max-width: 100%; }
 .part3-try-half + .part3-try-half { margin-top: 14px; }
 
 @media (max-width: 1040px) {
-  .part3-try-panel { min-height: 0; max-height: none; }
+  /* 窄螢幕時左右兩欄改成上下堆疊，固定高度沒有意義，改回自然高度。 */
+  .part3-try-explorer { height: auto; grid-template-rows: none; overflow: visible; }
+  .part3-try-doc { height: auto; }
+  .part3-try-pagestack { height: auto; }
+  .part3-try-explorer .part3-fx-page { height: auto; max-height: none; }
+  .part3-try-explorer .part3-fx-page img { width: 100%; height: auto; }
+  .part3-try-panel { height: auto; min-height: 0; max-height: none; }
 }
 @media (prefers-reduced-motion: reduce) {
   .part3-try-rpg .caret { animation: none; }
