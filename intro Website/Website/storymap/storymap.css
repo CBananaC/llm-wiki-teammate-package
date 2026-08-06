@@ -3231,3 +3231,36 @@ img { max-width: 100%; }
   .part3-try-rpg .caret { animation: none; }
   .part3-try-blank.is-bad { animation: none; }
 }
+
+/* 7／11：窄視窗改為上下堆疊時，清除桌面版的 PDF 高度上限。
+   否則較高的桌面 PDF 規則會壓住自然高度，令 backdrop 與頁面錯位。 */
+@media (max-width: 1040px) {
+  #part-3-printed-explorer .part3-fx-doc,
+  #part-3-try-explorer .part3-try-doc {
+    height: auto;
+    max-height: none;
+    align-self: start;
+    background-size: 100% 100%, 100% 100%;
+  }
+  #part-3-printed-explorer .part3-fx-pagestack,
+  #part-3-try-explorer .part3-try-pagestack {
+    height: auto;
+    max-height: none;
+    flex: 0 0 auto;
+  }
+  #part-3-printed-explorer .part3-fx-page,
+  #part-3-try-explorer .part3-fx-page {
+    height: auto;
+    max-height: none;
+    display: block;
+  }
+  #part-3-printed-explorer .part3-fx-page img,
+  #part-3-try-explorer .part3-fx-page img,
+  #part-3-printed-explorer .part3-fx-turn img {
+    width: 100%;
+    height: auto;
+    max-width: 100%;
+    max-height: none;
+    object-fit: contain;
+  }
+}
