@@ -941,21 +941,20 @@ const initPart3FeatureExplorers = () => {
     const features = (data && data.features) || [];
     if (!features.length) return;
 
-    /* 標籤與標示區的位置、大小、顏色全部走 CSS 變數。
-       這裡把 JSON 內的數值寫成「低優先度」的預設樣式（選擇器只用屬性，
-       不用 id），storymap-cards.css 便可以用 #id 選擇器覆寫任何一項，
-       不必改動 HTML 或這支程式。 */
+    /* 標籤的顏色與位置走 CSS 變數；Part 7 的人工標示改由 JSON 指定的
+       annotated PNG 顯示，不再需要 CSS 色塊位置。 */
     const kind = root.dataset.part3Explorer;
     const injectDefaults = () => {
       const rules = features.map((f) => {
-        const box = f.box || {};
         const tag = f.tag || {};
         const decls = [
           `--fx-color: ${f.colour || '#e6e0d4'}`,
-          `--fx-left: ${box.left || '0%'}`,
-          `--fx-top: ${box.top || '0%'}`,
-          `--fx-width: ${box.width || '0%'}`,
-          `--fx-height: ${box.height || '0%'}`,
+          ...(kind === 'folded' ? [
+            `--fx-left: ${(f.box || {}).left || '0%'}`,
+            `--fx-top: ${(f.box || {}).top || '0%'}`,
+            `--fx-width: ${(f.box || {}).width || '0%'}`,
+            `--fx-height: ${(f.box || {}).height || '0%'}`
+          ] : []),
           `--fx-tag-left: ${tag.left || 'auto'}`,
           `--fx-tag-right: ${tag.right || 'auto'}`,
           `--fx-tag-top: ${tag.top || 'auto'}`
@@ -1078,26 +1077,20 @@ const initPart3FeatureExplorers = () => {
     if (root.dataset.part3Explorer === 'printed') {
       const pages = data.pages || [];
       const img = root.querySelector('[data-part3-fx-img]');
-      const hlHost = root.querySelector('[data-part3-fx-hl]');
       const pageEl = img.parentElement;
       let page = 0;
       let turning = false;
       features.forEach((f) => { f.badge = `p.${(f.page || 0) + 1}`; });
 
       const paintPage = () => {
-        img.src = pages[page];
+        const f = features[cur];
+        const selectedImage = f && (f.page || 0) === page && f.image ? f.image : pages[page];
+        img.src = selectedImage;
+        img.alt = f && (f.page || 0) === page && f.image ? `${f.title}：人工標示頁面` : '印刷本奏摺頁面';
         indEl.textContent = `頁 ${page + 1} / ${pages.length}`;
 
         prevBtn.disabled = page === 0;
         nextBtn.disabled = page === pages.length - 1;
-        hlHost.innerHTML = '';
-        const f = features[cur];
-        if (f && (f.page || 0) === page) {
-          const hl = document.createElement('div');
-          hl.className = 'part3-fx-hl is-active';
-          hl.dataset.fxFeature = f.key;
-          hlHost.appendChild(hl);
-        }
         buildTags((f) => (f.page || 0) === page, true);
       };
       render = paintPage;

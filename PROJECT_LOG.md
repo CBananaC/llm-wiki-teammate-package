@@ -8484,3 +8484,24 @@ Verified:
 
 Remaining:
 - None for the JSON carousel controls.
+
+### 2026-08-06 15:29 HKT — Codex — Use annotated PNGs for Part 7 feature labels
+
+Summary:
+- Mapped all seven Part 7 辨識印刷字 labels to the supplied annotated PNGs in `intro Website/Website/storymap/辨識印刷字Label/`.
+- Replaced the CSS highlight rectangles with image switching when a feature label is selected; Part 8’s CSS highlights remain unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Clicking 夾批 loads `辨識印刷字Label/夾批.png` with the matching alt text and no Part 7 CSS highlight element.
+- Returning to page 1 restores `ocr-zhu25-printed-1-enhanced.png`; all seven PNGs match the base scan dimensions.
+- `node --check storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Part 7 annotated-image interaction.
