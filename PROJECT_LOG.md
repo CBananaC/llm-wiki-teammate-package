@@ -8601,3 +8601,77 @@ Verified:
 
 Remaining:
 - None for the Part 8 label ordering.
+
+### 2026-08-06 17:15 HKT — Codex — Match Part 7 and Part 8 label colours to annotated highlights
+
+Summary:
+- Updated all seven Part 7 label colours and all eight Part 8 label colours to follow the corresponding annotated PNG highlight tones.
+- Used slightly darker, still soft versions of each highlight colour for readable labels; `硃批` uses a softened red derived from its red ink.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser computed styles report the new colour values for all seven printed-text labels and all eight handwritten labels.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Part 7 and Part 8 label colours.
+
+### 2026-08-06 17:58 HKT — Claude — Add Part 3 section 11 「試一試」 interactive prompt-writing exercise
+
+Summary:
+- Added a new Part 3 section `#part-3-try` after `10 OCR測試`: left half shows the source document with highlight regions only (no labels, per request); right half is a three-stage guided exercise — download the PDF, assemble a prompt sentence by sentence in a Codex-style chat window, then paste and diff the user's OCR output against a reference.
+- Guidance is an RPG-style dialogue box pinned to the bottom of the info panel; the multiple-choice dropdown, suggested-prompt chip, and free-text box all render inside it below the guide text. Wrong picks show ✗ and clear for a retry.
+- Completed stages collapse into a checked to-do row. Each assembled prompt line is `contenteditable`; a copy button under the last line copies the live text.
+- A 印刷字／手寫字 toggle beside the section title switches document, highlight set, sentences, and reference text, resetting the flow.
+- Comparison uses a character-level LCS diff producing a match percentage and inline missing/extra highlighting; the user's pane stays editable for re-comparison.
+- All tunable geometry, type sizes, colours, and per-highlight positions are exposed as CSS variables documented in `storymap-cards.css` (「Part 3.4.10 — 試一試」), overriding JS-injected defaults by ID specificity — the same pattern used for sections 7/8.
+- Draft explored first in `intro Website/Website/UI Idea/26-part3-try-it-ui.html` over three iterations.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/UI Idea/26-part3-try-it-ui.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passes.
+- Brace balance is 0 for both `storymap.css` and `storymap-cards.css`; `<div>` open/close counts match in `storymap-example.html`.
+- Embedded `data-part3-try-data` JSON parses; both modes expose 5 features and 9 steps.
+- Every `data-try-*` hook referenced in JS exists in the HTML; all 28 `part3-try-*` classes used in JS have matching CSS rules.
+
+Remaining:
+- The two 試一試 PDFs do not exist yet. `"pdf"` shows a placeholder filename and `"href"` is empty (the download button only records completion); the 硃25 page images stand in as visuals. Supply the real PDFs, set `href`, and retune the highlight boxes in `storymap-cards.css`.
+- `"reference"` currently holds 硃25 body text as a stand-in; replace with the real reference OCR output for the new PDFs.
+- No local git checkpoint was created: the working tree already contains unrelated in-progress changes from another agent (GitHub cloud-upload animation) in the same files, and committing would absorb them.
+
+### 2026-08-06 18:02 HKT — Claude — Apply GitHub Repository cloud-upload animation to live site
+
+Summary:
+- Applied the finalized `25-github-repo-cloud-upload-draft.html` animation to `#part-3-tools-card`'s 「備份、管理與協作」info panel, replacing the static `img2_4_2.jpg` photo. A circuit-pattern scene shows a glowing cloud with a GitHub badge overlapping it near the top-right, a single glowing white upward arrow beneath the cloud, and real project file names (6 AI Skills, 4 Python scripts, 4 document JSON files — 硃25/奏5/台1/奏2) rising from the bottom of the frame into the cloud on staggered loops.
+- Added CSS section "9h · 自己的 GitHub Repository — 雲端上傳動畫" to `storymap.css` (`.cloud-scene`, `.cloud-wrap`, `.gh-badge`, `.cloud-arrow`/`@keyframes arrow-glow-up`, `.upload-card`/`@keyframes card-rise`, `prefers-reduced-motion` fallback), all values driven by `var(--name, default)`.
+- Added the tunable control block `#part-3-tools-card .cloud-scene { --scene-bg-1/2, --circuit-color/size, --cloud-color/glow/w, --gh-right/top/w, --arrow-w, --card-bg/border }` to `storymap-cards.css`, plus a new documentation subsection in the file's top comment block.
+- Added `initCloudUploadScene()` to `storymap.js` (after `initBatchTestScene()`), which builds the 14 upload cards from a real-filename array, staggers their rise timing/left offset, and uses an `IntersectionObserver` to pause/resume the card and arrow CSS animations when the panel scrolls off-screen (same convention as the OCR batch-test scene).
+- Bumped cache-busting query strings on `storymap.css`, `storymap-cards.css`, `storymap.js` links in `storymap-example.html` to `?v=20260806-cloud-upload-01`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- Brace balance and `/* */` comment-termination balance are equal for both `storymap.css` (989/989 braces, 125/125 comments) and `storymap-cards.css` (147/147 braces, 160/160 comments).
+- `<div>`, `<span>`, `<button>`, `<figure>`, `<article>` open/close tag counts all match in `storymap-example.html`.
+
+Remaining:
+- The working tree also contains the concurrently-developed Part 3 section 11「試一試」feature from another agent session (already documented in the 17:58 HKT entry above). Both features are complete, verified, and non-overlapping in the same files, so this checkpoint commit covers both together rather than splitting by feature.

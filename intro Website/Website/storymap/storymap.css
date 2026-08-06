@@ -2716,6 +2716,101 @@ img { max-width: 100%; }
 }
 
 /* ============================================================================
+   9h · 自己的 GitHub Repository — 雲端上傳動畫
+   （#part-3-tools-card 的「備份、管理與協作」資訊面板；取代原本的靜態圖片）
+   結構沿用 UI Idea/25-github-repo-cloud-upload-draft.html：深藍底＋電路
+   紋理、置中的發光雲朵、貼近雲朵右上角的 GitHub 頭像、單一白色上傳箭頭，
+   以及從底部持續往上飄、只顯示真實檔名的資料卡片。
+   大小、顏色寫在 storymap-cards.css 的 #part-3-tools-card .cloud-scene；
+   卡片內容與節奏在 storymap.js 的 initCloudUploadScene() 裡。
+   ========================================================================== */
+.part3-tool-info-photo-cloud { background: #0c1730; }
+/* 這個面板不需要一般照片的漸層色調疊加，關掉讓深藍場景保持乾淨 */
+.part3-tool-info-photo-cloud::after { display: none; }
+
+.cloud-scene {
+  position: relative; width: 100%; height: 100%; overflow: hidden;
+  background: radial-gradient(120% 90% at 50% 12%, var(--scene-bg-2, #142449), var(--scene-bg-1, #0c1730));
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, .4);
+}
+.cloud-scene::before {
+  content: ""; position: absolute; inset: 0; opacity: .7; pointer-events: none;
+  background-image:
+    linear-gradient(var(--circuit-color, rgba(140, 170, 255, .16)) 1px, transparent 1px),
+    linear-gradient(90deg, var(--circuit-color, rgba(140, 170, 255, .16)) 1px, transparent 1px);
+  background-size: var(--circuit-size, 46px) var(--circuit-size, 46px);
+  mask-image: radial-gradient(80% 80% at 50% 40%, #000 55%, transparent 100%);
+}
+
+.cloud-wrap {
+  position: absolute; left: 50%; top: 50%; width: var(--cloud-w, 58%);
+  transform: translate(-50%, -50%);
+  z-index: 3;
+}
+.cloud-glow-layer {
+  position: absolute; inset: -18%; border-radius: 50%;
+  background: radial-gradient(closest-side, var(--cloud-glow, rgba(127, 164, 242, .55)), transparent 72%);
+  opacity: .8; filter: blur(2px);
+}
+.cloud-svg { position: relative; display: block; width: 100%; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .35)); }
+.cloud-svg path { fill: var(--cloud-color, #7fa4f2); }
+
+.gh-badge {
+  position: absolute; right: var(--gh-right, 12%); top: var(--gh-top, 2%);
+  width: var(--gh-w, 20%); aspect-ratio: 1;
+  background: #fff; border-radius: 50%; display: grid; place-items: center;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, .35); z-index: 4;
+}
+.gh-badge svg { width: 62%; height: 62%; fill: #10182b; }
+
+.cloud-arrow-wrap { position: absolute; left: 50%; top: 58%; width: var(--arrow-w, 16%); transform: translateX(-50%); }
+.cloud-arrow {
+  width: 100%; fill: #ffffff;
+  filter: drop-shadow(0 0 10px rgba(255, 255, 255, .85)) drop-shadow(0 0 22px rgba(255, 255, 255, .5));
+  animation: arrow-glow-up 1.5s ease-in-out infinite;
+}
+@keyframes arrow-glow-up {
+  0%, 100% { transform: translateY(0); opacity: .85; }
+  50%      { transform: translateY(-14%); opacity: 1; }
+}
+
+/* 由下往上飄的資料卡片：只有種類標籤＋完整檔名，寬度跟著檔名長度走
+   （max-content），不截斷。 */
+.upload-lane { position: absolute; inset: 0; z-index: 2; }
+.upload-card {
+  position: absolute; left: var(--x, 50%); bottom: -14%;
+  width: max-content; max-width: 78%; transform: translateX(-50%);
+  background: var(--card-bg, #12213f); border: 1px solid var(--card-border, rgba(140, 170, 255, .35));
+  border-radius: 6px; padding: 7px 10px; box-shadow: 0 8px 18px rgba(0, 0, 0, .35);
+  opacity: 0;
+  animation: card-rise var(--rise-dur, 5.5s) linear infinite;
+  animation-delay: var(--rise-delay, 0s);
+}
+.upload-card-kind {
+  display: inline-block; margin-bottom: 3px; padding: 1px 6px; border-radius: 3px;
+  font-family: var(--sans); font-weight: 800; font-size: 9px; line-height: 1.5;
+  letter-spacing: .04em; text-transform: uppercase;
+}
+.upload-card[data-kind="skill"] .upload-card-kind { background: rgba(196, 93, 56, .22); color: #f2b48f; }
+.upload-card[data-kind="code"] .upload-card-kind { background: rgba(120, 180, 255, .2); color: #9cdcfe; }
+.upload-card[data-kind="json"] .upload-card-kind { background: rgba(120, 220, 170, .18); color: #8fe0ba; }
+.upload-card-name {
+  display: block; color: #e8edf8; white-space: nowrap;
+  font-family: "SF Mono", ui-monospace, Menlo, Consolas, monospace; font-weight: 700; font-size: 11px; line-height: 1.4;
+}
+@keyframes card-rise {
+  0%   { bottom: -14%; opacity: 0; transform: translateX(-50%) scale(.9); }
+  10%  { opacity: 1; transform: translateX(-50%) scale(1); }
+  72%  { opacity: 1; }
+  100% { bottom: 60%; opacity: 0; transform: translateX(-50%) scale(.62); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .upload-card { animation: none; opacity: 0; }
+  .cloud-arrow { animation: none; opacity: .9; }
+}
+
+/* ============================================================================
    10 · 響應式
    ========================================================================== */
 @media (max-width: 980px) {
@@ -2770,4 +2865,245 @@ img { max-width: 100%; }
   .title-row { gap: 11px; }
   .option-number { min-width: 38px; height: 38px; font-size: 15px; }
   .hero-content { padding: 0 20px; }
+}
+
+/* ============================================================================
+   9g · 試一試（#part-3-try）
+   左半：史料頁面，只顯示標示區（不顯示標籤）。
+   右半：闖關式資訊面板 — 上方可捲動（待辦清單＋目前視窗），
+        下方固定 RPG 引導對話框，所有互動選項都放在引導文字下面。
+   三個階段：1 下載史料 → 2 撰寫 Prompt（Codex 淺色聊天視窗）→ 3 比對 OCR 結果。
+   可調尺寸、顏色、標示區位置寫在 storymap-cards.css 的
+   「Part 3.4.10 — 試一試」區塊；此處只是預設值。
+   ========================================================================== */
+
+/* 標題列旁的印刷字／手寫字切換 */
+.part3-try-switch {
+  margin-left: auto; display: inline-flex; gap: 3px; padding: 3px;
+  background: rgba(22, 61, 63, .07); border-radius: 999px;
+}
+.part3-try-switch button {
+  appearance: none; border: none; cursor: pointer; background: transparent; border-radius: 999px;
+  padding: 6px 16px; font-family: var(--sans); font-weight: 700;
+  font-size: calc(var(--try-switch-font-size, 12.5px) * var(--font-scale));
+  color: rgba(22, 61, 63, .6); transition: background-color .18s, color .18s;
+}
+.part3-try-switch button:hover { color: var(--ink); }
+.part3-try-switch button.is-on { background: var(--ink); color: var(--card); }
+
+/* 左半：史料 */
+.part3-try-doc {
+  padding: var(--try-doc-pad, clamp(24px, 2.4vw, 38px));
+  gap: var(--try-doc-gap, 18px);
+}
+.part3-try-pagestack { position: relative; width: var(--try-page-w, 100%); }
+.part3-try-hl {
+  position: absolute; z-index: 5; border: 0; pointer-events: none; border-radius: 2px;
+  left: var(--fx-left, 0%); top: var(--fx-top, 0%);
+  width: var(--fx-width, 0%); height: var(--fx-height, 0%);
+  background: var(--fx-color, rgba(243, 201, 103, .3));
+  opacity: 0; transition: opacity .25s;
+}
+.part3-try-hl.is-active { opacity: var(--try-hl-opacity, .45); }
+
+/* 右半：資訊面板 */
+.part3-try-panel {
+  display: flex; flex-direction: column;
+  padding: var(--try-panel-pad, 24px 26px);
+  min-height: var(--try-panel-min-h, 640px);
+  max-height: var(--try-panel-max-h, 860px);
+}
+.part3-try-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 2px; scrollbar-width: thin; }
+.part3-try-guidehost { flex: 0 0 auto; padding-top: 14px; }
+
+/* 完成的步驟收合成待辦清單一行 */
+.part3-try-todo {
+  display: flex; align-items: center; gap: 10px; padding: 9px 14px; margin-bottom: 8px;
+  border: 1px solid var(--line); border-radius: 10px; background: rgba(46, 125, 91, .06);
+  font-size: calc(12.5px * var(--font-scale)); font-weight: 700; color: rgba(22, 61, 63, .72);
+}
+.part3-try-todo .n {
+  width: 20px; height: 20px; border-radius: 50%; background: rgba(22, 61, 63, .12); flex: 0 0 auto;
+  display: inline-flex; align-items: center; justify-content: center; font-size: calc(11px * var(--font-scale));
+}
+.part3-try-todo .tick { margin-left: auto; color: var(--try-ok, #2e7d5b); font-size: calc(14px * var(--font-scale)); }
+
+/* RPG 引導對話框（固定於面板底部） */
+.part3-try-rpg {
+  position: relative; padding: 16px 20px 20px;
+  background: var(--try-rpg-bg, linear-gradient(160deg, #12363a 0%, #1b464a 100%));
+  border: 2px solid var(--try-rpg-border, #6f9a90); border-radius: 6px;
+  box-shadow: inset 0 0 0 2px rgba(18, 54, 58, .9), 0 8px 20px rgba(18, 54, 58, .22);
+  color: #eef4f0; font-size: calc(var(--try-rpg-font-size, 13px) * var(--font-scale)); line-height: 1.95;
+}
+.part3-try-rpg::before,
+.part3-try-rpg::after { content: ""; position: absolute; width: 6px; height: 6px; background: var(--try-rpg-border, #6f9a90); }
+.part3-try-rpg::before { left: 5px; top: 5px; }
+.part3-try-rpg::after { right: 5px; top: 5px; }
+.part3-try-rpg .k {
+  display: block; margin-bottom: 7px; letter-spacing: .14em; font-weight: 700;
+  font-size: calc(11px * var(--font-scale)); color: var(--yellow);
+}
+.part3-try-rpg .t { display: block; min-height: 1.95em; }
+.part3-try-rpg .caret {
+  position: absolute; right: 14px; bottom: 8px; color: var(--yellow);
+  font-size: calc(11px * var(--font-scale)); animation: part3TryBlink 1s steps(2) infinite;
+}
+@keyframes part3TryBlink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
+.part3-try-opts { margin-top: 14px; padding-top: 13px; border-top: 1px dashed rgba(111, 154, 144, .5); }
+
+/* 引導框內的互動元件（深底配色） */
+.part3-try-chip {
+  appearance: none; cursor: pointer; display: block; width: 100%; text-align: left;
+  border: 1.5px dashed var(--yellow); border-radius: 10px; padding: 10px 15px;
+  background: rgba(243, 201, 103, .1); color: #fff8e6;
+  font-family: var(--sans); font-weight: 700; line-height: 1.7;
+  font-size: calc(12.5px * var(--font-scale));
+  transition: background-color .16s, transform .1s;
+}
+.part3-try-chip:hover { background: rgba(243, 201, 103, .22); }
+.part3-try-chip:active { transform: scale(.99); }
+.part3-try-sentence { margin: 0; line-height: 2.4; font-size: calc(13px * var(--font-scale)); color: #eef4f0; }
+.part3-try-blank {
+  appearance: none; cursor: pointer; border: none; border-bottom: 2px solid var(--yellow);
+  background: rgba(255, 255, 255, .1); color: #fff; padding: 4px 26px 4px 10px; border-radius: 5px 5px 0 0;
+  font-family: var(--sans); font-weight: 700; font-size: calc(13px * var(--font-scale));
+  background-image: linear-gradient(45deg, transparent 50%, var(--yellow) 50%),
+                    linear-gradient(135deg, var(--yellow) 50%, transparent 50%);
+  background-position: calc(100% - 14px) 55%, calc(100% - 9px) 55%;
+  background-size: 5px 5px, 5px 5px; background-repeat: no-repeat;
+}
+.part3-try-blank option { color: var(--ink); background: #fff; }
+.part3-try-blank:focus { outline: 2px solid rgba(243, 201, 103, .45); outline-offset: 1px; }
+.part3-try-blank.is-ok { border-bottom-color: #7fe0b3; background-color: rgba(127, 224, 179, .16); }
+.part3-try-blank.is-bad { border-bottom-color: #ff9f95; background-color: rgba(255, 159, 149, .16); animation: part3TryShake .3s; }
+@keyframes part3TryShake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
+.part3-try-mark { margin-left: 8px; font-weight: 700; font-size: calc(14px * var(--font-scale)); }
+.part3-try-mark.ok { color: #7fe0b3; }
+.part3-try-mark.bad { color: #ff9f95; }
+.part3-try-free {
+  width: 100%; min-height: 64px; border-radius: 9px; border: 1px solid rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .07); color: #fff; padding: 9px 12px;
+  font-family: var(--sans); font-size: calc(12.5px * var(--font-scale)); line-height: 1.7; resize: vertical;
+}
+.part3-try-free::placeholder { color: rgba(255, 255, 255, .4); }
+.part3-try-free:focus { outline: none; border-color: var(--yellow); }
+.part3-try-optbtn {
+  appearance: none; cursor: pointer; margin-top: 10px; border: none; border-radius: 9px;
+  padding: 9px 18px; background: var(--yellow); color: #3b2a0c;
+  font-family: var(--sans); font-weight: 700; font-size: calc(12.5px * var(--font-scale));
+  transition: filter .16s, transform .1s;
+}
+.part3-try-optbtn:hover { filter: brightness(1.07); }
+.part3-try-optbtn:active { transform: translateY(1px); }
+
+/* 視窗外殼（沿用網站 Codex 視窗的淺色標題列） */
+.part3-try-win { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 4px; }
+.part3-try-winbar {
+  display: flex; align-items: center; gap: 6px; padding: 9px 12px;
+  background: #efe8dc; border-bottom: 1px solid rgba(22, 61, 63, .14);
+}
+.part3-try-winbar .dot { width: 9px; height: 9px; border-radius: 50%; }
+.part3-try-winbar .dot.red { background: #ff5f57; }
+.part3-try-winbar .dot.yellow { background: #febc2e; }
+.part3-try-winbar .dot.green { background: #28c840; }
+.part3-try-winbar .ttl {
+  margin-left: 8px; font-weight: 700; color: #7a7263;
+  font-size: calc(11.5px * var(--font-scale));
+}
+
+/* 第一步：下載史料 */
+.part3-try-dl { padding: 20px; background: var(--card); display: flex; align-items: center; gap: 16px; flex-wrap: wrap; }
+.part3-try-dl .meta { flex: 1 1 160px; min-width: 0; }
+.part3-try-dl .name { font-family: var(--mono, "SF Mono", ui-monospace, Menlo, Consolas, monospace); font-size: calc(12.5px * var(--font-scale)); font-weight: 600; word-break: break-all; }
+.part3-try-dl .sub { margin-top: 4px; font-size: calc(11.5px * var(--font-scale)); color: rgba(22, 61, 63, .6); }
+.part3-try-dlbtn {
+  appearance: none; cursor: pointer; border: none; border-radius: 9px; padding: 11px 20px;
+  background: var(--ink); color: var(--card); font-family: var(--sans); font-weight: 700;
+  font-size: calc(13px * var(--font-scale)); transition: background-color .18s, transform .1s;
+}
+.part3-try-dlbtn:hover { background: #1d4d4f; }
+.part3-try-dlbtn:active { transform: translateY(1px); }
+
+/* 第二步：Codex 聊天視窗；每句 prompt 都可直接點入編輯 */
+.part3-try-chat { background: var(--card); padding: 16px; max-height: var(--try-chat-max-h, 420px); overflow-y: auto; scrollbar-width: thin; }
+.part3-try-bubblerow { display: flex; justify-content: flex-end; margin-bottom: 11px; }
+.part3-try-bubble {
+  max-width: 88%; padding: 9px 13px; border-radius: 12px 12px 3px 12px;
+  background: #e7e7e7; color: #262626; outline: none;
+  font: 500 calc(var(--try-bubble-font-size, 13.5px) * var(--font-scale)) / 1.7 var(--sans);
+  white-space: pre-wrap; word-break: break-word;
+  transition: box-shadow .16s, background-color .16s;
+}
+.part3-try-bubble[contenteditable="true"] { cursor: text; }
+.part3-try-bubble[contenteditable="true"]:hover { background: #e0e0e0; }
+.part3-try-bubble[contenteditable="true"]:focus { background: #fff; box-shadow: 0 0 0 2px rgba(196, 93, 56, .4); }
+.part3-try-chatfoot {
+  display: flex; align-items: center; justify-content: flex-end; gap: 8px;
+  padding: 0 16px 14px; background: var(--card);
+}
+.part3-try-chatfoot .hint { margin-right: auto; font-size: calc(11px * var(--font-scale)); color: rgba(22, 61, 63, .45); }
+.part3-try-copy {
+  appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+  border: 1px solid var(--line); border-radius: 8px; padding: 8px 14px;
+  background: #fff; color: var(--ink); font-family: var(--sans); font-weight: 700;
+  font-size: calc(12px * var(--font-scale));
+  transition: border-color .16s, box-shadow .16s, background-color .16s;
+}
+.part3-try-copy:hover { border-color: var(--accent); box-shadow: 0 3px 10px rgba(196, 93, 56, .15); }
+.part3-try-copy:active { transform: translateY(1px); }
+.part3-try-copy.is-done { border-color: var(--try-ok, #2e7d5b); color: var(--try-ok, #2e7d5b); }
+.part3-try-copy svg { width: 13px; height: 13px; flex: 0 0 auto; }
+
+/* 第三步：比對 OCR 結果（淺色） */
+.part3-try-cmp { padding: 16px; background: var(--card); }
+.part3-try-cmp .lab {
+  display: block; margin: 0 0 6px; font-weight: 700; letter-spacing: .08em;
+  font-size: calc(10.5px * var(--font-scale)); color: rgba(22, 61, 63, .5);
+}
+.part3-try-area {
+  width: 100%; min-height: var(--try-cmp-area-h, 96px); border-radius: 8px; border: 1px solid var(--line);
+  background: #fff; color: var(--ink); padding: 10px 12px; resize: vertical;
+  font-family: var(--mono, "SF Mono", ui-monospace, Menlo, Consolas, monospace);
+  font-size: calc(var(--try-cmp-font-size, 12px) * var(--font-scale)); line-height: 1.9;
+}
+.part3-try-area:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px rgba(196, 93, 56, .1); }
+.part3-try-cmprow { display: flex; gap: 10px; align-items: center; margin-top: 12px; }
+.part3-try-cmprow .spacer { flex: 1; }
+.part3-try-cmpbtn {
+  appearance: none; cursor: pointer; border: 1px solid var(--line); border-radius: 8px;
+  padding: 9px 16px; background: #fff; color: var(--ink);
+  font-family: var(--sans); font-weight: 700; font-size: calc(12.5px * var(--font-scale));
+  transition: border-color .18s, box-shadow .18s, background-color .18s;
+}
+.part3-try-cmpbtn:hover { border-color: var(--accent); box-shadow: 0 3px 10px rgba(196, 93, 56, .15); }
+.part3-try-cmpbtn.primary { background: var(--ink); border-color: var(--ink); color: var(--card); }
+.part3-try-cmpbtn.primary:hover { background: #1d4d4f; box-shadow: 0 4px 12px rgba(22, 61, 63, .22); }
+.part3-try-score {
+  display: flex; align-items: baseline; gap: 12px; padding: 12px 15px; margin-bottom: 14px;
+  border-radius: 9px; background: #fff6e2; border: 1px solid var(--yellow);
+}
+.part3-try-score .lab { margin: 0; letter-spacing: 0; font-size: calc(12px * var(--font-scale)); color: rgba(22, 61, 63, .6); }
+.part3-try-score .num {
+  font-weight: 700; color: var(--accent);
+  font-family: var(--mono, "SF Mono", ui-monospace, Menlo, Consolas, monospace);
+  font-size: calc(var(--try-score-font-size, 30px) * var(--font-scale));
+}
+.part3-try-diff {
+  border-radius: 8px; background: #fff; border: 1px solid var(--line); padding: 10px 12px;
+  font-family: var(--mono, "SF Mono", ui-monospace, Menlo, Consolas, monospace);
+  font-size: calc(var(--try-cmp-font-size, 12px) * var(--font-scale)); line-height: 1.95;
+  max-height: var(--try-diff-h, 180px); overflow-y: auto; word-break: break-all; color: rgba(22, 61, 63, .8);
+}
+.part3-try-diff .miss { background: #fdecea; color: #c0392b; text-decoration: line-through; }
+.part3-try-diff .extra { background: #eaf6f0; color: var(--try-ok, #2e7d5b); }
+.part3-try-key { margin: 8px 0 0; font-size: calc(10.5px * var(--font-scale)); color: rgba(22, 61, 63, .5); }
+.part3-try-half + .part3-try-half { margin-top: 14px; }
+
+@media (max-width: 1040px) {
+  .part3-try-panel { min-height: 0; max-height: none; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .part3-try-rpg .caret { animation: none; }
+  .part3-try-blank.is-bad { animation: none; }
 }

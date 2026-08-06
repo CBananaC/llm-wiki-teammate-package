@@ -1,0 +1,750 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>試一試 Try a Try — 草稿 v3（沿用 intro Website 的 UI 與版面）</title>
+<style>
+/* ==========================================================================
+   試一試 Try a Try — UI 草稿 v3
+   版面沿用「7 辨識印刷字」的 .part3-feature-explorer（左：史料 ／ 右：資訊面板）。
+   視窗樣式沿用網站既有元件：第二步＝Codex 視窗、第三步＝淺色檔案視窗。
+   引導文字＝RPG 對話框，固定在資訊面板底部；所有互動選項都放在引導文字下方。
+   已完成的視窗收合成待辦清單一行，把空間讓給目前的步驟。
+   ========================================================================== */
+:root{
+  --font-scale:1;
+  --ink:#163d3f;
+  --paper:#f4efe6;
+  --card:#fffaf2;
+  --line:rgba(22,61,63,.18);
+  --accent:#c45d38;
+  --yellow:#f3c967;
+  --ok:#2e7d5b;
+  --bad:#c0392b;
+  --sans:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  --mono:"SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+*{box-sizing:border-box;}
+body{margin:0; background:var(--paper); color:var(--ink); font-family:var(--sans);}
+.story-inner{max-width:1180px; margin:0 auto; padding:56px 28px 120px;}
+
+/* ---------- 標題列（同網站 .blk / .title-row） ---------- */
+.blk{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:26px 30px; margin-bottom:26px;}
+.title-row{display:flex; align-items:center; gap:12px; flex-wrap:wrap;}
+.option-number{
+  display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px;
+  border-radius:50%; background:var(--ink); color:var(--card); font-size:14px; font-weight:700; flex:0 0 auto;
+}
+.title-row h2{margin:0; font-size:20px;}
+.try-switch{margin-left:auto; display:inline-flex; padding:3px; gap:3px; background:rgba(22,61,63,.07); border-radius:999px;}
+.try-switch button{
+  appearance:none; border:none; cursor:pointer; background:transparent; border-radius:999px;
+  padding:6px 16px; font-family:var(--sans); font-weight:700; font-size:12.5px;
+  color:rgba(22,61,63,.6); transition:background-color .18s, color .18s;
+}
+.try-switch button:hover{color:var(--ink);}
+.try-switch button.is-on{background:var(--ink); color:var(--card);}
+.blk .body p{margin:14px 0 0; font-size:14px; line-height:1.85; color:rgba(22,61,63,.85);}
+
+/* ---------- 主體：左史料 ／ 右資訊面板（同 7） ---------- */
+.part3-feature-explorer{
+  display:grid; grid-template-columns:48% 52%;
+  background:var(--card); border:1px solid var(--line); border-radius:14px; overflow:hidden;
+}
+.part3-fx-doc{
+  position:relative; padding:30px 118px;
+  background:radial-gradient(circle at 22% 18%, rgba(196,93,56,.16), transparent 42%),
+             linear-gradient(150deg,#12363a 0%,#1c464a 55%,#3a5f5a 100%);
+  border-right:1px solid var(--line);
+  display:flex; flex-direction:column; align-items:center; justify-content:center; gap:18px;
+}
+.part3-fx-pagestack{position:relative; width:100%;}
+.part3-fx-page{position:relative; border-radius:3px; overflow:hidden; box-shadow:0 14px 30px rgba(0,0,0,.35);}
+.part3-fx-page img{display:block; width:100%; height:auto;}
+.part3-fx-hl{
+  position:absolute; z-index:5; pointer-events:none; border-radius:2px;
+  left:var(--fx-left,0%); top:var(--fx-top,0%); width:var(--fx-width,0%); height:var(--fx-height,0%);
+  background:var(--fx-color, rgba(243,201,103,.4)); opacity:0; transition:opacity .25s;
+}
+.part3-fx-hl.is-active{opacity:.45;}
+.part3-fx-tag{
+  position:absolute; z-index:6; white-space:nowrap; border:0; border-radius:4px;
+  padding:7px 13px; background:var(--fx-color,#eee); color:#22403f;
+  font:700 calc(12.5px * var(--font-scale)) var(--sans);
+  box-shadow:0 2px 7px rgba(22,61,63,.12);
+  left:var(--fx-tag-left,auto); right:var(--fx-tag-right,auto); top:var(--fx-tag-top,auto);
+  opacity:.32; transition:opacity .2s;
+}
+.part3-fx-tag.is-active{opacity:1;}
+.part3-fx-ind{color:rgba(255,255,255,.75); font-size:12px; font-weight:600;}
+.part3-fx-nav{display:flex; align-items:center; gap:12px;}
+.part3-fx-nav button{
+  width:34px; height:34px; padding:0; cursor:pointer; border-radius:50%;
+  border:1px solid rgba(255,255,255,.3); background:rgba(255,255,255,.1); color:#fff;
+  font-size:14px; transition:background-color .18s;
+}
+.part3-fx-nav button:hover{background:rgba(255,255,255,.22);}
+
+/* ---------- 右側資訊面板：上半可捲動、引導框固定在底部 ---------- */
+.part3-fx-out{
+  display:flex; flex-direction:column; padding:24px 26px 24px;
+  height:100%; min-height:640px; max-height:860px;
+}
+.panel-scroll{flex:1 1 auto; min-height:0; overflow-y:auto; padding-right:2px;}
+.panel-guide{flex:0 0 auto; padding-top:14px;}
+
+/* 已完成步驟：收合成待辦清單一行 */
+.todo-row{
+  display:flex; align-items:center; gap:10px; padding:9px 14px; margin-bottom:8px;
+  border:1px solid var(--line); border-radius:10px; background:rgba(46,125,91,.06);
+  font-size:12.5px; font-weight:700; color:rgba(22,61,63,.72);
+}
+.todo-row .n{
+  width:20px; height:20px; border-radius:50%; background:rgba(22,61,63,.12);
+  display:inline-flex; align-items:center; justify-content:center; font-size:11px; flex:0 0 auto;
+}
+.todo-row .tick{margin-left:auto; color:var(--ok); font-size:14px;}
+
+/* ---------- RPG 對話框（固定於面板底部），選項放在引導文字下方 ---------- */
+.rpg-box{
+  position:relative; padding:16px 20px 20px;
+  background:linear-gradient(160deg,#12363a 0%,#1b464a 100%);
+  border:2px solid #6f9a90; border-radius:6px;
+  box-shadow:inset 0 0 0 2px rgba(18,54,58,.9), 0 8px 20px rgba(18,54,58,.22);
+  color:#eef4f0; font-size:13px; line-height:1.95;
+}
+.rpg-box::before, .rpg-box::after{content:""; position:absolute; width:6px; height:6px; background:#6f9a90;}
+.rpg-box::before{left:5px; top:5px;}
+.rpg-box::after{right:5px; top:5px;}
+.rpg-k{display:block; margin-bottom:7px; font-size:11px; font-weight:700; letter-spacing:.14em; color:var(--yellow);}
+.rpg-t{display:block; min-height:1.95em;}
+.rpg-caret{position:absolute; right:14px; bottom:8px; color:var(--yellow); font-size:11px; animation:rpgBlink 1s steps(2) infinite;}
+@keyframes rpgBlink{0%,50%{opacity:1;}51%,100%{opacity:0;}}
+.rpg-opts{margin-top:14px; padding-top:13px; border-top:1px dashed rgba(111,154,144,.5);}
+
+/* 引導框內的互動元件（深底配色） */
+.chip{
+  appearance:none; cursor:pointer; display:block; width:100%; text-align:left;
+  border:1.5px dashed var(--yellow); border-radius:10px; padding:10px 15px;
+  background:rgba(243,201,103,.1); color:#fff8e6;
+  font-family:var(--sans); font-weight:700; font-size:12.5px; line-height:1.7;
+  transition:background-color .16s, transform .1s;
+}
+.chip:hover{background:rgba(243,201,103,.22);}
+.chip:active{transform:scale(.99);}
+.opt-sentence{margin:0; font-size:13px; line-height:2.4; color:#eef4f0;}
+select.blank{
+  appearance:none; cursor:pointer; border:none; border-bottom:2px solid var(--yellow);
+  background:rgba(255,255,255,.1); color:#fff; padding:4px 26px 4px 10px; border-radius:5px 5px 0 0;
+  font-family:var(--sans); font-weight:700; font-size:13px;
+  background-image:linear-gradient(45deg,transparent 50%,var(--yellow) 50%),
+                   linear-gradient(135deg,var(--yellow) 50%,transparent 50%);
+  background-position:calc(100% - 14px) 55%, calc(100% - 9px) 55%;
+  background-size:5px 5px, 5px 5px; background-repeat:no-repeat;
+}
+select.blank option{color:#163d3f; background:#fff;}
+select.blank:focus{outline:2px solid rgba(243,201,103,.45); outline-offset:1px;}
+select.blank.is-ok{border-bottom-color:#7fe0b3; background-color:rgba(127,224,179,.16);}
+select.blank.is-bad{border-bottom-color:#ff9f95; background-color:rgba(255,159,149,.16); animation:shake .3s;}
+@keyframes shake{25%{transform:translateX(-3px);}75%{transform:translateX(3px);}}
+.mark{margin-left:8px; font-size:14px; font-weight:700;}
+.mark.ok{color:#7fe0b3;} .mark.bad{color:#ff9f95;}
+.free-area{
+  width:100%; min-height:64px; border-radius:9px; border:1px solid rgba(255,255,255,.2);
+  background:rgba(255,255,255,.07); color:#fff; padding:9px 12px;
+  font-family:var(--sans); font-size:12.5px; line-height:1.7; resize:vertical;
+}
+.free-area::placeholder{color:rgba(255,255,255,.4);}
+.free-area:focus{outline:none; border-color:var(--yellow);}
+.opt-btn{
+  appearance:none; cursor:pointer; margin-top:10px; border:none; border-radius:9px;
+  padding:9px 18px; background:var(--yellow); color:#3b2a0c;
+  font-family:var(--sans); font-weight:700; font-size:12.5px; transition:filter .16s, transform .1s;
+}
+.opt-btn:hover{filter:brightness(1.07);}
+.opt-btn:active{transform:translateY(1px);}
+
+/* ---------- 通用視窗外殼 ---------- */
+.win{border-radius:12px; overflow:hidden; border:1px solid var(--line); margin-bottom:4px;}
+.win-bar{display:flex; align-items:center; gap:6px; padding:9px 12px; background:#efe8dc; border-bottom:1px solid rgba(22,61,63,.14);}
+.win-bar .dot{width:9px; height:9px; border-radius:50%;}
+.dot.red{background:#ff5f57;} .dot.yellow{background:#febc2e;} .dot.green{background:#28c840;}
+.win-bar .ttl{margin-left:8px; font-size:11.5px; font-weight:700; color:#7a7263;}
+
+/* 第一步：下載史料 */
+.dl-body{padding:20px; background:var(--card); display:flex; align-items:center; gap:16px; flex-wrap:wrap;}
+.dl-meta{flex:1 1 160px; min-width:0;}
+.dl-name{font-family:var(--mono); font-size:12.5px; font-weight:600; word-break:break-all;}
+.dl-sub{margin-top:4px; font-size:11.5px; color:rgba(22,61,63,.6);}
+.dl-btn{
+  appearance:none; cursor:pointer; border:none; border-radius:9px; padding:11px 20px;
+  background:var(--ink); color:var(--card); font-family:var(--sans); font-weight:700; font-size:13px;
+  transition:background-color .18s, transform .1s;
+}
+.dl-btn:hover{background:#1d4d4f;}
+.dl-btn:active{transform:translateY(1px);}
+
+/* 第二步：Codex 視窗（只放對話氣泡，可點入編輯） */
+.chat-body{background:var(--card); padding:16px; max-height:420px; overflow-y:auto;}
+.bubble-row{display:flex; justify-content:flex-end; margin-bottom:11px;}
+.bubble{
+  max-width:88%; padding:9px 13px; border-radius:12px 12px 3px 12px;
+  background:#e7e7e7; color:#262626; font:500 13.5px/1.7 var(--sans);
+  white-space:pre-wrap; word-break:break-word; outline:none;
+  transition:box-shadow .16s, background-color .16s;
+}
+.bubble[contenteditable="true"]{cursor:text;}
+.bubble[contenteditable="true"]:hover{background:#e0e0e0;}
+.bubble[contenteditable="true"]:focus{background:#fff; box-shadow:0 0 0 2px rgba(196,93,56,.4);}
+.chat-foot{display:flex; align-items:center; justify-content:flex-end; gap:8px; padding:0 16px 14px; background:var(--card);}
+.chat-foot .hint{margin-right:auto; font-size:11px; color:rgba(22,61,63,.45);}
+.copy-btn{
+  appearance:none; cursor:pointer; display:inline-flex; align-items:center; gap:7px;
+  border:1px solid var(--line); border-radius:8px; padding:8px 14px;
+  background:#fff; color:var(--ink); font-family:var(--sans); font-weight:700; font-size:12px;
+  transition:border-color .16s, box-shadow .16s, background-color .16s;
+}
+.copy-btn:hover{border-color:var(--accent); box-shadow:0 3px 10px rgba(196,93,56,.15);}
+.copy-btn:active{transform:translateY(1px);}
+.copy-btn.is-done{border-color:var(--ok); color:var(--ok);}
+.copy-ic{width:13px; height:13px; flex:0 0 auto;}
+
+/* 第三步：淺色檔案視窗 */
+.cmp-body{padding:16px; background:var(--card);}
+.cmp-label{display:block; margin:0 0 6px; font-size:10.5px; font-weight:700; letter-spacing:.08em; color:rgba(22,61,63,.5);}
+.cmp-area{
+  width:100%; min-height:96px; border-radius:8px; border:1px solid var(--line);
+  background:#fff; color:var(--ink); padding:10px 12px;
+  font-family:var(--mono); font-size:12px; line-height:1.9; resize:vertical;
+}
+.cmp-area:focus{outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(196,93,56,.1);}
+.cmp-row{display:flex; gap:10px; align-items:center; margin-top:12px;}
+.cmp-row .spacer{flex:1;}
+.cmp-btn{
+  appearance:none; cursor:pointer; border:1px solid var(--line); border-radius:8px;
+  padding:9px 16px; background:#fff; color:var(--ink);
+  font-family:var(--sans); font-weight:700; font-size:12.5px;
+  transition:border-color .18s, box-shadow .18s, background-color .18s;
+}
+.cmp-btn:hover{border-color:var(--accent); box-shadow:0 3px 10px rgba(196,93,56,.15);}
+.cmp-btn.primary{background:var(--ink); border-color:var(--ink); color:var(--card);}
+.cmp-btn.primary:hover{background:#1d4d4f; box-shadow:0 4px 12px rgba(22,61,63,.22);}
+.score-bar{
+  display:flex; align-items:baseline; gap:12px; padding:12px 15px; margin-bottom:14px;
+  border-radius:9px; background:#fff6e2; border:1px solid var(--yellow);
+}
+.score-bar .lab{font-size:12px; color:rgba(22,61,63,.6); font-weight:700;}
+.score-bar .num{font-size:30px; font-weight:700; color:var(--accent); font-family:var(--mono);}
+.diff-pane{
+  border-radius:8px; background:#fff; border:1px solid var(--line);
+  padding:10px 12px; font-family:var(--mono); font-size:12px; line-height:1.95;
+  max-height:180px; overflow-y:auto; word-break:break-all; color:rgba(22,61,63,.8);
+}
+.diff-pane .miss{background:#fdecea; color:var(--bad); text-decoration:line-through;}
+.diff-pane .extra{background:#eaf6f0; color:var(--ok);}
+.diff-key{margin:8px 0 0; font-size:10.5px; color:rgba(22,61,63,.5);}
+.cmp-half + .cmp-half{margin-top:14px;}
+
+.hidden{display:none !important;}
+
+@media (max-width:1040px){
+  .part3-feature-explorer{grid-template-columns:1fr;}
+  .part3-fx-doc{padding:24px; border-right:none; border-bottom:1px solid var(--line);}
+  .part3-fx-tag{position:static; opacity:1; margin:4px;}
+  .tagwrap{display:flex; flex-wrap:wrap; justify-content:center;}
+  .part3-fx-out{max-height:none; min-height:0;}
+}
+</style>
+</head>
+<body>
+
+<div class="story-inner">
+
+  <article class="blk">
+    <div class="title-row">
+      <span class="option-number">11</span>
+      <h2>試一試</h2>
+      <div class="try-switch" id="try-switch">
+        <button type="button" data-mode="printed" class="is-on">印刷字</button>
+        <button type="button" data-mode="handwritten">手寫字</button>
+      </div>
+    </div>
+    <div class="body">
+      <p>看完前面的步驟後，可以親自試一次。下載左方的史料 PDF，按照右方的引導逐句組裝一段給 Agentic AI 的 prompt，完成後複製並貼到你自己的 Agentic AI 工具，讓它安裝 PaddleOCR 並辨識這份 PDF；最後把你的 OCR 結果貼回來，與參考結果比對。</p>
+    </div>
+  </article>
+
+  <div class="part3-feature-explorer" id="try-explorer">
+    <!-- 左：史料 ＋ 標示區與標籤 -->
+    <div class="part3-fx-doc">
+      <div class="part3-fx-pagestack">
+        <div class="part3-fx-page">
+          <img id="try-img" alt="試一試史料頁面">
+          <div id="try-hls"></div>
+        </div>
+        <div id="try-tags" class="tagwrap"></div>
+      </div>
+      <div class="part3-fx-nav">
+        <button type="button" id="try-prev" aria-label="上一頁">←</button>
+        <span class="part3-fx-ind" id="try-ind"></span>
+        <button type="button" id="try-next" aria-label="下一頁">→</button>
+      </div>
+    </div>
+
+    <!-- 右：資訊面板 -->
+    <div class="part3-fx-out">
+      <div class="panel-scroll">
+        <div id="todo"></div>
+        <div id="stage-host"></div>
+      </div>
+      <div class="panel-guide" id="guide-host"></div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ==========================================================================
+   資料：兩種模式（印刷字／手寫字）
+   PDF 檔名為佔位符，實際檔案日後補上即可（只需改 pdf 欄位）。
+   句子與關鍵字取自「7 辨識印刷字」與「8 辨識手寫字」既有的示例。
+   ========================================================================== */
+const DATA = {
+  printed: {
+    pdf: 'try-printed.pdf',
+    pdfSub: '印刷本奏摺 · 2 頁 · PDF（佔位檔）',
+    pages: ['../storymap/ocr-zhu25-printed-1-enhanced.png', '../storymap/ocr-zhu25-printed-2-enhanced.png'],
+    features: {
+      info:   {title:'文本資訊', colour:'#cfe0ef', page:0, box:{left:'70%',top:'9%',width:'24%',height:'28%'},  tag:{right:'-126px',top:'12%'}},
+      column: {title:'直排單欄', colour:'#cfe3d4', page:0, box:{left:'12%',top:'20%',width:'56%',height:'62%'}, tag:{right:'-126px',top:'34%'}},
+      para:   {title:'分段',     colour:'#f5e6bd', page:0, box:{left:'14%',top:'44%',width:'50%',height:'26%'}, tag:{right:'-126px',top:'56%'}},
+      page:   {title:'頁碼',     colour:'#ddd6ea', page:0, box:{left:'6%', top:'88%',width:'14%',height:'7%'},  tag:{right:'-126px',top:'88%'}},
+      zhu:    {title:'夾批',     colour:'#f3ddc4', page:1, box:{left:'40%',top:'30%',width:'16%',height:'22%'}, tag:{left:'-120px',top:'36%'}}
+    },
+    steps: [
+      {kind:'chip', k:'其之一 · 安裝工具',
+       guide:'先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。',
+       chip:'請在我的電腦上下載並安裝 PaddleOCR。',
+       out:'請在我的電腦上下載並安裝 PaddleOCR。'},
+      {kind:'chip', k:'其之二 · OCR 目的',
+       guide:'再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。',
+       chip:'然後對名為 try-printed.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。',
+       out:'然後對名為 try-printed.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。'},
+      {kind:'mc', k:'其之三 · 版面要求：閱讀順序', feature:'column',
+       guide:'看看左邊反白的「直排單欄」。這份史料是直排的，閱讀方向與橫排的書不同——請補上正確的順序。',
+       before:'按照', after:'、由上至下的順序輸出文本。',
+       options:['由右至左','由左至右','由下至上'], answer:'由右至左'},
+      {kind:'mc', k:'其之四 · 版面要求：分段', feature:'para',
+       guide:'左邊反白處是「分段」。這份史料靠什麼來分隔段落？選錯的話，OCR 會把段落接成一整塊。',
+       before:'請辨認段首的', after:'，以此區分段落，保留每段完整內容，不要因一般換行而錯誤切斷段落。',
+       options:['縮排','空行','標點符號'], answer:'縮排'},
+      {kind:'mc', k:'其之五 · 版面要求：文本資訊', feature:'info',
+       guide:'正文之前那一塊，是這篇史料的來源、標題、作者與日期。它們該被獨立保存，而不是混進正文。',
+       before:'辨識正文前的', after:'：史料來源、標題、作者、日期，並把這四項輸出為獨立欄位，不要混入正文。',
+       options:['文本資訊','註釋','附錄'], answer:'文本資訊'},
+      {kind:'mc', k:'其之六 · 版面要求：夾批', feature:'zhu',
+       guide:'翻到第二頁。正文中夾著幾行小字——它們不是官員寫的。想清楚再選。',
+       before:'正文中（硃批：）內的小字是', after:'，請保留這些文字並獨立標記，不要視為官員的原文。',
+       options:['皇帝的硃批','官員的原文','印刷錯誤'], answer:'皇帝的硃批'},
+      {kind:'mc', k:'其之七 · 版面要求：頁碼', feature:'page',
+       guide:'頁面右下角那個小小的數字，日後引用時很重要，但它不屬於正文。',
+       before:'請辨識每一頁右下角的', after:'，並儲存於獨立欄位，不要納入正文。',
+       options:['頁碼','冊號','年份'], answer:'頁碼'},
+      {kind:'mc', k:'其之八 · 輸出要求',
+       guide:'最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。',
+       before:'最後，請把以上所有結果輸出為', after:' 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。',
+       options:['JSON','TXT','DOCX'], answer:'JSON'},
+      {kind:'free', k:'其之九 · 你自己的要求',
+       guide:'還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。',
+       placeholder:'例如：如果某個字辨識信心低於 0.9，請標記出來讓我人工核對。'}
+    ],
+    reference:'福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。'
+  },
+
+  handwritten: {
+    pdf: 'try-handwritten.pdf',
+    pdfSub: '手寫奏摺掃描 · 4 頁 · PDF（佔位檔）',
+    pages: ['../storymap/ocr-zhu25-handwritten-1-enhanced.png', '../storymap/ocr-zhu25-handwritten-2-enhanced.png'],
+    features: {
+      column: {title:'直排單欄', colour:'#cfe3d4', page:0, box:{left:'14%',top:'12%',width:'62%',height:'70%'}, tag:{right:'-126px',top:'18%'}},
+      author: {title:'上奏官員', colour:'#cfe0ef', page:0, box:{left:'68%',top:'10%',width:'20%',height:'20%'}, tag:{right:'-126px',top:'40%'}},
+      minor:  {title:'臣字款',   colour:'#f5e6bd', page:0, box:{left:'30%',top:'40%',width:'12%',height:'14%'}, tag:{right:'-126px',top:'62%'}},
+      rescript:{title:'硃批（草書）', colour:'#f0d6d0', page:1, box:{left:'20%',top:'16%',width:'26%',height:'34%'}, tag:{left:'-120px',top:'22%'}},
+      stamp:  {title:'印章與浮水印', colour:'#ddd6ea', page:1, box:{left:'50%',top:'60%',width:'22%',height:'22%'}, tag:{left:'-134px',top:'62%'}}
+    },
+    steps: [
+      {kind:'chip', k:'其之一 · 安裝工具',
+       guide:'先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。',
+       chip:'請在我的電腦上下載並安裝 PaddleOCR。',
+       out:'請在我的電腦上下載並安裝 PaddleOCR。'},
+      {kind:'chip', k:'其之二 · OCR 目的',
+       guide:'再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。',
+       chip:'然後對名為 try-handwritten.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。',
+       out:'然後對名為 try-handwritten.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。'},
+      {kind:'mc', k:'其之三 · 版面要求：閱讀順序', feature:'column',
+       guide:'手寫奏摺同樣是直排。先把閱讀順序講清楚，否則整段文字會顛倒。',
+       before:'奏摺用直排書寫，請按照', after:'、由上至下的順序輸出文字，而非由左至右。',
+       options:['由右至左','由左至右','由下至上'], answer:'由右至左'},
+      {kind:'mc', k:'其之四 · 版面要求：上奏官員', feature:'author',
+       guide:'左邊反白的首行，寫著這份奏摺是誰上的。這兩項資料要分開存。',
+       before:'奏摺首行標有上奏官員的', after:'，例如「福建水師提督　黃仕簡」，請分別獨立標記。',
+       options:['官職與姓名','籍貫與年齡','品級與俸祿'], answer:'官職與姓名'},
+      {kind:'mc', k:'其之五 · 版面要求：小字自稱', feature:'minor',
+       guide:'正文中的「奴才」「臣」寫得比別的字小。字小不代表不重要——它們屬於哪裡？',
+       before:'正文中的「奴才」或「臣」以較小字體書寫，但仍屬', after:'，請保留於原有位置，不要省略或刪除。',
+       options:['正文的一部份','註釋','裝飾文字'], answer:'正文的一部份'},
+      {kind:'mc', k:'其之六 · 版面要求：硃批', feature:'rescript',
+       guide:'翻到第二頁。紅色的草書是皇帝的硃批，OCR 幾乎辨不準。這一步該怎麼處理？',
+       before:'請', after:'紅色的硃批草書文字。',
+       options:['不要 OCR','優先 OCR','合併進正文'], answer:'不要 OCR'},
+      {kind:'mc', k:'其之七 · 版面要求：印章與浮水印', feature:'stamp',
+       guide:'印章和博物院的浮水印都不是文本內容，別讓它們混進結果裡。',
+       before:'請', after:'「國立故宮博物院」的浮水印，以及正文後的印章。',
+       options:['忽略','辨識為正文','翻譯'], answer:'忽略'},
+      {kind:'mc', k:'其之八 · 輸出要求',
+       guide:'最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。',
+       before:'最後，請把以上所有結果輸出為', after:' 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。',
+       options:['JSON','TXT','DOCX'], answer:'JSON'},
+      {kind:'free', k:'其之九 · 你自己的要求',
+       guide:'還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。',
+       placeholder:'例如：草書辨識不確定的字，請用 □ 標示並附上信心分數。'}
+    ],
+    reference:'福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。'
+  }
+};
+
+/* ========================================================================== */
+const $ = (id) => document.getElementById(id);
+const COPY_IC = '<svg class="copy-ic" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4"><rect x="5.2" y="5.2" width="8.3" height="8.3" rx="1.6"/><path d="M10.8 2.5H3.9c-.8 0-1.4.6-1.4 1.4v6.9"/></svg>';
+let mode = 'printed';
+let phase = 1;        // 1 下載史料 · 2 撰寫 prompt · 3 比對結果
+let cur = 0;
+let answers = [];
+let pageIdx = 0;
+let typing = null;
+const d = () => DATA[mode];
+
+/* ---------- 左側史料 ---------- */
+function renderDoc(activeFeature){
+  const data = d();
+  $('try-img').src = data.pages[pageIdx];
+  $('try-ind').textContent = `頁 ${pageIdx + 1} / ${data.pages.length}`;
+  const hls = $('try-hls'), tags = $('try-tags');
+  hls.innerHTML = ''; tags.innerHTML = '';
+  Object.entries(data.features).forEach(([key, f]) => {
+    if (f.page !== pageIdx) return;
+    const active = key === activeFeature;
+    const hl = document.createElement('div');
+    hl.className = 'part3-fx-hl' + (active ? ' is-active' : '');
+    hl.style.cssText = `--fx-color:${f.colour};--fx-left:${f.box.left};--fx-top:${f.box.top};--fx-width:${f.box.width};--fx-height:${f.box.height};`;
+    hls.appendChild(hl);
+    const tag = document.createElement('div');
+    tag.className = 'part3-fx-tag' + (active ? ' is-active' : '');
+    tag.style.cssText = `--fx-color:${f.colour};--fx-tag-left:${f.tag.left || 'auto'};--fx-tag-right:${f.tag.right || 'auto'};--fx-tag-top:${f.tag.top};`;
+    tag.textContent = f.title;
+    tags.appendChild(tag);
+  });
+}
+function syncDoc(){
+  const s = phase === 2 ? d().steps[cur] : null;
+  if (s && s.feature){
+    const f = d().features[s.feature];
+    if (f && f.page !== pageIdx) pageIdx = f.page;
+    renderDoc(s.feature);
+  } else {
+    renderDoc(null);
+  }
+}
+
+/* ---------- RPG 引導框：固定於面板底部，選項放在文字下方 ---------- */
+function showGuide(kicker, text, buildOptions){
+  clearTimeout(typing);
+  const host = $('guide-host');
+  host.innerHTML = '';
+  const box = document.createElement('div');
+  box.className = 'rpg-box';
+  box.innerHTML = `<span class="rpg-k">${kicker}</span><span class="rpg-t"></span><span class="rpg-caret">▼</span>`;
+  host.appendChild(box);
+
+  const t = box.querySelector('.rpg-t');
+  let i = 0;
+  const tick = () => {
+    t.textContent = text.slice(0, ++i);
+    if (i < text.length){ typing = setTimeout(tick, 12); }
+    else if (buildOptions){
+      const opts = document.createElement('div');
+      opts.className = 'rpg-opts';
+      buildOptions(opts);
+      box.insertBefore(opts, box.querySelector('.rpg-caret'));
+    }
+  };
+  tick();
+}
+
+/* ---------- 待辦清單 ---------- */
+function addTodo(n, label){
+  const row = document.createElement('div');
+  row.className = 'todo-row';
+  row.innerHTML = `<span class="n">${n}</span>${label}<span class="tick">✓</span>`;
+  $('todo').appendChild(row);
+}
+
+/* ---------- 第一步：下載史料 ---------- */
+function renderPhase1(){
+  $('stage-host').innerHTML = `
+    <div class="win">
+      <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第一步 · 下載史料</span></div>
+      <div class="dl-body">
+        <div class="dl-meta">
+          <div class="dl-name">${d().pdf}</div>
+          <div class="dl-sub">${d().pdfSub}</div>
+        </div>
+        <button type="button" class="dl-btn" id="dl-btn">下載 PDF</button>
+      </div>
+    </div>`;
+  showGuide('第一步', '先把左邊這份史料下載到你的電腦。稍後要讓 Agentic AI 在你的電腦上找到這個檔案。');
+  $('dl-btn').addEventListener('click', () => {
+    addTodo(1, '下載史料');
+    phase = 2; cur = 0; answers = [];
+    renderPhase2();
+  });
+  syncDoc();
+}
+
+/* ---------- 第二步：Codex 視窗 ＋ 引導框內的選項 ---------- */
+function renderPhase2(){
+  $('stage-host').innerHTML = `
+    <div class="win">
+      <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+      <div class="chat-body" id="chat-body"></div>
+      <div class="chat-foot" id="chat-foot"></div>
+    </div>`;
+  answers.forEach((a) => a && addBubble(a, true));
+  nextStep();
+}
+
+function addBubble(text, instant){
+  const row = document.createElement('div');
+  row.className = 'bubble-row';
+  const b = document.createElement('div');
+  b.className = 'bubble';
+  row.appendChild(b);
+  $('chat-body').appendChild(row);
+  const scroll = () => { $('chat-body').scrollTop = $('chat-body').scrollHeight; };
+  const finish = () => { b.contentEditable = 'true'; b.spellcheck = false; };
+  if (instant){ b.textContent = text; finish(); scroll(); return Promise.resolve(); }
+  return new Promise((res) => {
+    let i = 0;
+    const tick = () => {
+      b.textContent = text.slice(0, ++i); scroll();
+      if (i < text.length) setTimeout(tick, 7); else { finish(); res(); }
+    };
+    tick();
+  });
+}
+
+function nextStep(){
+  const steps = d().steps;
+
+  /* 全部完成 → 對話內容本身就是 prompt，右下角加複製鍵 */
+  if (cur >= steps.length){
+    const foot = $('chat-foot');
+    foot.innerHTML = `<span class="hint">每一句都可以直接點進去修改。</span>
+      <button type="button" class="copy-btn" id="copy-btn">${COPY_IC}複製全部</button>`;
+    showGuide('完成', '好了，上面每一句加起來就是你的 prompt。想改哪一句就直接點進去改，滿意後按右下角複製，貼到你的 Agentic AI。');
+    $('copy-btn').addEventListener('click', () => {
+      const txt = [...document.querySelectorAll('#chat-body .bubble')]
+        .map((b) => b.textContent.trim()).filter(Boolean).join('\n');
+      if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
+      const btn = $('copy-btn');
+      btn.classList.add('is-done'); btn.innerHTML = COPY_IC + '已複製';
+      setTimeout(() => { addTodo(2, '撰寫 Prompt'); phase = 3; renderPhase3(); }, 500);
+    });
+    syncDoc();
+    return;
+  }
+
+  const s = steps[cur];
+
+  showGuide(s.k, s.guide, (opts) => {
+    if (s.kind === 'chip'){
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'chip'; btn.textContent = s.chip;
+      btn.addEventListener('click', async () => {
+        opts.remove();
+        answers[cur] = s.out;
+        await addBubble(s.out);
+        cur += 1; nextStep();
+      });
+      opts.appendChild(btn);
+    }
+
+    if (s.kind === 'mc'){
+      const p = document.createElement('p');
+      p.className = 'opt-sentence';
+      p.append(s.before + ' ');
+      const sel = document.createElement('select');
+      sel.className = 'blank';
+      sel.innerHTML = '<option value="">—— 請選擇 ——</option>' +
+        shuffle(s.options).map((o) => `<option>${o}</option>`).join('');
+      const mark = document.createElement('span'); mark.className = 'mark';
+      sel.addEventListener('change', () => {
+        if (!sel.value) return;
+        if (sel.value === s.answer){
+          sel.classList.remove('is-bad'); sel.classList.add('is-ok');
+          mark.className = 'mark ok'; mark.textContent = '✓';
+          const line = s.before + s.answer + s.after;
+          answers[cur] = line;
+          setTimeout(async () => {
+            opts.remove();
+            await addBubble(line);
+            cur += 1; nextStep();
+          }, 300);
+        } else {
+          sel.classList.remove('is-ok'); sel.classList.add('is-bad');
+          mark.className = 'mark bad'; mark.textContent = '✗';
+          setTimeout(() => { sel.value = ''; sel.classList.remove('is-bad'); mark.textContent = ''; }, 650);
+        }
+      });
+      p.appendChild(sel); p.append(' ' + s.after); p.appendChild(mark);
+      opts.appendChild(p);
+    }
+
+    if (s.kind === 'free'){
+      const ta = document.createElement('textarea');
+      ta.className = 'free-area'; ta.placeholder = s.placeholder;
+      const btn = document.createElement('button');
+      btn.type = 'button'; btn.className = 'opt-btn'; btn.textContent = '完成，產生 prompt';
+      btn.addEventListener('click', async () => {
+        const v = ta.value.trim();
+        answers[cur] = v;
+        opts.remove();
+        if (v) await addBubble(v);
+        cur += 1; nextStep();
+      });
+      opts.appendChild(ta); opts.appendChild(btn);
+    }
+  });
+
+  syncDoc();
+}
+
+/* ---------- 第三步：淺色比對視窗 ---------- */
+function renderPhase3(){
+  $('stage-host').innerHTML = `
+    <div class="win">
+      <div class="win-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第三步 · 比對 OCR 結果　—　${mode === 'printed' ? 'try-printed' : 'try-handwritten'}.ocr.txt</span></div>
+      <div class="cmp-body" id="cmp-body"></div>
+    </div>`;
+  renderCmpInput();
+  showGuide('第三步', 'AI 跑完了嗎？把它輸出的正文貼進來，我們拿它跟參考結果逐字對照，看看差在哪裡。');
+  syncDoc();
+}
+
+function renderCmpInput(){
+  $('cmp-body').innerHTML = `
+    <span class="cmp-label">你的 OCR 結果</span>
+    <textarea class="cmp-area" id="cmp-input" placeholder="把 Agentic AI 輸出的正文貼在這裡。"></textarea>
+    <div class="cmp-row">
+      <button type="button" class="cmp-btn primary" id="cmp-run">與參考結果比對</button>
+      <span class="spacer"></span>
+      <button type="button" class="cmp-btn" id="cmp-dl">下載參考 OCR 結果</button>
+    </div>`;
+  $('cmp-run').addEventListener('click', () => runCompare($('cmp-input').value));
+  $('cmp-dl').addEventListener('click', downloadRef);
+}
+
+function runCompare(raw){
+  const mine = (raw || '').replace(/\s+/g, '');
+  if (!mine){ const el = $('cmp-input'); if (el) el.focus(); return; }
+  const ref = d().reference.replace(/\s+/g, '');
+  const {merged, score} = diffChars(ref, mine);
+  $('cmp-body').innerHTML = `
+    <div class="score-bar"><span class="lab">吻合度</span><span class="num">${score}%</span></div>
+    <div class="cmp-half">
+      <span class="cmp-label">參考 OCR 結果</span>
+      <div class="diff-pane" id="ref-pane"></div>
+      <p class="diff-key">紅刪除線＝參考結果有、你的結果缺少　·　綠＝你的結果多出來</p>
+    </div>
+    <div class="cmp-half">
+      <span class="cmp-label">你的 OCR 結果（可直接修改後重新比對）</span>
+      <textarea class="cmp-area" id="cmp-input"></textarea>
+    </div>
+    <div class="cmp-row">
+      <button type="button" class="cmp-btn primary" id="cmp-run">重新比對</button>
+      <span class="spacer"></span>
+      <button type="button" class="cmp-btn" id="cmp-dl">下載參考 OCR 結果</button>
+    </div>`;
+  $('ref-pane').innerHTML = merged
+    .map(([t, c]) => `<span class="${t}">${c.replace(/</g, '&lt;')}</span>`).join('');
+  $('cmp-input').value = raw;
+  $('cmp-run').addEventListener('click', () => runCompare($('cmp-input').value));
+  $('cmp-dl').addEventListener('click', downloadRef);
+}
+
+function downloadRef(){
+  const blob = new Blob([d().reference], {type:'text/plain;charset=utf-8'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = mode + '-reference-ocr.txt';
+  a.click();
+  URL.revokeObjectURL(a.href);
+}
+
+/* ---------- 字元層級 LCS ---------- */
+function diffChars(a, b){
+  const n = a.length, m = b.length;
+  const dp = Array.from({length:n + 1}, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--)
+    for (let j = m - 1; j >= 0; j--)
+      dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+  const out = []; let i = 0, j = 0, lcs = 0;
+  while (i < n && j < m){
+    if (a[i] === b[j]){ out.push(['same', a[i]]); i++; j++; lcs++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]){ out.push(['miss', a[i]]); i++; }
+    else { out.push(['extra', b[j]]); j++; }
+  }
+  while (i < n) out.push(['miss', a[i++]]);
+  while (j < m) out.push(['extra', b[j++]]);
+  const merged = [];
+  out.forEach(([t, c]) => {
+    const last = merged[merged.length - 1];
+    if (last && last[0] === t) last[1] += c; else merged.push([t, c]);
+  });
+  return {merged, score: n + m === 0 ? 0 : Math.round((2 * lcs / (n + m)) * 100)};
+}
+
+function shuffle(arr){
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--){ const j = Math.floor(Math.random() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; }
+  return a;
+}
+
+/* ---------- 翻頁 ---------- */
+$('try-prev').addEventListener('click', () => {
+  pageIdx = (pageIdx - 1 + d().pages.length) % d().pages.length; syncDoc();
+});
+$('try-next').addEventListener('click', () => {
+  pageIdx = (pageIdx + 1) % d().pages.length; syncDoc();
+});
+
+/* ---------- 模式切換 ---------- */
+$('try-switch').addEventListener('click', (e) => {
+  const btn = e.target.closest('button'); if (!btn) return;
+  mode = btn.dataset.mode;
+  [...$('try-switch').children].forEach((b) => b.classList.toggle('is-on', b === btn));
+  resetAll();
+});
+
+function resetAll(){
+  clearTimeout(typing);
+  phase = 1; cur = 0; answers = []; pageIdx = 0;
+  $('todo').innerHTML = '';
+  renderPhase1();
+}
+
+resetAll();
+</script>
+</body>
+</html>

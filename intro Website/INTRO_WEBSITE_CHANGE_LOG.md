@@ -4703,3 +4703,46 @@ Verified:
 
 Remaining:
 - None for the Part 8 label ordering.
+
+### 2026-08-06 17:15 HKT — Codex — Match Part 7 and Part 8 label colours to annotated highlights
+
+Summary:
+- Updated all seven Part 7 label colours and all eight Part 8 label colours to follow the corresponding annotated PNG highlight tones.
+- Used slightly darker, still soft versions of each highlight colour for readable labels; `硃批` uses a softened red derived from its red ink.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser computed styles report the new colour values for all seven printed-text labels and all eight handwritten labels.
+- `node --check storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Part 7 and Part 8 label colours.
+
+### 2026-08-06 17:58 HKT — Claude — Add Part 3 section 11 「試一試」 interactive prompt-writing exercise
+
+Summary:
+- New section `#part-3-try` after `10 OCR測試`. Left half: source page with highlight regions only, no labels. Right half: three-stage guided exercise (download PDF → assemble prompt in a Codex-style chat window → paste and diff OCR output).
+- RPG dialogue box pinned to the bottom of the info panel carries all guidance; the chip, fill-in-the-blank dropdown, and free-text box render inside it. Wrong answers show ✗ and reset for a retry.
+- Completed stages collapse into checked to-do rows. Assembled prompt lines are editable in place; the copy button reads live text.
+- 印刷字／手寫字 toggle beside the title swaps document, highlights, sentences, and reference, resetting progress.
+- Character-level LCS diff gives a match percentage with inline missing/extra marking; the user's pane stays editable for re-comparison.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `Website/UI Idea/26-part3-try-it-ui.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance 0; HTML div balance 0; embedded JSON parses.
+
+Remaining:
+- Real 試一試 PDFs and reference OCR text still to be supplied; highlight boxes to be retuned once the real documents are in.

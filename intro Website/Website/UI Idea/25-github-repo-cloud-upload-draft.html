@@ -1,0 +1,250 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>25 · 自己的 GitHub Repository — 雲端上傳動畫草稿</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 860px; margin: 0 0 12px; }
+  .note-list { max-width: 860px; margin: 0 0 32px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+  .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
+
+  .mock-section { max-width: 1320px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-layout { display: grid; grid-template-columns: minmax(0, 1fr) 46%; gap: clamp(20px, 2.4vw, 34px); align-items: start; }
+  /* 這個外框只是草稿預覽用的固定尺寸，模擬「工具資訊」面板裡圖片區
+     （.part3-tool-info-photo）在正式網站上的實際顯示大小。套用到正式網站
+     時，.cloud-scene 會直接放進同一個 class 裡，寬高由該面板決定，
+     不需要另外設定尺寸——這裡的 .info-photo-frame 只是為了讓草稿看起來
+     跟正式版面一致。 */
+  .info-photo-frame { position: relative; height: 460px; background: #d8cdbb; overflow: hidden; }
+  .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
+  .copybox .title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .copybox .num { display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; background: var(--accent); color: #fff; font: 800 13px var(--sans); border-radius: 3px; }
+  .copybox h2 { margin: 0; color: var(--ink); font: 500 22px/1.3 var(--serif); }
+  .copybox p { margin: 0; color: var(--text); font: 500 15px/1.9 var(--serif); }
+
+  /* ==========================================================================
+     自己的 GitHub Repository — 雲端上傳動畫
+     沿用參考圖的結構：深藍底＋電路紋理、淺藍雲朵、雲上的 GitHub 貓咪頭像、
+     一組上下箭頭。新增的部分：資料卡片（真實的 skill／code／JSON 檔名與內容）
+     由下往上飄，飄到雲的位置淡出，代表「上傳到雲端」。
+     ========================================================================== */
+  .cloud-scene {
+    --scene-bg-1: #0c1730; --scene-bg-2: #142449;
+    --circuit-color: rgba(140, 170, 255, .16);
+    --cloud-color: #7fa4f2; --cloud-glow: rgba(127, 164, 242, .55);
+    --arrow-color: #7fa4f2;
+    --card-bg: #12213f; --card-border: rgba(140, 170, 255, .35);
+
+    /* 寬、高都是 100%，跟「工具資訊」面板裡的 <img> 一樣直接填滿
+       .part3-tool-info-photo 這個容器，顯示大小完全比照該面板，
+       不再另外用 aspect-ratio 固定比例。 */
+    position: relative; width: 100%; height: 100%;
+    overflow: hidden;
+    background: radial-gradient(120% 90% at 50% 12%, var(--scene-bg-2), var(--scene-bg-1));
+    box-shadow: inset 0 0 60px rgba(0,0,0,.4);
+  }
+
+  /* 背景電路紋理：用重複的折線 SVG 當底紋，純裝飾 */
+  .cloud-scene::before {
+    content: ""; position: absolute; inset: 0; opacity: .7; pointer-events: none;
+    background-image:
+      linear-gradient(var(--circuit-color) 1px, transparent 1px),
+      linear-gradient(90deg, var(--circuit-color) 1px, transparent 1px);
+    background-size: 46px 46px;
+    mask-image: radial-gradient(80% 80% at 50% 40%, #000 55%, transparent 100%);
+  }
+
+  /* 雲置中在舞台正中央（left/top 50%），不再偏上 */
+  .cloud-wrap {
+    position: absolute; left: 50%; top: 50%; width: 58%;
+    transform: translate(-50%, -50%);
+    z-index: 3;
+  }
+  .cloud-glow-layer {
+    position: absolute; inset: -18%; border-radius: 50%;
+    background: radial-gradient(closest-side, var(--cloud-glow), transparent 72%);
+    opacity: .8; filter: blur(2px);
+  }
+  .cloud-svg { position: relative; display: block; width: 100%; filter: drop-shadow(0 10px 18px rgba(0,0,0,.35)); }
+  .cloud-svg path { fill: var(--cloud-color); }
+
+  /* GitHub 頭像：白底圓圈＋深色貓咪剪影，移到更貼近雲朵右上角的位置
+     （疊在雲的邊緣上，不是懸在外面） */
+  .gh-badge {
+    position: absolute; right: 12%; top: 2%; width: 20%; aspect-ratio: 1;
+    background: #fff; border-radius: 50%; display: grid; place-items: center;
+    box-shadow: 0 6px 16px rgba(0,0,0,.35); z-index: 4;
+  }
+  .gh-badge svg { width: 62%; height: 62%; fill: #10182b; }
+
+  /* 雲中間只留一個白色的上傳箭頭，用發光＋輕微跳動做效果 */
+  .cloud-arrow-wrap {
+    position: absolute; left: 50%; top: 58%; width: 16%; transform: translateX(-50%);
+  }
+  .cloud-arrow {
+    width: 100%; fill: #ffffff;
+    filter: drop-shadow(0 0 10px rgba(255,255,255,.85)) drop-shadow(0 0 22px rgba(255,255,255,.5));
+    animation: arrow-glow-up 1.5s ease-in-out infinite;
+  }
+  @keyframes arrow-glow-up {
+    0%, 100% { transform: translateY(0); opacity: .85; }
+    50%      { transform: translateY(-14%); opacity: 1; }
+  }
+
+  /* ---- 由下往上飄的資料卡片 ----
+     只顯示「種類標籤＋完整檔名」，不再放程式碼／JSON 內容片段。
+     寬度用 max-content（跟著檔名長度走，不截斷），並設 max-width
+     避免太長的檔名超出舞台邊界。 */
+  .upload-lane { position: absolute; inset: 0; z-index: 2; }
+  .upload-card {
+    position: absolute; left: var(--x, 50%); bottom: -14%;
+    width: max-content; max-width: 78%; transform: translateX(-50%);
+    background: var(--card-bg); border: 1px solid var(--card-border); border-radius: 6px;
+    padding: 7px 10px; box-shadow: 0 8px 18px rgba(0,0,0,.35);
+    opacity: 0;
+    animation: card-rise var(--rise-dur, 5.5s) linear infinite;
+    animation-delay: var(--rise-delay, 0s);
+  }
+  .upload-card-kind {
+    display: inline-block; margin-bottom: 3px; padding: 1px 6px; border-radius: 3px;
+    font: 800 9px/1.5 var(--sans); letter-spacing: .04em; text-transform: uppercase;
+  }
+  .upload-card[data-kind="skill"] .upload-card-kind { background: rgba(196, 93, 56, .22); color: #f2b48f; }
+  .upload-card[data-kind="code"] .upload-card-kind { background: rgba(120, 180, 255, .2); color: #9cdcfe; }
+  .upload-card[data-kind="json"] .upload-card-kind { background: rgba(120, 220, 170, .18); color: #8fe0ba; }
+  .upload-card-name {
+    display: block; color: #e8edf8; font: 700 11px/1.4 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+    white-space: nowrap;
+  }
+
+  /* 由舞台底部飄到雲的位置，越接近雲越淡出、越縮小 */
+  @keyframes card-rise {
+    0%   { bottom: -14%; opacity: 0; transform: translateX(-50%) scale(.9); }
+    10%  { opacity: 1; transform: translateX(-50%) scale(1); }
+    72%  { opacity: 1; }
+    100% { bottom: 60%; opacity: 0; transform: translateX(-50%) scale(.62); }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .upload-card { animation: none; opacity: 0; }
+    .cloud-arrow { animation: none; opacity: .9; }
+  }
+
+  .plan-block { max-width: 1320px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+</style>
+</head>
+<body>
+
+  <h1>「自己的 GitHub Repository」新增視覺元素 — 雲端上傳動畫草稿</h1>
+  <p class="lead">
+    版面沿用你提供的參考圖：深藍底＋電路紋理、發光的淺藍雲朵、貼近雲朵右上角的 GitHub 貓咪頭像，雲朵置中在畫面正中央。
+    雲中央只留一個白色的上傳箭頭（發光＋輕微跳動）。14 張從畫面底部往上飄的資料卡片只顯示種類標籤和完整檔名
+    （不截斷、不附程式碼／JSON 內容），代表程式碼、AI Skills、結構化 JSON 正在被上傳備份到雲端。
+  </p>
+  <ul class="note-list">
+    <li>飄浮卡片的檔名全部取自專案資料夾裡真實存在的檔案，且互不重複：<code>tool/skills md/</code> 裡的 6 個 Skill、<code>tool/scripts py/</code> 裡的 4 個腳本、以及 4 份不同文書（硃25／奏5／台1／奏2）的 JSON 檔名。</li>
+    <li>卡片寬度改用 <code>width: max-content</code>（跟著檔名長度走），較長的檔名例如 <code>chinese-reign-date-conversion.md</code> 也能完整顯示，不會被省略號截斷。</li>
+    <li>視覺尺寸比照「工具資訊」面板裡 <code>.part3-tool-info-photo</code> 圖片區的實際顯示大小（<code>width: 100%; height: 100%</code>），套用到正式網站時會自動填滿該區塊。</li>
+    <li>GitHub 頭像是用 SVG 畫的簡化貓咪剪影（不是直接複製官方圖示檔案），雲朵也是用一個 SVG path 畫的，方便之後直接調顏色。</li>
+    <li>所有顏色、大小、飄浮速度都寫成 CSS 變數，套用到正式網站時會搬到 <code>storymap-cards.css</code>。</li>
+  </ul>
+
+  <div class="mock-section">
+    <div class="mock-layout">
+      <article class="copybox">
+        <div class="title-row"><span class="num">6</span><h2>自己的 GitHub Repository</h2></div>
+        <p>最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。</p>
+      </article>
+
+      <div class="info-photo-frame">
+        <div class="cloud-scene" id="cloud-scene" aria-hidden="true">
+          <div class="cloud-wrap">
+            <div class="cloud-glow-layer"></div>
+            <svg class="cloud-svg" viewBox="0 0 200 120">
+              <path d="M46 92c-19 0-34-14-34-32 0-16 12-29 28-31 5-16 20-27 38-27 20 0 37 14 40 33 15 2 27 14 27 30 0 17-15 30-33 30H46z"/>
+            </svg>
+            <div class="gh-badge">
+              <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+            </div>
+            <div class="cloud-arrow-wrap">
+              <svg class="cloud-arrow" viewBox="0 0 24 24"><path d="M12 3 L20 12 L15 12 L15 21 L9 21 L9 12 L4 12 Z"/></svg>
+            </div>
+          </div>
+
+          <div class="upload-lane" id="upload-lane"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <h2>飄浮卡片內容（14 張，全部真實、不重複）</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>6 個 AI Skills</b>：<code>extract-emperor-action.md</code>、<code>extract-zhupi.md</code>、<code>chinese-reign-date-conversion.md</code>、<code>divide-into-parts.md</code>、<code>merge-emperor-actions.md</code>、<code>historical-gis.md</code> —— 皆為 <code>tool/skills md/</code> 裡的真實檔名。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>4 個程式檔</b>：<code>ocr_pdf_paragraphs.py</code>、<code>build_stage1_timeline_html.py</code>、<code>merge_pairs.py</code>、<code>clean_vertex_entities.py</code>，各自顯示的是該檔案真正的第一行 import／程式敘述。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>4 份文書 JSON</b>：硃25.json、奏5.json、台1.json、奏2.json —— 檔名對應四份不同的真實文書，與前面「9. 輸出格式：JSON」同一批資料。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>視覺尺寸</b>：外框 <code>width: 100%; height: 100%</code>，直接比照「工具資訊」面板裡 <code>.part3-tool-info-photo</code> 圖片區的實際顯示大小。</p></div></div>
+      <div class="plan-item"><span class="n">5</span><div><p><b>箭頭簡化</b>：只保留一個白色、有發光效果的上傳箭頭；移除卡片內容片段與卡片尾焰小箭頭。</p></div></div>
+      <div class="plan-item"><span class="n">6</span><div><p><b>版面調整</b>：雲朵置中在畫面正中央；GitHub 頭像移到更貼近雲朵右上角、疊在邊緣上。</p></div></div>
+    </div>
+  </div>
+
+  <script>
+    /* 真實檔名，全部不重複。Skill 取自 tool/skills md/，程式碼取自
+       tool/scripts py/，JSON 檔名對應四份已核實的不同文書
+       （硃25／奏5／台1／奏2），來源與前面「9. 輸出格式：JSON」一致。 */
+    const ITEMS = [
+      { kind: 'skill', name: 'extract-emperor-action.md' },
+      { kind: 'skill', name: 'extract-zhupi.md' },
+      { kind: 'skill', name: 'chinese-reign-date-conversion.md' },
+      { kind: 'skill', name: 'divide-into-parts.md' },
+      { kind: 'skill', name: 'merge-emperor-actions.md' },
+      { kind: 'skill', name: 'historical-gis.md' },
+      { kind: 'code', name: 'ocr_pdf_paragraphs.py' },
+      { kind: 'code', name: 'build_stage1_timeline_html.py' },
+      { kind: 'code', name: 'merge_pairs.py' },
+      { kind: 'code', name: 'clean_vertex_entities.py' },
+      { kind: 'json', name: '硃25.json' },
+      { kind: 'json', name: '奏5.json' },
+      { kind: 'json', name: '台1.json' },
+      { kind: 'json', name: '奏2.json' },
+    ];
+
+    const lane = document.getElementById('upload-lane');
+    const KIND_LABEL = { skill: 'SKILL', code: 'CODE', json: 'JSON' };
+
+    ITEMS.forEach((item, i) => {
+      const card = document.createElement('div');
+      card.className = 'upload-card';
+      card.dataset.kind = item.kind;
+      /* 每張卡片左右位置略有不同，飄浮速度與延遲也錯開，看起來比較自然 */
+      const x = 14 + ((i * 23) % 72);
+      card.style.setProperty('--x', `${x}%`);
+      card.style.setProperty('--rise-dur', `${5.4 + (i % 4) * 0.7}s`);
+      card.style.setProperty('--rise-delay', `${i * 0.85}s`);
+      card.innerHTML = `
+        <span class="upload-card-kind">${KIND_LABEL[item.kind]}</span>
+        <span class="upload-card-name">${item.name}</span>`;
+      lane.appendChild(card);
+    });
+  </script>
+
+</body>
+</html>

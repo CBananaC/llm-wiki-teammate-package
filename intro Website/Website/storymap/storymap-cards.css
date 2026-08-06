@@ -253,6 +253,26 @@
                  （STAGGER），屬於動畫流程，寫在 storymap.js 的
                  initBatchTestScene() 裡。
 
+    自己的 GitHub Repository 雲端上傳動畫（「工具資訊」面板裡「備份、
+                 管理與協作」那一頁的視覺元素）：
+                 寫在 #part-3-tools-card .cloud-scene 區塊裡。
+
+                   --scene-bg-1 / --scene-bg-2  背景漸層的深／淺色
+                   --circuit-color / --circuit-size
+                                       電路紋理的線條顏色與格線間距
+                   --cloud-color      雲朵顏色
+                   --cloud-glow       雲朵發光顏色
+                   --cloud-w          雲朵寬度（雲朵永遠置中在舞台正中央）
+                   --gh-right / --gh-top / --gh-w
+                                       GitHub 頭像的位置與大小；數字越小
+                                       越貼近雲朵中央
+                   --arrow-w          上傳箭頭的寬度
+                   --card-bg / --card-border
+                                       飄浮卡片的底色與邊框顏色
+
+                 卡片顯示哪些真實檔名、飄浮速度與間隔，屬於動畫流程，
+                 寫在 storymap.js 的 initCloudUploadScene() 裡。
+
   記得寫單位：百分號（56%）、px（480px）；倍數則不加單位（1、.8、1.2）。
   改完存檔，然後在瀏覽器按 Cmd+Shift+R 重新整理。
 
@@ -988,35 +1008,35 @@
 
 /* 8 辨識手寫字 — 標籤的位置仍可在 CSS 逐項調整。 */
 #part-3-handwritten-explorer [data-fx-feature="vertical"] {
-  --fx-color: #cfe3d4;
+  --fx-color: #7fb5b1;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
-  --fx-color: #cfe0ef;
+  --fx-color: #a28ca8;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
-  --fx-color: #e8d6b7;
+  --fx-color: #c88f8a;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 86%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
-  --fx-color: #f0d6d0;
+  --fx-color: #6e98d0;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
-  --fx-color: #f5e6bd;
+  --fx-color: #d97967;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
-  --fx-color: #f3ddc4;
+  --fx-color: #c86f62;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 28%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
-  --fx-color: #d8e2e0;
+  --fx-color: #d7c47d;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
-  --fx-color: #ddd6ea;
+  --fx-color: #d89a7e;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 72%;
 }
 
@@ -1309,6 +1329,24 @@
   --agentic-pet-body-font-size: 12px;
 }
 
+/* Part 3.2.2.1 — 自己的 GitHub Repository：雲端上傳動畫
+   （#part-3-tools-card 內「備份、管理與協作」資訊面板） */
+#part-3-tools-card .cloud-scene {
+  --scene-bg-1: #0c1730;         /* 背景漸層深色端 */
+  --scene-bg-2: #142449;         /* 背景漸層淺色端 */
+  --circuit-color: rgba(140, 170, 255, .16); /* 電路紋理線條顏色 */
+  --circuit-size: 46px;          /* 電路紋理格線間距 */
+  --cloud-color: #7fa4f2;        /* 雲朵顏色 */
+  --cloud-glow: rgba(127, 164, 242, .55); /* 雲朵發光顏色 */
+  --cloud-w: 58%;                /* 雲朵寬度（相對舞台） */
+  --gh-right: 12%;               /* GitHub 頭像距右邊的距離；數字越小越貼近雲朵中央 */
+  --gh-top: 2%;                  /* GitHub 頭像距頂部的距離 */
+  --gh-w: 20%;                   /* GitHub 頭像大小 */
+  --arrow-w: 16%;                /* 上傳箭頭寬度 */
+  --card-bg: #12213f;            /* 飄浮卡片底色 */
+  --card-border: rgba(140, 170, 255, .35); /* 飄浮卡片邊框顏色 */
+}
+
 /* Part 3.4.4 — 運用 Agentic AI 使用 PaddleOCR：Codex 對話視窗＋PaddleOCR Python 視窗
    #part-3-agentic-ocr-chart */
 #part-3-agentic-ocr-chart {
@@ -1473,3 +1511,144 @@
 #part-3-wiki-intro,
 #part-3-wiki-data,
 #part-3-wiki-analysis { --card-accent: #a45e4c; }
+
+/* =========================================================================
+   Part 3.4.10 — 試一試（#part-3-try）
+   ─────────────────────────────────────────────────────────────────────────
+   這一節所有可以手動調整的東西都集中在下面。只改這裡就好，
+   不用動 storymap.css、storymap.js 或 storymap-example.html。
+
+   一、整體尺寸與版面
+       在 #part-3-try-explorer 區塊裡改：
+
+         --try-explorer-cols   左右兩半的比例，例如 48% 52%
+         --try-doc-pad         左半（史料）的內邊距
+         --try-doc-gap         史料與翻頁按鈕之間的距離
+         --try-page-w          史料圖片的寬度，例如 100%、86%
+         --try-hl-opacity      標示區的透明度，0 全透明、1 全不透明
+         --try-panel-pad       右半（資訊面板）的內邊距
+         --try-panel-min-h     資訊面板最矮多少（撐開版面用）
+         --try-panel-max-h     資訊面板最高多少，超過就在面板內捲動
+         --try-chat-max-h      第二步聊天視窗最高多少
+         --try-cmp-area-h      第三步貼上結果的輸入框高度
+         --try-diff-h          第三步比對結果那一欄的高度
+
+   二、字級（全部會再乘上網站的字級設定 --font-scale）
+         --try-switch-font-size   標題旁「印刷字／手寫字」切換鈕
+         --try-rpg-font-size      底部引導對話框的內文
+         --try-bubble-font-size   第二步每一句 prompt 的字級
+         --try-cmp-font-size      第三步的等寬字（貼上的結果與比對結果）
+         --try-score-font-size    吻合度百分比的數字
+
+   三、顏色
+         --try-rpg-bg       引導對話框的底色（可寫漸層）
+         --try-rpg-border   引導對話框的外框與四角小方塊
+         --try-ok           完成打勾、比對「多出來」的綠色
+
+   四、標示區（左半史料上那幾塊半透明色塊）
+       這一節「不顯示標籤」，只顯示標示區。每一塊寫成一個區塊：
+
+         #part-3-try-explorer[data-try-mode="印刷字或手寫字"]
+         [data-try-feature="名稱"] {
+           --fx-color: #cfe3d4;    標示區顏色
+           --fx-left: 12%;         距離圖片左邊
+           --fx-top: 20%;          距離圖片上面
+           --fx-width: 56%;        寬度
+           --fx-height: 62%;       高度
+         }
+
+       data-try-mode 只有兩個值：printed（印刷字）、handwritten（手寫字）。
+       data-try-feature 的名稱要和 storymap-example.html 裡
+       <script type="application/json" data-part3-try-data> 的 features 一致：
+
+         印刷字 printed：info（文本資訊）、column（直排單欄）、
+                          para（分段）、page（頁碼）、zhu（夾批）
+         手寫字 handwritten：column（直排單欄）、author（上奏官員）、
+                          minor（臣字款）、rescript（硃批）、stamp（印章與浮水印）
+
+       要新增一塊標示區：先在 HTML 的 features 裡加一項（要寫 page 第幾頁），
+       再到某個 step 的 "feature" 指向它，最後在這裡加一個對應的區塊調位置。
+       要移除一塊：把 HTML features 裡那一項和用到它的 step 刪掉即可。
+
+   五、PDF 檔案
+       檔名與下載連結寫在 storymap-example.html 的 data-part3-try-data 裡：
+       "pdf" 是顯示的檔名，"href" 是實際下載路徑（目前留空＝只記錄已下載）。
+   ========================================================================= */
+
+#part-3-try-explorer {
+  /* 版面 */
+  --try-explorer-cols: 48% 52%;
+  --try-doc-pad: clamp(24px, 2.4vw, 38px);
+  --try-doc-gap: 18px;
+  --try-page-w: 100%;
+  --try-hl-opacity: .45;
+  --try-panel-pad: 24px 26px;
+  --try-panel-min-h: 640px;
+  --try-panel-max-h: 860px;
+  --try-chat-max-h: 420px;
+  --try-cmp-area-h: 96px;
+  --try-diff-h: 180px;
+
+  /* 字級 */
+  --try-switch-font-size: 12.5px;
+  --try-rpg-font-size: 13px;
+  --try-bubble-font-size: 13.5px;
+  --try-cmp-font-size: 12px;
+  --try-score-font-size: 30px;
+
+  /* 顏色 */
+  --try-rpg-bg: linear-gradient(160deg, #12363a 0%, #1b464a 100%);
+  --try-rpg-border: #6f9a90;
+  --try-ok: #2e7d5b;
+
+  /* 與 7／8 一樣加寬，跳出內容欄的左右留白 */
+  width: 96vw;
+  max-width: 96vw;
+  margin-left: calc(50% - 48vw);
+  margin-right: calc(50% - 48vw);
+  grid-template-columns: var(--try-explorer-cols, 48% 52%);
+}
+
+/* ── 標示區：印刷字 ─────────────────────────────────────────────── */
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="info"] {
+  --fx-color: #cfe0ef;
+  --fx-left: 70%; --fx-top: 9%; --fx-width: 24%; --fx-height: 28%;
+}
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="column"] {
+  --fx-color: #cfe3d4;
+  --fx-left: 12%; --fx-top: 20%; --fx-width: 56%; --fx-height: 62%;
+}
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="para"] {
+  --fx-color: #f5e6bd;
+  --fx-left: 14%; --fx-top: 44%; --fx-width: 50%; --fx-height: 26%;
+}
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="page"] {
+  --fx-color: #ddd6ea;
+  --fx-left: 6%; --fx-top: 88%; --fx-width: 14%; --fx-height: 7%;
+}
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="zhu"] {
+  --fx-color: #f3ddc4;
+  --fx-left: 40%; --fx-top: 30%; --fx-width: 16%; --fx-height: 22%;
+}
+
+/* ── 標示區：手寫字 ─────────────────────────────────────────────── */
+#part-3-try-explorer[data-try-mode="handwritten"] [data-try-feature="column"] {
+  --fx-color: #cfe3d4;
+  --fx-left: 14%; --fx-top: 12%; --fx-width: 62%; --fx-height: 70%;
+}
+#part-3-try-explorer[data-try-mode="handwritten"] [data-try-feature="author"] {
+  --fx-color: #cfe0ef;
+  --fx-left: 68%; --fx-top: 10%; --fx-width: 20%; --fx-height: 20%;
+}
+#part-3-try-explorer[data-try-mode="handwritten"] [data-try-feature="minor"] {
+  --fx-color: #f5e6bd;
+  --fx-left: 30%; --fx-top: 40%; --fx-width: 12%; --fx-height: 14%;
+}
+#part-3-try-explorer[data-try-mode="handwritten"] [data-try-feature="rescript"] {
+  --fx-color: #f0d6d0;
+  --fx-left: 20%; --fx-top: 16%; --fx-width: 26%; --fx-height: 34%;
+}
+#part-3-try-explorer[data-try-mode="handwritten"] [data-try-feature="stamp"] {
+  --fx-color: #ddd6ea;
+  --fx-left: 50%; --fx-top: 60%; --fx-width: 22%; --fx-height: 22%;
+}

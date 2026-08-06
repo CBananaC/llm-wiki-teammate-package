@@ -1832,6 +1832,459 @@ const initBatchTestScene = () => {
 };
 initBatchTestScene();
 
+/* 自己的 GitHub Repository — 雲端上傳動畫（#part-3-tools-card 的
+   「備份、管理與協作」資訊面板）。真實檔名持續從底部往上飄向雲朵，代表
+   把程式碼、AI Skills、結構化 JSON 備份到 GitHub。大小顏色在
+   storymap-cards.css 的 #part-3-tools-card .cloud-scene 調整。 */
+const initCloudUploadScene = () => {
+  const scene = document.querySelector('[data-cloud-scene]');
+  const lane = scene && scene.querySelector('[data-upload-lane]');
+  if (!scene || !lane) return;
+
+  /* 真實檔名，互不重複：Skill 取自 tool/skills md/，程式碼取自
+     tool/scripts py/，JSON 檔名對應四份已核實的不同文書
+     （硃25／奏5／台1／奏2），來源與「9. 輸出格式：JSON」一致。 */
+  const ITEMS = [
+    { kind: 'skill', name: 'extract-emperor-action.md' },
+    { kind: 'skill', name: 'extract-zhupi.md' },
+    { kind: 'skill', name: 'chinese-reign-date-conversion.md' },
+    { kind: 'skill', name: 'divide-into-parts.md' },
+    { kind: 'skill', name: 'merge-emperor-actions.md' },
+    { kind: 'skill', name: 'historical-gis.md' },
+    { kind: 'code', name: 'ocr_pdf_paragraphs.py' },
+    { kind: 'code', name: 'build_stage1_timeline_html.py' },
+    { kind: 'code', name: 'merge_pairs.py' },
+    { kind: 'code', name: 'clean_vertex_entities.py' },
+    { kind: 'json', name: '硃25.json' },
+    { kind: 'json', name: '奏5.json' },
+    { kind: 'json', name: '台1.json' },
+    { kind: 'json', name: '奏2.json' },
+  ];
+  const KIND_LABEL = { skill: 'SKILL', code: 'CODE', json: 'JSON' };
+
+  ITEMS.forEach((item, i) => {
+    const card = document.createElement('div');
+    card.className = 'upload-card';
+    card.dataset.kind = item.kind;
+    /* 每張卡片左右位置略有不同，飄浮速度與延遲也錯開，看起來比較自然 */
+    const x = 14 + ((i * 23) % 72);
+    card.style.setProperty('--x', `${x}%`);
+    card.style.setProperty('--rise-dur', `${5.4 + (i % 4) * 0.7}s`);
+    card.style.setProperty('--rise-delay', `${i * 0.85}s`);
+    card.innerHTML = `
+      <span class="upload-card-kind">${KIND_LABEL[item.kind]}</span>
+      <span class="upload-card-name">${item.name}</span>`;
+    lane.appendChild(card);
+  });
+
+  /* 純 CSS 動畫（infinite），只在看得見的時候用 animation-play-state 暫停，
+     不需要另外管理計時器。 */
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      lane.querySelectorAll('.upload-card').forEach((card) => {
+        card.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+      });
+      scene.querySelectorAll('.cloud-arrow').forEach((arrow) => {
+        arrow.style.animationPlayState = entry.isIntersecting ? 'running' : 'paused';
+      });
+    });
+  }, { threshold: .2 });
+  observer.observe(scene);
+};
+initCloudUploadScene();
+
+/* 試一試（#part-3-try）：三個階段的闖關流程。
+   1 下載史料 → 2 在 Codex 視窗逐句組 prompt → 3 比對 OCR 結果。
+   左半只畫標示區（不畫標籤）；標示區的位置、大小、顏色由 CSS 變數決定，
+   預設值由本函式依 JSON 注入，正式數值寫在 storymap-cards.css 的
+   「Part 3.4.10 — 試一試」區塊，以 ID 選擇器覆蓋。
+   完成的階段收合成待辦清單；引導文字固定在面板底部，選項放在引導文字下方。 */
+const initPart3TryIt = () => {
+  const root = document.querySelector('[data-part3-try]');
+  if (!root) return;
+  const data = parseJsonScript(root);
+  if (!data || !data.printed) return;
+
+  const COPY_IC = '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.4" aria-hidden="true">'
+    + '<rect x="5.2" y="5.2" width="8.3" height="8.3" rx="1.6"/>'
+    + '<path d="M10.8 2.5H3.9c-.8 0-1.4.6-1.4 1.4v6.9"/></svg>';
+
+  const imgEl = root.querySelector('[data-try-img]');
+  const hlHost = root.querySelector('[data-try-hls]');
+  const indEl = root.querySelector('[data-try-ind]');
+  const prevBtn = root.querySelector('[data-try-prev]');
+  const nextBtn = root.querySelector('[data-try-next]');
+  const todoHost = root.querySelector('[data-try-todo]');
+  const stageHost = root.querySelector('[data-try-stage]');
+  const guideHost = root.querySelector('[data-try-guide]');
+  const switchHost = document.querySelector('[data-part3-try-switch]');
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  let mode = 'printed';
+  let phase = 1;
+  let cur = 0;
+  let answers = [];
+  let pageIdx = 0;
+  let typingTimer = null;
+  const d = () => data[mode];
+
+  /* 標示區的預設幾何值：低權重注入，storymap-cards.css 可用 ID 覆蓋。 */
+  const injectDefaults = () => {
+    const rules = [];
+    Object.keys(data).forEach((m) => {
+      const feats = (data[m] && data[m].features) || {};
+      Object.keys(feats).forEach((key) => {
+        const f = feats[key]; const box = f.box || {};
+        rules.push(`[data-part3-try][data-try-mode="${m}"] [data-try-feature="${key}"] {`
+          + ` --fx-color: ${f.colour || '#f3c967'};`
+          + ` --fx-left: ${box.left || '0%'}; --fx-top: ${box.top || '0%'};`
+          + ` --fx-width: ${box.width || '0%'}; --fx-height: ${box.height || '0%'}; }`);
+      });
+    });
+    const style = document.createElement('style');
+    style.dataset.part3TryDefaults = 'true';
+    style.textContent = rules.join('\n');
+    document.head.appendChild(style);
+  };
+  injectDefaults();
+
+  /* ---------- 左半：史料與標示區 ---------- */
+  const renderDoc = (activeKey) => {
+    const set = d();
+    imgEl.src = set.pages[pageIdx];
+    indEl.textContent = `頁 ${pageIdx + 1} / ${set.pages.length}`;
+    hlHost.innerHTML = '';
+    Object.keys(set.features).forEach((key) => {
+      const f = set.features[key];
+      if (f.page !== pageIdx) return;
+      const hl = document.createElement('div');
+      hl.className = 'part3-try-hl' + (key === activeKey ? ' is-active' : '');
+      hl.dataset.tryFeature = key;
+      hlHost.appendChild(hl);
+    });
+  };
+  const syncDoc = () => {
+    const step = phase === 2 ? d().steps[cur] : null;
+    if (step && step.feature) {
+      const f = d().features[step.feature];
+      if (f && f.page !== pageIdx) pageIdx = f.page;
+      renderDoc(step.feature);
+    } else {
+      renderDoc(null);
+    }
+  };
+
+  /* ---------- 底部 RPG 引導框；選項放在引導文字下方 ---------- */
+  const showGuide = (kicker, text, buildOptions) => {
+    clearTimeout(typingTimer);
+    guideHost.innerHTML = '';
+    const box = document.createElement('div');
+    box.className = 'part3-try-rpg';
+    box.innerHTML = `<span class="k">${kicker}</span><span class="t"></span><span class="caret" aria-hidden="true">▼</span>`;
+    guideHost.appendChild(box);
+    const t = box.querySelector('.t');
+    const addOptions = () => {
+      if (!buildOptions) return;
+      const opts = document.createElement('div');
+      opts.className = 'part3-try-opts';
+      buildOptions(opts);
+      box.insertBefore(opts, box.querySelector('.caret'));
+    };
+    if (reduceMotion) { t.textContent = text; addOptions(); return; }
+    let i = 0;
+    const tick = () => {
+      t.textContent = text.slice(0, ++i);
+      if (i < text.length) typingTimer = setTimeout(tick, 12);
+      else addOptions();
+    };
+    tick();
+  };
+
+  const addTodo = (n, label) => {
+    const row = document.createElement('div');
+    row.className = 'part3-try-todo';
+    row.innerHTML = `<span class="n">${n}</span>${label}<span class="tick" aria-hidden="true">✓</span>`;
+    todoHost.appendChild(row);
+  };
+
+  /* ---------- 第一步：下載史料 ---------- */
+  const renderPhase1 = () => {
+    const set = d();
+    stageHost.innerHTML = `
+      <div class="part3-try-win">
+        <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第一步 · 下載史料</span></div>
+        <div class="part3-try-dl">
+          <div class="meta"><div class="name">${set.pdf}</div><div class="sub">${set.pdfSub}</div></div>
+          <button type="button" class="part3-try-dlbtn" data-try-dl>下載 PDF</button>
+        </div>
+      </div>`;
+    showGuide('第一步', '先把左邊這份史料下載到你的電腦。稍後要讓 Agentic AI 在你的電腦上找到這個檔案。');
+    stageHost.querySelector('[data-try-dl]').addEventListener('click', () => {
+      if (set.href) window.open(set.href, '_blank', 'noopener');
+      addTodo(1, '下載史料');
+      phase = 2; cur = 0; answers = [];
+      renderPhase2();
+    });
+    syncDoc();
+  };
+
+  /* ---------- 第二步：Codex 視窗撰寫 prompt ---------- */
+  const addBubble = (text, instant) => {
+    const chat = stageHost.querySelector('[data-try-chat]');
+    const row = document.createElement('div');
+    row.className = 'part3-try-bubblerow';
+    const b = document.createElement('div');
+    b.className = 'part3-try-bubble';
+    row.appendChild(b);
+    chat.appendChild(row);
+    const scroll = () => { chat.scrollTop = chat.scrollHeight; };
+    const finish = () => { b.contentEditable = 'true'; b.spellcheck = false; };
+    if (instant || reduceMotion) { b.textContent = text; finish(); scroll(); return Promise.resolve(); }
+    return new Promise((res) => {
+      let i = 0;
+      const tick = () => {
+        b.textContent = text.slice(0, ++i); scroll();
+        if (i < text.length) setTimeout(tick, 7); else { finish(); res(); }
+      };
+      tick();
+    });
+  };
+
+  const nextStep = () => {
+    const steps = d().steps;
+
+    if (cur >= steps.length) {
+      const foot = stageHost.querySelector('[data-try-foot]');
+      foot.innerHTML = `<span class="hint">每一句都可以直接點進去修改。</span>`
+        + `<button type="button" class="part3-try-copy" data-try-copy>${COPY_IC}複製全部</button>`;
+      showGuide('完成', '好了，上面每一句加起來就是你的 prompt。想改哪一句就直接點進去改，滿意後按右下角複製，貼到你的 Agentic AI。');
+      foot.querySelector('[data-try-copy]').addEventListener('click', (e) => {
+        const btn = e.currentTarget;
+        const txt = [...stageHost.querySelectorAll('.part3-try-bubble')]
+          .map((b) => b.textContent.trim()).filter(Boolean).join('\n');
+        if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
+        btn.classList.add('is-done');
+        btn.innerHTML = COPY_IC + '已複製';
+        setTimeout(() => { addTodo(2, '撰寫 Prompt'); phase = 3; renderPhase3(); }, 500);
+      });
+      syncDoc();
+      return;
+    }
+
+    const s = steps[cur];
+    showGuide(s.k, s.guide, (opts) => {
+      if (s.kind === 'chip') {
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'part3-try-chip';
+        btn.textContent = s.chip;
+        btn.addEventListener('click', () => {
+          opts.remove();
+          answers[cur] = s.chip;
+          addBubble(s.chip).then(() => { cur += 1; nextStep(); });
+        });
+        opts.appendChild(btn);
+      }
+
+      if (s.kind === 'mc') {
+        const p = document.createElement('p');
+        p.className = 'part3-try-sentence';
+        p.append(s.before + ' ');
+        const sel = document.createElement('select');
+        sel.className = 'part3-try-blank';
+        sel.innerHTML = '<option value="">—— 請選擇 ——</option>'
+          + shuffleTryOptions(s.options).map((o) => `<option>${o}</option>`).join('');
+        const mark = document.createElement('span');
+        mark.className = 'part3-try-mark';
+        sel.addEventListener('change', () => {
+          if (!sel.value) return;
+          if (sel.value === s.answer) {
+            sel.classList.remove('is-bad'); sel.classList.add('is-ok');
+            mark.className = 'part3-try-mark ok'; mark.textContent = '✓';
+            const line = s.before + s.answer + s.after;
+            answers[cur] = line;
+            setTimeout(() => {
+              opts.remove();
+              addBubble(line).then(() => { cur += 1; nextStep(); });
+            }, 300);
+          } else {
+            sel.classList.remove('is-ok'); sel.classList.add('is-bad');
+            mark.className = 'part3-try-mark bad'; mark.textContent = '✗';
+            setTimeout(() => {
+              sel.value = ''; sel.classList.remove('is-bad'); mark.textContent = '';
+            }, 650);
+          }
+        });
+        p.appendChild(sel); p.append(' ' + s.after); p.appendChild(mark);
+        opts.appendChild(p);
+      }
+
+      if (s.kind === 'free') {
+        const ta = document.createElement('textarea');
+        ta.className = 'part3-try-free';
+        ta.placeholder = s.placeholder || '';
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'part3-try-optbtn';
+        btn.textContent = '完成，產生 prompt';
+        btn.addEventListener('click', () => {
+          const v = ta.value.trim();
+          answers[cur] = v;
+          opts.remove();
+          const done = () => { cur += 1; nextStep(); };
+          if (v) addBubble(v).then(done); else done();
+        });
+        opts.appendChild(ta); opts.appendChild(btn);
+      }
+    });
+    syncDoc();
+  };
+
+  const renderPhase2 = () => {
+    stageHost.innerHTML = `
+      <div class="part3-try-win">
+        <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+        <div class="part3-try-chat" data-try-chat></div>
+        <div class="part3-try-chatfoot" data-try-foot></div>
+      </div>`;
+    answers.forEach((a) => { if (a) addBubble(a, true); });
+    nextStep();
+  };
+
+  /* ---------- 第三步：比對 OCR 結果（淺色視窗） ---------- */
+  const downloadRef = () => {
+    const blob = new Blob([d().reference], { type: 'text/plain;charset=utf-8' });
+    const a = document.createElement('a');
+    a.href = URL.createObjectURL(blob);
+    a.download = mode + '-reference-ocr.txt';
+    a.click();
+    URL.revokeObjectURL(a.href);
+  };
+
+  const runCompare = (raw) => {
+    const mine = (raw || '').replace(/\s+/g, '');
+    const input = stageHost.querySelector('[data-try-input]');
+    if (!mine) { if (input) input.focus(); return; }
+    const ref = d().reference.replace(/\s+/g, '');
+    const result = diffTryChars(ref, mine);
+    const body = stageHost.querySelector('[data-try-cmp]');
+    body.innerHTML = `
+      <div class="part3-try-score"><span class="lab">吻合度</span><span class="num">${result.score}%</span></div>
+      <div class="part3-try-half">
+        <span class="lab">參考 OCR 結果</span>
+        <div class="part3-try-diff" data-try-refpane></div>
+        <p class="part3-try-key">紅刪除線＝參考結果有、你的結果缺少　·　綠＝你的結果多出來</p>
+      </div>
+      <div class="part3-try-half">
+        <span class="lab">你的 OCR 結果（可直接修改後重新比對）</span>
+        <textarea class="part3-try-area" data-try-input></textarea>
+      </div>
+      <div class="part3-try-cmprow">
+        <button type="button" class="part3-try-cmpbtn primary" data-try-run>重新比對</button>
+        <span class="spacer"></span>
+        <button type="button" class="part3-try-cmpbtn" data-try-refdl>下載參考 OCR 結果</button>
+      </div>`;
+    body.querySelector('[data-try-refpane]').innerHTML = result.merged
+      .map((seg) => `<span class="${seg[0]}">${seg[1].replace(/</g, '&lt;')}</span>`).join('');
+    body.querySelector('[data-try-input]').value = raw;
+    body.querySelector('[data-try-run]').addEventListener('click', () => {
+      runCompare(body.querySelector('[data-try-input]').value);
+    });
+    body.querySelector('[data-try-refdl]').addEventListener('click', downloadRef);
+  };
+
+  const renderPhase3 = () => {
+    const file = mode === 'printed' ? 'try-printed' : 'try-handwritten';
+    stageHost.innerHTML = `
+      <div class="part3-try-win">
+        <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第三步 · 比對 OCR 結果　—　${file}.ocr.txt</span></div>
+        <div class="part3-try-cmp" data-try-cmp>
+          <span class="lab">你的 OCR 結果</span>
+          <textarea class="part3-try-area" data-try-input placeholder="把 Agentic AI 輸出的正文貼在這裡。"></textarea>
+          <div class="part3-try-cmprow">
+            <button type="button" class="part3-try-cmpbtn primary" data-try-run>與參考結果比對</button>
+            <span class="spacer"></span>
+            <button type="button" class="part3-try-cmpbtn" data-try-refdl>下載參考 OCR 結果</button>
+          </div>
+        </div>
+      </div>`;
+    stageHost.querySelector('[data-try-run]').addEventListener('click', () => {
+      runCompare(stageHost.querySelector('[data-try-input]').value);
+    });
+    stageHost.querySelector('[data-try-refdl]').addEventListener('click', downloadRef);
+    showGuide('第三步', 'AI 跑完了嗎？把它輸出的正文貼進來，我們拿它跟參考結果逐字對照，看看差在哪裡。');
+    syncDoc();
+  };
+
+  /* ---------- 翻頁與模式切換 ---------- */
+  prevBtn.addEventListener('click', () => {
+    pageIdx = (pageIdx - 1 + d().pages.length) % d().pages.length;
+    syncDoc();
+  });
+  nextBtn.addEventListener('click', () => {
+    pageIdx = (pageIdx + 1) % d().pages.length;
+    syncDoc();
+  });
+
+  const resetAll = () => {
+    clearTimeout(typingTimer);
+    phase = 1; cur = 0; answers = []; pageIdx = 0;
+    todoHost.innerHTML = '';
+    renderPhase1();
+  };
+
+  if (switchHost) {
+    switchHost.addEventListener('click', (e) => {
+      const btn = e.target.closest('button');
+      if (!btn || !data[btn.dataset.tryMode]) return;
+      mode = btn.dataset.tryMode;
+      root.dataset.tryMode = mode;
+      [...switchHost.children].forEach((b) => b.classList.toggle('is-on', b === btn));
+      resetAll();
+    });
+  }
+
+  resetAll();
+};
+
+/* 字元層級 LCS：比對參考結果與使用者貼上的 OCR 結果。 */
+function diffTryChars(a, b) {
+  const n = a.length, m = b.length;
+  const dp = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) {
+    for (let j = m - 1; j >= 0; j--) {
+      dp[i][j] = a[i] === b[j] ? dp[i + 1][j + 1] + 1 : Math.max(dp[i + 1][j], dp[i][j + 1]);
+    }
+  }
+  const out = [];
+  let i = 0, j = 0, lcs = 0;
+  while (i < n && j < m) {
+    if (a[i] === b[j]) { out.push(['same', a[i]]); i++; j++; lcs++; }
+    else if (dp[i + 1][j] >= dp[i][j + 1]) { out.push(['miss', a[i]]); i++; }
+    else { out.push(['extra', b[j]]); j++; }
+  }
+  while (i < n) out.push(['miss', a[i++]]);
+  while (j < m) out.push(['extra', b[j++]]);
+  const merged = [];
+  out.forEach((seg) => {
+    const last = merged[merged.length - 1];
+    if (last && last[0] === seg[0]) last[1] += seg[1];
+    else merged.push([seg[0], seg[1]]);
+  });
+  return { merged, score: n + m === 0 ? 0 : Math.round((2 * lcs / (n + m)) * 100) };
+}
+
+function shuffleTryOptions(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    const tmp = a[i]; a[i] = a[j]; a[j] = tmp;
+  }
+  return a;
+}
+
+initPart3TryIt();
+
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);

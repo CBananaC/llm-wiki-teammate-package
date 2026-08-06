@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260806-json-controls-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260806-part8-layout-01">
+  <link rel="stylesheet" href="storymap.css?v=20260806-cloud-upload-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260806-cloud-upload-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260806-json-controls-01" defer></script>
+  <script src="storymap.js?v=20260806-cloud-upload-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1052,7 +1052,28 @@
                     <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">批次處理與分析</p><h3>AI API</h3><div class="body"><p>此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。</p></div></div>
                   </article>
                   <article class="part3-tool-info-view" data-part3-tool-info="backup" hidden>
-                    <figure class="part3-tool-info-photo"><img src="../Visual%20Material/img2_4_2.jpg" alt="清代史料書冊" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">5</span></figure>
+                    <figure class="part3-tool-info-photo part3-tool-info-photo-cloud">
+                      <!-- 雲端上傳動畫：真實檔名（AI Skills／程式碼／文書 JSON）持續從下往上飄，
+                           代表備份到 GitHub。大小顏色在 storymap-cards.css 的
+                           #part-3-tools-card .cloud-scene 調整；內容清單與節奏在
+                           storymap.js 的 initCloudUploadScene() 裡。 -->
+                      <div class="cloud-scene" data-cloud-scene aria-hidden="true">
+                        <div class="cloud-wrap">
+                          <div class="cloud-glow-layer"></div>
+                          <svg class="cloud-svg" viewBox="0 0 200 120">
+                            <path d="M46 92c-19 0-34-14-34-32 0-16 12-29 28-31 5-16 20-27 38-27 20 0 37 14 40 33 15 2 27 14 27 30 0 17-15 30-33 30H46z"/>
+                          </svg>
+                          <div class="gh-badge">
+                            <svg viewBox="0 0 16 16"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0 0 16 8c0-4.42-3.58-8-8-8z"/></svg>
+                          </div>
+                          <div class="cloud-arrow-wrap">
+                            <svg class="cloud-arrow" viewBox="0 0 24 24"><path d="M12 3 L20 12 L15 12 L15 21 L9 21 L9 12 L4 12 Z"/></svg>
+                          </div>
+                        </div>
+                        <div class="upload-lane" data-upload-lane></div>
+                      </div>
+                      <span class="part3-tool-info-number" aria-hidden="true">5</span>
+                    </figure>
                     <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">備份、管理與協作</p><h3>自己的 GitHub Repository</h3><div class="body"><p>最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。</p></div></div>
                   </article>
                 </div>
@@ -1338,7 +1359,7 @@
                     "pages": ["ocr-zhu25-printed-1-enhanced.png", "ocr-zhu25-printed-2-enhanced.png"],
                     "features": [
                       {
-                        "key": "text-info", "page": 0, "image": "辨識印刷字Label/文本資訊.png", "colour": "#cfe0ef",
+                        "key": "text-info", "page": 0, "image": "辨識印刷字Label/文本資訊.png", "colour": "#8fcfe0",
                         "tag": {"right":"-132px","top":"14%"},
                         "title": "文本資訊",
                         "desc": "圖為《明清臺灣檔案彙編》的書影。每篇文本正文前均列有文本的資料，包括資料來源、標題、作者和日期。這些資料是後續檢索和分析的重要依據，因此應進行 OCR 辨識，並輸出為結構化的資料。",
@@ -1347,7 +1368,7 @@
                         "json": "{\n  <span class=\"jkey\">\"source\"</span>: <span class=\"jstr\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n  <span class=\"jkey\">\"title\"</span>: <span class=\"jstr\">\"為奏彰化失陷已調兵赴臺事\"</span>,\n  <span class=\"jkey\">\"author\"</span>: <span class=\"jstr\">\"福建水師提督 黃仕簡\"</span>,\n  <span class=\"jkey\">\"date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>\n}"
                       },
                       {
-                        "key": "single-column", "page": 0, "image": "辨識印刷字Label/直排單欄.png", "colour": "#cfe3d4",
+                        "key": "single-column", "page": 0, "image": "辨識印刷字Label/直排單欄.png", "colour": "#82adef",
                         "tag": {"right":"-132px","top":"36%"},
                         "title": "直排單欄",
                         "desc": "《明清臺灣檔案彙編》採用單欄印刷，閱讀方向由右至左、由上至下。OCR 必須按此順序輸出文字，而非由左至右的閱讀方式。",
@@ -1356,7 +1377,7 @@
                         "json": "{\n  <span class=\"jkey\">\"layout\"</span>: <span class=\"jstr\">\"single_column\"</span>,\n  <span class=\"jkey\">\"reading_order\"</span>: <span class=\"jstr\">\"right_to_left_top_to_bottom\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">1</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。……\"</span>\n}"
                       },
                       {
-                        "key": "paragraphs", "page": 0, "image": "辨識印刷字Label/分段.png", "colour": "#f5e6bd",
+                        "key": "paragraphs", "page": 0, "image": "辨識印刷字Label/分段.png", "colour": "#8e77dd",
                         "tag": {"right":"-132px","top":"58%"},
                         "title": "分段",
                         "desc": "《明清臺灣檔案彙編》以縮排分隔段落。OCR 時需要辨認縮排，保留每段完整內容，不要合併不同段落。",
@@ -1365,7 +1386,7 @@
                         "json": "{\n  <span class=\"jkey\">\"paragraph_break\"</span>: <span class=\"jstr\">\"indentation\"</span>,\n  <span class=\"jkey\">\"paragraph_count\"</span>: <span class=\"jnum\">2</span>,\n  <span class=\"jkey\">\"printed_pages\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>],\n  <span class=\"jkey\">\"paragraphs\"</span>: [\n    {<span class=\"jkey\">\"paragraph_number\"</span>: <span class=\"jnum\">1</span>, <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>},\n    {<span class=\"jkey\">\"paragraph_number\"</span>: <span class=\"jnum\">2</span>, <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣水師海壇閩安烽火各鎮協營，立就近省營分續調官兵北路援剿。奴才直由鹿耳門郡城南路進兵，會督夾攻。……\"</span>}\n  ]\n}"
                       },
                       {
-                        "key": "page", "page": 0, "image": "辨識印刷字Label/頁碼.png", "colour": "#ddd6ea",
+                        "key": "page", "page": 0, "image": "辨識印刷字Label/頁碼.png", "colour": "#bd70de",
                         "tag": {"right":"-132px","top":"90%"},
                         "title": "頁碼",
                         "desc": "頁碼位於頁面右下角。為方便日後引用與查考，每一頁、每一份奏摺的頁碼都要 OCR，並以結構化的形式保存。",
@@ -1374,7 +1395,7 @@
                         "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">80</span>,\n  <span class=\"jkey\">\"printed_page_numbers\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>],\n  <span class=\"jkey\">\"page_in_body\"</span>: <span class=\"jstr\">\"removed\"</span>\n}"
                       },
                       {
-                        "key": "mark", "page": 0, "image": "辨識印刷字Label/標題符號.png", "colour": "#f0d6d0",
+                        "key": "mark", "page": 0, "image": "辨識印刷字Label/標題符號.png", "colour": "#d980a0",
                         "tag": {"left":"-124px","top":"5%"},
                         "title": "標題符號",
                         "desc": "這份 PDF 的標點符號清晰可見，容易辨識。然而，其他PDF的標點符號可能會比較模糊，影響 OCR 結果。因此，完成 OCR 後，研究者應人工核對標點符號，或要求 AI 協助檢查標點。",
@@ -1383,7 +1404,7 @@
                         "json": "{\n  <span class=\"jkey\">\"title_mark\"</span>: {\n    <span class=\"jkey\">\"present\"</span>: <span class=\"jstr\">\"true\"</span>,\n    <span class=\"jkey\">\"clarity\"</span>: <span class=\"jstr\">\"clear_in_this_pdf\"</span>,\n    <span class=\"jkey\">\"review_needed\"</span>: <span class=\"jstr\">\"manual_or_ai_check\"</span>\n  },\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>\n}"
                       },
                       {
-                        "key": "inline-zhu", "page": 1, "image": "辨識印刷字Label/夾批.png", "colour": "#f3ddc4",
+                        "key": "inline-zhu", "page": 1, "image": "辨識印刷字Label/夾批.png", "colour": "#e6ada4",
                         "tag": {"left":"-132px","top":"38%"},
                         "title": "夾批",
                         "desc": "正文內有小字夾註的皇帝硃批「仍以調養為要，勿過勞」。應保留硃批的原文和位置，並在輸出的結果中明確標記為皇帝的硃批。",
@@ -1392,7 +1413,7 @@
                         "json": "{\n  <span class=\"jkey\">\"zhu\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"仍以調養為要，勿過勞\"</span>,\n    <span class=\"jkey\">\"type\"</span>: <span class=\"jstr\">\"emperor_rescript\"</span>,\n    <span class=\"jkey\">\"in_original_body\"</span>: <span class=\"jstr\">\"false\"</span>\n  }\n}"
                       },
                       {
-                        "key": "tail-zhu", "page": 1, "image": "辨識印刷字Label/落款與尾批.png", "colour": "#d3e5e2",
+                        "key": "tail-zhu", "page": 1, "image": "辨識印刷字Label/落款與尾批.png", "colour": "#dfc484",
                         "tag": {"left":"-132px","top":"60%"},
                         "title": "落款與尾批",
                         "desc": "正文後有兩行日期，第一行是官員上奏的日期，另一行是皇帝硃批的日期與尾批。在輸出的結果中，兩者都應與正文分開保存，方便日後分析。",
@@ -1440,7 +1461,7 @@
                     "foldAspect": "344 / 747",
                     "features": [
                       {
-                        "key": "vertical", "panel": 0, "image": "辨識手寫字Label/直排單欄.png", "colour": "#cfe3d4",
+                        "key": "vertical", "panel": 0, "image": "辨識手寫字Label/直排單欄.png", "colour": "#7fb5b1",
                         "tag": {"right":"-142px","top":"6%"},
                         "title": "直排單欄",
                         "desc": "奏摺採用直排書寫，閱讀方向由右至左、由上至下。OCR 必須按此順序輸出文字，而非由左至右的閱讀方式。",
@@ -1449,7 +1470,7 @@
                         "json": "{\n  <span class=\"jkey\">\"text_direction\"</span>: <span class=\"jstr\">\"vertical_rtl\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">9</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事奴才時刻留心察查不敢稍有懈忽茲本年十二月初五日戌刻訪聞得臺灣彰化縣屬又有匪徒聚集會黨於十一月二十九日辰刻攻打彰化縣城至午刻縣城被陷文武官員不知生死之事查臺灣不法民番甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池\"</span>\n}"
                       },
                       {
-                        "key": "regular-script", "panel": 0, "image": "辨識手寫字Label/正文字體.png", "colour": "#cfe0ef",
+                        "key": "regular-script", "panel": 0, "image": "辨識手寫字Label/正文字體.png", "colour": "#a28ca8",
                         "tag": {"right":"-142px","top":"20%"},
                         "title": "正文字體",
                         "desc": "這份奏摺採用楷書書寫，字跡清晰，字與字、行與行之間間距明確，且字體大小一致，容易進行 OCR 辨識。。",
@@ -1458,7 +1479,7 @@
                         "json": "{\n  <span class=\"jkey\">\"body_script\"</span>: <span class=\"jstr\">\"regular_kai_shu\"</span>,\n  <span class=\"jkey\">\"legibility\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"word_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"line_spacing\"</span>: <span class=\"jstr\">\"clear\"</span>,\n  <span class=\"jkey\">\"ocr_possible\"</span>: <span class=\"jstr\">\"true\"</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事奴才時刻留心察查不敢稍有懈忽茲本年十二月初五日戌刻訪聞得臺灣彰化縣屬又有匪徒聚集會黨於十一月二十九日辰刻攻打彰化縣城至午刻縣城被陷文武官員不知生死之事查臺灣不法民番甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池\"</span>\n}"
                       },
                       {
-                        "key": "author", "panel": 0, "image": "辨識手寫字Label/上奏官員.png", "colour": "#e8d6b7",
+                        "key": "author", "panel": 0, "image": "辨識手寫字Label/上奏官員.png", "colour": "#c88f8a",
                         "tag": {"right":"-142px","top":"72%"},
                         "title": "上奏官員",
                         "desc": "奏摺第二頁首行註明上奏官員的官職與姓名「福建水師提督黃仕簡」。OCR 時應辨識並獨立標記這項作者資料，不要與正文混合。",
@@ -1467,7 +1488,7 @@
                         "json": "{\n  <span class=\"jkey\">\"author\"</span>: {\n    <span class=\"jkey\">\"office\"</span>: <span class=\"jstr\">\"福建水師提督\"</span>,\n    <span class=\"jkey\">\"name\"</span>: <span class=\"jstr\">\"黃仕簡\"</span>\n  },\n  <span class=\"jkey\">\"saved_individually\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       },
                       {
-                        "key": "minister", "panel": 0, "image": "辨識手寫字Label/臣字款.png", "colour": "#f0d6d0",
+                        "key": "minister", "panel": 0, "image": "辨識手寫字Label/臣字款.png", "colour": "#6e98d0",
                         "tag": {"left":"-134px","top":"34%"},
                         "title": "臣字款（小字自稱）",
                         "desc": "官員在文中自稱「奴才」或「臣」時以小字偏右書寫，字體小於正文。這些字也要作正文一部份進行 OCR。",
@@ -1476,7 +1497,7 @@
                         "json": "{\n  <span class=\"jkey\">\"self_reference\"</span>: [<span class=\"jstr\">\"奴才\"</span>, <span class=\"jstr\">\"臣\"</span>],\n  <span class=\"jkey\">\"style\"</span>: <span class=\"jstr\">\"small_inline\"</span>,\n  <span class=\"jkey\">\"in_body\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       },
                       {
-                        "key": "respect", "panel": 4, "image": "辨識手寫字Label/抬頭.png", "colour": "#f5e6bd",
+                        "key": "respect", "panel": 4, "image": "辨識手寫字Label/抬頭.png", "colour": "#d97967",
                         "tag": {"right":"-142px","top":"38%"},
                         "title": "抬頭",
                         "desc": "當提及皇帝時，官員會另起一行並提高書寫位置，這種格式稱為「抬頭」。「抬頭」會把同一句話拆成兩行，OCR 需要把分隔的文字重新合併。",
@@ -1485,7 +1506,7 @@
                         "json": "{\n  <span class=\"jkey\">\"honorific_breaks\"</span>: [<span class=\"jnum\">3</span>, <span class=\"jnum\">11</span>],\n  <span class=\"jkey\">\"merged_sentences\"</span>: <span class=\"jnum\">2</span>\n}"
                       },
                       {
-                        "key": "rescript", "panel": 4, "image": "辨識手寫字Label/硃批.png", "colour": "#f3ddc4",
+                        "key": "rescript", "panel": 4, "image": "辨識手寫字Label/硃批.png", "colour": "#c86f62",
                         "tag": {"left":"-142px","top":"58%"},
                         "title": "硃批（草書）",
                         "desc": "硃批以草書書寫，連筆多、字形變化大，辨識準確率低。OCR 時應先辨識紅色筆跡範圍，並把它與正文分開，留待人工判讀。",
@@ -1494,7 +1515,7 @@
                         "json": "{\n  <span class=\"jkey\">\"rescript\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"\"</span>,\n    <span class=\"jkey\">\"script\"</span>: <span class=\"jstr\">\"cursive\"</span>,\n    <span class=\"jkey\">\"needs_manual_reading\"</span>: <span class=\"jstr\">\"true\"</span>\n  }\n}"
                       },
                       {
-                        "key": "watermark", "panel": 10, "image": "辨識手寫字Label/浮水印.png", "colour": "#d8e2e0",
+                        "key": "watermark", "panel": 10, "image": "辨識手寫字Label/浮水印.png", "colour": "#d7c47d",
                         "tag": {"right":"-142px","top":"56%"},
                         "title": "浮水印",
                         "desc": "奏摺的PDF來源自臺北國立故宮博物院的電子資料庫，因此有「國立故宮博物院」及「NATIONAL PALACE MUSEUM」浮水印。不應對它們進行OCR。",
@@ -1503,7 +1524,7 @@
                         "json": "{\n  <span class=\"jkey\">\"watermark\"</span>: [<span class=\"jstr\">\"國立故宮博物院\"</span>, <span class=\"jstr\">\"NATIONAL PALACE MUSEUM\"</span>],\n  <span class=\"jkey\">\"excluded_from_text\"</span>: <span class=\"jstr\">\"true\"</span>\n}"
                       },
                       {
-                        "key": "stamp", "panel": 10, "image": "辨識手寫字Label/印章.png", "colour": "#ddd6ea",
+                        "key": "stamp", "panel": 10, "image": "辨識手寫字Label/印章.png", "colour": "#d89a7e",
                         "tag": {"left":"-142px","top":"10%"},
                         "title": "印章",
                         "desc": "奏摺正文後蓋有印章，不應對它們進行OCR。",
@@ -1585,6 +1606,157 @@
                   <div class="batch-scene" data-batch-scene aria-hidden="true">
                     <div class="batch-track" data-batch-track></div>
                   </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- 11 試一試：左半為史料（只有標示區、不顯示標籤），右半為闖關式資訊面板。
+               三個步驟：下載史料 → 逐句組 prompt（Codex 視窗）→ 比對 OCR 結果。
+               引導文字固定在面板底部的 RPG 對話框，互動選項都在引導文字下方。
+               所有可調尺寸、顏色、標示區位置寫在 storymap-cards.css 的
+               「Part 3.4.10 — 試一試」區塊；本檔只放內容資料。 -->
+          <section class="story surface-a" id="part-3-try" data-tab="part-3" data-nav="#part-3-try">
+            <div class="story-inner">
+              <div class="lay-stack">
+                <article class="blk" id="part-3-try-card">
+                  <div class="title-row">
+                    <span class="option-number">11</span><h2>試一試</h2>
+                    <div class="part3-try-switch" data-part3-try-switch role="group" aria-label="切換印刷字或手寫字">
+                      <button type="button" data-try-mode="printed" class="is-on">印刷字</button>
+                      <button type="button" data-try-mode="handwritten">手寫字</button>
+                    </div>
+                  </div>
+                  <div class="body">
+                    <p>看完前面的步驟後，可以親自試一次。下載左方的史料 PDF，按照右方的引導逐句組裝一段給 Agentic AI 的 prompt，完成後複製並貼到你自己的 Agentic AI 工具，讓它安裝 PaddleOCR 並辨識這份 PDF；最後把你的 OCR 結果貼回來，與參考結果比對。</p>
+                  </div>
+                </article>
+
+                <div class="part3-feature-explorer part3-try-explorer" id="part-3-try-explorer" data-part3-try data-try-mode="printed">
+                  <div class="part3-fx-doc part3-try-doc">
+                    <div class="part3-try-pagestack">
+                      <div class="part3-fx-page">
+                        <img data-try-img alt="試一試史料頁面" loading="lazy" decoding="async">
+                        <div data-try-hls></div>
+                      </div>
+                    </div>
+                    <div class="part3-fx-nav">
+                      <button type="button" data-try-prev aria-label="上一頁">←</button>
+                      <span class="part3-fx-ind" data-try-ind></span>
+                      <button type="button" data-try-next aria-label="下一頁">→</button>
+                    </div>
+                  </div>
+                  <div class="part3-try-panel">
+                    <div class="part3-try-scroll">
+                      <div data-try-todo></div>
+                      <div data-try-stage></div>
+                    </div>
+                    <div class="part3-try-guidehost" data-try-guide></div>
+                  </div>
+
+                  <script type="application/json" data-part3-try-data>
+                  {
+                    "printed": {
+                      "pdf": "try-printed.pdf",
+                      "pdfSub": "印刷本奏摺 · 2 頁 · PDF",
+                      "href": "",
+                      "pages": ["ocr-zhu25-printed-1-enhanced.png", "ocr-zhu25-printed-2-enhanced.png"],
+                      "features": {
+                        "info":   {"page": 0, "colour": "#cfe0ef", "box": {"left": "70%", "top": "9%",  "width": "24%", "height": "28%"}},
+                        "column": {"page": 0, "colour": "#cfe3d4", "box": {"left": "12%", "top": "20%", "width": "56%", "height": "62%"}},
+                        "para":   {"page": 0, "colour": "#f5e6bd", "box": {"left": "14%", "top": "44%", "width": "50%", "height": "26%"}},
+                        "page":   {"page": 0, "colour": "#ddd6ea", "box": {"left": "6%",  "top": "88%", "width": "14%", "height": "7%"}},
+                        "zhu":    {"page": 1, "colour": "#f3ddc4", "box": {"left": "40%", "top": "30%", "width": "16%", "height": "22%"}}
+                      },
+                      "steps": [
+                        {"kind": "chip", "k": "其之一 · 安裝工具",
+                         "guide": "先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。",
+                         "chip": "請在我的電腦上下載並安裝 PaddleOCR。"},
+                        {"kind": "chip", "k": "其之二 · OCR 目的",
+                         "guide": "再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。",
+                         "chip": "然後對名為 try-printed.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。"},
+                        {"kind": "mc", "k": "其之三 · 版面要求：閱讀順序", "feature": "column",
+                         "guide": "看看左邊反白的部分。這份史料是直排的，閱讀方向與橫排的書不同——請補上正確的順序。",
+                         "before": "按照", "after": "、由上至下的順序輸出文本。",
+                         "options": ["由右至左", "由左至右", "由下至上"], "answer": "由右至左"},
+                        {"kind": "mc", "k": "其之四 · 版面要求：分段", "feature": "para",
+                         "guide": "左邊反白處是分段的地方。這份史料靠什麼來分隔段落？選錯的話，OCR 會把段落接成一整塊。",
+                         "before": "請辨認段首的", "after": "，以此區分段落，保留每段完整內容，不要因一般換行而錯誤切斷段落。",
+                         "options": ["縮排", "空行", "標點符號"], "answer": "縮排"},
+                        {"kind": "mc", "k": "其之五 · 版面要求：文本資訊", "feature": "info",
+                         "guide": "正文之前那一塊，是這篇史料的來源、標題、作者與日期。它們該被獨立保存，而不是混進正文。",
+                         "before": "辨識正文前的", "after": "：史料來源、標題、作者、日期，並把這四項輸出為獨立欄位，不要混入正文。",
+                         "options": ["文本資訊", "註釋", "附錄"], "answer": "文本資訊"},
+                        {"kind": "mc", "k": "其之六 · 版面要求：夾批", "feature": "zhu",
+                         "guide": "翻到第二頁。正文中夾著幾行小字——它們不是官員寫的。想清楚再選。",
+                         "before": "正文中（硃批：）內的小字是", "after": "，請保留這些文字並獨立標記，不要視為官員的原文。",
+                         "options": ["皇帝的硃批", "官員的原文", "印刷錯誤"], "answer": "皇帝的硃批"},
+                        {"kind": "mc", "k": "其之七 · 版面要求：頁碼", "feature": "page",
+                         "guide": "頁面右下角那個小小的數字，日後引用時很重要，但它不屬於正文。",
+                         "before": "請辨識每一頁右下角的", "after": "，並儲存於獨立欄位，不要納入正文。",
+                         "options": ["頁碼", "冊號", "年份"], "answer": "頁碼"},
+                        {"kind": "mc", "k": "其之八 · 輸出要求",
+                         "guide": "最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。",
+                         "before": "最後，請把以上所有結果輸出為", "after": " 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。",
+                         "options": ["JSON", "TXT", "DOCX"], "answer": "JSON"},
+                        {"kind": "free", "k": "其之九 · 你自己的要求",
+                         "guide": "還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。",
+                         "placeholder": "例如：如果某個字辨識信心低於 0.9，請標記出來讓我人工核對。"}
+                      ],
+                      "reference": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。"
+                    },
+
+                    "handwritten": {
+                      "pdf": "try-handwritten.pdf",
+                      "pdfSub": "手寫奏摺掃描 · 4 頁 · PDF",
+                      "href": "",
+                      "pages": ["ocr-zhu25-handwritten-1-enhanced.png", "ocr-zhu25-handwritten-2-enhanced.png"],
+                      "features": {
+                        "column":   {"page": 0, "colour": "#cfe3d4", "box": {"left": "14%", "top": "12%", "width": "62%", "height": "70%"}},
+                        "author":   {"page": 0, "colour": "#cfe0ef", "box": {"left": "68%", "top": "10%", "width": "20%", "height": "20%"}},
+                        "minor":    {"page": 0, "colour": "#f5e6bd", "box": {"left": "30%", "top": "40%", "width": "12%", "height": "14%"}},
+                        "rescript": {"page": 1, "colour": "#f0d6d0", "box": {"left": "20%", "top": "16%", "width": "26%", "height": "34%"}},
+                        "stamp":    {"page": 1, "colour": "#ddd6ea", "box": {"left": "50%", "top": "60%", "width": "22%", "height": "22%"}}
+                      },
+                      "steps": [
+                        {"kind": "chip", "k": "其之一 · 安裝工具",
+                         "guide": "先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。",
+                         "chip": "請在我的電腦上下載並安裝 PaddleOCR。"},
+                        {"kind": "chip", "k": "其之二 · OCR 目的",
+                         "guide": "再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。",
+                         "chip": "然後對名為 try-handwritten.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。"},
+                        {"kind": "mc", "k": "其之三 · 版面要求：閱讀順序", "feature": "column",
+                         "guide": "手寫奏摺同樣是直排。先把閱讀順序講清楚，否則整段文字會顛倒。",
+                         "before": "奏摺用直排書寫，請按照", "after": "、由上至下的順序輸出文字，而非由左至右。",
+                         "options": ["由右至左", "由左至右", "由下至上"], "answer": "由右至左"},
+                        {"kind": "mc", "k": "其之四 · 版面要求：上奏官員", "feature": "author",
+                         "guide": "左邊反白的首行，寫著這份奏摺是誰上的。這兩項資料要分開存。",
+                         "before": "奏摺首行標有上奏官員的", "after": "，例如「福建水師提督　黃仕簡」，請分別獨立標記。",
+                         "options": ["官職與姓名", "籍貫與年齡", "品級與俸祿"], "answer": "官職與姓名"},
+                        {"kind": "mc", "k": "其之五 · 版面要求：小字自稱", "feature": "minor",
+                         "guide": "正文中的「奴才」「臣」寫得比別的字小。字小不代表不重要——它們屬於哪裡？",
+                         "before": "正文中的「奴才」或「臣」以較小字體書寫，但仍屬", "after": "，請保留於原有位置，不要省略或刪除。",
+                         "options": ["正文的一部份", "註釋", "裝飾文字"], "answer": "正文的一部份"},
+                        {"kind": "mc", "k": "其之六 · 版面要求：硃批", "feature": "rescript",
+                         "guide": "翻到第二頁。紅色的草書是皇帝的硃批，OCR 幾乎辨不準。這一步該怎麼處理？",
+                         "before": "請", "after": "紅色的硃批草書文字。",
+                         "options": ["不要 OCR", "優先 OCR", "合併進正文"], "answer": "不要 OCR"},
+                        {"kind": "mc", "k": "其之七 · 版面要求：印章與浮水印", "feature": "stamp",
+                         "guide": "印章和博物院的浮水印都不是文本內容，別讓它們混進結果裡。",
+                         "before": "請", "after": "「國立故宮博物院」的浮水印，以及正文後的印章。",
+                         "options": ["忽略", "辨識為正文", "翻譯"], "answer": "忽略"},
+                        {"kind": "mc", "k": "其之八 · 輸出要求",
+                         "guide": "最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。",
+                         "before": "最後，請把以上所有結果輸出為", "after": " 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。",
+                         "options": ["JSON", "TXT", "DOCX"], "answer": "JSON"},
+                        {"kind": "free", "k": "其之九 · 你自己的要求",
+                         "guide": "還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。",
+                         "placeholder": "例如：草書辨識不確定的字，請用 □ 標示並附上信心分數。"}
+                      ],
+                      "reference": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。"
+                    }
+                  }
+                  </script>
                 </div>
               </div>
             </div>
