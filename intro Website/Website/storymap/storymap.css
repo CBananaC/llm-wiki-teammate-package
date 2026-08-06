@@ -3243,6 +3243,12 @@ img { max-width: 100%; }
     align-self: start;
     background-size: 100% 100%, 100% 100%;
   }
+  #part-3-printed-explorer .part3-fx-doc {
+    min-height: var(--fx-explorer-h, calc(95svh - var(--bar-h, 62px)));
+  }
+  #part-3-try-explorer .part3-try-doc {
+    min-height: var(--try-explorer-h, calc(95svh - var(--bar-h, 62px)));
+  }
   #part-3-printed-explorer .part3-fx-pagestack,
   #part-3-try-explorer .part3-try-pagestack {
     height: auto;
