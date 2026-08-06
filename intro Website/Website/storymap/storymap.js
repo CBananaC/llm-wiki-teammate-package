@@ -897,7 +897,7 @@ initPart3ToolsChecklist();
 /* ---------------------------------------------------------------------------
    版面特徵探索器（7 辨識印刷字 / 8 辨識手寫字）
    左半是原件：印刷本為書冊翻頁，手寫本為風琴摺（每張掃描分三摺，
-   固定兩摺一組展開）。點擊標籤會標示該特徵所在位置，右半同時逐字播出
+   固定兩摺一組展開）。點擊標籤會顯示相應的人工標示圖片，右半同時逐字播出
    「AI 指示 → AI 生成的 Python 代碼 → OCR 的輸出結果」三個視窗。
    內容全部來自 storymap-example.html 的 data-part3-feature-data JSON。
    --------------------------------------------------------------------------- */
@@ -941,7 +941,7 @@ const initPart3FeatureExplorers = () => {
     const features = (data && data.features) || [];
     if (!features.length) return;
 
-    /* 標籤的顏色與位置走 CSS 變數；Part 7 的人工標示改由 JSON 指定的
+    /* 標籤的顏色與位置走 CSS 變數；7、8 的人工標示都由 JSON 指定的
        annotated PNG 顯示，不再需要 CSS 色塊位置。 */
     const kind = root.dataset.part3Explorer;
     const injectDefaults = () => {
@@ -949,12 +949,6 @@ const initPart3FeatureExplorers = () => {
         const tag = f.tag || {};
         const decls = [
           `--fx-color: ${f.colour || '#e6e0d4'}`,
-          ...(kind === 'folded' ? [
-            `--fx-left: ${(f.box || {}).left || '0%'}`,
-            `--fx-top: ${(f.box || {}).top || '0%'}`,
-            `--fx-width: ${(f.box || {}).width || '0%'}`,
-            `--fx-height: ${(f.box || {}).height || '0%'}`
-          ] : []),
           `--fx-tag-left: ${tag.left || 'auto'}`,
           `--fx-tag-right: ${tag.right || 'auto'}`,
           `--fx-tag-top: ${tag.top || 'auto'}`
@@ -1059,8 +1053,7 @@ const initPart3FeatureExplorers = () => {
         tag.className = 'part3-fx-tag'
           + (i === cur ? ' is-active' : ' is-dim')
           + (other ? ' is-other' : '');
-        // 位置與顏色一律交由 CSS 變數決定（預設值見下方 injectDefaults()，
-        // 實際微調請改 storymap-cards.css），這裡只標上是哪一個特徵。
+        // 標籤位置與顏色仍交由 CSS 變數決定；人工標示圖片由 f.image 提供。
         tag.dataset.fxFeature = f.key;
         if (positioned) tag.classList.add('is-floating');
         const label = f.title.split('：')[0].split('（')[0];
@@ -1126,7 +1119,7 @@ const initPart3FeatureExplorers = () => {
       };
       prevBtn.addEventListener('click', () => turnTo(page - 1, -1));
       nextBtn.addEventListener('click', () => turnTo(page + 1, 1));
-      // 選到其他頁的特徵時，先翻到該頁，翻頁動畫結束後再標示
+      // 選到其他頁的特徵時，先翻到該頁，翻頁動畫結束後再顯示人工標示圖片
       render = () => {
         const f = features[cur];
         const target = f ? (f.page || 0) : page;
@@ -1150,7 +1143,7 @@ const initPart3FeatureExplorers = () => {
       panels.forEach((p, i) => {
         const el = document.createElement('div');
         el.className = 'part3-fx-panel';
-        el.style.setProperty('--src', `url("${p.src}")`);
+        el.dataset.sheetIndex = String(Math.floor(i / 3));
         el.style.setProperty('--posx', `${p.part * 50}%`);
         if (data.foldAspect) el.style.setProperty('--fold-aspect', data.foldAspect);
         el.addEventListener('click', () => { pair = pairOf(i); render(); });
@@ -1169,14 +1162,11 @@ const initPart3FeatureExplorers = () => {
         [...strip.children].forEach((el, i) => {
           const open = i === start || i === start + 1;
           el.classList.toggle('is-open', open);
-          const old = el.querySelector('.part3-fx-hl');
-          if (old) old.remove();
-          if (open && f && (f.panel || 0) === i) {
-            const hl = document.createElement('div');
-            hl.className = 'part3-fx-hl is-active';
-            hl.dataset.fxFeature = f.key;
-            el.appendChild(hl);
-          }
+          const selectedSheet = f && f.image ? Math.floor((f.panel || 0) / 3) : -1;
+          const image = selectedSheet === Number(el.dataset.sheetIndex)
+            ? f.image
+            : sheets[Number(el.dataset.sheetIndex)];
+          el.style.setProperty('--src', `url("${image}")`);
         });
         indEl.textContent = `頁 ${pair + 1} / ${pairCount}`;
         prevBtn.disabled = pair === 0;
@@ -1526,6 +1516,7 @@ const initJsonViewer = () => {
   let selectedButton = null;
   let selectedTargets = [];
   const labelViewport = wrap.querySelector('.part3-json-label-viewport');
+  const jsonBody = wrap.querySelector('.part3-json-body');
   const labelButtons = [...wrap.querySelectorAll('[data-json-target]')];
   const previousButton = wrap.querySelector('[data-json-nav="prev"]');
   const nextButton = wrap.querySelector('[data-json-nav="next"]');
@@ -1548,6 +1539,20 @@ const initJsonViewer = () => {
     updateCarouselButtons();
   };
 
+  const scrollJsonTargetIntoView = (target) => {
+    if (!jsonBody || !target) return;
+    const bodyRect = jsonBody.getBoundingClientRect();
+    const targetRect = target.getBoundingClientRect();
+    const targetTop = jsonBody.scrollTop + targetRect.top - bodyRect.top;
+    const targetCenter = targetTop + targetRect.height / 2;
+    const centeredTop = targetCenter - jsonBody.clientHeight / 2;
+    const maxScrollTop = Math.max(0, jsonBody.scrollHeight - jsonBody.clientHeight);
+    jsonBody.scrollTo({
+      top: Math.max(0, Math.min(maxScrollTop, centeredTop)),
+      behavior: 'smooth'
+    });
+  };
+
   labelButtons.forEach((button, index) => {
     button.setAttribute('aria-pressed', 'false');
     button.addEventListener('click', () => {
@@ -1562,7 +1567,7 @@ const initJsonViewer = () => {
       selectedTargets.forEach((el) => el.classList.remove('is-selected'));
 
       showCarouselLabel(index);
-      targets[0].scrollIntoView({ block: 'center', behavior: 'smooth' });
+      scrollJsonTargetIntoView(targets[0]);
       button.classList.add('is-selected');
       button.setAttribute('aria-pressed', 'true');
       targets.forEach((el) => el.classList.add('is-selected'));

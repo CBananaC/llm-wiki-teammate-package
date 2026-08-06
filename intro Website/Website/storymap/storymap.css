@@ -2470,7 +2470,7 @@ img { max-width: 100%; }
   border: 0;
   color: rgba(22, 61, 63, .55);
   background: transparent;
-  font: 600 28px/1 var(--sans);
+  font: 800 28px/1 var(--sans);
   cursor: pointer;
   transition: color .16s ease, opacity .16s ease, transform .1s ease;
 }
@@ -2480,7 +2480,7 @@ img { max-width: 100%; }
 .part3-json-nav:disabled { opacity: .22; cursor: default; }
 .part3-json-label {
   appearance: none; cursor: pointer; background: transparent;
-  border: none; border-bottom: 2px solid transparent;
+  border: none; border-bottom: 4px solid transparent;
   padding: 6px 4px 8px; font-family: var(--sans); font-weight: 700;
   font-size: var(--json-label-font-size, 12.5px); line-height: 1.4;
   color: rgba(22, 61, 63, .55);

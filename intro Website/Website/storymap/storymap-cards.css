@@ -944,16 +944,12 @@
 /* ===========================================================================
    Part 3.4.9 — 版面特徵標籤與標示區（7 辨識印刷字 / 8 辨識手寫字）
    ---------------------------------------------------------------------------
-   8 辨識手寫字的每一個特徵（標籤＋它在原件上的色塊）都由下面這一組變數控制，
+   7、8 的每一個特徵標籤位置都由下面這一組變數控制，
    改數字即可，不必碰 storymap.css、storymap.js 或 storymap-example.html。
-   7 辨識印刷字改用 data-part3-feature-data 內的 annotated PNG，點擊標籤時
-   直接替換原件圖片，不再需要在這裡調整色塊位置與大小。
+   7 辨識印刷字和 8 辨識手寫字都改用 data-part3-feature-data 內的 annotated PNG，
+   點擊標籤時直接替換原件圖片，不再需要在這裡調整色塊位置與大小。
 
-   --fx-color       標籤與色塊的顏色（8 辨識手寫字使用）
-     --fx-left        色塊左邊位置（相對於該頁／該摺的百分比）
-     --fx-top         色塊上邊位置
-     --fx-width       色塊寬度
-     --fx-height      色塊高度
+   --fx-color       標籤顏色
      --fx-tag-left    標籤距原件「左」邊多遠；負值＝移到原件左外側
      --fx-tag-right   標籤距原件「右」邊多遠；負值＝移到原件右外側
      --fx-tag-top     標籤的垂直位置（百分比，0% 是原件頂端）
@@ -990,69 +986,37 @@
   margin-right: calc(50% - 48vw);
 }
 
-/* 8 辨識手寫字（--fx-left 等是相對於「該一摺」的百分比） */
+/* 8 辨識手寫字 — 標籤的位置仍可在 CSS 逐項調整。 */
 #part-3-handwritten-explorer [data-fx-feature="vertical"] {
   --fx-color: #cfe3d4;
-  --fx-left: 0%;
-  --fx-top: 0%;
-  --fx-width: 100%;
-  --fx-height: 100%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #cfe0ef;
-  --fx-left: 24%;
-  --fx-top: 10%;
-  --fx-width: 48%;
-  --fx-height: 80%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #e8d6b7;
-  --fx-left: 12%;
-  --fx-top: 78%;
-  --fx-width: 70%;
-  --fx-height: 14%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 86%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #f0d6d0;
-  --fx-left: 60%;
-  --fx-top: 46%;
-  --fx-width: 11%;
-  --fx-height: 50%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #f5e6bd;
-  --fx-left: 10%;
-  --fx-top: 0%;
-  --fx-width: 80%;
-  --fx-height: 16%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 32%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #f3ddc4;
-  --fx-left: 8%;
-  --fx-top: 8%;
-  --fx-width: 34%;
-  --fx-height: 70%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 68%;
 }
 #part-3-handwritten-explorer [data-fx-feature="watermark"] {
   --fx-color: #d8e2e0;
-  --fx-left: 0%;
-  --fx-top: 0%;
-  --fx-width: 100%;
-  --fx-height: 100%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 17%;
 }
 #part-3-handwritten-explorer [data-fx-feature="stamp"] {
   --fx-color: #ddd6ea;
-  --fx-left: 62%;
-  --fx-top: 0%;
-  --fx-width: 30%;
-  --fx-height: 22%;
   --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 54%;
 }
 

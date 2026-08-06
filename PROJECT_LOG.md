@@ -8505,3 +8505,45 @@ Verified:
 
 Remaining:
 - None for the Part 7 annotated-image interaction.
+
+### 2026-08-06 15:40 HKT — Codex — Refine JSON controls and terminal-only field scrolling
+
+Summary:
+- Made the JSON carousel `‹` and `›` controls heavier and increased the selected-field orange underline from 2px to 4px.
+- Replaced page-level `scrollIntoView()` with centered scrolling inside the JSON terminal body, so field buttons move only the terminal text.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser interaction kept `window.scrollY` unchanged while `.part3-json-body.scrollTop` changed from 0 to 274 after clicking 段落三.
+- The selected button and matching JSON line remain highlighted; the updated arrow weight and 4px underline are visible.
+- Browser console reports no errors or warnings; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the JSON control and terminal-scrolling adjustment.
+
+### 2026-08-06 15:41 HKT — Codex — Use annotated PNGs for Part 8 handwritten labels
+
+Summary:
+- Mapped all eight Part 8 辨識手寫字 labels to the supplied annotated PNGs in `intro Website/Website/storymap/辨識手寫字Label/`.
+- Replaced CSS highlight rectangles with annotated-image source switching for the selected handwritten sheet while preserving the folded-paper layout.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Clicking 正文字體 loads `辨識手寫字Label/正文字體.png`; clicking 抬頭 switches to `辨識手寫字Label/抬頭.png` on the correct sheet.
+- Returning to page 1 restores `ocr-zhu25-handwritten-1-enhanced.png`; no `.part3-fx-hl` elements are generated.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Part 8 annotated-image interaction.
