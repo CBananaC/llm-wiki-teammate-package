@@ -1014,6 +1014,14 @@
   margin-right: calc(50% - 48vw);
 }
 
+/* 7 辨識印刷字：左側深綠原件區只包住 PDF、翻頁列與內距，
+   不再把整個右側資訊視窗的高度延伸到 PDF 以下。 */
+#part-3-printed-explorer {
+  --fx-pdf-pad-y: clamp(24px, 2.4vw, 38px);
+  --fx-pdf-max-h: calc(var(--fx-explorer-h) - (2 * var(--fx-pdf-pad-y)) - 58px);
+  --fx-pdf-backdrop-h: calc(var(--fx-pdf-max-h) + (2 * var(--fx-pdf-pad-y)) + 18px);
+}
+
 /* 8 辨識手寫字 — 標籤的位置仍可在 CSS 逐項調整。 */
 #part-3-handwritten-explorer [data-fx-feature="vertical"] {
   --fx-color: #7fb5b1;
@@ -1537,8 +1545,8 @@
          --try-doc-pad         左半（史料）的內邊距
          --try-doc-gap         史料與翻頁按鈕之間的距離
          --try-page-w          史料圖片的寬度，例如 100%、86%
-                                （圖片高度固定跟著 --try-explorer-h 縮放，
-                                不會變形、也不會被裁切）
+                                （圖片依比例縮放；PDF backdrop 會跟著
+                                史料內容收合，不會沿用右側視窗的高度）
          --try-hl-opacity      標示區的透明度，0 全透明、1 全不透明
          --try-panel-pad       右半（資訊面板）的內邊距
          --try-progress-gap    進度圓點列下面的留白，以及它跟目前視窗
@@ -1630,6 +1638,9 @@
   margin-left: calc(50% - 48vw);
   margin-right: calc(50% - 48vw);
   grid-template-columns: var(--try-explorer-cols, 48% 52%);
+  /* 印刷字 PDF 的高度上限；左側 backdrop 會隨圖片內容收合。 */
+  --try-pdf-max-h: calc(var(--try-explorer-h) - (2 * var(--try-doc-pad)) - 58px);
+  --try-pdf-backdrop-h: calc(var(--try-pdf-max-h) + (2 * var(--try-doc-pad)) + 18px);
 }
 
 /* ── 標示區：印刷字 ─────────────────────────────────────────────── */
