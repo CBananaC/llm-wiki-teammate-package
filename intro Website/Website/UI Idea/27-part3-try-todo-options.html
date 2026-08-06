@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<title>試一試 — 已完成步驟樣式選項</title>
+<style>
+  :root{
+    --ink:#163d3f; --paper:#f4efe6; --card:#fffaf2; --line:rgba(22,61,63,.18);
+    --accent:#c45d38; --yellow:#f3c967; --ok:#2e7d5b;
+    --sans:Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0; padding:48px 32px 100px; background:var(--paper); color:var(--ink); font-family:var(--sans);}
+  h1{font-size:20px; margin:0 0 6px;}
+  .lead{color:rgba(22,61,63,.65); font-size:13.5px; margin:0 0 36px; max-width:600px; line-height:1.7;}
+  .option{background:var(--card); border:1px solid var(--line); border-radius:14px; padding:24px 26px 28px; margin-bottom:30px; max-width:640px;}
+  .option h2{font-size:14.5px; margin:0 0 4px; display:flex; align-items:center; gap:8px;}
+  .option h2 .tag{font-size:10px; font-weight:700; letter-spacing:.03em; padding:2px 8px; border-radius:20px; background:rgba(22,61,63,.08);}
+  .option p.note{font-size:12px; color:rgba(22,61,63,.6); margin:0 0 18px; line-height:1.6;}
+
+  /* mock window below, to compare weight against */
+  .win{border-radius:12px; overflow:hidden; border:1px solid var(--line);}
+  .winbar{display:flex; align-items:center; gap:6px; padding:9px 12px; background:#efe8dc; border-bottom:1px solid rgba(22,61,63,.14);}
+  .winbar .dot{width:9px; height:9px; border-radius:50%;}
+  .dot.red{background:#ff5f57;} .dot.yellow{background:#febc2e;} .dot.green{background:#28c840;}
+  .winbar .ttl{margin-left:8px; font-size:11.5px; font-weight:700; color:#7a7263;}
+  .winbody{padding:16px; background:var(--card); font-size:13px; color:rgba(22,61,63,.5);}
+
+  /* ---------- baseline (current) ---------- */
+  .todo-base{
+    display:flex; align-items:center; gap:10px; padding:9px 14px; margin-bottom:8px;
+    border:1px solid var(--line); border-radius:10px; background:rgba(46,125,91,.06);
+    font-size:12.5px; font-weight:700; color:rgba(22,61,63,.72);
+  }
+  .todo-base .n{width:20px; height:20px; border-radius:50%; background:rgba(22,61,63,.12); display:inline-flex; align-items:center; justify-content:center; font-size:11px;}
+  .todo-base .tick{margin-left:auto; color:var(--ok); font-size:14px;}
+
+  /* ---------- A: flat checklist line ---------- */
+  .todo-a{
+    display:flex; align-items:center; gap:9px; padding:5px 4px 5px 12px; margin-bottom:2px;
+    border-left:3px solid var(--ok); font-size:12px; color:rgba(22,61,63,.5);
+  }
+  .todo-a .badge{
+    width:15px; height:15px; border-radius:50%; background:var(--ok); color:#fff;
+    display:inline-flex; align-items:center; justify-content:center; font-size:9px; flex:0 0 auto;
+  }
+  .todo-a .lbl{font-weight:600;}
+
+  /* ---------- B: strikethrough + dimmed ---------- */
+  .todo-b{
+    display:flex; align-items:center; gap:10px; padding:8px 14px; margin-bottom:6px;
+    border:1px solid var(--line); border-radius:10px; background:transparent; opacity:.55;
+    font-size:12.5px; font-weight:600; color:rgba(22,61,63,.6);
+  }
+  .todo-b .n{width:18px; height:18px; border-radius:50%; background:rgba(22,61,63,.1); display:inline-flex; align-items:center; justify-content:center; font-size:10px; flex:0 0 auto;}
+  .todo-b .lbl{text-decoration:line-through; text-decoration-color:rgba(22,61,63,.35);}
+  .todo-b .tick{margin-left:auto; color:var(--ok); font-size:12px;}
+
+  /* ---------- C: collapsed pill strip ---------- */
+  .todo-c-row{display:flex; flex-wrap:wrap; gap:7px; margin-bottom:12px;}
+  .todo-c{
+    display:inline-flex; align-items:center; gap:6px; padding:5px 11px 5px 8px;
+    border-radius:999px; background:rgba(46,125,91,.1); border:1px solid rgba(46,125,91,.25);
+    font-size:11.5px; font-weight:700; color:var(--ok);
+  }
+  .todo-c .badge{
+    width:14px; height:14px; border-radius:50%; background:var(--ok); color:#fff;
+    display:inline-flex; align-items:center; justify-content:center; font-size:9px;
+  }
+
+  /* ---------- D: numbered badge stack, no row ---------- */
+  .todo-d-row{display:flex; align-items:center; gap:6px; margin-bottom:14px;}
+  .todo-d-row .cap{font-size:11px; color:rgba(22,61,63,.45); margin-right:4px;}
+  .todo-d{
+    width:22px; height:22px; border-radius:50%; display:inline-flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:700; background:var(--ok); color:#fff;
+  }
+  .todo-d.pending{background:rgba(22,61,63,.1); color:rgba(22,61,63,.4);}
+</style>
+</head>
+<body>
+
+<h1>試一試 — 已完成步驟樣式選項</h1>
+<p class="lead">下面每個方案都放在同一個模擬的「目前視窗」（淺色 mac 標題列）上方做比較，方便看出份量差異。目標：已完成的步驟一眼就能看出是「歷史紀錄」，不會跟下面正在進行的視窗搶注意力。</p>
+
+<div class="option">
+  <h2>基準（目前網站上的樣式）<span class="tag">BEFORE</span></h2>
+  <p class="note">跟下面的視窗卡片幾乎同等份量：一樣有邊框、一樣是圓角卡片，容易被誤認成另一個進行中的區塊。</p>
+  <div class="todo-base"><span class="n">1</span>下載史料<span class="tick">✓</span></div>
+  <div class="win">
+    <div class="winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+    <div class="winbody">（進行中的視窗內容）</div>
+  </div>
+</div>
+
+<div class="option">
+  <h2>方案 A — 扁平清單線<span class="tag">推薦</span></h2>
+  <p class="note">拿掉整個卡片外框與底色，只留一條左側綠色細線＋實心小圓勾，文字縮小、變淡。看起來像「已完成的紀錄」而不是另一個可互動的區塊。</p>
+  <div class="todo-a"><span class="badge">✓</span><span class="lbl">下載史料</span></div>
+  <div class="win">
+    <div class="winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+    <div class="winbody">（進行中的視窗內容）</div>
+  </div>
+</div>
+
+<div class="option">
+  <h2>方案 B — 刪除線＋整體變淡</h2>
+  <p class="note">維持現在的卡片形狀，但文字加上刪除線、整塊透明度降低。是最常見的「代辦事項」樣式，改動最小。</p>
+  <div class="todo-b"><span class="n">1</span><span class="lbl">下載史料</span><span class="tick">✓</span></div>
+  <div class="win">
+    <div class="winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+    <div class="winbody">（進行中的視窗內容）</div>
+  </div>
+</div>
+
+<div class="option">
+  <h2>方案 C — 收合成一排小圓標籤</h2>
+  <p class="note">多個已完成步驟會排成一橫排的小膠囊標籤（✓1 ✓2 ✓3），最省垂直空間，適合到了第三步、上面已經有兩個完成項目時。</p>
+  <div class="todo-c-row">
+    <span class="todo-c"><span class="badge">✓</span>下載史料</span>
+    <span class="todo-c"><span class="badge">✓</span>撰寫 Prompt</span>
+  </div>
+  <div class="win">
+    <div class="winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第三步 · 比對 OCR 結果</span></div>
+    <div class="winbody">（進行中的視窗內容）</div>
+  </div>
+</div>
+
+<div class="option">
+  <h2>方案 D — 純數字圓點進度（無文字列）</h2>
+  <p class="note">完全不顯示文字列，只在面板頂端留一排小圓點數字（已完成＝綠色實心，進行中／未開始＝灰色），最不搶眼，注意力全部留給目前的視窗。缺點：看不到「下載史料」等步驟名稱。</p>
+  <div class="todo-d-row">
+    <span class="cap">進度</span>
+    <span class="todo-d">1</span>
+    <span class="todo-d pending">2</span>
+    <span class="todo-d pending">3</span>
+  </div>
+  <div class="win">
+    <div class="winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+    <div class="winbody">（進行中的視窗內容）</div>
+  </div>
+</div>
+
+</body>
+</html>
