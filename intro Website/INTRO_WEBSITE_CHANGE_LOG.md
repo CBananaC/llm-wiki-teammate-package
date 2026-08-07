@@ -5214,6 +5214,24 @@ Verified:
 Remaining:
 - None for this label translation.
 
+### 2026-08-07 15:55 HKT — Codex — Recover Google Cloud image in HTML
+
+Summary:
+- Restored the Google Cloud card’s right-side gallery markup in the StoryMap HTML.
+- Restored the supplied image path, Traditional Chinese info-panel label, and documentation link.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the HTML contains `1661514832038.jpeg` and the supplied documentation URL.
+- `git diff --check` passes.
+
+Remaining:
+- None for this image recovery.
+
 ### 2026-08-07 15:54 HKT — Codex — Keep the latest prompt visible in the AI chatbox
 
 Summary:
@@ -5231,3 +5249,19 @@ Verified:
 
 Remaining:
 - None for latest-prompt visibility.
+
+### 2026-08-07 16:12 HKT — Claude — Recover 試一試 printed steps after concurrent overwrite
+
+Summary:
+- `storymap-example.html`'s working copy had reverted to an old pre-restructuring version (10 printed steps instead of 18, missing 2.1/3.5/4.5, different PDF filename/asset versions) — a concurrent write from another in-progress session, not something I did. The last commit (`d8626f4`) already had the correct 18-step version, so restored the working file to match HEAD via `git show d8626f4:...` copied back over the file (plain `git checkout` failed: `.git/index.lock` present, owned by another process, permission denied to remove).
+
+Files changed:
+- `Website/storymap/storymap-example.html` (restored to HEAD)
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses; printed 18 / handwritten 10 steps confirmed correct; `git status` shows no diff vs HEAD for this file.
+
+Remaining:
+- `.git/index.lock` still present — likely another agent session is active on this same repo right now; recommend checking before further concurrent edits.

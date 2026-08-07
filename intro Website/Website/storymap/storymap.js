@@ -2138,8 +2138,14 @@ const initPart3TryIt = () => {
     });
   };
 
+  const scrollChatToLatest = () => {
+    const chat = stageHost.querySelector('[data-try-chat]');
+    if (chat) chat.scrollTop = chat.scrollHeight;
+  };
+
   const nextStep = () => {
     saveModeState();
+    scrollChatToLatest();
     const steps = d().steps;
 
     if (cur >= steps.length) {
@@ -2149,9 +2155,9 @@ const initPart3TryIt = () => {
       const chatEl = stageHost.querySelector('[data-try-chat]');
       if (chatEl) chatEl.classList.add('is-final');
       const foot = stageHost.querySelector('[data-try-foot]');
-      foot.innerHTML = `<span class="hint">每一句都可以直接點進去修改。</span>`
+      foot.innerHTML = `<span class="hint">點擊Prompt進行修改</span>`
         + `<button type="button" class="part3-try-copy" data-try-copy>${COPY_IC}複製全部</button>`;
-      showGuide('完成', '好了，上面每一句加起來就是你的 prompt。想改哪一句就直接點進去改，滿意後按右下角複製，貼到你的 Agentic AI。');
+      showGuide('完成', '以上就是寫給Agentic Ai進行OCR的 prompt。想改哪一句就直接點進去改，滿意後按右下角複製，貼到你的 Agentic AI。');
       foot.querySelector('[data-try-copy]').addEventListener('click', (e) => {
         const btn = e.currentTarget;
         const txt = [...stageHost.querySelectorAll('.part3-try-bubble')]
@@ -2354,6 +2360,7 @@ const initPart3TryIt = () => {
       </div>`;
     answers.slice(0, cur).forEach((a) => { if (a) addBubble(a, true); });
     nextStep();
+    scrollChatToLatest();
   };
 
   /* ---------- 第三步：比對 OCR 結果（淺色視窗） ---------- */

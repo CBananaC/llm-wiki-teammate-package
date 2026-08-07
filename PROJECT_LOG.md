@@ -9360,6 +9360,24 @@ Verified:
 Remaining:
 - None for this label translation.
 
+### 2026-08-07 15:55 HKT — Codex — Recover Google Cloud image in HTML
+
+Summary:
+- Restored the Google Cloud card’s right-side gallery markup in the StoryMap HTML.
+- Restored the supplied image path, Traditional Chinese info-panel label, and documentation link.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the HTML contains `1661514832038.jpeg` and the supplied documentation URL.
+- `git diff --check` passes.
+
+Remaining:
+- None for this image recovery.
+
 ### 2026-08-07 15:54 HKT — Codex — Keep the latest prompt visible in the AI chatbox
 
 Summary:
@@ -9377,3 +9395,22 @@ Verified:
 
 Remaining:
 - None for latest-prompt visibility.
+
+### 2026-08-07 16:12 HKT — Claude — Recover 試一試 printed steps after concurrent overwrite
+
+Summary:
+- Found `storymap-example.html`'s working-tree copy had been silently overwritten (uncommitted) back down to an old pre-restructuring version: printed steps dropped from 18 to 10 (old labels like "七 · 版面要求：夾批", "八 · 版面要求：頁碼", missing 2.1 史料來源／3.5 落款與尾批／4.5 儲存為 Skill), different PDF filename (`..._印刷字.pdf`), different asset cache-busting query strings (`?v=20260806-...` vs the current `?v=20260807-...`). This happened between my two most recent turns — almost certainly a concurrent write from another in-progress agent session on this same file.
+- The last commit (`d8626f4`, "Translate Google Cloud gallery label") already contained the correct, fully up-to-date 18-step printed / 10-step handwritten version, so recovery was a restore-from-HEAD rather than a rebuild. `git checkout -- storymap-example.html` failed with `Operation not permitted` (an active `.git/index.lock` exists — 0 bytes, created 16:06, owned by another process I don't have permission to remove — confirming a concurrent git operation is/was in flight). Worked around it with a plain file copy of `git show d8626f4:...` back onto the working path, which succeeded and now matches HEAD exactly (`git status` shows no diff for this file).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html` (restored to HEAD content)
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed 18 steps / handwritten 10 steps, all labels match the intended set (incl. 3.6 頁碼 as `choice`, 4.5 儲存為 Skill present); all `steps[].feature` resolve against `features{}` both directions.
+- `node --check storymap.js` passes (unaffected).
+- `git status` shows zero diff for `storymap-example.html` vs HEAD.
+
+Remaining:
+- `.git/index.lock` is still present and not removable by me (permission denied) — a sign another agent/process may still be mid-operation on this repo. Recommend the user check whether another Claude/Codex session is running against this same folder right now before doing further concurrent edits, to avoid this happening again.
+- `storymap.css`/`storymap.js` still have my legitimate uncommitted "freeze chat header/footer + rectangle multi buttons" changes from this session — left untouched, not part of this recovery.
