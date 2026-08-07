@@ -9046,3 +9046,47 @@ Verified:
 
 Remaining:
 - `落款與尾批.png` (and the other printed feature images referenced: 文本資訊.png / 直排單欄.png / 分段.png / 標點.png / 頁數.png) still need to be supplied in `試一試/印刷字/`; the doc-swap mechanism (`renderDoc`) will show a broken image until then.
+
+### 2026-08-06 20:15 HKT — Claude — 試一試 (printed): 史料來源 step, multi-select quizzes, new 輸出要求 intro card
+
+Summary:
+- Added "2.1 史料來源" (chip, single click) between 二·OCR目的 and 三·版面要求: guide "告訴 AI 這份 PDF 的來源。", suggested sentence "這份 PDF 出自《明清臺灣檔案彙編》第30冊。"
+- New step kind `"multi"`: a set of toggleable checkbox-chips (no distractors) that must ALL be selected before the "完成（已選 x/N）" button enables; on completion, items join in their listed order into `before + items.join('、') + after`. Replaces the earlier `"order"` reorder-game kind entirely (removed its JS branch and CSS — no step used it anymore per this request).
+- 3.2 文本資訊 converted from single-choice mc to `multi`: user must check all of 史料來源/標題/作者/日期. Sentence updated to "...並輸出為獨立的 data。" (dropped "四項").
+- 3.5 落款與尾批 converted to `multi` over 官員上奏日期/皇帝硃批日期/尾批, reworded to "正文結束後包含...，請分別保存，不要混入正文。"; its feature's image swapped from the still-missing `落款與尾批.png` to the now-supplied `尾批.png`.
+- Inserted a new `"advance"` (click-card, no button) step "4. 輸出要求" before the JSON-format question, carrying the "定義好版面規則後，現在要定義輸出格式。" narration. The former "4. 輸出要求" mc step is now "4.1 JSON 格式" with its guide emptied (narration moved to the new intro card, per request).
+- Cascaded the renumbering: 4.1→4.2 (輸出 JSON 的結構), 4.2→4.3 (史料資訊, converted order→multi over all 8 fields, all required), 4.3→4.4 (正文, converted from a single suggested chip to an `mc` quiz: 逐段列出 vs 合併成一段), 4.4→4.5 (你自己的要求, unchanged).
+- `storymap-cards.css`: updated `signoff`'s image reference is in the HTML only (box/colour override unchanged); feature-name doc comment already covered `signoff`/`punctuation` from the prior session.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed now 16 steps, all `steps[].feature` resolve against `features{}` both ways, no orphans; handwritten unchanged at 10 steps.
+- `<div>` balance 0; brace balance 0 for both CSS files; `node --check storymap.js` passes.
+- Grepped for `'order'` / `part3-try-order` — zero remaining references (fully replaced by `multi`).
+- Confirmed `試一試/印刷字/尾批.png` exists on disk at the path the user gave.
+
+Remaining:
+- `文本資訊.png`, `直排單欄.png`, `分段.png`, `標點.png`, `頁數.png` already exist per a disk check; only unverified image reference at this point is none — all six printed feature images now resolve to real files.
+
+### 2026-08-07 14:59 HKT — Codex — Move Part 8 handwritten labels closer to the PDF
+
+Summary:
+- Tightened the vertical positions of the top `直排單欄`／`抬頭` labels and the bottom `上奏官員` label in `辨識手寫字`.
+- Kept the existing side offsets, label styling, and animation unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Part 8 label positions now use `17%` for the two upper edge labels and `80%` for the lower edge label, keeping them closer to the visible PDF span.
+- CSS brace balance and `git diff --check` pass.
+
+Remaining:
+- None for this Part 8 label-spacing adjustment.

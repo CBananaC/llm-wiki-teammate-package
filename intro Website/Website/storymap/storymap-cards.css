@@ -1025,7 +1025,7 @@
 /* 8 辨識手寫字 — 標籤的位置仍可在 CSS 逐項調整。 */
 #part-3-handwritten-explorer [data-fx-feature="vertical"] {
   --fx-color: #7fb5b1;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 17%;
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #a28ca8;
@@ -1033,7 +1033,7 @@
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #c88f8a;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 86%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 80%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #6e98d0;
@@ -1041,7 +1041,7 @@
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #d97967;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 8%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 17%;
 }
 #part-3-handwritten-explorer [data-fx-feature="rescript"] {
   --fx-color: #c86f62;

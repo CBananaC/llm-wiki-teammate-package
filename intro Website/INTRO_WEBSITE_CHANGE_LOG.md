@@ -4967,3 +4967,21 @@ Verified:
 
 Remaining:
 - None for the npmpdf-3 clarity enhancement.
+
+### 2026-08-07 14:59 HKT — Codex — Move Part 8 handwritten labels closer to the PDF
+
+Summary:
+- Tightened the vertical positions of the top `直排單欄`／`抬頭` labels and the bottom `上奏官員` label in `辨識手寫字`.
+- Kept the existing side offsets, label styling, and animation unchanged.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Part 8 label positions now use `17%` for the two upper edge labels and `80%` for the lower edge label, keeping them closer to the visible PDF span.
+- CSS brace balance and `git diff --check` pass.
+
+Remaining:
+- None for this Part 8 label-spacing adjustment.
