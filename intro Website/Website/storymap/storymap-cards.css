@@ -1244,6 +1244,31 @@
   --part3-title-size: clamp(27px, 3.4vw, 46px);
   --part3-body-size: calc(16px * var(--font-scale));
   --part3-body-line-height: 1.9;
+  --part3-cloud-gallery-width: 48%;
+  --part3-cloud-gallery-height: clamp(360px, 34vw, 520px);
+}
+
+/* Part 3.5.5.1 — Google Cloud: text card left, free-trial gallery right */
+#part-3-cloud .part3-cloud-layout {
+  display: grid;
+  grid-template-columns: minmax(0, calc(100% - var(--part3-cloud-gallery-width) - var(--col-gap))) minmax(280px, var(--part3-cloud-gallery-width));
+  align-items: stretch;
+  gap: var(--col-gap);
+}
+#part-3-cloud .part3-cloud-layout > .copybox {
+  width: 100%;
+  max-width: none;
+}
+#part-3-cloud .part3-cloud-visual {
+  width: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+#part-3-cloud .part3-cloud-photo-gallery {
+  width: 100%;
+  height: var(--part3-cloud-gallery-height);
+  min-height: 0;
+  --gallery-fit: contain;
 }
 
 /* Part 3.6.2–3.6.4 — Section defaults: LLM Wiki */
@@ -1709,4 +1734,13 @@
 #part-3-try-explorer[data-try-mode="handwritten"] [data-try-feature="stamp"] {
   --fx-color: #ddd6ea;
   --fx-left: 50%; --fx-top: 60%; --fx-width: 22%; --fx-height: 22%;
+}
+
+@media (max-width: 980px) {
+  #part-3-cloud .part3-cloud-layout {
+    grid-template-columns: 1fr;
+  }
+  #part-3-cloud .part3-cloud-photo-gallery {
+    height: var(--part3-cloud-gallery-height-mobile, 420px);
+  }
 }

@@ -7,8 +7,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260807-part3-try-persistence-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260807-part3-try-persistence-01">
+  <link rel="stylesheet" href="storymap.css?v=20260807-part3-google-cloud-gallery-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260807-part3-google-cloud-gallery-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js?v=20260807-part3-try-persistence-01" defer></script>
@@ -1723,7 +1723,10 @@
                          "guide": "最後，正文本身要怎麼輸出？",
                          "before": "正文請", "after": "，不要合併成一整段。",
                          "options": ["逐段列出", "合併成一段"], "answer": "逐段列出"},
-                        {"kind": "free", "k": "4.5 你自己的要求",
+                        {"kind": "chip", "k": "4.5 儲存為 Skill",
+                         "guide": "以後要辨識同一本書的其他史料，不想每次都重打一次 prompt，怎麼辦？",
+                         "chip": "請把以上所有規則整理並儲存為一個可重複使用的 skill，之後我要辨識同一本書的其他史料時，可以直接套用這個 skill，不用再重新輸入一次 prompt。"},
+                        {"kind": "free", "k": "4.6 你自己的要求",
                          "guide": "還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。",
                          "placeholder": "例如：如果某個字辨識信心低於 0.9，請標記出來讓我人工核對。"}
                       ],
@@ -1831,7 +1834,26 @@
 
           <section class="story surface-a" id="part-3-cloud" data-tab="part-3" data-nav="#part-3-cloud">
             <div class="story-inner">
-              <article class="copybox blk"><div class="title-row"><span class="option-number">4</span><h2>Google Cloud</h2></div><div class="body"><p>研究者可透過 Google Cloud 使用 Gemini Flash 及 DeepSeek 的 API，因為Google Cloud 為新用戶提供一定金額的免費額度（約港幣 2,000 元），足以應付大量的 AI Skills 批次分析工作。</p></div></article>
+              <div class="part3-cloud-layout">
+                <article class="copybox blk" id="part-3-cloud-card"><div class="title-row"><span class="option-number">4</span><h2>Google Cloud</h2></div><div class="body"><p>研究者可透過 Google Cloud 使用 Gemini Flash 及 DeepSeek 的 API，因為Google Cloud 為新用戶提供一定金額的免費額度（約港幣 2,000 元），足以應付大量的 AI Skills 批次分析工作。</p></div></article>
+                <div class="part3-cloud-visual">
+                  <div class="photo-gallery visual-frame part3-cloud-photo-gallery" data-photo-gallery data-photo-gallery-id="google-cloud">
+                    <div class="photo-gallery-stage"></div>
+                    <div class="photo-gallery-body"></div>
+                    <script type="application/json" data-photo-gallery-data>
+                    [
+                      {
+                        "image": "1661514832038.jpeg",
+                        "alt": "Google Cloud 免費試用額度宣傳圖",
+                        "fit": "contain",
+                        "title": "details of free trail of google cloud",
+                        "titleHref": "https://docs.cloud.google.com/free/docs/free-cloud-features?hl=zh-tw"
+                      }
+                    ]
+                    </script>
+                  </div>
+                </div>
+              </div>
             </div>
           </section>
         </section>

@@ -7462,6 +7462,25 @@ Verification:
 Remaining:
 - None for this shape adjustment.
 
+### 2026-08-07 15:42 HKT — Codex — Restore the pill-shaped intro Website 試一試 mode switch
+
+Summary:
+- Restored the rounded pill styling for the `印刷字／手寫字` switch container and buttons.
+- Kept the switch in the same right-aligned position beside the 1／2／3 progression row.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verification:
+- The switch and buttons now use `border-radius: 999px`.
+- The right-side alignment rules remain unchanged.
+- `git diff --check` passes and CSS brace balance remains 0.
+
+Remaining:
+- None for this styling adjustment.
+
 ### 2026-08-04 15:57 HKT — Codex — Restore the linked PaddleOCR info panel
 
 Summary:
@@ -9261,3 +9280,64 @@ Verified:
 
 Remaining:
 - No git commit — working tree still has concurrent unrelated edits from another agent (Codex) in the same files.
+
+### 2026-08-07 16:05 HKT — Claude — Add "save as skill" step to 試一試 printed prompt flow
+
+Summary:
+- Inserted a new chip step "4.5 儲存為 Skill" in printed mode, right after "4.4 正文" (逐段列出) and before the renumbered "4.6 你自己的要求" free-text step. Guide asks how to reuse these rules on other material from the same book without retyping the prompt; the suggested chip line asks the AI to save all the rules just defined as a reusable skill for future OCR runs on the same book.
+- Printed mode only (the referenced "正文請逐段列出" line only exists there); handwritten mode's step sequence was left untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed now 18 steps, no duplicate `k` labels, all `steps[].feature` still resolve against `features{}`.
+- `node --check storymap.js` passes (unaffected file, sanity check).
+
+Remaining:
+- Consider mirroring an equivalent "save as skill" step into handwritten mode if desired.
+- No git commit — working tree still has concurrent unrelated edits from another agent (Codex) in the same files.
+
+### 2026-08-07 15:40 HKT — Codex — Preserve 試一試 progress across mode switching
+
+Summary:
+- Stored the exercise state separately for 印刷字 and 手寫字, so switching modes preserves each mode's current phase, prompt step, answers, page, and OCR comparison state until the page is reloaded.
+- Renamed the Step 1 button to `下載` and added a right-side `已下載` button that advances without opening the PDF.
+- Styled `已下載` with a transparent background and green border, and refreshed the asset query version.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm `已下載` advances to Step 2, 手寫字 starts independently at Step 1, and returning to 印刷字 restores its Step 2 position.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for this 試一試 persistence and Step 1 control update.
+
+### 2026-08-07 15:46 HKT — Codex — Add Google Cloud free-trial gallery
+
+Summary:
+- Added the supplied Google Cloud free-trial image as a one-image gallery on the right side of the Part 3 Google Cloud text card.
+- Added the requested `details of free trail of google cloud` information-panel title and embedded the supplied Google Cloud documentation URL in that title.
+- Added dedicated responsive sizing for the new card-and-gallery layout and refreshed the stylesheet cache key.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/1661514832038.jpeg`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms the text card is on the left and the gallery is on the right at 1280px viewport width.
+- Browser confirms the image loads at its native `1198×627` dimensions and the info-panel link resolves to `https://docs.cloud.google.com/free/docs/free-cloud-features?hl=zh-tw`.
+- Google Cloud gallery JSON parses; `node --check`, `git diff --check`, and the asset existence check pass.
+
+Remaining:
+- None for this Google Cloud gallery addition.

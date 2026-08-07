@@ -3764,6 +3764,25 @@ Verified:
 Remaining:
 - None for this shape adjustment.
 
+### 2026-08-07 15:42 HKT — Codex — Restore the pill-shaped 試一試 mode switch
+
+Summary:
+- Restored the rounded pill styling for the `印刷字／手寫字` switch container and buttons.
+- Kept the switch in the same right-aligned position beside the 1／2／3 progression row.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- The switch and buttons now use `border-radius: 999px`.
+- The right-side alignment rules remain unchanged.
+- `git diff --check` passes and CSS brace balance remains 0.
+
+Remaining:
+- None for this styling adjustment.
+
 ### 2026-08-07 15:30 HKT — Codex — Reorder Part 8 handwritten labels
 
 Summary:
@@ -5116,3 +5135,63 @@ Verified:
 
 Remaining:
 - No git commit — working tree has concurrent unrelated edits from another agent in the same files.
+
+### 2026-08-07 16:05 HKT — Claude — Add "save as skill" step to 試一試 printed prompt flow
+
+Summary:
+- New chip step "4.5 儲存為 Skill" inserted after "4.4 正文" in printed mode: asks AI to save the just-defined OCR rules as a reusable skill so the same rules can be applied to other material from the same book without retyping the prompt. Existing "4.5 你自己的要求" renumbered to "4.6".
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `data-part3-try-data` JSON parses; printed steps now 18, no duplicate labels.
+
+Remaining:
+- Handwritten mode not updated with an equivalent step.
+- No git commit — concurrent edits from another agent present in the working tree.
+
+### 2026-08-07 15:40 HKT — Codex — Preserve 試一試 progress across mode switching
+
+Summary:
+- Stored the exercise state separately for 印刷字 and 手寫字, so switching modes preserves each mode's current phase, prompt step, answers, page, and OCR comparison state until the page is reloaded.
+- Renamed the Step 1 button to `下載` and added a right-side `已下載` button that advances without opening the PDF.
+- Styled `已下載` with a transparent background and green border, and refreshed the asset query version.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm `已下載` advances to Step 2, 手寫字 starts independently at Step 1, and returning to 印刷字 restores its Step 2 position.
+- Browser console logs are empty; `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for this 試一試 persistence and Step 1 control update.
+
+### 2026-08-07 15:46 HKT — Codex — Add Google Cloud free-trial gallery
+
+Summary:
+- Added the supplied Google Cloud free-trial image as a one-image gallery on the right side of the Part 3 Google Cloud text card.
+- Added the requested `details of free trail of google cloud` information-panel title and embedded the supplied Google Cloud documentation URL in that title.
+- Added dedicated responsive sizing for the new card-and-gallery layout and refreshed the stylesheet cache key.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/1661514832038.jpeg`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirms the text card is on the left and the gallery is on the right at 1280px viewport width.
+- Browser confirms the image loads at its native `1198×627` dimensions and the info-panel link resolves to `https://docs.cloud.google.com/free/docs/free-cloud-features?hl=zh-tw`.
+- Google Cloud gallery JSON parses; `node --check`, `git diff --check`, and the asset existence check pass.
+
+Remaining:
+- None for this Google Cloud gallery addition.
