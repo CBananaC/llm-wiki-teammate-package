@@ -5195,3 +5195,39 @@ Verified:
 
 Remaining:
 - None for this Google Cloud gallery addition.
+
+### 2026-08-07 15:51 HKT — Codex — Translate Google Cloud gallery label
+
+Summary:
+- Translated the Google Cloud gallery information-panel title into Traditional Chinese as `Google Cloud 免費試用詳情`.
+- Preserved the supplied Google Cloud documentation link unchanged.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the gallery JSON title is Traditional Chinese and the `titleHref` remains the supplied URL.
+- `git diff --check` passes.
+
+Remaining:
+- None for this label translation.
+
+### 2026-08-07 15:54 HKT — Codex — Keep the latest prompt visible in the AI chatbox
+
+Summary:
+- Added an explicit latest-message scroll after rendering and restoring the Step 2 AI chatbox.
+- The newest prompt remains visible when the chatbox is rebuilt after switching between 印刷字 and 手寫字.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm the newest OCR prompt is the last chat bubble and the chatbox remains at its bottom position after mode switching.
+- Browser console logs are empty; `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for latest-prompt visibility.
