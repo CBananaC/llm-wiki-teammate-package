@@ -9435,3 +9435,358 @@ Verified:
 
 Remaining:
 - None for the chat footer spacing adjustment.
+
+### 2026-08-07 16:40 HKT — Claude — Mirror printed try-it structure into handwritten mode
+
+Summary:
+- Applied several printed-mode 試一試 additions to handwritten mode, per request (checked against commit `5e6686b`, working tree clean at time of edit): added opening `撰寫 Prompt` advance card; added `2.1 史料來源` chip citing 《明清臺灣檔案彙編》第30冊 (verified against `stage1_original_text.json`: the handwritten PDF corresponds to doc_id `硃56`, same title "為請酌籌加調官兵協力進剿事", `compiled_in.book/volume = 30` — same source as printed, not invented); added `4.2 輸出 JSON 的結構` chip (identical to printed); added `4.3 史料資訊` multi step with printed's item list minus `頁碼` (handwritten has no page-number feature); added `4.4 正文` chip stating body text should be merged into one paragraph (`正文請合併成一整段，不要逐段列出。` — the literal opposite of printed's 逐段列出 answer, since handwritten manuscripts don't have printed mode's indentation-based paragraph cue); added `4.5 儲存為 Skill` chip (identical to printed); replaced the old `十 · 你自己的要求` free step (custom guide/placeholder) with printed's `4.6 你自己的要求` verbatim (guide "還有其他想要求嗎？ ", empty placeholder), per "(use the print version)".
+- Handwritten steps went from 10 to 16. Existing `四~九` Chinese-numeral steps were left untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed 18 / handwritten 16 steps, no duplicate `k` labels in either mode, all `steps[].feature` resolve against each mode's `features{}`.
+- `node --check storymap.js` passes (unaffected).
+- Handwritten source citation cross-checked against `review-tools/shared data/stage1_original_text.json` (doc_id 硃56) rather than assumed/copied blindly.
+
+Remaining:
+- No git commit made this turn — recommend the user commit soon given the earlier concurrent-overwrite incident on this same file.
+
+### 2026-08-07 16:50 HKT — Claude — Simplify handwritten prompt-defining guides to plain questions
+
+Summary:
+- In handwritten mode only, reworded the three guide texts that were statements (not questions) in the prompt-defining steps to simple questions: "撰寫 Prompt" ("現在，開始撰寫..." → "準備好開始撰寫 OCR prompt 了嗎？"), "2.1 史料來源" ("告訴 AI 這份 PDF 的來源。" → "這份 PDF 的來源是什麼？"), "4.2 輸出 JSON 的結構" ("先說明整體結構，AI 才知道..." → "JSON 要分成哪些部分？"). Printed mode's matching guides left untouched. Noted the 2.1 史料來源 chip text itself had already been corrected (by another concurrent edit) to cite 故宮 the「清代檔案檢索系統」（故宮075669號）instead of my earlier 《明清臺灣檔案彙編》第30冊 guess — left that citation as-is, only touched the guide question.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed 18 / handwritten 16 steps unchanged in count; printed's `4.2 輸出 JSON 的結構` guide confirmed unchanged.
+- `node --check storymap.js` passes.
+
+Remaining:
+- No git commit made — recommend the user commit soon.
+
+### 2026-08-07 17:17 HKT — Codex — Route handwritten 試一試 assets and folded page turning
+
+Summary:
+- Wired `intro Website/Website/storymap/試一試/手寫字/` into the handwritten 試一試 mode, including the local PDF, `page1.png`–`page3.png`, and feature-specific images (`直欄.png`, `作者.png`, `臣字.png`, `硃批.png`, `水印.png`).
+- Prompt-related feature steps show the matching annotated image; ordinary prompt steps show the handwritten page scan. The handwritten document view does not add feature highlight labels or coloured overlays.
+- Added folded-paper crease treatment and a short turn animation when moving between handwritten page scans.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm the handwritten PDF path, page 1 and page 2 navigation, the turn class, zero overlay labels, and final routing to `水印.png` with `頁 3 / 3`.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass; browser console logs are empty.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:00 HKT — Claude — Renumber handwritten 版面要求 steps to match printed's numeric scheme
+
+Summary:
+- Renamed handwritten mode's five 版面要求 quiz steps from Chinese-numeral labels to printed-style numeric sub-labels under section 3, and the closing format question into section 4.1, so the whole handwritten flow now numbers continuously like printed (…三 · 版面要求 → 3.1…3.5 → 4.1…4.6):
+  - 四 · 版面要求：閱讀順序 → 3.1 閱讀順序 (guide unchanged, already short)
+  - 五 · 版面要求：上奏官員 → 3.2 上奏官員, guide "左邊反白的首行，寫著這份奏摺是誰上的。這兩項資料要分開存。" → "首行的上奏官員資料要怎麼標記？"
+  - 六 · 版面要求：小字自稱 → 3.3 小字自稱, guide shortened to "小字書寫的「奴才」「臣」屬於哪裡？"
+  - 七 · 版面要求：硃批 → 3.4 硃批, guide shortened to "紅色硃批草書要怎麼處理？"
+  - 八 · 版面要求：印章與浮水印 → 3.5 印章與浮水印, guide (was a statement, not a question) shortened to "印章和浮水印要怎麼處理？"
+  - 九 · 輸出要求 → 4.1 JSON 格式, guide replaced with printed's exact "辨識完成後，要用什麼格式存下來？" so it bridges cleanly into the already-numeric 4.2–4.6 tail.
+- Only `k` labels and `guide` text changed; `before`/`after`/`options`/`answer`/`feature` content (the actual OCR-rule wording specific to the handwritten manuscript) left untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed 18 / handwritten 16 steps, no duplicate `k` labels within either mode, all `steps[].feature` still resolve against `features{}`.
+- `node --check storymap.js` passes.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 17:10 HKT — Claude — Add distractor support to "multi" step; mark 硃批日期/硃批內容 wrong in handwritten
+
+Summary:
+- Handwritten mode's "3.4 硃批" step already tells the AI not to OCR the red rescript text at all, so requiring 硃批日期/硃批內容 in "4.3 史料資訊" was inconsistent. Added a new optional `wrong` field to the block-style "multi" step kind (`storymap.js`): items in `wrong` are shown mixed into the same chip list but must be left unchecked to complete — checking one now turns it red (`.part3-try-multi-item.is-wrong`, shares the existing shake animation) and blocks the "完成，加入 prompt" button until deselected. Fully backward-compatible: when `wrong` is omitted (printed's 4.3, and every other existing multi step), behavior is unchanged.
+- Handwritten's 4.3 史料資訊: `items` now `["來源","史料編號","標題","官職","姓名","具奏日期"]`, `wrong: ["硃批日期","硃批內容"]`. Printed's 4.3 (which still legitimately includes 硃批日期/硃批內容, since printed transcription does carry the rescript) left untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- `json.loads()` on `data-part3-try-data`: printed 4.3 unchanged (no `wrong` field); handwritten 4.3 has `wrong: ["硃批日期","硃批內容"]`.
+- CSS brace balance 0; `.part3-try-multi-item.is-wrong` rule and shared `part3TryShake` keyframe both present.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 17:20 HKT — Claude — Add two-blank "mc2" step kind; convert handwritten 4.4 正文 to it
+
+Summary:
+- Handwritten's "4.4 正文" needed a sentence with two separate fill-in-blank choices in one line ("正文請【　】，【　】抬頭引致的分段。"), which the existing single-blank "mc" kind can't express. Added a new `mc2` step kind to `nextStep()` in `storymap.js`: renders two independent `<select>` blanks (each with its own ✓/✗ feedback, reusing the existing `.part3-try-blank`/`.part3-try-mark` styles — no new CSS needed) and only advances once both are answered correctly.
+- Handwritten "4.4 正文" is now: `{"kind":"mc2","before":"正文請","mid":"，","after":"抬頭引致的分段。","options1":["合併成一整段","逐段列出"],"answer1":"合併成一整段","options2":["忽略","保留"],"answer2":"忽略"}`. "保留" was added as the quiz distractor for the second blank (not a historical claim — a UI quiz alternative, mirroring how other mc steps already have invented distractor options like 空行/標點符號). Printed's 4.4 (single-blank `mc`) left untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- `json.loads()` on `data-part3-try-data`: printed 18 / handwritten 16 steps unchanged in count; handwritten 4.4 confirmed as `mc2` with both option/answer pairs; printed 4.4 confirmed unchanged (`mc`).
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 17:30 HKT — Claude — Add "already downloaded" skip option to 安裝工具 step (both modes)
+
+Summary:
+- Added optional `skip` field to the "chip" step kind (`storymap.js`): when present, a second, visually subdued button (`.part3-try-chip--skip`) renders below the main suggested-sentence chip. Clicking it advances to the next step without inserting the chip sentence into the chat/prompt at all (unlike the main chip, which adds the line via `addBubble`).
+- Applied to "一 · 安裝工具" in both printed (chip: 請在我的電腦下載 PaddleOCR。) and handwritten (chip: 請在我的電腦上下載並安裝 PaddleOCR。) — both now show a "已下載" button so users who already have PaddleOCR installed can skip without that sentence cluttering their final prompt.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- `json.loads()` on `data-part3-try-data`: both modes' "一 · 安裝工具" now have `"skip": "已下載"`; step counts unchanged (18/16).
+- CSS brace balance 0; `.part3-try-chip--skip` rule present.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 17:38 HKT — Claude — Add "4. 輸出要求" advance card to handwritten
+
+Summary:
+- Inserted the same section-header advance step printed uses before its output-format questions ("4. 輸出要求", guide "定義好版面規則後，現在要定義輸出格式。") into handwritten mode, right before "4.1 JSON 格式" — matches printed's structure exactly.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: handwritten now 17 steps (was 16), no duplicate `k` labels; printed unchanged at 18.
+- `node --check storymap.js` passes (unaffected).
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 17:45 HKT — Claude — Always-clickable "完成，加入 prompt" button for block-style multi
+
+Summary:
+- The block-style "multi" step (e.g. "4.3 史料資訊" in both printed and handwritten) previously disabled its "完成，加入 prompt" button until every required item was selected and no wrong item was checked. Changed so the button is always clickable: clicking it now evaluates correctness on demand — correct selection proceeds as before, incorrect/incomplete selection shakes and briefly turns the button red (`.part3-try-optbtn.is-bad`, reusing the shared `part3TryShake` keyframe) instead of doing nothing, so users get feedback even with zero or one item selected.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- CSS brace balance 0; `.part3-try-optbtn.is-bad` rule present.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 17:50 HKT — Claude — Left-align "已下載" skip button text
+
+Summary:
+- `.part3-try-chip--skip` text-align changed from center to left, matching the primary chip button's left-aligned text above it.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- CSS brace balance 0.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 18:05 HKT — Claude — Add 具奏日期 quiz (handwritten) and JSON "issue" field (both modes)
+
+Summary:
+- Handwritten only: inserted "3.5 具奏日期" mc step right after "3.4 硃批" (before the now-renumbered "3.6 印章與浮水印"). Asks whether the end-of-document date (format 乾隆X年X月X日) is the 具奏日期 or 硃批日期; correct answer 具奏日期 — consistent with step 3.4 already telling the AI not to OCR the red rescript text, so the plain-ink closing date must be the submission date, not a rescript date.
+- Both modes: "4.2 輸出 JSON 的結構" chip changed from two parts (史料資訊、正文) to three (史料資訊、正文、issue). Added a new "4.5 issue" chip step right after "4.4 正文" describing the issue field: mark every uncertain/suspicious character or punctuation mark as "(5 preceding characters, if any)＋？(the uncertain character)＋(5 following characters, if any)". Existing "4.5 儲存為 Skill"/"4.6 你自己的要求" renumbered to "4.6"/"4.7" in both modes to keep sequencing continuous.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed 19 steps (was 18), handwritten 19 steps (was 17), no duplicate `k` labels in either mode, all `steps[].feature` resolve against `features{}`.
+- `node --check storymap.js` passes (unaffected).
+
+Remaining:
+- No git commit made — recommend committing soon given this file's history of concurrent-edit collisions.
+
+### 2026-08-07 18:15 HKT — Claude — Rename "issue" to 待查; shuffle multi-select button order
+
+Summary:
+- Renamed the JSON output field "issue" to "待查" throughout both modes: "4.2 輸出 JSON 的結構" chip text, and the "4.5 issue" step's `k` label and chip text (now "4.5 待查").
+- Block-style "multi" step (used by 4.3 史料資訊 in both modes): the option buttons now shuffle into random display order each time the step renders (`shuffleTryOptions`), but the sentence assembled into the chat still always uses `items` in its original declared order (unchanged logic — was already fixed-order via `items.join('、')`), so e.g. handwritten's 4.3 always produces "史料資訊包含：來源、史料編號、標題、官職、姓名、具奏日期。" regardless of click order.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- `json.loads()` on `data-part3-try-data`: no remaining "issue" text in either mode; step counts unchanged (19/19), no duplicate labels.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 18:22 HKT — Claude — Fix broken JSON in "4.6 儲存為 Skill" (handwritten)
+
+Summary:
+- User's manual edit to handwritten's "4.6 儲存為 Skill" chip text (updated to reference a named skill file `memorial_handwritten.md`) was missing the closing `"` on the `chip` string, which broke `JSON.parse()` on the whole `data-part3-try-data` block — this is why the entire 試一試 section stopped rendering (initPart3TryIt() bails out early when the data fails to parse). Added the missing quote; text now reads `"chip": "請把以上所有規則整理為 skill「memorial_handwritten.md」。"`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data` now succeeds: printed 19 / handwritten 19 steps, no duplicate labels, all feature refs resolve.
+- `node --check storymap.js` passes.
+
+Remaining:
+- No git commit made — recommend committing soon given repeated manual/concurrent edits to this exact block.
+
+### 2026-08-07 18:30 HKT — Claude — Hide right/wrong coloring on multi (史料資訊) until 完成 is clicked
+
+Summary:
+- Block-style "multi" step (4.3 史料資訊, both modes): previously, clicking a distractor (`wrong`) item immediately turned it red while selecting. Changed so all picks look the same neutral "selected" (yellow) style while choosing — the red "wrong" state only appears right after "完成，加入 prompt" is clicked (via a `revealed` flag), and clicking any chip afterward resets back to neutral until Done is pressed again.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 18:55 HKT — Claude — Accordion-fold visuals for 試一試 handwritten mode
+
+Summary:
+- Ported the "風琴摺" accordion visual from section 8 (辨識手寫字) into 試一試's handwritten document pane, for specific feature steps only (base page browsing / non-feature steps are unchanged — still the flat page1/2/3.png stack).
+- New per-feature JSON field `"fold"` ("ab" or "bc") on handwritten `features`: column/author/minor → "bc", stamp → "ab". When that feature is active, its dedicated image (直欄.png/作者.png/臣字.png/水印.png) is now shown as a 3-panel accordion strip (a=left third, b=middle third, c=right third, same background-size:300%/position 0%/50%/100% technique as section 8), with the two panels named in `fold` opened and the third collapsed into a folded sliver — not just a flat image like before.
+- New step-level fields `"cropImage"`/`"cropWindow"` added to "3.4 硃批" and "3.5 具奏日期" (both set to `奏報日期.png` / `"bc"`): these two steps now bypass the accordion entirely and show a flat crop of 奏報日期.png's middle+right two-thirds (background-size:150%, position 100% 0) filling the pane — per explicit instruction that both steps should show this shared image rather than each having its own separate fold.
+- Also removed the "頁X／Y" page-count label whenever a feature's dedicated image is showing (now always shows the feature's title instead, in both modes — previously this title-swap only applied to printed mode).
+- New DOM: `.part3-try-fold`/`[data-try-fold-strip]` and `.part3-try-crop` containers added as siblings of `.part3-try-pagestack` inside `.part3-try-doc`; `renderDoc()` in storymap.js now toggles which of the three (pagestack / fold / crop) is visible per step, via new `renderFold()` helper.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance 0.
+- `json.loads()` on `data-part3-try-data`: handwritten features have correct `fold` values; "3.4 硃批"/"3.5 具奏日期" both carry `cropImage`/`cropWindow`; step counts unchanged (19/19).
+
+Assumptions/open items (no browser available to visually verify this turn):
+- Each per-feature image (直欄.png etc.) is treated as a complete standalone 3-panel sheet on its own, not tied to page1/2/3.png's coordinate space — I don't have per-feature "which physical page" mapping beyond what was already in `features[].page`, so the fold only ever operates on the feature's own dedicated image.
+- The crop math (150% background-size, 100%/0% position) is a computed approximation for "show the right/left two-thirds of the image" — exact framing depends on 奏報日期.png's real content and may need `--try-*` variable tuning in `storymap-cards.css` after a visual check.
+- Recommend the user view this live and report back with a screenshot for any position/sizing corrections.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 19:10 HKT — Claude — Fix double-rendered document pane (pagestack + fold both visible)
+
+Summary:
+- Bug: `.part3-try-pagestack`, `.part3-try-fold`, `.part3-try-crop` all set `display: flex` unconditionally, which overrides the browser's default `[hidden] { display: none }` rule (author stylesheet beats UA stylesheet at equal specificity when declared later). So `el.hidden = true` in JS had no visual effect — on handwritten step "3.2 上奏官員" the old page stack and the new accordion fold strip were both rendering stacked on top of each other ("2 pdf" bug from user screenshot), at the wrong size/position since neither container was getting the full pane to itself.
+- Fix: added `.part3-try-pagestack[hidden], .part3-try-fold[hidden], .part3-try-crop[hidden] { display: none !important; }`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- CSS brace balance 0; `[hidden]` override rule present.
+
+Remaining:
+- User also flagged a blank white-space area in the printed-mode page 1 image (first screenshot, step "第一步 · 下載史料"). The image sizing CSS (`object-fit: contain`, height:100%) looks correct on inspection — this is most likely the source page1 PDF-page image itself having that whitespace (e.g. a title/margin area), not a CSS bug, but not confirmed without visual access. Flagged to user for confirmation rather than guessed at.
+- User separately asked to extend the 風琴 accordion effect to "normal" (non-feature) page browsing, shown "2 by 2" — scope not yet clarified (2 whole pages side-by-side vs. sub-panel accordion pairing across the whole document like section 8). Not yet implemented — asked user to clarify before building given this session's history of accordion-scope rework.
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 19:35 HKT — Claude — Full multi-page 風琴摺 for handwritten normal browsing + fix sizing math
+
+Summary:
+- Extended the accordion fold from "only the 6 quiz-feature steps" to ALL handwritten browsing, per follow-up request ("like 辨識手寫字, show as ab, cd, ef... but special cases can show bc, de"). Now builds a real flat 9-panel strip from all 3 pages (page1/2/3.png × 3 sub-folds each), same push-order/background-position technique as section 8. Default browsing (prev/next) moves the open window by exactly 2 flat-indices at a time (ab→cd→ef…). When a quiz feature with a `fold` window is active, `foldStart` jumps directly to that feature's flat index instead — which can land on an odd boundary (e.g. "bc"), and subsequent ±2 stepping from there continues on that same odd grid (bc→de→fg…), which is the "special case" behaviour asked for. The active feature's own image now only swaps in for the 3 sub-panels belonging to its page (matching section 8's per-sheet swap), other pages still show their plain page image.
+- New `foldStart` state (added to per-mode save/restore alongside `pageIdx`/`phase`/`cur`).
+- Fixed real sizing math using actual measured image dimensions (via PIL): all three pages have a near-identical single-fold aspect ratio ≈ 155/338 (0.458 w/h) — replaced the earlier placeholder/guessed `0.46` divisor and percentage-based `--fold-w` (which was dimensionally wrong, mixing % width into a height calc) with a JS-measured pixel width (`sizeFoldStrip()`, mirrors section 8's `sizeStrip()`) and `aspect-ratio: 155/338` applied per open panel (previously panels used `flex:1 1 auto` with no aspect-ratio, which would have visibly stretched/distorted the image).
+- Indicator text for normal fold browsing now reads "第 N 組／共 M 組" instead of any 頁X wording.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance 0.
+- `json.loads()` on `data-part3-try-data`: step counts/labels unchanged (19/19, no dups) — this turn only touched JS/CSS, not the data block.
+- Measured real PNG dimensions for page1/2/3.png and all per-feature images via Python/PIL to derive the `aspect-ratio` and slivers-width constants, rather than guessing.
+
+Remaining:
+- Still not visually verified in an actual browser — recommend the user check live, especially: whether `--fold-slivers: 42px` (7 collapsed panels) looks right, and whether the odd-boundary "bc/de" jump behaves as expected when moving between quiz steps.
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 19:55 HKT — Claude — Revert 風琴摺 accordion; back to plain page-by-page for 試一試
+
+Summary:
+- Fully rolled back the accordion-fold experiment added in the last few turns, per explicit request to return to "plain pdf showing page by page without any special effect." Handwritten mode's document pane is back to the original simple behaviour: flat page1/2/3.png stack with prev/next page-turn animation, and each quiz feature swapping the displayed image to its own dedicated PNG (no folding, no cropping).
+- "3.4 硃批" now uses its existing `feature: "rescript"` (image 硃批.png) again — removed the `cropImage`/`cropWindow` override that had been pointing it at 奏報日期.png.
+- "3.5 具奏日期" previously had no `feature` at all (it only worked via the now-removed cropImage override); added a proper new feature entry `sendDate` (image 奏報日期.png, page 2, a placeholder highlight box) and set `"feature": "sendDate"` on the step, so it still shows a relevant image, just via the plain swap-in mechanism like every other feature.
+- Removed all now-dead accordion code: `foldStart` state (+ save/restore), `renderFoldStrip`/`sizeFoldStrip`/`FOLD_PART_OF`/`flatFoldIndex` helpers, `foldHost`/`foldStrip`/`cropHost`/`pagestackHost` DOM refs, the mode-branching in prevBtn/nextBtn, and the `"fold"` field on column/author/minor/stamp features and `cropImage`/`cropWindow` on 3.4/3.5. Removed the `.part3-try-fold`/`.part3-try-fold-strip`/`.part3-try-fold-panel`/`.part3-try-crop` HTML containers and their CSS block (including the `[hidden]` override rule, no longer needed since there's nothing left to toggle).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance 0; grep confirms zero remaining `.part3-try-fold`/`.part3-try-crop` references anywhere.
+- `json.loads()` on `data-part3-try-data`: printed 19 / handwritten 19 steps unchanged, no duplicate labels, all `steps[].feature` resolve against `features{}` (including the new `sendDate`), no leftover `cropImage` or `fold` fields anywhere.
+
+Remaining:
+- No git commit made — strongly recommend committing now that this settles back to a known-simple, working state, given the earlier concurrent-overwrite incident on this exact file.
+
+### 2026-08-07 20:10 HKT — Claude — Use memorial_print_ocr.json as printed 試一試 reference
+
+Summary:
+- Replaced printed mode's compare-stage `reference` (previously a short placeholder plain-text excerpt) with the full content of `/Users/creamybanana/Documents/Codex/2026-08-07/paddleocr-pdf-ocr-pdf-30-data/outputs/memorial_print_ocr.json`, embedded verbatim as a JSON string (史料資訊／正文／待查 structure — 3 body paragraphs, 2 待查 flagged items). This matches the printed prompt flow's actual target output format (the 4.x steps now build toward a 3-part JSON with 史料資訊/正文/待查), so 第三步 · 比對 OCR 結果 now compares the user's pasted AI output against this real reference JSON rather than a placeholder plain-text sentence.
+- Requested and was granted access to the external folder `.../paddleocr-pdf-ocr-pdf-30-data/outputs` to read the source file (not part of the DH Project workspace).
+- Handwritten mode's `reference` untouched (still its own placeholder).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+
+Verified:
+- `json.loads()` on `data-part3-try-data` succeeds; `data.printed.reference` is itself valid JSON parsing to the expected 史料資訊／正文／待查 keys with correct paragraph/待查 counts; step counts unchanged (19/19).
+- `node --check storymap.js` passes (unaffected file).
+
+Remaining:
+- No git commit made — recommend committing soon.

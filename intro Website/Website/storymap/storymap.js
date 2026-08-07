@@ -1995,7 +1995,9 @@ const initPart3TryIt = () => {
   };
   injectDefaults();
 
-  /* ---------- 左半：史料與標示區 ---------- */
+  /* ---------- 左半：史料與標示區 ----------
+     恢復成單純一頁一頁顯示：選到某個特徵時，直接把該頁圖片換成該特徵
+     的專屬標示圖（不摺、不裁切），沒有特徵時照 pageIdx 顯示原頁面。 */
   const renderDoc = (activeKey) => {
     const set = d();
     const feature = phase === 2 && activeKey ? set.features[activeKey] : null;
@@ -2005,7 +2007,10 @@ const initPart3TryIt = () => {
     imgEl.src = `${assetDir}${visualFile}`;
     imgEl.alt = featureImage ? `${feature.title || visualFile}示意圖` : '試一試史料頁面';
     imgEl.dataset.tryVisual = featureImage || `page${pageIdx + 1}`;
-    indEl.textContent = featureImage ? (feature.title || visualFile.replace(/\.png$/i, '')) : `頁 ${pageIdx + 1} / ${set.pages.length}`;
+    /* 只要正在顯示某個特徵的專屬圖片，一律用標題取代「頁X／Y」。 */
+    indEl.textContent = featureImage
+      ? (feature.title || visualFile.replace(/\.png$/i, ''))
+      : `頁 ${pageIdx + 1} / ${set.pages.length}`;
     prevBtn.disabled = Boolean(featureImage) || pageIdx === 0;
     nextBtn.disabled = Boolean(featureImage) || pageIdx === set.pages.length - 1;
     hlHost.innerHTML = '';
@@ -2018,6 +2023,15 @@ const initPart3TryIt = () => {
       hl.dataset.tryFeature = key;
       hlHost.appendChild(hl);
     });
+  };
+
+  const animateHandwrittenTurn = (direction) => {
+    if (mode !== 'handwritten') return;
+    const className = direction > 0 ? 'is-handwritten-turn-next' : 'is-handwritten-turn-prev';
+    root.classList.remove('is-handwritten-turn-next', 'is-handwritten-turn-prev');
+    void root.offsetWidth;
+    root.classList.add(className);
+    window.setTimeout(() => root.classList.remove(className), 560);
   };
   const syncDoc = () => {
     const step = phase === 2 ? d().steps[cur] : null;
@@ -2197,6 +2211,21 @@ const initPart3TryIt = () => {
           addBubble(s.chip).then(() => { cur += 1; nextStep(); });
         });
         opts.appendChild(btn);
+        /* 可選的第二顆按鈕（例如「已下載」）：點了就跳過，
+           不把建議句子送進聊天視窗、也不加入最後的 prompt。 */
+        if (s.skip) {
+          const skipBtn = document.createElement('button');
+          skipBtn.type = 'button';
+          skipBtn.className = 'part3-try-chip part3-try-chip--skip';
+          skipBtn.textContent = s.skip;
+          skipBtn.addEventListener('click', () => {
+            opts.remove();
+            answers[cur] = '';
+            cur += 1;
+            nextStep();
+          });
+          opts.appendChild(skipBtn);
+        }
       }
 
       if (s.kind === 'mc') {
@@ -2229,6 +2258,53 @@ const initPart3TryIt = () => {
           }
         });
         p.appendChild(sel); p.append(' ' + s.after); p.appendChild(mark);
+        opts.appendChild(p);
+      }
+
+      /* 「mc2」：一句話裡有兩個填空，兩個都答對才算完成
+         （例如 4.4 正文：「正文請【　】，【　】抬頭引致的分段。」）。 */
+      if (s.kind === 'mc2') {
+        const p = document.createElement('p');
+        p.className = 'part3-try-sentence';
+        p.append(s.before + ' ');
+        const makeBlank = (options, answer) => {
+          const sel = document.createElement('select');
+          sel.className = 'part3-try-blank';
+          sel.innerHTML = '<option value="">—— 請選擇 ——</option>'
+            + shuffleTryOptions(options).map((o) => `<option>${o}</option>`).join('');
+          const mark = document.createElement('span');
+          mark.className = 'part3-try-mark';
+          sel.addEventListener('change', () => {
+            if (!sel.value) return;
+            if (sel.value === answer) {
+              sel.classList.remove('is-bad'); sel.classList.add('is-ok');
+              mark.className = 'part3-try-mark ok'; mark.textContent = '✓';
+              checkBothDone();
+            } else {
+              sel.classList.remove('is-ok'); sel.classList.add('is-bad');
+              mark.className = 'part3-try-mark bad'; mark.textContent = '✗';
+              setTimeout(() => {
+                sel.value = ''; sel.classList.remove('is-bad'); mark.textContent = '';
+              }, 650);
+            }
+          });
+          return { sel, mark };
+        };
+        const b1 = makeBlank(s.options1, s.answer1);
+        const b2 = makeBlank(s.options2, s.answer2);
+        const checkBothDone = () => {
+          if (!b1.sel.classList.contains('is-ok') || !b2.sel.classList.contains('is-ok')) return;
+          const line = s.before + s.answer1 + (s.mid || '') + s.answer2 + (s.after || '');
+          answers[cur] = line;
+          setTimeout(() => {
+            opts.remove();
+            addBubble(line).then(() => { cur += 1; nextStep(); });
+          }, 300);
+        };
+        p.appendChild(b1.sel); p.appendChild(b1.mark);
+        p.append(' ' + (s.mid || '') + ' ');
+        p.appendChild(b2.sel); p.appendChild(b2.mark);
+        p.append(' ' + (s.after || ''));
         opts.appendChild(p);
       }
 
@@ -2312,33 +2388,56 @@ const initPart3TryIt = () => {
         p.append(s.after || '');
         opts.appendChild(p);
       } else if (s.kind === 'multi') {
+        /* items：必須全部勾選才算完成；wrong（可省略）：干擾選項，
+           混在同一排卡片裡，勾了反而不能完成，需要使用者自己取消。 */
         const items = s.items || [];
+        const wrongItems = s.wrong || [];
+        /* 按鈕本身隨機排列（每次進到這一步重新洗牌一次，選的時候不會又跳動），
+           但送進聊天視窗的句子永遠照 items 原本寫的固定順序組合，不受點擊順序影響。 */
+        const pool = shuffleTryOptions([...items, ...wrongItems]);
         const list = document.createElement('div');
         list.className = 'part3-try-multi';
         const selected = new Set();
+        /* 選的時候一律用中性的「已選」樣式，看不出對錯；
+           只有按下「完成」之後才會短暫變色（紅＝選錯），
+           之後只要再點任何一顆卡片就會恢復中性、要重新按完成才會再揭曉。 */
+        let revealed = false;
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'part3-try-optbtn';
         btn.textContent = '完成，加入 prompt';
-        btn.disabled = true;
+        /* 按鈕一開始就可以按：不管選了幾個、選對還是選錯，按下去都會
+           判斷一次——答對就送出，答錯就用抖動＋變紅提醒，讓使用者自己修正。 */
+        const isReady = () => items.every((label) => selected.has(label))
+          && wrongItems.every((label) => !selected.has(label));
         const renderItems = () => {
           list.innerHTML = '';
-          items.forEach((label) => {
+          pool.forEach((label) => {
+            const isWrong = wrongItems.includes(label);
+            const isPicked = selected.has(label);
+            let stateClass = '';
+            if (isPicked) stateClass = (revealed && isWrong) ? ' is-wrong' : ' is-selected';
             const chip = document.createElement('button');
             chip.type = 'button';
-            chip.className = 'part3-try-multi-item' + (selected.has(label) ? ' is-selected' : '');
+            chip.className = 'part3-try-multi-item' + stateClass;
             chip.innerHTML = `<span class="chk" aria-hidden="true"></span>${label}`;
             chip.addEventListener('click', () => {
               if (selected.has(label)) selected.delete(label); else selected.add(label);
+              revealed = false;
               renderItems();
-              btn.disabled = selected.size < items.length;
             });
             list.appendChild(chip);
           });
         };
         renderItems();
         btn.addEventListener('click', () => {
-          if (selected.size < items.length) return;
+          revealed = true;
+          renderItems();
+          if (!isReady()) {
+            btn.classList.remove('is-bad'); void btn.offsetWidth; btn.classList.add('is-bad');
+            setTimeout(() => btn.classList.remove('is-bad'), 550);
+            return;
+          }
           const line = (s.before || '') + items.join('、') + (s.after || '');
           opts.remove();
           answers[cur] = line;
@@ -2453,10 +2552,12 @@ const initPart3TryIt = () => {
 
   /* ---------- 翻頁與模式切換 ---------- */
   prevBtn.addEventListener('click', () => {
+    animateHandwrittenTurn(-1);
     pageIdx = (pageIdx - 1 + d().pages.length) % d().pages.length;
     syncDoc();
   });
   nextBtn.addEventListener('click', () => {
+    animateHandwrittenTurn(1);
     pageIdx = (pageIdx + 1) % d().pages.length;
     syncDoc();
   });

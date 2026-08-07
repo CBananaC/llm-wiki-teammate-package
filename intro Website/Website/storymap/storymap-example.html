@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260807-part3-chatfoot-spacing-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260807-part3-chatfoot-spacing-01">
+  <link rel="stylesheet" href="storymap.css?v=20260807-part3-handwritten-try-assets-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260807-part3-handwritten-try-assets-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260807-part3-try-persistence-01" defer></script>
+  <script src="storymap.js?v=20260807-part3-handwritten-try-assets-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1631,7 +1631,7 @@
 
                 <div class="part3-feature-explorer part3-try-explorer" id="part-3-try-explorer" data-part3-try data-try-mode="printed">
                   <div class="part3-fx-doc part3-try-doc">
-                    <div class="part3-try-pagestack">
+                    <div class="part3-try-pagestack" data-try-pagestack>
                       <div class="part3-fx-page">
                         <img data-try-img alt="試一試史料頁面" loading="lazy" decoding="async">
                         <div data-try-hls></div>
@@ -1673,7 +1673,7 @@
                          "guide": "現在，開始撰寫給 Agentic AI 的 OCR prompt。"},
                         {"kind": "chip", "k": "一 · 安裝工具",
                          "guide": "先讓 Agentic AI 在你的電腦下載PaddleOCR的工具。",
-                         "chip": "請在我的電腦下載 PaddleOCR。"},
+                         "chip": "請在我的電腦下載 PaddleOCR。", "skip": "已下載"},
                         {"kind": "chip", "k": "二 · OCR 目的",
                          "guide": "再告訴它要辨識哪一份檔案。",
                          "chip": "請在我的電腦上搜尋「為請酌籌加調官兵協力進剿事_印刷字.pdf」，並對它進行OCR。"},
@@ -1714,73 +1714,109 @@
                          "options": ["JSON", "TXT", "DOCX"], "answer": "JSON"},
                         {"kind": "chip", "k": "4.2 輸出 JSON 的結構",
                          "guide": "先說明整體結構，AI 才知道要把哪些欄位放進 JSON。",
-                         "chip": "輸出的 JSON 分為兩部分：史料資訊、正文。"},
+                         "chip": "輸出的 JSON 分為三部分：史料資訊、正文、待查。"},
                         {"kind": "multi", "k": "4.3 史料資訊",
                          "guide": "史料資訊要包含哪些欄位？",
                          "before": "史料資訊包含：", "after": "。",
                          "items": ["來源", "頁碼", "標題", "官職", "姓名", "具奏日期", "硃批日期", "硃批內容"]},
                         {"kind": "mc", "k": "4.4 正文",
                          "guide": "最後，正文本身要怎麼輸出？",
-                         "before": "正文請", "after": "，不要合併成一整段。",
+                         "before": "正文請", "after": "。",
                          "options": ["逐段列出", "合併成一段"], "answer": "逐段列出"},
-                        {"kind": "chip", "k": "4.5 儲存為 Skill",
+                        {"kind": "chip", "k": "4.5 待查",
+                         "guide": "不確定的字要怎麼標記？",
+                         "chip": "在 JSON 最後的待查部分，標記所有不確定的文字和標點，格式為「（前5字，如有）＋？（不確定的字）＋（後5字，如有）」。"},
+                        {"kind": "chip", "k": "4.6 儲存為 Skill",
                          "guide": "以後要辨識同一本書的其他史料，不想每次都重打一次 prompt，怎麼辦？",
-                         "chip": "請把以上所有規則整理並儲存為一個可重複使用的 skill。"},
-                        {"kind": "free", "k": "4.6 你自己的要求",
+                         "chip": "請把以上所有規則整理為 skill「memorial_print.md」。"},
+                        {"kind": "free", "k": "4.7 你自己的要求",
                          "guide": "還有其他想要求嗎？ ",
                          "placeholder": ""}
                       ],
-                      "reference": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。"
+                      "reference": "{\n  \"史料資訊\": {\n    \"來源\": \"《明清臺灣檔案彙編》第30冊\",\n    \"頁碼\": [\n      {\n        \"PDF頁\": 1,\n        \"頁碼\": \"136\"\n      },\n      {\n        \"PDF頁\": 2,\n        \"頁碼\": \"137\"\n      }\n    ],\n    \"原始檔案來源\": \"《天地會第一冊》\",\n    \"標題\": \"為請酌籌加調官兵協力進剿事\",\n    \"官職\": \"閩浙總督\",\n    \"姓名\": \"常青\",\n    \"具奏日期\": \"乾隆五十一年十二月二十日\",\n    \"硃批日期\": \"乾隆五十二年正月初七日\",\n    \"硃批內容\": \"看來爾等皆過於張皇矣。豈有因一匪犯，使全省以及鄰疆皆懷恐惶之理。欽此。\",\n    \"編者註\": \"本文原收錄於軍錄\",\n    \"辨識狀態\": \"PaddleOCR 候選文字；已按原頁影像整理閱讀順序、段落、全形標點、頁碼、日期與硃批，仍應以原頁影像覆核待查項目。\"\n  },\n  \"正文\": [\n    {\n      \"段落\": 1,\n      \"頁碼\": [\n        \"136\"\n      ],\n      \"內容\": \"閩浙總督臣常青跪奏，為酌籌加調官兵協力進剿，速殲逆匪事。\"\n    },\n    {\n      \"段落\": 2,\n      \"頁碼\": [\n        \"136\",\n        \"137\"\n      ],\n      \"內容\": \"竊照彰化賊人林爽文等，謀為不軌，攻占城池，先經臣派撥三路官兵赴剿。嗣聞賊勢蔓延臺灣，郡城尤關緊要，臣抵泉後，即與提臣任承恩籌劃，令其加帶官兵，仍由鹿耳門前進。該提臣於十四日登舟，十七日乘風開駕，緣臺地遠隔重洋，必須出奇制變，方可迅奏膚功。因覆面為商定，或竟由鹿港進攻，或由鹿耳門入口，聽其察探賊情，隨宜辦理各緣由，均經節次奏聞在案。惟是調往官兵，雖有六千，內水師提臣黃仕簡帶領本標及調取南澳、銅山等營官兵，共計二千數百名，其由閩安出口派赴淡北之官兵一千五百名。臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人占踞，因飭領兵之海壇鎮總兵郝壯猷相奪度情形，非於新莊堵禦，即赴南路應援。而鹿耳為臺地咽喉，尤須厚集兵力，庶可近護郡城，遠赴攻剿。茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船；又調福寧鎮並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船，俱從各該處出口候風，直渡過臺。經由鹿耳門進口，交與水師提臣黃仕簡，聽其調度，俾軍容益昭壯盛，賊匪聞風膽落，自可克期殄滅。臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應外，所有加調官兵赴剿緣由，理合恭摺馳奏。\"\n    },\n    {\n      \"段落\": 3,\n      \"頁碼\": [\n        \"137\"\n      ],\n      \"內容\": \"再，查十八、九兩日，未有臺來文報，惟據差往探聽之守備林登雲稟稱：探得澎湖陳副將差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。又水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。等語。合併奏聞。伏乞皇上睿鑒。謹奏。\"\n    }\n  ],\n  \"待查\": [\n    \"膚功。因？（覆／復）面為商\",\n    \"澎湖陳副將？（，）差蔡遊擊領\"\n  ]\n}"
                     },
 
                     "handwritten": {
                       "pdf": "為請酌籌加調官兵協力進剿事_手寫字.pdf",
                       "pdfSub": "",
-                      "href": "",
-                      "pages": ["ocr-zhu25-handwritten-1-enhanced.png", "ocr-zhu25-handwritten-2-enhanced.png"],
+                      "pdfPath": "/Users/creamybanana/Downloads/DH Project/intro Website/Website/storymap/試一試/手寫字/為請酌籌加調官兵協力進剿事_手寫字.pdf",
+                      "href": "試一試/手寫字/為請酌籌加調官兵協力進剿事_手寫字.pdf",
+                      "assetDir": "試一試/手寫字/",
+                      "pages": ["page1.png", "page2.png", "page3.png"],
                       "features": {
-                        "column":   {"page": 0, "colour": "#cfe3d4", "box": {"left": "14%", "top": "12%", "width": "62%", "height": "70%"}},
-                        "author":   {"page": 0, "colour": "#cfe0ef", "box": {"left": "68%", "top": "10%", "width": "20%", "height": "20%"}},
-                        "minor":    {"page": 0, "colour": "#f5e6bd", "box": {"left": "30%", "top": "40%", "width": "12%", "height": "14%"}},
-                        "rescript": {"page": 1, "colour": "#f0d6d0", "box": {"left": "20%", "top": "16%", "width": "26%", "height": "34%"}},
-                        "stamp":    {"page": 1, "colour": "#ddd6ea", "box": {"left": "50%", "top": "60%", "width": "22%", "height": "22%"}}
+                        "column":   {"page": 0, "image": "直欄.png", "colour": "#cfe3d4", "box": {"left": "14%", "top": "12%", "width": "62%", "height": "70%"}},
+                        "author":   {"page": 0, "image": "作者.png", "colour": "#cfe0ef", "box": {"left": "68%", "top": "10%", "width": "20%", "height": "20%"}},
+                        "minor":    {"page": 0, "image": "臣字.png", "colour": "#f5e6bd", "box": {"left": "30%", "top": "40%", "width": "12%", "height": "14%"}},
+                        "rescript": {"page": 2, "image": "硃批.png", "colour": "#f0d6d0", "box": {"left": "20%", "top": "16%", "width": "26%", "height": "34%"}},
+                        "sendDate": {"page": 2, "image": "奏報日期.png", "colour": "#e3d4b8", "box": {"left": "60%", "top": "10%", "width": "22%", "height": "20%"}},
+                        "stamp":    {"page": 2, "image": "水印.png", "colour": "#ddd6ea", "box": {"left": "50%", "top": "60%", "width": "22%", "height": "22%"}}
                       },
                       "steps": [
+                        {"kind": "advance", "k": "撰寫 Prompt",
+                         "guide": "準備好撰寫 OCR prompt 了嗎？"},
                         {"kind": "chip", "k": "一 · 安裝工具",
-                         "guide": "先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。",
-                         "chip": "請在我的電腦上下載並安裝 PaddleOCR。"},
+                         "guide": "先讓 Agentic AI 在你的電腦下載PaddleOCR的工具。",
+                         "chip": "請在我的電腦上下載並安裝 PaddleOCR。", "skip": "已下載"},
                         {"kind": "chip", "k": "二 · OCR 目的",
-                         "guide": "再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。",
-                         "chip": "然後對名為「為請酌籌加調官兵協力進剿事_手寫字.pdf」 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。"},
+                         "guide": "再告訴它要辨識哪一份檔案。",
+                         "chip": "請在我的電腦上搜尋「為請酌籌加調官兵協力進剿事_手寫字.pdf」 ，並OCR這個檔案。"},
+                        {"kind": "chip", "k": "2.1 史料來源",
+                         "guide": "告訴AI這份 PDF 的來源。",
+                         "chip": "這份 PDF 出自國立故宮博物院的「清代檔案檢索系統」（編號：故宮075669號）。"},
                         {"kind": "advance", "k": "三 · 版面要求",
-                         "guide": "接下來，請觀察PDF的版面，再向AI指定OCR的規則。"},
-                        {"kind": "mc", "k": "四 · 版面要求：閱讀順序", "feature": "column",
-                         "guide": "手寫奏摺同樣是直排。先把閱讀順序講清楚，否則整段文字會顛倒。",
-                         "before": "奏摺用直排書寫，請按照", "after": "、由上至下的順序輸出文字，而非由左至右。",
+                         "guide": "接下來，觀察PDF的版面，再向AI指定OCR的規則。"},
+                        {"kind": "mc", "k": "3.1 閱讀順序", "feature": "column",
+                         "guide": "這份史料的閱讀順序是什麼？",
+                         "before": "按照", "after": "、由上至下的順序輸出文字。",
                          "options": ["由右至左", "由左至右", "由下至上"], "answer": "由右至左"},
-                        {"kind": "mc", "k": "五 · 版面要求：上奏官員", "feature": "author",
-                         "guide": "左邊反白的首行，寫著這份奏摺是誰上的。這兩項資料要分開存。",
-                         "before": "奏摺首行標有上奏官員的", "after": "，例如「福建水師提督　黃仕簡」，請分別獨立標記。",
+                        {"kind": "mc", "k": "3.2 上奏官員", "feature": "author",
+                         "guide": "提醒AI要OCR第一行上奏官員的資料。",
+                         "before": "奏摺首行標有上奏官員的", "after": "，例如「福建水師提督黃仕簡」，請分別獨立標記。",
                          "options": ["官職與姓名", "籍貫與年齡", "品級與俸祿"], "answer": "官職與姓名"},
-                        {"kind": "mc", "k": "六 · 版面要求：小字自稱", "feature": "minor",
-                         "guide": "正文中的「奴才」「臣」寫得比別的字小。字小不代表不重要——它們屬於哪裡？",
-                         "before": "正文中的「奴才」或「臣」以較小字體書寫，但仍屬", "after": "，請保留於原有位置，不要省略或刪除。",
+                        {"kind": "mc", "k": "3.3 小字自稱", "feature": "minor",
+                         "guide": "提醒AI要OCR字體較小的臣字款。",
+                         "before": "正文中的「奴才」或「臣」以較小字體書寫，是", "after": "，請保留於原有位置OCR。",
                          "options": ["正文的一部份", "註釋", "裝飾文字"], "answer": "正文的一部份"},
-                        {"kind": "mc", "k": "七 · 版面要求：硃批", "feature": "rescript",
-                         "guide": "翻到第二頁。紅色的草書是皇帝的硃批，OCR 幾乎辨不準。這一步該怎麼處理？",
-                         "before": "請", "after": "紅色的硃批草書文字。",
+                        {"kind": "mc", "k": "3.4 硃批", "feature": "rescript",
+                         "guide": "如何處理用草書書寫的硃批？",
+                         "before": "請", "after": "紅色的硃批文字。",
                          "options": ["不要 OCR", "優先 OCR", "合併進正文"], "answer": "不要 OCR"},
-                        {"kind": "mc", "k": "八 · 版面要求：印章與浮水印", "feature": "stamp",
-                         "guide": "印章和博物院的浮水印都不是文本內容，別讓它們混進結果裡。",
-                         "before": "請", "after": "「國立故宮博物院」的浮水印，以及正文後的印章。",
-                         "options": ["忽略", "辨識為正文", "翻譯"], "answer": "忽略"},
-                        {"kind": "mc", "k": "九 · 輸出要求",
-                         "guide": "最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。",
-                         "before": "最後，請把以上所有結果輸出為", "after": " 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。",
+                        {"kind": "mc", "k": "3.5 具奏日期", "feature": "sendDate",
+                         "guide": "文末「乾隆X年X月X日」格式的日期，是什麼日期？",
+                         "before": "文末以「乾隆X年X月X日」格式呈現的是", "after": "，請辨識並存為獨立的 data。",
+                         "options": ["具奏日期", "硃批日期"], "answer": "具奏日期"},
+                        {"kind": "mc", "k": "3.6 印章與浮水印", "feature": "stamp",
+                         "guide": "如何處理印章、編號和浮水印？",
+                         "before": "請", "after": "「國立故宮博物院」的浮水印，以及正文後的印章，不要輪出漢字以外的文字和數字。",
+                         "options": ["忽略", "辨識"], "answer": "忽略"},
+                        {"kind": "advance", "k": "4. 輸出要求",
+                         "guide": "定義好版面規則後，現在要定義輸出格式。"},
+                        {"kind": "mc", "k": "4.1 JSON 格式",
+                         "guide": "辨識完成後，要用什麼格式輸出結果？",
+                         "before": "完成辨識後，把所有結果輸出為", "after": "。",
                          "options": ["JSON", "TXT", "DOCX"], "answer": "JSON"},
-                        {"kind": "free", "k": "十 · 你自己的要求",
-                         "guide": "還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。",
-                         "placeholder": "例如：草書辨識不確定的字，請用 □ 標示並附上信心分數。"}
+                        {"kind": "chip", "k": "4.2 輸出 JSON 的結構",
+                         "guide": "JSON 要分成哪些部分？",
+                         "chip": "輸出的 JSON 分為三部分：史料資訊、正文、待查。"},
+                        {"kind": "multi", "k": "4.3 史料資訊",
+                         "guide": "史料資訊要包含哪些欄位？",
+                         "before": "史料資訊包含：", "after": "。",
+                         "items": ["來源", "史料編號", "標題", "官職", "姓名", "具奏日期"],
+                         "wrong": ["硃批日期", "硃批內容"]},
+                        {"kind": "mc2", "k": "4.4 正文",
+                         "guide": "最後，正文本身要怎麼輸出？",
+                         "before": "正文請", "mid": "，", "after": "抬頭引致的分段。",
+                         "options1": ["合併成一整段", "逐段列出"], "answer1": "合併成一整段",
+                         "options2": ["忽略", "保留"], "answer2": "忽略"},
+                        {"kind": "chip", "k": "4.5 待查",
+                         "guide": "不確定的字要怎麼標記？",
+                         "chip": "在 JSON 最後的待查部分，標記所有不確定的文字，格式為「（前5字，如有）＋？（不確定的字）＋（後5字，如有）」。"},
+                        {"kind": "chip", "k": "4.6 儲存為 Skill",
+                         "guide": "以後要辨識其他手寫的奏摺，不想每次都重打一次 prompt，怎麼辦？",
+                         "chip": "請把以上所有規則整理為 skill「memorial_handwritten.md」。"},
+                        {"kind": "free", "k": "4.7 你自己的要求",
+                         "guide": "還有其他想要求嗎？ ",
+                         "placeholder": ""}
                       ],
                       "reference": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。"
                     }

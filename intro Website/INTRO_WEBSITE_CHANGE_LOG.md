@@ -5286,3 +5286,328 @@ Verified:
 
 Remaining:
 - None for the chat footer spacing adjustment.
+
+### 2026-08-07 16:40 HKT — Claude — Mirror printed try-it structure into handwritten mode
+
+Summary:
+- Added to handwritten 試一試: opening `撰寫 Prompt` advance card, `2.1 史料來源` chip (cites 《明清臺灣檔案彙編》第30冊 — verified against stage1_original_text.json doc_id 硃56, same document as printed), `4.2 輸出 JSON 的結構` chip, `4.3 史料資訊` multi (printed's field list minus 頁碼, since handwritten has no page-number feature), `4.4 正文` chip asking for the body to be merged into one paragraph (opposite of printed's 逐段列出), `4.5 儲存為 Skill` chip, and replaced the old custom `十 · 你自己的要求` with printed's `4.6 你自己的要求` verbatim.
+- Handwritten steps: 10 → 16.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses; printed 18 / handwritten 16 steps, no duplicate labels, all feature refs resolve.
+
+Remaining:
+- No git commit yet — recommend committing soon given the earlier concurrent-overwrite incident.
+
+### 2026-08-07 16:50 HKT — Claude — Simplify handwritten prompt-defining guides to plain questions
+
+Summary:
+- Reworded three handwritten-only guide texts to simple questions: 撰寫 Prompt, 2.1 史料來源, 4.2 輸出 JSON 的結構. Printed mode untouched.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses, step counts unchanged (printed 18 / handwritten 16).
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:17 HKT — Codex — Route handwritten 試一試 assets and folded page turning
+
+Summary:
+- Wired the handwritten 試一試 mode to `Website/storymap/試一試/手寫字/`, including its local PDF, `page1.png`–`page3.png`, and feature-specific images such as `直欄.png`, `作者.png`, `臣字.png`, `硃批.png`, and `水印.png`.
+- Prompt-related feature steps now show the matching annotated image; ordinary prompt steps show the handwritten page scan. The handwritten document view does not add feature highlight labels or coloured overlays.
+- Added folded-paper crease treatment and a short turn animation when moving between handwritten page scans.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm the handwritten PDF path, page 1 and page 2 navigation, the turn class, zero overlay labels, and final routing to `水印.png` with `頁 3 / 3`.
+- `node --check Website/storymap/storymap.js` and `git diff --check` pass; browser console logs are empty.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:00 HKT — Claude — Renumber handwritten 版面要求 steps to match printed's numeric scheme
+
+Summary:
+- Handwritten's five 版面要求 quiz steps renamed from Chinese numerals to printed-style numbers: 四→3.1 閱讀順序, 五→3.2 上奏官員, 六→3.3 小字自稱, 七→3.4 硃批, 八→3.5 印章與浮水印, 九→4.1 JSON 格式 (now flows straight into the existing 4.2–4.6). Guide text for 3.2/3.3/3.4/3.5/4.1 shortened to plain questions, matching printed's style; actual prompt wording (before/after/options) unchanged.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses; printed 18 / handwritten 16 steps, no duplicate labels, feature refs resolve.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:10 HKT — Claude — Add distractor support to "multi" step; mark 硃批日期/硃批內容 wrong in handwritten
+
+Summary:
+- Added optional `wrong` field to the block-style "multi" quiz kind: listed items are shown but must stay unchecked (checking one turns red and blocks completion). Applied to handwritten's "4.3 史料資訊" — 硃批日期/硃批內容 are now distractors there, consistent with "3.4 硃批" already telling the AI to skip OCR'ing the rescript. Printed's 4.3 unaffected (no `wrong` field, still requires those two fields).
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; JSON parses; CSS brace balance 0.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:20 HKT — Claude — Add two-blank "mc2" step kind; convert handwritten 4.4 正文 to it
+
+Summary:
+- New `mc2` step kind (two independent fill-in-blank selects in one sentence, both must be correct to advance) added to `storymap.js`. Handwritten's "4.4 正文" converted from a chip to `mc2`: "正文請【合併成一整段／逐段列出】，【忽略／保留】抬頭引致的分段。", correct = 合併成一整段 / 忽略. Printed's 4.4 unaffected.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; JSON parses; step counts unchanged (18/16).
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:30 HKT — Claude — Add "already downloaded" skip option to 安裝工具 step (both modes)
+
+Summary:
+- New optional `skip` field on "chip" steps renders a secondary, subdued button that advances without adding any line to the chat/prompt. Applied to both modes' "一 · 安裝工具" step with label "已下載".
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; JSON parses; CSS brace balance 0.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:38 HKT — Claude — Add "4. 輸出要求" advance card to handwritten
+
+Summary:
+- Added printed's "4. 輸出要求" advance step (定義好版面規則後，現在要定義輸出格式。) to handwritten mode before "4.1 JSON 格式".
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses; handwritten now 17 steps, no duplicate labels.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:45 HKT — Claude — Always-clickable "完成，加入 prompt" button for block-style multi
+
+Summary:
+- Block-style "multi" quiz (4.3 史料資訊, both modes): "完成，加入 prompt" button is no longer disabled by selection count — clicking it always checks correctness, shaking/reddening on a wrong or incomplete answer instead of being unclickable.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; CSS brace balance 0.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 17:50 HKT — Claude — Left-align "已下載" skip button text
+
+Summary:
+- `.part3-try-chip--skip` text now left-aligned instead of centered.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+### 2026-08-07 18:05 HKT — Claude — Add 具奏日期 quiz (handwritten) and JSON "issue" field (both modes)
+
+Summary:
+- Handwritten: new "3.5 具奏日期" mc step after "3.4 硃批" (印章與浮水印 renumbered 3.5→3.6). Asks whether the closing 乾隆X年X月X日 date is 具奏日期 or 硃批日期 (correct: 具奏日期).
+- Both modes: "4.2 輸出 JSON 的結構" now describes three parts (史料資訊、正文、issue). New "4.5 issue" chip after "4.4 正文" defines the issue field: mark uncertain characters/punctuation as "(前5字)＋？(不確定的字)＋(後5字)". Trailing steps renumbered 4.5→4.6 (儲存為 Skill), 4.6→4.7 (你自己的要求).
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses; printed 19 / handwritten 19 steps, no duplicate labels, feature refs resolve.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 18:15 HKT — Claude — Rename "issue" to 待查; shuffle multi-select button order
+
+Summary:
+- "issue" JSON field renamed to "待查" in both modes' 4.2/4.5 steps.
+- Block-style multi (4.3 史料資訊) option buttons now shuffle on each render; assembled chat sentence still always follows the fixed `items` order regardless of click order.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; JSON parses, no "issue" text remaining.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 18:22 HKT — Claude — Fix broken JSON in "4.6 儲存為 Skill" (handwritten)
+
+Summary:
+- Missing closing quote on the "4.6 儲存為 Skill" chip string broke JSON parsing, taking down the whole 試一試 section. Fixed.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses cleanly again; 19/19 steps, no duplicates.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 18:30 HKT — Claude — Hide right/wrong coloring on multi (史料資訊) until 完成 is clicked
+
+Summary:
+- Multi-select chips (4.3 史料資訊) now stay neutral while picking; red "wrong" styling only reveals right after clicking "完成，加入 prompt", and resets to neutral on further clicks.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 18:55 HKT — Claude — Accordion-fold visuals for 試一試 handwritten mode
+
+Summary:
+- Added section 8's accordion-fold ("風琴摺") visual to specific 試一試 handwritten feature steps: column/author/minor open "bc" (middle+right), stamp opens "ab" (left+middle), each using its own dedicated image split into 3 panels via background-size 300%.
+- "3.4 硃批" and "3.5 具奏日期" instead show a flat crop of 奏報日期.png (middle+right two-thirds, no accordion), since both should display the same image.
+- Removed "頁X／Y" label when any feature image is active (now shows the feature title in both modes).
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; CSS brace balance 0; JSON parses correctly.
+
+Remaining:
+- Not visually verified in a browser this turn — please check live and report any position/sizing issues.
+- No git commit yet.
+
+### 2026-08-07 19:10 HKT — Claude — Fix double-rendered document pane (pagestack + fold both visible)
+
+Summary:
+- `[hidden]` attribute was being overridden by unconditional `display:flex` rules on the page stack / fold / crop containers, causing them to render stacked on top of each other. Added explicit `[hidden]{display:none!important}` override for all three.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- CSS brace balance 0.
+
+Remaining:
+- Printed-mode blank-space screenshot not yet diagnosed as bug vs. source image content.
+- "2 by 2" accordion for normal page browsing not yet implemented — scope needs clarification.
+- No git commit yet.
+
+### 2026-08-07 19:35 HKT — Claude — Full multi-page 風琴摺 for handwritten normal browsing + fix sizing math
+
+Summary:
+- Handwritten mode's normal page browsing (not just quiz-feature steps) now uses the same accordion-fold as section 8: 3 pages × 3 sub-folds = 9 flat panels, default pairing ab/cd/ef via prev/next (±2), with quiz features able to jump to a non-default pair (bc/de) and continue stepping on that grid afterward.
+- Fixed fold sizing: real image aspect ratio (≈155/338, measured via PIL on the actual PNGs) now drives `aspect-ratio` on open panels, and strip width is measured in JS pixels (`sizeFoldStrip()`) instead of an incorrect percentage-based calc.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `../PROJECT_LOG.md`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check` passes; CSS brace balance 0; JSON unaffected (19/19 steps).
+
+Remaining:
+- Not yet checked in a live browser.
+- No git commit yet.
+
+### 2026-08-07 19:55 HKT — Claude — Revert 風琴摺 accordion; back to plain page-by-page for 試一試
+
+Summary:
+- Rolled back the accordion-fold experiment entirely — handwritten mode is back to plain page1/2/3.png browsing with per-feature image swap-in, no folding/cropping. "3.4 硃批" uses 硃批.png again (via existing `rescript` feature); "3.5 具奏日期" now has a proper new `sendDate` feature (奏報日期.png) instead of the removed crop override. All accordion JS/CSS/HTML removed.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; CSS brace balance 0; JSON parses (19/19 steps, no dup labels, all feature refs resolve, no leftover fold/cropImage fields).
+
+Remaining:
+- Recommend committing now — back to a simple, verified-working state.
+
+### 2026-08-07 20:10 HKT — Claude — Use memorial_print_ocr.json as printed 試一試 reference
+
+Summary:
+- Printed mode's compare-stage `reference` now holds the full memorial_print_ocr.json content verbatim (史料資訊／正文／待查), replacing the earlier plain-text placeholder, matching the flow's actual JSON output target.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- JSON parses; reference string itself parses to expected structure.
+
+Remaining:
+- No git commit yet.
