@@ -2157,7 +2157,7 @@ const initPart3TryIt = () => {
       const foot = stageHost.querySelector('[data-try-foot]');
       foot.innerHTML = `<span class="hint">點擊Prompt進行修改</span>`
         + `<button type="button" class="part3-try-copy" data-try-copy>${COPY_IC}複製全部</button>`;
-      showGuide('完成', '以上就是寫給Agentic Ai進行OCR的 prompt。想改哪一句就直接點進去改，滿意後按右下角複製，貼到你的 Agentic AI。');
+      showGuide('完成', '以上就是寫給Agentic Ai進行OCR的 prompt。直接點選各項 Prompt 進行修改，確認內容後，複製再發給 Agentic AI 執行');
       foot.querySelector('[data-try-copy]').addEventListener('click', (e) => {
         const btn = e.currentTarget;
         const txt = [...stageHost.querySelectorAll('.part3-try-bubble')]
@@ -2269,7 +2269,7 @@ const initPart3TryIt = () => {
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'part3-try-optbtn';
-        btn.textContent = '完成，產生 prompt';
+        btn.textContent = '完成';
         btn.addEventListener('click', () => {
           const v = ta.value.trim();
           answers[cur] = v;
@@ -2424,14 +2424,14 @@ const initPart3TryIt = () => {
     const file = mode === 'printed' ? 'try-printed' : 'try-handwritten';
     stageHost.innerHTML = `
       <div class="part3-try-win">
-        <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第三步 · 比對 OCR 結果　—　${file}.ocr.txt</span></div>
+        <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第三步 · 比較 OCR 結果</span></div>
         <div class="part3-try-cmp" data-try-cmp>
           <span class="lab">你的 OCR 結果</span>
-          <textarea class="part3-try-area" data-try-input placeholder="把 Agentic AI 輸出的正文貼在這裡。"></textarea>
+          <textarea class="part3-try-area" data-try-input placeholder=""></textarea>
           <div class="part3-try-cmprow">
-            <button type="button" class="part3-try-cmpbtn primary" data-try-run>與參考結果比對</button>
+            <button type="button" class="part3-try-cmpbtn primary" data-try-run>比較參考結果</button>
             <span class="spacer"></span>
-            <button type="button" class="part3-try-cmpbtn" data-try-refdl>下載參考 OCR 結果</button>
+            <button type="button" class="part3-try-cmpbtn" data-try-refdl>下載參考結果</button>
           </div>
         </div>
       </div>`;
@@ -2446,8 +2446,8 @@ const initPart3TryIt = () => {
       runCompare(stageHost.querySelector('[data-try-input]').value);
     });
     stageHost.querySelector('[data-try-refdl]').addEventListener('click', downloadRef);
-    showGuide('第三步', 'AI 跑完了嗎？把它輸出的正文貼進來，我們拿它跟參考結果逐字對照，看看差在哪裡。');
-    syncDoc();
+    showGuide('第三步', 'AI 完成 OCR 後，請將結果貼到上方的文字輸入區，與參考結果進行比較，看看是否需要修改 OCR Prompt。 ');
+    syncDoc(); 
     if (compareHasRun && compareRaw) runCompare(compareRaw);
   };
 

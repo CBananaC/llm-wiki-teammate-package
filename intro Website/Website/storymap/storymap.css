@@ -3290,7 +3290,7 @@ img { max-width: 100%; }
 .part3-try-bubble[contenteditable="true"]:focus { background: #fff; box-shadow: 0 0 0 2px rgba(196, 93, 56, .4); }
 .part3-try-chatfoot {
   display: flex; align-items: center; justify-content: flex-end; gap: 8px;
-  padding: 0 16px 14px; background: var(--card);
+  padding: var(--try-chatfoot-top-pad, 24px) 16px 14px; background: var(--card);
 }
 .part3-try-chatfoot .hint { margin-right: auto; font-size: calc(11px * var(--font-scale)); color: rgba(22, 61, 63, .45); }
 .part3-try-copy {

@@ -5265,3 +5265,24 @@ Verified:
 
 Remaining:
 - `.git/index.lock` still present — likely another agent session is active on this same repo right now; recommend checking before further concurrent edits.
+
+### 2026-08-07 16:22 HKT — Codex — Increase the upper space of the completed chat footer
+
+Summary:
+- Increased the top padding above `每一句都可以直接點進去修改。` and `複製全部` in the Step 2 AI chatbox.
+- Added `--try-chatfoot-top-pad: 24px` to the adjustable Part 3 試一試 variables.
+- Refreshed the stylesheet query version so the spacing change loads immediately.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirms both StoryMap stylesheets load the refreshed version and the computed `--try-chatfoot-top-pad` is `24px`.
+- Browser console logs are empty; `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the chat footer spacing adjustment.

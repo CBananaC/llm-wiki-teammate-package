@@ -1583,6 +1583,8 @@
                                 聊天視窗改長高多少（預設 none＝不設上限，
                                 視內容自然長高，仍在 --try-explorer-h
                                 的範圍內用外層面板捲動）
+         --try-chatfoot-top-pad 完成 prompt 後，底部「複製全部」面板
+                                上方的留白
          --try-cmp-area-h      第三步貼上結果的輸入框高度
          --try-diff-h          第三步比對結果那一欄的高度
 
@@ -1646,6 +1648,7 @@
   --try-guide-gap: 16px;
   --try-chat-max-h: 420px;
   --try-chat-max-h-final: none;
+  --try-chatfoot-top-pad: 24px;
   --try-cmp-area-h: 96px;
   --try-diff-h: 180px;
 

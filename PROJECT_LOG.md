@@ -9414,3 +9414,24 @@ Verified:
 Remaining:
 - `.git/index.lock` is still present and not removable by me (permission denied) — a sign another agent/process may still be mid-operation on this repo. Recommend the user check whether another Claude/Codex session is running against this same folder right now before doing further concurrent edits, to avoid this happening again.
 - `storymap.css`/`storymap.js` still have my legitimate uncommitted "freeze chat header/footer + rectangle multi buttons" changes from this session — left untouched, not part of this recovery.
+
+### 2026-08-07 16:22 HKT — Codex — Increase the upper space of the completed chat footer
+
+Summary:
+- Increased the top padding above `每一句都可以直接點進去修改。` and `複製全部` in the Step 2 AI chatbox.
+- Added `--try-chatfoot-top-pad: 24px` to the adjustable Part 3 試一試 variables.
+- Refreshed the stylesheet query version so the spacing change loads immediately.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirms both StoryMap stylesheets load the refreshed version and the computed `--try-chatfoot-top-pad` is `24px`.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the chat footer spacing adjustment.
