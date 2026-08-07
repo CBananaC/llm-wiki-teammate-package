@@ -21,13 +21,51 @@
   <title>清代奏摺與上諭分析平台</title>
 </head>
 <body>
+  <!-- 螢幕尺寸／方向守門：這個網站的排版目前只為「較寬的視窗」和「橫向手機」
+       設計，還沒有做真正的手機直向版面。以下兩個守門畫面純粹靠 CSS media
+       query 判斷，不需要 JavaScript：
+       1. 用滑鼠／觸控板的裝置（電腦、筆電）視窗太窄 → 請求放寬視窗；門檻對齊
+          「辨識印刷字」等 .part3-feature-explorer 版面改為上下堆疊的寬度（1040px）。
+       2. 用觸控的裝置（手機、平板）且目前是直向 → 請求轉為橫向。
+       兩個判斷條件互斥，不會同時出現；視覺沿用封面／分頁帶的深色漸層＋
+       serif 大標題風格，門檻與文案可在 storymap.css 的
+       「螢幕尺寸／方向守門」區塊調整。 -->
+  <div class="viewport-gate viewport-gate-widen" aria-hidden="true">
+    <div class="viewport-gate-backdrop"></div>
+    <div class="viewport-gate-card">
+      <span class="viewport-gate-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/>
+        </svg>
+      </span>
+      <p class="viewport-gate-eyebrow">視窗提示</p>
+      <h2 class="viewport-gate-title">請放大瀏覽器視窗</h2>
+      <p class="viewport-gate-note">為獲得最佳瀏覽效果，請將瀏覽器視窗放大，或改用較大螢幕的裝置。</p>
+    </div>
+  </div>
+  <div class="viewport-gate viewport-gate-rotate" aria-hidden="true">
+    <div class="viewport-gate-backdrop"></div>
+    <div class="viewport-gate-card">
+      <span class="viewport-gate-icon" aria-hidden="true">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+          <rect x="7" y="2" width="10" height="20" rx="2"/>
+          <path d="M11 18h2"/>
+          <path d="M20 8a6 6 0 0 0-6-6" stroke-dasharray="2.5 2.5"/>
+          <path d="M20 8l-2.4-.6M20 8l.6-2.4"/>
+        </svg>
+      </span>
+      <p class="viewport-gate-eyebrow">畫面提示</p>
+      <h2 class="viewport-gate-title">請將手機轉為橫向</h2>
+      <p class="viewport-gate-note">請將手機轉為橫向，以獲得最佳瀏覽效果。</p>
+    </div>
+  </div>
   <header class="topbar">
     <a class="brand" href="#cover">清代奏摺與上諭分析平台</a>
     <nav class="tabs" aria-label="網站章節">
       <a class="main-nav-link" href="#cover" data-nav-target="cover">主頁</a>
       <div class="nav-dropdown">
-        <a class="main-nav-link nav-dropdown-trigger" href="#intro" data-nav-target="intro" aria-haspopup="true" aria-expanded="false">引言<span class="nav-dropdown-chevron" aria-hidden="true">⌄</span></a>
-        <div class="nav-dropdown-menu" role="menu" aria-label="引言章節">
+        <a class="main-nav-link nav-dropdown-trigger" href="#intro" data-nav-target="intro" aria-haspopup="true" aria-expanded="false">平台簡介<span class="nav-dropdown-chevron" aria-hidden="true">⌄</span></a>
+        <div class="nav-dropdown-menu" role="menu" aria-label="平台簡介章節">
           <div class="nav-dropdown-inner">
             <div class="workflow-chain">
               <a class="workflow-node" href="#intro-1-1" data-workflow-target="#intro-1-1" role="menuitem">清代奏折制度<small>01</small></a>
@@ -45,9 +83,9 @@
           </div>
         </div>
       </div>
-      <a class="main-nav-link" href="#part-1" data-nav-target="part-1">第一部分</a>
-      <a class="main-nav-link" href="#part-2" data-nav-target="part-2">第二部分</a>
-      <a class="main-nav-link" href="#part-3" data-nav-target="part-3">第三部分</a>
+      <a class="main-nav-link" href="#part-1" data-nav-target="part-1">平台介面</a>
+      <a class="main-nav-link" href="#part-2" data-nav-target="part-2">平台運作流程</a>
+      <a class="main-nav-link" href="#part-3" data-nav-target="part-3">運用平台研究其他問題</a>
     </nav>
     <div class="settings-wrap">
       <button class="settings-button" id="settings-button" type="button" aria-expanded="false" aria-controls="site-settings-panel" aria-label="開啟網站設定" title="網站設定">
@@ -874,12 +912,6 @@
                   </div>
                 </article>
               </div>
-              <div class="lay-visual">
-                <!-- 互動圖庫：版面在 part-3-question-gallery.css 調整，
-                     行為在 part-3-question-gallery.js 調整，
-                     內容資料一律來自 part-3-question-gallery-data.js。 -->
-                <div class="part3-qgallery" id="part-3-research-chart" data-part3-qgallery role="group" aria-label="適合的研究問題：四線關係圖表示範"></div>
-              </div>
             </div>
           </div>
         </section>
@@ -926,7 +958,7 @@
                 <div class="part3-tools-window-bar"><span>工具資訊</span></div>
                 <div class="part3-tools-info-panel">
                   <article class="part3-tool-info-view" data-part3-tool-info="repository">
-                    <figure class="part3-tool-info-photo"><img src="../UI%20Idea/demo-review-tool-fullview.png" alt="清代奏摺與上諭分析平台介面" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">1</span></figure>
+                    <figure class="part3-tool-info-photo"><span class="part3-tool-info-number" aria-hidden="true">1</span></figure>
                     <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">原始碼與資料夾</p><h3>GitHub Repository</h3><div class="body"><p>首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills的Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。</p></div></div>
                   </article>
                   <article class="part3-tool-info-view" data-part3-tool-info="agentic-ai" hidden>
@@ -1048,7 +1080,7 @@
                   </article>
                 
                   <article class="part3-tool-info-view" data-part3-tool-info="api" hidden>
-                    <figure class="part3-tool-info-photo"><img src="done-intro-8.png" alt="史料傳遞路線圖" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">4</span></figure>
+                    <figure class="part3-tool-info-photo"><img src="done-into-8.png" alt="" loading="lazy" decoding="async"><span class="part3-tool-info-number" aria-hidden="true">4</span></figure>
                     <div class="part3-tool-info-copy"><p class="part3-tool-info-subtitle">批次處理與分析</p><h3>AI API</h3><div class="body"><p>此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。</p></div></div>
                   </article>
                   <article class="part3-tool-info-view" data-part3-tool-info="backup" hidden>
@@ -1300,7 +1332,7 @@
                       "alt": "理大數碼創意空間的書籍掃描器",
                       "title": "理大圖書館中的掃描器",
                       "paragraphs": [
-                        "理大的數碼創意空間提供配備先進影像處理功能的書籍掃描器，包括書籍影像校正、自動移除手指影像、多份文件偵測，以及厚書掃描。"
+                        "理大圖書館四樓的書籍掃描器具備半自動掃描、影像校正及手指影像自動移除等功能，可協助同學掃描古籍和檔案史料。"
                       ],
                       "source": { "text": "詳見理大圖書館〈書籍掃描器〉網頁。", "href": "https://www.lib.polyu.edu.hk/makerspace/book-scanner" }
                     }]
@@ -1544,7 +1576,7 @@
             <div class="story-inner">
               <div class="lay-split text-left" style="--vis-w: 56%;">
                 <div class="lay-copy">
-                  <article class="copybox blk" id="part-3-json-card"><div class="title-row"><span class="option-number">9</span><h2>輸出格式：JSON</h2></div><div class="body"><p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p></div></article>
+                  <article class="copybox blk" id="part-3-json-card"><div class="title-row"><span class="option-number">9</span><h2>輸出格式：JSON</h2></div><div class="body"><p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON的格式。</p><p>JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p></div></article>
                 </div>
                 <div class="lay-visual">
                   <div class="part3-json-viewer-wrap" id="part-3-json-chart" role="group" aria-label="輸出格式：JSON——硃25 完整 OCR JSON">
@@ -1597,7 +1629,7 @@
             <div class="story-inner">
               <div class="lay-split text-left" style="--vis-w: 46%;">
                 <div class="lay-copy">
-                  <article class="copybox blk" id="part-3-test-card"><div class="title-row"><span class="option-number">10</span><h2>OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
+                  <article class="copybox blk" id="part-3-test-card"><div class="title-row"><span class="option-number">10</span><h2>OCR測試</h2></div><div class="body"><p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。</p><p>研究者應檢查OCR能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。</p><p>為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查 結果，再繼續處理下一批。</p></div></article>
                 </div>
                 <div class="lay-visual">
                   <!-- 批次掃描／驗證動畫。所有尺寸、顏色在 storymap-cards.css 的
@@ -1656,7 +1688,7 @@
                     "printed": {
                       "pdf": "為請酌籌加調官兵協力進剿事_印刷字.pdf",
                       "pdfSub": "",
-                      "pdfPath": "/Users/creamybanana/Downloads/DH Project/intro Website/Website/storymap/試一試/印刷字/為請酌籌加調官兵協力進剿事_印刷字.pdf",
+                      "pdfPath": "試一試/印刷字/為請酌籌加調官兵協力進剿事_印刷字.pdf",
                       "href": "試一試/印刷字/為請酌籌加調官兵協力進剿事_印刷字.pdf",
                       "assetDir": "試一試/印刷字/",
                       "pages": ["page1.png", "page2.png"],
@@ -1739,7 +1771,7 @@
                     "handwritten": {
                       "pdf": "為請酌籌加調官兵協力進剿事_手寫字.pdf",
                       "pdfSub": "",
-                      "pdfPath": "/Users/creamybanana/Downloads/DH Project/intro Website/Website/storymap/試一試/手寫字/為請酌籌加調官兵協力進剿事_手寫字.pdf",
+                      "pdfPath": "試一試/手寫字/為請酌籌加調官兵協力進剿事_手寫字.pdf",
                       "href": "試一試/手寫字/為請酌籌加調官兵協力進剿事_手寫字.pdf",
                       "assetDir": "試一試/手寫字/",
                       "pages": ["page1.png", "page2.png", "page3.png"],
@@ -1782,8 +1814,8 @@
                          "before": "請", "after": "紅色的硃批文字。",
                          "options": ["不要 OCR", "優先 OCR", "合併進正文"], "answer": "不要 OCR"},
                         {"kind": "mc", "k": "3.5 具奏日期", "feature": "sendDate",
-                         "guide": "文末「乾隆X年X月X日」格式的日期，是什麼日期？",
-                         "before": "文末以「乾隆X年X月X日」格式呈現的是", "after": "，請辨識並存為獨立的 data。",
+                         "guide": "如何處理文末的日期？",
+                         "before": "文末「乾隆X年X月X日」格式的日期是", "after": "，辨識並輸出為獨立的 data。",
                          "options": ["具奏日期", "硃批日期"], "answer": "具奏日期"},
                         {"kind": "mc", "k": "3.6 印章與浮水印", "feature": "stamp",
                          "guide": "如何處理印章、編號和浮水印？",
@@ -1818,7 +1850,7 @@
                          "guide": "還有其他想要求嗎？ ",
                          "placeholder": ""}
                       ],
-                      "reference": "福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。"
+                      "reference": "{\"史料資訊\": {\"來源\": \"國立故宮博物院的「清代檔案檢索系統」\", \"史料編號\": \"故宮075669號\", \"標題\": \"為請酌籌加調官兵協力進剿事\", \"官職\": \"閩浙總督\", \"姓名\": \"常青\", \"具奏日期\": \"乾隆五十一年十二月二十日\"}, \"正文\": \"閩浙總督臣常青跪奏，為酌籌加調官兵協力進剿，速殲逆匪事。竊照彰化賊人林爽文等，謀為不軌，攻佔城池，先經臣派撥三路官兵赴剿。嗣聞賊勢蔓延，臺灣郡城尤關緊要，臣抵泉後，即與提臣任承恩籌畫，令其加帶官兵，仍由鹿耳門前進。該提臣於十四日登舟，十七日乘風開駕。緣臺地遠隔重洋，必須出奇制變，方可迅奏膚功。因復面為商定，或竟由鹿港進攻，或由鹿耳門入口，聽其察探賊情，隨宜辦理。各緣由均經節次奏聞在案。惟是調往官兵，雖有六千，內水師提臣黃仕簡帶領本標及調取南澳、銅山等營官兵，共計二千數百名，其由閩安出口派赴淡北之官兵一千五百名。臣於十三日據淡水同知程峻之子程必大稟報：竹塹地方亦被賊人佔踞，因飭領兵之海壇鎮總兵郝壯猷相奪情形，非於新莊堵禦，即赴南路應援。而鹿耳為臺地咽喉，尤須厚集兵力，庶可近護郡城，遠赴攻剿。茲臣復添派督、撫二標兵一千名，檄令原任閩安協副將徐鼎士帶領，由省城南臺口配船；又調福寧鎮並桐山、羅源等營兵一千名，檄令福寧右營遊擊延山帶領，於福安縣白石口配船。俱從各該處出口候風，直渡過臺，逕由鹿耳門進口，交與水師提臣黃仕簡，聽其調度。俾軍容益昭壯盛，賊匪聞風膽落，自可剋期殄滅。臣一面仍再於各營兵丁內，預為挑備，酌量機宜，隨時策應。外所有加調官兵赴剿緣由，理合恭摺馳奏。再，查十八、九兩日，未有臺來文報，惟據差往探聽之守備林登雲稟稱：探得澎湖陳副將，差蔡遊擊領兵於十四日到郡，安平林遊擊亦帶兵赴援，現在賊勢稍退。又，水師黃提臺於十五日帶孫遊擊領兵開船，因風勢甚猛，仍於十六日收回，十七日始行東渡。等語。合併奏聞，伏祈皇上睿鑒。謹奏。\", \"待查\": [\"十七日＋？（乘／乗）＋風開駕\", \"謀為不軌＋？（攻佔／攻占）＋城池先經\", \"必須出＋？（奇）＋制變方可\", \"郝壯猷相奪＋？（情形／度情形）＋非於新莊\", \"臣內預為＋？（挑／桃）＋備酌量機宜\", \"福寧鎮＋？（並／并）＋桐山羅源\", \"自可＋？（剋／克／尅）＋期殄滅臣一面\", \"皇上睿鑒謹＋？（奏）＋\"]}"
                     }
                   }
                   </script>

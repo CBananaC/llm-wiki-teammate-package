@@ -5611,3 +5611,74 @@ Verified:
 
 Remaining:
 - No git commit yet.
+
+### 2026-08-07 20:55 HKT — Claude — Simplify 試一試 phase 3 to stacked reference/mine text boxes; drop field-table + legend, collapse guide bar after compare
+
+Summary:
+- Replaced the field-by-field JSON table UI with two stacked text boxes (參考 OCR 結果 top, 你的 OCR 結果 bottom, editable), each 50% of the compare window's remaining height (score row + button row excluded via flexbox). Diff shown as inline red underline directly in each box's text (reused `diffTryChars`), no separate legend/side panel.
+- After a compare runs, the bottom guide dialogue box hides to give the compare window the rest of the panel height; it reappears automatically on the next `showGuide()` call.
+- "Your OCR result" box is now `contenteditable` instead of `<textarea>` so diff highlighting can render inline while still being editable.
+
+Files changed:
+- `Website/storymap/storymap.js`, `Website/storymap/storymap.css`
+
+Verified:
+- `node --check storymap.js` OK; CSS brace balance 0; JSON data block still parses, step counts unchanged.
+- Not visually verified in a browser.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 20:35 HKT — Claude — JSON-vs-JSON structured compare for 試一試 phase 3; handwritten reference now real OCR JSON too
+
+Summary:
+- Phase 3 compare (`runCompare` in storymap.js) now branches: if `d().reference` parses as JSON, compares the user's pasted text as JSON field-by-field (`flattenTryJson`/`diffTryJson`) with match/mismatch/missing/extra states per leaf path, invalid-JSON input shows a dedicated error panel; otherwise unchanged character-level diff.
+- Handwritten `reference` replaced with full content of `memorial_handwritten_ocr.json` (external outputs folder), so both modes now use real OCR-output JSON as reference and both get the structured compare automatically.
+- Download-reference button exports `.json` (formatted) when reference is JSON, `.txt` otherwise.
+
+Files changed:
+- `Website/storymap/storymap.js`, `Website/storymap/storymap.css`, `Website/storymap/storymap-example.html`
+
+Verified:
+- `node --check storymap.js` OK; CSS brace balance 0; both printed/handwritten `reference` fields parse as valid JSON; step counts unchanged (19/19).
+- Not visually verified in a browser.
+
+Remaining:
+- No git commit yet.
+
+### 2026-08-07 21:20 HKT — Claude — Nav renaming, responsive gate, teacher-preview mode (?preview=ocr) for GitHub hosting
+
+Summary:
+- Renamed the 4 top-nav tabs: 引言→平台簡介, 第一部分→平台介面, 第二部分→平台運作流程, 第三部分→運用平台研究其他問題.
+- Added CSS-only viewport gate: narrow desktop window → "widen your window" overlay; mobile portrait → "rotate to landscape" overlay (`pointer:fine`/`pointer:coarse` media queries, no JS).
+- Added `?preview=ocr` mode (same file, no duplicate site): jumps straight to Part 3 步驟二 OCR並結構化原始史料 on load, locks 主頁/平台介面/平台運作流程 tabs + brand link, fades+`inert`s content above 步驟二 and the 步驟八 LLM Wiki stage onward with a "尚在開發中" badge. Share link: `storymap-example.html?preview=ocr`.
+- Fixed 2 absolute local-machine paths in 試一試's `pdfPath` JSON field → relative (matches existing `href`, cleanliness fix, not functional since `href` already took priority for the actual download link).
+- Flagged, not changed: site has `../` links needing `Website/` (not just `storymap/`) as the published root (`../references.html`, `../UI Idea/demo-review-tool-fullview.png`, one PDF under `../Visual Material/情報路線/`); `Website/` is ~1GB total from large unlinked archival PDFs under `Visual Material/` — recommend pruning or Git LFS before pushing to GitHub.
+
+Files changed:
+- `Website/storymap/storymap-example.html`, `Website/storymap/storymap.css`, `Website/storymap/storymap.js`
+
+Verified:
+- `node --check` OK, CSS brace balance 0, HTML tag counts balanced, JSON data block parses, all referenced relative assets confirmed to exist on disk.
+- Not visually verified in a browser.
+
+Remaining:
+- No git commit made.
+- User to decide repo scope for hosting.
+
+### 2026-08-07 21:45 HKT — Claude — Redo reverted image removals; redesign viewport-gate, align breakpoint with 辨識印刷字
+
+Summary:
+- Re-removed 適合的研究問題's chart container and the GitHub Repository photo in 所需的工具與資源 — both had reverted back into the file since the earlier turn that removed them, while other later edits (nav renaming, pdfPath fixes, preview mode) stayed intact. Possible concurrent-edit collision; flagged.
+- Viewport-gate breakpoint changed 899px→1040px to match `.part3-feature-explorer`'s own stacking breakpoint (辨識印刷字 etc.).
+- Gate copy updated to the requested wording; visual redesigned to match the site's hero/section-hero style (gradient backdrop, icon, yellow eyebrow, serif headline, larger body text) instead of the plain small card.
+
+Files changed:
+- `Website/storymap/storymap-example.html`, `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` OK, CSS brace balance 0, HTML tag counts balanced, JSON data block parses, confirmed the two images are gone again.
+- Not visually verified in a browser.
+
+Remaining:
+- No git commit made.

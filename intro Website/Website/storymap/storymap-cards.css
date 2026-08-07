@@ -1007,7 +1007,7 @@
    and cap the whole game window's height so it fits the viewport. */
 #part-3-printed-explorer,
 #part-3-handwritten-explorer {
-  --fx-explorer-h: calc(95svh - var(--bar-h, 62px));
+  --fx-explorer-h: calc(98svh - var(--bar-h, 62px));
   width: 96vw;
   max-width: 96vw;
   margin-left: calc(50% - 48vw);

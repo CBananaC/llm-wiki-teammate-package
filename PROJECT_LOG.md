@@ -9790,3 +9790,107 @@ Verified:
 
 Remaining:
 - No git commit made — recommend committing soon.
+
+### 2026-08-07 20:55 HKT — Claude — Simplify 試一試 phase 3 to stacked reference/mine text boxes; drop field-table + legend, collapse guide bar after compare
+
+Summary:
+- Reverted the field-by-field JSON comparison table from the previous change (removed `flattenTryJson`/`diffTryJson`/the row UI and its legend line). 第三步 · 比較 OCR 結果 is now two stacked text boxes inside the compare window: 參考 OCR 結果 on top, 你的 OCR 結果 (editable) on bottom, each taking 50% of the window's remaining height (吻合度 row and the button row are fixed-height and excluded from that 50/50 split, via flexbox: `.part3-try-cmp` is a flex column, `.part3-try-cmpstack` is `flex:1`, each `.part3-try-cmpbox` inside it is `flex:1 1 0`).
+- Diff markers (red underline for mismatched/missing/extra characters) are rendered directly inside each box's text via `diffTryChars`, reusing the existing LCS diff — no separate side panel or per-field legend text.
+- For JSON references (both modes now), the diff still runs on the whitespace-collapsed JSON text; the reference box shows the pretty-printed JSON before any comparison has run, then switches to the diffed (collapsed) text after 比較/重新比對 is clicked.
+- Once a compare successfully runs, the bottom RPG guide dialogue box (`[data-try-guide]`) is hidden (`guideHost.hidden = true`) so the compare window can stretch to fill the rest of the panel (new `.part3-try-scroll.is-cmp` flex layout). The guide box reappears automatically on any subsequent `showGuide()` call (mode switch, phase change, revisiting phase 3 fresh), since `showGuide` now resets `guideHost.hidden = false` at the top.
+- User's "your OCR result" box changed from a `<textarea>` to a `contenteditable` div (`.part3-try-cmptext.is-editable`) so diff highlighting can be shown inline in typed text, per explicit request ("show the comparison symbol like underline, red font etc. in the type box's text is ok").
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js` (rewrote the 第三步 compare block: `paintCmp`, simplified `runCompare`, simplified `renderPhase3`; `showGuide` now resets `guideHost.hidden`; removed `flattenTryJson`/`diffTryJson`)
+- `intro Website/Website/storymap/storymap.css` (replaced `.part3-try-half`/`.part3-try-diff`/`.part3-try-key`/`.part3-try-jsoncmp`/`.part3-try-jsonrow*` rules with `.part3-try-cmpstack`/`.part3-try-cmpbox`/`.part3-try-cmptext`/`.part3-try-scroll.is-cmp`)
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance = 0; `data-part3-try-data` JSON still parses, step counts unchanged (19/19 both modes).
+- Not yet visually verified in a browser (no browser available here) — recommend checking the 50/50 split height, the underline/red diff styling legibility, and that the guide box correctly reappears when switching mode or revisiting phase 3.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 20:35 HKT — Claude — JSON-vs-JSON structured compare for 試一試 phase 3; handwritten reference now real OCR JSON too
+
+Summary:
+- `第三步 · 比對 OCR 結果` now detects whether the mode's `reference` is valid JSON. If so, it parses the user's pasted OCR text as JSON too and compares field-by-field (flattened dot/bracket path per leaf) instead of raw character diffing: each reference field is marked 相符 (match), 不同 (mismatch, with the differing text still shown via the existing character-diff highlighting), or 缺少 (missing), plus any extra user-only fields marked 多出. 吻合度 % = matched leaf fields ÷ total reference leaf fields. If the user's pasted text is not valid JSON, a dedicated error panel explains this instead of silently falling back to garbled character diffing. If the mode's reference is plain text (not JSON), the original character-level diff behavior is unchanged.
+- Replaced handwritten mode's placeholder plain-text `reference` with the full content of `/Users/creamybanana/Documents/Codex/2026-08-07/paddleocr-pdf-ocr-pdf-30-data/outputs/memorial_handwritten_ocr.json` (史料資訊／正文／待查 structure — 6 史料資訊 fields, single merged 正文 string, 8 待查 flagged items), embedded verbatim as a JSON string, matching the handwritten prompt flow's actual target output. This means handwritten mode now also gets the new JSON-vs-JSON structured compare automatically (no mode-specific branching needed — both modes share the same `runCompare` logic, keyed off whether `reference` parses as JSON).
+- `下載參考 OCR 結果` button now downloads the reference as a formatted `.json` file (`application/json`, 2-space indent) when the reference is JSON, instead of a flat `.txt` file.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js` (added `flattenTryJson`, `diffTryJson`, `refAsJson`, `runCompareJson`, `wireCompareControls`; `runCompare` and `downloadRef` branch on JSON vs plain-text reference)
+- `intro Website/Website/storymap/storymap.css` (new `.part3-try-jsoncmp`/`.part3-try-jsonrow`/`.part3-try-jsonerr`/`.part3-try-score.is-error` rules)
+- `intro Website/Website/storymap/storymap-example.html` (handwritten `reference` replaced with memorial_handwritten_ocr.json content)
+
+Verified:
+- `node --check storymap.js` passes.
+- CSS brace balance = 0.
+- `json.loads()` on `data-part3-try-data` succeeds; both `data.printed.reference` and `data.handwritten.reference` parse as valid JSON with expected keys (史料資訊/正文/待查); step counts unchanged (19/19).
+- Not yet verified in an actual browser (no browser available in this environment) — recommend a manual click-through of both modes' phase 3 compare screen, including pasting a deliberately malformed JSON to confirm the error panel appears correctly.
+
+Remaining:
+- No git commit made — recommend committing soon.
+
+### 2026-08-07 21:20 HKT — Claude — Nav renaming, responsive gate, and teacher-preview mode for GitHub hosting prep
+
+Summary:
+- Renamed the four top-nav tab labels in `storymap-example.html`: 引言→平台簡介, 第一部分→平台介面, 第二部分→平台運作流程, 第三部分→運用平台研究其他問題 (also updated the intro dropdown menu's `aria-label` to match). Only the nav bar labels changed; the in-content "第一部分/第二部分/第三部分" eyebrow headings elsewhere in the page were left as-is since the request was specifically about tab names.
+- Added a CSS-only (no JS) screen-size/orientation gate: two full-viewport overlays (`.viewport-gate-widen`, `.viewport-gate-rotate`) shown via `@media (pointer: fine) and (max-width: 899px)` (desktop/laptop window too narrow → asks to widen the window) and `@media (pointer: coarse) and (orientation: portrait)` (phone/tablet in portrait → asks to rotate to landscape). The two conditions are mutually exclusive by media query. No mobile-portrait layout was built — this is a stopgap for the draft/teacher-review stage, not a real responsive redesign.
+- Added a "teacher preview" mode triggered by a URL query param `?preview=ocr` (no separate duplicate site/file — same `storymap-example.html`/`storymap.js`/`storymap.css`, extra restrictions only activate when the param is present, appended as a self-contained IIFE at the end of `storymap.js`):
+  - On load, forces the view straight to Part 3's 步驟二 · OCR 並結構化原始史料 (`#part-3-ocr`), regardless of what hash was in the URL.
+  - Locks the 主頁／平台介面／平台運作流程 nav tabs and the header brand link (visibly greyed via `.is-preview-locked-tab`, `title` tooltip explaining why, click blocked) — only 平台簡介 and 運用平台研究其他問題 stay clickable. Re-clicking the Part 3 tab always snaps back to `#part-3-ocr` rather than the top of Part 3.
+  - Fades and disables (`.is-preview-faded` + `inert` attribute) the content above 步驟二 (適合的研究問題／所需的工具與資源／重用平台的基本流程) and everything inside the 步驟八・後續功能：LLM Wiki stage (`#part-3-wiki`, which also contains the 保存分析結果 sub-section) — each locked block gets a small "此部分尚在開發中，暫未開放於此預覽" badge. The 步驟三至五・運用AI抽取資訊 stage (`#part-3-ai`) is untouched — fully visible and interactive, since it wasn't named in the exclusion.
+  - Shareable link for the teacher: `storymap-example.html?preview=ocr` (relative to wherever the file ends up hosted).
+- Hosting hygiene: found and fixed two absolute local-machine paths (`/Users/creamybanana/Downloads/DH Project/...`) leaking into the 試一試 (Try-it) feature's `pdfPath` JSON field for both printed and handwritten modes — replaced with the same relative paths already used by the correct `href` field (the actual download button already worked via `href`'s fallback priority; `pdfPath` was only leaking into an inert `data-try-pdf-source` HTML attribute, so this was a cleanliness fix, not a functional bug fix).
+- Hosting caveat found, NOT changed (flagged for the user's decision): `storymap-example.html` has a few `../` links that reach outside the `storymap/` folder into the parent `Website/` folder — `../references.html`, `../UI Idea/demo-review-tool-fullview.png`, and one PDF under `../Visual Material/情報路線/`. Whatever gets published to GitHub Pages needs to include `Website/` (not just `Website/storymap/`) for these to resolve. Separately, `Website/` is currently ~1GB on disk, mostly from large archival PDFs under `Visual Material/明清台灣檔案匯編/` and `Visual Material/天地會/` (70–86MB each) that do not appear to be linked from the site at all — worth pruning what actually gets pushed to the repo (or using Git LFS) rather than pushing the whole folder as-is.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html` (nav labels, viewport-gate markup, two `pdfPath` fixes)
+- `intro Website/Website/storymap/storymap.css` (viewport-gate rules, `.is-preview-locked-tab`, `.is-preview-faded`, `.preview-faded-badge`)
+- `intro Website/Website/storymap/storymap.js` (appended the `?preview=ocr` IIFE at the end of the file)
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance = 0; `div`/`section`/`article` tag counts balanced in the HTML; `data-part3-try-data` JSON still parses with both `pdfPath` fields now relative and step counts unchanged (19/19).
+- Confirmed via filesystem check that all relative asset targets referenced by the site (`試一試/印刷字/`, `試一試/手寫字/`, `../UI Idea/demo-review-tool-fullview.png`, `../references.html`, the one `../Visual Material/情報路線/...pdf`) exist on disk.
+- Not yet visually verified in a browser (no browser available here) — recommend checking: the four renamed tabs render correctly, the viewport-gate overlays trigger correctly at a narrowed browser window and on an actual phone in portrait, and clicking through `?preview=ocr` lands on 步驟二 with the other tabs/sections visibly locked.
+
+Remaining:
+- No git commit made — recommend committing soon.
+- User to decide final repo scope/pruning for hosting given the `../` dependencies and the ~1GB `Visual Material/` size noted above.
+
+### 2026-08-07 21:45 HKT — Claude — Redo reverted image removals; redesign viewport-gate to match site style, align breakpoint with 辨識印刷字
+
+Summary:
+- Found that two earlier removals (適合的研究問題's interactive chart, and the GitHub Repository photo in 所需的工具與資源) had reverted back into `storymap-example.html` — the `<div class="part3-qgallery" id="part-3-research-chart">` container and the `<img src="../UI Idea/demo-review-tool-fullview.png">` were both back in the file, even though other edits from the same and later turns (nav tab renaming, `pdfPath` fixes, the `?preview=ocr` JS block) were still intact. Re-applied both removals (chart container removed entirely; GitHub Repository figure keeps its number-badge but no `<img>`). Given only these two specific edits reverted while surrounding edits held, this looks like a narrow/coincidental overwrite rather than a full file rollback — flagging in case a concurrent editor is active on this file, per the project's known concurrent-edit hazard.
+- Changed the "widen your window" gate's trigger breakpoint from an arbitrary 899px to 1040px, to match the exact width where `.part3-feature-explorer` (used by 辨識印刷字／辨識手寫字／試一試) switches from side-by-side (PDF beside info panel) to stacked (PDF on top, info panel below) — see `.part3-feature-explorer { grid-template-columns: 1fr; }` under `@media (max-width: 1040px)`.
+- Replaced both gate messages with the requested copy: widen → "為獲得最佳瀏覽效果，請將瀏覽器視窗放大，或改用較大螢幕的裝置。"; rotate → "請將手機轉為橫向，以獲得最佳瀏覽效果。"
+- Redesigned the gate's visual style to match the site's established hero/section-hero language instead of the plain small-text card: dark teal-to-terracotta radial/linear gradient backdrop (same recipe as `.hero-backdrop`/`.section-hero::after`), a circular line-icon (expand-arrows for widen, rotate-phone for rotate), a yellow eyebrow label with flanking hairlines (`.viewport-gate-eyebrow`, mirrors `.cover-kicker`/`.section-hero .eyebrow`), a large serif headline (mirrors `#cover-title`/`.section-hero h1`), and serif body copy at a larger, more legible size (mirrors `.hero-note`).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html` (re-removed the two images; rewrote both `.viewport-gate` blocks with icon/eyebrow/title/note structure and new copy)
+- `intro Website/Website/storymap/storymap.css` (redesigned `.viewport-gate*` rules; breakpoint 899px→1040px)
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance = 0; HTML `div`/`section`/`article`/`svg` tag counts balanced; `data-part3-try-data` JSON still parses (19/19 steps both modes); confirmed zero remaining matches for the qgallery container or the GitHub Repository `<img>` src.
+- Confirmed nav tab renaming, `pdfPath` relative-path fixes, and the `?preview=ocr` teacher-preview JS from the prior session entry are all still present and intact.
+- Not yet visually verified in a browser — recommend checking the new gate's look at a narrowed window (~1000px) and on an actual phone in portrait.
+
+Remaining:
+- No git commit made — recommend committing soon, which would also give a recovery point against further concurrent-edit reverts on this file.
+
+### 2026-08-07 22:05 HKT — Claude — More height for the two code windows in 7/8's feature explorer
+
+Summary:
+- In the 版面特徵探索器 (used by 7 辨識印刷字 / 8 辨識手寫字), the "AI 生成的 Python 代碼" and "OCR 的輸出結果" windows are the only `flex: 1 1 0` elements in `.part3-fx-out`'s flex column — they split whatever height is left over after the fixed-size 版面特徵 card, AI Prompt window, and 3 down-arrows take their share within `--fx-explorer-h`. Gave them more room from two directions: raised `--fx-explorer-h` from `95svh` to `98svh` (`storymap-cards.css`, `#part-3-printed-explorer, #part-3-handwritten-explorer`), and trimmed the fixed elements that were eating into the remainder — `.part3-fx-out` top/bottom padding `clamp(24px,2.4vw,40px)`→`clamp(16px,1.6vw,28px)`, the 3 `.part3-fx-arrow` connectors `40px`→`26px` tall, and `.part3-fx-feat`'s top/bottom padding `20px`→`16px` (left/right unchanged) — all in `storymap.css`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css` (`.part3-fx-out`, `.part3-fx-arrow`, `.part3-fx-feat` padding/height trims)
+- `intro Website/Website/storymap/storymap-cards.css` (`--fx-explorer-h` 95svh→98svh)
+
+Verified:
+- CSS brace balance = 0 for both files; confirmed no other rule in `storymap-cards.css` overrides `.part3-fx-out`/`.part3-fx-arrow`/`.part3-fx-feat` for either explorer.
+- Not yet visually verified in a browser.
+
+Remaining:
+- No git commit made.

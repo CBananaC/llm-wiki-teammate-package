@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>第三步 · 比較 OCR 結果（重新設計樣本）</title>
+<style>
+  :root{
+    --ink:#163d3f; --paper:#f4efe6; --card:#fffaf2;
+    --line:rgba(22,61,63,.18); --accent:#c45d38; --yellow:#f3c967;
+    --ok:#2e7d5b; --bad:#c0392b;
+    --sans:Inter, ui-sans-serif, system-ui, -apple-system, "PingFang TC", "Noto Sans TC", sans-serif;
+    --mono:"SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; padding:40px 20px; background:var(--paper); color:var(--ink);
+    font-family:var(--sans);
+    display:flex; justify-content:center;
+  }
+  .wrap{ width:100%; max-width:880px; }
+
+  /* ---- mode + progress row (context only, mirrors existing site chrome) ---- */
+  .top{ display:flex; align-items:center; gap:16px; margin-bottom:16px; flex-wrap:wrap; }
+  .progress{ display:flex; align-items:center; gap:8px; font-size:13px; font-weight:700; color:rgba(22,61,63,.55); }
+  .progress .cap{ letter-spacing:.08em; }
+  .progress .dots{ display:flex; gap:6px; }
+  .progress .dot{ width:20px; height:20px; border-radius:50%; display:flex; align-items:center; justify-content:center;
+    font-size:11px; font-weight:800; border:1.5px solid rgba(22,61,63,.3); color:rgba(22,61,63,.45); }
+  .progress .dot.done{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .progress .dot.now{ border-color:var(--accent); color:var(--accent); }
+  .modeswitch{ margin-left:auto; display:inline-flex; border:1px solid var(--line); border-radius:9px; overflow:hidden; }
+  .modeswitch button{ appearance:none; cursor:pointer; border:none; background:#fff; color:var(--ink);
+    font:700 12.5px var(--sans); padding:8px 16px; }
+  .modeswitch button.is-on{ background:var(--ink); color:#fff; }
+
+  /* ---- window shell ---- */
+  .win{ border-radius:12px; overflow:hidden; border:1px solid var(--line); background:var(--card);
+    box-shadow:0 18px 40px -20px rgba(22,61,63,.25); }
+  .winbar{ display:flex; align-items:center; gap:6px; padding:9px 14px; background:#efe8dc; border-bottom:1px solid rgba(22,61,63,.14); }
+  .winbar .dot{ width:9px; height:9px; border-radius:50%; }
+  .winbar .dot.red{ background:#ff5f57; } .winbar .dot.yellow{ background:#febc2e; } .winbar .dot.green{ background:#28c840; }
+  .winbar .ttl{ margin-left:8px; font-weight:700; color:#7a7263; font-size:12px; }
+
+  .body{ padding:18px 20px 20px; }
+
+  /* ---- 1. score summary: headline number + breakdown chips instead of a single vague % ---- */
+  .summary{ display:flex; align-items:stretch; gap:14px; margin-bottom:16px; flex-wrap:wrap; }
+  .scorecard{ flex:0 0 auto; display:flex; flex-direction:column; align-items:center; justify-content:center;
+    gap:2px; padding:10px 22px; border-radius:12px; background:#fff6e2; border:1px solid var(--yellow); min-width:112px; }
+  .scorecard .num{ font-family:var(--mono); font-weight:800; font-size:32px; color:var(--accent); line-height:1; }
+  .scorecard .lab{ font-size:11px; font-weight:700; letter-spacing:.06em; color:rgba(22,61,63,.55); }
+  .breakdown{ flex:1 1 260px; display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+  .stat{ border-radius:10px; border:1px solid var(--line); background:#fff; padding:9px 10px; text-align:center; cursor:pointer;
+    transition:box-shadow .15s, border-color .15s; user-select:none; }
+  .stat:hover{ box-shadow:0 3px 10px rgba(22,61,63,.1); }
+  .stat.is-active{ border-color:var(--ink); box-shadow:0 0 0 2px rgba(22,61,63,.12) inset; }
+  .stat .n{ font-family:var(--mono); font-weight:800; font-size:17px; }
+  .stat .t{ font-size:10.5px; color:rgba(22,61,63,.55); margin-top:2px; font-weight:600; }
+  .stat.match .n{ color:var(--ok); }
+  .stat.mismatch .n{ color:#b8873a; }
+  .stat.missing .n{ color:var(--bad); }
+  .stat.extra .n{ color:#5b7fc4; }
+
+  /* ---- 2. field-by-field comparison table (replaces raw whole-blob char diff) ---- */
+  .fieldlist{ border:1px solid var(--line); border-radius:10px; overflow:hidden; margin-bottom:14px; }
+  .fieldhead{ display:grid; grid-template-columns:1fr 1.4fr 1.4fr 84px; gap:0; background:#efe8dc; }
+  .fieldhead div{ padding:8px 12px; font-size:10.5px; font-weight:800; letter-spacing:.07em; color:rgba(22,61,63,.55); }
+  .fieldrow{ display:grid; grid-template-columns:1fr 1.4fr 1.4fr 84px; border-top:1px solid var(--line); background:#fff; }
+  .fieldrow.is-hidden{ display:none; }
+  .fieldrow > div{ padding:10px 12px; font-size:12.5px; line-height:1.7; word-break:break-word; }
+  .fieldrow .path{ font-family:var(--mono); font-size:11.5px; color:rgba(22,61,63,.65); align-self:center; }
+  .fieldrow .refval, .fieldrow .mineval{ font-family:var(--mono); }
+  .fieldrow .status{ align-self:center; text-align:center; }
+  .pill{ display:inline-block; padding:3px 9px; border-radius:99px; font-size:10.5px; font-weight:800; }
+  .pill.match{ background:#eaf6f0; color:var(--ok); }
+  .pill.mismatch{ background:#fdf3e2; color:#8a6116; }
+  .pill.missing{ background:#fdecea; color:var(--bad); }
+  .pill.extra{ background:#eaf0fd; color:#3a5cad; }
+  .fieldrow.match{ background:#fff; }
+  .fieldrow.mismatch{ background:#fffaf0; }
+  .fieldrow.missing{ background:#fef6f5; }
+  .fieldrow.extra{ background:#f5f8ff; }
+  .diffchar .miss{ background:#fdecea; color:var(--bad); text-decoration:line-through; }
+  .diffchar .extra{ background:#eaf6f0; color:var(--ok); }
+  .emptyval{ color:rgba(22,61,63,.35); font-style:italic; }
+  .fieldlist-empty{ padding:20px; text-align:center; color:rgba(22,61,63,.5); font-size:12.5px; }
+
+  /* ---- 3. paste / edit area kept, but demoted to a collapsible "raw input" so the table is the focus ---- */
+  details.rawbox{ border:1px solid var(--line); border-radius:10px; background:#fff; margin-bottom:14px; }
+  details.rawbox summary{ cursor:pointer; padding:10px 12px; font-size:11.5px; font-weight:800; letter-spacing:.05em;
+    color:rgba(22,61,63,.6); list-style:none; display:flex; align-items:center; gap:6px; }
+  details.rawbox summary::before{ content:"▸"; font-size:10px; transition:transform .15s; }
+  details.rawbox[open] summary::before{ transform:rotate(90deg); }
+  details.rawbox .inner{ padding:0 12px 12px; }
+  textarea.area{ width:100%; min-height:140px; border-radius:8px; border:1px solid var(--line); background:#fff;
+    color:var(--ink); padding:10px 12px; resize:vertical; font-family:var(--mono); font-size:12px; line-height:1.8; }
+  textarea.area:focus{ outline:none; border-color:var(--accent); box-shadow:0 0 0 3px rgba(196,93,56,.1); }
+
+  .actionrow{ display:flex; gap:10px; align-items:center; }
+  .actionrow .spacer{ flex:1; }
+  .btn{ appearance:none; cursor:pointer; border:1px solid var(--line); border-radius:8px; padding:9px 16px;
+    background:#fff; color:var(--ink); font-family:var(--sans); font-weight:700; font-size:12.5px;
+    transition:border-color .18s, box-shadow .18s, background-color .18s; }
+  .btn:hover{ border-color:var(--accent); box-shadow:0 3px 10px rgba(196,93,56,.15); }
+  .btn.primary{ background:var(--ink); border-color:var(--ink); color:#fff; }
+  .btn.primary:hover{ background:#1d4d4f; box-shadow:0 4px 12px rgba(22,61,63,.22); }
+
+  .hint{ margin:10px 2px 0; font-size:11px; color:rgba(22,61,63,.5); line-height:1.6; }
+
+  /* guide bar (mirrors site's dark caption strip) */
+  .guide{ margin-top:18px; background:#163d3f; color:#fff; border-radius:12px; padding:16px 20px; }
+  .guide .k{ font-weight:800; color:var(--yellow); margin-bottom:6px; font-size:12.5px; }
+  .guide p{ margin:0; font-size:13px; line-height:1.7; opacity:.92; }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <div class="top">
+    <div class="progress">
+      <span class="cap">進度</span>
+      <div class="dots">
+        <span class="dot done">1</span>
+        <span class="dot done">2</span>
+        <span class="dot now">3</span>
+      </div>
+    </div>
+    <div class="modeswitch" data-mode-switch>
+      <button type="button" class="is-on" data-mode="printed">印刷字</button>
+      <button type="button" data-mode="handwritten">手寫字</button>
+    </div>
+  </div>
+
+  <div class="win">
+    <div class="winbar">
+      <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+      <span class="ttl">第三步 · 比較 OCR 結果</span>
+    </div>
+    <div class="body">
+
+      <div class="summary">
+        <div class="scorecard"><span class="num" data-score>—</span><span class="lab">吻合度</span></div>
+        <div class="breakdown">
+          <div class="stat match is-active" data-filter="all"><div class="n" data-count-all>0</div><div class="t">全部欄位</div></div>
+          <div class="stat mismatch" data-filter="mismatch"><div class="n" data-count-mismatch>0</div><div class="t">內容不符</div></div>
+          <div class="stat missing" data-filter="missing"><div class="n" data-count-missing>0</div><div class="t">缺少欄位</div></div>
+          <div class="stat extra" data-filter="extra"><div class="n" data-count-extra>0</div><div class="t">多出欄位</div></div>
+        </div>
+      </div>
+
+      <div class="fieldlist">
+        <div class="fieldhead">
+          <div>欄位路徑</div><div>參考結果</div><div>你的結果</div><div>狀態</div>
+        </div>
+        <div data-field-rows></div>
+      </div>
+
+      <details class="rawbox" open>
+        <summary>你的 OCR 原始 JSON（可直接修改後重新比對）</summary>
+        <div class="inner">
+          <textarea class="area" data-input></textarea>
+        </div>
+      </details>
+
+      <div class="actionrow">
+        <button type="button" class="btn primary" data-run>重新比對</button>
+        <span class="spacer"></span>
+        <button type="button" class="btn" data-refdl>下載參考 OCR 結果</button>
+      </div>
+
+      <p class="hint">吻合度＝完全相符的欄位數 ÷ 參考欄位總數。點選上方分類卡片可篩選只看「內容不符」「缺少欄位」或「多出欄位」的項目，逐欄位核對比逐字元比對更容易找出該調整的 OCR prompt 規則。</p>
+    </div>
+  </div>
+
+  <div class="guide">
+    <div class="k">第三步</div>
+    <p>AI 完成 OCR 後，請將結果貼到下方的文字輸入區，與參考結果逐欄位比較，看看是否需要修改 OCR Prompt。</p>
+  </div>
+
+</div>
+
+<script>
+/* ---------------- sample data ---------------- */
+const REFS = {
+  printed: {
+    "史料資訊": {
+      "來源": "《明清臺灣檔案彙編》第30冊",
+      "頁碼": [{"PDF頁":1,"頁碼":"136"},{"PDF頁":2,"頁碼":"137"}],
+      "原始檔案來源": "《天地會第一冊》",
+      "標題": "為請酌籌加調官兵協力進剿事",
+      "官職": "閩浙總督",
+      "姓名": "常青",
+      "具奏日期": "乾隆五十一年十二月二十日",
+      "硃批日期": "乾隆五十二年正月初七日",
+      "硃批內容": "看來爾等皆過於張皇矣。豈有因一匪犯，使全省以及鄰疆皆懷恐惶之理。欽此。"
+    },
+    "正文": [
+      {"段落":1,"頁碼":["136"],"內容":"閩浙總督臣常青跪奏，為酌籌加調官兵協力進剿，速殲逆匪事。"},
+      {"段落":2,"頁碼":["136","137"],"內容":"竊照彰化賊人林爽文等，謀為不軌，攻占城池，先經臣派撥三路官兵赴剿。"}
+    ]
+  },
+  handwritten: {
+    "史料資訊": {
+      "來源": "國立故宮博物院「清代檔案檢索系統」",
+      "史料編號": "故宮075669號",
+      "標題": "為請酌籌加調官兵協力進剿事",
+      "官職": "福建水師提督",
+      "姓名": "黃仕簡",
+      "具奏日期": "乾隆五十一年十一月十八日"
+    },
+    "正文": [
+      {"段落":1,"內容":"福建水師提督奴才黃仕簡跪奏，為據實奏聞事。"},
+      {"段落":2,"內容":"竊臣自到臺灣以來，督率官兵晝夜巡防，並無片刻懈怠。"}
+    ]
+  }
+};
+
+/* a plausible "your OCR result" for each mode, seeded with a mix of
+   matches / a wrong character / a missing field / an extra field —
+   this is what the redesigned view is meant to make obvious at a glance. */
+const SAMPLE_MINE = {
+  printed: {
+    "史料資訊": {
+      "來源": "《明清臺灣檔案彙編》第30冊",
+      "頁碼": [{"PDF頁":1,"頁碼":"136"},{"PDF頁":2,"頁碼":"137"}],
+      "原始檔案來源": "《天地會第一冊》",
+      "標題": "為請酌籌加調官兵協力進勦事",
+      "官職": "閩浙總督",
+      "姓名": "常青",
+      "具奏日期": "乾隆五十一年十二月二十日",
+      "辨識信心": "高"
+    },
+    "正文": [
+      {"段落":1,"頁碼":["136"],"內容":"閩浙總督臣常青跪奏，為酌籌加調官兵協力進剿，速殲逆匪事。"},
+      {"段落":2,"頁碼":["136","137"],"內容":"竊照彰化賊人林爽文等，謀為不軌，攻佔城池，先經臣派撥三路官兵赴剿。"}
+    ]
+  },
+  handwritten: {
+    "史料資訊": {
+      "來源": "國立故宮博物院清代檔案檢索系統",
+      "史料編號": "故宮075669號",
+      "標題": "為請酌籌加調官兵協力進剿事",
+      "官職": "福建水師提督",
+      "具奏日期": "乾隆五十一年十一月十八日"
+    },
+    "正文": [
+      {"段落":1,"內容":"福建水師提督奴才黃仕簡跪奏，為據實奏聞事。"},
+      {"段落":2,"內容":"竊臣自到臺灣以來，督率官兵晝夜巡防，並無片刻懈怠。"}
+    ]
+  }
+};
+
+/* ---------------- diff engine (same LCS logic already used on the site) ---------------- */
+function diffChars(a, b) {
+  const n = a.length, m = b.length;
+  const dp = Array.from({ length: n + 1 }, () => new Uint16Array(m + 1));
+  for (let i = n - 1; i >= 0; i--) for (let j = m - 1; j >= 0; j--)
+    dp[i][j] = a[i] === b[j] ? dp[i+1][j+1] + 1 : Math.max(dp[i+1][j], dp[i][j+1]);
+  const out = []; let i=0, j=0;
+  while (i<n && j<m) {
+    if (a[i]===b[j]) { out.push(['same', a[i]]); i++; j++; }
+    else if (dp[i+1][j] >= dp[i][j+1]) { out.push(['miss', a[i]]); i++; }
+    else { out.push(['extra', b[j]]); j++; }
+  }
+  while (i<n) out.push(['miss', a[i++]]);
+  while (j<m) out.push(['extra', b[j++]]);
+  const merged = [];
+  out.forEach(seg => { const last = merged[merged.length-1];
+    if (last && last[0]===seg[0]) last[1]+=seg[1]; else merged.push([seg[0], seg[1]]); });
+  return merged;
+}
+function flatten(value, prefix) {
+  const out = [];
+  if (value !== null && typeof value === 'object') {
+    if (Array.isArray(value)) value.forEach((v,i)=>out.push(...flatten(v, `${prefix}[${i}]`)));
+    else Object.keys(value).forEach(k=>out.push(...flatten(value[k], prefix?`${prefix}.${k}`:k)));
+  } else out.push([prefix, value]);
+  return out;
+}
+function diffJson(refObj, mineObj) {
+  const refLeaves = flatten(refObj, '');
+  const mineLeaves = new Map(flatten(mineObj, ''));
+  const rows = refLeaves.map(([path, refVal]) => {
+    const has = mineLeaves.has(path);
+    const mineVal = mineLeaves.get(path);
+    mineLeaves.delete(path);
+    const refStr = String(refVal), mineStr = has ? String(mineVal) : '';
+    const status = has ? (refStr === mineStr ? 'match' : 'mismatch') : 'missing';
+    return { path, refVal: refStr, mineVal: mineStr, status };
+  });
+  const extraRows = [...mineLeaves.entries()].map(([path, mineVal]) => ({ path, refVal:'', mineVal:String(mineVal), status:'extra' }));
+  const rowsAll = rows.concat(extraRows);
+  const matched = rows.filter(r=>r.status==='match').length;
+  const score = refLeaves.length ? Math.round(matched/refLeaves.length*100) : 100;
+  return { rows: rowsAll, score };
+}
+function escapeHtml(s){ return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+function renderValCell(status, refStr, mineStr, which) {
+  if (status === 'mismatch') {
+    const merged = diffChars(refStr, mineStr);
+    const html = merged.map(seg => {
+      if (seg[0] === 'same') return escapeHtml(seg[1]);
+      if (which === 'ref' && seg[0] === 'miss') return `<span class="miss">${escapeHtml(seg[1])}</span>`;
+      if (which === 'mine' && seg[0] === 'extra') return `<span class="extra">${escapeHtml(seg[1])}</span>`;
+      return '';
+    }).join('');
+    return `<div class="diffchar">${html}</div>`;
+  }
+  const val = which === 'ref' ? refStr : mineStr;
+  if (val === '') return `<span class="emptyval">（無）</span>`;
+  return escapeHtml(val);
+}
+
+/* ---------------- render ---------------- */
+let mode = 'printed';
+let currentFilter = 'all';
+let result = null;
+
+function runCompare(mineJsonText) {
+  let mineObj;
+  try { mineObj = JSON.parse(mineJsonText); }
+  catch (e) {
+    document.querySelector('[data-field-rows]').innerHTML =
+      `<div class="fieldlist-empty">你的 OCR 結果不是有效的 JSON，請檢查格式後再試一次。</div>`;
+    document.querySelector('[data-score]').textContent = '—';
+    ['all','mismatch','missing','extra'].forEach(k => document.querySelector(`[data-count-${k}]`).textContent = '0');
+    return;
+  }
+  result = diffJson(REFS[mode], mineObj);
+  document.querySelector('[data-score]').textContent = result.score + '%';
+  const counts = { all: result.rows.length, mismatch:0, missing:0, extra:0 };
+  result.rows.forEach(r => { if (counts[r.status] !== undefined) counts[r.status]++; });
+  document.querySelector('[data-count-all]').textContent = counts.all;
+  document.querySelector('[data-count-mismatch]').textContent = counts.mismatch;
+  document.querySelector('[data-count-missing]').textContent = counts.missing;
+  document.querySelector('[data-count-extra]').textContent = counts.extra;
+  renderRows();
+}
+
+function renderRows() {
+  const host = document.querySelector('[data-field-rows]');
+  if (!result || !result.rows.length) { host.innerHTML = `<div class="fieldlist-empty">沒有可比對的欄位。</div>`; return; }
+  host.innerHTML = result.rows.map(r => {
+    const hidden = currentFilter !== 'all' && r.status !== currentFilter;
+    const label = { match:'相符', mismatch:'不符', missing:'缺少', extra:'多出' }[r.status];
+    return `<div class="fieldrow ${r.status}${hidden ? ' is-hidden' : ''}">
+      <div class="path">${escapeHtml(r.path || '(root)')}</div>
+      <div class="refval">${renderValCell(r.status, r.refVal, r.mineVal, 'ref')}</div>
+      <div class="mineval">${renderValCell(r.status, r.refVal, r.mineVal, 'mine')}</div>
+      <div class="status"><span class="pill ${r.status}">${label}</span></div>
+    </div>`;
+  }).join('');
+}
+
+document.querySelectorAll('.stat').forEach(el => {
+  el.addEventListener('click', () => {
+    currentFilter = el.dataset.filter;
+    document.querySelectorAll('.stat').forEach(s => s.classList.toggle('is-active', s === el));
+    renderRows();
+  });
+});
+
+document.querySelector('[data-run]').addEventListener('click', () => {
+  runCompare(document.querySelector('[data-input]').value);
+});
+document.querySelector('[data-refdl]').addEventListener('click', () => {
+  const blob = new Blob([JSON.stringify(REFS[mode], null, 2)], { type: 'application/json;charset=utf-8' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = mode + '-reference-ocr.json';
+  a.click();
+  URL.revokeObjectURL(a.href);
+});
+
+document.querySelector('[data-mode-switch]').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  mode = btn.dataset.mode;
+  document.querySelectorAll('[data-mode-switch] button').forEach(b => b.classList.toggle('is-on', b === btn));
+  const text = JSON.stringify(SAMPLE_MINE[mode], null, 2);
+  document.querySelector('[data-input]').value = text;
+  currentFilter = 'all';
+  document.querySelectorAll('.stat').forEach(s => s.classList.toggle('is-active', s.dataset.filter === 'all'));
+  runCompare(text);
+});
+
+/* init */
+document.querySelector('[data-input]').value = JSON.stringify(SAMPLE_MINE[mode], null, 2);
+runCompare(document.querySelector('[data-input]').value);
+</script>
+</body>
+</html>

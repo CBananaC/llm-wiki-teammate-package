@@ -2050,6 +2050,7 @@ const initPart3TryIt = () => {
      單純推進到下一步、不產生 prompt 內容的步驟）。 */
   const showGuide = (kicker, text, buildOptions, onClickAdvance) => {
     clearTimeout(typingTimer);
+    guideHost.hidden = false;
     guideHost.innerHTML = '';
     const box = document.createElement('div');
     box.className = 'part3-try-rpg' + (onClickAdvance ? ' is-advance' : '');
@@ -2101,7 +2102,7 @@ const initPart3TryIt = () => {
 
   /* ---------- 第一步：下載史料 ---------- */
   const renderPhase1 = () => {
-    if (scrollHost) scrollHost.classList.remove('is-chat');
+    if (scrollHost) { scrollHost.classList.remove('is-chat'); scrollHost.classList.remove('is-cmp'); }
     const set = d();
     const pdfSource = set.pdfPath || set.href || '';
     stageHost.innerHTML = `
@@ -2450,7 +2451,7 @@ const initPart3TryIt = () => {
   };
 
   const renderPhase2 = () => {
-    if (scrollHost) scrollHost.classList.add('is-chat');
+    if (scrollHost) { scrollHost.classList.add('is-chat'); scrollHost.classList.remove('is-cmp'); }
     stageHost.innerHTML = `
       <div class="part3-try-win">
         <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
@@ -2462,91 +2463,110 @@ const initPart3TryIt = () => {
     scrollChatToLatest();
   };
 
-  /* ---------- 第三步：比對 OCR 結果（淺色視窗） ---------- */
+  /* ---------- 第三步：比對 OCR 結果（淺色視窗） ----------
+     版面固定為上下兩個文字框：上＝參考 OCR 結果、下＝使用者貼上的結果，
+     各佔視窗高度的一半（吻合度列與按鈕列不計入這一半一半的高度）。
+     比對後的差異直接以底線／紅字等樣式標示在這兩個文字框的文字裡，
+     不再另外用逐欄位表格呈現。 */
+  const refAsJson = () => {
+    try {
+      const parsed = JSON.parse(d().reference);
+      return parsed && typeof parsed === 'object' ? parsed : null;
+    } catch (e) {
+      return null;
+    }
+  };
+
   const downloadRef = () => {
-    const blob = new Blob([d().reference], { type: 'text/plain;charset=utf-8' });
+    const asJson = refAsJson();
+    const text = asJson ? JSON.stringify(asJson, null, 2) : d().reference;
+    const blob = new Blob([text], { type: asJson ? 'application/json;charset=utf-8' : 'text/plain;charset=utf-8' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
-    a.download = mode + '-reference-ocr.txt';
+    a.download = mode + '-reference-ocr.' + (asJson ? 'json' : 'txt');
     a.click();
     URL.revokeObjectURL(a.href);
   };
 
-  const runCompare = (raw) => {
-    const mine = (raw || '').replace(/\s+/g, '');
-    const input = stageHost.querySelector('[data-try-input]');
-    compareRaw = raw || '';
-    if (!mine) {
-      compareHasRun = false;
-      saveModeState();
-      if (input) input.focus();
-      return;
-    }
-    compareHasRun = true;
-    saveModeState();
-    const ref = d().reference.replace(/\s+/g, '');
-    const result = diffTryChars(ref, mine);
+  const escHtml = (s) => String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;');
+
+  /* 畫出上下兩個文字框＋（可有可無的）吻合度列與按鈕列。
+     scoreVal 為 null 時代表尚未比對過，不顯示吻合度列，按鈕文字也不同。 */
+  const paintCmp = (scoreVal, refHtml, mineHtml, mineRaw) => {
     const body = stageHost.querySelector('[data-try-cmp]');
     body.innerHTML = `
-      <div class="part3-try-score"><span class="lab">吻合度</span><span class="num">${result.score}%</span></div>
-      <div class="part3-try-half">
-        <span class="lab">參考 OCR 結果</span>
-        <div class="part3-try-diff" data-try-refpane></div>
-        <p class="part3-try-key">紅刪除線＝參考結果有、你的結果缺少　·　綠＝你的結果多出來</p>
-      </div>
-      <div class="part3-try-half">
-        <span class="lab">你的 OCR 結果（可直接修改後重新比對）</span>
-        <textarea class="part3-try-area" data-try-input></textarea>
+      ${scoreVal !== null ? `<div class="part3-try-score"><span class="lab">吻合度</span><span class="num">${scoreVal}%</span></div>` : ''}
+      <div class="part3-try-cmpstack">
+        <div class="part3-try-cmpbox">
+          <span class="lab">參考 OCR 結果</span>
+          <div class="part3-try-cmptext" data-try-refpane>${refHtml}</div>
+        </div>
+        <div class="part3-try-cmpbox">
+          <span class="lab">你的 OCR 結果（可直接修改後重新比對）</span>
+          <div class="part3-try-cmptext is-editable" data-try-input contenteditable="true" spellcheck="false"></div>
+        </div>
       </div>
       <div class="part3-try-cmprow">
-        <button type="button" class="part3-try-cmpbtn primary" data-try-run>重新比對</button>
+        <button type="button" class="part3-try-cmpbtn primary" data-try-run>${scoreVal !== null ? '重新比對' : '比較參考結果'}</button>
         <span class="spacer"></span>
         <button type="button" class="part3-try-cmpbtn" data-try-refdl>下載參考 OCR 結果</button>
       </div>`;
-    body.querySelector('[data-try-refpane]').innerHTML = result.merged
-      .map((seg) => `<span class="${seg[0]}">${seg[1].replace(/</g, '&lt;')}</span>`).join('');
-    const resultInput = body.querySelector('[data-try-input]');
-    resultInput.value = raw;
-    resultInput.addEventListener('input', () => {
-      compareRaw = resultInput.value;
-      compareHasRun = true;
+    const mineEl = body.querySelector('[data-try-input]');
+    if (mineHtml !== null) mineEl.innerHTML = mineHtml;
+    else mineEl.textContent = mineRaw || '';
+    mineEl.addEventListener('input', () => {
+      compareRaw = mineEl.textContent;
+      compareHasRun = false;
       saveModeState();
     });
     body.querySelector('[data-try-run]').addEventListener('click', () => {
-      runCompare(body.querySelector('[data-try-input]').value);
+      runCompare(body.querySelector('[data-try-input]').textContent);
     });
     body.querySelector('[data-try-refdl]').addEventListener('click', downloadRef);
   };
 
+  const runCompare = (raw) => {
+    const mine = (raw || '').replace(/\s+/g, '');
+    compareRaw = raw || '';
+    if (!mine) {
+      compareHasRun = false;
+      saveModeState();
+      const refJson = refAsJson();
+      const refPlain = refJson ? JSON.stringify(refJson, null, 2) : d().reference;
+      paintCmp(null, escHtml(refPlain), null, raw);
+      const mineEl = stageHost.querySelector('[data-try-input]');
+      if (mineEl) mineEl.focus();
+      return;
+    }
+    compareHasRun = true;
+    saveModeState();
+    const refJson = refAsJson();
+    const refSource = refJson ? JSON.stringify(refJson) : d().reference;
+    const ref = refSource.replace(/\s+/g, '');
+    const result = diffTryChars(ref, mine);
+    const refHtml = result.merged.filter((seg) => seg[0] !== 'extra')
+      .map((seg) => `<span class="${seg[0]}">${escHtml(seg[1])}</span>`).join('');
+    const mineHtml = result.merged.filter((seg) => seg[0] !== 'miss')
+      .map((seg) => `<span class="${seg[0]}">${escHtml(seg[1])}</span>`).join('');
+    paintCmp(result.score, refHtml, mineHtml, raw);
+
+    /* 比對過一次後，收起底部的引導對話框，讓比對視窗延伸到面板底部，
+       騰出更多空間顯示兩個文字框。 */
+    if (guideHost) guideHost.hidden = true;
+  };
+
   const renderPhase3 = () => {
-    if (scrollHost) scrollHost.classList.remove('is-chat');
-    const file = mode === 'printed' ? 'try-printed' : 'try-handwritten';
+    if (scrollHost) { scrollHost.classList.remove('is-chat'); scrollHost.classList.add('is-cmp'); }
     stageHost.innerHTML = `
       <div class="part3-try-win">
         <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第三步 · 比較 OCR 結果</span></div>
-        <div class="part3-try-cmp" data-try-cmp>
-          <span class="lab">你的 OCR 結果</span>
-          <textarea class="part3-try-area" data-try-input placeholder=""></textarea>
-          <div class="part3-try-cmprow">
-            <button type="button" class="part3-try-cmpbtn primary" data-try-run>比較參考結果</button>
-            <span class="spacer"></span>
-            <button type="button" class="part3-try-cmpbtn" data-try-refdl>下載參考結果</button>
-          </div>
-        </div>
+        <div class="part3-try-cmp" data-try-cmp></div>
       </div>`;
-    const input = stageHost.querySelector('[data-try-input]');
-    input.value = compareRaw;
-    input.addEventListener('input', () => {
-      compareRaw = input.value;
-      compareHasRun = false;
-      saveModeState();
-    });
-    stageHost.querySelector('[data-try-run]').addEventListener('click', () => {
-      runCompare(stageHost.querySelector('[data-try-input]').value);
-    });
-    stageHost.querySelector('[data-try-refdl]').addEventListener('click', downloadRef);
-    showGuide('第三步', 'AI 完成 OCR 後，請將結果貼到上方的文字輸入區，與參考結果進行比較，看看是否需要修改 OCR Prompt。 ');
-    syncDoc(); 
+    const refJson = refAsJson();
+    const refPlain = refJson ? JSON.stringify(refJson, null, 2) : d().reference;
+    paintCmp(null, escHtml(refPlain), null, compareRaw);
+    showGuide('第三步', 'AI 完成 OCR 後，請將結果貼到下方的文字框，與上方的參考結果進行比較，看看是否需要修改 OCR Prompt。 ');
+    syncDoc();
     if (compareHasRun && compareRaw) runCompare(compareRaw);
   };
 
@@ -2642,3 +2662,58 @@ const activateFromLocation = () => {
 window.addEventListener('popstate', activateFromLocation);
 window.addEventListener('hashchange', activateFromLocation);
 activateFromLocation();
+
+/* ---------- 教師預覽模式（網址加上 ?preview=ocr）----------
+   給老師看草稿用的專用連結，不是另外複製一個網站：同一份 storymap.js／
+   storymap.css，加上這個網址參數才會啟動以下限制，平常瀏覽網站（不帶這個
+   參數）完全不受影響：
+   - 分頁只保留「平台簡介」與「運用平台研究其他問題」可以點擊，其餘（主頁、
+     平台介面、平台運作流程）維持看得見但不能點。
+   - 一進入頁面就直接跳到第三部分「步驟二 · OCR 並結構化原始史料」。
+   - 步驟二之前（適合的研究問題／所需的工具與資源／重用平台的基本流程）與
+     步驟八之後（後續功能：LLM Wiki）的內容維持在畫面上，但變淡、不能點擊，
+     並標示「尚在開發中」。
+   分享給老師的連結範例：storymap-example.html?preview=ocr */
+(() => {
+  const params = new URLSearchParams(window.location.search);
+  if (params.get('preview') !== 'ocr') return;
+
+  document.documentElement.classList.add('is-ocr-preview');
+
+  const lockLink = (el, label) => {
+    if (!el) return;
+    el.classList.add('is-preview-locked-tab');
+    el.setAttribute('aria-disabled', 'true');
+    el.title = label;
+    el.addEventListener('click', (event) => { event.preventDefault(); });
+  };
+  const lockLabel = '這個草稿預覽只開放「平台簡介」與「運用平台研究其他問題」兩個部分';
+  lockLink(document.querySelector('.brand'), lockLabel);
+  const LOCKED_TAB_TARGETS = ['cover', 'part-1', 'part-2'];
+  tabs.forEach((tab) => {
+    if (LOCKED_TAB_TARGETS.includes(tab.dataset.navTarget)) lockLink(tab, lockLabel);
+    if (tab.dataset.navTarget === 'part-3') {
+      /* 就算之後再點一次「運用平台研究其他問題」，也固定回到步驟二，
+         不要停在步驟二之前那些已變淡鎖住的內容最上面。 */
+      tab.addEventListener('click', () => {
+        setActiveTab('part-3', { scrollTarget: '#part-3-ocr' });
+      });
+    }
+  });
+
+  const LOCKED_SECTION_IDS = ['part-3-research-questions', 'part-3-tools', 'part-3-basic-flow', 'part-3-wiki'];
+  LOCKED_SECTION_IDS.forEach((id) => {
+    const el = document.getElementById(id);
+    if (!el) return;
+    el.classList.add('is-preview-faded');
+    el.setAttribute('aria-hidden', 'true');
+    el.setAttribute('inert', ''); /* 連鍵盤 Tab 也跳過這個區塊；不支援的舊瀏覽器會忽略此屬性，不影響上面的視覺與滑鼠鎖定 */
+    const badge = document.createElement('div');
+    badge.className = 'preview-faded-badge';
+    badge.textContent = '此部分尚在開發中，暫未開放於此預覽';
+    el.prepend(badge);
+  });
+
+  /* 不論網址原本帶什麼 hash，教師預覽一律直接跳到步驟二。 */
+  setActiveTab('part-3', { updateHash: false, scrollTarget: '#part-3-ocr' });
+})();
