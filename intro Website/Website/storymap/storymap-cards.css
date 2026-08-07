@@ -1029,15 +1029,15 @@
 }
 #part-3-handwritten-explorer [data-fx-feature="regular-script"] {
   --fx-color: #a28ca8;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 23%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 28%;
 }
 #part-3-handwritten-explorer [data-fx-feature="author"] {
   --fx-color: #c88f8a;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 80%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 38%;
 }
 #part-3-handwritten-explorer [data-fx-feature="minister"] {
   --fx-color: #6e98d0;
-  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 42%;
+  --fx-tag-left: auto; --fx-tag-right: -142px; --fx-tag-top: 52%;
 }
 #part-3-handwritten-explorer [data-fx-feature="respect"] {
   --fx-color: #d97967;
