@@ -9090,3 +9090,37 @@ Verified:
 
 Remaining:
 - None for this Part 8 label-spacing adjustment.
+
+### 2026-08-07 15:03 HKT — Codex — Refresh Part 8 label styles in the preview
+
+Summary:
+- Bumped the StoryMap asset query versions so the browser reloads the updated Part 8 handwritten-label positions instead of using the previous cached CSS.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The HTML now requests the `20260807-part3-handwritten-labels-02` stylesheet and script versions.
+- `git diff --check` passes.
+
+Remaining:
+- None for this Part 8 preview refresh.
+
+### 2026-08-07 15:15 HKT — Codex — Shorten the printed 試一試 Step 1 guide
+
+Summary:
+- Changed the Step 1 guide text from the longer download-and-search instruction to `先把這份史料下載到你的電腦。`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser DOM verification shows the shortened sentence in the printed `試一試` Step 1.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for this wording adjustment.
