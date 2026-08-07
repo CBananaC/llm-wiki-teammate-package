@@ -8716,3 +8716,333 @@ Verified:
 
 Remaining:
 - Same outstanding items as previous entries (placeholder PDFs/reference text for 試一試).
+
+### 2026-08-06 18:44 HKT — Codex — Render 試一試 printed PDF pages as clearer PNG assets
+
+Summary:
+- Rendered `intro Website/Website/storymap/試一試/印刷字/明清台灣檔案匯編 30 (dragged).pdf` at 400 PPI into one PNG per page.
+- Applied a light unsharp-mask pass without contrast remapping or thresholding, preserving the original page layout and text.
+
+Files changed:
+- `intro Website/Website/storymap/試一試/印刷字/明清台灣檔案匯編 30-page-1.png`
+- `intro Website/Website/storymap/試一試/印刷字/明清台灣檔案匯編 30-page-2.png`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both pages were visually inspected after rendering.
+- Both PNGs are RGB images at 3308×5260 pixels with no clipping or layout changes.
+- Temporary render files were removed after the final PNGs were saved.
+
+Remaining:
+- None for this printed-PDF PNG export.
+
+### 2026-08-06 18:52 HKT — Claude — 7/8 right panel: keep AI Prompt fully visible, auto-fit code/JSON font size
+
+Summary:
+- Within `.part3-fx-out` (right panel of 7 辨識印刷字 and 8 辨識手寫字), the 版面特徵 card and AI Prompt chat window are now `flex: 0 0 auto` — always rendered at full size, never clipped or scrolled.
+- The remaining height is split evenly between the 「AI 生成的 Python 代碼」and 「OCR 的輸出結果」windows (`flex: 1 1 0` each), each scrolling independently via its own `.part3-fx-win-body` instead of the whole panel scrolling as one block.
+- Added `fitCodeFont()` in `storymap.js`: measures the plain-text length of `f.py` / `f.json` (HTML tags stripped) and sets `--fx-code-font-size` on each window in tiers (11.5px down to 9px) so longer content shows more before the window's own scrollbar kicks in, without shrinking indefinitely.
+- Mobile (`max-width: 1040px`, stacked layout) reverts the two code/JSON windows to natural auto height, matching the rest of the stacked-layout overrides.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passes.
+- Brace balance is 0 for `storymap.css`.
+
+Remaining:
+- Font-size tiers (720/480/300 char thresholds, 11.5/10.5/9.5/9px) are a first pass; may need visual tuning once viewed against the real 7/8 content lengths.
+- Note: `storymap.css`/`storymap.js` had unrelated external edits already present when this task started (feature-number badge `.part3-fx-feature-number`, `elNumber`) — left untouched, only the panel layout/font-fit changes were made.
+
+### 2026-08-06 18:57 HKT — Codex — Fit printed-PDF backdrops to the document content
+
+Summary:
+- Fixed the oversized dark PDF backdrop in Part 7 `辨識印刷字` and the printed mode of Part 11 `試一試`.
+- The right information panel keeps the full explorer height, while the left document area and its PDF-derived backdrop use a content-based height and the PDF's available-height limit.
+- Preserved the page-turn layer and controls; the printed page remains proportional and uncropped.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirmed both printed views render a compact left document backdrop instead of a full-height dark panel.
+- Part 7 and Part 11 printed pages remain proportional, and the existing page-turn controls remain present.
+- `git diff --check` passes.
+
+Remaining:
+- None for this backdrop-height fix.
+
+### 2026-08-06 19:00 HKT — Codex — Restore natural PDF sizing in narrow windows
+
+Summary:
+- Added a narrow-window override for Part 7 `辨識印刷字` and Part 11 `試一試` printed mode.
+- Desktop PDF height limits are cleared at the stacked breakpoint, so the document, backdrop, and page-turn layer return to natural proportional height.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The responsive override has higher specificity than the desktop PDF sizing rules and restores `height: auto` / `max-height: none` at `1040px` and below.
+- CSS brace balance and `git diff --check` pass.
+
+Remaining:
+- None for the narrow-window PDF sizing fix.
+
+### 2026-08-06 19:17 HKT — Codex — Refresh responsive PDF styles in the browser
+
+Summary:
+- Bumped the StoryMap stylesheet query so the browser loads the current PDF backdrop rules instead of the cached desktop CSS.
+- Kept the narrow-window override for Part 7 `辨識印刷字` and Part 11 `試一試` printed mode, restoring natural document height and proportional images below `1040px`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The HTML now requests the refreshed `storymap.css` and `storymap-cards.css` versions.
+- The responsive CSS has balanced braces; `git diff --check` passes.
+
+Remaining:
+- None for this cache and narrow-window correction.
+
+### 2026-08-06 19:23 HKT — Codex — Move the printed/handwritten switch to the progress row
+
+Summary:
+- Moved the existing `印刷字／手寫字` switch into the generated `進度 1 2 3` row.
+- The switch is appended after the three progress numbers and aligned to the far right; its existing mode-switch interaction is unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passes.
+- CSS brace balance is 0 and `git diff --check` passes.
+- The stylesheet and script query versions were refreshed so the moved control is not hidden by cached assets.
+
+Remaining:
+- None for this progress-row switch placement.
+
+### 2026-08-06 18:48 HKT — Codex — Replace Part 7/8 feature heading with gradient number badge
+
+Summary:
+- Removed the `版面特徵` label from the shared feature result panel used by Part 7 `辨識印刷字` and Part 8 `辨識手寫字`.
+- Added a square number badge before the active feature title; the number updates with the selected feature.
+- Styled the badge with an orange-dominant gradient that fades into the website green.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm both Part 7 and Part 8 render one square badge, show the selected feature number, and no longer render the old `版面特徵` label.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for this Part 7/8 badge change.
+
+### 2026-08-06 18:57 HKT — Codex — Remove Part 7/8 numbered colour badge
+
+Summary:
+- Removed the orange-and-green square number badge from the shared feature result panel in Part 7 `辨識印刷字` and Part 8 `辨識手寫字`.
+- Kept the active feature title and description in the same result panel.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The badge markup, styling, and update code are no longer present.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+- Browser checks confirm both Part 7 and Part 8 show the feature title and description with zero numbered badges; the browser console is clean.
+
+Remaining:
+- None for this Part 7/8 badge removal.
+
+### 2026-08-06 19:10 HKT — Claude — Fix 7 辨識印刷字 left panel leaving a blank gap under the PDF
+
+Summary:
+- Removed the `#part-3-printed-explorer .part3-fx-doc/.part3-fx-pagestack/.part3-fx-page/img` override block in `storymap.css` that tried to shrink the left dark-green backdrop to hug the PDF+nav content via a `--fx-pdf-max-h`/`--fx-pdf-pad-y`/`--fx-pdf-backdrop-h` calc chain. The formula was circular (`--fx-pdf-max-h` was itself derived from `--fx-explorer-h`, so the "hugged" doc height always resolved back to ~full explorer height regardless of the image's actual rendered size), while the image sizing used `height: auto; max-height: var(--fx-pdf-max-h)` — which caps growth but never forces the image to fill the reserved space, so a width-constrained (narrower) page rendered shorter than the reserved height, leaving a gap between the image and the nav row below it.
+- Section 7 now falls back to the shared `.part3-fx-doc` / `.part3-fx-pagestack` / `.part3-fx-page img` rules already used successfully elsewhere: `height: 100%` all the way down (definite, flex-shrink resolves correctly), image at `height: 100%; width: auto; object-fit: contain`. This makes the backdrop genuinely fill the full column height, with the page image centered inside it — matching 8 辨識手寫字, which was unaffected (it never had this override).
+- Removed the now-unused `--fx-pdf-pad-y` / `--fx-pdf-max-h` / `--fx-pdf-backdrop-h` variable block from `storymap-cards.css`; `--fx-explorer-h` (shared by both 7 and 8) is untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Brace balance is 0 for both CSS files.
+- Grepped for `--fx-pdf-max-h` / `--fx-pdf-pad-y` / `--fx-pdf-backdrop-h` across `storymap.css`, `storymap-cards.css`, `storymap.js`, `storymap-example.html` — no remaining references.
+
+Remaining:
+- No browser available in this environment to visually confirm the fix; reasoning is based on CSS flexbox/percentage-height resolution rules. Please eyeball 7 辨識印刷字 on a real screen to confirm the gap is gone.
+
+### 2026-08-06 19:20 HKT — Claude — Differentiate guide narration vs prompt text in 試一試
+
+Summary:
+- `.part3-try-rpg` (the RPG guide box) now sets `font-family: var(--serif)`, matching the site's narrative/body-copy convention used elsewhere (section descriptions, feature card text). The small yellow kicker label (`.part3-try-rpg .k`) stays `var(--sans)`, consistent with other kicker labels site-wide.
+- All prompt-building elements inside the guide box — the suggested-prompt chip, the fill-in-the-blank sentence (`.part3-try-sentence`), the dropdown, the ✓/✗ mark, and the free-text box — are explicitly pinned to `var(--sans)` (chip/blank/free already were; added it to `.part3-try-sentence` and `.part3-try-mark`, which previously inherited whatever the parent used and would otherwise have picked up the new serif).
+- This mirrors the site's established AI-Prompt convention (`.part3-fx-chat-text` in 7/8 uses `--sans`), so the actual prompt text now visually reads the same family end-to-end (chip → sentence → chat bubble), while the guide's narration is typographically distinct.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Brace balance is 0.
+- Grepped each `.part3-try-*` rule touching prompt content — all explicitly declare `font-family: var(--sans)`.
+
+Remaining:
+- None for this change.
+
+### 2026-08-06 19:27 HKT — Codex — Use printed 試一試 PDF and prompt-specific page images
+
+Summary:
+- Wired the printed `intro Website/Website/storymap/試一試/印刷字/` exercise to its local PDF, page 1 and page 2 PNGs, and annotated topic images.
+- Step 2 now shows the matching annotated image for each topic prompt, including `標點.png`; steps without a topic image fall back to `page1.png` or `page2.png`.
+- The OCR-purpose prompt now names the local PDF `為請酌籌加調官兵協力進剿事.pdf`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirm the printed flow uses `page1.png` for the initial and installation/OCR-purpose states; `直排單欄` uses `直排單欄.png`; `分段` uses `分段.png`; `標點` uses `標點.png`; `文本資訊` uses `文本資訊.png`; and the no-topic `夾批` step falls back to `page2.png`.
+- The PDF link resolves to `intro Website/Website/storymap/試一試/印刷字/為請酌籌加調官兵協力進剿事.pdf`.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the printed 試一試 asset routing.
+
+### 2026-08-06 19:28 HKT — Codex — Restore narrow green document backdrop height
+
+Summary:
+- Kept the narrow-window PDF and page images at natural proportional height while restoring a minimum height for the green document area.
+- Part 7 uses `--fx-explorer-h` and Part 11 uses `--try-explorer-h`, so each section retains its own adjustable panel height without reusing the wrong variable.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The final `max-width: 1040px` override clears the desktop height caps, keeps the PDF image `height: auto`, and applies section-specific minimum height to the green backdrop.
+- Browser visual recheck was unavailable because the existing local file tab was blocked from reloading; static CSS checks were run instead.
+
+Remaining:
+- None for this narrow-window backdrop adjustment.
+
+### 2026-08-06 19:31 HKT — Codex — Bind the exact printed PDF to Step 1
+
+Summary:
+- Added the supplied absolute PDF path to the printed `試一試` data used by Step 1.
+- Step 1 keeps the browser-safe relative link for opening the same PDF from the website, while retaining the exact local source path as the PDF asset metadata.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser inspection confirms Step 1 carries `/Users/creamybanana/Downloads/DH Project/intro Website/Website/storymap/試一試/印刷字/為請酌籌加調官兵協力進剿事.pdf`, displays the correct filename, and advances to Step 2 with `page1.png`.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- None for the Step 1 PDF binding.
+
+### 2026-08-06 19:44 HKT — Codex — Enhance npmpdf-3 handwritten pages
+
+Summary:
+- Rendered the supplied `intro Website/Website/storymap/試一試/手寫字/npmpdf-3.pdf` from its crop box at 400 DPI.
+- Applied gentle autocontrast, contrast, and unsharp-mask enhancement, then exported one PNG per page and a matching three-page PDF.
+
+Files changed:
+- `intro Website/Website/storymap/試一試/手寫字/npmpdf-3-enhanced.pdf`
+- `intro Website/Website/storymap/試一試/手寫字/npmpdf-3-1-enhanced.png`
+- `intro Website/Website/storymap/試一試/手寫字/npmpdf-3-2-enhanced.png`
+- `intro Website/Website/storymap/試一試/手寫字/npmpdf-3-3-enhanced.png`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- All three PNGs are high-resolution crop-box renders and were visually inspected.
+- The final PDF has three pages and preserves the original approximately 836.7 × 608.4 pt page size; its pages were re-rendered and visually checked.
+
+Remaining:
+- None for the npmpdf-3 clarity enhancement.
+
+### 2026-08-06 19:35 HKT — Claude — Restructure 試一試 (printed) info-panel content, add "start" chip to both modes
+
+Summary:
+- Printed mode: inserted a new step "三 · 版面要求" (chip, guide "接下來，請觀察PDF的版面，再向AI指定OCR的規則。", suggested text "開始") right after the OCR-purpose chip and before the first quiz.
+- Renumbered and reordered the five layout-requirement quizzes into 3.1–3.5, removing their guide text (RPG narration now blank for these — the quiz sentence itself carries the instruction):
+  3.1 閱讀順序 (column) — unchanged sentence/quiz.
+  3.2 文本資訊 (info) — moved up from 6th to 2nd position; sentence now ends "...並輸出為四項獨立的 data。"
+  3.3 分段 (para) — reworded to "根據段首的縮排，劃分段落，保留每一段的內容，不要合併不同段落。"
+  3.4 標點符號 (punctuation) — reworded to quiz 全形/半形, sentence ends "...並在輸出 JSON 的最後，標記模糊標點和附近的文句。"
+  3.5 頁碼 (page) — shortened to "辨識每一頁角落的頁碼。"
+- Removed the 夾批 step and its now-unused `zhu` feature/highlight entirely (per project convention: delete the JSON feature entry and its step together). Note: the `zhu` PNG asset itself was not touched (raw source material untouched, only removed from the interactive JSON).
+- Added "4. 輸出要求" (mc, reworded guide, sentence shortened to "請把辨識結果輸出為 JSON。") followed by three new declarative chip steps: 4.1 輸出 JSON 的結構 (兩部分：史料資訊、正文), 4.2 史料資訊 (來源/標題/官職/姓名/具奏日期/硃批日期/硃批內容/頁碼), 4.3 正文 (逐段列出，不合併). Final free-text step relabeled 4.4 to fit the new numbering.
+- Handwritten mode: inserted the identical "三 · 版面要求" start chip in the same position; bumped every subsequent step's Chinese-numeral label by one (四→五...九→十) so labels stay sequential and non-duplicated. Content/guides of those steps were left untouched — only this insertion was requested for handwritten.
+- Added a `#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="punctuation"]` block to `storymap-cards.css` (replacing the now-removed `zhu` block) so the punctuation highlight stays independently adjustable, per the file's existing per-feature override convention.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Extracted and `json.loads()`'d the `data-part3-try-data` block: both modes' `steps[].feature` references resolve exactly against `features{}` keys in both directions (no orphaned/missing features).
+- Printed: 13 steps, handwritten: 10 steps, labels sequential with no duplicates.
+- `<div>` open/close balance is 0 across the whole HTML file; `storymap-cards.css` brace balance 0; `node --check storymap.js` passes (JS untouched, only content data changed).
+
+Remaining:
+- Handwritten mode's existing per-feature guide text and quiz sentences were not touched — only the new start chip was added, per the literal request scope. Flag if the same 3.x/4.x restructuring should be mirrored there later.
+
+### 2026-08-06 19:55 HKT — Claude — 試一試: click-anywhere "advance" step, order-game for 史料資訊, new 落款與尾批 step, guide questions
+
+Summary:
+- New step kind `"advance"`: no button at all — the entire RPG guide card becomes the click target (keyboard-accessible via role="button"/tabindex/Enter-Space), shows "點擊卡片繼續 →" in place of the blinking caret, and produces no chat bubble or prompt text. Replaces the earlier "開始" chip button (which would have wrongly inserted "開始" as a prompt line) in both 印刷字 and 手寫字's "三 · 版面要求" step.
+- New step kind `"order"`: an up/down reorder list (no drag-and-drop, just accessible ↑/↓ buttons) — items start shuffled, user rearranges freely, any resulting order is accepted (no fixed answer), and "完成，加入 prompt" assembles `prefix + items.join('、') + suffix` as the prompt line. Used to replace 4.2 史料資訊's fixed-order chip with a reorder game over 來源/頁碼/標題/官職/姓名/具奏日期/硃批日期/硃批內容.
+- Printed mode: inserted new step "3.5 落款與尾批" (between 標點符號 and 頁碼, which is now 3.6) with a new `signoff` feature/highlight (page 1, references image asset `落款與尾批.png` — not yet supplied, same placeholder convention as the other 試一試 feature images) and its own quiz (blank on "落款與尾批" vs 印章/浮水印).
+- Filled in short question-style guide text for every previously-empty guide (3.1–3.4, 3.6) plus the new 3.5, replacing the removed narration with a one-line rhetorical question matching each quiz's theme.
+- Added `#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="signoff"]` to `storymap-cards.css`'s per-feature override block, and updated its feature-name reference list (removed the retired `zhu`, added `punctuation`/`signoff`) to stay accurate.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on the `data-part3-try-data` block: printed now has 14 steps / 6 features, handwritten unchanged at 10 steps / 5 features; every `steps[].feature` resolves against `features{}` in both directions, no orphans.
+- `<div>` balance 0 across the HTML file; brace balance 0 for both CSS files; `node --check storymap.js` passes.
+
+Remaining:
+- `落款與尾批.png` (and the other printed feature images referenced: 文本資訊.png / 直排單欄.png / 分段.png / 標點.png / 頁數.png) still need to be supplied in `試一試/印刷字/`; the doc-swap mechanism (`renderDoc`) will show a broken image until then.

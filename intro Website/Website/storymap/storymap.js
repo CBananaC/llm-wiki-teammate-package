@@ -911,7 +911,6 @@ const initPart3FeatureExplorers = () => {
 
   const outMarkup = `
     <div class="part3-fx-feat">
-      <span class="k">版面特徵</span>
       <h3 data-fx-title></h3>
       <p data-fx-desc></p>
     </div>
@@ -1020,6 +1019,20 @@ const initPart3FeatureExplorers = () => {
       step();
     };
 
+    /* 「AI 生成的 Python 代碼」「OCR 的輸出結果」內容長短不一：
+       依純文字長度（去掉標色用的 <span> 標籤）分級調整字級，
+       盡量讓內容一次顯示更多，放不下的部分再交給視窗自己的捲動。
+       字級只有這幾個級距，不是每個字元都重新計算，畫面才不會抖動。 */
+    const fitCodeFont = (el, html) => {
+      const plain = (html || '').replace(/<[^>]+>/g, '');
+      const len = plain.length;
+      let px = 11.5;
+      if (len > 720) px = 9;
+      else if (len > 480) px = 9.5;
+      else if (len > 300) px = 10.5;
+      el.style.setProperty('--fx-code-font-size', px + 'px');
+    };
+
     const showFeature = (index) => {
       const f = features[index];
       if (!f) return;
@@ -1029,6 +1042,8 @@ const initPart3FeatureExplorers = () => {
       stopTyping();
       elTitle.textContent = f.title;
       elDesc.textContent = f.desc;
+      fitCodeFont(elPy, f.py);
+      fitCodeFont(elJson, f.json);
       if (reduceMotion) {
         elPrompt.textContent = f.prompt;
         elPy.innerHTML = f.py;
@@ -1951,9 +1966,18 @@ const initPart3TryIt = () => {
   /* ---------- 左半：史料與標示區 ---------- */
   const renderDoc = (activeKey) => {
     const set = d();
-    imgEl.src = set.pages[pageIdx];
-    indEl.textContent = `頁 ${pageIdx + 1} / ${set.pages.length}`;
+    const feature = phase === 2 && activeKey ? set.features[activeKey] : null;
+    const featureImage = feature && feature.image;
+    const visualFile = featureImage || set.pages[pageIdx];
+    const assetDir = set.assetDir || '';
+    imgEl.src = `${assetDir}${visualFile}`;
+    imgEl.alt = featureImage ? `${feature.title || visualFile}示意圖` : '試一試史料頁面';
+    imgEl.dataset.tryVisual = featureImage || `page${pageIdx + 1}`;
+    indEl.textContent = featureImage ? (feature.title || visualFile.replace(/\.png$/i, '')) : `頁 ${pageIdx + 1} / ${set.pages.length}`;
+    prevBtn.disabled = Boolean(featureImage) || pageIdx === 0;
+    nextBtn.disabled = Boolean(featureImage) || pageIdx === set.pages.length - 1;
     hlHost.innerHTML = '';
+    if (featureImage) return;
     Object.keys(set.features).forEach((key) => {
       const f = set.features[key];
       if (f.page !== pageIdx) return;
@@ -1974,14 +1998,29 @@ const initPart3TryIt = () => {
     }
   };
 
-  /* ---------- 底部 RPG 引導框；選項放在引導文字下方 ---------- */
-  const showGuide = (kicker, text, buildOptions) => {
+  /* ---------- 底部 RPG 引導框；選項放在引導文字下方 ----------
+     第 4 個參數 onClickAdvance：如果提供，代表這一步沒有按鈕，
+     整張卡片本身就是「繼續」的按鈕（用於「三 · 版面要求」這類
+     單純推進到下一步、不產生 prompt 內容的步驟）。 */
+  const showGuide = (kicker, text, buildOptions, onClickAdvance) => {
     clearTimeout(typingTimer);
     guideHost.innerHTML = '';
     const box = document.createElement('div');
-    box.className = 'part3-try-rpg';
-    box.innerHTML = `<span class="k">${kicker}</span><span class="t"></span><span class="caret" aria-hidden="true">▼</span>`;
+    box.className = 'part3-try-rpg' + (onClickAdvance ? ' is-advance' : '');
+    box.innerHTML = `<span class="k">${kicker}</span><span class="t"></span>`
+      + (onClickAdvance
+        ? `<span class="caret part3-try-advance-hint" aria-hidden="true">點擊卡片繼續 →</span>`
+        : `<span class="caret" aria-hidden="true">▼</span>`);
     guideHost.appendChild(box);
+    if (onClickAdvance) {
+      box.tabIndex = 0;
+      box.setAttribute('role', 'button');
+      box.setAttribute('aria-label', `${kicker}：繼續`);
+      box.addEventListener('click', onClickAdvance, { once: true });
+      box.addEventListener('keydown', (e) => {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClickAdvance(); }
+      }, { once: true });
+    }
     const t = box.querySelector('.t');
     const addOptions = () => {
       if (!buildOptions) return;
@@ -2017,17 +2056,19 @@ const initPart3TryIt = () => {
   /* ---------- 第一步：下載史料 ---------- */
   const renderPhase1 = () => {
     const set = d();
+    const pdfSource = set.pdfPath || set.href || '';
     stageHost.innerHTML = `
       <div class="part3-try-win">
         <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第一步 · 下載史料</span></div>
-        <div class="part3-try-dl">
+        <div class="part3-try-dl" data-try-pdf-source="${pdfSource}">
           <div class="meta"><div class="name">${set.pdf}</div><div class="sub">${set.pdfSub}</div></div>
-          <button type="button" class="part3-try-dlbtn" data-try-dl>下載 PDF</button>
+          <button type="button" class="part3-try-dlbtn" data-try-dl data-try-pdf-source="${pdfSource}">下載 PDF</button>
         </div>
       </div>`;
     showGuide('第一步', '先把左邊這份史料下載到你的電腦。稍後要讓 Agentic AI 在你的電腦上找到這個檔案。');
     stageHost.querySelector('[data-try-dl]').addEventListener('click', () => {
-      if (set.href) window.open(set.href, '_blank', 'noopener');
+      const pdfHref = set.href || set.pdfPath;
+      if (pdfHref) window.open(pdfHref, '_blank', 'noopener');
       phase = 2; cur = 0; answers = [];
       renderProgress();
       renderPhase2();
@@ -2079,6 +2120,14 @@ const initPart3TryIt = () => {
     }
 
     const s = steps[cur];
+
+    /* 「advance」：沒有按鈕、不產生 prompt 內容，點整張引導卡片就進下一步。 */
+    if (s.kind === 'advance') {
+      showGuide(s.k, s.guide, null, () => { cur += 1; nextStep(); });
+      syncDoc();
+      return;
+    }
+
     showGuide(s.k, s.guide, (opts) => {
       if (s.kind === 'chip') {
         const btn = document.createElement('button');
@@ -2142,6 +2191,50 @@ const initPart3TryIt = () => {
           if (v) addBubble(v).then(done); else done();
         });
         opts.appendChild(ta); opts.appendChild(btn);
+      }
+
+      /* 「order」：排序小遊戲——把 items 打亂後讓使用者用上／下移動排出
+         自己想要的順序，沒有固定正確答案，排完直接送出當前順序。 */
+      if (s.kind === 'order') {
+        const list = document.createElement('div');
+        list.className = 'part3-try-order';
+        let order = shuffleTryOptions(s.items);
+        const renderRows = () => {
+          list.innerHTML = '';
+          order.forEach((label, i) => {
+            const row = document.createElement('div');
+            row.className = 'part3-try-order-row';
+            row.innerHTML = `<span class="part3-try-order-num">${i + 1}</span>`
+              + `<span class="part3-try-order-label">${label}</span>`
+              + `<span class="part3-try-order-btns">`
+              + `<button type="button" data-dir="up" ${i === 0 ? 'disabled' : ''} aria-label="上移">↑</button>`
+              + `<button type="button" data-dir="down" ${i === order.length - 1 ? 'disabled' : ''} aria-label="下移">↓</button>`
+              + `</span>`;
+            row.querySelector('[data-dir="up"]').addEventListener('click', () => {
+              if (i === 0) return;
+              const tmp = order[i - 1]; order[i - 1] = order[i]; order[i] = tmp;
+              renderRows();
+            });
+            row.querySelector('[data-dir="down"]').addEventListener('click', () => {
+              if (i === order.length - 1) return;
+              const tmp = order[i + 1]; order[i + 1] = order[i]; order[i] = tmp;
+              renderRows();
+            });
+            list.appendChild(row);
+          });
+        };
+        renderRows();
+        const btn = document.createElement('button');
+        btn.type = 'button';
+        btn.className = 'part3-try-optbtn';
+        btn.textContent = '完成，加入 prompt';
+        btn.addEventListener('click', () => {
+          const line = (s.prefix || '') + order.join('、') + (s.suffix || '');
+          opts.remove();
+          answers[cur] = line;
+          addBubble(line).then(() => { cur += 1; nextStep(); });
+        });
+        opts.appendChild(list); opts.appendChild(btn);
       }
     });
     syncDoc();

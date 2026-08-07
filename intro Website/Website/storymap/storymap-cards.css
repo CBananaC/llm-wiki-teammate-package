@@ -1014,8 +1014,8 @@
   margin-right: calc(50% - 48vw);
 }
 
-/* 7 辨識印刷字：左側深綠原件區只包住 PDF、翻頁列與內距，
-   不再把整個右側資訊視窗的高度延伸到 PDF 以下。 */
+/* 7 辨識印刷字：左側 backdrop 依 PDF 內容收合，
+   不再沿用右側資訊面板的整體高度。 */
 #part-3-printed-explorer {
   --fx-pdf-pad-y: clamp(24px, 2.4vw, 38px);
   --fx-pdf-max-h: calc(var(--fx-explorer-h) - (2 * var(--fx-pdf-pad-y)) - 58px);
@@ -1590,7 +1590,8 @@
        <script type="application/json" data-part3-try-data> 的 features 一致：
 
          印刷字 printed：info（文本資訊）、column（直排單欄）、
-                          para（分段）、page（頁碼）、zhu（夾批）
+                          para（分段）、punctuation（標點符號）、
+                          signoff（落款與尾批）、page（頁碼）
          手寫字 handwritten：column（直排單欄）、author（上奏官員）、
                           minor（臣字款）、rescript（硃批）、stamp（印章與浮水印）
 
@@ -1660,9 +1661,13 @@
   --fx-color: #ddd6ea;
   --fx-left: 6%; --fx-top: 88%; --fx-width: 14%; --fx-height: 7%;
 }
-#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="zhu"] {
-  --fx-color: #f3ddc4;
-  --fx-left: 40%; --fx-top: 30%; --fx-width: 16%; --fx-height: 22%;
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="punctuation"] {
+  --fx-color: #f3bdd4;
+  --fx-left: 10%; --fx-top: 20%; --fx-width: 60%; --fx-height: 62%;
+}
+#part-3-try-explorer[data-try-mode="printed"] [data-try-feature="signoff"] {
+  --fx-color: #d3e5e2;
+  --fx-left: 14%; --fx-top: 70%; --fx-width: 60%; --fx-height: 20%;
 }
 
 /* ── 標示區：手寫字 ─────────────────────────────────────────────── */

@@ -7,11 +7,11 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260806-cloud-upload-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260806-cloud-upload-01">
+  <link rel="stylesheet" href="storymap.css?v=20260806-part3-try-switch-progress-01">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260806-part3-try-switch-progress-01">
   <link rel="stylesheet" href="part-1-interface.css">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260806-cloud-upload-01" defer></script>
+  <script src="storymap.js?v=20260806-part3-try-switch-progress-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
   <script src="part-1-interface.js" defer></script>
@@ -1627,9 +1627,6 @@
                       <button type="button" data-try-mode="handwritten">手寫字</button>
                     </div>
                   </div>
-                  <div class="body">
-                    <p>看完前面的步驟後，可以親自試一次。下載左方的史料 PDF，按照右方的引導逐句組裝一段給 Agentic AI 的 prompt，完成後複製並貼到你自己的 Agentic AI 工具，讓它安裝 PaddleOCR 並辨識這份 PDF；最後把你的 OCR 結果貼回來，與參考結果比對。</p>
-                  </div>
                 </article>
 
                 <div class="part3-feature-explorer part3-try-explorer" id="part-3-try-explorer" data-part3-try data-try-mode="printed">
@@ -1657,49 +1654,68 @@
                   <script type="application/json" data-part3-try-data>
                   {
                     "printed": {
-                      "pdf": "try-printed.pdf",
-                      "pdfSub": "印刷本奏摺 · 2 頁 · PDF",
-                      "href": "",
-                      "pages": ["ocr-zhu25-printed-1-enhanced.png", "ocr-zhu25-printed-2-enhanced.png"],
+                      "pdf": "為請酌籌加調官兵協力進剿事.pdf",
+                      "pdfSub": "",
+                      "pdfPath": "/Users/creamybanana/Downloads/DH Project/intro Website/Website/storymap/試一試/印刷字/為請酌籌加調官兵協力進剿事.pdf",
+                      "href": "試一試/印刷字/為請酌籌加調官兵協力進剿事.pdf",
+                      "assetDir": "試一試/印刷字/",
+                      "pages": ["page1.png", "page2.png"],
                       "features": {
-                        "info":   {"page": 0, "colour": "#cfe0ef", "box": {"left": "70%", "top": "9%",  "width": "24%", "height": "28%"}},
-                        "column": {"page": 0, "colour": "#cfe3d4", "box": {"left": "12%", "top": "20%", "width": "56%", "height": "62%"}},
-                        "para":   {"page": 0, "colour": "#f5e6bd", "box": {"left": "14%", "top": "44%", "width": "50%", "height": "26%"}},
-                        "page":   {"page": 0, "colour": "#ddd6ea", "box": {"left": "6%",  "top": "88%", "width": "14%", "height": "7%"}},
-                        "zhu":    {"page": 1, "colour": "#f3ddc4", "box": {"left": "40%", "top": "30%", "width": "16%", "height": "22%"}}
+                        "info":   {"page": 0, "image": "文本資訊.png", "colour": "#cfe0ef", "box": {"left": "70%", "top": "9%",  "width": "24%", "height": "28%"}},
+                        "column": {"page": 0, "image": "直排單欄.png", "colour": "#cfe3d4", "box": {"left": "12%", "top": "20%", "width": "56%", "height": "62%"}},
+                        "para":   {"page": 0, "image": "分段.png", "colour": "#f5e6bd", "box": {"left": "14%", "top": "44%", "width": "50%", "height": "26%"}},
+                        "punctuation": {"page": 0, "image": "標點.png", "colour": "#f3bdd4", "box": {"left": "10%", "top": "20%", "width": "60%", "height": "62%"}},
+                        "signoff": {"page": 1, "image": "落款與尾批.png", "colour": "#d3e5e2", "box": {"left": "14%", "top": "70%", "width": "60%", "height": "20%"}},
+                        "page":   {"page": 0, "image": "頁數.png", "colour": "#ddd6ea", "box": {"left": "6%",  "top": "88%", "width": "14%", "height": "7%"}}
                       },
                       "steps": [
-                        {"kind": "chip", "k": "其之一 · 安裝工具",
-                         "guide": "先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。",
-                         "chip": "請在我的電腦上下載並安裝 PaddleOCR。"},
-                        {"kind": "chip", "k": "其之二 · OCR 目的",
-                         "guide": "再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。",
-                         "chip": "然後對名為 try-printed.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。"},
-                        {"kind": "mc", "k": "其之三 · 版面要求：閱讀順序", "feature": "column",
-                         "guide": "看看左邊反白的部分。這份史料是直排的，閱讀方向與橫排的書不同——請補上正確的順序。",
+                        {"kind": "chip", "k": "一 · 安裝工具",
+                         "guide": "先讓 Agentic AI 在你的電腦下載PaddleOCR的工具。",
+                         "chip": "請在我的電腦下載 PaddleOCR。"},
+                        {"kind": "chip", "k": "二 · OCR 目的",
+                         "guide": "再告訴它要辨識哪一份檔案。",
+                         "chip": "請在我的電腦上搜尋「為請酌籌加調官兵協力進剿事.pdf」，並對它進行OCR。"},
+                        {"kind": "advance", "k": "三 · 版面要求",
+                         "guide": "接下來，請觀察PDF的版面，再向AI指定OCR的規則。"},
+                        {"kind": "mc", "k": "3.1 閱讀順序", "feature": "column",
+                         "guide": "這份史料的閱讀順序是什麼？",
                          "before": "按照", "after": "、由上至下的順序輸出文本。",
                          "options": ["由右至左", "由左至右", "由下至上"], "answer": "由右至左"},
-                        {"kind": "mc", "k": "其之四 · 版面要求：分段", "feature": "para",
-                         "guide": "左邊反白處是分段的地方。這份史料靠什麼來分隔段落？選錯的話，OCR 會把段落接成一整塊。",
-                         "before": "請辨認段首的", "after": "，以此區分段落，保留每段完整內容，不要因一般換行而錯誤切斷段落。",
-                         "options": ["縮排", "空行", "標點符號"], "answer": "縮排"},
-                        {"kind": "mc", "k": "其之五 · 版面要求：文本資訊", "feature": "info",
-                         "guide": "正文之前那一塊，是這篇史料的來源、標題、作者與日期。它們該被獨立保存，而不是混進正文。",
-                         "before": "辨識正文前的", "after": "：史料來源、標題、作者、日期，並把這四項輸出為獨立欄位，不要混入正文。",
+                        {"kind": "mc", "k": "3.2 文本資訊", "feature": "info",
+                         "guide": "正文前的這些資料，應該放進正文嗎？",
+                         "before": "辨識正文前的", "after": "：史料來源、標題、作者、日期，並輸出為四項獨立的 data。",
                          "options": ["文本資訊", "註釋", "附錄"], "answer": "文本資訊"},
-                        {"kind": "mc", "k": "其之六 · 版面要求：夾批", "feature": "zhu",
-                         "guide": "翻到第二頁。正文中夾著幾行小字——它們不是官員寫的。想清楚再選。",
-                         "before": "正文中（硃批：）內的小字是", "after": "，請保留這些文字並獨立標記，不要視為官員的原文。",
-                         "options": ["皇帝的硃批", "官員的原文", "印刷錯誤"], "answer": "皇帝的硃批"},
-                        {"kind": "mc", "k": "其之七 · 版面要求：頁碼", "feature": "page",
-                         "guide": "頁面右下角那個小小的數字，日後引用時很重要，但它不屬於正文。",
-                         "before": "請辨識每一頁右下角的", "after": "，並儲存於獨立欄位，不要納入正文。",
+                        {"kind": "mc", "k": "3.3 分段", "feature": "para",
+                         "guide": "段落之間要靠什麼來分隔？",
+                         "before": "根據段首的", "after": "，劃分段落，保留每一段的內容，不要合併不同段落。",
+                         "options": ["縮排", "空行", "標點符號"], "answer": "縮排"},
+                        {"kind": "mc", "k": "3.4 標點符號", "feature": "punctuation",
+                         "guide": "標點符號要用全形還是半形？",
+                         "before": "辨識正文的標點符號，所有標點使用", "after": "，並在輸出 JSON 的最後，標記模糊標點和附近的文句。",
+                         "options": ["全形", "半形"], "answer": "全形"},
+                        {"kind": "mc", "k": "3.5 落款與尾批", "feature": "signoff",
+                         "guide": "正文結束後的日期與尾批，應該怎麼處理？",
+                         "before": "正文結束後的", "after": "，包含官員上奏日期、皇帝硃批日期與尾批，請分別保存，不要混入正文。",
+                         "options": ["落款與尾批", "印章", "浮水印"], "answer": "落款與尾批"},
+                        {"kind": "mc", "k": "3.6 頁碼", "feature": "page",
+                         "guide": "頁碼算不算正文的一部分？",
+                         "before": "辨識每一頁角落的", "after": "。",
                          "options": ["頁碼", "冊號", "年份"], "answer": "頁碼"},
-                        {"kind": "mc", "k": "其之八 · 輸出要求",
-                         "guide": "最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。",
-                         "before": "最後，請把以上所有結果輸出為", "after": " 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。",
+                        {"kind": "mc", "k": "4. 輸出要求",
+                         "guide": "定義好版面規則後，接下來是輸出格式：辨識的結果要用什麼形式保存？",
+                         "before": "請把辨識結果輸出為", "after": "。",
                          "options": ["JSON", "TXT", "DOCX"], "answer": "JSON"},
-                        {"kind": "free", "k": "其之九 · 你自己的要求",
+                        {"kind": "chip", "k": "4.1 輸出 JSON 的結構",
+                         "guide": "先說明整體結構，AI 才知道要把哪些欄位放進 JSON。",
+                         "chip": "輸出的 JSON 分為兩部分：史料資訊、正文。"},
+                        {"kind": "order", "k": "4.2 史料資訊",
+                         "guide": "史料資訊要包含哪些欄位？想用什麼順序列出？",
+                         "items": ["來源", "頁碼", "標題", "官職", "姓名", "具奏日期", "硃批日期", "硃批內容"],
+                         "prefix": "史料資訊包含：", "suffix": "。"},
+                        {"kind": "chip", "k": "4.3 正文",
+                         "guide": "最後，正文本身要怎麼輸出？",
+                         "chip": "正文請逐段列出，不要合併成一整段。"},
+                        {"kind": "free", "k": "4.4 你自己的要求",
                          "guide": "還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。",
                          "placeholder": "例如：如果某個字辨識信心低於 0.9，請標記出來讓我人工核對。"}
                       ],
@@ -1719,37 +1735,39 @@
                         "stamp":    {"page": 1, "colour": "#ddd6ea", "box": {"left": "50%", "top": "60%", "width": "22%", "height": "22%"}}
                       },
                       "steps": [
-                        {"kind": "chip", "k": "其之一 · 安裝工具",
+                        {"kind": "chip", "k": "一 · 安裝工具",
                          "guide": "先讓 Agentic AI 在你的電腦上把 OCR 工具準備好。按下面的建議句子，把它送出。",
                          "chip": "請在我的電腦上下載並安裝 PaddleOCR。"},
-                        {"kind": "chip", "k": "其之二 · OCR 目的",
+                        {"kind": "chip", "k": "二 · OCR 目的",
                          "guide": "再告訴它要辨識哪一份檔案。剛才下載的檔案就在你的電腦裡。",
                          "chip": "然後對名為 try-handwritten.pdf 的檔案進行 OCR，請在我的電腦上搜尋這個檔案。"},
-                        {"kind": "mc", "k": "其之三 · 版面要求：閱讀順序", "feature": "column",
+                        {"kind": "advance", "k": "三 · 版面要求",
+                         "guide": "接下來，請觀察PDF的版面，再向AI指定OCR的規則。"},
+                        {"kind": "mc", "k": "四 · 版面要求：閱讀順序", "feature": "column",
                          "guide": "手寫奏摺同樣是直排。先把閱讀順序講清楚，否則整段文字會顛倒。",
                          "before": "奏摺用直排書寫，請按照", "after": "、由上至下的順序輸出文字，而非由左至右。",
                          "options": ["由右至左", "由左至右", "由下至上"], "answer": "由右至左"},
-                        {"kind": "mc", "k": "其之四 · 版面要求：上奏官員", "feature": "author",
+                        {"kind": "mc", "k": "五 · 版面要求：上奏官員", "feature": "author",
                          "guide": "左邊反白的首行，寫著這份奏摺是誰上的。這兩項資料要分開存。",
                          "before": "奏摺首行標有上奏官員的", "after": "，例如「福建水師提督　黃仕簡」，請分別獨立標記。",
                          "options": ["官職與姓名", "籍貫與年齡", "品級與俸祿"], "answer": "官職與姓名"},
-                        {"kind": "mc", "k": "其之五 · 版面要求：小字自稱", "feature": "minor",
+                        {"kind": "mc", "k": "六 · 版面要求：小字自稱", "feature": "minor",
                          "guide": "正文中的「奴才」「臣」寫得比別的字小。字小不代表不重要——它們屬於哪裡？",
                          "before": "正文中的「奴才」或「臣」以較小字體書寫，但仍屬", "after": "，請保留於原有位置，不要省略或刪除。",
                          "options": ["正文的一部份", "註釋", "裝飾文字"], "answer": "正文的一部份"},
-                        {"kind": "mc", "k": "其之六 · 版面要求：硃批", "feature": "rescript",
+                        {"kind": "mc", "k": "七 · 版面要求：硃批", "feature": "rescript",
                          "guide": "翻到第二頁。紅色的草書是皇帝的硃批，OCR 幾乎辨不準。這一步該怎麼處理？",
                          "before": "請", "after": "紅色的硃批草書文字。",
                          "options": ["不要 OCR", "優先 OCR", "合併進正文"], "answer": "不要 OCR"},
-                        {"kind": "mc", "k": "其之七 · 版面要求：印章與浮水印", "feature": "stamp",
+                        {"kind": "mc", "k": "八 · 版面要求：印章與浮水印", "feature": "stamp",
                          "guide": "印章和博物院的浮水印都不是文本內容，別讓它們混進結果裡。",
                          "before": "請", "after": "「國立故宮博物院」的浮水印，以及正文後的印章。",
                          "options": ["忽略", "辨識為正文", "翻譯"], "answer": "忽略"},
-                        {"kind": "mc", "k": "其之八 · 輸出要求",
+                        {"kind": "mc", "k": "九 · 輸出要求",
                          "guide": "最後一項要求：辨識完的東西要用什麼格式存下來？回想一下第 9 步說過的結構化格式。",
                          "before": "最後，請把以上所有結果輸出為", "after": " 格式，以「欄位－內容」的方式儲存，方便後續讀取與分析。",
                          "options": ["JSON", "TXT", "DOCX"], "answer": "JSON"},
-                        {"kind": "free", "k": "其之九 · 你自己的要求",
+                        {"kind": "free", "k": "十 · 你自己的要求",
                          "guide": "還有其他想要求 AI 做的事嗎？寫下來，或直接跳過。",
                          "placeholder": "例如：草書辨識不確定的字，請用 □ 標示並附上信心分數。"}
                       ],

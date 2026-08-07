@@ -1727,25 +1727,34 @@ img { max-width: 100%; }
 .part3-fx-ind { color: rgba(244, 239, 230, .62); font: 600 calc(12px * var(--font-scale)) var(--sans); }
 
 /* --- 右半：特徵 → 指示 → 代碼 → 輸出，以向下箭頭串起因果關係 ---
-   高度跟著整個遊戲視窗（見 #part-3-printed-explorer／#part-3-handwritten-explorer
-   的 --fx-explorer-h）走；四個區塊放不下時在這一欄內部捲動，
-   不再把整個頁面往下撐長。 */
+   「版面特徵」卡片與「AI Prompt」視窗永遠完整顯示、不捲動、不縮小；
+   剩下的高度平分給「AI 生成的 Python 代碼」與「OCR 的輸出結果」兩個視窗，
+   放不下時各自在視窗內部捲動（見下面 .part3-fx-win 的 flex: 1 1 0）。
+   這兩個視窗的字級另外由 storymap.js 依內容長短自動微調
+   （--fx-code-font-size，見 initPart3FeatureExplorers 的 fitCodeFont）。 */
 .part3-fx-out {
-  height: 100%; min-height: 0; overflow-y: auto; scrollbar-width: thin;
+  height: 100%; min-height: 0; overflow: hidden;
   padding: clamp(24px, 2.4vw, 40px);
   display: flex; flex-direction: column;
 }
+.part3-fx-feat,
+.part3-fx-chat,
+.part3-fx-out > .part3-fx-arrow { flex: 0 0 auto; }
 .part3-fx-arrow {
   display: flex; align-items: center; justify-content: center;
   height: 40px; color: var(--accent); font-size: calc(19px * var(--font-scale)); line-height: 1;
 }
 .part3-fx-feat { padding: 20px 22px; background: var(--paper); border: 1px solid var(--line); }
-.part3-fx-feat .k { color: var(--accent); font: 800 calc(10.5px * var(--font-scale)) var(--sans); letter-spacing: .15em; }
-.part3-fx-feat h3 { margin: 9px 0 10px; font: 700 calc(19px * var(--font-scale)) var(--serif); }
+.part3-fx-feat h3 { margin: 0 0 10px; font: 700 calc(19px * var(--font-scale)) var(--serif); }
 .part3-fx-feat p { margin: 0; color: #31484a; font: 400 calc(13.5px * var(--font-scale))/1.9 var(--serif); }
 
-.part3-fx-win { overflow: hidden; background: #1e1e1e; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px; }
+/* 「AI 生成的 Python 代碼」與「OCR 的輸出結果」平分剩餘高度，各自捲動 */
+.part3-fx-win {
+  flex: 1 1 0; min-height: 64px; display: flex; flex-direction: column;
+  overflow: hidden; background: #1e1e1e; border: 1px solid rgba(255, 255, 255, .08); border-radius: 14px;
+}
 .part3-fx-win-bar {
+  flex: 0 0 auto;
   display: flex; align-items: center; gap: 7px; padding: 10px 13px;
   background: #2b2b2b; border-bottom: 1px solid rgba(255, 255, 255, .06);
 }
@@ -1755,9 +1764,11 @@ img { max-width: 100%; }
 .part3-fx-win-bar .dot.green { background: #28c840; }
 .part3-fx-win-bar .ttl { margin-left: 8px; color: rgba(255, 255, 255, .72); font: 700 calc(13px * var(--font-scale)) var(--sans); }
 .part3-fx-win-body {
-  padding: 14px 16px; min-height: 80px;
+  flex: 1 1 auto; min-height: 0; overflow-y: auto; scrollbar-width: thin;
+  padding: 14px 16px;
   color: #d4d4d4; white-space: pre-wrap; word-break: break-word;
-  font: calc(11.5px * var(--font-scale))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  font: calc(var(--fx-code-font-size, 11.5px) * var(--font-scale))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  transition: font-size .15s ease;
 }
 .part3-fx-win-body .kw { color: #c586c0; }
 .part3-fx-win-body .fn { color: #dcdcaa; }
@@ -1822,6 +1833,8 @@ img { max-width: 100%; }
   .part3-fx-page img { width: 100%; height: auto; }
   .part3-fx-striparea { height: auto; }
   .part3-fx-out { height: auto; max-height: none; overflow: visible; }
+  .part3-fx-win { flex: 0 0 auto; min-height: 0; }
+  .part3-fx-win-body { flex: 0 0 auto; max-height: none; overflow-y: visible; }
   /* 窄螢幕：改回原件下方的標籤列，避免浮貼標籤擠壓版面 */
   .part3-fx-doc { padding-inline: clamp(18px, 3vw, 30px); }
   .part3-fx-doc .part3-fx-tag.is-floating {
@@ -2961,7 +2974,7 @@ img { max-width: 100%; }
   overflow: hidden;
 }
 
-/* 左半：史料——高度跟著整個遊戲視窗走，圖片依比例縮放置中，不裁切。 */
+/* 左半：史料——PDF 依比例縮放置中，不裁切；左側 backdrop 依內容收合。 */
 .part3-try-doc {
   height: 100%; min-height: 0;
   padding: var(--try-doc-pad, clamp(24px, 2.4vw, 38px));
@@ -3048,12 +3061,16 @@ img { max-width: 100%; }
 .part3-try-dot.is-pending { background: rgba(22, 61, 63, .09); color: rgba(22, 61, 63, .38); }
 
 /* RPG 引導對話框（固定於面板底部） */
+/* 引導框走網站敘述文用的 --serif（跟其他章節的說明文字同一種字體），
+   跟下面「建議句子／填空／輸入框」刻意維持的 --sans 區分開來——
+   前者是遊戲旁白，後者才是真正會變成 prompt 的文字。 */
 .part3-try-rpg {
   position: relative; padding: 16px 20px 20px;
   background: var(--try-rpg-bg, linear-gradient(160deg, #12363a 0%, #1b464a 100%));
   border: 2px solid var(--try-rpg-border, #6f9a90); border-radius: 6px;
   box-shadow: inset 0 0 0 2px rgba(18, 54, 58, .9), 0 8px 20px rgba(18, 54, 58, .22);
-  color: #eef4f0; font-size: calc(var(--try-rpg-font-size, 13px) * var(--font-scale)); line-height: 1.95;
+  color: #eef4f0; font-family: var(--serif);
+  font-size: calc(var(--try-rpg-font-size, 13px) * var(--font-scale)); line-height: 1.95;
 }
 .part3-try-rpg::before,
 .part3-try-rpg::after { content: ""; position: absolute; width: 6px; height: 6px; background: var(--try-rpg-border, #6f9a90); }
@@ -3061,7 +3078,7 @@ img { max-width: 100%; }
 .part3-try-rpg::after { right: 5px; top: 5px; }
 .part3-try-rpg .k {
   display: block; margin-bottom: 7px; letter-spacing: .14em; font-weight: 700;
-  font-size: calc(11px * var(--font-scale)); color: var(--yellow);
+  font-family: var(--sans); font-size: calc(11px * var(--font-scale)); color: var(--yellow);
 }
 .part3-try-rpg .t { display: block; min-height: 1.95em; }
 .part3-try-rpg .caret {
@@ -3070,6 +3087,21 @@ img { max-width: 100%; }
 }
 @keyframes part3TryBlink { 0%, 50% { opacity: 1; } 51%, 100% { opacity: 0; } }
 .part3-try-opts { margin-top: 14px; padding-top: 13px; border-top: 1px dashed rgba(111, 154, 144, .5); }
+
+/* 「advance」步驟：沒有按鈕，整張引導卡片本身可點擊，直接進下一步。 */
+.part3-try-rpg.is-advance {
+  cursor: pointer;
+  transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+}
+.part3-try-rpg.is-advance:hover,
+.part3-try-rpg.is-advance:focus-visible {
+  transform: translateY(-2px);
+  border-color: var(--yellow);
+  box-shadow: inset 0 0 0 2px rgba(18, 54, 58, .9), 0 12px 26px rgba(18, 54, 58, .32);
+  outline: none;
+}
+.part3-try-rpg.is-advance:active { transform: translateY(0); }
+.part3-try-advance-hint { font-family: var(--sans); white-space: nowrap; }
 
 /* 引導框內的互動元件（深底配色） */
 .part3-try-chip {
@@ -3082,7 +3114,7 @@ img { max-width: 100%; }
 }
 .part3-try-chip:hover { background: rgba(243, 201, 103, .22); }
 .part3-try-chip:active { transform: scale(.99); }
-.part3-try-sentence { margin: 0; line-height: 2.4; font-size: calc(13px * var(--font-scale)); color: #eef4f0; }
+.part3-try-sentence { margin: 0; line-height: 2.4; font-family: var(--sans); font-size: calc(13px * var(--font-scale)); color: #eef4f0; }
 .part3-try-blank {
   appearance: none; cursor: pointer; border: none; border-bottom: 2px solid var(--yellow);
   background: rgba(255, 255, 255, .1); color: #fff; padding: 4px 26px 4px 10px; border-radius: 5px 5px 0 0;
@@ -3097,7 +3129,7 @@ img { max-width: 100%; }
 .part3-try-blank.is-ok { border-bottom-color: #7fe0b3; background-color: rgba(127, 224, 179, .16); }
 .part3-try-blank.is-bad { border-bottom-color: #ff9f95; background-color: rgba(255, 159, 149, .16); animation: part3TryShake .3s; }
 @keyframes part3TryShake { 25% { transform: translateX(-3px); } 75% { transform: translateX(3px); } }
-.part3-try-mark { margin-left: 8px; font-weight: 700; font-size: calc(14px * var(--font-scale)); }
+.part3-try-mark { margin-left: 8px; font-family: var(--sans); font-weight: 700; font-size: calc(14px * var(--font-scale)); }
 .part3-try-mark.ok { color: #7fe0b3; }
 .part3-try-mark.bad { color: #ff9f95; }
 .part3-try-free {
@@ -3115,6 +3147,37 @@ img { max-width: 100%; }
 }
 .part3-try-optbtn:hover { filter: brightness(1.07); }
 .part3-try-optbtn:active { transform: translateY(1px); }
+
+/* 「order」排序小遊戲：用上／下移動排出使用者自己想要的順序，
+   沒有固定正解，只是把選好的順序組成一句 prompt。 */
+.part3-try-order { display: flex; flex-direction: column; gap: 6px; }
+.part3-try-order-row {
+  display: flex; align-items: center; gap: 10px;
+  padding: 7px 10px; border-radius: 8px;
+  background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .14);
+}
+.part3-try-order-num {
+  flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: rgba(243, 201, 103, .18); color: var(--yellow);
+  font-family: var(--sans); font-weight: 700; font-size: calc(11px * var(--font-scale));
+}
+.part3-try-order-label {
+  flex: 1 1 auto; min-width: 0;
+  font-family: var(--sans); font-weight: 600; color: #fff;
+  font-size: calc(13px * var(--font-scale));
+}
+.part3-try-order-btns { flex: 0 0 auto; display: flex; gap: 4px; }
+.part3-try-order-btns button {
+  appearance: none; cursor: pointer; width: 24px; height: 24px; padding: 0;
+  border-radius: 6px; border: 1px solid rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .08); color: #fff;
+  font-size: calc(11px * var(--font-scale)); line-height: 1;
+  transition: background-color .14s, opacity .14s;
+}
+.part3-try-order-btns button:hover:not(:disabled) { background: rgba(243, 201, 103, .22); }
+.part3-try-order-btns button:disabled { opacity: .25; cursor: default; }
+.part3-try-order + .part3-try-optbtn { display: block; }
 
 /* 視窗外殼（沿用網站 Codex 視窗的淺色標題列） */
 .part3-try-win { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 4px; }
