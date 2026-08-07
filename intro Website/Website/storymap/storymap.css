@@ -2954,11 +2954,11 @@ img { max-width: 100%; }
 /* 進度列最右側的印刷字／手寫字切換 */
 .part3-try-switch {
   margin-left: auto; display: inline-flex; gap: 3px; padding: 3px;
-  background: rgba(22, 61, 63, .07); border-radius: 999px;
+  background: rgba(22, 61, 63, .07); border-radius: 0;
 }
 .part3-try-progress .part3-try-switch { margin-left: auto; flex: 0 0 auto; }
 .part3-try-switch button {
-  appearance: none; border: none; cursor: pointer; background: transparent; border-radius: 999px;
+  appearance: none; border: none; cursor: pointer; background: transparent; border-radius: 0;
   padding: 6px 16px; font-family: var(--sans); font-weight: 700;
   font-size: calc(var(--try-switch-font-size, 12.5px) * var(--font-scale));
   color: rgba(22, 61, 63, .6); transition: background-color .18s, color .18s;
@@ -3032,6 +3032,15 @@ img { max-width: 100%; }
   padding: var(--try-panel-pad, 24px 26px);
 }
 .part3-try-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding-right: 2px; scrollbar-width: thin; }
+/* 第二步（Codex 聊天視窗）時：進度列與底部「複製全部」列固定不動，
+   只有聊天訊息本身（.part3-try-chat）在視窗裡面捲動。 */
+.part3-try-scroll.is-chat { display: flex; flex-direction: column; overflow: hidden; }
+.part3-try-scroll.is-chat > [data-try-todo] { flex: 0 0 auto; }
+.part3-try-scroll.is-chat > [data-try-stage] { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; overflow: hidden; }
+.part3-try-scroll.is-chat .part3-try-win { flex: 1 1 auto; min-height: 0; display: flex; flex-direction: column; }
+.part3-try-scroll.is-chat .part3-try-winbar { flex: 0 0 auto; }
+.part3-try-scroll.is-chat .part3-try-chat { flex: 1 1 auto; min-height: 0; max-height: none; overflow-y: auto; }
+.part3-try-scroll.is-chat .part3-try-chatfoot { flex: 0 0 auto; }
 .part3-try-guidehost {
   flex: 0 0 auto;
   margin-top: var(--try-guide-gap, 16px);
@@ -3132,6 +3141,36 @@ img { max-width: 100%; }
 .part3-try-mark { margin-left: 8px; font-family: var(--sans); font-weight: 700; font-size: calc(14px * var(--font-scale)); }
 .part3-try-mark.ok { color: #7fe0b3; }
 .part3-try-mark.bad { color: #ff9f95; }
+
+/* 「multi」inline 模式：勾選項目直接嵌在句子裡（3.2 文本資訊 / 3.5 落款與尾批）。
+   做成跟句子明顯不同的小藥丸狀按鈕（呼應下面 .part3-try-multi-item 的做法），
+   而不是純文字＋一個很小的勾選框，這樣才看得出「這裡可以點」。 */
+.part3-try-check {
+  display: inline-flex; align-items: center; gap: 6px; cursor: pointer;
+  margin: 2px 1px; padding: 3px 10px 3px 8px; border-radius: 0;
+  border: 1.5px solid rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .09);
+  font-family: var(--sans); font-weight: 700; color: #fff8e6;
+  font-size: calc(12.5px * var(--font-scale)); line-height: 1.4;
+  transition: background-color .14s, border-color .14s, box-shadow .14s;
+}
+.part3-try-check:hover { border-color: rgba(243, 201, 103, .6); background: rgba(255, 255, 255, .15); }
+.part3-try-check input[type="checkbox"] {
+  position: absolute; width: 1px; height: 1px; opacity: 0; pointer-events: none;
+}
+.part3-try-check .chk {
+  flex: 0 0 auto; width: 14px; height: 14px; border-radius: 3px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, .5); background: rgba(0, 0, 0, .18);
+  font-size: 10px; line-height: 1; color: transparent; font-weight: 900;
+  transition: background-color .14s, border-color .14s, color .14s;
+}
+.part3-try-check .chk::after { content: "✓"; }
+.part3-try-check input:checked + .chk,
+.part3-try-check.is-checked .chk { border-color: #3b2a0c; background: var(--yellow); color: #3b2a0c; }
+.part3-try-check.is-checked {
+  border-color: var(--yellow); background: rgba(243, 201, 103, .22);
+  box-shadow: 0 0 0 1px rgba(243, 201, 103, .3);
+}
 .part3-try-free {
   width: 100%; min-height: 64px; border-radius: 9px; border: 1px solid rgba(255, 255, 255, .2);
   background: rgba(255, 255, 255, .07); color: #fff; padding: 9px 12px;
@@ -3145,39 +3184,52 @@ img { max-width: 100%; }
   font-family: var(--sans); font-weight: 700; font-size: calc(12.5px * var(--font-scale));
   transition: filter .16s, transform .1s;
 }
-.part3-try-optbtn:hover { filter: brightness(1.07); }
-.part3-try-optbtn:active { transform: translateY(1px); }
+.part3-try-optbtn:hover:not(:disabled) { filter: brightness(1.07); }
+.part3-try-optbtn:active:not(:disabled) { transform: translateY(1px); }
+.part3-try-optbtn:disabled { background: rgba(255, 255, 255, .12); color: rgba(255, 255, 255, .4); cursor: not-allowed; }
 
-/* 「order」排序小遊戲：用上／下移動排出使用者自己想要的順序，
-   沒有固定正解，只是把選好的順序組成一句 prompt。 */
-.part3-try-order { display: flex; flex-direction: column; gap: 6px; }
-.part3-try-order-row {
-  display: flex; align-items: center; gap: 10px;
-  padding: 7px 10px; border-radius: 8px;
-  background: rgba(255, 255, 255, .07); border: 1px solid rgba(255, 255, 255, .14);
-}
-.part3-try-order-num {
-  flex: 0 0 auto; width: 20px; height: 20px; border-radius: 50%;
-  display: inline-flex; align-items: center; justify-content: center;
-  background: rgba(243, 201, 103, .18); color: var(--yellow);
-  font-family: var(--sans); font-weight: 700; font-size: calc(11px * var(--font-scale));
-}
-.part3-try-order-label {
-  flex: 1 1 auto; min-width: 0;
-  font-family: var(--sans); font-weight: 600; color: #fff;
+/* 「choice」：不嵌在句子裡的獨立選項按鈕（例如 3.6 頁碼：保留／不保留）。 */
+.part3-try-choices { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 4px; }
+.part3-try-choice {
+  appearance: none; cursor: pointer; border-radius: 10px; padding: 10px 22px;
+  border: 1.5px solid rgba(255, 255, 255, .3); background: rgba(255, 255, 255, .09);
+  font-family: var(--sans); font-weight: 700; color: #fff8e6;
   font-size: calc(13px * var(--font-scale));
+  transition: background-color .14s, border-color .14s, transform .1s, color .14s;
 }
-.part3-try-order-btns { flex: 0 0 auto; display: flex; gap: 4px; }
-.part3-try-order-btns button {
-  appearance: none; cursor: pointer; width: 24px; height: 24px; padding: 0;
-  border-radius: 6px; border: 1px solid rgba(255, 255, 255, .2);
-  background: rgba(255, 255, 255, .08); color: #fff;
-  font-size: calc(11px * var(--font-scale)); line-height: 1;
-  transition: background-color .14s, opacity .14s;
+.part3-try-choice:hover:not(:disabled) { border-color: rgba(243, 201, 103, .6); background: rgba(255, 255, 255, .15); }
+.part3-try-choice:active:not(:disabled) { transform: translateY(1px); }
+.part3-try-choice:disabled { cursor: not-allowed; }
+.part3-try-choice.is-ok { border-color: #7fe0b3; background: rgba(127, 224, 179, .22); color: #eafff5; }
+.part3-try-choice.is-bad { border-color: #ff9f95; background: rgba(255, 159, 149, .22); animation: part3TryShake .3s; }
+
+/* 「multi」複選：把每個項目都打勾才能完成，沒有干擾選項——
+   全部選滿之後才能按下方按鈕，依原本列出的順序組成一句 prompt。 */
+.part3-try-multi { display: flex; flex-wrap: wrap; gap: 8px; }
+.part3-try-multi-item {
+  appearance: none; cursor: pointer; display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 12px; border-radius: 0; border: 1.5px solid rgba(255, 255, 255, .2);
+  background: rgba(255, 255, 255, .06); color: #fff;
+  font-family: var(--sans); font-weight: 600; font-size: calc(12.5px * var(--font-scale));
+  line-height: 1.4;
+  transition: background-color .14s, border-color .14s;
 }
-.part3-try-order-btns button:hover:not(:disabled) { background: rgba(243, 201, 103, .22); }
-.part3-try-order-btns button:disabled { opacity: .25; cursor: default; }
-.part3-try-order + .part3-try-optbtn { display: block; }
+.part3-try-multi-item .chk {
+  flex: 0 0 auto; width: 13px; height: 13px; border-radius: 3px;
+  display: inline-flex; align-items: center; justify-content: center;
+  border: 1.5px solid rgba(255, 255, 255, .35); background: transparent;
+  font-size: 10px; line-height: 1; color: transparent;
+  transition: background-color .14s, border-color .14s, color .14s;
+}
+.part3-try-multi-item .chk::after { content: "✓"; }
+.part3-try-multi-item:hover { border-color: rgba(243, 201, 103, .55); }
+.part3-try-multi-item.is-selected {
+  border-color: var(--yellow); background: rgba(243, 201, 103, .16);
+}
+.part3-try-multi-item.is-selected .chk {
+  border-color: var(--yellow); background: var(--yellow); color: #3b2a0c;
+}
+.part3-try-multi + .part3-try-optbtn { display: block; }
 
 /* 視窗外殼（沿用網站 Codex 視窗的淺色標題列） */
 .part3-try-win { border-radius: 12px; overflow: hidden; border: 1px solid var(--line); margin-bottom: 4px; }
@@ -3199,6 +3251,7 @@ img { max-width: 100%; }
 .part3-try-dl .meta { flex: 1 1 160px; min-width: 0; }
 .part3-try-dl .name { font-family: var(--mono, "SF Mono", ui-monospace, Menlo, Consolas, monospace); font-size: calc(12.5px * var(--font-scale)); font-weight: 600; word-break: break-all; }
 .part3-try-dl .sub { margin-top: 4px; font-size: calc(11.5px * var(--font-scale)); color: rgba(22, 61, 63, .6); }
+.part3-try-dl-actions { display: inline-flex; align-items: center; gap: 10px; flex: 0 0 auto; }
 .part3-try-dlbtn {
   appearance: none; cursor: pointer; border: none; border-radius: 9px; padding: 11px 20px;
   background: var(--ink); color: var(--card); font-family: var(--sans); font-weight: 700;
@@ -3206,9 +3259,24 @@ img { max-width: 100%; }
 }
 .part3-try-dlbtn:hover { background: #1d4d4f; }
 .part3-try-dlbtn:active { transform: translateY(1px); }
+.part3-try-already {
+  appearance: none; cursor: pointer; border: 1px solid var(--ink); border-radius: 9px; padding: 10px 18px;
+  background: transparent; color: var(--ink); font-family: var(--sans); font-weight: 700;
+  font-size: calc(13px * var(--font-scale)); transition: background-color .18s, color .18s, transform .1s;
+}
+.part3-try-already:hover { background: rgba(22, 61, 63, .08); }
+.part3-try-already:active { transform: translateY(1px); }
 
 /* 第二步：Codex 聊天視窗；每句 prompt 都可直接點入編輯 */
-.part3-try-chat { background: var(--card); padding: 16px; max-height: var(--try-chat-max-h, 420px); overflow-y: auto; scrollbar-width: thin; }
+.part3-try-chat {
+  background: var(--card); padding: 16px;
+  max-height: var(--try-chat-max-h, 420px); overflow-y: auto; scrollbar-width: thin;
+  transition: max-height .2s ease;
+}
+/* 完整 prompt 顯示階段：聊天視窗長高，讓更多內容不必捲動就看得到。
+   外層 .part3-try-scroll 仍然是唯一的捲動邊界，整個遊戲視窗的高度
+   （--try-explorer-h）完全不受影響。 */
+.part3-try-chat.is-final { max-height: var(--try-chat-max-h-final, none); }
 .part3-try-bubblerow { display: flex; justify-content: flex-end; margin-bottom: 11px; }
 .part3-try-bubble {
   max-width: 88%; padding: 9px 13px; border-radius: 12px 12px 3px 12px;

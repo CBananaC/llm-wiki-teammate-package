@@ -3745,6 +3745,45 @@ Verified:
 Remaining:
 - None for this layout adjustment.
 
+### 2026-08-07 15:30 HKT — Codex — Make the 試一試 mode switch rectangular
+
+Summary:
+- Changed the `印刷字／手寫字` switch container and buttons from pill-shaped controls to straight-corner rectangles.
+- Kept the switch aligned to the right edge of the 1／2／3 progression row.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser check at 1150×1600 reports `border-radius: 0px` for both the switch and its buttons.
+- The switch and progression row have the same right edge.
+- `git diff --check` passes and CSS brace balance remains 0.
+
+Remaining:
+- None for this shape adjustment.
+
+### 2026-08-07 15:30 HKT — Codex — Reorder Part 8 handwritten labels
+
+Summary:
+- Increased the gap between `直排單欄` and `正文字體`.
+- Moved `上奏官員` above `臣字款` while keeping a clear vertical gap between them.
+- Refreshed the StoryMap asset query version so the new positions load in the preview.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- The Part 8 positions are now `17%`, `28%`, `38%`, and `52%` for the affected labels.
+- CSS brace balance and `git diff --check` pass.
+
+Remaining:
+- None for this Part 8 label-order adjustment.
+
 ### 2026-08-04 15:57 HKT — Codex — Restore the linked PaddleOCR info panel
 
 Summary:
@@ -5019,3 +5058,61 @@ Verified:
 
 Remaining:
 - None for this wording adjustment.
+
+### 2026-08-07 15:25 HKT — Codex — Fill the 試一試 PDF backdrop and align the mode switch
+
+Summary:
+- Filled the green backdrop of the `試一試` PDF window to the full height of its left pane, removing the transparent white strip above and below the backdrop.
+- Kept `印刷字／手寫字` inside the 1／2／3 progression row and pinned it to that row's right edge.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- At a 1150×1600 browser viewport, the try PDF pane reports `background-size: 100% 100%, 100% 100%`.
+- The mode switch's right edge is exactly aligned with the progression row's right edge.
+- CSS brace balance is 0, `node --check Website/storymap/storymap.js` passes, and `git diff --check` passes.
+
+Remaining:
+- None for this layout adjustment.
+
+### 2026-08-07 15:31 HKT — Claude — Make 試一試 3.6 頁碼 a plain two-choice question
+
+Summary:
+- Changed printed-mode step "3.6 頁碼" from an inline fill-in-blank `mc` dropdown to a new non-inline `choice` step kind: two standalone buttons (`保留` / `不保留`) below the guide box, per request "應否保留頁碼，2 option (not intext)". Guide text simplified to `應否保留頁碼？`.
+- Added the `choice` renderer to `storymap.js` `nextStep()` and `.part3-try-choices`/`.part3-try-choice` styling to `storymap.css`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passes; `json.loads()` on `data-part3-try-data` confirms 3.6 頁碼 is now `kind: "choice"` with `options: ["保留","不保留"]`, `answer: "保留"`.
+- CSS brace balance 0.
+
+Remaining:
+- No git commit — working tree has concurrent unrelated edits from another agent in the same files.
+
+### 2026-08-07 15:52 HKT — Claude — Freeze 試一試 chat header/footer; rectangle multi-option buttons
+
+Summary:
+- Phase 2 chat window: progress row and footer ("每一句都可以直接點進去修改。複製全部") now stay fixed; only the chat bubble list scrolls internally. Implemented via a JS-toggled `is-chat` class on `.part3-try-scroll` that turns it into a flex column (progress row + winbar + footer fixed-size, `.part3-try-chat` flex-fills and scrolls).
+- Multi-select option buttons (inline `.part3-try-check`, block `.part3-try-multi-item`) changed from rounded pills to plain rectangles with tighter padding/smaller checkbox (shorter height).
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passes; CSS brace balance 0.
+- `data-part3-try-data` JSON still parses (17 printed steps).
+
+Remaining:
+- No git commit — working tree has concurrent unrelated edits from another agent in the same files.

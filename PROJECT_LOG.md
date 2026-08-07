@@ -4530,6 +4530,26 @@ Verified:
 Remaining:
 - None for this change.
 
+### 2026-08-07 15:30 HKT — Codex — Reorder Part 8 handwritten labels
+
+Summary:
+- Increased the gap between `直排單欄` and `正文字體`.
+- Moved `上奏官員` above `臣字款` while keeping a clear vertical gap between them.
+- Refreshed the StoryMap asset query version so the new positions load in the preview.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The Part 8 positions are now `17%`, `28%`, `38%`, and `52%` for the affected labels.
+- CSS brace balance and `git diff --check` pass.
+
+Remaining:
+- None for this Part 8 label-order adjustment.
+
 ### 2026-07-30 16:39 HKT — Codex — Preserve edited original text with stale divisions
 
 Summary:
@@ -7423,6 +7443,25 @@ Verified:
 Remaining:
 - None for this layout adjustment.
 
+### 2026-08-07 15:30 HKT — Codex — Make the intro Website 試一試 mode switch rectangular
+
+Summary:
+- Changed the `印刷字／手寫字` switch container and buttons from pill-shaped controls to straight-corner rectangles.
+- Kept the switch aligned to the right edge of the 1／2／3 progression row.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verification:
+- Browser check at 1150×1600 reports `border-radius: 0px` for both the switch and its buttons.
+- The switch and progression row have the same right edge.
+- `git diff --check` passes and CSS brace balance remains 0.
+
+Remaining:
+- None for this shape adjustment.
+
 ### 2026-08-04 15:57 HKT — Codex — Restore the linked PaddleOCR info panel
 
 Summary:
@@ -9124,3 +9163,101 @@ Verified:
 
 Remaining:
 - None for this wording adjustment.
+
+### 2026-08-07 15:25 HKT — Codex — Fill the intro Website 試一試 PDF backdrop and align the mode switch
+
+Summary:
+- Updated the intro Website `試一試` PDF pane so its green backdrop fills the complete left-pane height instead of leaving a white strip.
+- Kept `印刷字／手寫字` in the 1／2／3 progression row and pinned it to the row's right edge.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verification:
+- Browser-checked at 1150×1600: backdrop size is `100% 100%, 100% 100%`; the mode switch and progression row share the same right edge.
+- CSS brace balance is 0, `node --check intro Website/Website/storymap/storymap.js` passes, and `git diff --check` passes.
+
+Remaining:
+- None for this layout adjustment.
+
+### 2026-08-06 20:35 HKT — Claude — 試一試 (printed): opening advance card, inline multi-select, yes/no 頁碼 quiz, taller final chat window
+
+Summary:
+- Added a new "advance" (click-card, no button) step "撰寫 Prompt" as the very first step, before 一·安裝工具: guide "現在，開始撰寫給 Agentic AI 的 OCR prompt。" Printed only — not mirrored to handwritten this time (not requested).
+- `multi` step kind split into two rendering modes via a new `"inline": true` flag:
+  - Inline (3.2 文本資訊, 3.5 落款與尾批): checkboxes now sit directly inside the sentence text ("正文結束後包含：☐官員上奏日期、☐皇帝硃批日期、☐尾批，請分別保存..."), auto-completing ~300ms after the last box is checked — no separate button.
+  - Block (4.3 史料資訊, unflagged — kept as-is per request): still a row of toggle chips with a confirm button, since inlining all 8 fields into one sentence would be unreadable.
+  - Removed the "（已選 x/4）" counter text from the block-style confirm button in both cases; it now just reads "完成，加入 prompt" and stays disabled until everything is checked.
+- 3.6 頁碼 restructured from "identify this region's name" (頁碼/冊號/年份) into a keep-or-not quiz: "辨識每一頁角落的頁碼，[保留/不保留]於獨立欄位，不要納入正文。" with 保留 (yes) as the correct answer.
+- Filled the one remaining empty guide (4.1 JSON 格式) with a short question: "辨識完成後，要用什麼格式存下來？"
+- Final "prompt is ready" stage: the Codex-style chat window (`.part3-try-chat`) now gets `.is-final` added, removing its `max-height` cap (`--try-chat-max-h-final`, default `none`) so it grows to show more of the assembled prompt without its own inner scrollbar. The outer explorer's fixed height (`--try-explorer-h`) is untouched — `.part3-try-scroll` remains the single scroll boundary.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `json.loads()` on `data-part3-try-data`: printed now 17 steps (2 inline-multi, 1 block-multi), zero empty guides across both modes, all `steps[].feature` resolve against `features{}` both ways.
+- `<div>` balance 0; brace balance 0 for both CSS files; `node --check storymap.js` passes.
+
+Remaining:
+- The new opening "撰寫 Prompt" advance card was added to printed only; flag if it should also open the handwritten flow.
+
+### 2026-08-06 20:42 HKT — Claude — Make inline multi-select options in 試一試 visually obvious
+
+Summary:
+- The inline checkbox options embedded in sentences (3.2 文本資訊, 3.5 落款與尾批) were plain text with a tiny 15px checkbox appended — hard to tell they were clickable against the dark backdrop. Restyled each as a small rounded pill (border + fill, matching the block-style `.part3-try-multi-item` chip language): visible border/background at rest, brighter hover state, and a full pill highlight (yellow border + tinted fill + outer glow) when checked, not just the tiny checkbox square.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Brace balance 0.
+
+Remaining:
+- None for this change.
+
+### 2026-08-07 15:31 HKT — Claude — Make 試一試 3.6 頁碼 a plain two-choice question
+
+Summary:
+- Changed printed-mode step "3.6 頁碼" from the inline fill-in-blank `mc` dropdown to a new non-inline `choice` step kind: two standalone buttons (`保留` / `不保留`) shown under the guide box, matching the request "應否保留頁碼，2 option (not intext)". Guide text simplified to `應否保留頁碼？`. Correct answer still assembles the same prompt line (`辨識每一頁角落的頁碼，保留於獨立欄位，不要納入正文。`) into the chat once `保留` is picked; wrong pick shakes/reverts.
+- Added the `choice` step-kind renderer in `nextStep()` and `.part3-try-choices`/`.part3-try-choice` button styling (rest/hover/ok/bad states, matching the existing green/red mc-mark palette) to `storymap.css`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- `json.loads()` on `data-part3-try-data`: printed steps count unchanged (17); 3.6 頁碼 now `"kind": "choice"` with `options` `["保留","不保留"]` and `answer` `"保留"`; all `steps[].feature` still resolve against `features{}`.
+- CSS brace balance 0 (checked after noting `storymap.css` had concurrent unrelated edits on disk from another agent since last read).
+
+Remaining:
+- No git commit made — working tree still contains concurrent in-progress changes from another agent (Codex) in the same files.
+
+### 2026-08-07 15:52 HKT — Claude — Freeze 試一試 chat header/footer; rectangle multi-option buttons
+
+Summary:
+- Phase 2 (撰寫給 Agentic AI 的 Prompt) window: the progress dots row and the bottom "每一句都可以直接點進去修改。複製全部" row used to scroll away with the chat once content grew tall, because `.part3-try-scroll` was the single scroll boundary for the progress row, window titlebar, chat bubbles, and footer together. Restructured with a JS-toggled `is-chat` class on `.part3-try-scroll` (added in `renderPhase2()`, removed in `renderPhase1()`/`renderPhase3()`): when active, the scroll container becomes a flex column where the progress row and chat footer are fixed-size and only `.part3-try-chat` (the bubble list) flexes/scrolls internally. Removed the old fixed `max-height`/`is-final` expansion hack for chat since it now always fills remaining space.
+- Restyled the "multi" step-kind option buttons (inline `.part3-try-check` pills used by 3.2/3.5, and block `.part3-try-multi-item` chips used by 4.3) from rounded pills to plain rectangles (`border-radius: 0`) with less vertical padding/smaller checkbox, so they're visibly shorter.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check storymap.js` passes.
+- CSS brace balance 0; confirmed 7 `.part3-try-scroll.is-chat` rules present.
+- `json.loads()` on `data-part3-try-data` still parses, printed steps count unchanged (17).
+
+Remaining:
+- No git commit — working tree still has concurrent unrelated edits from another agent (Codex) in the same files.

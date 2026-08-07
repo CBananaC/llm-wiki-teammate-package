@@ -1554,6 +1554,10 @@
          --try-guide-gap       目前視窗跟底部引導對話框之間的留白，
                                 以及它們之間那條分隔線的間距
          --try-chat-max-h      第二步聊天視窗最高多少
+         --try-chat-max-h-final 全部完成、顯示完整 prompt 那一刻，
+                                聊天視窗改長高多少（預設 none＝不設上限，
+                                視內容自然長高，仍在 --try-explorer-h
+                                的範圍內用外層面板捲動）
          --try-cmp-area-h      第三步貼上結果的輸入框高度
          --try-diff-h          第三步比對結果那一欄的高度
 
@@ -1616,6 +1620,7 @@
   --try-progress-gap: 16px;
   --try-guide-gap: 16px;
   --try-chat-max-h: 420px;
+  --try-chat-max-h-final: none;
   --try-cmp-area-h: 96px;
   --try-diff-h: 180px;
 
@@ -1642,6 +1647,20 @@
   /* 印刷字 PDF 的高度上限；左側 backdrop 會隨圖片內容收合。 */
   --try-pdf-max-h: calc(var(--try-explorer-h) - (2 * var(--try-doc-pad)) - 58px);
   --try-pdf-backdrop-h: calc(var(--try-pdf-max-h) + (2 * var(--try-doc-pad)) + 18px);
+}
+
+/* 試一試：綠色原件區填滿左欄，不在上方／下方留下透明白邊。
+   進度列的模式切換固定在 1／2／3 數字列最右側。 */
+#part-3-try-explorer .part3-try-doc {
+  background-size: 100% 100%, 100% 100%;
+}
+#part-3-try-explorer .part3-try-progress {
+  justify-content: flex-start;
+}
+#part-3-try-explorer .part3-try-progress .part3-try-switch {
+  margin-left: auto;
+  flex: 0 0 auto;
+  white-space: nowrap;
 }
 
 /* ── 標示區：印刷字 ─────────────────────────────────────────────── */

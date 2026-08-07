@@ -1931,6 +1931,7 @@ const initPart3TryIt = () => {
   const nextBtn = root.querySelector('[data-try-next]');
   const todoHost = root.querySelector('[data-try-todo]');
   const stageHost = root.querySelector('[data-try-stage]');
+  const scrollHost = root.querySelector('.part3-try-scroll');
   const guideHost = root.querySelector('[data-try-guide]');
   const switchHost = document.querySelector('[data-part3-try-switch]');
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -1940,8 +1941,39 @@ const initPart3TryIt = () => {
   let cur = 0;
   let answers = [];
   let pageIdx = 0;
+  let compareRaw = '';
+  let compareHasRun = false;
   let typingTimer = null;
+  const modeStates = Object.fromEntries(Object.keys(data).map((key) => [key, {
+    phase: 1,
+    cur: 0,
+    answers: [],
+    pageIdx: 0,
+    compareRaw: '',
+    compareHasRun: false
+  }]));
   const d = () => data[mode];
+
+  const saveModeState = () => {
+    modeStates[mode] = {
+      phase,
+      cur,
+      answers: answers.slice(),
+      pageIdx,
+      compareRaw,
+      compareHasRun
+    };
+  };
+
+  const restoreModeState = () => {
+    const saved = modeStates[mode];
+    phase = saved.phase;
+    cur = saved.cur;
+    answers = saved.answers.slice();
+    pageIdx = saved.pageIdx;
+    compareRaw = saved.compareRaw;
+    compareHasRun = saved.compareHasRun;
+  };
 
   /* 標示區的預設幾何值：低權重注入，storymap-cards.css 可用 ID 覆蓋。 */
   const injectDefaults = () => {
@@ -2055,6 +2087,7 @@ const initPart3TryIt = () => {
 
   /* ---------- 第一步：下載史料 ---------- */
   const renderPhase1 = () => {
+    if (scrollHost) scrollHost.classList.remove('is-chat');
     const set = d();
     const pdfSource = set.pdfPath || set.href || '';
     stageHost.innerHTML = `
@@ -2062,17 +2095,24 @@ const initPart3TryIt = () => {
         <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第一步 · 下載史料</span></div>
         <div class="part3-try-dl" data-try-pdf-source="${pdfSource}">
           <div class="meta"><div class="name">${set.pdf}</div><div class="sub">${set.pdfSub}</div></div>
-          <button type="button" class="part3-try-dlbtn" data-try-dl data-try-pdf-source="${pdfSource}">下載 PDF</button>
+          <div class="part3-try-dl-actions">
+            <button type="button" class="part3-try-dlbtn" data-try-dl data-try-pdf-source="${pdfSource}">下載</button>
+            <button type="button" class="part3-try-already" data-try-already>已下載</button>
+          </div>
         </div>
       </div>`;
-    showGuide('第一步', '先把左邊這份史料下載到你的電腦。稍後要讓 Agentic AI 在你的電腦上找到這個檔案。');
-    stageHost.querySelector('[data-try-dl]').addEventListener('click', () => {
+    showGuide('第一步', '先把這份史料下載到你的電腦。');
+    const advanceToPrompt = (openPdf) => {
       const pdfHref = set.href || set.pdfPath;
-      if (pdfHref) window.open(pdfHref, '_blank', 'noopener');
+      if (openPdf && pdfHref) window.open(pdfHref, '_blank', 'noopener');
       phase = 2; cur = 0; answers = [];
+      compareRaw = ''; compareHasRun = false;
+      saveModeState();
       renderProgress();
       renderPhase2();
-    });
+    };
+    stageHost.querySelector('[data-try-dl]').addEventListener('click', () => advanceToPrompt(true));
+    stageHost.querySelector('[data-try-already]').addEventListener('click', () => advanceToPrompt(false));
     syncDoc();
   };
 
@@ -2099,9 +2139,15 @@ const initPart3TryIt = () => {
   };
 
   const nextStep = () => {
+    saveModeState();
     const steps = d().steps;
 
     if (cur >= steps.length) {
+      /* 完整 prompt 都出來了：讓聊天視窗長高一點，方便一次看到更多內容。
+         整個「試一試」遊戲視窗的高度（--try-explorer-h）不變，
+         只有這個視窗自己在可捲動的面板裡變高。 */
+      const chatEl = stageHost.querySelector('[data-try-chat]');
+      if (chatEl) chatEl.classList.add('is-final');
       const foot = stageHost.querySelector('[data-try-foot]');
       foot.innerHTML = `<span class="hint">每一句都可以直接點進去修改。</span>`
         + `<button type="button" class="part3-try-copy" data-try-copy>${COPY_IC}複製全部</button>`;
@@ -2113,7 +2159,12 @@ const initPart3TryIt = () => {
         if (navigator.clipboard) navigator.clipboard.writeText(txt).catch(() => {});
         btn.classList.add('is-done');
         btn.innerHTML = COPY_IC + '已複製';
-        setTimeout(() => { phase = 3; renderProgress(); renderPhase3(); }, 500);
+        setTimeout(() => {
+          phase = 3;
+          saveModeState();
+          renderProgress();
+          renderPhase3();
+        }, 500);
       });
       syncDoc();
       return;
@@ -2175,6 +2226,36 @@ const initPart3TryIt = () => {
         opts.appendChild(p);
       }
 
+      /* 「choice」：不嵌在句子裡的獨立二選一（或多選一）按鈕，
+         答對後仍組成 before+answer+after 的句子加入 prompt。 */
+      if (s.kind === 'choice') {
+        const row = document.createElement('div');
+        row.className = 'part3-try-choices';
+        (s.options || []).forEach((opt) => {
+          const btn = document.createElement('button');
+          btn.type = 'button';
+          btn.className = 'part3-try-choice';
+          btn.textContent = opt;
+          btn.addEventListener('click', () => {
+            if (opt === s.answer) {
+              btn.classList.add('is-ok');
+              row.querySelectorAll('button').forEach((b) => { if (b !== btn) b.disabled = true; });
+              const line = (s.before || '') + s.answer + (s.after || '');
+              answers[cur] = line;
+              setTimeout(() => {
+                opts.remove();
+                addBubble(line).then(() => { cur += 1; nextStep(); });
+              }, 300);
+            } else {
+              btn.classList.add('is-bad');
+              setTimeout(() => btn.classList.remove('is-bad'), 550);
+            }
+          });
+          row.appendChild(btn);
+        });
+        opts.appendChild(row);
+      }
+
       if (s.kind === 'free') {
         const ta = document.createElement('textarea');
         ta.className = 'part3-try-free';
@@ -2193,43 +2274,66 @@ const initPart3TryIt = () => {
         opts.appendChild(ta); opts.appendChild(btn);
       }
 
-      /* 「order」：排序小遊戲——把 items 打亂後讓使用者用上／下移動排出
-         自己想要的順序，沒有固定正確答案，排完直接送出當前順序。 */
-      if (s.kind === 'order') {
-        const list = document.createElement('div');
-        list.className = 'part3-try-order';
-        let order = shuffleTryOptions(s.items);
-        const renderRows = () => {
-          list.innerHTML = '';
-          order.forEach((label, i) => {
-            const row = document.createElement('div');
-            row.className = 'part3-try-order-row';
-            row.innerHTML = `<span class="part3-try-order-num">${i + 1}</span>`
-              + `<span class="part3-try-order-label">${label}</span>`
-              + `<span class="part3-try-order-btns">`
-              + `<button type="button" data-dir="up" ${i === 0 ? 'disabled' : ''} aria-label="上移">↑</button>`
-              + `<button type="button" data-dir="down" ${i === order.length - 1 ? 'disabled' : ''} aria-label="下移">↓</button>`
-              + `</span>`;
-            row.querySelector('[data-dir="up"]').addEventListener('click', () => {
-              if (i === 0) return;
-              const tmp = order[i - 1]; order[i - 1] = order[i]; order[i] = tmp;
-              renderRows();
-            });
-            row.querySelector('[data-dir="down"]').addEventListener('click', () => {
-              if (i === order.length - 1) return;
-              const tmp = order[i + 1]; order[i + 1] = order[i]; order[i] = tmp;
-              renderRows();
-            });
-            list.appendChild(row);
+      /* 「multi」：複選——把 items 全部打勾才能完成，沒有干擾選項，
+         全選之後把它們依原本列出的順序組成一句 prompt。
+         inline:true 時，勾選框直接嵌在句子裡（適合 2–3 個項目）；
+         不設 inline 時維持原本「一排選項卡片＋完成按鈕」的做法
+         （適合像史料資訊這種項目較多、放進句子裡會太長的情況）。 */
+      if (s.kind === 'multi' && s.inline) {
+        const items = s.items || [];
+        const p = document.createElement('p');
+        p.className = 'part3-try-sentence';
+        p.append(s.before || '');
+        items.forEach((label, i) => {
+          const wrap = document.createElement('label');
+          wrap.className = 'part3-try-check';
+          wrap.innerHTML = `${label}<input type="checkbox"><span class="chk" aria-hidden="true"></span>`;
+          const input = wrap.querySelector('input');
+          input.addEventListener('change', () => {
+            wrap.classList.toggle('is-checked', input.checked);
+            if (items.every((_, j) => p.querySelectorAll('input[type="checkbox"]')[j].checked)) {
+              setTimeout(() => {
+                const line = (s.before || '') + items.join('、') + (s.after || '');
+                opts.remove();
+                answers[cur] = line;
+                addBubble(line).then(() => { cur += 1; nextStep(); });
+              }, 300);
+            }
           });
-        };
-        renderRows();
+          p.appendChild(wrap);
+          if (i < items.length - 1) p.append('、');
+        });
+        p.append(s.after || '');
+        opts.appendChild(p);
+      } else if (s.kind === 'multi') {
+        const items = s.items || [];
+        const list = document.createElement('div');
+        list.className = 'part3-try-multi';
+        const selected = new Set();
         const btn = document.createElement('button');
         btn.type = 'button';
         btn.className = 'part3-try-optbtn';
         btn.textContent = '完成，加入 prompt';
+        btn.disabled = true;
+        const renderItems = () => {
+          list.innerHTML = '';
+          items.forEach((label) => {
+            const chip = document.createElement('button');
+            chip.type = 'button';
+            chip.className = 'part3-try-multi-item' + (selected.has(label) ? ' is-selected' : '');
+            chip.innerHTML = `<span class="chk" aria-hidden="true"></span>${label}`;
+            chip.addEventListener('click', () => {
+              if (selected.has(label)) selected.delete(label); else selected.add(label);
+              renderItems();
+              btn.disabled = selected.size < items.length;
+            });
+            list.appendChild(chip);
+          });
+        };
+        renderItems();
         btn.addEventListener('click', () => {
-          const line = (s.prefix || '') + order.join('、') + (s.suffix || '');
+          if (selected.size < items.length) return;
+          const line = (s.before || '') + items.join('、') + (s.after || '');
           opts.remove();
           answers[cur] = line;
           addBubble(line).then(() => { cur += 1; nextStep(); });
@@ -2241,13 +2345,14 @@ const initPart3TryIt = () => {
   };
 
   const renderPhase2 = () => {
+    if (scrollHost) scrollHost.classList.add('is-chat');
     stageHost.innerHTML = `
       <div class="part3-try-win">
         <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
         <div class="part3-try-chat" data-try-chat></div>
         <div class="part3-try-chatfoot" data-try-foot></div>
       </div>`;
-    answers.forEach((a) => { if (a) addBubble(a, true); });
+    answers.slice(0, cur).forEach((a) => { if (a) addBubble(a, true); });
     nextStep();
   };
 
@@ -2264,7 +2369,15 @@ const initPart3TryIt = () => {
   const runCompare = (raw) => {
     const mine = (raw || '').replace(/\s+/g, '');
     const input = stageHost.querySelector('[data-try-input]');
-    if (!mine) { if (input) input.focus(); return; }
+    compareRaw = raw || '';
+    if (!mine) {
+      compareHasRun = false;
+      saveModeState();
+      if (input) input.focus();
+      return;
+    }
+    compareHasRun = true;
+    saveModeState();
     const ref = d().reference.replace(/\s+/g, '');
     const result = diffTryChars(ref, mine);
     const body = stageHost.querySelector('[data-try-cmp]');
@@ -2286,7 +2399,13 @@ const initPart3TryIt = () => {
       </div>`;
     body.querySelector('[data-try-refpane]').innerHTML = result.merged
       .map((seg) => `<span class="${seg[0]}">${seg[1].replace(/</g, '&lt;')}</span>`).join('');
-    body.querySelector('[data-try-input]').value = raw;
+    const resultInput = body.querySelector('[data-try-input]');
+    resultInput.value = raw;
+    resultInput.addEventListener('input', () => {
+      compareRaw = resultInput.value;
+      compareHasRun = true;
+      saveModeState();
+    });
     body.querySelector('[data-try-run]').addEventListener('click', () => {
       runCompare(body.querySelector('[data-try-input]').value);
     });
@@ -2294,6 +2413,7 @@ const initPart3TryIt = () => {
   };
 
   const renderPhase3 = () => {
+    if (scrollHost) scrollHost.classList.remove('is-chat');
     const file = mode === 'printed' ? 'try-printed' : 'try-handwritten';
     stageHost.innerHTML = `
       <div class="part3-try-win">
@@ -2308,12 +2428,20 @@ const initPart3TryIt = () => {
           </div>
         </div>
       </div>`;
+    const input = stageHost.querySelector('[data-try-input]');
+    input.value = compareRaw;
+    input.addEventListener('input', () => {
+      compareRaw = input.value;
+      compareHasRun = false;
+      saveModeState();
+    });
     stageHost.querySelector('[data-try-run]').addEventListener('click', () => {
       runCompare(stageHost.querySelector('[data-try-input]').value);
     });
     stageHost.querySelector('[data-try-refdl]').addEventListener('click', downloadRef);
     showGuide('第三步', 'AI 跑完了嗎？把它輸出的正文貼進來，我們拿它跟參考結果逐字對照，看看差在哪裡。');
     syncDoc();
+    if (compareHasRun && compareRaw) runCompare(compareRaw);
   };
 
   /* ---------- 翻頁與模式切換 ---------- */
@@ -2329,18 +2457,29 @@ const initPart3TryIt = () => {
   const resetAll = () => {
     clearTimeout(typingTimer);
     phase = 1; cur = 0; answers = []; pageIdx = 0;
+    compareRaw = ''; compareHasRun = false;
+    saveModeState();
     renderProgress();
     renderPhase1();
+  };
+
+  const renderCurrentPhase = () => {
+    renderProgress();
+    if (phase === 1) renderPhase1();
+    else if (phase === 2) renderPhase2();
+    else renderPhase3();
   };
 
   if (switchHost) {
     switchHost.addEventListener('click', (e) => {
       const btn = e.target.closest('button');
       if (!btn || !data[btn.dataset.tryMode]) return;
+      saveModeState();
       mode = btn.dataset.tryMode;
+      restoreModeState();
       root.dataset.tryMode = mode;
       [...switchHost.children].forEach((b) => b.classList.toggle('is-on', b === btn));
-      resetAll();
+      renderCurrentPhase();
     });
   }
 
