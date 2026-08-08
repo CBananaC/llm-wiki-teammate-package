@@ -266,7 +266,7 @@ const refreshSourceFlowConnectors = () => {
         bubble.hidden = !markIsVisible;
         bubble.setAttribute('aria-hidden', String(!markIsVisible));
         if (!markIsVisible) {
-          bubble.style.removeProperty('top');
+          bubble.style.removeProperty('--source-bubble-top');
           return;
         }
         const markRect = visibleMarks[0].rect;
@@ -275,7 +275,7 @@ const refreshSourceFlowConnectors = () => {
         const maxBubbleTop = Math.max(8, height - bubbleHeight - 8);
         let bubbleTop = Math.max(8, Math.min(maxBubbleTop, targetY - bubbleHeight / 2));
         if (bubbleTop < previousBottom + 10) bubbleTop = Math.min(maxBubbleTop, previousBottom + 10);
-        bubble.style.top = `${Math.round(bubbleTop)}px`;
+        bubble.style.setProperty('--source-bubble-top', `${Math.round(bubbleTop)}px`);
         previousBottom = bubbleTop + bubbleHeight;
 
         const bubbleRect = bubble.getBoundingClientRect();
@@ -385,6 +385,67 @@ document.querySelectorAll('[data-acc]').forEach((group) => {
 
   showPanel(cards[0].dataset.accCard);
 });
+
+/* 手機／窄螢幕：清單列進入閱讀區時，以動畫展開對應的視覺面板。
+   Part 3 的硃113／硃119兩列是完整通信示意，維持固定展開，不套用這個收合動畫。 */
+const initResponsiveSequentialRows = () => {
+  const responsiveQuery = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
+  document.querySelectorAll('[data-sequential-scroll]').forEach((group) => {
+    const cards = [...group.querySelectorAll('[data-acc-card]')];
+    const panels = [...group.querySelectorAll('[data-acc-panel]')];
+    const panelById = new Map(panels.map((panel) => [panel.dataset.accPanel, panel]));
+    const rows = cards
+      .map((card) => ({ card, panel: panelById.get(card.dataset.accCard) }))
+      .filter(({ panel }) => panel);
+    if (!rows.length) return;
+
+    const isFixedSourceRow = (panel) => (
+      group.closest('#intro-1-3-a')
+      && ['difficulty-relations', 'difficulty-network'].includes(panel.dataset.accPanel)
+    );
+    let scrollFrame = 0;
+    const updateRows = () => {
+      scrollFrame = 0;
+      if (!responsiveQuery.matches) return;
+      if (!group.getClientRects().length) return;
+      const triggerLine = window.innerHeight * 0.68;
+      rows.forEach(({ card, panel }) => {
+        if (isFixedSourceRow(panel) || panel.classList.contains('is-scroll-open')) return;
+        const rect = card.getBoundingClientRect();
+        if (rect.top <= triggerLine) {
+          card.classList.add('is-scroll-open');
+          panel.classList.add('is-scroll-open');
+        }
+      });
+    };
+    const requestRowUpdate = () => {
+      if (!responsiveQuery.matches || scrollFrame) return;
+      scrollFrame = window.requestAnimationFrame(updateRows);
+    };
+    const resetRows = () => {
+      rows.forEach(({ card, panel }) => {
+        card.classList.remove('is-scroll-open');
+        panel.classList.remove('is-scroll-open');
+      });
+      if (responsiveQuery.matches) requestRowUpdate();
+    };
+
+    window.addEventListener('scroll', requestRowUpdate, { passive: true });
+    window.addEventListener('resize', requestRowUpdate, { passive: true });
+    const tabPanel = group.closest('[data-tab-panel]');
+    if (tabPanel && 'MutationObserver' in window) {
+      new MutationObserver(requestRowUpdate).observe(tabPanel, {
+        attributes: true,
+        attributeFilter: ['hidden']
+      });
+    }
+    if (responsiveQuery.addEventListener) responsiveQuery.addEventListener('change', resetRows);
+    else responsiveQuery.addListener(resetRows);
+    requestRowUpdate();
+  });
+};
+initResponsiveSequentialRows();
+
 document.addEventListener('click', (event) => {
   if (!introDropdown.contains(event.target)) setIntroDropdownOpen(false);
 });

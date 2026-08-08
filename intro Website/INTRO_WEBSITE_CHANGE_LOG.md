@@ -6169,3 +6169,24 @@ Verified:
 
 Remaining:
 - Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
+
+### 2026-08-08 18:03 HKT — Codex — Add responsive row extension and narrow source windows
+
+Summary:
+- Added a smooth scroll-triggered extension for the normal responsive list rows in Parts 3 and 6; Part 3 rows 02–03 remain fully expanded as the zhu113/zhu119 communication views.
+- Reduced normal expanded visual heights so the card, visual, and expanded information area fit approximately within the top-bar-excluded viewport, while preserving proportional image fitting.
+- Narrowed and centered both source-document windows, kept their labels on both sides with controlled overlap, and hid source-detail hover text in the responsive modes.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed Part 3 rows 02–03 are excluded from the scroll-extension class and that the responsive source labels use the connector-calculated positions.
+- Existing unrelated OCR and drawer/layout edits remain unstaged and preserved.
+
+Remaining:
+- Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
