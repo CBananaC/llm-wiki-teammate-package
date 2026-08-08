@@ -517,8 +517,8 @@ const photoLightbox = (() => {
    data-photo-gallery-data> 作為圖片與說明來源。若只有來源而沒有段落，直接顯示完整引註；
    點擊圖片本身可開啟放大檢視。 */
 const PHOTO_GALLERY_MOBILE_MQ = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
-const PHOTO_GALLERY_EXPAND_RATIO = 0.56; /* 面板頂端距離螢幕中線仍留約 6% 時展開 */
-const PHOTO_GALLERY_COLLAPSE_RATIO = 0.66; /* 向上離開後多留一點緩衝，避免來回閃動 */
+const PHOTO_GALLERY_EXPAND_RATIO = 0.5; /* 圖片頂端越過螢幕中線後展開 */
+const PHOTO_GALLERY_COLLAPSE_RATIO = 0.56; /* 向上離開後多留一點緩衝，避免來回閃動 */
 document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const dataScript = gallery.querySelector('[data-photo-gallery-data]');
   if (!dataScript) return;
@@ -535,7 +535,7 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   if (!stage || !body) return;
 
   /* 手機／窄螢幕電腦：先保持「圖片＋收合標題列」，頁面向下捲到
-     說明區頂端快到螢幕中線前才自動展開。這裡只負責加／移除狀態 class，
+     圖片頂端越過螢幕中線後才自動展開。這裡只負責加／移除狀態 class，
      展開高度與過渡仍由 storymap.css 控制。 */
   let scrollFrame = 0;
   let hasScrolled = false;
@@ -545,11 +545,11 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     if (!PHOTO_GALLERY_MOBILE_MQ.matches || !hasScrolled || !body.getClientRects().length) return;
     const currentScrollY = window.scrollY;
     const scrollingDown = currentScrollY >= previousScrollY;
-    const top = body.getBoundingClientRect().top;
+    const photoTop = stage.getBoundingClientRect().top;
     const expandLine = window.innerHeight * PHOTO_GALLERY_EXPAND_RATIO;
     const collapseLine = window.innerHeight * PHOTO_GALLERY_COLLAPSE_RATIO;
-    if (scrollingDown && top <= expandLine) body.classList.add('is-expanded');
-    else if (!scrollingDown && top >= collapseLine) body.classList.remove('is-expanded');
+    if (scrollingDown && photoTop <= expandLine) body.classList.add('is-expanded');
+    else if (!scrollingDown && photoTop >= collapseLine) body.classList.remove('is-expanded');
     previousScrollY = currentScrollY;
   };
   const requestMobileScrollExpansion = () => {

@@ -738,7 +738,7 @@ img { max-width: 100%; }
 
 @media (pointer: coarse) and (hover: none), (max-width: 1040px) {
   /* 手機與窄螢幕電腦先保持收合；由 storymap.js 的捲動判斷，或觸控點擊，
-     在說明區頂端接近螢幕中線前後切換 is-expanded。 */
+     在圖片頂端越過螢幕中線後切換 is-expanded。 */
   .photo-gallery-body:not(.is-expanded) {
     max-height: none;
     overflow: hidden;

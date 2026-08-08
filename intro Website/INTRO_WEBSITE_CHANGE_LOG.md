@@ -5903,3 +5903,22 @@ Verified:
 
 Remaining:
 - Reload the local preview normally and check one mobile width and one narrow desktop width.
+
+### 2026-08-08 16:36 HKT — Codex — Trigger photo-gallery expansion from the photo midpoint
+
+Summary:
+- Changed the mobile and narrow-computer scroll trigger to measure the photo stage's top edge instead of the information panel's top edge.
+- The panel now expands when the photo top crosses the viewport midpoint; scrolling back up collapses it after a 56% reset buffer.
+- Refreshed the StoryMap CSS/JS cache key.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed; CSS brace checks passed; `git diff --check` passed.
+- Browser reload remained blocked for the local `file://` page by the browser safety policy.
+
+Remaining:
+- Reload the local preview and check the photo-top midpoint trigger at one mobile width and one narrow desktop width.
