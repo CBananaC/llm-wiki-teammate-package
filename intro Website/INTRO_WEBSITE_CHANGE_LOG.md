@@ -5664,6 +5664,23 @@ Verified:
 
 Remaining:
 - No git commit made.
+
+### 2026-08-08 14:00 HKT — Codex — Remove the extra PDF page backdrop from the shared lightbox
+
+Summary:
+- Made the enlarged PDF image background transparent so it no longer adds a beige backdrop around the page. The dark modal overlay, navigation, close button, and bottom information panel remain unchanged.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser computed style confirms the lightbox image background is transparent; the Part 7 lightbox still opens with its feature information panel.
+- Browser console logs are empty; `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- No git commit made.
 - User to decide repo scope for hosting.
 
 ### 2026-08-07 21:45 HKT — Claude — Redo reverted image removals; redesign viewport-gate, align breakpoint with 辨識印刷字
@@ -5682,3 +5699,114 @@ Verified:
 
 Remaining:
 - No git commit made.
+
+### 2026-08-07 22:30 HKT — Claude — Fix preview lock bug, extend fade to 步驟三至五, block mobile entirely, font-size pass
+
+Summary:
+- Fixed preview-mode tab lock: locked tabs (平台介面/平台運作流程) were still switching panels because the block-click listener was added after the original nav listener (same-target listeners fire in registration order, not by capture flag) — now clone-and-replace strips the original listener first.
+- `#part-3-ai` (步驟三至五) added to the preview-mode fade list; only 步驟二 stays fully open now.
+- Mobile gate now blocks touch devices in any orientation ("手機版仍在開發中，請改用電腦瀏覽"), not just portrait.
+- Font sizes fixed: too-big Agentic AI/PaddleOCR and JSON-viewer visuals scaled down (20-25px→12-15px); too-small 試一試 text and steps 7/8's feature-explorer info-panel text + code windows scaled up (~11-13.5px→13-15px, code-window auto-shrink floor raised from 9px to 10.5px).
+
+Files changed:
+- `Website/storymap/storymap.js`, `storymap-example.html`, `storymap.css`, `storymap-cards.css`
+
+Verified:
+- `node --check` OK, both CSS files brace-balanced, HTML tag counts balanced, JSON data block parses.
+- Not yet re-checked on the live t-preview deployment.
+
+Remaining:
+- No git commit made; user needs to push to the separate t-preview repo.
+
+### 2026-08-07 22:45 HKT — Claude — Bump 輸出格式：JSON's button/body text to match Agentic OCR chat bubble size
+
+Summary:
+- 輸出格式：JSON's field-jump buttons and JSON code window text bumped from 12/12.5px to 15px, matching the size of the existing "set up PaddleOCR on my mac..." user-message bubble in 運用 Agentic AI 使用 PaddleOCR (`--agentic-codex-text-size: 15px`), per user's size reference.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- CSS brace balance 0, node --check OK (unaffected file).
+- Not visually verified.
+
+Remaining:
+- No git commit made; t-preview folder not touched this round (its .git/index.lock still present).
+
+### 2026-08-08 13:55 HKT — Codex — Add document lightbox navigation to Part 7, Part 8, and 試一試
+
+Summary:
+- Extended the shared image lightbox to accept per-page titles and descriptions while preserving existing image galleries.
+- Made the Part 7 printed-document page, Part 8 handwritten folded panels, and both printed/handwritten 試一試 document views clickable. Each opens the enlarged document view with previous/next navigation, a bottom information panel, an X button, outside-click closing, and the existing keyboard controls.
+- The enlarged view keeps the currently selected annotated feature image and its description where applicable; ordinary pages show the corresponding original scan.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks passed for Part 7 (2 pages), Part 8 (4 scanned pages), printed 試一試 (2 pages), and handwritten 試一試 (3 pages), including page navigation, feature descriptions, X closing, and outside-click closing.
+- Browser console logs are empty; `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- No git commit made.
+
+### 2026-08-08 13:30 HKT — Claude — 手機版：史料抽屜（7／8／11）＋解除手機封鎖
+
+Summary:
+- Mobile block removed (rotate gate deleted); phones now get a real layout. The "widen window" gate remains desktop-only.
+- New ≤820px pattern for 7／8／11: info panel becomes the page body; document collapses into a left-pull drawer (default 172px, drag-resizable via right-border grip, expandable to full width).
+- Drawer chrome: number circle + large feature name header; four joined icon buttons centered at the bottom (prev/next feature, expand, close); arrows step features while dragging the image past an edge changes page.
+- Expanded state centers the PDF and zooms the image only (＋/−, pinch, double-tap, ctrl+wheel).
+- Feature picking moves to a sticky chip row above the panel; chips proxy the existing tag buttons, with a MutationObserver syncing state back, so no feature logic is duplicated. 11 gets no chips (no tags) and its arrows fall back to page nav.
+- Desktop untouched: the drawer wrapper is `display: contents` above 820px, so `.part3-fx-doc` remains a direct grid child.
+- Prototypes kept in `Website/UI Idea/mobile-7-8-11-drawer-prototype{,-v2,-v3}.html`.
+
+Files changed:
+- `Website/storymap/storymap.css`, `storymap.js`, `storymap-example.html`
+
+Verified:
+- node --check OK; CSS balanced; HTML tags balanced; JSON blocks parse.
+- Not tested in a browser or on a phone yet.
+
+Remaining:
+- No git commit; needs device testing then syncing to t-preview.
+
+### 2026-08-08 14:05 HKT — Claude — 修正桌面版破版；移除窄視窗警告，改用手機版面
+
+Summary:
+- Fixed desktop breakage in 7／8／11: `.mdrawer-edge` was not hidden on desktop, and because the drawer wrapper is `display: contents`, those two edge labels became extra grid items and shifted the whole two-column layout. Now hidden by default, shown only in the mobile block.
+- Removed the narrow-window warning overlay entirely (CSS + markup); narrow desktop windows get the mobile layout instead.
+- Drawer breakpoint moved 820px → 1040px to match where the old gate fired.
+- Deleted three obsolete ≤1040px stacking blocks whose ID selectors out-specified the drawer rules (one forced `min-height: 95svh` on the doc inside the drawer). Comment left in their place.
+
+Files changed:
+- `Website/storymap/storymap.css`, `storymap-example.html`
+
+Verified:
+- CSS brace depth scan clean (caught a stray `}`); node --check OK; HTML tags balanced; JSON parses; no viewport-gate refs left.
+- Not yet checked in a browser — desktop ≥1041px is the priority re-check.
+
+Remaining:
+- No git commit; needs device pass then t-preview sync.
+
+### 2026-08-08 15:07 HKT — Codex — Add the AI model comparison table
+
+Summary:
+- Added the six-column AI model comparison table beneath `選用的AI Model`.
+- Preserved the requested Claude Opus and GPT（5.6） wording, completed DeepSeek Flash／Pro and Gemini Flash, and marked the latter two as `必須使用` through API.
+- Added section-specific table sizing and horizontal scrolling for narrower screens.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Browser-rendered the table with four model rows beneath the text card.
+- Confirmed horizontal scrolling at 820px viewport width.
+- Browser console has no errors or warnings; `node --check Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.

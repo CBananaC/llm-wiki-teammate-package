@@ -9894,3 +9894,265 @@ Verified:
 
 Remaining:
 - No git commit made.
+
+### 2026-08-07 22:30 HKT — Claude — Fix preview-mode lock bug, extend fade to 步驟三至五, block mobile entirely, font-size pass on 4/7/8/11/JSON
+
+Summary:
+- **Bug fix — locked tabs were still clickable in `?preview=ocr` mode**: the lock only called `event.preventDefault()` in a listener added after the original tab-click listener (registered at the top of `storymap.js`); same-target DOM listeners fire in registration order regardless of capture, so the original listener's `setActiveTab()` call had already run by the time the lock listener fired — clicking 平台介面/平台運作流程 still switched panels. Fixed by having `lockLink()` clone-and-replace the tab node (`el.cloneNode(true)` + `el.replaceWith(clone)`) before attaching the block-click listener, which strips the original listener entirely.
+- Extended the preview-mode fade list to include `#part-3-ai` (步驟三至五・運用AI抽取資訊) per request — now only 步驟二・OCR並結構化原始史料 stays fully open; everything else in Part 3 (before it, 步驟三至五, and 步驟八 onward) is faded + `inert`.
+- **Mobile: now blocked entirely, not just portrait.** Changed `.viewport-gate-rotate`'s media query from `(pointer: coarse) and (orientation: portrait)` to just `(pointer: coarse)` — any touch device, any orientation, is now blocked. Copy changed from "rotate to landscape" to "手機版仍在開發中，請改用電腦瀏覽" (mobile version still in development, please use a computer), icon changed from a rotate-arrow to a blocked/cross icon.
+- Font-size pass, informed by live feedback on the hosted `t-preview` site:
+  - **Too big** — `運用 Agentic AI 使用 PaddleOCR` (`#part-3-agentic-ocr-chart`): `--agentic-codex-font-size` 20px→12px, `--agentic-codex-text-size` 20px→15px. `輸出格式：JSON` (`#part-3-json-chart`): `--json-label-font-size` 25px→12px, `--json-body-font-size` 20px→12.5px.
+  - **Too small** — 試一試 (`#part-3-try-explorer`): `--try-rpg-font-size` 13→14.5px, `--try-bubble-font-size` 13.5→15px, `--try-cmp-font-size` 12→13.5px, `--try-switch-font-size` 12.5→13px, plus hardcoded `.part3-try-chip`/`.part3-try-sentence`/`.part3-try-blank` 12.5–13px→14–14.5px and `.part3-try-check`/`.part3-try-multi-item` 12.5px→13.5px. Steps 7/8 feature explorer: `.part3-fx-feat p` 13.5→15px, `.part3-fx-chat-text` (AI Prompt window) 13→14.5px, and the auto-shrinking code-window tiers in `fitCodeFont()` (storymap.js) raised from 9–11.5px to 10.5–13px so long Python/JSON content no longer drops as low as 9px.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js` (lockLink clone-replace fix, LOCKED_SECTION_IDS +part-3-ai, fitCodeFont tiers)
+- `intro Website/Website/storymap/storymap-example.html` (mobile gate copy/icon, media-query comment update)
+- `intro Website/Website/storymap/storymap.css` (mobile gate media query, font-size fixes for agentic-ocr/json/try-it/feature-explorer)
+- `intro Website/Website/storymap/storymap-cards.css` (--agentic-codex-* and --json-*-font-size fixes, --try-*-font-size fixes)
+
+Verified:
+- `node --check storymap.js` passes; both CSS files brace-balanced; HTML div/section/article/svg tag counts balanced; `data-part3-try-data` JSON still parses (19/19 steps).
+- Not yet re-checked on the live `https://cbananac.github.io/t-preview/` deployment — user will need to re-push these files for the fixes to take effect there.
+
+Remaining:
+- No git commit made.
+- User needs to push these changes to the `t-preview` repo (separate from this monorepo) for the live site to reflect the fixes.
+
+### 2026-08-07 22:45 HKT — Claude — Bump 輸出格式：JSON's button/body text to match Agentic OCR chat bubble size
+
+Summary:
+- User asked for bigger text on both the field-jump buttons and the JSON code window in 輸出格式：JSON (#part-3-json-chart), sized to match the user-message bubble text in 4「運用 Agentic AI 使用 PaddleOCR」("set up PaddleOCR on my mac, and use it to OCR '/Users/mymac/Downloads/Text/奏摺1.pdf'" — this is existing demo content already on the page, referenced as the size target, not a request to add new content).
+- That bubble's size is `--agentic-codex-text-size: 15px` (set in the previous font-size pass). Set `--json-label-font-size` and `--json-body-font-size` to the same `15px` (previously 12px / 12.5px from the prior "too big" fix, which had overshot the correction).
+- Left `.part3-json-nav` (‹ › carousel arrows) untouched — those are already large (28px) by design, not a text-size complaint.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css` (`#part-3-json-chart` --json-label-font-size, --json-body-font-size → 15px)
+
+Verified:
+- CSS brace balance = 0 for both storymap.css and storymap-cards.css; `node --check storymap.js` passes (unaffected file).
+- Not yet visually verified in a browser.
+
+Remaining:
+- No git commit made.
+- `/Users/creamybanana/Downloads/DH StoryMap Preview` (the t-preview repo) still needs this change synced over — did not touch it directly this time since its `.git/index.lock` is still present, suggesting a concurrent process (likely Codex) may still be active there.
+
+### 2026-08-07 22:55 HKT — Claude — 輸出格式：JSON text still too small at 15px, bumped to 19px
+
+Summary:
+- User reported the 15px size from the previous fix was still too small in the wide JSON window/screenshot. Bumped `--json-label-font-size` and `--json-body-font-size` from 15px to 19px in `#part-3-json-chart`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- CSS brace balance = 0.
+- Not yet visually verified in a browser.
+
+Remaining:
+- No git commit made.
+- Still need to sync this + the earlier round of fixes to `/Users/creamybanana/Downloads/DH StoryMap Preview` (t-preview repo) once its git lock clears.
+
+### 2026-08-07 22:58 HKT — Claude — Revert 輸出格式：JSON text back to 15px
+
+Summary:
+- User confirmed 19px was unnecessary; reverted `--json-label-font-size`/`--json-body-font-size` back to 15px (matching the Agentic OCR chat bubble reference size).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- CSS brace balance = 0.
+
+Remaining:
+- No git commit made.
+- Still need to sync accumulated storymap fixes to `/Users/creamybanana/Downloads/DH StoryMap Preview` once its git lock clears.
+
+### 2026-08-08 14:00 HKT — Codex — Remove the extra PDF page backdrop from the shared lightbox
+
+Summary:
+- Made the enlarged PDF image background transparent so it no longer adds a beige backdrop around the page. The dark modal overlay, navigation, close button, and bottom information panel remain unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser computed style confirms the lightbox image background is transparent; the Part 7 lightbox still opens with its feature information panel.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- No git commit made.
+
+### 2026-08-08 13:55 HKT — Codex — Add document lightbox navigation to Part 7, Part 8, and 試一試
+
+Summary:
+- Extended the shared image lightbox to accept per-page titles and descriptions while preserving existing image galleries.
+- Made the Part 7 printed-document page, Part 8 handwritten folded panels, and both printed/handwritten 試一試 document views clickable. Each opens the enlarged document view with previous/next navigation, a bottom information panel, an X button, outside-click closing, and the existing keyboard controls.
+- The enlarged view keeps the currently selected annotated feature image and its description where applicable; ordinary pages show the corresponding original scan.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks passed for Part 7 (2 pages), Part 8 (4 scanned pages), printed 試一試 (2 pages), and handwritten 試一試 (3 pages), including page navigation, feature descriptions, X closing, and outside-click closing.
+- Browser console logs are empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- No git commit made.
+
+### 2026-08-07 23:02 HKT — Claude — PaddleOCR (3) layout: image wider than text, 60:40
+
+Summary:
+- `#part-3-paddleocr`'s two-column layout had the text column effectively wider than the image (fixed `--paddleocr-card-width: 75ch` vs `--paddleocr-photo-width: 50%`, and the grid's own space-left-over math gave text more room). Changed to percentage-based columns matching the requested 60:40 split: `--paddleocr-card-width: 40%`, `--paddleocr-photo-width: 60%` (photo image now wider than the text card).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- CSS brace balance = 0.
+- Not yet visually verified in a browser.
+
+Remaining:
+- No git commit made.
+- Still need to sync accumulated storymap fixes to `/Users/creamybanana/Downloads/DH StoryMap Preview` once its git lock clears.
+
+### 2026-08-08 13:30 HKT — Claude — 手機版：史料抽屜（7／8／11）＋解除手機封鎖
+
+Summary:
+- Read latest commit `589eb7d` as the baseline, then designed the phone layout with the user across two throwaway prototypes in `intro Website/Website/UI Idea/` (`mobile-7-8-11-drawer-prototype.html`, `-v2`, `-v3`) before touching the site. v3 is the accepted spec (left-side drawer).
+- **Removed the mobile block entirely** — deleted the `viewport-gate-rotate` markup and its `@media (pointer: coarse)` rule. Phones now get a real layout. The narrow-desktop-window "please widen" gate stays (`pointer: fine` only), so it never fires on phones.
+- **New mobile pattern for 7／8／11 (≤820px)**: the info/game panel becomes the page body; the document column collapses into a drawer pulled out from the left edge.
+  - DOM approach chosen to be desktop-safe: `initMobileDocDrawers()` wraps the existing `.part3-fx-doc` in `<aside class="mdrawer">` **inside the same explorer root**, so every existing `root.querySelector(...)` in `initPart3FeatureExplorers`/`initPart3TryIt` keeps working untouched. On desktop the aside is `display: contents`, so it vanishes from layout and `.part3-fx-doc` is still a direct grid child — desktop rendering is byte-identical in behaviour.
+  - Drawer defaults to 172px wide (just wider than the four footer buttons), showing a vertical slice of the page; a grip button on the right border drag-resizes it; the expand button goes full-width.
+  - Footer = four icon-only buttons joined together and centered: prev feature, next feature, expand/shrink, close. Header = yellow number circle + enlarged (19px serif) feature name.
+  - Arrows step through **features**; dragging the image past either edge (yellow 上一頁/下一頁 tab appears) changes **page** by clicking the existing nav buttons.
+  - Expanded state centers the PDF and zooms **only the image** (`--z` on image width) via ＋/− buttons, pinch, double-tap, or ctrl+wheel — never the whole page.
+  - Feature selection moves off the document into a sticky horizontally-scrolling chip row above the panel. Chips are thin proxies: clicking a chip calls `.click()` on the existing `.part3-fx-tag`, and a MutationObserver on the tags' `is-active` class syncs chip state / drawer title / number back. No duplication of feature logic.
+  - 11 試一試 has no feature tags, so it gets no chip row; its drawer title mirrors the page indicator and the arrows fall back to page nav.
+  - Puller is fixed-position at 72% viewport height (thumb reach) and only fades in while its section is on screen (IntersectionObserver), auto-closing the drawer on scroll-away.
+- Also added the general phone rule that visual elements stack under their text card for `.lay-split`, `.paddleocr-layout`, `.part3-material-layout`, `.part3-ocr-def-layout`, the tools checklist, etc.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css` (removed coarse-pointer gate; new "10 · 手機版：史料抽屜" block)
+- `intro Website/Website/storymap/storymap.js` (appended `initMobileDocDrawers()`)
+- `intro Website/Website/storymap/storymap-example.html` (removed rotate-gate markup + stale comment)
+- `intro Website/Website/UI Idea/mobile-7-8-11-drawer-prototype{,-v2,-v3}.html` (new prototypes, not linked from the site)
+
+Verified:
+- `node --check storymap.js` passes; CSS brace balance 0; HTML div/section/article/svg/aside tag counts balanced; both embedded JSON blocks still parse (19/19 try steps, 7 features).
+- Confirmed no ancestor of the explorers sets `transform`/`filter`, so the drawer's `position: fixed` is not trapped in a containing block.
+- **Not verified in a real browser or on a real phone** — no browser available here. Needs a device pass: drawer open/resize/expand, pinch-zoom, drag-to-change-page, chip sync, and that desktop ≥821px is visually unchanged.
+
+Remaining:
+- No git commit made.
+- Needs syncing to the `t-preview` repo (`/Users/creamybanana/Downloads/DH StoryMap Preview`) after device testing.
+
+### 2026-08-08 14:05 HKT — Claude — 修正桌面版破版；移除窄視窗警告，改用手機版面
+
+Summary:
+- **Bug fix (desktop 7／8／11 broken layout)**: the drawer wrapper is `display: contents` on desktop, which means *any* child not explicitly hidden becomes a direct grid item of the explorer. I had hidden `.mdrawer-bar/-foot/-grip/-zoom/-puller/-scrim/.mfilter` but **not `.mdrawer-edge`**, so the two 上一頁／下一頁 edge labels became extra grid children and pushed the document column and info panel out of their 50/50 columns (visible in the user's screenshot as a stray「上一頁」at top-right and a misaligned panel). Added `.mdrawer-edge` to the desktop hidden list and gave it `display: block` inside the mobile block. Also verified by grep that no desktop rule relies on `.part3-fx-doc` being a *direct* child (`>` combinator) of the explorer, so `display: contents` is otherwise safe.
+- **Removed the narrow-desktop-window warning entirely** (`.viewport-gate*` CSS section + the remaining markup in `storymap-example.html`). Narrow desktop windows now simply get the mobile layout instead of a blocking overlay — so the site no longer blocks or nags on any device/size.
+- Moved the mobile drawer breakpoint from `≤820px` to **`≤1040px`** to match where the old gate used to fire, so a narrowed laptop window gets the same drawer UI as a phone.
+- **Removed three now-obsolete `@media (max-width: 1040px)` blocks** that used to stack the explorers vertically. These were not merely redundant: they use ID selectors (`#part-3-printed-explorer .part3-fx-doc`, specificity 1-0-1) which out-specify the drawer's `.mdrawer > .part3-fx-doc` (0-2-0), and one of them sets `min-height: 95svh` on the doc — that would have forced the document column tall *inside* the drawer and broken it. Left a comment in their place explaining why they must not be reinstated.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css` (hide `.mdrawer-edge` on desktop; delete viewport-gate section; breakpoint 820→1040px; delete 3 obsolete stacking blocks)
+- `intro Website/Website/storymap/storymap-example.html` (delete remaining gate markup/comment)
+
+Verified:
+- CSS brace balance 0 **and** a depth scan confirming nesting never goes negative (this caught a stray orphan `}` left by my first removal pass, since brace-count alone showed −1).
+- `node --check storymap.js` passes; HTML div/section/article/svg/aside counts balanced; both JSON blocks parse (19/19 steps, 7 features); zero `viewport-gate` references remain; exactly one `@media (max-width: 1040px)` block left (the drawer's).
+- **Still not verified in a browser.** Desktop ≥1041px should now be back to the pre-drawer appearance — that is the first thing to re-check.
+
+Remaining:
+- No git commit made.
+- Needs a real device/browser pass, then syncing to the t-preview repo.
+
+### 2026-08-08 14:25 HKT — Claude — 修正抽屜關不掉／蓋住其他章節；窄螢幕頂欄重疊
+
+Summary:
+- **Bug: drawer stayed on screen over unrelated sections and would not close when the button was clicked.** Three compounding causes, all now addressed:
+  1. Closing relied solely on `transform: translateX(-101%)`. Added `.mdrawer:not(.is-open) { visibility: hidden; pointer-events: none; }` as a second, independent guarantee — if anything ever overrides `transform`, the drawer still cannot appear.
+  2. There are three drawers (7／8／11), each `position: fixed`, and nothing stopped two being open at once — closing the top one simply revealed the one behind it, which looks exactly like "the close button does nothing". Added a shared `closers[]` registry so opening any drawer closes all the others; only one can be open at a time.
+  3. The drawer could remain in the viewport while the reader scrolled to a different section. The IntersectionObserver now also toggles an `is-inview` class on the explorer root, and CSS `display: none`s the drawer, puller and scrim whenever their own section is out of view — so a drawer physically cannot overlay another section. Also added Esc to close.
+- **Narrow-screen topbar overlap** (a regression exposed by removing the gate — this width used to be blocked): the brand is `white-space: nowrap` in an `auto` grid column, so it refused to shrink and ran straight over the tab list. Below 820px the brand now truncates with an ellipsis (`min-width: 0; overflow: hidden`), and below 620px it is hidden entirely so the tabs get the full bar. Tab-strip scrollbar also hidden.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css` (visibility fallback, `is-inview` gate, topbar/brand narrow rules)
+- `intro Website/Website/storymap/storymap.js` (shared `closers[]` registry, `is-inview` toggle, Esc-to-close)
+
+Verified:
+- `node --check storymap.js` passes; CSS depth scan clean (balanced, never negative); HTML tag counts balanced; both JSON blocks parse (19/19 steps, 7 features).
+- **Not verified in a browser.** Worth checking specifically: close button, scrolling between 7／8／11 with a drawer open, and the topbar at ~560px and ~900px.
+
+Remaining:
+- No git commit made; t-preview sync still pending.
+
+### 2026-08-08 14:50 HKT — Claude — 手機版四個回報問題：終端機無字、篩選列、史料抽屜、JSON 破版
+
+Summary:
+- **兩個終端機視窗在手機版沒有文字**（截圖一）：桌面版 `.part3-fx-win` 是 `flex: 1 1 0`，靠父層固定高度平分剩餘空間；手機版把父層改成 `height: auto` 之後，`flex-basis: 0` 讓兩個視窗塌成 0 高，內容還在但看不見。手機版改為 `.part3-fx-win { flex: 0 0 auto }` 與 `.part3-fx-win-body { height: auto; max-height: none; overflow: visible }`，改由內容決定高度。（這組規則原本存在於我上一輪刪掉的舊 ≤1040px 區塊裡，是刪除時的回歸。）
+- **篩選列 UI 重做**：膠囊改小（12px、圓角 7px、灰底），選中才反白深色；標題字級縮小、去掉誇張字距；整列加左右遮罩淡出，暗示可以左右滑；底部改用一條分隔線收邊。
+- **史料抽屜（截圖二）**：
+  - 標題列與底部工具列「沒有滿版」其實是**史料圖溢出抽屜**造成的錯覺——`.mdrawer` 沒有 `overflow: hidden`，圖片超出抽屜寬度後直接畫到外面。已補上。
+  - 寬度調整鈕原本是 `right: -13px`（掛在抽屜外緣），加上 `overflow: hidden` 後會被裁掉，因此改成 `right: 0` 貼在抽屜內側右緣。
+  - 依要求**移除展開後的 ＋／− 縮放鈕**（CSS、HTML 標記、事件handler 全部刪除）；縮放仍可用雙指、雙擊、ctrl+滾輪。
+- **JSON 一節破版（截圖三）**：`#part-3-json` 等三節在桌面版由 `#part-3-content .part3-json-split .lay-split`（權重 1-0-2）指定兩欄，我手機版的 `.part3-json-split .lay-split`（0-2-0）權重不足，完全蓋不過去，所以文字卡被壓成一個字寬的直條、JSON 視窗再溢出蓋在它上面。改用同樣的 `#part-3-content` 前綴改寫成單欄，並補 `min-width: 0`、`max-width: 100%`、`.part3-json-body { overflow: auto }`，避免等寬長行把欄位撐爆。
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`, `storymap.js`
+
+Verified:
+- `node --check` 通過；CSS 深度掃描平衡且未出現負值；HTML 標籤數平衡；兩個 JSON 區塊仍可解析（19/19 步驟、7 個特徵）；確認沒有殘留的 `mdrawer-zoom` / `data-mz-` 參照。
+- **仍未在瀏覽器實測。** 需重點回看：兩個終端機視窗是否有字、抽屜是否不再溢出、JSON 一節的文字卡寬度。
+
+Remaining:
+- 尚未 git commit；t-preview 尚未同步。
+
+### 2026-08-08 15:10 HKT — Claude — 修正 JSON 一節仍然破版、手機版篩選列點了沒反應
+
+Summary:
+- **JSON 一節（第三次才修對）**：前一輪我用 `#part-3-content .part3-json-split .lay-visual`（權重 1-0-2）想把視覺元素移回第 1 欄，但桌面版真正生效的規則是
+  `#part-3-content #part-3-json .lay-visual { grid-column: 2 }`——**兩個 ID，權重 2-0-1**，我的規則根本蓋不過去。
+  結果：欄數被我改成單欄了，視覺元素卻仍被指定丟進「第 2 欄」，於是 grid 長出一個隱含欄，文字卡被擠成一個字寬的直條，JSON 視窗再溢出蓋在上面——正是截圖三的畫面。
+  改用同樣的兩個 ID 選擇器（`#part-3-content #part-3-json .lay-visual` 等）重寫，並補 `min-width: 0; position: relative; top: auto`。用腳本確認：檔案中觸及該選擇器的規則只有兩條（桌面 `grid-column: 2`、我的 `grid-column: 1`），且我的在後、權重相同 → 確定勝出。
+  附帶發現：既有的 `@media (max-width: 980px)` 區塊也犯同樣的權重錯誤，所以這個破版在我加手機版之前就已存在於 ≤980px，只是先前被「窄視窗警告」擋住看不到。
+- **手機版篩選列點了沒反應**：既有的 `buildTags()` 在**每次 render 都會 `tagHost.innerHTML = ''` 整批重建標籤**。我原本把標籤節點存進陣列重複使用，第一次 render 後那些節點就脫離 DOM 變成舊節點——膠囊點下去打到空氣，MutationObserver 也還盯著舊節點，所以膠囊高亮與抽屜標題都不會更新。
+  改為**每次現查**：`liveTags()` 於點擊當下重新 querySelector，MutationObserver 改為觀察 `tagHost` 本身並加上 `childList`（才抓得到整批重建）＋ `subtree/attributes`（抓 is-active 切換）。`stepFeature()` 的方向鍵也一併改用現查。
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`（JSON／研究問題／OCR測試 三節改用 2-ID 選擇器）
+- `intro Website/Website/storymap/storymap.js`（liveTags 現查、MutationObserver 改觀察 tagHost）
+
+Verified:
+- `node --check` 通過；CSS 深度掃描平衡；HTML 標籤平衡；JSON 區塊可解析（19/19、7 特徵）。
+- 以腳本列出所有觸及 `#part-3-content #part-3-json .lay-visual` 的規則並確認勝出者是 `grid-column: 1`（另一個相符字串經確認只是註解內文，不是規則）。
+- **仍未在瀏覽器實測。**
+
+Remaining:
+- 尚未 git commit；t-preview 尚未同步。
+- 既有 ≤980px 區塊的同類權重錯誤未清理（目前被我後面的規則蓋過，不影響顯示）。
+
+### 2026-08-08 15:07 HKT — Codex — Add the AI model comparison table
+
+Summary:
+- Added the six-column AI model comparison table beneath `選用的AI Model`.
+- Preserved the requested Claude Opus and GPT（5.6） wording, completed DeepSeek Flash／Pro and Gemini Flash, and marked the latter two as `必須使用` through API.
+- Added section-specific table sizing and horizontal scrolling for narrower screens.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- Browser-rendered the table with four model rows beneath the text card.
+- Confirmed horizontal scrolling at 820px viewport width.
+- Browser console has no errors or warnings; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.
