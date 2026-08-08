@@ -10559,3 +10559,25 @@ Verified:
 
 Remaining:
 - No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-08 17:45 HKT — Codex — Separate intro cards and responsive research visuals
+
+Summary:
+- Restored Part 2 as two complete, independent text cards and kept the existing three-page gallery between card 1 and card 2 on mobile and narrow-computer layouts.
+- Replaced the responsive folded-row treatment for Parts 3 and 6 with sequential full text cards followed by their matching visual panels.
+- Set the first visual row to approximately 97% of the top-bar-excluded viewport and the second and third rows to approximately 130%, with the Part 3 source visuals constrained to the website width.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- Removed the previous `intro-inline` implementation and confirmed the original Part 2 gallery data remains in one gallery.
+- `node --check Website/storymap/storymap.js` passed.
+- Static structure and obsolete-selector checks passed.
+- Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
+
+Remaining:
+- Review the responsive layout visually when the local browser can load the updated file.

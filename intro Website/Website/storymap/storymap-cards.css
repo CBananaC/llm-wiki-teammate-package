@@ -303,76 +303,60 @@
 /* 研究價值卡片與制度卡片之間保留額外上方留白 */
 #intro-1-2 { margin-top: clamp(24px, 2.2vw, 40px) !important; }
 
-/* 引言 01 的手機／窄螢幕排列：每一列依序顯示標題、視覺元素、原文。 */
-#intro-1-1 .intro-inline-list {
+/* 引言 01：桌面版把兩張文字卡放在左欄，原有三頁畫廊放在右欄。
+   窄螢幕改為「卡片 1 → 原有畫廊 → 卡片 2」，三者保持獨立。 */
+#intro-1-1 .intro-1-1-layout {
   display: grid;
-  gap: 12px;
-  width: 100%;
+  grid-template-columns: minmax(0, 1fr) minmax(0, var(--vis-w, 50%));
+  grid-template-rows: auto auto;
+  align-items: start;
+  gap: var(--col-gap, clamp(22px, 4vw, 72px));
 }
-#intro-1-1 .intro-inline-list.intro-inline-list-hidden { display: none; }
-#intro-1-1 .intro-inline-source-hidden { display: none !important; }
-#intro-1-1 .intro-inline-row {
-  overflow: hidden;
-  background: var(--card);
-  border: 1px solid var(--line);
-  scroll-margin-top: calc(var(--bar-h) + 18px);
+#intro-1-1 .intro-1-1-layout > #intro-1-1-card {
+  grid-column: 1;
+  grid-row: 1;
 }
-#intro-1-1 .intro-inline-title {
-  display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 14px;
-  width: 100%;
-  padding: 14px 17px;
-  color: var(--ink);
-  background: transparent;
-  border: 0;
-  cursor: pointer;
-  text-align: left;
-  font: inherit;
-}
-#intro-1-1 .intro-inline-title .option-number {
-  min-width: 42px;
-  height: 42px;
-  font-size: 16px;
-}
-#intro-1-1 .intro-inline-title h2 {
-  margin: 0;
+#intro-1-1 .intro-1-1-layout > .lay-visual {
+  grid-column: 2;
+  grid-row: 1 / span 2;
+  position: sticky;
+  top: calc(var(--bar-h) + 18px);
   min-width: 0;
-  font: 600 clamp(20px, 2.4vw, 30px)/1.25 var(--serif);
 }
-#intro-1-1 .intro-inline-title:focus-visible {
-  outline: 2px solid var(--accent);
-  outline-offset: -4px;
+#intro-1-1 .intro-1-1-layout > #intro-1-2 {
+  grid-column: 1;
+  grid-row: 2;
+  margin-top: 0 !important;
 }
-#intro-1-1 .intro-inline-arrow {
-  color: var(--accent);
-  font: 600 20px/1 var(--sans);
-  transition: transform .22s ease;
-}
-#intro-1-1 .intro-inline-row.is-open .intro-inline-arrow { transform: rotate(180deg); }
-#intro-1-1 .intro-inline-visual,
-#intro-1-1 .intro-inline-text { display: none; }
-#intro-1-1 .intro-inline-row.is-open .intro-inline-visual {
-  display: block;
-  padding: 0 clamp(12px, 2vw, 22px);
-}
-#intro-1-1 .intro-inline-row.is-open .intro-inline-text {
-  display: block;
-  margin: 0;
-  padding: clamp(18px, 2.5vw, 28px) clamp(18px, 2.8vw, 32px);
-  border-top: 1px solid var(--line);
-}
-#intro-1-1 .intro-inline-visual .photo-gallery {
-  height: min(60vh, 560px);
-  min-height: 300px;
-}
-/* 第 2 列使用原畫廊的第 2 頁（遞送奏摺），不再留在整組列表最下方。 */
-#intro-1-1 .intro-inline-row[data-intro-inline-row="2"] .photo-gallery-frame {
-  --photo-fit: contain;
-  --photo-left: 70%;
-  --photo-top: 42%;
-  --photo-zoom: 1.2;
+
+@media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  #intro-1-1 .intro-1-1-layout {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: none;
+    gap: clamp(16px, 3vh, 28px);
+  }
+  #intro-1-1 .intro-1-1-layout > #intro-1-1-card,
+  #intro-1-1 .intro-1-1-layout > .lay-visual,
+  #intro-1-1 .intro-1-1-layout > #intro-1-2 {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  #intro-1-1 .intro-1-1-layout > #intro-1-1-card { order: 1; }
+  #intro-1-1 .intro-1-1-layout > .lay-visual {
+    order: 2;
+    position: relative;
+    top: auto;
+    width: 100%;
+  }
+  #intro-1-1 .intro-1-1-layout > #intro-1-2 {
+    order: 3;
+    margin-top: 0 !important;
+  }
+  #intro-1-1 .intro-1-1-layout > .lay-visual .photo-gallery {
+    width: 100%;
+    height: min(70vh, 720px);
+    min-height: 360px;
+  }
 }
 
 /* 引言 01・第 2 張圖片（遞送奏摺／路線圖）：原圖是一整頁掃描，地圖本身只佔
@@ -542,6 +526,107 @@
   --photo-zoom: 1;
 }
 #intro-1-6-a-source > .story-inner > .blk { width: 100%; max-width: none !important; }
+
+/* 引言 03／06 的手機與窄螢幕排列：取消折疊，依序顯示完整文字卡及其視覺元素。
+   01 約一個畫面高；02、03 留出較大的視覺區域。 */
+@media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  #intro-1-3-a,
+  #intro-1-6-a-source {
+    --responsive-short-panel-h: max(420px, calc(97svh - var(--bar-h) - 150px));
+    --responsive-tall-panel-h: max(560px, calc(130svh - var(--bar-h) - 175px));
+  }
+
+  #intro-1-3-a .lay-acc,
+  #intro-1-6-a-source .lay-acc {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: clamp(18px, 3vh, 30px);
+    align-items: stretch;
+  }
+  #intro-1-3-a .lay-acc > .acc-visual,
+  #intro-1-3-a .lay-acc > .acc-track,
+  #intro-1-3-a .acc-panels,
+  #intro-1-6-a-source .lay-acc > .acc-visual,
+  #intro-1-6-a-source .lay-acc > .acc-track,
+  #intro-1-6-a-source .acc-panels {
+    display: contents;
+  }
+  #intro-1-3-a .acc-card,
+  #intro-1-6-a-source .acc-card {
+    display: block;
+    grid-column: 1;
+    margin: 0;
+    min-width: 0;
+  }
+  #intro-1-3-a .acc-card .acc-body,
+  #intro-1-6-a-source .acc-card .acc-body {
+    display: block !important;
+    max-height: none;
+    overflow: visible;
+  }
+  #intro-1-3-a .acc-heading,
+  #intro-1-6-a-source .acc-heading {
+    cursor: default;
+    pointer-events: none;
+  }
+  #intro-1-3-a .acc-arrow,
+  #intro-1-6-a-source .acc-arrow {
+    visibility: hidden;
+  }
+  #intro-1-3-a .acc-panel,
+  #intro-1-6-a-source .acc-panel {
+    display: flex !important;
+    grid-area: auto;
+    grid-column: 1;
+    flex-direction: column;
+    width: 100% !important;
+    max-width: none !important;
+    min-width: 0;
+    min-height: 0 !important;
+    margin: 0;
+    overflow: visible;
+  }
+
+  #intro-1-3-a .acc-card[data-acc-card="difficulty-quantity"],
+  #intro-1-6-a-source .acc-card[data-acc-card="case-background"] { order: 1; }
+  #intro-1-3-a .acc-panel[data-acc-panel="difficulty-quantity"],
+  #intro-1-6-a-source .acc-panel[data-acc-panel="case-background"] {
+    order: 2;
+    height: var(--responsive-short-panel-h) !important;
+  }
+  #intro-1-3-a .acc-card[data-acc-card="difficulty-relations"],
+  #intro-1-6-a-source .acc-card[data-acc-card="case-route"] { order: 3; }
+  #intro-1-3-a .acc-panel[data-acc-panel="difficulty-relations"],
+  #intro-1-6-a-source .acc-panel[data-acc-panel="case-route"] {
+    order: 4;
+    height: var(--responsive-tall-panel-h) !important;
+  }
+  #intro-1-3-a .acc-card[data-acc-card="difficulty-network"],
+  #intro-1-6-a-source .acc-card[data-acc-card="case-sources"] { order: 5; }
+  #intro-1-3-a .acc-panel[data-acc-panel="difficulty-network"],
+  #intro-1-6-a-source .acc-panel[data-acc-panel="case-sources"] {
+    order: 6;
+    height: var(--responsive-tall-panel-h) !important;
+  }
+
+  #intro-1-3-a .acc-panel > .photo-gallery,
+  #intro-1-6-a-source .acc-panel > .photo-gallery {
+    width: 100%;
+    height: 100% !important;
+    min-height: 0;
+  }
+  #intro-1-3-a .source-flow-panel,
+  #intro-1-3-a .source-flow-visual {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+  }
+  #intro-1-3-a .source-flow-document {
+    width: 100% !important;
+    max-width: none !important;
+  }
+}
 
 /* 編號方塊沿用各節的強調色作漸層底（一般不需修改） */
 .story .option-number {
