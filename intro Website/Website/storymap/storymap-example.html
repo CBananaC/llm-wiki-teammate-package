@@ -56,6 +56,10 @@
           <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/>
         </svg>
       </button>
+      <button class="compact-menu-button" id="compact-menu-button" type="button" aria-expanded="false" aria-controls="compact-menu-panel" aria-label="開啟網站選單" title="網站選單">
+        <span class="compact-menu-icon" aria-hidden="true"><span></span><span></span><span></span></span>
+        <span>選單</span>
+      </button>
       <div class="settings-panel" id="site-settings-panel" role="dialog" aria-label="網站設定" hidden>
         <div class="settings-panel-title">網站設定</div>
         <div class="settings-row">
@@ -69,6 +73,20 @@
       </div>
     </div>
   </header>
+  <div class="compact-menu-backdrop" id="compact-menu-backdrop" aria-hidden="true"></div>
+  <aside class="compact-menu-panel" id="compact-menu-panel" role="dialog" aria-label="網站章節選單" aria-hidden="true">
+    <div class="compact-menu-head">
+      <span class="compact-menu-title">網站章節</span>
+      <button class="compact-menu-close" id="compact-menu-close" type="button" aria-label="關閉網站選單" title="關閉">×</button>
+    </div>
+    <nav class="compact-menu-links" aria-label="網站章節">
+      <a class="compact-menu-link" href="#cover" data-nav-target="cover">主頁</a>
+      <a class="compact-menu-link" href="#intro" data-nav-target="intro">平台簡介</a>
+      <a class="compact-menu-link" href="#part-1" data-nav-target="part-1">平台介面</a>
+      <a class="compact-menu-link" href="#part-2" data-nav-target="part-2">平台運作流程</a>
+      <a class="compact-menu-link" href="#part-3" data-nav-target="part-3">運用平台研究其他問題</a>
+    </nav>
+  </aside>
 
   <main>
     <section class="tab-panel" id="cover-panel" data-tab-panel="cover" aria-labelledby="cover-title">

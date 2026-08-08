@@ -82,7 +82,35 @@ document.addEventListener('keydown', (event) => {
   }
 });
 
-const tabs = [...document.querySelectorAll('.main-nav-link')];
+const compactMenuButton = document.getElementById('compact-menu-button');
+const compactMenuPanel = document.getElementById('compact-menu-panel');
+const compactMenuBackdrop = document.getElementById('compact-menu-backdrop');
+const compactMenuClose = document.getElementById('compact-menu-close');
+const setCompactMenuOpen = (open) => {
+  compactMenuButton.setAttribute('aria-expanded', String(open));
+  compactMenuButton.setAttribute('aria-label', open ? '關閉網站選單' : '開啟網站選單');
+  compactMenuPanel.classList.toggle('is-open', open);
+  compactMenuPanel.setAttribute('aria-hidden', String(!open));
+  compactMenuBackdrop.classList.toggle('is-open', open);
+  compactMenuBackdrop.setAttribute('aria-hidden', String(!open));
+  document.documentElement.classList.toggle('compact-menu-open', open);
+};
+compactMenuButton.addEventListener('click', () => {
+  setCompactMenuOpen(compactMenuButton.getAttribute('aria-expanded') !== 'true');
+});
+compactMenuClose.addEventListener('click', () => {
+  setCompactMenuOpen(false);
+  compactMenuButton.focus();
+});
+compactMenuBackdrop.addEventListener('click', () => setCompactMenuOpen(false));
+document.addEventListener('keydown', (event) => {
+  if (event.key === 'Escape' && compactMenuButton.getAttribute('aria-expanded') === 'true') {
+    setCompactMenuOpen(false);
+    compactMenuButton.focus();
+  }
+});
+
+const tabs = [...document.querySelectorAll('.main-nav-link, .compact-menu-link')];
 const tabPanels = [...document.querySelectorAll('[data-tab-panel]')];
 const introDropdown = document.querySelector('.nav-dropdown');
 const introDropdownTrigger = introDropdown.querySelector('.nav-dropdown-trigger');
@@ -122,6 +150,7 @@ const setActiveTab = (tabName, { updateHash = true, scrollTarget = null } = {}) 
   tabs.forEach((tab) => tab.classList.toggle('active', tab.dataset.navTarget === tabName));
   introDropdown.classList.toggle('active', tabName === 'intro');
   setIntroDropdownOpen(false);
+  setCompactMenuOpen(false);
   if (updateHash) history.pushState(null, '', scrollTarget || `#${tabName}`);
   if (scrollTarget) {
     window.requestAnimationFrame(() => document.querySelector(scrollTarget)?.scrollIntoView({ block: 'start' }));
@@ -487,6 +516,9 @@ const photoLightbox = (() => {
    每個 [data-photo-gallery] 讀取自己的 <script type="application/json"
    data-photo-gallery-data> 作為圖片與說明來源。若只有來源而沒有段落，直接顯示完整引註；
    點擊圖片本身可開啟放大檢視。 */
+const PHOTO_GALLERY_MOBILE_MQ = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
+const PHOTO_GALLERY_EXPAND_RATIO = 0.56; /* 面板頂端距離螢幕中線仍留約 6% 時展開 */
+const PHOTO_GALLERY_COLLAPSE_RATIO = 0.66; /* 向上離開後多留一點緩衝，避免來回閃動 */
 document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const dataScript = gallery.querySelector('[data-photo-gallery-data]');
   if (!dataScript) return;
@@ -501,6 +533,42 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const stage = gallery.querySelector('.photo-gallery-stage');
   const body = gallery.querySelector('.photo-gallery-body');
   if (!stage || !body) return;
+
+  /* 手機／窄螢幕電腦：先保持「圖片＋收合標題列」，頁面向下捲到
+     說明區頂端快到螢幕中線前才自動展開。這裡只負責加／移除狀態 class，
+     展開高度與過渡仍由 storymap.css 控制。 */
+  let scrollFrame = 0;
+  let hasScrolled = false;
+  let previousScrollY = window.scrollY;
+  const updateMobileScrollExpansion = () => {
+    scrollFrame = 0;
+    if (!PHOTO_GALLERY_MOBILE_MQ.matches || !hasScrolled || !body.getClientRects().length) return;
+    const currentScrollY = window.scrollY;
+    const scrollingDown = currentScrollY >= previousScrollY;
+    const top = body.getBoundingClientRect().top;
+    const expandLine = window.innerHeight * PHOTO_GALLERY_EXPAND_RATIO;
+    const collapseLine = window.innerHeight * PHOTO_GALLERY_COLLAPSE_RATIO;
+    if (scrollingDown && top <= expandLine) body.classList.add('is-expanded');
+    else if (!scrollingDown && top >= collapseLine) body.classList.remove('is-expanded');
+    previousScrollY = currentScrollY;
+  };
+  const requestMobileScrollExpansion = () => {
+    if (!PHOTO_GALLERY_MOBILE_MQ.matches) return;
+    hasScrolled = true;
+    if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateMobileScrollExpansion);
+  };
+  window.addEventListener('scroll', requestMobileScrollExpansion, { passive: true });
+  window.addEventListener('resize', () => {
+    previousScrollY = window.scrollY;
+    if (PHOTO_GALLERY_MOBILE_MQ.matches) updateMobileScrollExpansion();
+  }, { passive: true });
+  const resetMobileScrollExpansion = () => {
+    body.classList.remove('is-expanded');
+    hasScrolled = false;
+    previousScrollY = window.scrollY;
+  };
+  if (PHOTO_GALLERY_MOBILE_MQ.addEventListener) PHOTO_GALLERY_MOBILE_MQ.addEventListener('change', resetMobileScrollExpansion);
+  else PHOTO_GALLERY_MOBILE_MQ.addListener(resetMobileScrollExpansion);
 
   stage.innerHTML = '';
   pages.forEach((page, i) => {

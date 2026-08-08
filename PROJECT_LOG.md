@@ -10114,6 +10114,24 @@ Verified:
 Remaining:
 - 尚未 git commit；t-preview 尚未同步。
 
+### 2026-08-08 16:16 HKT — Codex — Restore the Agentic AI visual on narrow screens
+
+Summary:
+- Kept the visual element for `運用 Agentic AI 使用 PaddleOCR` visible in both the mobile mode and the narrow computer-window mode.
+- Added a scoped responsive height for the Agentic AI frame and an explicit height for its absolutely positioned scene, so the Python and Codex windows no longer collapse when the shared visual-frame rule changes to `height: auto`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+
+Verified:
+- At 1024px wide, the Agentic frame is 560px high and the inner scene is rendered at about 519px high.
+- At 390px wide, the Agentic frame is 560px high and the inner scene is rendered at 528px high.
+- Browser screenshot confirms the overlapping PaddleOCR Python and Codex windows are visible in the mobile layout.
+- No external deployment or t-preview sync performed.
+
+Remaining:
+- No git commit created because the worktree already contains unrelated user edits and prototype files.
+
 ### 2026-08-08 16:03 HKT — Codex — Add a mobile model-card carousel
 
 Summary:
@@ -10129,6 +10147,27 @@ Files changed:
 Verified:
 - Browser-tested at 390px and 900px: vertical cards appear without horizontal overflow, and both carousel directions work.
 - Browser-tested at 1280px: all four desktop table rows remain visible and arrows are hidden.
+- Browser console has no errors or warnings; `node --check intro Website/Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.
+
+### 2026-08-08 16:17 HKT — Codex — Add a narrow-screen section menu
+
+Summary:
+- Replaced the centered top-level navigation with a single `選單` button at ≤1040px for both mobile and narrow computer windows.
+- Added a right-to-left sliding section panel containing 主頁、平台簡介、平台介面、平台運作流程、運用平台研究其他問題.
+- Added an X close button, backdrop close, Escape close, active-section highlighting, and automatic close after navigation.
+- Kept the original desktop navigation unchanged above 1040px.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+
+Verified:
+- Browser-tested at 390px and 900px: menu button, five links, right-side panel, X close, and section navigation work.
+- Browser-tested at 1280px: original navigation remains visible and compact menu is hidden.
 - Browser console has no errors or warnings; `node --check intro Website/Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` pass.
 
 Remaining:
