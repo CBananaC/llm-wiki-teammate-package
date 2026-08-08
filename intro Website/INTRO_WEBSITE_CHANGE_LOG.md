@@ -5981,6 +5981,24 @@ Verified:
 Remaining:
 - Check the hover transition visually at one narrow viewport.
 
+### 2026-08-08 17:08 HKT — Codex — Remove the compact menu close button
+
+Summary:
+- Removed the `×` button from the header and deleted its styling and event listeners.
+- The menu now closes through hover-out, outside-click, or Escape.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed; `git diff --check` passed; CSS brace checks passed.
+- Confirmed no close-button selector or element remains.
+
+Remaining:
+- Check the menu visually at one narrow viewport.
+
 ### 2026-08-08 17:05 HKT — Codex — Make Part 2 research-value rows inline on narrow screens
 
 Summary:

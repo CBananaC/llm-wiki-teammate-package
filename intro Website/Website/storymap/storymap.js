@@ -83,13 +83,11 @@ document.addEventListener('keydown', (event) => {
 const compactMenuButton = document.getElementById('compact-menu-button');
 const compactMenuPanel = document.getElementById('compact-menu-panel');
 const compactMenuBackdrop = document.getElementById('compact-menu-backdrop');
-const compactMenuClose = document.getElementById('compact-menu-close');
 let compactMenuCloseTimer;
 const scheduleCompactMenuClose = () => {
   window.clearTimeout(compactMenuCloseTimer);
   compactMenuCloseTimer = window.setTimeout(() => {
     const menuHovered = compactMenuButton.matches(':hover')
-      || compactMenuClose.matches(':hover')
       || compactMenuPanel.matches(':hover');
     if (!menuHovered) setCompactMenuOpen(false);
   }, 120);
@@ -109,15 +107,9 @@ const setCompactMenuOpen = (open) => {
 };
 compactMenuButton.addEventListener('mouseenter', keepCompactMenuOpen);
 compactMenuButton.addEventListener('mouseleave', scheduleCompactMenuClose);
-compactMenuClose.addEventListener('mouseenter', keepCompactMenuOpen);
-compactMenuClose.addEventListener('mouseleave', scheduleCompactMenuClose);
 compactMenuPanel.addEventListener('mouseenter', keepCompactMenuOpen);
 compactMenuPanel.addEventListener('mouseleave', scheduleCompactMenuClose);
 compactMenuButton.addEventListener('click', () => setCompactMenuOpen(true));
-compactMenuClose.addEventListener('click', () => {
-  setCompactMenuOpen(false);
-  compactMenuButton.focus();
-});
 compactMenuBackdrop.addEventListener('click', () => setCompactMenuOpen(false));
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && compactMenuButton.getAttribute('aria-expanded') === 'true') {

@@ -181,7 +181,6 @@ img { max-width: 100%; }
 
 /* 窄螢幕網站選單：由右向左滑入；桌面寬度維持原本的頂欄導覽。 */
 .compact-menu-button,
-.compact-menu-close,
 .compact-menu-panel,
 .compact-menu-backdrop { display: none; }
 
@@ -217,24 +216,7 @@ img { max-width: 100%; }
   .compact-menu-button[aria-expanded="true"] {
     color: #fff;
   }
-  .compact-menu-close {
-    display: none;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    color: rgba(247, 243, 234, .86);
-    background: transparent;
-    border: 0;
-    border-radius: 0;
-    cursor: pointer;
-    font: 400 25px/1 var(--sans);
-    transition: color .2s;
-  }
-  .settings-wrap:has(.compact-menu-button[aria-expanded="true"]) .compact-menu-close { display: grid; }
-  .compact-menu-close:hover { color: #fff; }
   .compact-menu-button:focus-visible,
-  .compact-menu-close:focus-visible,
   .compact-menu-link:focus-visible {
     outline: 2px solid var(--yellow);
     outline-offset: 3px;
