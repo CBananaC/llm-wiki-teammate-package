@@ -542,15 +542,14 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const body = gallery.querySelector('.photo-gallery-body');
   if (!stage || !body) return;
 
-  /* 手機／窄螢幕電腦：先保持「圖片＋收合標題列」，頁面向下捲到
-     圖片頂端越過螢幕中線後才自動展開。這裡只負責加／移除狀態 class，
-     展開高度與過渡仍由 storymap.css 控制。 */
+/* 手機／窄螢幕電腦：先保持「圖片＋收合標題列」。只要圖片頂端已經
+   到達或越過螢幕中線，就立即展開，不要求一定要先經歷一次越線捲動。
+   這裡只負責加／移除狀態 class，展開高度與過渡仍由 storymap.css 控制。 */
   let scrollFrame = 0;
-  let hasScrolled = false;
   let previousScrollY = window.scrollY;
   const updateMobileScrollExpansion = () => {
     scrollFrame = 0;
-    if (!PHOTO_GALLERY_MOBILE_MQ.matches || !hasScrolled || !body.getClientRects().length) return;
+    if (!PHOTO_GALLERY_MOBILE_MQ.matches || !body.getClientRects().length) return;
     const currentScrollY = window.scrollY;
     const scrollingDown = currentScrollY >= previousScrollY;
     const photoTop = stage.getBoundingClientRect().top;
@@ -562,7 +561,6 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   };
   const requestMobileScrollExpansion = () => {
     if (!PHOTO_GALLERY_MOBILE_MQ.matches) return;
-    hasScrolled = true;
     if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateMobileScrollExpansion);
   };
   window.addEventListener('scroll', requestMobileScrollExpansion, { passive: true });
@@ -572,11 +570,21 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   }, { passive: true });
   const resetMobileScrollExpansion = () => {
     body.classList.remove('is-expanded');
-    hasScrolled = false;
     previousScrollY = window.scrollY;
+    if (PHOTO_GALLERY_MOBILE_MQ.matches) requestMobileScrollExpansion();
   };
   if (PHOTO_GALLERY_MOBILE_MQ.addEventListener) PHOTO_GALLERY_MOBILE_MQ.addEventListener('change', resetMobileScrollExpansion);
   else PHOTO_GALLERY_MOBILE_MQ.addListener(resetMobileScrollExpansion);
+
+  /* 當引言／其他分頁剛變為可見時，圖片可能已經位於中線上方；立即重算，
+     不必等待下一次捲動事件。 */
+  const tabPanel = gallery.closest('[data-tab-panel]');
+  if (tabPanel && 'MutationObserver' in window) {
+    new MutationObserver(requestMobileScrollExpansion).observe(tabPanel, {
+      attributes: true,
+      attributeFilter: ['hidden']
+    });
+  }
 
   stage.innerHTML = '';
   pages.forEach((page, i) => {
@@ -676,6 +684,9 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     if (event.target.closest('a')) return;
     if (window.matchMedia('(hover: none)').matches) body.classList.toggle('is-expanded');
   });
+
+  /* 初次建立畫廊後也檢查目前位置，涵蓋圖片一開始已在螢幕中線上方的情況。 */
+  requestMobileScrollExpansion();
 });
 
 /* OCR PDF page previews use one delegated listener so the click remains active

@@ -6148,3 +6148,24 @@ Verified:
 
 Remaining:
 - Review the responsive layout visually when the local browser can load the updated file.
+
+### 2026-08-08 17:53 HKT — Codex — Trigger gallery panels from current image position
+
+Summary:
+- Removed the requirement for a prior scroll event before a gallery information panel can expand.
+- Recalculate the image position after gallery creation, resizing, and tab visibility changes, so an image already above the screen midpoint opens its panel immediately.
+- Kept the existing midpoint threshold, upward collapse buffer, and panel animation.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed the `hasScrolled` gate is absent and the immediate position checks are registered.
+- Existing unrelated OCR layout edits remain unstaged and preserved.
+
+Remaining:
+- Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
