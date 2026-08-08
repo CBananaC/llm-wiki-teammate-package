@@ -5811,6 +5811,24 @@ Verified:
 Remaining:
 - No external deployment or t-preview sync performed.
 
+### 2026-08-08 16:22 HKT — Codex — Simplify the narrow-screen menu control
+
+Summary:
+- Changed the narrow-screen `選單` control to show only the hamburger symbol.
+- Removed its decorative border, background, rounded button surface, and text label so it matches the adjacent settings symbol.
+- Kept the sliding section panel and its navigation behavior unchanged.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- At 390px, the control has no text, transparent background, and no border; the menu still opens correctly.
+- Browser console has no errors or warnings; `node --check Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.
+
 ### 2026-08-08 16:17 HKT — Codex — Add a narrow-screen section menu
 
 Summary:

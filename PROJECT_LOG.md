@@ -10114,6 +10114,24 @@ Verified:
 Remaining:
 - 尚未 git commit；t-preview 尚未同步。
 
+### 2026-08-08 16:22 HKT — Codex — Simplify the narrow-screen menu control
+
+Summary:
+- Changed the narrow-screen `選單` control to show only the hamburger symbol.
+- Removed its decorative border, background, rounded button surface, and text label so it matches the adjacent settings symbol.
+- Kept the sliding section panel and its navigation behavior unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+
+Verified:
+- At 390px, the control has no text, transparent background, and no border; the menu still opens correctly.
+- Browser console has no errors or warnings; `node --check intro Website/Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.
+
 ### 2026-08-08 16:16 HKT — Codex — Restore the Agentic AI visual on narrow screens
 
 Summary:
@@ -10264,6 +10282,28 @@ Verified:
 - `node --check` 通過；確認 `applyMobileTryText()` 位於 `initPart3TryIt()` 之前（否則覆寫不會生效）且 init 僅呼叫一次。
 - 以腳本模擬覆寫結果：印刷字／手寫字皆 19 → 18 步，建議句帶入各自正確的 PDF 檔名。
 - **仍未在瀏覽器／實機測試。** 注意：目前覆寫只在載入時判斷一次，若在同一個分頁把視窗從桌面拉到手機寬度，文案不會即時切換（重新整理即可）。
+
+Remaining:
+- 尚未 git commit；t-preview 尚未同步。
+
+### 2026-08-08 16:30 HKT — Claude — 手機版史料圖：位置與放大倍數改為可在 storymap-cards.css 手動微調
+
+Summary:
+- 依 CLAUDE.md「storymap-cards.css 是手動微調的指定檔案」的原則，把 7／8 抽屜與 11 試一試視窗裡的史料圖，全部改成由 CSS 變數控制，並在 `storymap-cards.css` 末端新增「手機版史料圖微調」區塊（含用法說明與每一張圖的範例規則，數值預設為不改變現狀）。
+- **新增 per-image 選擇器鉤子**：`storymap.js` 的 7／8 繪圖流程新增 `img.dataset.fxVisual = selectedImage`，因此可用 `[data-fx-visual="辨識印刷字Label/文本資訊.png"]` 針對「目前顯示的是哪一張圖」個別設定。11 試一試本來就已經有 `data-try-visual`（特徵圖為檔名、整頁為 `page1`／`page2`…），直接沿用。
+- **7／8 可調變數**：`--fxdoc-scale`（放大倍數）、`--fxdoc-x/-y`（位移）、`--fxdoc-origin`（縮放基準點）、`--fxdoc-h`（高度倍率）。套用方式為 `transform: translate(...) scale(...)`。
+- **11 可調變數**：`--tryimg-fit`（`contain` 縮到框內／`none` 原始大小）、`--tryimg-max-w/-h`（設 `none` 可超出視窗）、`--tryimg-scale`、`--tryimg-x/-y`、`--tryimg-origin`；容器另有 `--trydoc-align`／`--trydoc-justify`（圖片靠哪一邊）與 `--trydoc-overflow`（放大後是否可捲動）。
+- 已核對所有選擇器用的檔名與 HTML 內 JSON 的 `image`／`pages` 欄位完全一致（7：7 張標示圖＋2 張整頁；8：8 張標示圖；11 印刷字：6 張＋2 頁、手寫字：6 張＋3 頁）。
+- 這些規則全部只寫在手機版 media query 內生效的屬性上，**桌面版不受影響**。
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`（新增 `data-fx-visual` 鉤子）
+- `intro Website/Website/storymap/storymap.css`（圖片樣式改吃 CSS 變數）
+- `intro Website/Website/storymap/storymap-cards.css`（新增「手機版史料圖微調」區塊，共 37 條範例規則）
+
+Verified:
+- `node --check` 通過；兩個 CSS 檔深度掃描皆平衡；以腳本比對選擇器檔名與 JSON 資料完全相符。
+- **仍未在瀏覽器／實機測試。**
 
 Remaining:
 - 尚未 git commit；t-preview 尚未同步。

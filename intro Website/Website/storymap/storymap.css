@@ -200,26 +200,21 @@ img { max-width: 100%; }
     gap: 8px;
   }
   .compact-menu-button {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    gap: 8px;
-    min-height: 34px;
-    padding: 6px 11px;
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
     color: rgba(247, 243, 234, .86);
-    background: rgba(255, 255, 255, .06);
-    border: 1px solid rgba(255, 255, 255, .28);
-    border-radius: 7px;
+    background: transparent;
+    border: 0;
+    border-radius: 0;
     cursor: pointer;
-    font: 600 calc(12px * var(--font-scale)) var(--sans);
-    letter-spacing: .08em;
-    transition: color .2s, background-color .2s, border-color .2s;
+    transition: color .2s;
   }
   .compact-menu-button:hover,
   .compact-menu-button[aria-expanded="true"] {
     color: #fff;
-    background: rgba(255, 255, 255, .14);
-    border-color: rgba(255, 255, 255, .55);
   }
   .compact-menu-button:focus-visible,
   .compact-menu-close:focus-visible,
@@ -227,7 +222,7 @@ img { max-width: 100%; }
     outline: 2px solid var(--yellow);
     outline-offset: 3px;
   }
-  .compact-menu-icon { display: inline-grid; gap: 3px; width: 15px; }
+  .compact-menu-icon { display: inline-grid; gap: 4px; width: 20px; }
   .compact-menu-icon span { display: block; height: 1.5px; background: currentColor; border-radius: 2px; }
   .compact-menu-backdrop {
     position: fixed;
@@ -3720,9 +3715,16 @@ img { max-width: 100%; }
   .mdrawer .part3-fx-page, .mdrawer .part3-fx-striparea {
     height: 100%; max-height: none; min-height: 0; width: auto; margin: auto;
   }
+  /* 位置與放大倍數全部走 CSS 變數，實際數值在 storymap-cards.css 調
+     （見該檔「手機版史料圖微調」區塊）：
+       --fxdoc-scale   放大倍數（1 = 原本剛好塞滿抽屜高度）
+       --fxdoc-x / -y  位移
+       --fxdoc-origin  縮放的基準點 */
   .mdrawer .part3-fx-page img, .mdrawer [data-try-img] {
-    display: block; height: 100%; width: auto; max-width: none; margin: auto;
+    display: block; height: calc(100% * var(--fxdoc-h, 1)); width: auto; max-width: none; margin: auto;
     pointer-events: none; user-select: none;
+    transform: translate(var(--fxdoc-x, 0px), var(--fxdoc-y, 0px)) scale(var(--fxdoc-scale, 1));
+    transform-origin: var(--fxdoc-origin, center center);
   }
   /* 展開後：PDF 置中，並可單獨縮放（不影響整個網頁） */
   .mdrawer.is-full > .part3-fx-doc { padding: 14px; }
@@ -3882,9 +3884,26 @@ img { max-width: 100%; }
     height: 100%; width: 100%; max-height: none; min-height: 0;
     display: flex; align-items: center; justify-content: center;
   }
+  /* 每張圖都可以個別決定「照原始大小顯示」或「縮放到視窗內」，以及位置。
+     實際數值在 storymap-cards.css 調（見「手機版史料圖微調」區塊）：
+       --tryimg-fit    contain＝縮到框內（預設）；none＝原始大小
+       --tryimg-max-w / --tryimg-max-h   放 none 就可以超出視窗（配合 none 使用）
+       --tryimg-scale  放大倍數
+       --tryimg-x / -y 位移
+       --tryimg-origin 縮放基準點 */
   #part-3-try-explorer [data-try-img] {
-    max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain;
+    max-width: var(--tryimg-max-w, 100%); max-height: var(--tryimg-max-h, 100%);
+    width: var(--tryimg-w, auto); height: var(--tryimg-h, auto);
+    object-fit: var(--tryimg-fit, contain);
+    transform: translate(var(--tryimg-x, 0px), var(--tryimg-y, 0px)) scale(var(--tryimg-scale, 1));
+    transform-origin: var(--tryimg-origin, center center);
     border-radius: 3px; box-shadow: 0 6px 18px rgba(0, 0, 0, .3);
+  }
+  /* 圖片在視窗裡靠哪一邊 */
+  #part-3-try-explorer .part3-try-doc {
+    align-items: var(--trydoc-align, center);
+    justify-content: var(--trydoc-justify, center);
+    overflow: var(--trydoc-overflow, hidden);
   }
   /* 翻頁鍵縮小、疊在圖片下緣 */
   #part-3-try-explorer .part3-fx-nav {
