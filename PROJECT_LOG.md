@@ -10114,6 +10114,26 @@ Verified:
 Remaining:
 - 尚未 git commit；t-preview 尚未同步。
 
+### 2026-08-08 16:03 HKT — Codex — Add a mobile model-card carousel
+
+Summary:
+- Added a mobile-only vertical card layout for `選用的AI Model`.
+- The first mobile view shows Claude Opus and GPT（5.6）; the arrow in the first card switches to DeepSeek Flash／Pro and Gemini Flash, with a back arrow on the second view.
+- Kept the desktop six-column table unchanged and aligned the mobile breakpoint with the website's existing 1040px mobile mode.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.js`
+
+Verified:
+- Browser-tested at 390px and 900px: vertical cards appear without horizontal overflow, and both carousel directions work.
+- Browser-tested at 1280px: all four desktop table rows remain visible and arrows are hidden.
+- Browser console has no errors or warnings; `node --check intro Website/Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.
+
 ### 2026-08-08 15:10 HKT — Claude — 修正 JSON 一節仍然破版、手機版篩選列點了沒反應
 
 Summary:
@@ -10156,3 +10176,55 @@ Verified:
 
 Remaining:
 - No external deployment or t-preview sync performed.
+
+### 2026-08-08 15:45 HKT — Claude — 試一試（11）手機版：PDF 進視窗、整節滿版一屏；裝置偵測取代純寬度
+
+Summary:
+- 先做了獨立原型 `intro Website/Website/UI Idea/mobile-try-it-prototype.html`（含真實步驟資料），確認互動後才套用到網站。
+- **裝置偵測**：改用「裝置優先、寬度為輔」的判斷式
+  `@media (pointer: coarse) and (hover: none), (max-width: 1040px)`。
+  `pointer: coarse` ＋ `hover: none` 代表主要輸入是手指且沒有滑鼠指標，只有手機／平板成立，桌機把視窗縮窄**不會**誤判；但 iPad 外接觸控板會回報 `pointer: fine`，所以再用寬度取聯集當保險。7／8 的抽屜與 11 的新版面都改用同一條判斷式。
+- **11 試一試手機版（`initMobileTryLayout()` ＋ CSS 第 11 區塊）**：
+  - 整節高度 = `100svh - var(--bar-h)`，進度列與引導對話框固定，只有視窗內部捲動，整頁不再被撐長。
+  - 把既有的史料欄與 `[data-try-stage]` 一起搬進新的 `.mtry-win` 外框（外框自己提供邊框與標題列）。兩者都是穩定節點（stage 只有內容會被重繪，元素本身不變），所以搬動不影響 `initPart3TryIt` 既有邏輯與已註冊的事件。
+  - 視窗內容依階段切換，狀態 class 由 MutationObserver 觀察 stage 內容推斷（`[data-try-dl]` → 第一步、`[data-try-cmp]` → 第三步、`.part3-try-chat.is-final` → 完成總覽、其餘 → 作答中）：
+    * 第一步：PDF 在視窗內，底部一條細長列放檔名與 下載／已下載。
+    * 作答中：**只顯示 PDF**（跟著題目換標示圖），並依要求**把下載列整個收起來**，不再顯示「為請酌籌加調官兵協力進剿事_印刷字.pdf 已下載 下載」。
+    * 完成總覽：改顯示累積的全部 prompt（可複製）。
+    * 第三步：顯示比對區。
+  - 桌面版會把史料欄與 stage 搬回原位並移除外框，維持原本的兩欄 grid；`matchMedia` 的 change 事件會在跨越斷點時來回切換。
+- **11 不再使用左側抽屜**：PDF 已經在視窗裡，`initMobileDocDrawers()` 的選擇器改為只含 7／8。
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`（新增 `initMobileTryLayout()`；抽屜選擇器排除 11）
+- `intro Website/Website/storymap/storymap.css`（新增「11 · 手機版：試一試」區塊；兩處 media query 改為裝置偵測）
+- `intro Website/Website/UI Idea/mobile-try-it-prototype.html`（新原型，未被網站引用）
+
+Verified:
+- `node --check` 通過；CSS 深度掃描平衡；HTML 標籤平衡；JSON 區塊可解析（19/19）。
+- **仍未在瀏覽器／實機測試。** 需重點看：跨斷點來回縮放視窗時，史料欄與 stage 有沒有正確搬回桌面版位置；四個階段的視窗內容切換是否正確。
+
+Remaining:
+- 尚未 git commit；t-preview 尚未同步。
+
+### 2026-08-08 16:05 HKT — Claude — 試一試手機版專用文案（上傳 PDF 給 AI App，而非本機安裝）
+
+Summary:
+- 手機上的實際操作跟電腦不同：使用者不會在本機安裝 PaddleOCR，而是把 PDF 上傳到 AI App（ChatGPT 等，工作模式與聊天模式皆可）再請它辨識。因此新增手機版文案覆寫：
+  - **第一步引導**：`先把這份史料下載到你的電腦。` → 手機版改為 `先把這份史料下載到你的手機。`（此句寫死在 `renderPhase1()`，改為依 `isTryMobile()` 二選一）。
+  - **「一 · 安裝工具」** 手機版改寫為 **「一 · 指示 AI 使用 PaddleOCR」**：引導語說明手機不需自行安裝，改為上傳 PDF 給 AI App；建議句改為 `請使用 PaddleOCR，為我 OCR 這份 PDF：「<該模式的 pdf 檔名>」。`（檔名取自該模式的 `pdf` 欄位，印刷字／手寫字各自正確），並移除「已下載」的 skip 鈕（手機沒有東西要下載安裝）。
+  - **移除「二 · OCR 目的」**：手機版已在第一步一句話講完，該步整步濾掉（19 → 18 步，進度圓點自動跟著變）。
+  - **完成總覽引導**：改為指示複製全部後，到 AI App 開新訊息、**先上傳 PDF 再貼上 prompt** 一起送出。
+- 實作方式：新增 `applyMobileTryText()`，在**解析 JSON 之前**改寫 `data-part3-try-data` 的內容，因此不需要改動 `initPart3TryIt()` 的任何既有邏輯；HTML 原始檔不變（只在執行期覆寫），桌面版完全不受影響。
+- 兩處寫死的引導語改用共用的 `isTryMobile()`（與版面用的是同一條 media query）。
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+
+Verified:
+- `node --check` 通過；確認 `applyMobileTryText()` 位於 `initPart3TryIt()` 之前（否則覆寫不會生效）且 init 僅呼叫一次。
+- 以腳本模擬覆寫結果：印刷字／手寫字皆 19 → 18 步，建議句帶入各自正確的 PDF 檔名。
+- **仍未在瀏覽器／實機測試。** 注意：目前覆寫只在載入時判斷一次，若在同一個分頁把視窗從桌面拉到手機寬度，文案不會即時切換（重新整理即可）。
+
+Remaining:
+- 尚未 git commit；t-preview 尚未同步。

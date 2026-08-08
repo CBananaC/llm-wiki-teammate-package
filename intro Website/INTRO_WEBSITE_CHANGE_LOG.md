@@ -5810,3 +5810,23 @@ Verified:
 
 Remaining:
 - No external deployment or t-preview sync performed.
+
+### 2026-08-08 16:03 HKT — Codex — Add a mobile model-card carousel
+
+Summary:
+- Added a mobile-only vertical card layout for `選用的AI Model`.
+- The first mobile view shows Claude Opus and GPT（5.6）; the arrow in the first card switches to DeepSeek Flash／Pro and Gemini Flash, with a back arrow on the second view.
+- Kept the desktop six-column table unchanged and aligned the mobile breakpoint with the website's existing 1040px mobile mode.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Browser-tested at 390px and 900px: vertical cards appear without horizontal overflow, and both carousel directions work.
+- Browser-tested at 1280px: all four desktop table rows remain visible and arrows are hidden.
+- Browser console has no errors or warnings; `node --check Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` pass.
+
+Remaining:
+- No external deployment or t-preview sync performed.

@@ -429,18 +429,26 @@ const photoLightbox = (() => {
   const openGallery = (galleryPages, startIndex, {
     title = '', captionTitle = title, showPageNumber = true, description = '', descriptionHtml = ''
   } = {}, triggerEl) => {
-    const validPages = galleryPages.filter(Boolean);
+    /* 接受純圖片路徑，也接受帶有個別說明的頁面物件；既有圖庫仍可只傳路徑。 */
+    const validPages = galleryPages
+      .map((page) => typeof page === 'string' ? { src: page } : page)
+      .filter((page) => page && (page.src || page.image));
     if (!validPages.length) return;
     lastFocused = triggerEl || null;
-    pages = validPages.map((src, i) => {
+    pages = validPages.map((item, i) => {
+      const src = item.src || item.image;
       const pageLabel = showPageNumber ? `第 ${i + 1} 頁` : '';
+      const itemTitle = item.title || captionTitle;
+      const itemDescription = item.description ?? description;
+      const itemDescriptionHtml = item.descriptionHtml ?? descriptionHtml;
       return {
         src,
-        alt: `${title} ${pageLabel}`.trim(),
-        caption: [captionTitle, pageLabel, description].filter(Boolean).join('｜'),
-        captionHtml: descriptionHtml
-          ? [captionTitle && escapeCaptionHtml(captionTitle), pageLabel, descriptionHtml].filter(Boolean).join('｜')
+        alt: item.alt || `${title} ${pageLabel}`.trim(),
+        caption: item.caption || [itemTitle, pageLabel, itemDescription].filter(Boolean).join('｜'),
+        captionHtml: item.captionHtml || (itemDescriptionHtml
+          ? [itemTitle && escapeCaptionHtml(itemTitle), pageLabel, itemDescriptionHtml].filter(Boolean).join('｜')
           : ''
+        )
       };
     });
     pageIndex = Math.max(0, Math.min(pages.length - 1, startIndex || 0));
@@ -1026,10 +1034,10 @@ const initPart3FeatureExplorers = () => {
     const fitCodeFont = (el, html) => {
       const plain = (html || '').replace(/<[^>]+>/g, '');
       const len = plain.length;
-      let px = 11.5;
-      if (len > 720) px = 9;
-      else if (len > 480) px = 9.5;
-      else if (len > 300) px = 10.5;
+      let px = 13;
+      if (len > 720) px = 10.5;
+      else if (len > 480) px = 11.5;
+      else if (len > 300) px = 12.5;
       el.style.setProperty('--fx-code-font-size', px + 'px');
     };
 
@@ -1089,6 +1097,26 @@ const initPart3FeatureExplorers = () => {
       let page = 0;
       let turning = false;
       features.forEach((f) => { f.badge = `p.${(f.page || 0) + 1}`; });
+
+      const openPrintedGallery = (triggerEl) => {
+        const feature = features[cur];
+        const galleryPages = pages.map((src, i) => {
+          const annotated = feature && (feature.page || 0) === i && feature.image;
+          return {
+            src: annotated ? feature.image : src,
+            alt: annotated ? `${feature.title}：人工標示頁面` : `印刷本奏摺第 ${i + 1} 頁`,
+            title: annotated ? feature.title : `印刷本奏摺第 ${i + 1} 頁`,
+            description: annotated
+              ? feature.desc
+              : '《明清臺灣檔案彙編》的印刷本奏摺頁面，可使用左右按鈕查看前後頁。'
+          };
+        });
+        photoLightbox.openGallery(galleryPages, page, {
+          title: '辨識印刷字', captionTitle: '', showPageNumber: false
+        }, triggerEl);
+      };
+      img.title = '點擊放大檢視';
+      img.addEventListener('click', () => openPrintedGallery(img));
 
       const paintPage = () => {
         const f = features[cur];
@@ -1155,13 +1183,37 @@ const initPart3FeatureExplorers = () => {
       let pair = 0;
       features.forEach((f) => { f.badge = `第 ${(f.panel || 0) + 1} 摺`; });
 
+      const openHandwrittenGallery = (sheetIndex, triggerEl) => {
+        const feature = features[cur];
+        const selectedSheet = feature && feature.image ? Math.floor((feature.panel || 0) / 3) : -1;
+        const galleryPages = sheets.map((src, i) => {
+          const annotated = i === selectedSheet;
+          return {
+            src: annotated ? feature.image : src,
+            alt: annotated ? `${feature.title}：人工標示頁面` : `手寫奏摺第 ${i + 1} 張掃描頁面`,
+            title: annotated ? feature.title : `手寫奏摺第 ${i + 1} 張掃描頁面`,
+            description: annotated
+              ? feature.desc
+              : '手寫奏摺原件掃描頁面，可使用左右按鈕查看前後頁。'
+          };
+        });
+        photoLightbox.openGallery(galleryPages, sheetIndex, {
+          title: '辨識手寫字', captionTitle: '', showPageNumber: false
+        }, triggerEl);
+      };
+
       panels.forEach((p, i) => {
         const el = document.createElement('div');
         el.className = 'part3-fx-panel';
         el.dataset.sheetIndex = String(Math.floor(i / 3));
         el.style.setProperty('--posx', `${p.part * 50}%`);
         if (data.foldAspect) el.style.setProperty('--fold-aspect', data.foldAspect);
-        el.addEventListener('click', () => { pair = pairOf(i); render(); });
+        el.title = '點擊放大檢視整張奏摺頁面';
+        el.addEventListener('click', () => {
+          pair = pairOf(i);
+          render();
+          openHandwrittenGallery(Math.floor(i / 3), el);
+        });
         strip.appendChild(el);
       });
 
@@ -2025,6 +2077,33 @@ const initPart3TryIt = () => {
     });
   };
 
+  const openTryGallery = (triggerEl) => {
+    const set = d();
+    const step = phase === 2 ? set.steps[cur] : null;
+    const feature = step && step.feature ? set.features[step.feature] : null;
+    const assetDir = set.assetDir || '';
+    const featurePage = feature && Number.isFinite(feature.page) ? feature.page : pageIdx;
+    const modeTitle = mode === 'handwritten' ? '手寫字' : '印刷字';
+    const featureTitle = (feature && feature.title) || (step && step.k) || `${modeTitle}史料頁面`;
+    const featureDescription = (feature && feature.desc) || (step && step.guide)
+      || `${modeTitle}奏摺原件掃描頁面，可使用左右按鈕查看前後頁。`;
+    const galleryPages = set.pages.map((src, i) => {
+      const annotated = feature && feature.page === i && feature.image;
+      return {
+        src: assetDir + (annotated ? feature.image : src),
+        alt: annotated ? `${featureTitle}：人工標示頁面` : `${modeTitle}奏摺第 ${i + 1} 頁`,
+        title: annotated ? featureTitle : `${modeTitle}奏摺第 ${i + 1} 頁`,
+        description: annotated ? featureDescription : `${modeTitle}奏摺原件掃描頁面。`
+      };
+    });
+    photoLightbox.openGallery(galleryPages, featurePage, {
+      title: `${modeTitle}史料`, captionTitle: '', showPageNumber: false
+    }, triggerEl);
+  };
+
+  imgEl.title = '點擊放大檢視';
+  imgEl.addEventListener('click', () => openTryGallery(imgEl));
+
   const animateHandwrittenTurn = (direction) => {
     if (mode !== 'handwritten') return;
     const className = direction > 0 ? 'is-handwritten-turn-next' : 'is-handwritten-turn-prev';
@@ -2116,7 +2195,9 @@ const initPart3TryIt = () => {
           </div>
         </div>
       </div>`;
-    showGuide('第一步', '先把這份史料下載到你的電腦。');
+    showGuide('第一步', isTryMobile()
+      ? '先把這份史料下載到你的手機。'
+      : '先把這份史料下載到你的電腦。');
     const advanceToPrompt = (openPdf) => {
       const pdfHref = set.href || set.pdfPath;
       if (openPdf && pdfHref) window.open(pdfHref, '_blank', 'noopener');
@@ -2172,7 +2253,9 @@ const initPart3TryIt = () => {
       const foot = stageHost.querySelector('[data-try-foot]');
       foot.innerHTML = `<span class="hint">點擊Prompt進行修改</span>`
         + `<button type="button" class="part3-try-copy" data-try-copy>${COPY_IC}複製全部</button>`;
-      showGuide('完成', '以上就是寫給Agentic Ai進行OCR的 prompt。直接點選各項 Prompt 進行修改，確認內容後，複製再發給 Agentic AI 執行');
+      showGuide('完成', isTryMobile()
+        ? '以上就是給 AI 的 OCR prompt。點選各項 Prompt 可以直接修改。確認後按「複製全部」，再到 AI App（例如 ChatGPT，工作模式或聊天模式都可以）開一則新訊息：先上傳剛才下載的 PDF，然後貼上這段 prompt 一起送出。'
+        : '以上就是寫給Agentic Ai進行OCR的 prompt。直接點選各項 Prompt 進行修改，確認內容後，複製再發給 Agentic AI 執行');
       foot.querySelector('[data-try-copy]').addEventListener('click', (e) => {
         const btn = e.currentTarget;
         const txt = [...stageHost.querySelectorAll('.part3-try-bubble')]
@@ -2650,7 +2733,70 @@ function shuffleTryOptions(arr) {
   return a;
 }
 
+/* ---------------------------------------------------------------------------
+   試一試：手機版文案覆寫
+   手機上的操作方式跟電腦不一樣——不是在本機安裝 PaddleOCR，而是把 PDF 上傳到
+   AI App（例如 ChatGPT，工作模式或聊天模式都可以），再請它用 PaddleOCR 辨識。
+   因此手機版要換掉幾句提示，並把「二 · OCR 目的」併進第一步（同一句話就講完了）。
+   必須在 initPart3TryIt() 解析 data-part3-try-data 之前改寫，才會生效。
+   --------------------------------------------------------------------------- */
+const TRY_MOBILE_MQ = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
+const isTryMobile = () => TRY_MOBILE_MQ.matches;
+
+const applyMobileTryText = () => {
+  if (!isTryMobile()) return;
+  const script = document.querySelector('[data-part3-try-data]');
+  if (!script) return;
+  let data;
+  try { data = JSON.parse(script.textContent); } catch (e) { return; }
+
+  ['printed', 'handwritten'].forEach((mode) => {
+    const set = data[mode];
+    if (!set || !Array.isArray(set.steps)) return;
+    /* 「二 · OCR 目的」在手機版併進第一步，整步移除 */
+    set.steps = set.steps.filter((s) => s.k !== '二 · OCR 目的');
+    const first = set.steps.find((s) => s.k === '一 · 安裝工具');
+    if (first) {
+      first.k = '一 · 指示 AI 使用 PaddleOCR';
+      first.guide = '手機上不用自己安裝工具：把剛才下載的 PDF 上傳到 AI App（例如 ChatGPT，工作模式或聊天模式都可以），再請它用 PaddleOCR 辨識。';
+      first.chip = `請使用 PaddleOCR，為我 OCR 這份 PDF：「${set.pdf}」。`;
+      delete first.skip;
+    }
+  });
+  script.textContent = JSON.stringify(data);
+};
+applyMobileTryText();
+
 initPart3TryIt();
+
+/* ---------------------------------------------------------------------------
+   選用的 AI Model：手機版兩頁垂直模型卡
+   桌面版維持六欄比較表；手機版先顯示 Claude／GPT，再用第一張卡的箭頭
+   切換至 DeepSeek／Gemini。
+   --------------------------------------------------------------------------- */
+const initPart3ModelMobile = () => {
+  const table = document.querySelector('#part-3-model .part3-model-table');
+  if (!table) return;
+  const buttons = [...table.querySelectorAll('[data-model-mobile-next]')];
+  if (!buttons.length) return;
+  let page = 'primary';
+  const setPage = (next) => {
+    page = next;
+    table.dataset.mobilePage = page;
+    buttons.forEach((button) => {
+      const secondary = page === 'secondary';
+      button.textContent = secondary ? '←' : '→';
+      button.setAttribute('aria-label', secondary
+        ? '返回 Claude Opus 和 GPT（5.6）'
+        : '查看 DeepSeek Flash／Pro 和 Gemini Flash');
+    });
+  };
+  buttons.forEach((button) => button.addEventListener('click', () => {
+    setPage(page === 'primary' ? 'secondary' : 'primary');
+  }));
+  setPage(page);
+};
+initPart3ModelMobile();
 
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
@@ -2670,9 +2816,10 @@ activateFromLocation();
    - 分頁只保留「平台簡介」與「運用平台研究其他問題」可以點擊，其餘（主頁、
      平台介面、平台運作流程）維持看得見但不能點。
    - 一進入頁面就直接跳到第三部分「步驟二 · OCR 並結構化原始史料」。
-   - 步驟二之前（適合的研究問題／所需的工具與資源／重用平台的基本流程）與
-     步驟八之後（後續功能：LLM Wiki）的內容維持在畫面上，但變淡、不能點擊，
-     並標示「尚在開發中」。
+   - 只留步驟二・OCR並結構化原始史料完全開放；步驟二之前（適合的研究問題／
+     所需的工具與資源／重用平台的基本流程）、步驟三至五・運用AI抽取資訊、
+     以及步驟八之後（後續功能：LLM Wiki）的內容維持在畫面上，但變淡、
+     不能點擊，並標示「尚在開發中」。
    分享給老師的連結範例：storymap-example.html?preview=ocr */
 (() => {
   const params = new URLSearchParams(window.location.search);
@@ -2680,19 +2827,29 @@ activateFromLocation();
 
   document.documentElement.classList.add('is-ocr-preview');
 
+  /* 鎖住分頁：用 cloneNode 把整個節點換掉，藉此清掉原本 tabs.forEach
+     （在檔案最前面）已經掛在這個節點上的 click 監聽器——同一個節點上的
+     監聽器是照註冊順序依序觸發，不分 capture／bubble，光是在這裡另外
+     addEventListener 沒辦法搶在原本的監聽器之前執行 preventDefault，
+     所以單純呼叫 preventDefault 攔不住原本那個監聽器已經呼叫的
+     setActiveTab()，分頁還是會切換過去。換成全新節點就不會有這個問題。 */
   const lockLink = (el, label) => {
-    if (!el) return;
-    el.classList.add('is-preview-locked-tab');
-    el.setAttribute('aria-disabled', 'true');
-    el.title = label;
-    el.addEventListener('click', (event) => { event.preventDefault(); });
+    if (!el) return null;
+    const clone = el.cloneNode(true);
+    el.replaceWith(clone);
+    clone.classList.add('is-preview-locked-tab');
+    clone.setAttribute('aria-disabled', 'true');
+    clone.title = label;
+    clone.addEventListener('click', (event) => { event.preventDefault(); });
+    return clone;
   };
   const lockLabel = '這個草稿預覽只開放「平台簡介」與「運用平台研究其他問題」兩個部分';
   lockLink(document.querySelector('.brand'), lockLabel);
   const LOCKED_TAB_TARGETS = ['cover', 'part-1', 'part-2'];
   tabs.forEach((tab) => {
-    if (LOCKED_TAB_TARGETS.includes(tab.dataset.navTarget)) lockLink(tab, lockLabel);
-    if (tab.dataset.navTarget === 'part-3') {
+    if (LOCKED_TAB_TARGETS.includes(tab.dataset.navTarget)) {
+      lockLink(tab, lockLabel);
+    } else if (tab.dataset.navTarget === 'part-3') {
       /* 就算之後再點一次「運用平台研究其他問題」，也固定回到步驟二，
          不要停在步驟二之前那些已變淡鎖住的內容最上面。 */
       tab.addEventListener('click', () => {
@@ -2701,7 +2858,12 @@ activateFromLocation();
     }
   });
 
-  const LOCKED_SECTION_IDS = ['part-3-research-questions', 'part-3-tools', 'part-3-basic-flow', 'part-3-wiki'];
+  /* 只留步驟二完全開放；步驟二之前的三個小節、步驟三至五（#part-3-ai）、
+     以及步驟八之後（#part-3-wiki）都變淡鎖住。 */
+  const LOCKED_SECTION_IDS = [
+    'part-3-research-questions', 'part-3-tools', 'part-3-basic-flow',
+    'part-3-ai', 'part-3-wiki'
+  ];
   LOCKED_SECTION_IDS.forEach((id) => {
     const el = document.getElementById(id);
     if (!el) return;
@@ -2717,3 +2879,325 @@ activateFromLocation();
   /* 不論網址原本帶什麼 hash，教師預覽一律直接跳到步驟二。 */
   setActiveTab('part-3', { updateHash: false, scrollTarget: '#part-3-ocr' });
 })();
+
+/* ---------------------------------------------------------------------------
+   手機版：史料抽屜（7 辨識印刷字 / 8 辨識手寫字 / 11 試一試）
+   桌面版完全不動：只是把原本的史料欄 .part3-fx-doc 包進一層 <aside class="mdrawer">，
+   而該 aside 在桌面版是 display:contents（外框不存在），史料欄仍是 grid 的直接子元素。
+   手機版（≤820px）才由 CSS 把 aside 變成從左邊拉出的固定抽屜。
+   因為 aside 仍在 explorer root 之內，既有程式碼的 root.querySelector(...) 全部照舊有效。
+   --------------------------------------------------------------------------- */
+const initMobileDocDrawers = () => {
+  /* 全站同時只允許一個抽屜打開：打開新的之前先把其他的關掉，
+     避免兩個 fixed 抽屜疊在一起、關掉上面那個之後下面還留著。 */
+  const closers = [];
+  const IC = {
+    prev: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg>',
+    next: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg>',
+    ex:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-8 8M3 21l8-8"/></svg>',
+    sh:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9h-6V3M3 15h6v6M15 9l6-6M9 15l-6 6"/></svg>',
+    cl:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg>',
+    grip: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg>'
+  };
+
+  /* 只有 7／8 用抽屜。11 試一試在手機版把 PDF 直接放進視窗裡，
+     由下面的 initMobileTryLayout() 處理，不需要抽屜。 */
+  document.querySelectorAll('#part-3-printed-explorer, #part-3-handwritten-explorer')
+    .forEach((root) => {
+      const doc = root.querySelector('.part3-fx-doc');
+      const panel = root.querySelector('[data-part3-fx-out]') || root.querySelector('.part3-try-panel');
+      if (!doc || !panel || doc.closest('.mdrawer')) return;
+
+      /* 1. 把史料欄包進抽屜外框（桌面版 display:contents，等於沒有這層） */
+      const drawer = document.createElement('aside');
+      drawer.className = 'mdrawer';
+      drawer.setAttribute('aria-label', '史料圖');
+      doc.parentNode.insertBefore(drawer, doc);
+      const bar = document.createElement('div');
+      bar.className = 'mdrawer-bar';
+      bar.innerHTML = '<span class="mdrawer-no"></span><span class="t"></span>';
+      drawer.appendChild(bar);
+      drawer.appendChild(doc);
+      drawer.insertAdjacentHTML('beforeend', `
+        <div class="mdrawer-edge l">上一頁</div>
+        <div class="mdrawer-edge r">下一頁</div>
+        <div class="mdrawer-foot">
+          <button type="button" data-m-prev aria-label="上一個特徵">${IC.prev}</button>
+          <button type="button" data-m-next aria-label="下一個特徵">${IC.next}</button>
+          <button type="button" data-m-full aria-label="整頁／縮小">${IC.ex}</button>
+          <button type="button" data-m-close aria-label="收起">${IC.cl}</button>
+        </div>
+        <button type="button" class="mdrawer-grip" data-m-grip aria-label="調整寬度">${IC.grip}</button>`);
+
+      /* 2. 拉手與遮罩（固定在視窗上，只有捲到這一節時才出現） */
+      const puller = document.createElement('button');
+      puller.type = 'button';
+      puller.className = 'mdrawer-puller';
+      puller.setAttribute('aria-label', '拉出史料圖');
+      puller.innerHTML = '<span class="arw">›</span><span class="lab">史料</span>';
+      const scrim = document.createElement('div');
+      scrim.className = 'mdrawer-scrim';
+      root.appendChild(scrim);
+      root.appendChild(puller);
+
+      const titleEl = bar.querySelector('.t');
+      const noEl = bar.querySelector('.mdrawer-no');
+      const edgeL = drawer.querySelector('.mdrawer-edge.l');
+      const edgeR = drawer.querySelector('.mdrawer-edge.r');
+      const fullBtn = drawer.querySelector('[data-m-full]');
+      const grip = drawer.querySelector('[data-m-grip]');
+      let zoom = 1;
+      const setZoom = (z) => { zoom = Math.max(1, Math.min(4, z)); drawer.style.setProperty('--z', zoom); };
+
+      /* 3. 版面特徵：沿用既有的標籤按鈕，另外在面板上方做一排膠囊按鈕。
+            點膠囊 = 點原本的標籤，所有既有邏輯（換圖、逐字播放）完全不改。 */
+      /* 重要：既有的 buildTags() 每次 render 都會把 tagHost.innerHTML 清空重建，
+         所以絕對不能把標籤節點存起來重複使用——存下來的會立刻變成脫離 DOM 的
+         舊節點，膠囊點了沒反應、狀態也同步不到。一律每次現查。 */
+      const tagHost = root.querySelector('[data-part3-fx-tags]');
+      const liveTags = () => (tagHost ? [...tagHost.querySelectorAll('.part3-fx-tag')] : []);
+      const tags = liveTags();
+      let chips = [];
+      if (tags.length) {
+        const filter = document.createElement('div');
+        filter.className = 'mfilter';
+        filter.innerHTML = '<span class="mfilter-lab">選擇版面特徵</span><div class="mfilter-row"></div>';
+        const row = filter.querySelector('.mfilter-row');
+        tags.forEach((tag, i) => {
+          const chip = document.createElement('button');
+          chip.type = 'button';
+          chip.className = 'mchip';
+          chip.textContent = tag.textContent;
+          chip.addEventListener('click', () => {
+            const live = liveTags()[i];
+            if (live) live.click();
+          });
+          row.appendChild(chip);
+          chips.push(chip);
+        });
+        panel.insertBefore(filter, panel.firstChild);
+      }
+
+      /* 標籤的 is-active 由既有程式碼維護；照著同步膠囊與抽屜標題。 */
+      const syncFromTags = () => {
+        const live = liveTags();
+        const i = live.findIndex((t) => t.classList.contains('is-active'));
+        chips.forEach((c, n) => c.setAttribute('aria-pressed', String(n === i)));
+        if (i >= 0 && live[i]) {
+          noEl.textContent = String(i + 1);
+          titleEl.textContent = live[i].textContent;
+          if (chips[i]) chips[i].scrollIntoView({ block: 'nearest', inline: 'center', behavior: 'smooth' });
+          setZoom(1);
+        }
+      };
+      if (tags.length) {
+        syncFromTags();
+        /* 觀察 tagHost 本身（childList），才抓得到「整批重建」；
+           subtree+attributes 則抓得到 is-active 的切換。 */
+        new MutationObserver(syncFromTags).observe(tagHost, {
+          childList: true, subtree: true, attributes: true, attributeFilter: ['class']
+        });
+      } else {
+        /* 11 試一試：沒有特徵標籤，抽屜標題就用頁碼指示器 */
+        const ind = root.querySelector('[data-try-ind]');
+        const syncTry = () => { titleEl.textContent = (ind && ind.textContent) || '史料'; };
+        syncTry();
+        if (ind) new MutationObserver(syncTry).observe(ind, { childList: true, characterData: true, subtree: true });
+      }
+
+      /* 4. 開關、展開、縮放、換特徵 */
+      const setOpen = (on) => {
+        if (on) closers.forEach((fn) => fn !== setOpen && fn(false));
+        drawer.classList.toggle('is-open', on);
+        scrim.classList.toggle('is-on', on);
+        puller.setAttribute('aria-expanded', String(on));
+      };
+      closers.push(setOpen);
+      puller.addEventListener('click', () => setOpen(true));
+      scrim.addEventListener('click', () => setOpen(false));
+      drawer.querySelector('[data-m-close]').addEventListener('click', () => setOpen(false));
+      fullBtn.addEventListener('click', () => {
+        const full = drawer.classList.toggle('is-full');
+        fullBtn.innerHTML = full ? IC.sh : IC.ex;
+        setZoom(1);
+      });
+
+      const stepFeature = (dir) => {
+        if (!tags.length) {
+          /* 11 試一試沒有特徵，方向鍵改為翻頁 */
+          const btn = root.querySelector(dir > 0 ? '[data-try-next]' : '[data-try-prev]');
+          if (btn) btn.click();
+          return;
+        }
+        const live = liveTags();
+        if (!live.length) return;
+        const i = live.findIndex((t) => t.classList.contains('is-active'));
+        live[((i < 0 ? 0 : i) + dir + live.length) % live.length].click();
+      };
+      drawer.querySelector('[data-m-prev]').addEventListener('click', () => stepFeature(-1));
+      drawer.querySelector('[data-m-next]').addEventListener('click', () => stepFeature(1));
+
+      /* 5. 右邊界拖動調整寬度 */
+      let rs = null;
+      grip.addEventListener('pointerdown', (e) => {
+        e.preventDefault(); e.stopPropagation();
+        rs = { x: e.clientX, w: drawer.getBoundingClientRect().width };
+        drawer.classList.add('is-resizing');
+        grip.setPointerCapture(e.pointerId);
+      });
+      grip.addEventListener('pointermove', (e) => {
+        if (!rs) return;
+        const w = Math.max(150, Math.min(window.innerWidth, rs.w + (e.clientX - rs.x)));
+        drawer.style.setProperty('--mdrawer-w', w + 'px');
+      });
+      const endRs = () => { if (rs) { drawer.classList.remove('is-resizing'); rs = null; } };
+      grip.addEventListener('pointerup', endRs);
+      grip.addEventListener('pointercancel', endRs);
+
+      /* 6. 圖片水平拖動；拖到底再拖 → 換頁。雙指／雙擊縮放（只縮放 PDF） */
+      const pageBtns = {
+        prev: root.querySelector('[data-part3-fx-prev]') || root.querySelector('[data-try-prev]'),
+        next: root.querySelector('[data-part3-fx-next]') || root.querySelector('[data-try-next]')
+      };
+      let drag = null, over = 0, lastTap = 0;
+      const pts = new Map();
+      let pinch = null;
+      doc.addEventListener('pointerdown', (e) => {
+        pts.set(e.pointerId, e);
+        if (pts.size === 2) {
+          const [a, b] = [...pts.values()];
+          pinch = { d: Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY), z: zoom };
+          drag = null;
+          return;
+        }
+        drag = { x: e.clientX, sl: doc.scrollLeft }; over = 0;
+      });
+      doc.addEventListener('pointermove', (e) => {
+        if (pts.has(e.pointerId)) pts.set(e.pointerId, e);
+        if (pinch && pts.size === 2) {
+          const [a, b] = [...pts.values()];
+          setZoom(pinch.z * (Math.hypot(a.clientX - b.clientX, a.clientY - b.clientY) / pinch.d));
+          return;
+        }
+        if (!drag) return;
+        const max = doc.scrollWidth - doc.clientWidth;
+        const t = drag.sl - (e.clientX - drag.x);
+        doc.scrollLeft = Math.max(0, Math.min(max, t));
+        over = t < 0 ? t : (t > max ? t - max : 0);
+        edgeL.classList.toggle('is-on', over < -52);
+        edgeR.classList.toggle('is-on', over > 52);
+      });
+      const endDrag = (e) => {
+        pts.delete(e.pointerId);
+        if (pts.size < 2) pinch = null;
+        if (!drag) return;
+        if (over > 52 && pageBtns.next) pageBtns.next.click();
+        else if (over < -52 && pageBtns.prev) pageBtns.prev.click();
+        edgeL.classList.remove('is-on'); edgeR.classList.remove('is-on');
+        drag = null; over = 0;
+      };
+      doc.addEventListener('pointerup', endDrag);
+      doc.addEventListener('pointercancel', endDrag);
+      doc.addEventListener('click', () => {
+        const now = Date.now();
+        if (drawer.classList.contains('is-full') && now - lastTap < 320) setZoom(zoom > 1 ? 1 : 2);
+        lastTap = now;
+      });
+      doc.addEventListener('wheel', (e) => {
+        if (!drawer.classList.contains('is-full')) return;
+        if (e.ctrlKey || e.metaKey) { e.preventDefault(); setZoom(zoom - e.deltaY * 0.004); }
+      }, { passive: false });
+
+      /* 7. 只有捲到這一節時才顯示拉手 */
+      if ('IntersectionObserver' in window) {
+        new IntersectionObserver((entries) => {
+          entries.forEach((en) => {
+            root.classList.toggle('is-inview', en.isIntersecting);
+            puller.classList.toggle('is-on', en.isIntersecting);
+            if (!en.isIntersecting) setOpen(false);
+          });
+        }, { rootMargin: '-10% 0px -10% 0px' }).observe(root);
+      } else {
+        root.classList.add('is-inview');
+        puller.classList.add('is-on');
+      }
+      /* Esc 或按到遮罩以外的情況也要關得掉 */
+      document.addEventListener('keydown', (e) => { if (e.key === 'Escape') setOpen(false); });
+    });
+};
+initMobileDocDrawers();
+
+
+/* ---------------------------------------------------------------------------
+   手機版：試一試（11）
+   桌面版是左右並排（史料｜闖關面板）。手機版改成「整節剛好一個螢幕高」，
+   由上而下：進度列 → 視窗 → 引導對話框；只有視窗內部會捲動。
+   視窗內容依階段切換：
+     第一步（下載）   PDF ＋ 底部一條細長列（檔名／下載／已下載）
+     第二步（作答中） 只顯示 PDF（跟著題目換標示圖），不再逐句堆疊已答的 prompt
+     第二步（完成）   改顯示累積的全部 prompt，可複製
+     第三步（比對）   顯示比對區
+   作法：把既有的史料欄與 stage 一起搬進一個新的 .mtry-win 外框；
+   兩者都是穩定節點（stage 只有內容會被重繪，元素本身不變），搬動不影響既有邏輯。
+   桌面版會把它們搬回原位，維持原本的 grid。
+   --------------------------------------------------------------------------- */
+const initMobileTryLayout = () => {
+  const root = document.getElementById('part-3-try-explorer');
+  if (!root) return;
+  const doc = root.querySelector('.part3-try-doc');
+  const scroll = root.querySelector('.part3-try-scroll');
+  const todo = root.querySelector('[data-try-todo]');
+  const stage = root.querySelector('[data-try-stage]');
+  if (!doc || !scroll || !stage) return;
+
+  const win = document.createElement('div');
+  win.className = 'mtry-win';
+  const bar = document.createElement('div');
+  bar.className = 'mtry-winbar';
+  bar.innerHTML = '<span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl"></span>';
+  const titleEl = bar.querySelector('.ttl');
+
+  let mobile = null;
+  const toMobile = () => {
+    if (mobile === true) return;
+    mobile = true;
+    win.appendChild(bar);
+    win.appendChild(doc);
+    win.appendChild(stage);
+    scroll.appendChild(win);
+    syncState();
+  };
+  const toDesktop = () => {
+    if (mobile === false) return;
+    mobile = false;
+    root.insertBefore(doc, root.firstChild);   /* 史料欄回到 grid 第一欄 */
+    scroll.appendChild(stage);                  /* stage 回到面板內 */
+    if (win.parentNode) win.remove();
+    root.classList.remove('is-mtry-p1', 'is-mtry-steps', 'is-mtry-overview', 'is-mtry-p3');
+  };
+
+  /* 由 stage 內容判斷目前階段，設定 root 上的狀態 class 與視窗標題 */
+  const syncState = () => {
+    if (mobile !== true) return;
+    const has = (s) => !!stage.querySelector(s);
+    let state, title;
+    if (has('[data-try-dl]')) { state = 'is-mtry-p1'; title = '第一步 · 下載史料'; }
+    else if (has('[data-try-cmp]')) { state = 'is-mtry-p3'; title = '第三步 · 比較 OCR 結果'; }
+    else if (has('.part3-try-chat.is-final')) { state = 'is-mtry-overview'; title = '第二步 · 完成的 Prompt'; }
+    else if (has('[data-try-chat]')) { state = 'is-mtry-steps'; title = '第二步 · 撰寫給 Agentic AI 的 Prompt'; }
+    else { state = 'is-mtry-steps'; title = '第二步 · 撰寫給 Agentic AI 的 Prompt'; }
+    ['is-mtry-p1', 'is-mtry-steps', 'is-mtry-overview', 'is-mtry-p3']
+      .forEach((cl) => root.classList.toggle(cl, cl === state));
+    titleEl.textContent = title;
+  };
+  new MutationObserver(syncState).observe(stage, {
+    childList: true, subtree: true, attributes: true, attributeFilter: ['class']
+  });
+
+  const mq = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
+  const apply = () => (mq.matches ? toMobile() : toDesktop());
+  apply();
+  if (mq.addEventListener) mq.addEventListener('change', apply);
+  else mq.addListener(apply);
+};
+initMobileTryLayout();
