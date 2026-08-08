@@ -10307,3 +10307,19 @@ Verified:
 
 Remaining:
 - 尚未 git commit；t-preview 尚未同步。
+
+### 2026-08-08 16:22 HKT — Codex — Refresh mobile photo-gallery scroll behavior
+
+Summary:
+- Confirmed the latest commit's mobile and narrow-computer photo gallery behavior: the image and collapsed title row appear first; scrolling down expands the information panel when its top reaches 56% of the viewport height, leaving space before the midpoint; scrolling back up collapses it after the 66% reset buffer.
+- Bumped the StoryMap CSS/JS cache key so the preview loads the current behavior after reload.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed; `git diff --check` passed.
+- Browser reload was blocked for the local `file://` page by the browser safety policy, so no new visual browser verification was recorded.
+
+Remaining:
+- Reload the local preview normally and check one mobile width and one narrow desktop width.
