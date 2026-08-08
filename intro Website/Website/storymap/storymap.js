@@ -969,22 +969,96 @@ const initPart3ToolsChecklist = () => {
     const views = [...workbench.querySelectorAll('[data-part3-tool-info]')];
     if (!rows.length || !views.length) return;
 
+    // 手機版／窄螢幕：工具清單隱藏後改用的左右箭頭、頁碼、勾選章
+    // （桌面版沒有這些元素時，下面的查詢會拿到 null，直接安全跳過）。
+    const mnav = workbench.querySelector('[data-part3-tools-mnav]');
+    const mPrev = mnav && mnav.querySelector('[data-part3-tools-nav="prev"]');
+    const mNext = mnav && mnav.querySelector('[data-part3-tools-nav="next"]');
+    const mCount = mnav && mnav.querySelector('[data-part3-tools-count]');
+    const mTick = mnav && mnav.querySelector('[data-part3-tools-tick]');
+    let tickTimer = null;
+
     const selectTool = (id) => {
-      const row = rows.find((item) => item.dataset.part3ToolId === id);
+      const idx = rows.findIndex((item) => item.dataset.part3ToolId === id);
+      if (idx === -1) return;
+      const row = rows[idx];
       const view = views.find((item) => item.dataset.part3ToolInfo === id);
-      if (!row || !view) return;
+      if (!view) return;
       rows.forEach((item) => item.classList.toggle('is-active', item === row));
       views.forEach((item) => { item.hidden = item !== view; });
+
+      if (mCount) mCount.textContent = `${idx + 1} / ${rows.length}`;
+      if (mPrev) mPrev.disabled = idx === 0;
+      if (mNext) mNext.disabled = idx === rows.length - 1;
+      if (mTick) {
+        // 每次換到新工具都重播一次「空白 → 打勾」的效果，而不是維持已勾狀態
+        mTick.classList.remove('is-ticked');
+        if (tickTimer) window.clearTimeout(tickTimer);
+        // eslint-disable-next-line no-void
+        void mTick.offsetWidth;
+        tickTimer = window.setTimeout(() => mTick.classList.add('is-ticked'), 220);
+      }
     };
 
     rows.forEach((row) => {
       row.addEventListener('change', () => selectTool(row.dataset.part3ToolId));
       row.addEventListener('click', () => selectTool(row.dataset.part3ToolId));
     });
+
+    if (mPrev) mPrev.addEventListener('click', () => {
+      const idx = rows.findIndex((item) => item.classList.contains('is-active'));
+      if (idx > 0) selectTool(rows[idx - 1].dataset.part3ToolId);
+    });
+    if (mNext) mNext.addEventListener('click', () => {
+      const idx = rows.findIndex((item) => item.classList.contains('is-active'));
+      if (idx < rows.length - 1) selectTool(rows[idx + 1].dataset.part3ToolId);
+    });
+
     selectTool(rows[0].dataset.part3ToolId);
   });
 };
 initPart3ToolsChecklist();
+
+/* ---------------------------------------------------------------------------
+   手機版／窄螢幕：「重用平台的基本流程」8 個步驟排成 2 欄「展開紙盒」版面。
+   桌面版維持原本的橫向雪佛龍樣式（見 storymap.css），這裡只負責在手機版
+   進場時依序播放掀開動畫，並提供一顆「重播展開效果」按鈕。
+   --------------------------------------------------------------------------- */
+const initPart3MobileFlowUnfold = () => {
+  document.querySelectorAll('.part3-flow-chev').forEach((chev) => {
+    const items = [...chev.querySelectorAll('.part3-flow-step')];
+    if (!items.length) return;
+    const frame = chev.closest('.part3-flow-frame');
+    const replayBtn = frame && frame.querySelector('[data-part3-flow-replay]');
+
+    let played = false;
+    const play = () => {
+      items.forEach((el) => el.classList.remove('is-shown'));
+      let t = 100;
+      items.forEach((el, idx) => {
+        window.setTimeout(() => el.classList.add('is-shown'), t);
+        t += 260 + (idx === 3 ? 200 : 0); // 第 4 格之後多停一拍，再開始右欄
+      });
+    };
+
+    if (replayBtn) replayBtn.addEventListener('click', play);
+
+    if (typeof IntersectionObserver === 'function') {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && PHOTO_GALLERY_MOBILE_MQ.matches && !played) {
+            played = true;
+            play();
+          }
+        });
+      }, { threshold: .35 });
+      io.observe(chev);
+    } else if (PHOTO_GALLERY_MOBILE_MQ.matches) {
+      play();
+    }
+  });
+};
+initPart3MobileFlowUnfold();
 
 /* ---------------------------------------------------------------------------
    版面特徵探索器（7 辨識印刷字 / 8 辨識手寫字）
@@ -1206,6 +1280,10 @@ const initPart3FeatureExplorers = () => {
         const f = features[cur];
         const selectedImage = f && (f.page || 0) === page && f.image ? f.image : pages[page];
         img.src = selectedImage;
+        /* 讓 storymap-cards.css 可以針對「目前顯示的是哪一張圖」個別調整
+           手機版抽屜裡的位置與放大倍數，例如
+           [data-fx-visual="辨識印刷字Label/文本資訊.png"] { --fxdoc-scale: 1.6; } */
+        img.dataset.fxVisual = selectedImage;
         img.alt = f && (f.page || 0) === page && f.image ? `${f.title}：人工標示頁面` : '印刷本奏摺頁面';
         indEl.textContent = `頁 ${page + 1} / ${pages.length}`;
 

@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>試一試 手機版原型</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#163d3f;--text:#3c5754;--paper:#f4efe6;--card:#fffaf2;--line:rgba(22,61,63,.18);
+--muted:#6d756f;--accent:#c45d38;--yellow:#f3c967;--ok:#2e7d5b;--bar-h:44px;
+--serif:"Noto Serif TC",Georgia,serif;--sans:Inter,ui-sans-serif,system-ui,"PingFang TC",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#e7e2d8;font-family:var(--sans);color:var(--ink);padding:24px 16px 50px;
+ display:flex;flex-direction:column;align-items:center;gap:16px}
+.note{max-width:860px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+.note h1{margin:0 0 10px;font:600 21px/1.3 var(--serif)}
+.note p{margin:0 0 8px;font-size:13.5px;line-height:1.8;color:var(--text)}
+.note ul{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.9;color:var(--text)}
+.note code{background:#f0ece2;padding:1px 5px;border-radius:4px;font-size:12.5px}
+.phone{width:390px;height:844px;border:10px solid #1d1d1f;border-radius:44px;overflow:hidden;
+ position:relative;background:var(--paper);box-shadow:0 24px 60px rgba(22,61,63,.28)}
+
+/* ===== 移植用：試一試手機版 ===== */
+.mtop{height:var(--bar-h);display:flex;align-items:center;justify-content:space-between;
+ padding:0 15px;background:#12363a;color:#f7f3ea}
+.mtop .brand{font:600 12px var(--serif);letter-spacing:.05em}
+.mtop .burger{width:20px;height:13px;display:flex;flex-direction:column;justify-content:space-between}
+.mtop .burger i{display:block;height:1.5px;background:rgba(247,243,234,.8)}
+
+/* 整節剛好一個螢幕高（扣掉頂欄），內部自己分配，不整頁捲動 */
+.try{height:calc(100% - var(--bar-h));display:flex;flex-direction:column;
+ padding:10px clamp(12px,4vw,16px) calc(10px + env(safe-area-inset-bottom));gap:9px}
+
+.try-prog{flex:0 0 auto;display:flex;align-items:center;gap:6px}
+.try-prog .cap{font:600 10px var(--sans);color:var(--muted);letter-spacing:.1em;margin-right:2px}
+.try-dot{width:19px;height:19px;border-radius:50%;display:grid;place-items:center;flex:0 0 auto;
+ font:700 10px var(--sans);background:rgba(22,61,63,.09);color:rgba(22,61,63,.38)}
+.try-dot.is-done{background:var(--ok);color:#fff}
+.try-dot.is-cur{background:rgba(46,125,91,.15);border:2px solid var(--ok);color:var(--ok)}
+.try-switch{margin-left:auto;display:inline-flex;gap:2px;padding:2px;background:rgba(22,61,63,.07);border-radius:999px}
+.try-switch button{appearance:none;border:0;cursor:pointer;background:transparent;border-radius:999px;
+ padding:4px 9px;font:700 11px var(--sans);color:var(--muted)}
+.try-switch button.on{background:#fff;color:var(--ink);box-shadow:0 1px 4px rgba(22,61,63,.16)}
+
+/* 視窗：佔滿剩下的高度 */
+.try-win{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;
+ border:1px solid var(--line);border-radius:12px;overflow:hidden;background:var(--card)}
+.try-winbar{flex:0 0 auto;display:flex;align-items:center;gap:6px;padding:8px 11px;
+ background:#e9e4da;border-bottom:1px solid var(--line)}
+.try-winbar .dot{width:8px;height:8px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.try-winbar .ttl{margin-left:5px;font:700 11.5px var(--sans);color:#4d5a58}
+
+/* 視窗內容：PDF（下載階段與作答階段都顯示） */
+.try-body{flex:1 1 auto;min-height:0;position:relative;display:flex;align-items:center;
+ justify-content:center;background:#123336;padding:8px}
+.try-body img{max-width:100%;max-height:100%;width:auto;height:auto;object-fit:contain;
+ border-radius:3px;box-shadow:0 6px 18px rgba(0,0,0,.3)}
+.try-pagenav{position:absolute;left:0;right:0;bottom:6px;display:flex;align-items:center;
+ justify-content:center;gap:10px}
+.try-pagenav button{appearance:none;cursor:pointer;width:26px;height:26px;border-radius:50%;
+ border:1px solid rgba(247,243,234,.4);background:rgba(12,30,32,.5);color:#f4efe6;font-size:12px}
+.try-pagenav button:disabled{opacity:.3}
+.try-pagenav .ind{font:600 11px var(--sans);color:rgba(244,239,230,.8)}
+
+/* 下載階段：視窗底部細長列 */
+.try-dlbar{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:7px 10px;
+ background:#fff;border-top:1px solid var(--line)}
+.try-dlbar .nm{flex:1 1 auto;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;
+ font:600 11px var(--sans);color:var(--ink)}
+.try-dlbar button{flex:0 0 auto;appearance:none;cursor:pointer;border:0;border-radius:7px;
+ padding:6px 13px;font:700 11.5px var(--sans);background:var(--ink);color:var(--card)}
+.try-dlbar button.ghost{background:transparent;color:var(--ink);border:1px solid var(--ink)}
+
+/* 總覽階段：所有 prompt */
+.try-bubbles{flex:1 1 auto;min-height:0;overflow-y:auto;padding:11px;background:#f0efed;
+ display:flex;flex-direction:column;gap:8px}
+.try-bub{align-self:flex-end;max-width:88%;background:#e0e0e0;border-radius:12px 12px 3px 12px;
+ padding:8px 11px;font:400 12.5px/1.7 var(--sans);color:var(--ink)}
+.try-copy{flex:0 0 auto;display:flex;gap:8px;padding:8px 10px;background:#fff;border-top:1px solid var(--line)}
+.try-copy button{flex:1 1 auto;appearance:none;cursor:pointer;border:0;border-radius:8px;padding:9px;
+ font:700 12px var(--sans);background:var(--ink);color:var(--card)}
+
+/* 比對階段 */
+.try-cmp{flex:1 1 auto;min-height:0;display:flex;flex-direction:column;gap:8px;padding:10px;background:#fff}
+.try-cmp .lab{font:700 10px var(--sans);color:var(--muted);letter-spacing:.06em}
+.try-cmp .box{flex:1 1 0;min-height:0;overflow:auto;border:1px solid var(--line);border-radius:8px;
+ padding:8px 10px;font:12px/1.75 ui-monospace,Menlo,monospace;white-space:pre-wrap;word-break:break-all}
+.try-cmp .box.mine{background:#fffdf8}
+
+/* 引導對話框：固定在最下面，像手機遊戲的對話框 */
+.try-guide{flex:0 0 auto;max-height:46%;overflow-y:auto;position:relative;
+ padding:13px 15px 15px;border:2px solid #6f9a90;border-radius:8px;
+ background:linear-gradient(160deg,#12363a,#1b464a);color:#eef4f0;
+ box-shadow:inset 0 0 0 2px rgba(18,54,58,.9),0 8px 20px rgba(18,54,58,.22)}
+.try-guide .k{display:block;margin-bottom:6px;font:700 10px var(--sans);letter-spacing:.13em;color:var(--yellow)}
+.try-guide .t{display:block;font:400 13.5px/1.8 var(--serif)}
+.try-opts{margin-top:11px;padding-top:10px;border-top:1px dashed rgba(111,154,144,.5)}
+.try-chip{appearance:none;cursor:pointer;display:block;width:100%;text-align:left;margin-bottom:6px;
+ border:1.5px dashed var(--yellow);border-radius:9px;padding:9px 13px;background:rgba(243,201,103,.1);
+ color:#fff8e6;font:700 13px/1.65 var(--sans)}
+.try-chip.skip{border:1.5px solid rgba(255,255,255,.22);background:rgba(255,255,255,.05);
+ color:rgba(255,248,230,.75)}
+.try-sentence{margin:0;font:13.5px/2.3 var(--sans);color:#eef4f0}
+.try-blank{appearance:none;cursor:pointer;border:0;border-bottom:2px solid var(--yellow);
+ background:rgba(255,255,255,.1);color:#fff;padding:3px 8px;border-radius:5px 5px 0 0;
+ font:700 13px var(--sans)}
+.try-blank option{color:var(--ink);background:#fff}
+.try-check{display:inline-flex;align-items:center;gap:5px;cursor:pointer;margin:2px 1px;
+ padding:3px 9px;border:1.5px solid rgba(255,255,255,.3);background:rgba(255,255,255,.09);
+ font:700 12.5px var(--sans);color:#fff8e6}
+.try-check.on{border-color:var(--yellow);background:rgba(243,201,103,.22)}
+.try-check .box{width:12px;height:12px;border:1.5px solid rgba(255,255,255,.5);border-radius:3px;
+ display:grid;place-items:center;font-size:9px;color:transparent}
+.try-check.on .box{background:var(--yellow);border-color:#3b2a0c;color:#3b2a0c}
+.try-choice{appearance:none;cursor:pointer;border:1.5px solid rgba(255,255,255,.3);border-radius:9px;
+ padding:9px 18px;margin-right:7px;background:rgba(255,255,255,.09);color:#fff8e6;font:700 13px var(--sans)}
+.try-choice.ok{border-color:#7fe0b3;background:rgba(127,224,179,.22)}
+.try-choice.bad{border-color:#ff9f95;background:rgba(255,159,149,.22)}
+.try-free{width:100%;min-height:56px;border-radius:8px;border:1px solid rgba(255,255,255,.2);
+ background:rgba(255,255,255,.08);color:#fff;padding:8px 10px;font:12.5px/1.7 var(--sans);resize:vertical}
+.try-go{appearance:none;cursor:pointer;margin-top:9px;border:0;border-radius:8px;padding:9px 17px;
+ background:var(--yellow);color:#3b2a0c;font:700 12.5px var(--sans)}
+.try-go:disabled{background:rgba(255,255,255,.12);color:rgba(255,255,255,.4)}
+</style>
+</head>
+<body>
+<div class="note">
+  <h1>試一試 手機版原型</h1>
+  <p><b>裝置偵測</b>：可以，不必只靠寬度。最可靠的純 CSS 寫法是
+     <code>@media (pointer: coarse) and (hover: none)</code>——判斷「主要輸入是手指、而且沒有滑鼠指標」，
+     這是手機／平板才會成立的組合，桌機把視窗縮窄並不會觸發。JS 端還有
+     <code>navigator.userAgentData.mobile</code>（Chromium 系）與 <code>navigator.maxTouchPoints</code> 可交叉驗證。</p>
+  <p>但兩種訊號都不完美：外接鍵盤與觸控板的 iPad 會回報 <code>pointer: fine</code>；觸控螢幕筆電則可能兩者皆有。
+     所以建議<b>兩個條件取聯集</b>：<code>(pointer: coarse) and (hover: none), (max-width: 1040px)</code>——
+     真手機一定進手機版，桌機縮窄視窗也還是能看，不會卡住。</p>
+  <ul>
+    <li><b>整節剛好一個螢幕高</b>（扣掉頂欄），進度列與對話框固定，只有視窗內部捲動。</li>
+    <li><b>下載階段</b>：PDF 直接放進「撰寫 Prompt」視窗裡，底部一條細長列放檔名與下載鈕，PDF 自動縮放到視窗大小。</li>
+    <li><b>作答階段</b>：視窗<b>持續顯示 PDF</b>（並跟著題目切換標示圖），不再逐句堆疊已答的 prompt。</li>
+    <li><b>最後總覽</b>時才把累積的 prompt 一次列出來，可複製。</li>
+  </ul>
+</div>
+
+<div class="phone">
+  <div class="mtop"><span class="brand">清代奏摺與上諭分析平台</span><span class="burger"><i></i><i></i><i></i></span></div>
+  <div class="try">
+    <div class="try-prog">
+      <span class="cap">進度</span><span id="dots" style="display:flex;gap:5px"></span>
+      <span class="try-switch"><button class="on">印刷字</button><button>手寫字</button></span>
+    </div>
+    <div class="try-win">
+      <div class="try-winbar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span>
+        <span class="ttl" id="wintitle">二步 · 撰寫給 Agentic AI 的 Prompt</span></div>
+      <div id="winbody"></div>
+    </div>
+    <div class="try-guide" id="guide"></div>
+  </div>
+</div>
+
+<script>
+const D = {
+    "assetDir": "試一試/印刷字/",
+    "pages": [
+        "page1.png",
+        "page2.png"
+    ],
+    "features": {
+        "info": {
+            "page": 0,
+            "image": "文本資訊.png",
+            "colour": "#cfe0ef",
+            "box": {
+                "left": "70%",
+                "top": "9%",
+                "width": "24%",
+                "height": "28%"
+            }
+        },
+        "column": {
+            "page": 0,
+            "image": "直排單欄.png",
+            "colour": "#cfe3d4",
+            "box": {
+                "left": "12%",
+                "top": "20%",
+                "width": "56%",
+                "height": "62%"
+            }
+        },
+        "para": {
+            "page": 0,
+            "image": "分段.png",
+            "colour": "#f5e6bd",
+            "box": {
+                "left": "14%",
+                "top": "44%",
+                "width": "50%",
+                "height": "26%"
+            }
+        },
+        "punctuation": {
+            "page": 0,
+            "image": "標點.png",
+            "colour": "#f3bdd4",
+            "box": {
+                "left": "10%",
+                "top": "20%",
+                "width": "60%",
+                "height": "62%"
+            }
+        },
+        "signoff": {
+            "page": 1,
+            "image": "尾批.png",
+            "colour": "#d3e5e2",
+            "box": {
+                "left": "14%",
+                "top": "70%",
+                "width": "60%",
+                "height": "20%"
+            }
+        },
+        "page": {
+            "page": 0,
+            "image": "頁數.png",
+            "colour": "#ddd6ea",
+            "box": {
+                "left": "6%",
+                "top": "88%",
+                "width": "14%",
+                "height": "7%"
+            }
+        }
+    },
+    "pdf": "為請酌籌加調官兵協力進剿事_印刷字.pdf",
+    "steps": [
+        {
+            "kind": "advance",
+            "k": "撰寫 Prompt",
+            "guide": "現在，開始撰寫給 Agentic AI 的 OCR prompt。"
+        },
+        {
+            "kind": "chip",
+            "k": "一 · 安裝工具",
+            "guide": "先讓 Agentic AI 在你的電腦下載PaddleOCR的工具。",
+            "chip": "請在我的電腦下載 PaddleOCR。",
+            "skip": "已下載"
+        },
+        {
+            "kind": "mc",
+            "k": "3.1 閱讀順序",
+            "feature": "column",
+            "guide": "這份史料的閱讀順序是什麼？",
+            "before": "按照",
+            "after": "、由上至下的順序輸出文本。",
+            "options": [
+                "由右至左",
+                "由左至右",
+                "由下至上"
+            ],
+            "answer": "由右至左"
+        },
+        {
+            "kind": "multi",
+            "inline": true,
+            "k": "3.2 文本資訊",
+            "feature": "info",
+            "guide": "正文前的這些資料，屬於正文嗎？",
+            "before": "辨識正文前的文本資訊：",
+            "after": "，並輸出為獨立的 data。",
+            "items": [
+                "史料來源",
+                "標題",
+                "作者",
+                "日期"
+            ]
+        },
+        {
+            "kind": "choice",
+            "k": "3.6 頁碼",
+            "feature": "page",
+            "guide": "應否保留頁碼？",
+            "before": "辨識每一頁角落的頁碼，",
+            "after": "於獨立欄位，不要納入正文。",
+            "options": [
+                "保留",
+                "不保留"
+            ],
+            "answer": "保留"
+        },
+        {
+            "kind": "free",
+            "k": "4.7 你自己的要求",
+            "guide": "還有其他想要求嗎？ ",
+            "placeholder": ""
+        }
+    ],
+    "total": 19
+};
+const BASE = "";
+const steps = D.steps;
+let phase = 1, cur = 0, page = 0, answers = [];
+
+const $ = (id)=>document.getElementById(id);
+const winbody=$("winbody"), guide=$("guide"), dots=$("dots"), wintitle=$("wintitle");
+
+function pdfHtml(featKey){
+  const f = featKey ? D.features[featKey] : null;
+  const src = D.assetDir + (f ? f.image : D.pages[page]);
+  const p = f ? f.page : page;
+  return `<div class="try-body">
+      <img src="${src}" alt="史料">
+      <div class="try-pagenav">
+        <button ${p===0?"disabled":""} data-pg="-1">←</button>
+        <span class="ind">頁 ${p+1} / ${D.pages.length}</span>
+        <button ${p>=D.pages.length-1?"disabled":""} data-pg="1">→</button>
+      </div>
+    </div>`;
+}
+function wirePage(){
+  winbody.querySelectorAll("[data-pg]").forEach(b=>b.addEventListener("click",()=>{
+    page=Math.max(0,Math.min(D.pages.length-1,page+ +b.dataset.pg)); render();
+  }));
+}
+function renderDots(){
+  dots.innerHTML="";
+  [1,2,3].forEach(n=>{
+    const s=document.createElement("span");
+    s.className="try-dot "+(phase>n?"is-done":phase===n?"is-cur":"");
+    s.textContent=n; dots.appendChild(s);
+  });
+}
+function guideBox(kicker,text,optsHtml){
+  guide.innerHTML=`<span class="k">${kicker}</span><span class="t">${text}</span>`+
+    (optsHtml?`<div class="try-opts">${optsHtml}</div>`:"");
+}
+
+function render(){
+  renderDots();
+  /* --- 第一步：下載，PDF 就在視窗裡，底下一條細長列 --- */
+  if(phase===1){
+    wintitle.textContent="一步 · 下載史料";
+    winbody.outerHTML=`<div id="winbody" style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column">
+      ${pdfHtml(null)}
+      <div class="try-dlbar">
+        <span class="nm">${D.pdf}</span>
+        <button class="ghost" data-skip>已下載</button>
+        <button data-dl>下載</button>
+      </div></div>`;
+    const wb=$("winbody"); wirePageIn(wb);
+    wb.querySelector("[data-dl]").onclick=()=>{phase=2;cur=0;render();};
+    wb.querySelector("[data-skip]").onclick=()=>{phase=2;cur=0;render();};
+    guideBox("第一步","先把這份史料下載到你的電腦。");
+    return;
+  }
+  /* --- 第二步：作答，視窗持續顯示 PDF --- */
+  if(phase===2 && cur<steps.length){
+    wintitle.textContent="二步 · 撰寫給 Agentic AI 的 Prompt";
+    const s=steps[cur];
+    winbody.outerHTML=`<div id="winbody" style="flex:1 1 auto;min-height:0;display:flex">${pdfHtml(s.feature)}</div>`;
+    wirePageIn($("winbody"));
+    renderStep(s);
+    return;
+  }
+  /* --- 總覽：這時才列出全部 prompt --- */
+  if(phase===2){
+    wintitle.textContent="二步 · 完成的 Prompt";
+    winbody.outerHTML=`<div id="winbody" style="flex:1 1 auto;min-height:0;display:flex;flex-direction:column">
+      <div class="try-bubbles">${answers.map(a=>`<div class="try-bub">${a}</div>`).join("")}</div>
+      <div class="try-copy"><button data-copy>複製全部</button><button data-next style="background:var(--accent)">下一步：比對</button></div>
+    </div>`;
+    const wb=$("winbody");
+    wb.querySelector("[data-copy]").onclick=(e)=>{navigator.clipboard?.writeText(answers.join("\n"));e.target.textContent="已複製";};
+    wb.querySelector("[data-next]").onclick=()=>{phase=3;render();};
+    guideBox("完成","以上就是給 Agentic AI 的 OCR prompt。可以複製後貼給 AI 執行。");
+    return;
+  }
+  /* --- 第三步：比對 --- */
+  wintitle.textContent="三步 · 比較 OCR 結果";
+  winbody.outerHTML=`<div id="winbody" style="flex:1 1 auto;min-height:0;display:flex">
+    <div class="try-cmp">
+      <span class="lab">參考 OCR 結果</span><div class="box">{ "source": "《明清臺灣檔案彙編》第30冊", "title": "為請酌籌加調官兵協力進剿事", ... }</div>
+      <span class="lab">你的 OCR 結果（可直接修改）</span><div class="box mine" contenteditable="true">把 AI 的輸出貼在這裡</div>
+    </div></div>`;
+  guideBox("第三步","把 AI 完成的 OCR 結果貼到下面的框，與參考結果比對。");
+}
+function wirePageIn(wb){
+  wb.querySelectorAll("[data-pg]").forEach(b=>b.addEventListener("click",()=>{
+    page=Math.max(0,Math.min(D.pages.length-1,page+ +b.dataset.pg)); render();
+  }));
+}
+function next(text){ if(text) answers.push(text); cur++; render(); }
+
+function renderStep(s){
+  if(s.kind==="advance"){
+    guideBox(s.k,s.guide,`<button class="try-chip" data-go>繼續 →</button>`);
+    guide.querySelector("[data-go]").onclick=()=>next(null);
+  }
+  else if(s.kind==="chip"){
+    guideBox(s.k,s.guide,
+      `<button class="try-chip" data-go>${s.chip}</button>`+
+      (s.skip?`<button class="try-chip skip" data-skip>${s.skip}</button>`:""));
+    guide.querySelector("[data-go]").onclick=()=>next(s.chip);
+    if(s.skip) guide.querySelector("[data-skip]").onclick=()=>next(null);
+  }
+  else if(s.kind==="mc"){
+    const opts=[...s.options].sort(()=>Math.random()-.5);
+    guideBox(s.k,s.guide,
+      `<p class="try-sentence">${s.before}<select class="try-blank" data-sel>
+        <option value="">　？　</option>${opts.map(o=>`<option>${o}</option>`).join("")}
+      </select>${s.after}</p><button class="try-go" data-go disabled>加入 prompt</button>`);
+    const sel=guide.querySelector("[data-sel]"), go=guide.querySelector("[data-go]");
+    sel.onchange=()=>{go.disabled=!sel.value};
+    go.onclick=()=>{ if(sel.value!==s.answer){sel.style.borderBottomColor="#ff9f95";return;}
+      next(s.before+sel.value+s.after); };
+  }
+  else if(s.kind==="multi"){
+    guideBox(s.k,s.guide,
+      `<p class="try-sentence">${s.before}${s.items.map(it=>
+        `<label class="try-check" data-it="${it}"><span class="box">✓</span>${it}</label>`).join("")}${s.after}</p>
+       <button class="try-go" data-go disabled>完成，加入 prompt</button>`);
+    const go=guide.querySelector("[data-go]"); const picked=new Set();
+    guide.querySelectorAll("[data-it]").forEach(l=>l.onclick=()=>{
+      const k=l.dataset.it; picked.has(k)?picked.delete(k):picked.add(k);
+      l.classList.toggle("on",picked.has(k)); go.disabled=picked.size!==s.items.length;
+    });
+    go.onclick=()=>next(s.before+s.items.join("、")+s.after);
+  }
+  else if(s.kind==="choice"){
+    guideBox(s.k,s.guide,s.options.map(o=>`<button class="try-choice" data-o="${o}">${o}</button>`).join(""));
+    guide.querySelectorAll("[data-o]").forEach(b=>b.onclick=()=>{
+      if(b.dataset.o!==s.answer){b.classList.add("bad");return;}
+      b.classList.add("ok"); setTimeout(()=>next(s.before+s.answer+s.after),260);
+    });
+  }
+  else if(s.kind==="free"){
+    guideBox(s.k,s.guide,`<textarea class="try-free" data-free placeholder="${s.placeholder||"例如：信心低於 0.9 的字請標記出來。"}"></textarea>
+      <button class="try-go" data-go>完成</button>`);
+    guide.querySelector("[data-go]").onclick=()=>{
+      const v=guide.querySelector("[data-free]").value.trim(); next(v||null);
+    };
+  }
+}
+render();
+</script>
+</body>
+</html>

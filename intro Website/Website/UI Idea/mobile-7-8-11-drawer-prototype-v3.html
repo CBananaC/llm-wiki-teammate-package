@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>手機版原型 v3 — 側拉抽屜</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#163d3f;--text:#3c5754;--paper:#f4efe6;--line:rgba(22,61,63,.18);--muted:#6d756f;--accent:#c45d38;--yellow:#f3c967;
+--serif:"Noto Serif TC",Georgia,serif;--sans:Inter,ui-sans-serif,system-ui,"PingFang TC",sans-serif}
+*{box-sizing:border-box}
+body{margin:0;background:#e7e2d8;font-family:var(--sans);color:var(--ink);padding:26px 16px 60px;display:flex;flex-direction:column;align-items:center;gap:18px}
+.note{max-width:820px;background:#fff;border:1px solid var(--line);border-radius:12px;padding:18px 22px}
+.note h1{margin:0 0 10px;font:600 22px/1.3 var(--serif)}
+.note p{margin:0 0 8px;font-size:13.5px;line-height:1.8;color:var(--text)}
+.note ul{margin:8px 0 0;padding-left:20px;font-size:13.5px;line-height:1.9;color:var(--text)}
+.phone{width:390px;height:844px;border:10px solid #1d1d1f;border-radius:44px;overflow:hidden;position:relative;background:var(--paper);box-shadow:0 24px 60px rgba(22,61,63,.28)}
+.phone-scroll{position:absolute;inset:0;overflow-y:auto;overflow-x:hidden}
+
+/* ===== 移植用樣式 ===== */
+.mtop{position:sticky;top:0;z-index:30;display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#12363a;color:#f7f3ea}
+.mtop .brand{font:600 12.5px var(--serif);letter-spacing:.06em}
+.mtop .burger{width:22px;height:14px;display:flex;flex-direction:column;justify-content:space-between}
+.mtop .burger i{display:block;height:1.5px;background:rgba(247,243,234,.8)}
+.mcard{padding:22px 18px 0}
+.mcard .title-row{display:flex;align-items:center;gap:11px;margin-bottom:12px}
+.mcard .num{flex:0 0 auto;width:34px;height:34px;display:grid;place-items:center;background:linear-gradient(150deg,#1d4a4d,#2c6360);color:#fff;font:800 15px var(--sans)}
+.mcard h2{margin:0;font:500 26px/1.2 var(--serif);letter-spacing:-.02em}
+.mcard p{margin:0;color:var(--text);font:400 14.5px/1.9 var(--serif)}
+.mfilter{position:sticky;top:44px;z-index:20;margin-top:18px;padding:10px 0 11px;background:linear-gradient(var(--paper) 78%,rgba(244,239,230,0))}
+.mfilter-lab{display:block;padding:0 18px 8px;color:var(--muted);font:700 10.5px var(--sans);letter-spacing:.14em}
+.mfilter-row{display:flex;gap:8px;overflow-x:auto;padding:2px 18px 4px;scrollbar-width:none}
+.mfilter-row::-webkit-scrollbar{display:none}
+.mchip{flex:0 0 auto;appearance:none;cursor:pointer;border:1px solid var(--line);background:#fff;color:var(--text);border-radius:999px;padding:8px 15px;font:600 13px var(--sans);white-space:nowrap;transition:.16s}
+.mchip[aria-pressed="true"]{background:var(--ink);border-color:var(--ink);color:#fff;box-shadow:0 4px 12px rgba(22,61,63,.22)}
+.mpanel{padding:4px 18px 40px;display:flex;flex-direction:column}
+.mfeat{padding:16px 17px;background:#fffdf8;border:1px solid var(--line);border-radius:12px}
+.mfeat h3{margin:0 0 9px;font:700 18px var(--serif)}
+.mfeat p{margin:0;color:#31484a;font:400 14.5px/1.9 var(--serif)}
+.marrow{display:grid;place-items:center;height:24px;color:var(--accent);font-size:17px}
+.mwin{border-radius:13px;overflow:hidden;border:1px solid rgba(255,255,255,.08);background:#1e1e1e}
+.mwin-bar{display:flex;align-items:center;gap:7px;padding:9px 12px;background:#2b2b2b}
+.mwin-bar .dot{width:8px;height:8px;border-radius:50%}
+.dot.r{background:#ff5f57}.dot.y{background:#febc2e}.dot.g{background:#28c840}
+.mwin-bar .ttl{margin-left:7px;color:rgba(255,255,255,.72);font:700 11px var(--sans)}
+.mwin-body{padding:13px 14px;color:#d4d4d4;white-space:pre-wrap;word-break:break-word;font:12.5px/1.75 "SF Mono",ui-monospace,Menlo,monospace;max-height:230px;overflow:auto}
+.mwin-body .kw{color:#c586c0}.mwin-body .fn{color:#dcdcaa}.mwin-body .str{color:#ce9178}
+.mwin-body .num{color:#b5cea8}.mwin-body .cmt{color:#6a9955}
+.mwin-body .jkey{color:#9cdcfe}.mwin-body .jstr{color:#ce9178}
+.mchat{border-radius:13px;overflow:hidden;background:#f0efed;border:1px solid rgba(22,61,63,.16)}
+.mchat .mwin-bar{background:#e4e3e0}.mchat .mwin-bar .ttl{color:#575654}
+.mchat-body{padding:13px 14px}
+.mchat-input{background:#fff;border:1px solid rgba(22,61,63,.14);border-radius:14px;padding:13px 14px 10px}
+.mchat-text{color:var(--ink);white-space:pre-wrap;font:400 14px/1.75 var(--sans)}
+.mchat-row{display:flex;align-items:center;gap:12px;margin-top:12px;color:#8a8987;font-size:13px}
+.mchat-send{margin-left:auto;width:26px;height:26px;border-radius:50%;background:#d7d7d5;display:grid;place-items:center;color:#4a4a48;font-size:13px}
+
+.mpuller{position:absolute;left:0;top:72%;transform:translateY(-50%);z-index:40;appearance:none;cursor:pointer;border:0;padding:0;
+ width:30px;height:118px;border-radius:0 13px 13px 0;background:linear-gradient(160deg,#1d4a4d,#2c6360);color:#fff;
+ box-shadow:4px 6px 18px rgba(22,61,63,.32);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px}
+.mpuller .lab{writing-mode:vertical-rl;font:700 12px var(--sans);letter-spacing:.16em}
+.mpuller .arw{font-size:12px;color:var(--yellow)}
+.mscrim{position:absolute;inset:0;z-index:45;background:rgba(12,30,32,.5);opacity:0;pointer-events:none;transition:opacity .28s}
+.mscrim.is-on{opacity:1;pointer-events:auto}
+
+/* 抽屜：預設只比四顆按鈕寬一點 */
+.mdoc{position:absolute;left:0;top:0;bottom:0;z-index:50;width:var(--mdoc-w,172px);
+ transform:translateX(-101%);transition:transform .3s cubic-bezier(.4,0,.2,1);
+ background:linear-gradient(160deg,#123336,#1c4a4a);display:flex;flex-direction:column;box-shadow:0 0 34px rgba(12,30,32,.45)}
+.mdoc.is-open{transform:translateX(0)}
+.mdoc.is-resizing{transition:none}
+.mdoc.is-full{width:100%!important}
+.mdoc-bar{flex:0 0 auto;display:flex;align-items:center;gap:9px;padding:12px 12px 9px}
+.mdoc-no{flex:0 0 auto;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;
+ background:var(--yellow);color:#3b2a0c;font:800 13px var(--sans)}
+.mdoc-bar .t{color:#fff;font:700 19px/1.3 var(--serif)}
+.mdoc-view{flex:1 1 auto;min-height:0;overflow:auto;padding:8px;touch-action:pan-y;cursor:grab;
+ display:flex;align-items:center;justify-content:center}
+.mdoc-view:active{cursor:grabbing}
+.mdoc-view img{display:block;height:100%;width:auto;max-width:none;margin:auto;border-radius:4px;
+ box-shadow:0 8px 22px rgba(0,0,0,.3);pointer-events:none;user-select:none}
+/* 展開：置中、可單獨縮放 PDF */
+.mdoc.is-full .mdoc-view{padding:14px}
+.mdoc.is-full .mdoc-view img{width:calc(var(--z,1) * 100%);height:auto}
+.mdoc-edge{position:absolute;top:50%;transform:translateY(-50%);z-index:5;padding:8px 6px;border-radius:8px;
+ background:rgba(243,201,103,.92);color:#3b2a0c;font:800 11px/1.35 var(--sans);writing-mode:vertical-rl;
+ letter-spacing:.1em;opacity:0;transition:opacity .15s;pointer-events:none}
+.mdoc-edge.l{left:6px}.mdoc-edge.r{right:6px}.mdoc-edge.is-on{opacity:1}
+/* 右邊界中間的寬度調整鈕 */
+.mdoc-grip{position:absolute;right:-13px;top:50%;transform:translateY(-50%);z-index:55;
+ appearance:none;cursor:ew-resize;border:0;padding:0;width:26px;height:52px;border-radius:8px;
+ background:linear-gradient(160deg,#1d4a4d,#2c6360);color:rgba(247,243,234,.85);
+ display:grid;place-items:center;box-shadow:3px 3px 12px rgba(12,30,32,.4);touch-action:none}
+.mdoc-grip svg{width:15px;height:15px}
+.mdoc.is-full .mdoc-grip{display:none}
+/* 底部：四顆鈕貼在一起、置中 */
+.mdoc-foot{flex:0 0 auto;display:flex;align-items:center;justify-content:center;gap:0;padding:9px 6px;border-top:1px solid rgba(255,255,255,.14)}
+.mdoc-foot button{appearance:none;cursor:pointer;width:34px;height:34px;border-radius:0;border:1px solid rgba(247,243,234,.3);
+ border-right-width:0;background:transparent;color:#f4efe6;display:grid;place-items:center;padding:0}
+.mdoc-foot button:first-child{border-radius:8px 0 0 8px}
+.mdoc-foot button:last-child{border-radius:0 8px 8px 0;border-right-width:1px}
+.mdoc-foot button svg{width:16px;height:16px}
+.mdoc-zoom{display:none;position:absolute;left:50%;bottom:56px;transform:translateX(-50%);z-index:6;gap:0}
+.mdoc.is-full .mdoc-zoom{display:flex}
+.mdoc-zoom button{appearance:none;cursor:pointer;width:38px;height:34px;border:1px solid rgba(247,243,234,.3);border-right-width:0;
+ background:rgba(12,30,32,.72);color:#f4efe6;font:700 17px var(--sans);display:grid;place-items:center}
+.mdoc-zoom button:first-child{border-radius:8px 0 0 8px}
+.mdoc-zoom button:last-child{border-radius:0 8px 8px 0;border-right-width:1px}
+</style>
+</head>
+<body>
+<div class="note">
+  <h1>手機版原型 v3（側拉版）</h1>
+  <p>仍是獨立原型；同一套規則我已同步套用到正式網站的 7、8、11。</p>
+  <ul>
+    <li>抽屜標題左邊加上<b>數字圓圈</b>（第幾個特徵）。</li>
+    <li>底部四顆鈕<b>連在一起、置中</b>，中間的頁碼圓點已移除。</li>
+    <li>預設寬度縮到 <b>172px</b>（比四顆鈕寬一點）；右邊界中間有<b>調整鈕</b>可左右拖動改寬度。</li>
+    <li>展開後 PDF <b>置中</b>，並可用左下角的 <b>＋／−</b>（或雙指、雙擊）單獨縮放 PDF，不會連整個網頁一起放大。</li>
+  </ul>
+</div>
+
+<div class="phone">
+  <div class="phone-scroll">
+    <div class="mtop"><span class="brand">清代奏摺與上諭分析平台</span><span class="burger"><i></i><i></i><i></i></span></div>
+    <div class="mcard">
+      <div class="title-row"><span class="num">7</span><h2>辨識印刷字</h2></div>
+      <p>印刷字的字形較為統一，因此較容易進行 OCR。然而，研究者仍需檢視史料的版面和格式，確認需要保留的結構，再要求 Agentic AI 撰寫相應的 Python OCR 規則。</p>
+    </div>
+    <div class="mfilter"><span class="mfilter-lab">選擇版面特徵</span><div class="mfilter-row" data-chips></div></div>
+    <div class="mpanel">
+      <div class="mfeat"><h3 data-t></h3><p data-d></p></div>
+      <div class="marrow">↓</div>
+      <div class="mchat">
+        <div class="mwin-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="ttl">AI Prompt</span></div>
+        <div class="mchat-body"><div class="mchat-input"><div class="mchat-text" data-p></div>
+          <div class="mchat-row"><span>＋</span><span>☺</span><span>5.6 ▾</span><span class="mchat-send">↑</span></div></div></div>
+      </div>
+      <div class="marrow">↓</div>
+      <div class="mwin"><div class="mwin-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="ttl">AI 生成的 Python 代碼</span></div><div class="mwin-body" data-py></div></div>
+      <div class="marrow">↓</div>
+      <div class="mwin"><div class="mwin-bar"><span class="dot r"></span><span class="dot y"></span><span class="dot g"></span><span class="ttl">OCR 的輸出結果</span></div><div class="mwin-body" data-json></div></div>
+    </div>
+  </div>
+
+  <button class="mpuller" data-open aria-label="拉出史料圖"><span class="arw">›</span><span class="lab">史料</span></button>
+  <div class="mscrim" data-scrim></div>
+
+  <aside class="mdoc" data-doc aria-label="史料圖">
+    <div class="mdoc-bar"><span class="mdoc-no" data-no></span><span class="t" data-doc-title></span></div>
+    <div class="mdoc-view" data-view><img data-img alt="史料頁面"></div>
+    <div class="mdoc-edge l" data-edge-l>上一頁</div>
+    <div class="mdoc-edge r" data-edge-r>下一頁</div>
+    <div class="mdoc-zoom"><button data-zout aria-label="縮小">−</button><button data-zin aria-label="放大">＋</button></div>
+    <div class="mdoc-foot">
+      <button data-prev aria-label="上一個特徵"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 5l-7 7 7 7"/></svg></button>
+      <button data-next aria-label="下一個特徵"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 5l7 7-7 7"/></svg></button>
+      <button data-full aria-label="整頁／縮小"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-8 8M3 21l8-8"/></svg></button>
+      <button data-close aria-label="收起"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6L6 18"/></svg></button>
+    </div>
+    <button class="mdoc-grip" data-grip aria-label="調整寬度"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M9 6v12M15 6v12"/></svg></button>
+  </aside>
+</div>
+
+<script>
+const DATA={
+      "pages": [
+            "ocr-zhu25-printed-1-enhanced.png",
+            "ocr-zhu25-printed-2-enhanced.png"
+      ],
+      "features": [
+            {
+                  "key": "text-info",
+                  "page": 0,
+                  "image": "辨識印刷字Label/文本資訊.png",
+                  "colour": "#8fcfe0",
+                  "tag": {
+                        "right": "-132px",
+                        "top": "14%"
+                  },
+                  "title": "文本資訊",
+                  "desc": "圖為《明清臺灣檔案彙編》的書影。每篇文本正文前均列有文本的資料，包括資料來源、標題、作者和日期。這些資料是後續檢索和分析的重要依據，因此應進行 OCR 辨識，並輸出為結構化的資料。",
+                  "prompt": "辨識正文前的文本資訊：史料來源、標題、作者、日期，\n並把這四項資料輸出為結構化的資料。\n不要把文本資訊混入正文當中。",
+                  "py": "<span class=\"cmt\"># 先抽取文本資訊，再處理正文</span>\nheader = <span class=\"fn\">extract_header</span>(result)\ndoc = {\n    <span class=\"str\">\"source\"</span>: <span class=\"str\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n    <span class=\"str\">\"title\"</span>:  header[<span class=\"str\">\"title\"</span>],\n    <span class=\"str\">\"author\"</span>: header[<span class=\"str\">\"author\"</span>],\n    <span class=\"str\">\"date\"</span>:   header[<span class=\"str\">\"date\"</span>],\n}",
+                  "json": "{\n  <span class=\"jkey\">\"source\"</span>: <span class=\"jstr\">\"《明清臺灣檔案彙編》第30冊\"</span>,\n  <span class=\"jkey\">\"title\"</span>: <span class=\"jstr\">\"為奏彰化失陷已調兵赴臺事\"</span>,\n  <span class=\"jkey\">\"author\"</span>: <span class=\"jstr\">\"福建水師提督 黃仕簡\"</span>,\n  <span class=\"jkey\">\"date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>\n}"
+            },
+            {
+                  "key": "single-column",
+                  "page": 0,
+                  "image": "辨識印刷字Label/直排單欄.png",
+                  "colour": "#82adef",
+                  "tag": {
+                        "right": "-132px",
+                        "top": "36%"
+                  },
+                  "title": "直排單欄",
+                  "desc": "《明清臺灣檔案彙編》採用單欄印刷，閱讀方向由右至左、由上至下。OCR 必須按此順序輸出文字，而非由左至右的閱讀方式。",
+                  "prompt": "按照由右至左、由上至下的順序輸出文本。",
+                  "py": "<span class=\"cmt\"># 單欄印刷：由右至左、由上至下排序</span>\nregions = <span class=\"fn\">sorted</span>(\n    data[<span class=\"str\">\"raw_regions\"</span>],\n    key=<span class=\"kw\">lambda</span> r: (-r[<span class=\"str\">\"box\"</span>][<span class=\"num\">0</span>], r[<span class=\"str\">\"box\"</span>][<span class=\"num\">1</span>])\n)",
+                  "json": "{\n  <span class=\"jkey\">\"layout\"</span>: <span class=\"jstr\">\"single_column\"</span>,\n  <span class=\"jkey\">\"reading_order\"</span>: <span class=\"jstr\">\"right_to_left_top_to_bottom\"</span>,\n  <span class=\"jkey\">\"column_count\"</span>: <span class=\"jnum\">1</span>,\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。……\"</span>\n}"
+            },
+            {
+                  "key": "paragraphs",
+                  "page": 0,
+                  "image": "辨識印刷字Label/分段.png",
+                  "colour": "#8e77dd",
+                  "tag": {
+                        "right": "-132px",
+                        "top": "58%"
+                  },
+                  "title": "分段",
+                  "desc": "《明清臺灣檔案彙編》以縮排分隔段落。OCR 時需要辨認縮排，保留每段完整內容，不要合併不同段落。",
+                  "prompt": "請辨認段首縮排，以縮排區分段落，\n保留每段完整內容，\n不要因一般換行而錯誤切斷段落。",
+                  "py": "<span class=\"cmt\"># 以縮排辨識段落，不把每個直欄誤切成新段落</span>\nparagraphs = <span class=\"fn\">split_paragraphs_by_indent</span>(\n    reading_order_regions,\n    indent_tolerance=<span class=\"num\">12</span>\n)\nbody = <span class=\"str\">\"\\n\\n\"</span>.<span class=\"fn\">join</span>(paragraphs)",
+                  "json": "{\n  <span class=\"jkey\">\"paragraph_break\"</span>: <span class=\"jstr\">\"indentation\"</span>,\n  <span class=\"jkey\">\"paragraph_count\"</span>: <span class=\"jnum\">2</span>,\n  <span class=\"jkey\">\"printed_pages\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>],\n  <span class=\"jkey\">\"paragraphs\"</span>: [\n    {<span class=\"jkey\">\"paragraph_number\"</span>: <span class=\"jnum\">1</span>, <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>},\n    {<span class=\"jkey\">\"paragraph_number\"</span>: <span class=\"jnum\">2</span>, <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣水師海壇閩安烽火各鎮協營，立就近省營分續調官兵北路援剿。奴才直由鹿耳門郡城南路進兵，會督夾攻。……\"</span>}\n  ]\n}"
+            },
+            {
+                  "key": "page",
+                  "page": 0,
+                  "image": "辨識印刷字Label/頁碼.png",
+                  "colour": "#bd70de",
+                  "tag": {
+                        "right": "-132px",
+                        "top": "90%"
+                  },
+                  "title": "頁碼",
+                  "desc": "頁碼位於頁面右下角。為方便日後引用與查考，每一頁、每一份奏摺的頁碼都要 OCR，並以結構化的形式保存。",
+                  "prompt": "請辨識每一頁右下角的頁碼，\n並儲存於獨立欄位，不要納入正文。",
+                  "py": "<span class=\"cmt\"># 擷取所有頁碼，與正文分開保存</span>\npage_numbers = []\n<span class=\"kw\">for</span> page_result <span class=\"kw\">in</span> pages:\n    number = <span class=\"fn\">match_page_number</span>(page_result, corner=<span class=\"str\">\"bottom_right\"</span>)\n    page_numbers.<span class=\"fn\">append</span>(number)\ndoc[<span class=\"str\">\"printed_page_numbers\"</span>] = page_numbers",
+                  "json": "{\n  <span class=\"jkey\">\"page\"</span>: <span class=\"jnum\">80</span>,\n  <span class=\"jkey\">\"printed_page_numbers\"</span>: [<span class=\"jnum\">80</span>, <span class=\"jnum\">81</span>],\n  <span class=\"jkey\">\"page_in_body\"</span>: <span class=\"jstr\">\"removed\"</span>\n}"
+            },
+            {
+                  "key": "mark",
+                  "page": 0,
+                  "image": "辨識印刷字Label/標題符號.png",
+                  "colour": "#d980a0",
+                  "tag": {
+                        "left": "-124px",
+                        "top": "5%"
+                  },
+                  "title": "標題符號",
+                  "desc": "這份 PDF 的標點符號清晰可見，容易辨識。然而，其他PDF的標點符號可能會比較模糊，影響 OCR 結果。因此，完成 OCR 後，研究者應人工核對標點符號，或要求 AI 協助檢查標點。",
+                  "prompt": "保留所有的標點符號，\n標記模糊或低辨識信心的標點，供後續檢查。",
+                  "py": "<span class=\"cmt\"># 標題符號清晰度不固定：保留後續檢查標記</span>\nsymbol = <span class=\"fn\">detect_title_mark</span>(image)\nreview_needed = symbol.confidence &lt; <span class=\"num\">0.90</span>\ndoc[<span class=\"str\">\"title_mark\"</span>] = {\n    <span class=\"str\">\"present\"</span>: symbol.found,\n    <span class=\"str\">\"confidence\"</span>: <span class=\"fn\">round</span>(symbol.confidence, <span class=\"num\">3</span>),\n    <span class=\"str\">\"review_needed\"</span>: review_needed\n}",
+                  "json": "{\n  <span class=\"jkey\">\"title_mark\"</span>: {\n    <span class=\"jkey\">\"present\"</span>: <span class=\"jstr\">\"true\"</span>,\n    <span class=\"jkey\">\"clarity\"</span>: <span class=\"jstr\">\"clear_in_this_pdf\"</span>,\n    <span class=\"jkey\">\"review_needed\"</span>: <span class=\"jstr\">\"manual_or_ai_check\"</span>\n  },\n  <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治乃該匪等竟膽敢聚眾攻陷城池。……\"</span>\n}"
+            },
+            {
+                  "key": "inline-zhu",
+                  "page": 1,
+                  "image": "辨識印刷字Label/夾批.png",
+                  "colour": "#e6ada4",
+                  "tag": {
+                        "left": "-132px",
+                        "top": "38%"
+                  },
+                  "title": "夾批",
+                  "desc": "正文內有小字夾註的皇帝硃批「仍以調養為要，勿過勞」。應保留硃批的原文和位置，並在輸出的結果中明確標記為皇帝的硃批。",
+                  "prompt": "正文中（硃批：）內的小字是皇帝的硃批。\n保留這些文字，並標記為皇帝的硃批，\n不要將其視為官員的原文。",
+                  "py": "<span class=\"cmt\"># 小字夾批另存為皇帝硃批，不併入官員正文</span>\ninline_zhu = <span class=\"fn\">find_inline_annotation</span>(\n    text, pattern=<span class=\"str\">\"仍以調養為要\"</span>\n)\ndoc[<span class=\"str\">\"zhu\"</span>] = {\n    <span class=\"str\">\"text\"</span>: inline_zhu.text,\n    <span class=\"str\">\"type\"</span>: <span class=\"str\">\"emperor_rescript\"</span>\n}\nbody = <span class=\"fn\">remove_annotation</span>(text, inline_zhu)",
+                  "json": "{\n  <span class=\"jkey\">\"zhu\"</span>: {\n    <span class=\"jkey\">\"text\"</span>: <span class=\"jstr\">\"仍以調養為要，勿過勞\"</span>,\n    <span class=\"jkey\">\"type\"</span>: <span class=\"jstr\">\"emperor_rescript\"</span>,\n    <span class=\"jkey\">\"in_original_body\"</span>: <span class=\"jstr\">\"false\"</span>\n  }\n}"
+            },
+            {
+                  "key": "tail-zhu",
+                  "page": 1,
+                  "image": "辨識印刷字Label/落款與尾批.png",
+                  "colour": "#dfc484",
+                  "tag": {
+                        "left": "-132px",
+                        "top": "60%"
+                  },
+                  "title": "落款與尾批",
+                  "desc": "正文後有兩行日期，第一行是官員上奏的日期，另一行是皇帝硃批的日期與尾批。在輸出的結果中，兩者都應與正文分開保存，方便日後分析。",
+                  "prompt": "正文結束後有兩行日期：官員上奏日期、皇帝硃批日期，以及尾批。\n辨識並分別保存這三項資料，不要將把它們納入正文。",
+                  "py": "<span class=\"cmt\"># 落款日期、硃批日期與尾批分開抽取</span>\nfooter = <span class=\"fn\">extract_footer</span>(result)\ndoc[<span class=\"str\">\"footer\"</span>] = {\n    <span class=\"str\">\"send_date\"</span>: footer[<span class=\"str\">\"send_date\"</span>],\n    <span class=\"str\">\"zhu_date\"</span>: footer[<span class=\"str\">\"zhu_date\"</span>],\n    <span class=\"str\">\"zhu_text\"</span>: footer[<span class=\"str\">\"zhu_text\"</span>]\n}",
+                  "json": "{\n  <span class=\"jkey\">\"footer\"</span>: {\n    <span class=\"jkey\">\"send_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月初十日\"</span>,\n    <span class=\"jkey\">\"zhu_date\"</span>: <span class=\"jstr\">\"乾隆五十一年十二月二十七日\"</span>,\n    <span class=\"jkey\">\"zhu_text\"</span>: <span class=\"jstr\">\"已有旨了。欽此。\"</span>\n  },\n  <span class=\"jkey\">\"footer_in_body\"</span>: <span class=\"jstr\">\"false\"</span>\n}"
+            }
+      ]
+}, BASE="../storymap/", feats=DATA.features;
+const IC_EX=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h6v6M9 21H3v-6M21 3l-8 8M3 21l8-8"/></svg>`, IC_SH=`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><path d="M21 9h-6V3M3 15h6v6M15 9l6-6M9 15l-6 6"/></svg>`;
+const q=(n)=>document.querySelector(`[data-${n}]`);
+const chipHost=q("chips"),docEl=q("doc"),scrim=q("scrim"),view=q("view"),imgEl=q("img"),
+      edgeL=q("edge-l"),edgeR=q("edge-r"),fullBtn=q("full"),grip=q("grip");
+let cur=0, zoom=1;
+
+feats.forEach((f,i)=>{const b=document.createElement("button");b.className="mchip";b.type="button";
+ b.textContent=f.title;b.setAttribute("aria-pressed",String(i===0));b.addEventListener("click",()=>show(i));chipHost.appendChild(b);});
+
+function setZoom(z){zoom=Math.max(1,Math.min(4,z));docEl.style.setProperty("--z",zoom);}
+function show(i){
+  cur=(i+feats.length)%feats.length; const f=feats[cur];
+  [...chipHost.children].forEach((b,n)=>b.setAttribute("aria-pressed",String(n===cur)));
+  q("t").textContent=f.title; q("d").textContent=f.desc; q("p").textContent=f.prompt;
+  q("py").innerHTML=f.py; q("json").innerHTML=f.json;
+  q("doc-title").textContent=f.title; q("no").textContent=cur+1;
+  imgEl.src=BASE+(f.image||DATA.pages[f.page||0]);
+  setZoom(1);
+  requestAnimationFrame(()=>{view.scrollLeft=view.scrollWidth;});
+  chipHost.children[cur].scrollIntoView({block:"nearest",inline:"center",behavior:"smooth"});
+}
+function goPage(d){const p=(feats[cur].page||0)+d;if(p<0||p>=DATA.pages.length)return;
+ const i=feats.findIndex(f=>(f.page||0)===p); if(i>=0) show(i);}
+function setOpen(on){docEl.classList.toggle("is-open",on);scrim.classList.toggle("is-on",on);
+ if(on)requestAnimationFrame(()=>{view.scrollLeft=view.scrollWidth;});}
+q("open").addEventListener("click",()=>setOpen(true));
+q("close").addEventListener("click",()=>setOpen(false));
+scrim.addEventListener("click",()=>setOpen(false));
+fullBtn.addEventListener("click",()=>{const full=docEl.classList.toggle("is-full");
+ fullBtn.innerHTML=full?IC_SH:IC_EX; setZoom(1);});
+q("prev").addEventListener("click",()=>show(cur-1));
+q("next").addEventListener("click",()=>show(cur+1));
+q("zin").addEventListener("click",()=>setZoom(zoom+.35));
+q("zout").addEventListener("click",()=>setZoom(zoom-.35));
+
+/* 右邊界調整寬度 */
+let rs=null;
+grip.addEventListener("pointerdown",(e)=>{e.preventDefault();e.stopPropagation();
+ rs={x:e.clientX,w:docEl.getBoundingClientRect().width};docEl.classList.add("is-resizing");grip.setPointerCapture(e.pointerId);});
+grip.addEventListener("pointermove",(e)=>{if(!rs)return;
+ const host=docEl.parentElement.getBoundingClientRect();
+ const w=Math.max(150,Math.min(host.width,rs.w+(e.clientX-rs.x)));
+ docEl.style.setProperty("--mdoc-w",w+"px");});
+const endRs=()=>{if(rs){docEl.classList.remove("is-resizing");rs=null;}};
+grip.addEventListener("pointerup",endRs);grip.addEventListener("pointercancel",endRs);
+
+/* 圖片水平拖動；拖到底再拖 → 換頁。雙指縮放、雙擊縮放（展開時） */
+let drag=null,over=0,pts=new Map(),pinch=null,lastTap=0;
+view.addEventListener("pointerdown",(e)=>{pts.set(e.pointerId,e);
+ if(pts.size===2){const[a,b]=[...pts.values()];pinch={d:Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY),z:zoom};drag=null;return;}
+ drag={x:e.clientX,sl:view.scrollLeft};over=0;view.setPointerCapture(e.pointerId);});
+view.addEventListener("pointermove",(e)=>{
+ if(pts.has(e.pointerId))pts.set(e.pointerId,e);
+ if(pinch&&pts.size===2){const[a,b]=[...pts.values()];
+  setZoom(pinch.z*(Math.hypot(a.clientX-b.clientX,a.clientY-b.clientY)/pinch.d));return;}
+ if(!drag)return;
+ const max=view.scrollWidth-view.clientWidth, t=drag.sl-(e.clientX-drag.x);
+ view.scrollLeft=Math.max(0,Math.min(max,t));
+ over=t<0?t:(t>max?t-max:0);
+ edgeL.classList.toggle("is-on",over<-52&&(feats[cur].page||0)>0);
+ edgeR.classList.toggle("is-on",over>52&&(feats[cur].page||0)<DATA.pages.length-1);});
+const endDrag=(e)=>{pts.delete(e.pointerId);if(pts.size<2)pinch=null;
+ if(drag){if(over>52)goPage(1);else if(over<-52)goPage(-1);
+  edgeL.classList.remove("is-on");edgeR.classList.remove("is-on");drag=null;over=0;}};
+view.addEventListener("pointerup",endDrag);view.addEventListener("pointercancel",endDrag);
+view.addEventListener("click",()=>{const now=Date.now();
+ if(docEl.classList.contains("is-full")&&now-lastTap<320)setZoom(zoom>1?1:2);lastTap=now;});
+view.addEventListener("wheel",(e)=>{if(!docEl.classList.contains("is-full"))return;
+ if(e.ctrlKey||e.metaKey){e.preventDefault();setZoom(zoom-e.deltaY*.004);}},{passive:false});
+
+show(0);
+</script>
+</body>
+</html>

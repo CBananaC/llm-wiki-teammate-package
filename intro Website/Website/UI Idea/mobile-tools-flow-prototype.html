@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Mobile prototype · 所需的工具與資源 / 重用平台的基本流程</title>
+<style>
+  :root{
+    --ink:#12363a; --paper:#f6f1e8; --paper-deep:#e8dfd1; --card:#fffaf2;
+    --line:rgba(22,61,63,.18); --muted:#5c6f6f; --accent:#c45d38; --yellow:#e8b93a;
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;
+    --serif:Georgia,"Noto Serif TC",serif;
+    --bar-h:56px;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--paper);font-family:var(--sans);color:var(--ink);}
+  .topbar{
+    position:sticky;top:0;z-index:50;height:var(--bar-h);display:flex;align-items:center;
+    padding:0 16px;background:var(--ink);color:#f7f3ea;font:700 14px/1 var(--sans);letter-spacing:.06em;
+  }
+  .demo-note{padding:14px 16px;background:#fff3d6;border-bottom:1px solid var(--line);
+    font:13px/1.6 var(--sans);color:#6b5219;}
+  .demo-note b{color:#4a3a10;}
+  section.screen{border-bottom:10px solid var(--paper-deep);}
+  .screen-label{padding:14px 16px 0;font:800 12px/1 var(--sans);letter-spacing:.1em;color:var(--accent);
+    text-transform:uppercase;}
+
+  /* ============================================================
+     2 · 所需的工具與資源 — mobile
+     ============================================================ */
+  .mtools{
+    position:relative;
+    height:calc(100svh - var(--bar-h));
+    display:flex; flex-direction:column;
+    background:var(--card);
+    overflow:hidden;
+  }
+  .mtools-view{
+    position:relative;
+    flex:1 1 auto; min-height:0;
+    display:flex; flex-direction:column;
+  }
+  .mtools-photo{
+    position:relative;
+    flex:1 1 auto; min-height:0;
+    background:#d8cdbb;
+    overflow:hidden;
+  }
+  .mtools-photo img{ width:100%; height:100%; object-fit:cover; filter:saturate(.82) contrast(.96); display:block; }
+  .mtools-photo .ph-fallback{
+    width:100%;height:100%;display:flex;align-items:center;justify-content:center;
+    background:linear-gradient(135deg,#20494c,#3a5f5a);color:rgba(247,243,234,.5);
+    font:600 13px/1.4 var(--sans); letter-spacing:.08em;
+  }
+  /* empty (untouched) state: white empty box, no mark, no fill.
+     ticked state: box fills yellow and the ✓ pops in — this is the
+     transition that replays every time a new tool is shown. */
+  .mtools-tick{
+    position:absolute; top:14px; right:14px; z-index:2;
+    display:grid; place-items:center;
+    width:38px; height:38px;
+    background:#fffaf2; color:transparent;
+    border:1.5px solid rgba(18,54,58,.55);
+    font:800 20px/1 var(--sans);
+    box-shadow:0 6px 14px rgba(0,0,0,.18);
+    transition:background-color .28s ease, border-color .28s ease;
+  }
+  .mtools-tick .mark{
+    display:inline-block;
+    transform:scale(.3) rotate(-18deg);
+    opacity:0;
+    transition:transform .3s cubic-bezier(.34,1.56,.64,1), opacity .2s ease;
+  }
+  .mtools-tick.is-ticked{
+    background:var(--yellow); border-color:var(--ink); color:var(--ink);
+  }
+  .mtools-tick.is-ticked .mark{
+    transform:scale(1) rotate(0deg);
+    opacity:1;
+  }
+
+  .mtools-copy{
+    flex:0 0 auto;
+    padding:18px 20px 22px;
+    border-top:1px solid var(--line);
+    background:var(--card);
+  }
+  .mtools-subtitle{ margin:0 0 6px; color:var(--accent); font:800 12px/1.35 var(--sans); letter-spacing:.14em; }
+  .mtools-copy h3{ margin:0 0 10px; font:500 clamp(24px,7vw,30px)/1.15 var(--serif); letter-spacing:-.02em; }
+  .mtools-copy p{ margin:0; max-width:60ch; color:#31484a; font:400 15px/1.75 var(--serif); }
+
+  .mtools-arrow{
+    position:absolute; top:50%; transform:translateY(-50%);
+    z-index:3;
+    width:40px; height:40px;
+    display:grid; place-items:center;
+    background:rgba(18,54,58,.72);
+    color:#f7f3ea;
+    border:0; border-radius:50%;
+    font:600 18px/1 var(--sans);
+    -webkit-tap-highlight-color:transparent;
+  }
+  .mtools-arrow:active{ background:rgba(18,54,58,.92); }
+  .mtools-arrow.prev{ left:10px; }
+  .mtools-arrow.next{ right:10px; }
+  .mtools-arrow[disabled]{ opacity:.25; pointer-events:none; }
+
+  .mtools-dots{
+    position:absolute; left:0; right:0; bottom:calc(100% - 0px);
+    display:none; /* dots not needed: progress shown via title count instead */
+  }
+  .mtools-count{
+    position:absolute; left:14px; top:14px; z-index:2;
+    padding:5px 10px;
+    background:rgba(18,54,58,.72); color:#f7f3ea;
+    font:700 11px/1 var(--sans); letter-spacing:.06em;
+  }
+
+  /* ============================================================
+     3 · 重用平台的基本流程 — mobile
+     2 直欄 × 4 格「紙盒展開」版面：左欄由上至下放 1-4，
+     4 的右邊接第 5 格，然後 6、7、8 沿右欄由下往上疊上去
+     （對照「淨圖」unboxing 的概念，但不是真的立方體）。
+     進場動畫：先顯示 1，像掀開紙盒一樣往下掀出 2、3、4，
+     再往右掀出 5，最後沿右欄一格一格往上掀出 6、7、8。
+     ============================================================ */
+  .mflow{
+    position:relative;
+    height:calc(100svh - var(--bar-h));
+    display:flex; flex-direction:column;
+    background:var(--ink);
+    color:#f7f3ea;
+    overflow:hidden;
+  }
+  .mflow-head{
+    flex:0 0 auto;
+    padding:16px 20px 10px;
+    border-bottom:1px solid rgba(247,243,234,.14);
+    display:flex; align-items:center; justify-content:space-between; gap:10px;
+  }
+  .mflow-head .eyebrow{ margin:0 0 4px; font:800 11px/1 var(--sans); letter-spacing:.14em; color:var(--yellow); }
+  .mflow-head h2{ margin:0; font:500 19px/1.25 var(--serif); }
+  .mflow-replay{
+    flex:0 0 auto;
+    padding:7px 12px;
+    background:rgba(247,243,234,.1);
+    color:#f7f3ea;
+    border:1px solid rgba(247,243,234,.3);
+    font:700 12px/1 var(--sans); letter-spacing:.04em;
+  }
+  .mflow-replay:active{ background:rgba(247,243,234,.2); }
+
+  .mflow-stage{
+    position:relative;
+    flex:1 1 auto; min-height:0;
+    display:flex; align-items:center; justify-content:center;
+    padding:14px;
+    perspective:900px;
+  }
+  .mflow-grid{
+    display:grid;
+    grid-template-columns:repeat(2, 1fr);
+    grid-template-rows:repeat(4, 1fr);
+    gap:6px;
+    width:min(100%, 360px);
+    height:100%;
+    max-height:560px;
+  }
+  .mflow-box{
+    position:relative;
+    display:flex; flex-direction:column; align-items:center; justify-content:center;
+    text-align:center;
+    padding:8px 10px;
+    background:var(--paper-deep);
+    color:var(--ink);
+    border:1px solid rgba(247,243,234,.18);
+    opacity:0;
+    transform-style:preserve-3d;
+    backface-visibility:hidden;
+  }
+  .mflow-box:nth-child(odd){ background:var(--card); }
+  .mflow-box .no{ font:800 11px/1 var(--serif); color:var(--accent); letter-spacing:.06em; margin-bottom:5px; }
+  .mflow-box .label{ font:600 12.5px/1.35 var(--sans); }
+
+  /* placement: left column top-to-bottom is 1,2,3,4 ; right column
+     bottom-to-top is 5,6,7,8 (5 sits beside 4, 8 sits beside 1) */
+  .mflow-box[data-step="1"]{ grid-column:1; grid-row:1; }
+  .mflow-box[data-step="2"]{ grid-column:1; grid-row:2; }
+  .mflow-box[data-step="3"]{ grid-column:1; grid-row:3; }
+  .mflow-box[data-step="4"]{ grid-column:1; grid-row:4; }
+  .mflow-box[data-step="5"]{ grid-column:2; grid-row:4; }
+  .mflow-box[data-step="6"]{ grid-column:2; grid-row:3; }
+  .mflow-box[data-step="7"]{ grid-column:2; grid-row:2; }
+  .mflow-box[data-step="8"]{ grid-column:2; grid-row:1; }
+
+  /* fold-down flaps (2,3,4): hinge on their own top edge, as if
+     flipping down out of the box above them */
+  .mflow-box[data-step="2"], .mflow-box[data-step="3"], .mflow-box[data-step="4"]{
+    transform-origin:top center;
+    transform:rotateX(-100deg);
+  }
+  /* fold-right flap (5): hinge on its own left edge, unfolding
+     sideways out of box 4 */
+  .mflow-box[data-step="5"]{
+    transform-origin:left center;
+    transform:rotateY(-100deg);
+  }
+  /* fold-up flaps (6,7,8): hinge on their own bottom edge, climbing
+     back up the right-hand column one at a time */
+  .mflow-box[data-step="6"], .mflow-box[data-step="7"], .mflow-box[data-step="8"]{
+    transform-origin:bottom center;
+    transform:rotateX(100deg);
+  }
+  .mflow-box.is-shown{
+    opacity:1;
+    transform:rotateX(0deg) rotateY(0deg);
+    transition:transform .5s cubic-bezier(.3,.9,.4,1.15), opacity .25s ease;
+  }
+  .mflow-box.is-current{
+    border-color:var(--yellow);
+    box-shadow:0 0 0 2px var(--yellow) inset;
+  }
+  .mflow-caption{
+    flex:0 0 auto;
+    padding:12px 20px 18px;
+    border-top:1px solid rgba(247,243,234,.14);
+    color:rgba(247,243,234,.8);
+    font:400 13.5px/1.7 var(--sans);
+    min-height:1.7em;
+  }
+  .mflow-caption b{ color:var(--yellow); font-weight:700; }
+</style>
+</head>
+<body>
+
+<div class="topbar">清代奏摺與上諭分析平台 · 手機版原型（僅供預覽，不是正式頁面）</div>
+
+<div class="demo-note">
+  這是給老師看之前的<b>設計原型</b>，用真實文字內容，方便直接比較效果。核准後我會把同樣的邏輯套進
+  <b>intro Website/Website/storymap</b> 正式頁面（保留桌面版完全不變）。
+</div>
+
+<section class="screen">
+  <div class="screen-label">2 · 所需的工具與資源（手機版）</div>
+  <div class="mtools" id="mtools">
+    <div class="mtools-view">
+      <div class="mtools-photo">
+        <span class="mtools-count" id="mtoolsCount">1 / 5</span>
+        <span class="mtools-tick" id="mtoolsTick"><span class="mark">✓</span></span>
+        <div class="ph-fallback" id="mtoolsPhoto">GitHub Repository</div>
+      </div>
+      <div class="mtools-copy">
+        <p class="mtools-subtitle" id="mtoolsSubtitle">原始碼與資料夾</p>
+        <h3 id="mtoolsTitle">GitHub Repository</h3>
+        <p id="mtoolsBody">首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills 的 Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。</p>
+      </div>
+      <button class="mtools-arrow prev" id="mtoolsPrev" aria-label="上一個工具">‹</button>
+      <button class="mtools-arrow next" id="mtoolsNext" aria-label="下一個工具">›</button>
+    </div>
+  </div>
+</section>
+
+<section class="screen">
+  <div class="screen-label">3 · 重用平台的基本流程（手機版）</div>
+  <div class="mflow" id="mflow">
+    <div class="mflow-head">
+      <div>
+        <p class="eyebrow">重用平台的基本流程</p>
+        <h2>把平台應用於新的研究主題</h2>
+      </div>
+      <button class="mflow-replay" id="mflowReplay" type="button">重播展開效果</button>
+    </div>
+    <div class="mflow-stage">
+      <div class="mflow-grid" id="mflowGrid"></div>
+    </div>
+    <div class="mflow-caption" id="mflowCaption"></div>
+  </div>
+</section>
+
+<script>
+// ---------- 2 · 工具資訊 carousel ----------
+const tools = [
+  { subtitle:"原始碼與資料夾", title:"GitHub Repository",
+    body:"首先，研究者可以從這個 GitHub Repository 下載平台的原始碼。Repository 內包含平台網站的程式碼、AI Skills 的 Markdown 檔案，以及儲存一手史料和 AI 分析結果的資料夾。" },
+  { subtitle:"閱讀原始碼與部署平台", title:"Agentic AI",
+    body:"接著，研究者需要一套 Agentic AI 工具（例如 Codex、Claude Code），用來閱讀 Repository 中的原始碼、在本機部署平台，並在後續步驟中執行各項 AI Skills。" },
+  { subtitle:"批次處理與分析", title:"AI API",
+    body:"此外，研究者亦需要使用成本較低的 AI API，例如 Gemini 或 DeepSeek，用於處理大量文本的 OCR，以及在多份文書上批次執行 AI Skills。" },
+  { subtitle:"備份、管理與協作", title:"自己的 GitHub Repository",
+    body:"最後，建議研究者建立自己的 GitHub Repository，在雲端備份和管理程式碼、AI Skills、結構化資料及分析結果，方便後續維護、更新和協作。" },
+  { subtitle:"（示範用第五項）", title:"研究筆記工具",
+    body:"這是原型示範用的第五個項目，實際頁面請沿用原本 5 個工具清單裡的第 5 項內容。" },
+];
+let ti = 0;
+const tickEl = document.getElementById('mtoolsTick');
+function paintTool(){
+  const t = tools[ti];
+  document.getElementById('mtoolsSubtitle').textContent = t.subtitle;
+  document.getElementById('mtoolsTitle').textContent = t.title;
+  document.getElementById('mtoolsBody').textContent = t.body;
+  document.getElementById('mtoolsPhoto').textContent = t.title;
+  document.getElementById('mtoolsCount').textContent = (ti+1) + ' / ' + tools.length;
+  document.getElementById('mtoolsPrev').disabled = ti === 0;
+  document.getElementById('mtoolsNext').disabled = ti === tools.length - 1;
+  // reset to the empty (untouched) box first, then replay the fill+pop
+  // transition into the ticked state — same box, two states, not a swap
+  tickEl.classList.remove('is-ticked');
+  void tickEl.offsetWidth; // reflow so the removal is committed before re-adding
+  setTimeout(() => tickEl.classList.add('is-ticked'), 260);
+}
+document.getElementById('mtoolsPrev').addEventListener('click', () => { if (ti>0){ ti--; paintTool(); } });
+document.getElementById('mtoolsNext').addEventListener('click', () => { if (ti<tools.length-1){ ti++; paintTool(); } });
+paintTool();
+
+// swipe support
+(function(){
+  const el = document.getElementById('mtools');
+  let x0=null;
+  el.addEventListener('touchstart', e=>{ x0=e.touches[0].clientX; }, {passive:true});
+  el.addEventListener('touchend', e=>{
+    if (x0===null) return;
+    const dx = e.changedTouches[0].clientX - x0;
+    if (Math.abs(dx) > 40){
+      if (dx<0 && ti<tools.length-1){ ti++; paintTool(); }
+      else if (dx>0 && ti>0){ ti--; paintTool(); }
+    }
+    x0=null;
+  }, {passive:true});
+})();
+
+// ---------- 3 · 基本流程：紙盒展開版面 ----------
+const flow = [
+  { label:"選定研究主題與史料", desc:"確認要研究的問題方向，並找出對應的一手奏摺、上諭等原始史料。" },
+  { label:"OCR 並結構化原始史料", desc:"使用 Agentic AI 搭配 PaddleOCR，將原始影像轉為文字，並整理成結構化 JSON。" },
+  { label:"調整 AI Skills", desc:"依研究主題調整既有的 AI Skills（Markdown 提示詞），讓分析聚焦在新的問題上。" },
+  { label:"執行 AI 分析", desc:"以調整後的 AI Skills 對史料進行分析，產出事件、人物與回應等結構化結果。" },
+  { label:"載入網站核驗", desc:"把 AI 分析結果載入審閱工具，由研究者人工核對、編輯後再確認。" },
+  { label:"修改及擴展平台", desc:"視需要調整審閱介面、圖表或資料欄位，讓平台符合新研究主題的需求。" },
+  { label:"保存分析結果", desc:"將核驗後的結果保存為正式資料，並記錄在 LLM Wiki 中作為長期研究記憶。" },
+  { label:"後續研究", desc:"以保存的結構化成果為基礎，展開進一步的歷史分析與寫作。" },
+];
+
+const gridHost = document.getElementById('mflowGrid');
+const captionEl = document.getElementById('mflowCaption');
+
+function setCaption(i){
+  captionEl.innerHTML = '<b>STEP ' + (i+1) + ' · ' + flow[i].label + '</b><br>' + flow[i].desc;
+}
+
+function buildGrid(){
+  gridHost.innerHTML = '';
+  flow.forEach((s, i) => {
+    const box = document.createElement('button');
+    box.type = 'button';
+    box.className = 'mflow-box';
+    box.dataset.step = String(i + 1);
+    box.innerHTML = '<span class="no">' + (i + 1) + '</span><span class="label">' + s.label + '</span>';
+    box.addEventListener('click', () => {
+      [...gridHost.children].forEach(b => b.classList.remove('is-current'));
+      box.classList.add('is-current');
+      setCaption(i);
+    });
+    gridHost.appendChild(box);
+  });
+}
+
+// unfolding order matches the "unboxing" reading order: 1 appears first,
+// then 2/3/4 fold down one after another, then 5 folds out beside 4,
+// then 6/7/8 climb back up the right-hand column one at a time.
+const REVEAL_ORDER = [1, 2, 3, 4, 5, 6, 7, 8];
+const REVEAL_GAP = 260;   // ms between each flap
+const REVEAL_PAUSE_AFTER_4 = 200; // small extra beat before the new column starts
+
+function playUnfold(){
+  [...gridHost.children].forEach(b => b.classList.remove('is-shown', 'is-current'));
+  captionEl.innerHTML = '';
+  let t = 120;
+  REVEAL_ORDER.forEach((step, idx) => {
+    setTimeout(() => {
+      const box = gridHost.querySelector('[data-step="' + step + '"]');
+      if (box) box.classList.add('is-shown');
+      if (idx === REVEAL_ORDER.length - 1){
+        box.classList.add('is-current');
+        setCaption(step - 1);
+      }
+    }, t);
+    t += REVEAL_GAP + (step === 4 ? REVEAL_PAUSE_AFTER_4 : 0);
+  });
+}
+
+buildGrid();
+playUnfold();
+document.getElementById('mflowReplay').addEventListener('click', playUnfold);
+</script>
+</body>
+</html>
