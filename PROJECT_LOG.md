@@ -10342,3 +10342,21 @@ Verified:
 
 Remaining:
 - Reload the local preview and check the photo-top midpoint trigger at one mobile width and one narrow desktop width.
+
+### 2026-08-08 16:40 HKT — Codex — Simplify the compact menu and font settings controls
+
+Summary:
+- Removed the visible `網站章節` heading from the narrow-screen section drawer.
+- Moved the borderless `×` control beside the menu symbol in the header; it is shown only while the drawer is open, and the existing backdrop click closes the drawer.
+- Removed the visible `網站設定` heading and changed the font controls to `字體 − 100% ＋`, without the `A−` or `A＋` labels.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed; `git diff --check` passed.
+- The live page confirmed there is no drawer heading, no settings heading, and the controls render as `−` and `＋`; the desktop layout keeps the compact controls hidden.
+
+Remaining:
+- Check the open narrow-screen drawer visually at a mobile viewport.

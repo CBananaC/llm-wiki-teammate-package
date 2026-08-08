@@ -170,7 +170,6 @@ img { max-width: 100%; }
   border: 1px solid rgba(22, 61, 63, .24); box-shadow: 0 16px 40px rgba(18, 43, 44, .26);
 }
 .settings-panel[hidden] { display: none; }
-.settings-panel-title { margin-bottom: 11px; color: var(--muted); font: 700 calc(10.5px * var(--font-scale)) var(--sans); letter-spacing: .13em; }
 .settings-row { display: flex; align-items: center; justify-content: space-between; gap: 16px; font: calc(13.5px * var(--font-scale)) var(--sans); }
 .font-size-controls { display: inline-flex; align-items: center; gap: 6px; }
 .font-size-button { min-width: 32px; padding: 4px 6px; color: var(--ink); background: transparent; border: 1px solid rgba(22, 61, 63, .28); font: calc(13px * var(--font-scale)) var(--sans); line-height: 1; cursor: pointer; }
@@ -181,6 +180,7 @@ img { max-width: 100%; }
 
 /* 窄螢幕網站選單：由右向左滑入；桌面寬度維持原本的頂欄導覽。 */
 .compact-menu-button,
+.compact-menu-close,
 .compact-menu-panel,
 .compact-menu-backdrop { display: none; }
 
@@ -216,6 +216,22 @@ img { max-width: 100%; }
   .compact-menu-button[aria-expanded="true"] {
     color: #fff;
   }
+  .compact-menu-close {
+    display: none;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    padding: 0;
+    color: rgba(247, 243, 234, .86);
+    background: transparent;
+    border: 0;
+    border-radius: 0;
+    cursor: pointer;
+    font: 400 25px/1 var(--sans);
+    transition: color .2s;
+  }
+  .settings-wrap:has(.compact-menu-button[aria-expanded="true"]) .compact-menu-close { display: grid; }
+  .compact-menu-close:hover { color: #fff; }
   .compact-menu-button:focus-visible,
   .compact-menu-close:focus-visible,
   .compact-menu-link:focus-visible {
@@ -263,38 +279,6 @@ img { max-width: 100%; }
     visibility: visible;
     pointer-events: auto;
     transition-delay: 0s;
-  }
-  .compact-menu-head {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 14px;
-    padding: 18px 18px 16px 22px;
-    border-bottom: 1px solid rgba(255, 255, 255, .16);
-  }
-  .compact-menu-title {
-    color: rgba(238, 244, 242, .62);
-    font: 700 calc(11px * var(--font-scale)) var(--sans);
-    letter-spacing: .14em;
-  }
-  .compact-menu-close {
-    display: grid;
-    place-items: center;
-    width: 34px;
-    height: 34px;
-    padding: 0;
-    color: #eef4f2;
-    background: transparent;
-    border: 1px solid rgba(255, 255, 255, .3);
-    border-radius: 50%;
-    cursor: pointer;
-    font: 400 25px/1 var(--sans);
-    transition: color .2s, background-color .2s, border-color .2s;
-  }
-  .compact-menu-close:hover {
-    color: #12363a;
-    background: var(--yellow);
-    border-color: var(--yellow);
   }
   .compact-menu-links {
     display: grid;
