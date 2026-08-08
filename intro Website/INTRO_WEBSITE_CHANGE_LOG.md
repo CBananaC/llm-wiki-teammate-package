@@ -6018,3 +6018,111 @@ Verified:
 
 Remaining:
 - Reload the page in a permitted HTTP/browser preview and check the row-title auto-expansion at mobile and narrow-computer widths.
+
+### 2026-08-08 17:10 HKT — Codex — Make the first Part 3 sections viewport-height on narrow screens
+
+Summary:
+- Made `第三部分／運用平台研究其他的問題` and `1／適合的研究問題` share one viewport below the top bar; `2／所需的工具與資源` remains a separate full-viewport section.
+- Changed the tools/resources checklist from a fixed height to a flexing panel, so its visual and text areas adapt to the remaining screen space.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 1024×900 and 390×844, the cover plus research-question section sums to `100svh - 62px`; the tools section independently computes to `100svh - 62px`.
+- The tools card now flexes to the remaining section height instead of retaining the previous 1000px fixed height.
+- Browser screenshots confirm the research card and tools/resources panel fit the viewport; console has no errors or warnings.
+- No external deployment or t-preview sync performed.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits were present in the worktree; those changes were preserved.
+
+### 2026-08-08 17:20 HKT — Claude — Fix mobile 工具與資源／基本流程 layout bugs
+
+Summary:
+- Tools carousel: fixed tick/count overlapping the title bar (offset nav layer below the bar); fixed copy text not rendering (grid percentage-height chain replaced with flexbox column).
+- Flow grid: fixed uneven box sizes (`1fr` → `minmax(0,1fr)`), centered text, larger font, narrowed grid to 300px centered (chart background shows through as a shared backdrop), unified all 8 boxes to one background color.
+- Removed the replay button entirely; reveal animation now triggers once via scroll position (when the heading text reaches 70% up the screen from the bottom) instead of an early IntersectionObserver.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS brace depth-scan balanced; HTML tag-balance matched; no leftover references to the removed button.
+
+Remaining:
+- Not tested in a real browser/device. No git commit made.
+
+### 2026-08-08 17:40 HKT — Claude — Fix mobile 重用平台的基本流程 sizing/backdrop/color
+
+Summary:
+- Section height reduced to 95% of available screen.
+- Removed the grey card backdrop behind the 8-box grid.
+- Boxes are now true, identically-sized squares via a new `initPart3MobileFlowSquare()` (measures available space, sets `--flow-box-size` used for both grid axes). Larger number/label text.
+- Odd boxes white/dark-text, even boxes dark green/light-text with yellow numbers, plus hover/active feedback.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS brace depth-scan balanced.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-08 17:22 HKT — Codex — Give OCR definition/test visuals more narrow-screen height
+
+Summary:
+- Kept `使用OCR的原因`／OCR definition and `OCR測試` each within one viewport below the top bar in mobile and narrow-computer modes.
+- Reduced their top and bottom section padding to 18px maximum and increased the compact visual heights, while centering both visuals horizontally.
+- Made the OCR scan scene internally flex so its document pages and JSON output share the shorter viewport-sized visual without expanding the page.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 390×844, OCR definition is 782px high with a 320.7px centered visual; OCR test has a 303.8px centered visual, and both groups fit within their sections.
+- At 1024×900, both sections are 838px high; the OCR visual is 342px and the test visual is 324px, centered horizontally.
+- Browser screenshots show the enlarged visuals without adding inner page scrolling.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-08 17:38 HKT — Codex — Restore original OCR section inner spacing
+
+Summary:
+- Restored the original top and bottom padding for the OCR definition and OCR test sections.
+- Kept the 150% height for `1＋2＋visual` and 130% height for `10＋visual`; the visuals continue to flex into the remaining space and stay horizontally centered.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- At 390×844, both sections restore 56px top/bottom padding; OCR visual height is 643.7px and OCR test visual height is 469.1px.
+- At 1024×900, both sections restore 61.44px top/bottom padding; OCR visual height is 799.0px and OCR test visual height is 648.9px.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-08 17:30 HKT — Codex — Expand OCR definition/test sections to 150%／130% height
+
+Summary:
+- Replaced the previous compact inner spacing with sections that use 150% of the top-bar-excluded viewport for `1＋2＋visual` and 130% for `10＋visual` in mobile and narrow-computer modes.
+- Let both visuals flex into the additional section height and remain horizontally centered.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 390×844, the OCR definition section is 1173px high with a 722px visual; the OCR test section is 1016.6px high with a 547.4px visual.
+- At 1024×900, the OCR definition section is 1257px high with an 885.9px visual; the OCR test section is 1089.4px high with a 735.8px visual.
+- Both visuals are horizontally centered; syntax and CSS balance checks passed.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.

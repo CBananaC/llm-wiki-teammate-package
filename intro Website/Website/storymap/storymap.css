@@ -3902,20 +3902,138 @@ img { max-width: 100%; }
    與播放時機）。桌面版完全不受影響——.part3-tools-mnav 預設 display:none。
 
    重用平台的基本流程：8 個步驟原本橫向排成一列雪佛龍，手機版改排成 2 欄
-   × 4 格：左欄由上到下是 1-4，4 的右邊接 5，然後 6、7、8 沿右欄由下往上
-   疊回去。進場時依序「掀開」——先顯示 1，再往下掀出 2、3、4，停一拍後
-   往右掀出 5，最後沿右欄一格一格往上掀出 6、7、8（storymap.js 的
-   initPart3MobileFlowUnfold() 負責時機，用 IntersectionObserver 在區塊第一次
-   進入畫面時播放一次，也可以按「重播展開效果」按鈕重播）。桌面版的雪佛龍
-   樣式（.part3-flow-step 的 clip-path 等）都寫在本節媒體查詢之外，不受影響。
+   × 4 格（寬度縮窄、置中，兩側露出背板底色）：左欄由上到下是 1-4，4 的
+   右邊接 5，然後 6、7、8 沿右欄由下往上疊回去。掀開動畫只播放一次——
+   當「重用平台的基本流程」標題／說明文字（#part-3-basic-flow-card）捲動到
+   螢幕高度 70%（以畫面最底為 0%、最頂為 100% 計）時觸發，由 storymap.js 的
+   initPart3MobileFlowUnfold() 監聽捲動位置判斷時機。桌面版的雪佛龍樣式
+   （.part3-flow-step 的 clip-path 等）都寫在本節媒體查詢之外，不受影響。
    ========================================================================== */
-.part3-tools-mnav, .part3-flow-mreplay { display: none; }
+.part3-tools-mnav { display: none; }
 
 @media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  /* 第三部分封面＋適合的研究問題合計佔滿頂欄以下的一個視窗高度；
+     所需的工具與資源則獨立佔滿下一個視窗。 */
+  #part-3,
+  #part-3-research-questions,
+  #part-3-tools {
+    height: var(--part3-narrow-section-height, calc(100svh - var(--bar-h, 62px)));
+    min-height: 0;
+  }
+  #part-3-research-questions {
+    display: flex;
+    align-items: stretch;
+  }
+  #part-3-research-questions > .story-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+  }
+  #part-3-research-questions .lay-split { width: 100%; }
+
+  #part-3-tools {
+    display: flex;
+    flex-direction: column;
+  }
+  #part-3-tools > .story-inner {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    min-height: 0;
+  }
+
+  /* OCR 定義：1、2 號卡片與掃描視覺元素共用頂欄以下 150% 的高度；
+     OCR測試的 10 號卡片與批次視覺元素共用 130% 的高度。 */
+  #part-3-ocr-definition,
+  #part-3-test {
+    display: flex;
+    height: var(--part3-narrow-section-height, calc(100svh - var(--bar-h, 62px)));
+    min-height: 0;
+    overflow: hidden;
+  }
+  #part-3-ocr-definition > .story-inner,
+  #part-3-test > .story-inner {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    min-height: 0;
+  }
+  #part-3-ocr-definition .part3-ocr-def-layout,
+  #part-3-test .lay-split {
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    min-height: 0;
+    gap: clamp(10px, 1.6vh, 18px);
+  }
+  #part-3-ocr-definition .part3-two-card-grid,
+  #part-3-test .lay-copy {
+    flex: 0 0 auto;
+    min-height: 0;
+  }
+  #part-3-ocr-definition .ocr-scan-scene,
+  #part-3-test .batch-scene {
+    flex: 1 1 auto;
+    min-height: var(--part3-narrow-visual-height, 280px);
+    align-self: center;
+    width: min(var(--part3-narrow-visual-width, 70%), var(--ocr-scene-max-w, 1000px));
+    max-width: 100%;
+    margin: 0 auto;
+  }
+  #part-3-test .batch-scene {
+    width: min(90%, 560px);
+    flex: 0 0 var(--part3-narrow-visual-height-ratio, 60%);
+    height: var(--part3-narrow-visual-height-ratio, 60%);
+    min-height: 0;
+    aspect-ratio: auto;
+  }
+  #part-3-test .lay-visual {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    align-items: stretch;
+    justify-content: center;
+    min-height: 0;
+  }
+
+  /* OCR 視覺元素內部也跟著縮短：頁面與輸出視窗分配剩餘高度，
+     不讓原本的比例把整個 section 撐高。 */
+  #part-3-ocr-definition .ocr-scan-scene {
+    display: flex;
+    flex-direction: column;
+    height: auto;
+    overflow: hidden;
+  }
+  #part-3-ocr-definition .ocr-pages {
+    flex: 1 1 56%;
+    min-height: 0;
+    margin-bottom: clamp(8px, 1.2vh, 14px);
+  }
+  #part-3-ocr-definition .ocr-filestack.handwritten,
+  #part-3-ocr-definition .ocr-filestack.printed {
+    height: 100%;
+    aspect-ratio: auto;
+  }
+  #part-3-ocr-definition .ocr-output {
+    display: flex;
+    flex: 1 1 44%;
+    flex-direction: column;
+    min-height: 0;
+  }
+  #part-3-ocr-definition .ocr-output-body {
+    flex: 1 1 auto;
+    height: auto;
+    min-height: 0;
+  }
+
   /* --- 所需的工具與資源 --- */
   .part3-tools-checklist {
     grid-template-columns: 1fr;
-    height: calc(100svh - var(--bar-h, 62px));
+    flex: 1 1 auto;
+    height: auto;
     min-height: 0;
   }
   .part3-tools-list-window { display: none; }
@@ -3926,25 +4044,39 @@ img { max-width: 100%; }
     overflow: hidden;
   }
   .part3-tools-info-panel {
-    height: calc(100% - 50px);
+    display: flex;
+    flex-direction: column;
+    height: calc(100% - var(--tools-bar-h, 50px));
     min-height: 0;
     overflow: hidden;
   }
-  .part3-tools-window-bar { min-height: 50px; padding: 12px 16px; }
+  .part3-tools-window-bar { min-height: var(--tools-bar-h, 50px); padding: 12px 16px; }
+  /* 改用 flex 而不是 grid-template-rows：grid 的百分比高度鏈在「auto 列」上
+     很容易解不出定值，導致文字整個不出現；flex column＋min-height:0 這個
+     組合在本檔其他手機版版面（抽屜、試一試）已經證明可靠，這裡沿用同一寫法。 */
   .part3-tool-info-view {
-    grid-template-rows: minmax(0, 1fr) auto;
+    display: flex;
+    flex-direction: column;
     height: 100%;
     min-height: 0;
   }
-  .part3-tool-info-photo { min-height: 0; }
-  .part3-tool-info-copy { max-height: 46%; overflow-y: auto; }
+  .part3-tool-info-photo { flex: 1 1 auto; min-height: 0; }
+  .part3-tool-info-copy {
+    flex: 0 0 auto;
+    max-height: 46%;
+    overflow-y: auto;
+  }
   /* 保留設計裡原有的打勾樣式，但每列自己的數字方塊在手機版改由
      .part3-tools-mtick 取代，避免和抽屜化的清單一起消失 */
   .part3-tool-info-number { display: none; }
 
+  /* 這一層蓋在「工具資訊」整塊（標題列＋內容）上面，所以箭頭／頁碼／勾選章
+     要往下讓出標題列高度，否則會疊在「工具資訊」四個字上面。 */
   .part3-tools-mnav {
     display: block;
-    position: absolute; inset: 0;
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    top: var(--tools-bar-h, 50px);
     z-index: 4;
     pointer-events: none;
   }
@@ -3975,7 +4107,7 @@ img { max-width: 100%; }
     font: 700 11px/1 var(--sans); letter-spacing: .06em;
   }
   .part3-tools-marrow {
-    position: absolute; top: 42%; transform: translateY(-50%);
+    position: absolute; top: 50%; transform: translateY(-50%);
     pointer-events: auto;
     width: 38px; height: 38px;
     display: grid; place-items: center;
@@ -3990,42 +4122,97 @@ img { max-width: 100%; }
   .part3-tools-marrow[disabled] { opacity: .25; pointer-events: none; }
 
   /* --- 重用平台的基本流程：2 欄 × 4 格「展開紙盒」 --- */
+  /* 整節只佔螢幕（扣掉頂欄）高度的 95%，刻意留一點空白，
+     暗示下面還有內容、也不會頂到螢幕邊緣。 */
   #part-3-basic-flow-stack {
-    height: calc(100svh - var(--bar-h, 62px));
+    height: calc((100svh - var(--bar-h, 62px)) * .95);
     display: flex; flex-direction: column;
   }
   #part-3-basic-flow-card { flex: 0 0 auto; }
   #part-3-basic-flow-chart {
+    /* 拿掉桌面版原本的卡片背景／邊框／陰影（見本檔前面
+       #part-3-basic-flow-chart 的桌面規則），讓 8 個格子直接落在
+       頁面本身的底色上，不要再多一層「灰卡片」夾在中間。 */
+    background: transparent;
+    border: 0;
+    box-shadow: none;
     position: relative;
     flex: 1 1 auto; min-height: 0;
     display: flex; flex-direction: column;
     padding: clamp(12px, 3vw, 18px);
   }
   #part-3-basic-flow-chart > .body { display: none; }
+  /* 格子大小＝正方形，由 storymap.js 的 initPart3MobileFlowSquare() 量出
+     目前可用寬高，取兩者較小值換算成 --flow-box-size，寫在 .part3-flow-chev
+     上；grid-template-columns/rows 兩邊都用同一個變數，寬＝高，8 格保證
+     完全等大。量測前先用 130px 這個預設值，避免變數還沒算出來時版面跳動。 */
   .part3-flow-chev {
     display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    grid-template-rows: repeat(4, 1fr);
+    grid-template-columns: repeat(2, var(--flow-box-size, 130px));
+    grid-template-rows: repeat(4, var(--flow-box-size, 130px));
     gap: 6px;
+    justify-content: center;
+    align-content: center;
+    width: 100%;
     flex: 1 1 auto; min-height: 0;
     perspective: 900px;
   }
   .part3-flow-step {
     margin-left: 0;
     clip-path: none;
+    min-width: 0;
     min-height: 0;
     padding: 8px 10px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
     border: 1px solid var(--line);
     opacity: 0;
     transform-style: preserve-3d;
     backface-visibility: hidden;
+    transition: transform .5s cubic-bezier(.3, .9, .4, 1.15), opacity .25s ease,
+      background-color .18s ease, color .18s ease, box-shadow .18s ease;
   }
   .part3-flow-step:first-child { clip-path: none; }
-  .part3-flow-step-no {
-    font-size: calc(15px * var(--font-scale));
-    margin-bottom: 4px;
+  /* 單數格（1/3/5/7）白底深字，偶數格（2/4/6/8）綠底淺字，
+     跟桌面版單雙交錯淺色不同——這裡改成兩個對比色，並蓋掉本檔前面
+     .part3-flow-step:nth-child(odd/even) 的桌面配色（權重相同，這裡
+     寫在後面所以會贏）。 */
+  .part3-flow-step:nth-child(odd) {
+    background: var(--card);
+    color: var(--ink);
   }
-  .part3-flow-step-label { font-size: calc(11.5px * var(--font-scale)); }
+  .part3-flow-step:nth-child(odd) .part3-flow-step-no { color: var(--accent); }
+  .part3-flow-step:nth-child(even) {
+    background: var(--ink);
+    color: #f7f3ea;
+  }
+  .part3-flow-step:nth-child(even) .part3-flow-step-no { color: var(--yellow); opacity: 1; }
+  /* 手指點按／滑鼠懸停：格子微微放大＋加深陰影，維持已經掀開的角度 */
+  .part3-flow-step.is-shown:hover,
+  .part3-flow-step.is-shown:focus-visible,
+  .part3-flow-step.is-shown:active {
+    transform: rotateX(0deg) rotateY(0deg) scale(1.05);
+    box-shadow: 0 8px 18px rgba(22, 61, 63, .22);
+    z-index: 2;
+  }
+  .part3-flow-step:nth-child(odd).is-shown:hover,
+  .part3-flow-step:nth-child(odd).is-shown:focus-visible,
+  .part3-flow-step:nth-child(odd).is-shown:active {
+    background: #fffaf2;
+  }
+  .part3-flow-step:nth-child(even).is-shown:hover,
+  .part3-flow-step:nth-child(even).is-shown:focus-visible,
+  .part3-flow-step:nth-child(even).is-shown:active {
+    background: #1c464a;
+  }
+  .part3-flow-step-no {
+    font-size: calc(19px * var(--font-scale));
+    margin-bottom: 14px;
+  }
+  .part3-flow-step-label { font-size: calc(15.5px * var(--font-scale)); line-height: 1.35; }
 
   /* 位置：左欄由上到下 1-4，右欄由下到上 5-8（5 貼著 4） */
   .part3-flow-step:nth-child(1) { grid-column: 1; grid-row: 1; }
@@ -4059,16 +4246,8 @@ img { max-width: 100%; }
   .part3-flow-step.is-shown {
     opacity: 1;
     transform: rotateX(0deg) rotateY(0deg);
-    transition: transform .5s cubic-bezier(.3, .9, .4, 1.15), opacity .25s ease;
+    /* 過場動畫（transform/opacity/background-color/color/box-shadow）已經
+       統一寫在上面 .part3-flow-step 的基礎規則，這裡不用重複宣告，
+       避免兩處 transition 值不一致、之後改一邊忘了改另一邊。 */
   }
-  .part3-flow-mreplay {
-    display: block;
-    position: absolute; top: 10px; right: 10px; z-index: 3;
-    padding: 6px 12px;
-    background: rgba(18, 54, 58, .08);
-    color: var(--ink);
-    border: 1px solid var(--line);
-    font: 700 11px/1 var(--sans); letter-spacing: .04em;
-  }
-  .part3-flow-mreplay:active { background: rgba(18, 54, 58, .16); }
 }

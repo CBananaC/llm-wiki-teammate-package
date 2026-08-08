@@ -1135,17 +1135,21 @@ initPart3ToolsChecklist();
 /* ---------------------------------------------------------------------------
    手機版／窄螢幕：「重用平台的基本流程」8 個步驟排成 2 欄「展開紙盒」版面。
    桌面版維持原本的橫向雪佛龍樣式（見 storymap.css），這裡只負責在手機版
-   進場時依序播放掀開動畫，並提供一顆「重播展開效果」按鈕。
+   判斷時機、播放一次掀開動畫。
+
+   時機：以「重用平台的基本流程」標題／說明文字（#part-3-basic-flow-card）
+   的位置為準——當它的頂端捲動到「螢幕高度 70%」那條線（畫面最底定義為
+   0%、最頂為 100%，所以 70% 高＝距離視窗頂端 30% 的位置）時觸發一次。
    --------------------------------------------------------------------------- */
 const initPart3MobileFlowUnfold = () => {
   document.querySelectorAll('.part3-flow-chev').forEach((chev) => {
     const items = [...chev.querySelectorAll('.part3-flow-step')];
     if (!items.length) return;
-    const frame = chev.closest('.part3-flow-frame');
-    const replayBtn = frame && frame.querySelector('[data-part3-flow-replay]');
+    const card = document.getElementById('part-3-basic-flow-card') || chev;
 
     let played = false;
     const play = () => {
+      played = true;
       items.forEach((el) => el.classList.remove('is-shown'));
       let t = 100;
       items.forEach((el, idx) => {
@@ -1154,24 +1158,60 @@ const initPart3MobileFlowUnfold = () => {
       });
     };
 
-    if (replayBtn) replayBtn.addEventListener('click', play);
+    let ticking = false;
+    const checkTrigger = () => {
+      ticking = false;
+      if (played || !PHOTO_GALLERY_MOBILE_MQ.matches) return;
+      const triggerLine = window.innerHeight * 0.3; // 螢幕高度 70%（從底部算）＝頂端往下 30%
+      if (card.getBoundingClientRect().top <= triggerLine) play();
+    };
+    const requestCheck = () => {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(checkTrigger);
+    };
 
-    if (typeof IntersectionObserver === 'function') {
-      const io = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting && PHOTO_GALLERY_MOBILE_MQ.matches && !played) {
-            played = true;
-            play();
-          }
-        });
-      }, { threshold: .35 });
-      io.observe(chev);
-    } else if (PHOTO_GALLERY_MOBILE_MQ.matches) {
-      play();
-    }
+    window.addEventListener('scroll', requestCheck, { passive: true });
+    window.addEventListener('resize', requestCheck, { passive: true });
+    requestCheck(); // 頁面載入時若已經在觸發線之下（例如透過錨點跳入），也要立刻檢查一次
   });
 };
 initPart3MobileFlowUnfold();
+
+/* ---------------------------------------------------------------------------
+   手機版／窄螢幕：讓「重用平台的基本流程」8 個格子維持正方形。
+   .part3-flow-chev 本身靠 flex（flex:1 1 auto ＋ 父層 flex column 的預設
+   stretch）填滿可用空間，格子大小則交給 grid-template-columns/rows 的
+   var(--flow-box-size) 決定，兩個方向用同一個變數＝正方形。這裡量測
+   .part3-flow-chev 目前的可用寬高（量測時機不受這個變數影響，因為
+   flex 已經把外框撐好了，內部格子多大不影響外框大小），取「寬度可以
+   放兩欄」「高度可以放四列」兩者較小的一個，換算成單一格子的邊長。
+   --------------------------------------------------------------------------- */
+const initPart3MobileFlowSquare = () => {
+  const GAP = 6;
+  const MIN_SIZE = 56;
+  const MAX_SIZE = 190;
+  document.querySelectorAll('.part3-flow-chev').forEach((chev) => {
+    const resize = () => {
+      if (!PHOTO_GALLERY_MOBILE_MQ.matches) {
+        chev.style.removeProperty('--flow-box-size');
+        return;
+      }
+      const rect = chev.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const byWidth = (rect.width - GAP) / 2;
+      const byHeight = (rect.height - GAP * 3) / 4;
+      const size = Math.max(MIN_SIZE, Math.min(MAX_SIZE, Math.floor(Math.min(byWidth, byHeight))));
+      chev.style.setProperty('--flow-box-size', `${size}px`);
+    };
+    resize();
+    window.addEventListener('resize', resize, { passive: true });
+    if (typeof ResizeObserver === 'function') new ResizeObserver(resize).observe(chev);
+    if (PHOTO_GALLERY_MOBILE_MQ.addEventListener) PHOTO_GALLERY_MOBILE_MQ.addEventListener('change', resize);
+    else PHOTO_GALLERY_MOBILE_MQ.addListener(resize);
+  });
+};
+initPart3MobileFlowSquare();
 
 /* ---------------------------------------------------------------------------
    版面特徵探索器（7 辨識印刷字 / 8 辨識手寫字）
