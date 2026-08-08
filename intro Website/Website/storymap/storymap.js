@@ -331,6 +331,127 @@ document.querySelectorAll('[data-source-flow]').forEach((visual) => {
 });
 scheduleSourceFlowConnectorRefresh();
 
+/* 引言 01：手機／窄螢幕把每一列改成「標題 → 視覺 → 內文」。
+   保留原本的三頁畫廊，並把第 2 頁複製到第 2 列，讓「研究價值」有自己的圖像。
+   捲到某列標題時自動展開；點擊標題仍可手動開關。 */
+const initIntroResearchValueInlineList = () => {
+  const responsiveQuery = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
+
+  const section = document.getElementById('intro-1-1');
+  const split = section?.querySelector(':scope > .story-inner > .lay-split');
+  const stack = split?.querySelector(':scope > .lay-copy-stack');
+  const visual = split?.querySelector(':scope > .lay-visual');
+  const gallery = visual?.querySelector('[data-photo-gallery]');
+  const cards = stack ? [...stack.children].filter((item) => item.matches('[data-intro-card]')) : [];
+  const dataScript = gallery?.querySelector('[data-photo-gallery-data]');
+  if (!split || !gallery || cards.length < 2 || !dataScript) return;
+
+  let pages = [];
+  try {
+    pages = JSON.parse(dataScript.textContent);
+  } catch (error) {
+    return;
+  }
+  if (!Array.isArray(pages) || !pages.length) return;
+
+  const list = document.createElement('div');
+  list.className = 'intro-inline-list';
+  list.dataset.introInlineList = '';
+  const rows = [];
+
+  cards.forEach((card, index) => {
+    const titleRow = card.querySelector('.title-row');
+    const number = titleRow?.querySelector('.option-number');
+    const title = titleRow?.querySelector('h2');
+    const body = card.querySelector('.body');
+    if (!number || !title || !body) return;
+
+    const row = document.createElement('article');
+    row.className = 'intro-inline-row';
+    row.dataset.introInlineRow = String(index + 1);
+    row.dataset.introCard = '';
+    row.dataset.tab = card.dataset.tab || '';
+    row.dataset.nav = card.dataset.nav || '';
+    if (card.id) row.id = card.id;
+
+    const heading = document.createElement('button');
+    heading.type = 'button';
+    heading.className = 'intro-inline-title';
+    heading.dataset.introInlineTarget = String(index + 1);
+    heading.setAttribute('aria-expanded', 'false');
+    heading.setAttribute('aria-controls', `intro-inline-body-${index + 1}`);
+    heading.append(number.cloneNode(true), title.cloneNode(true));
+    const arrow = document.createElement('span');
+    arrow.className = 'intro-inline-arrow';
+    arrow.setAttribute('aria-hidden', 'true');
+    arrow.textContent = '▾';
+    heading.appendChild(arrow);
+
+    const rowVisual = gallery.cloneNode(true);
+    rowVisual.dataset.photoGalleryId = index === 0 ? 'intro-1-1' : 'intro-1-2';
+    if (index === 1) {
+      const rowData = rowVisual.querySelector('[data-photo-gallery-data]');
+      rowData.textContent = JSON.stringify([pages[1] || pages[0]]);
+    }
+    const visualBox = document.createElement('div');
+    visualBox.className = 'intro-inline-visual';
+    visualBox.appendChild(rowVisual);
+
+    const rowBody = body.cloneNode(true);
+    rowBody.classList.add('intro-inline-text');
+    rowBody.id = `intro-inline-body-${index + 1}`;
+    row.append(heading, visualBox, rowBody);
+    list.appendChild(row);
+    rows.push(row);
+  });
+
+  if (rows.length < 2) return;
+  split.after(list);
+
+  const setOpen = (row, open) => {
+    rows.forEach((item) => {
+      const active = open && item === row;
+      item.classList.toggle('is-open', active);
+      item.querySelector('.intro-inline-title')?.setAttribute('aria-expanded', String(active));
+    });
+  };
+  rows.forEach((row) => {
+    const heading = row.querySelector('.intro-inline-title');
+    heading?.addEventListener('click', () => setOpen(row, !row.classList.contains('is-open')));
+  });
+
+  let scrollFrame = 0;
+  const updateFromScroll = () => {
+    scrollFrame = 0;
+    if (!responsiveQuery.matches) return;
+    const threshold = window.innerHeight * 0.62;
+    const candidates = rows.filter((row) => {
+      const rect = row.querySelector('.intro-inline-title')?.getBoundingClientRect();
+      return rect && rect.bottom > window.innerHeight * 0.08 && rect.top < threshold;
+    });
+    if (candidates.length) setOpen(candidates[candidates.length - 1], true);
+  };
+  const requestScrollUpdate = () => {
+    if (!scrollFrame) scrollFrame = window.requestAnimationFrame(updateFromScroll);
+  };
+  const syncLayout = () => {
+    const inline = responsiveQuery.matches;
+    split.classList.toggle('intro-inline-source-hidden', inline);
+    list.classList.toggle('intro-inline-list-hidden', !inline);
+    if (inline) requestScrollUpdate();
+  };
+  window.addEventListener('scroll', requestScrollUpdate, { passive: true });
+  window.addEventListener('resize', requestScrollUpdate, { passive: true });
+  const introPanel = document.getElementById('intro-panel');
+  if (introPanel && 'MutationObserver' in window) {
+    new MutationObserver(requestScrollUpdate).observe(introPanel, { attributes: true, attributeFilter: ['hidden'] });
+  }
+  if (responsiveQuery.addEventListener) responsiveQuery.addEventListener('change', syncLayout);
+  else responsiveQuery.addListener(syncLayout);
+  syncLayout();
+};
+initIntroResearchValueInlineList();
+
 /* 小卡（點擊展開）＋對應視覺元素。
    行為：初始全部收合；點標題展開／收合，不影響其他已展開的卡；
    點已展開卡片的內文，只把右側畫面切換到該卡，不收合。 */

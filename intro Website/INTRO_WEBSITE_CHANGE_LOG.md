@@ -5980,3 +5980,23 @@ Verified:
 
 Remaining:
 - Check the hover transition visually at one narrow viewport.
+
+### 2026-08-08 17:05 HKT — Codex — Make Part 2 research-value rows inline on narrow screens
+
+Summary:
+- Added a responsive two-row accordion for `清代奏折制度` and `清代奏折的研究價值`.
+- Each row now follows the requested order: title bar → visual element → original text box.
+- The second row receives the original second gallery image (`done-intro-2.png`) so its visual no longer remains at the bottom of the whole list.
+- Scrolling to a row title auto-expands that row; clicking the title also opens or closes it. The original side-by-side layout remains available above 1040px and returns correctly after resizing.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed; CSS brace checks and `git diff --check` passed.
+- Browser visual reload remains unavailable for the local `file://` page because of the browser safety policy.
+
+Remaining:
+- Reload the page in a permitted HTTP/browser preview and check the row-title auto-expansion at mobile and narrow-computer widths.
