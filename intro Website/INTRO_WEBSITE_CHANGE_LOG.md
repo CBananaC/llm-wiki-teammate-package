@@ -5940,3 +5940,43 @@ Verified:
 
 Remaining:
 - Check the open narrow-screen drawer visually at a mobile viewport.
+
+### 2026-08-08 16:53 HKT — Claude — Mobile/narrow-screen layout for 所需的工具與資源 and 重用平台的基本流程
+
+Summary:
+- Approved sample prototype first (`Website/UI Idea/mobile-tools-flow-prototype.html`), then applied to the live site.
+- 所需的工具與資源: mobile/narrow (≤1040px or touch) hides the 工具清單 list, 工具資訊 fills full height, left/right arrows switch tools via the existing radio-row logic, per-tool number box replaced by one shared tick badge that resets to empty and replays a fill+pop each time a new tool is shown.
+- 重用平台的基本流程: 8 steps regridded into 2 columns × 4 rows (1-4 left top-to-bottom, 5 beside 4, 6-8 climbing back up the right column), fills remaining screen height, plays a staggered "unfold the box" reveal on first scroll into view (new `initPart3MobileFlowUnfold()`), replayable via a button. Desktop chevron unchanged.
+- Deleted the stale `@media (max-width: 760px)` tools-checklist stacking block (conflicted with the new full-height design, same pattern as the earlier 7/8/11 stale-rule removals).
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/UI Idea/mobile-tools-flow-prototype.html`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- CSS brace depth-scan balanced; HTML tag-balance counts matched; embedded JSON blocks parsed; all new data-attribute selectors cross-checked between HTML and JS.
+
+Remaining:
+- Not tested in an actual browser/device. No git commit made; t-preview not re-synced.
+
+### 2026-08-08 16:55 HKT — Codex — Restrict settings and menu panels to their own hover zones
+
+Summary:
+- Isolated the font settings control from the menu control so hovering one cannot open the other panel.
+- Settings opens while hovering the gear or its panel and closes after leaving that area.
+- The compact menu opens while hovering the menu symbol or its drawer, closes after leaving both, and remains click-open for touch devices.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed; `git diff --check` passed; CSS brace checks passed.
+- Live page confirmed the settings panel content and that the compact menu remains hidden on desktop; the browser supports the hover-state selector used for the menu close symbol.
+
+Remaining:
+- Check the hover transition visually at one narrow viewport.

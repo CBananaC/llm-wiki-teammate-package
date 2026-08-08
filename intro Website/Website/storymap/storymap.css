@@ -80,6 +80,7 @@ img { max-width: 100%; }
 }
 .tabs { grid-column: 2; justify-self: center; display: flex; align-items: center; gap: clamp(16px, 2.2vw, 32px); height: 100%; }
 .settings-wrap { grid-column: 3; justify-self: end; position: relative; }
+.site-settings-control { position: relative; display: grid; place-items: center; }
 
 .tabs > a,
 .nav-dropdown-trigger {
@@ -2172,46 +2173,10 @@ img { max-width: 100%; }
     padding: 16px;
   }
 }
-@media (max-width: 760px) {
-  .part3-tools-checklist {
-    grid-template-columns: 1fr;
-    height: auto;
-    min-height: 0;
-  }
-  .part3-tools-list-window {
-    border-right: 0;
-    border-bottom: 1px solid var(--line);
-  }
-  .part3-tools-info-window {
-    height: auto;
-    overflow: visible;
-  }
-  .part3-tools-list {
-    grid-auto-rows: auto;
-    flex: 0 1 auto;
-    overflow: visible;
-  }
-  .part3-tool-row {
-    height: auto;
-    min-height: var(--part3-tools-row-height, 88px);
-  }
-  .part3-tool-info-view {
-    grid-template-rows: 280px auto;
-    height: auto;
-    min-height: 0;
-  }
-  .part3-tools-info-panel {
-    height: auto;
-    min-height: 0;
-    overflow: visible;
-  }
-  .part3-tool-info-photo {
-    min-height: 280px;
-  }
-  .part3-tool-info-copy {
-    overflow: visible;
-  }
-}
+/* 註：舊的「工具清單堆疊在工具資訊上方、auto 高度」規則已移除——
+   所需的工具與資源在手機版／窄螢幕改用下方「12 · 手機版：工具與資源／
+   基本流程」的左右箭頭單頁版面（工具清單整個隱藏，工具資訊佔滿高度）。
+   舊規則的 auto 高度會和新版面的滿版高度衝突，故整段刪除。 */
 
 /* ============================================================================
    9b · 第一至第三部分：尚未改寫的舊版標記之過渡樣式
@@ -3941,4 +3906,187 @@ img { max-width: 100%; }
   }
   #part-3-try-explorer.is-mtry-overview .part3-try-chatfoot { flex: 0 0 auto; }
   #part-3-try-explorer.is-mtry-p3 .part3-try-cmp { flex: 1 1 auto; min-height: 0; }
+}
+
+/* ============================================================================
+   12 · 手機版／窄螢幕：所需的工具與資源、重用平台的基本流程
+   （#part-3-tools-card / #part-3-basic-flow-chart）
+
+   所需的工具與資源：工具清單（左欄）整個隱藏，只留工具資訊（右欄）並佔滿
+   高度；改用疊在工具資訊上方的左右箭頭切換工具。原本每列自己的勾選章
+   （.part3-tool-tick）跟著清單一起隱藏，改用 .part3-tools-mtick 這個共用的
+   勾選章疊在目前工具的圖片右上角：每次換工具都先變回空白方框，再播放
+   「填色＋打勾」的效果（storymap.js 的 initPart3ToolsChecklist() 負責換工具
+   與播放時機）。桌面版完全不受影響——.part3-tools-mnav 預設 display:none。
+
+   重用平台的基本流程：8 個步驟原本橫向排成一列雪佛龍，手機版改排成 2 欄
+   × 4 格：左欄由上到下是 1-4，4 的右邊接 5，然後 6、7、8 沿右欄由下往上
+   疊回去。進場時依序「掀開」——先顯示 1，再往下掀出 2、3、4，停一拍後
+   往右掀出 5，最後沿右欄一格一格往上掀出 6、7、8（storymap.js 的
+   initPart3MobileFlowUnfold() 負責時機，用 IntersectionObserver 在區塊第一次
+   進入畫面時播放一次，也可以按「重播展開效果」按鈕重播）。桌面版的雪佛龍
+   樣式（.part3-flow-step 的 clip-path 等）都寫在本節媒體查詢之外，不受影響。
+   ========================================================================== */
+.part3-tools-mnav, .part3-flow-mreplay { display: none; }
+
+@media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  /* --- 所需的工具與資源 --- */
+  .part3-tools-checklist {
+    grid-template-columns: 1fr;
+    height: calc(100svh - var(--bar-h, 62px));
+    min-height: 0;
+  }
+  .part3-tools-list-window { display: none; }
+  .part3-tools-info-window {
+    position: relative;
+    height: 100%;
+    min-height: 0;
+    overflow: hidden;
+  }
+  .part3-tools-info-panel {
+    height: calc(100% - 50px);
+    min-height: 0;
+    overflow: hidden;
+  }
+  .part3-tools-window-bar { min-height: 50px; padding: 12px 16px; }
+  .part3-tool-info-view {
+    grid-template-rows: minmax(0, 1fr) auto;
+    height: 100%;
+    min-height: 0;
+  }
+  .part3-tool-info-photo { min-height: 0; }
+  .part3-tool-info-copy { max-height: 46%; overflow-y: auto; }
+  /* 保留設計裡原有的打勾樣式，但每列自己的數字方塊在手機版改由
+     .part3-tools-mtick 取代，避免和抽屜化的清單一起消失 */
+  .part3-tool-info-number { display: none; }
+
+  .part3-tools-mnav {
+    display: block;
+    position: absolute; inset: 0;
+    z-index: 4;
+    pointer-events: none;
+  }
+  .part3-tools-mtick {
+    position: absolute; top: 14px; right: 14px; pointer-events: none;
+    display: grid; place-items: center;
+    width: 36px; height: 36px;
+    background: #fffaf2; color: transparent;
+    border: 1.5px solid rgba(22, 61, 63, .5);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, .18);
+    transition: background-color .28s ease, border-color .28s ease;
+  }
+  .part3-tools-mtick .mark {
+    display: inline-block;
+    font: 800 18px/1 var(--sans);
+    transform: scale(.3) rotate(-18deg);
+    opacity: 0;
+    transition: transform .3s cubic-bezier(.34, 1.56, .64, 1), opacity .2s ease;
+  }
+  .part3-tools-mtick.is-ticked {
+    background: var(--yellow); border-color: var(--ink); color: var(--ink);
+  }
+  .part3-tools-mtick.is-ticked .mark { transform: scale(1) rotate(0deg); opacity: 1; }
+  .part3-tools-mcount {
+    position: absolute; top: 14px; left: 14px; pointer-events: none;
+    padding: 5px 10px;
+    background: rgba(18, 54, 58, .72); color: #f7f3ea;
+    font: 700 11px/1 var(--sans); letter-spacing: .06em;
+  }
+  .part3-tools-marrow {
+    position: absolute; top: 42%; transform: translateY(-50%);
+    pointer-events: auto;
+    width: 38px; height: 38px;
+    display: grid; place-items: center;
+    background: rgba(18, 54, 58, .72); color: #f7f3ea;
+    border: 0; border-radius: 50%;
+    font: 600 18px/1 var(--sans);
+    -webkit-tap-highlight-color: transparent;
+  }
+  .part3-tools-marrow:active { background: rgba(18, 54, 58, .92); }
+  .part3-tools-marrow.prev { left: 10px; }
+  .part3-tools-marrow.next { right: 10px; }
+  .part3-tools-marrow[disabled] { opacity: .25; pointer-events: none; }
+
+  /* --- 重用平台的基本流程：2 欄 × 4 格「展開紙盒」 --- */
+  #part-3-basic-flow-stack {
+    height: calc(100svh - var(--bar-h, 62px));
+    display: flex; flex-direction: column;
+  }
+  #part-3-basic-flow-card { flex: 0 0 auto; }
+  #part-3-basic-flow-chart {
+    position: relative;
+    flex: 1 1 auto; min-height: 0;
+    display: flex; flex-direction: column;
+    padding: clamp(12px, 3vw, 18px);
+  }
+  #part-3-basic-flow-chart > .body { display: none; }
+  .part3-flow-chev {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    grid-template-rows: repeat(4, 1fr);
+    gap: 6px;
+    flex: 1 1 auto; min-height: 0;
+    perspective: 900px;
+  }
+  .part3-flow-step {
+    margin-left: 0;
+    clip-path: none;
+    min-height: 0;
+    padding: 8px 10px;
+    border: 1px solid var(--line);
+    opacity: 0;
+    transform-style: preserve-3d;
+    backface-visibility: hidden;
+  }
+  .part3-flow-step:first-child { clip-path: none; }
+  .part3-flow-step-no {
+    font-size: calc(15px * var(--font-scale));
+    margin-bottom: 4px;
+  }
+  .part3-flow-step-label { font-size: calc(11.5px * var(--font-scale)); }
+
+  /* 位置：左欄由上到下 1-4，右欄由下到上 5-8（5 貼著 4） */
+  .part3-flow-step:nth-child(1) { grid-column: 1; grid-row: 1; }
+  .part3-flow-step:nth-child(2) { grid-column: 1; grid-row: 2; }
+  .part3-flow-step:nth-child(3) { grid-column: 1; grid-row: 3; }
+  .part3-flow-step:nth-child(4) { grid-column: 1; grid-row: 4; }
+  .part3-flow-step:nth-child(5) { grid-column: 2; grid-row: 4; }
+  .part3-flow-step:nth-child(6) { grid-column: 2; grid-row: 3; }
+  .part3-flow-step:nth-child(7) { grid-column: 2; grid-row: 2; }
+  .part3-flow-step:nth-child(8) { grid-column: 2; grid-row: 1; }
+
+  /* 掀開方向：2-4 從自己的上緣往下掀 */
+  .part3-flow-step:nth-child(2),
+  .part3-flow-step:nth-child(3),
+  .part3-flow-step:nth-child(4) {
+    transform-origin: top center;
+    transform: rotateX(-100deg);
+  }
+  /* 5 從自己的左緣往右掀，貼著 4 展開 */
+  .part3-flow-step:nth-child(5) {
+    transform-origin: left center;
+    transform: rotateY(-100deg);
+  }
+  /* 6-8 從自己的下緣往上掀，沿右欄往上疊回去 */
+  .part3-flow-step:nth-child(6),
+  .part3-flow-step:nth-child(7),
+  .part3-flow-step:nth-child(8) {
+    transform-origin: bottom center;
+    transform: rotateX(100deg);
+  }
+  .part3-flow-step.is-shown {
+    opacity: 1;
+    transform: rotateX(0deg) rotateY(0deg);
+    transition: transform .5s cubic-bezier(.3, .9, .4, 1.15), opacity .25s ease;
+  }
+  .part3-flow-mreplay {
+    display: block;
+    position: absolute; top: 10px; right: 10px; z-index: 3;
+    padding: 6px 12px;
+    background: rgba(18, 54, 58, .08);
+    color: var(--ink);
+    border: 1px solid var(--line);
+    font: 700 11px/1 var(--sans); letter-spacing: .04em;
+  }
+  .part3-flow-mreplay:active { background: rgba(18, 54, 58, .16); }
 }

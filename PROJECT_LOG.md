@@ -10360,3 +10360,48 @@ Verified:
 
 Remaining:
 - Check the open narrow-screen drawer visually at a mobile viewport.
+
+### 2026-08-08 16:53 HKT — Claude — Mobile/narrow-screen layout for 所需的工具與資源 and 重用平台的基本流程
+
+Summary:
+- Built and got approval on a sample HTML prototype (`intro Website/Website/UI Idea/mobile-tools-flow-prototype.html`) before touching the live site, per project convention.
+- 所需的工具與資源 (mobile/narrow ≤1040px or touch device): hides the 工具清單 list panel entirely; 工具資訊 now fills the full available height (100svh minus topbar). Left/right arrow buttons switch tools, reusing the existing radio-row selection logic (`initPart3ToolsChecklist`) rather than duplicating data. The per-row number box is hidden; a single shared tick badge (`.part3-tools-mtick`) overlays the top-right of the current tool's photo, resetting to an empty white box and replaying a fill+pop animation each time a new tool is shown.
+- 重用平台的基本流程 (same breakpoint): the 8-step chevron chain is regridded into 2 columns × 4 rows (left column top-to-bottom = steps 1-4, step 5 beside step 4, then 6/7/8 climbing back up the right column) and reflows to fill the remaining screen height. On first scroll into view it plays a staggered "unfolding a paper box" reveal (steps 2-4 fold down, 5 folds right, 6-8 fold up), driven by a new `initPart3MobileFlowUnfold()` in storymap.js using the existing step buttons (no content duplicated); a "重播展開效果" button replays it. Desktop chevron styling and click-to-navigate behavior are untouched.
+- Deleted the stale `@media (max-width: 760px)` block that used to stack the tools list/info vertically with `auto` height — it conflicted with the new full-height single-panel design and is now fully superseded by the new device-aware media query, consistent with how the 7/8/11 mobile work handled the same kind of stale-rule conflict earlier this session.
+- Added `id="part-3-basic-flow-stack"` to the `.lay-stack` wrapping the flow heading+chart so the new CSS could target just that instance without relying on `:has()`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/UI Idea/mobile-tools-flow-prototype.html` (prototype, not linked from the live site)
+
+Verified:
+- `node --check storymap.js` passed.
+- Full character-by-character brace depth-scan on `storymap.css`: balanced, never negative.
+- HTML tag-balance counts (div/section/article/aside/button/span/figure) on `storymap-example.html`: open == close for all.
+- Embedded `data-part3-try-data` / `data-part3-feature-data` JSON blocks still parse.
+- Cross-checked every new `data-part3-tools-*` / `data-part3-flow-replay` attribute selector used in storymap.js against the exact attributes present in storymap-example.html.
+
+Remaining:
+- Not tested in an actual browser or on a real device — this whole round was verified only via static analysis, same disclosed limitation as the earlier 7/8/11 mobile work.
+- No git commit made; `t-preview` mirror repo not re-synced.
+
+### 2026-08-08 16:55 HKT — Codex — Restrict settings and menu panels to their own hover zones
+
+Summary:
+- Isolated the font settings control from the menu control so hovering one cannot open the other panel.
+- Settings opens while hovering the gear or its panel and closes after leaving that area.
+- The compact menu opens while hovering the menu symbol or its drawer, closes after leaving both, and remains click-open for touch devices.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed; `git diff --check` passed; CSS brace checks passed.
+- Live page confirmed the settings panel content and that the compact menu remains hidden on desktop; the browser supports the hover-state selector used for the menu close symbol.
+
+Remaining:
+- Check the hover transition visually at one narrow viewport.

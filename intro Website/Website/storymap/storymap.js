@@ -22,7 +22,7 @@ document.querySelectorAll('.sample-doc-panel, .source-flow-document').forEach((p
   });
 });
 const settingsPanel = document.getElementById('site-settings-panel');
-const settingsWrap = document.querySelector('.settings-wrap');
+const settingsControl = document.querySelector('.site-settings-control');
 const fontSizeDecrease = document.getElementById('font-size-decrease');
 const fontSizeIncrease = document.getElementById('font-size-increase');
 const fontSizeValue = document.getElementById('font-size-value');
@@ -61,19 +61,17 @@ let settingsCloseTimer;
 const scheduleSettingsClose = () => {
   window.clearTimeout(settingsCloseTimer);
   settingsCloseTimer = window.setTimeout(() => {
-    if (!settingsWrap.matches(':hover') && !settingsWrap.contains(document.activeElement)) setSettingsOpen(false);
+    if (!settingsControl.matches(':hover')) setSettingsOpen(false);
   }, 100);
 };
 applyFontScale(readFontScale());
-settingsWrap.addEventListener('mouseenter', () => setSettingsOpen(true));
-settingsWrap.addEventListener('mouseleave', scheduleSettingsClose);
-settingsWrap.addEventListener('focusin', () => setSettingsOpen(true));
-settingsWrap.addEventListener('focusout', scheduleSettingsClose);
-settingsButton.addEventListener('click', () => setSettingsOpen(settingsPanel.hidden || settingsWrap.matches(':hover')));
+settingsControl.addEventListener('mouseenter', () => setSettingsOpen(true));
+settingsControl.addEventListener('mouseleave', scheduleSettingsClose);
+settingsButton.addEventListener('click', () => setSettingsOpen(true));
 fontSizeDecrease.addEventListener('click', () => applyFontScale(readFontScale() - FONT_SCALE_STEP));
 fontSizeIncrease.addEventListener('click', () => applyFontScale(readFontScale() + FONT_SCALE_STEP));
 document.addEventListener('click', (event) => {
-  if (!settingsPanel.hidden && !event.target.closest('.settings-wrap')) setSettingsOpen(false);
+  if (!settingsPanel.hidden && !event.target.closest('.site-settings-control')) setSettingsOpen(false);
 });
 document.addEventListener('keydown', (event) => {
   if (event.key === 'Escape' && !settingsPanel.hidden) {
@@ -86,6 +84,20 @@ const compactMenuButton = document.getElementById('compact-menu-button');
 const compactMenuPanel = document.getElementById('compact-menu-panel');
 const compactMenuBackdrop = document.getElementById('compact-menu-backdrop');
 const compactMenuClose = document.getElementById('compact-menu-close');
+let compactMenuCloseTimer;
+const scheduleCompactMenuClose = () => {
+  window.clearTimeout(compactMenuCloseTimer);
+  compactMenuCloseTimer = window.setTimeout(() => {
+    const menuHovered = compactMenuButton.matches(':hover')
+      || compactMenuClose.matches(':hover')
+      || compactMenuPanel.matches(':hover');
+    if (!menuHovered) setCompactMenuOpen(false);
+  }, 120);
+};
+const keepCompactMenuOpen = () => {
+  window.clearTimeout(compactMenuCloseTimer);
+  setCompactMenuOpen(true);
+};
 const setCompactMenuOpen = (open) => {
   compactMenuButton.setAttribute('aria-expanded', String(open));
   compactMenuButton.setAttribute('aria-label', open ? '關閉網站選單' : '開啟網站選單');
@@ -95,9 +107,13 @@ const setCompactMenuOpen = (open) => {
   compactMenuBackdrop.setAttribute('aria-hidden', String(!open));
   document.documentElement.classList.toggle('compact-menu-open', open);
 };
-compactMenuButton.addEventListener('click', () => {
-  setCompactMenuOpen(compactMenuButton.getAttribute('aria-expanded') !== 'true');
-});
+compactMenuButton.addEventListener('mouseenter', keepCompactMenuOpen);
+compactMenuButton.addEventListener('mouseleave', scheduleCompactMenuClose);
+compactMenuClose.addEventListener('mouseenter', keepCompactMenuOpen);
+compactMenuClose.addEventListener('mouseleave', scheduleCompactMenuClose);
+compactMenuPanel.addEventListener('mouseenter', keepCompactMenuOpen);
+compactMenuPanel.addEventListener('mouseleave', scheduleCompactMenuClose);
+compactMenuButton.addEventListener('click', () => setCompactMenuOpen(true));
 compactMenuClose.addEventListener('click', () => {
   setCompactMenuOpen(false);
   compactMenuButton.focus();
