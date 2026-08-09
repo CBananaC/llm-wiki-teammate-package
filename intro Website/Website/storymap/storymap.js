@@ -2458,15 +2458,8 @@ const initPart3TryIt = () => {
         <div class="part3-try-winbar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="ttl">第一步 · 下載史料</span></div>
         <div class="part3-try-dl" data-try-pdf-source="${pdfSource}">
           <div class="meta"><div class="name">${set.pdf}</div><div class="sub">${set.pdfSub}</div></div>
-          <div class="part3-try-dl-actions">
-            <button type="button" class="part3-try-dlbtn" data-try-dl data-try-pdf-source="${pdfSource}">下載</button>
-            <button type="button" class="part3-try-already" data-try-already>已下載</button>
-          </div>
         </div>
       </div>`;
-    showGuide('第一步', isTryMobile()
-      ? '先把這份史料下載到你的手機。'
-      : '先把這份史料下載到你的電腦。');
     const advanceToPrompt = (openPdf) => {
       const pdfHref = set.href || set.pdfPath;
       if (openPdf && pdfHref) window.open(pdfHref, '_blank', 'noopener');
@@ -2476,8 +2469,23 @@ const initPart3TryIt = () => {
       renderProgress();
       renderPhase2();
     };
-    stageHost.querySelector('[data-try-dl]').addEventListener('click', () => advanceToPrompt(true));
-    stageHost.querySelector('[data-try-already]').addEventListener('click', () => advanceToPrompt(false));
+    showGuide('第一步', isTryMobile()
+      ? '先把這份史料下載到你的手機。'
+      : '先把這份史料下載到你的電腦。', (opts) => {
+      const downloadButton = document.createElement('button');
+      downloadButton.type = 'button';
+      downloadButton.className = 'part3-try-chip';
+      downloadButton.textContent = '下載';
+      downloadButton.addEventListener('click', () => advanceToPrompt(true));
+      opts.appendChild(downloadButton);
+
+      const downloadedButton = document.createElement('button');
+      downloadedButton.type = 'button';
+      downloadedButton.className = 'part3-try-chip part3-try-chip--skip';
+      downloadedButton.textContent = '已下載';
+      downloadedButton.addEventListener('click', () => advanceToPrompt(false));
+      opts.appendChild(downloadedButton);
+    });
     syncDoc();
   };
 
@@ -3454,7 +3462,7 @@ const initMobileTryLayout = () => {
     if (mobile !== true) return;
     const has = (s) => !!stage.querySelector(s);
     let state, title;
-    if (has('[data-try-dl]')) { state = 'is-mtry-p1'; title = '第一步 · 下載史料'; }
+    if (has('[data-try-pdf-source]')) { state = 'is-mtry-p1'; title = '第一步 · 下載史料'; }
     else if (has('[data-try-cmp]')) { state = 'is-mtry-p3'; title = '第三步 · 比較 OCR 結果'; }
     else if (has('.part3-try-chat.is-final')) { state = 'is-mtry-overview'; title = '第二步 · 完成的 Prompt'; }
     else if (has('[data-try-chat]')) { state = 'is-mtry-steps'; title = '第二步 · 撰寫給 Agentic AI 的 Prompt'; }
