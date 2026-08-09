@@ -4326,3 +4326,14 @@ img { max-width: 100%; }
        避免兩處 transition 值不一致、之後改一邊忘了改另一邊。 */
   }
 }
+
+/* 「重用平台的基本流程」位於步驟二之前：桌面版不顯示整節，
+   手機／窄螢幕保留標題與說明文字，但不顯示 8 個方格流程圖。 */
+@media (min-width: 1041px) {
+  #part-3-basic-flow { display: none; }
+}
+
+@media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  #part-3-basic-flow-stack { height: auto; min-height: 0; }
+  #part-3-basic-flow-chart { display: none; }
+}
