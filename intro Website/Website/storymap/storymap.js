@@ -1821,8 +1821,8 @@ const initOcrScanScene = () => {
       if (stopPages.length || stopOutput) return;
       // 兩份文書的翻頁間隔稍微錯開，避免同時翻頁顯得太整齊、不自然。
       stopPages = pageImgs.map((img, i) => cycleOcrPage(img, pageSets[i], { interval: 3200 + i * 700 }));
-      // body 欄位是全文，字數較多，打字間隔調快一點，避免跑完一輪要等太久。
-      stopOutput = typeAgenticSequence(outputHost, outputLines, { charDelay: 9, lineDelay: 220, holdTime: 3600, clearDelay: 500 });
+      // body 欄位是全文；放慢逐字速度，讓研究者可以看清楚 JSON 的輸出過程。
+      stopOutput = typeAgenticSequence(outputHost, outputLines, { charDelay: 18, lineDelay: 220, holdTime: 3600, clearDelay: 500 });
     };
     const stop = () => {
       stopPages.forEach((fn) => fn());

@@ -4326,3 +4326,21 @@ img { max-width: 100%; }
        避免兩處 transition 值不一致、之後改一邊忘了改另一邊。 */
   }
 }
+
+/* 手機／窄螢幕：頂欄左側保留網站名稱；工具資源區扣除頂欄後填滿整個視窗。 */
+@media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  .topbar .brand { display: block; }
+
+  #part-3-tools {
+    height: calc(100svh - var(--bar-h, 62px));
+    min-height: 0;
+  }
+  #part-3-tools > .story-inner {
+    height: 100%;
+    min-height: 0;
+  }
+  #part-3-tools .part3-tools-checklist {
+    height: 100%;
+    min-height: 0;
+  }
+}
