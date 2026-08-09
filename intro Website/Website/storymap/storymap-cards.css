@@ -2219,3 +2219,9 @@
 #part-3-try-explorer[data-try-mode="handwritten"] [data-try-visual="硃批.png"]   { --tryimg-fit: contain; --tryimg-scale: 1; }
 #part-3-try-explorer[data-try-mode="handwritten"] [data-try-visual="奏報日期.png"] { --tryimg-fit: contain; --tryimg-scale: 1; }
 #part-3-try-explorer[data-try-mode="handwritten"] [data-try-visual="水印.png"]   { --tryimg-fit: contain; --tryimg-scale: 1; }
+
+/* Normal desktop: keep the Codex title bar inside the scene. The desktop
+   layout above places it at a negative top, but .agentic-scene clips overflow. */
+@media (min-width: 1041px) {
+  #part-3-agentic-ocr-chart { --agentic-codex-top: 4px; }
+}
