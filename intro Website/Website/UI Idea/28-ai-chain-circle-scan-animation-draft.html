@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>28 · 執行 AI Skills 的方法：AI Chain 環狀掃描動畫草稿</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+    --body-weight: 500;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 820px; margin: 0 0 12px; }
+  .lead b { color: var(--accent); }
+  .note-list { max-width: 820px; margin: 0 0 40px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+  .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
+
+  /* ==========================================================================
+     版面示意：沿用「2. 執行 AI Skills 的方法」目前的兩張文字卡，
+     新增的正方形視覺元素放在第一張卡（執行 AI Skills 的方法）右側。
+     第二張卡（撰寫 Python 代碼串聯 Chain）維持原本全寬放在下方。
+     ========================================================================== */
+  .mock-section { max-width: 1280px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
+  .mock-title-row h2 { margin: 0; color: var(--ink); font: 500 clamp(22px, 2.4vw, 30px)/1.2 var(--serif); letter-spacing: -.02em; }
+
+  .aichain-row { display: grid; grid-template-columns: minmax(0, 1fr) 38%; gap: clamp(18px, 2.2vw, 30px); align-items: stretch; margin-bottom: 14px; }
+  .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
+  .copybox.blk { display: flex; flex-direction: column; justify-content: center; }
+  .copybox .title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .copybox .option-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--accent); color: #fff; font: 800 13px var(--sans); border-radius: 3px; flex: none; }
+  .copybox h2 { margin: 0; color: var(--ink); font: 500 22px/1.3 var(--serif); }
+  .copybox p { margin: 0; color: var(--text); font: var(--body-weight) 15px/1.9 var(--serif); }
+  .aichain-card-2 { margin-bottom: 0; }
+
+  /* ---- 正方形視覺元素 ---- */
+  .aichain-square {
+    position: relative; display: flex; flex-direction: column; gap: 10px;
+    padding: clamp(16px, 1.8vw, 22px);
+    color: #f7f3ea; background: var(--ink);
+    border: 1px solid rgba(22, 61, 63, .22);
+    box-shadow: 0 10px 26px rgba(22, 61, 63, .14);
+  }
+  .aichain-square > .aichain-lead { margin: 0; color: rgba(247, 243, 234, .82); font: var(--body-weight) 13.5px/1.7 var(--serif); }
+
+  .aichain-ring-wrap { position: relative; width: 100%; aspect-ratio: 1 / 1; margin: 0 auto; }
+  .aichain-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .aichain-link { fill: none; stroke: rgba(247, 243, 234, .22); stroke-width: 2.5; stroke-linecap: round; }
+  .aichain-link.is-active { stroke: var(--yellow); filter: drop-shadow(0 0 4px rgba(243, 201, 103, .55)); }
+  .aichain-gap-note {
+    position: absolute; left: 50%; bottom: 1.5%; transform: translateX(-50%);
+    color: rgba(247, 243, 234, .38); font: 700 9px/1 var(--sans); letter-spacing: .08em;
+    white-space: nowrap; pointer-events: none;
+  }
+
+  /* 六個步驟小圓點：位置用 left/top 百分比（半徑固定，圓心在中央），
+     缺口留在正下方（第 6 點與第 1 點之間不連接）。 */
+  .aichain-node {
+    --p: 0; /* 0–100，由 JS 每一格動畫更新，代表這一步「填滿」的進度 */
+    position: absolute; transform: translate(-50%, -50%);
+    width: clamp(20px, 6.4%, 26px); aspect-ratio: 1 / 1; border-radius: 50%;
+    display: grid; place-items: center;
+    background: conic-gradient(var(--yellow) calc(var(--p) * 1%), rgba(255, 255, 255, .1) 0);
+    border: 1.5px solid rgba(247, 243, 234, .38);
+    box-shadow: 0 0 0 3px rgba(22, 61, 63, .9);
+    transition: border-color .25s, box-shadow .25s;
+  }
+  .aichain-node span {
+    display: grid; place-items: center; width: 68%; aspect-ratio: 1 / 1; border-radius: 50%;
+    background: var(--ink);
+    color: rgba(247, 243, 234, .8); font: 800 9px/1 var(--sans);
+    transition: background .25s, color .25s;
+  }
+  .aichain-node.is-filled { border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(22, 61, 63, .9), 0 0 10px rgba(243, 201, 103, .5); }
+  .aichain-node.is-filled span { background: transparent; color: #12363a; }
+
+  /* ---- 中央：VS Code 風格 JSON 視窗，模擬正在被逐步分析、掃描 ---- */
+  .aichain-vscode {
+    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
+    width: 47%; aspect-ratio: 3 / 2;
+    display: flex; flex-direction: column;
+    background: #1e1e1e; border-radius: 6px; overflow: hidden;
+    box-shadow: 0 10px 20px rgba(0, 0, 0, .4);
+    border: 1px solid rgba(255, 255, 255, .08);
+  }
+  .aichain-vscode-bar { display: flex; align-items: center; gap: 4px; padding: 4px 6px; background: #2b2b2b; border-bottom: 1px solid rgba(255, 255, 255, .06); flex: none; }
+  .aichain-vscode-bar .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .aichain-vscode-bar .dot.red { background: #ff5f57; }
+  .aichain-vscode-bar .dot.yellow { background: #febc2e; }
+  .aichain-vscode-bar .dot.green { background: #28c840; }
+  .aichain-vscode-bar span.file { margin-left: 4px; color: rgba(255, 255, 255, .5); font: 600 7px/1 var(--sans); letter-spacing: .02em; }
+  .aichain-vscode-body { position: relative; flex: 1; min-height: 0; padding: 5px 7px; overflow: hidden; font: 6.4px/1.55 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color: #d4d4d4; }
+  .aichain-vscode-body .line { display: block; white-space: pre; }
+  .aichain-vscode-body .key { color: #9cdcfe; }
+  .aichain-vscode-body .str { color: #ce9178; }
+  .aichain-vscode-body .punc { color: #858585; }
+  /* 掃描光暈：由 JS 控制 top（百分比），每一步從頭掃到尾一次，
+     速度＝該步驟的小圓點填滿速度，兩者共用同一個時間軸。 */
+  .aichain-scanline {
+    position: absolute; left: 0; right: 0; height: 26%;
+    background: linear-gradient(180deg, rgba(120, 180, 255, 0) 0%, rgba(120, 180, 255, .38) 48%, rgba(120, 180, 255, 0) 100%);
+    mix-blend-mode: screen; pointer-events: none; opacity: 0; transition: opacity .2s;
+  }
+  .aichain-scanline.is-visible { opacity: 1; }
+  .aichain-vscode-status {
+    position: absolute; right: 6px; bottom: 4px;
+    padding: 1px 5px; color: #12363a; background: var(--yellow);
+    font: 800 6.5px/1.4 var(--sans); letter-spacing: .04em; border-radius: 2px;
+    opacity: 0; transform: translateY(2px); transition: opacity .3s, transform .3s;
+  }
+  .aichain-vscode-status.is-shown { opacity: 1; transform: translateY(0); }
+
+  /* ---- 圖例：對應六個小圓點的實際步驟名稱（含可及性用途） ---- */
+  .aichain-legend { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; font: 700 10.5px/1.5 var(--sans); }
+  .aichain-legend li { display: flex; gap: 6px; align-items: baseline; color: rgba(247, 243, 234, .45); transition: color .25s; }
+  .aichain-legend li .n { flex: none; color: rgba(247, 243, 234, .35); }
+  .aichain-legend li.is-current { color: var(--yellow); }
+  .aichain-legend li.is-current .n { color: var(--yellow); }
+  .aichain-legend li.is-done { color: rgba(247, 243, 234, .75); }
+
+  /* 構圖標註（草稿用，正式版不會出現） */
+  .draft-tag {
+    position: absolute; z-index: 5;
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 9px; background: rgba(255, 255, 255, .96);
+    border: 1px solid var(--line); border-radius: 3px;
+    font: 700 11px/1 var(--sans); color: var(--ink); white-space: nowrap;
+  }
+  .draft-tag .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--accent); color: #fff; font: 800 9.5px/1 var(--sans);
+  }
+
+  .plan-block { max-width: 1280px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+
+  .source-note { max-width: 1280px; margin: 20px auto 0; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); font: 500 12.5px/1.7 var(--sans); color: var(--ink-soft); }
+</style>
+</head>
+<body>
+
+  <h1>「執行 AI Skills 的方法」新增正方形視覺元素 — AI Chain 環狀掃描動畫草稿</h1>
+  <p class="lead">
+    放在「執行 AI Skills 的方法」文字卡右側的新視覺元素：六個步驟畫成一圈小圓點，依序逐一「填滿」代表
+    <b>一個步驟做完才開始下一個</b>；因為「文書總結、分段」並不是「輸出結構化 JSON」的下一步，
+    第 6 點與第 1 點之間<b>刻意不連接</b>，圓圈下方留一個缺口。中央是一個 VS Code 風格的 JSON 視窗，
+    掃描光暈會在每一步跟著該步驟的小圓點填滿速度，從頭掃到尾一次，讓人感覺「這一步正在分析文書」。
+  </p>
+  <ul class="note-list">
+    <li>六個步驟文字逐字取自網站現有的 <code>#part-3-ai-chain-chart</code>：文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON，未新增或更動任何步驟名稱。</li>
+    <li>圓點本身不放文字（版面太小），改用小圓點旁的圖例對應數字，滑鼠不需要互動也能看懂目前跑到第幾步。</li>
+    <li>動畫是純時間軸驅動（<code>performance.now()</code> 取模），不是逐格用 <code>setInterval</code> 累加狀態，所以分頁切走再切回來不會卡住或跳格。</li>
+    <li>已加入 <code>IntersectionObserver</code>（畫面外暫停）與 <code>prefers-reduced-motion</code>（改成靜止的示意畫面，不跑動畫）。</li>
+  </ul>
+
+  <div class="mock-section">
+    <div class="mock-title-row"><h2>2. 執行 AI Skills 的方法</h2></div>
+
+    <div class="aichain-row">
+      <article class="copybox blk">
+        <div class="title-row"><span class="option-number">2</span><h2>執行 AI Skills的方法</h2></div>
+        <div class="body"><p>完成修改或建立 AI Skills 後，研究者便可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。</p></div>
+      </article>
+
+      <div class="aichain-square" id="aichain-square" role="group" aria-label="文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON">
+        <p class="aichain-lead">例如，處理奏摺的 AI Chain：</p>
+        <div class="aichain-ring-wrap">
+          <svg class="aichain-svg" viewBox="0 0 240 240" aria-hidden="true">
+            <path class="aichain-link" data-link="0" d="M76,196.21 A88,88 0 0,1 32,120" />
+            <path class="aichain-link" data-link="1" d="M32,120 A88,88 0 0,1 76,43.79" />
+            <path class="aichain-link" data-link="2" d="M76,43.79 A88,88 0 0,1 164,43.79" />
+            <path class="aichain-link" data-link="3" d="M164,43.79 A88,88 0 0,1 208,120" />
+            <path class="aichain-link" data-link="4" d="M208,120 A88,88 0 0,1 164,196.21" />
+          </svg>
+
+          <div class="aichain-node" data-node="0" style="left:31.667%; top:81.756%;" aria-hidden="true"><span>1</span></div>
+          <div class="aichain-node" data-node="1" style="left:13.333%; top:50%;" aria-hidden="true"><span>2</span></div>
+          <div class="aichain-node" data-node="2" style="left:31.667%; top:18.244%;" aria-hidden="true"><span>3</span></div>
+          <div class="aichain-node" data-node="3" style="left:68.333%; top:18.244%;" aria-hidden="true"><span>4</span></div>
+          <div class="aichain-node" data-node="4" style="left:86.667%; top:50%;" aria-hidden="true"><span>5</span></div>
+          <div class="aichain-node" data-node="5" style="left:68.333%; top:81.756%;" aria-hidden="true"><span>6</span></div>
+
+          <span class="aichain-gap-note" aria-hidden="true">6 → 1 不相連</span>
+
+          <div class="aichain-vscode" aria-hidden="true">
+            <div class="aichain-vscode-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="file">硃25.json</span></div>
+            <div class="aichain-vscode-body" id="aichain-json-body">
+              <span class="line"><span class="punc">{</span></span>
+              <span class="line">&nbsp;<span class="key">"doc_id"</span><span class="punc">:</span> <span class="str">"硃25"</span><span class="punc">,</span></span>
+              <span class="line">&nbsp;<span class="key">"step"</span><span class="punc">:</span> <span class="str">"…"</span><span class="punc">,</span></span>
+              <span class="line">&nbsp;<span class="key">"events"</span><span class="punc">:</span> <span class="punc">[</span></span>
+              <span class="line">&nbsp;&nbsp;<span class="punc">{</span> <span class="key">"quote"</span><span class="punc">:</span> <span class="str">"…"</span> <span class="punc">}</span></span>
+              <span class="line">&nbsp;<span class="punc">]</span></span>
+              <span class="line"><span class="punc">}</span></span>
+              <div class="aichain-scanline" id="aichain-scanline"></div>
+            </div>
+            <span class="aichain-vscode-status" id="aichain-status">6 步完成</span>
+          </div>
+
+          <!-- 構圖標註 -->
+          <div class="draft-tag" style="left: -4%; top: -10%;"><span class="n">1</span>小圓點＝六個步驟，逐一填滿</div>
+          <div class="draft-tag" style="right: -10%; top: 40%;"><span class="n">2</span>掃描光暈速度＝該步驟填滿速度</div>
+        </div>
+
+        <ol class="aichain-legend" id="aichain-legend">
+          <li data-legend="0"><span class="n">1</span>文書總結、分段</li>
+          <li data-legend="1"><span class="n">2</span>抽取事件及官員行動</li>
+          <li data-legend="2"><span class="n">3</span>追溯資訊來源</li>
+          <li data-legend="3"><span class="n">4</span>抽取上諭中皇帝對奏摺的回應</li>
+          <li data-legend="4"><span class="n">5</span>抽取後續官員的回應</li>
+          <li data-legend="5"><span class="n">6</span>輸出結構化 JSON</li>
+        </ol>
+      </div>
+    </div>
+
+    <article class="copybox blk aichain-card-2">
+      <div class="body"><p>為減少重複操作，研究者可要求 Agentic AI 撰寫 Python代碼，將多個 AI Skills 串聯成自動化的分析流程 （Chain）。程式會逐份讀取結構化文書，依序執行各項 AI Skills，並自動將結果儲存至 JSON 檔案，直至完成所有史料的分析，</p></div>
+    </article>
+  </div>
+
+  <div class="plan-block">
+    <h2>套用到正式網站前，還需要確認的事</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>是否取代現有的橫向版本</b>：目前 <code>#part-3-ai-chain-chart</code> 下方已有一條可點擊的橫向六節點鏈（<code>data-part3-chart-toggle</code>）。這個環狀版本要放在文字卡右側「新增」，還是直接取代整條橫向鏈，尚待確認。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>手機／窄螢幕版面</b>：正方形視覺元素在窄螢幕下建議整寬顯示、疊在文字卡下方（比照其他 <code>part3-*-grid</code> 在窄螢幕收成單欄的做法），圓點與圖例字級也需要再放大測試可讀性。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>中央 JSON 內容</b>：目前只是示意用的精簡欄位（<code>doc_id / step / events</code>），未對應任何真實文書的逐字內容；若要放上正式網站，需要決定是否改成某一份真實奏摺 JSON 的節錄（比照「甚麼是 OCR？」視覺元素的作法）。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>時間節奏</b>：草稿先用「每步 1.1 秒填滿、六步跑完後停留 0.9 秒再重播」，之後可依實際觀感調整快慢。</p></div></div>
+    </div>
+  </div>
+
+  <p class="source-note">
+    六個步驟文字與圓圈缺口（第 6 步不接回第 1 步）的邏輯，均取自
+    <code>Website/storymap/storymap-example.html</code> 中 <code>#part-3-ai-chain-chart</code> 的現有內容，未新增或更動步驟名稱。
+  </p>
+
+  <script>
+    (function () {
+      const square = document.getElementById('aichain-square');
+      const nodes = Array.from(square.querySelectorAll('.aichain-node'));
+      const links = Array.from(square.querySelectorAll('.aichain-link'));
+      const legendItems = Array.from(square.querySelectorAll('#aichain-legend li'));
+      const scanline = document.getElementById('aichain-scanline');
+      const status = document.getElementById('aichain-status');
+
+      const STEP_MS = 1100;   // 一個步驟：小圓點從 0 填到 100，同時掃描光暈掃一次
+      const HOLD_MS = 900;    // 六步都完成後，停留一下再重播
+      const TOTAL_MS = STEP_MS * nodes.length + HOLD_MS;
+
+      const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      // 純時間軸函式：輸入「這一圈跑了多久」，直接算出畫面該長怎樣。
+      // 不用逐格累加狀態，分頁切走幾秒再切回來也不會亂跳。
+      function render(elapsed) {
+        const t = ((elapsed % TOTAL_MS) + TOTAL_MS) % TOTAL_MS;
+        let currentStep = -1;
+
+        nodes.forEach((node, i) => {
+          const stepStart = i * STEP_MS;
+          const stepEnd = stepStart + STEP_MS;
+          let p;
+          if (t < stepStart) {
+            p = 0;
+          } else if (t < stepEnd) {
+            p = ((t - stepStart) / STEP_MS) * 100;
+            currentStep = i;
+          } else {
+            p = 100;
+          }
+          node.style.setProperty('--p', p.toFixed(1));
+          node.classList.toggle('is-filled', p >= 100);
+        });
+
+        links.forEach((link, i) => {
+          // 連結 i 接的是 node i → node i+1；node i 填滿後才亮起。
+          const nodeDoneAt = (i + 1) * STEP_MS;
+          link.classList.toggle('is-active', t >= nodeDoneAt);
+        });
+
+        legendItems.forEach((li, i) => {
+          li.classList.toggle('is-current', i === currentStep);
+          li.classList.toggle('is-done', currentStep === -1 ? t >= TOTAL_MS - HOLD_MS : i < currentStep);
+        });
+
+        if (currentStep >= 0) {
+          const within = (t - currentStep * STEP_MS) / STEP_MS; // 0–1
+          scanline.classList.add('is-visible');
+          scanline.style.top = (within * 74).toFixed(1) + '%';
+          status.classList.remove('is-shown');
+        } else if (t >= nodes.length * STEP_MS) {
+          scanline.classList.remove('is-visible');
+          status.classList.add('is-shown');
+        } else {
+          scanline.classList.remove('is-visible');
+          status.classList.remove('is-shown');
+        }
+      }
+
+      if (reduceMotion) {
+        // 靜止畫面：示意跑到一半（第 4 步進行中），不啟動動畫迴圈。
+        render(3 * STEP_MS + STEP_MS * 0.5);
+        return;
+      }
+
+      let raf = null;
+      let visible = false;
+      const start = performance.now();
+
+      function loop(now) {
+        render(now - start);
+        if (visible) raf = requestAnimationFrame(loop);
+      }
+
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          visible = entry.isIntersecting;
+          if (visible && raf === null) {
+            raf = requestAnimationFrame(loop);
+          } else if (!visible && raf !== null) {
+            cancelAnimationFrame(raf);
+            raf = null;
+          }
+        });
+      }, { threshold: 0.15 });
+      io.observe(square);
+    })();
+  </script>
+
+</body>
+</html>
