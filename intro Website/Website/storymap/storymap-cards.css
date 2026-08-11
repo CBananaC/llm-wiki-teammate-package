@@ -2207,7 +2207,9 @@
   margin-top: clamp(22px, 2.6vw, 34px);
   overflow-x: auto;
   overflow-y: hidden;
-  padding: 6px 2px 16px;
+  padding: clamp(22px, 3vw, 34px) clamp(14px, 2.4vw, 28px);
+  background: var(--paper-deep);
+  border: 1px solid var(--line);
 }
 #part-2-content .part2-flow-chart {
   display: flex;
@@ -2303,15 +2305,26 @@
 /* 窄螢幕／手機：改為直向排列，四組 Skills 收進同一個虛線群組，
    群組上／下各接一條垂直箭頭，不再逐一畫支線。 */
 @media (max-width: 900px) {
-  #part-2-content .part2-flow-shell { overflow-x: visible; padding: 4px 0 8px; }
+  #part-2-content .part2-flow-shell {
+    overflow-x: visible;
+    padding: clamp(20px, 6vw, 28px) clamp(12px, 4vw, 20px);
+  }
   #part-2-content .part2-flow-chart {
     flex-direction: column;
-    align-items: stretch;
+    align-items: center;
     width: 100%;
     min-width: 0;
   }
+  #part-2-content .part2-flow-node {
+    align-items: center;
+    text-align: center;
+  }
   #part-2-content .part2-flow-node-solo,
-  #part-2-content .part2-flow-node-stack { width: 100%; min-width: 0; }
+  #part-2-content .part2-flow-node-stack {
+    width: fit-content;
+    max-width: min(84vw, 320px);
+    min-width: 0;
+  }
 
   #part-2-content .part2-flow-arrow {
     flex: 0 0 clamp(22px, 6vw, 32px);
@@ -2330,7 +2343,10 @@
 
   #part-2-content .part2-flow-branch {
     flex-direction: column;
-    padding: clamp(30px, 9vw, 40px) clamp(12px, 3.4vw, 18px) clamp(14px, 3.4vw, 18px);
+    align-items: center;
+    width: fit-content;
+    max-width: 100%;
+    padding: clamp(30px, 9vw, 40px) clamp(16px, 4.4vw, 24px) clamp(14px, 3.4vw, 18px);
     border: 1px dashed rgba(22, 61, 63, .3);
     background: rgba(22, 61, 63, .04);
   }
@@ -2345,7 +2361,10 @@
     letter-spacing: .1em;
     white-space: nowrap;
   }
-  #part-2-content .part2-flow-stack { gap: clamp(12px, 3.4vw, 18px); }
+  #part-2-content .part2-flow-stack {
+    align-items: center;
+    gap: clamp(12px, 3.4vw, 18px);
+  }
   #part-2-content .part2-flow-node-stack::before,
   #part-2-content .part2-flow-node-stack::after { display: none; }
 }
