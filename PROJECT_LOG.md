@@ -11930,28 +11930,6 @@ Verified:
 Remaining:
 - No commit or push was made; the updated files remain in the working tree for review.
 
-## 2026-08-11 17:30 HKT — Codex — Exported the platform interface replica to a standalone HTML page
-
-Summary:
-- Added one standalone page containing the five interactive replicas shown in the `平台介面` tab: 導覽列、時間與關係圖表、節點資訊區、原始史料區 and 人工智能分析區.
-- Reused the existing canonical Part 1 data, styling, and interaction modules so the new page remains tied to the reviewed 硃42 demonstration.
-
-Files changed:
-- `intro Website/Website/storymap/platform-interface-replica.html`
-- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
-- `PROJECT_LOG.md`
-
-Verified:
-- Inspected the live `平台介面` tab before extracting the replica.
-- Confirmed all five mode roots render on the new page, with no browser console errors.
-- Browser-tested chart node opening, AI Skill source highlighting, AI result loading, and adding a candidate to the chart.
-- `node --check` and `git diff --check` passed.
-
-Remaining:
-- The new HTML intentionally references the adjacent Part 1 CSS, data, and behavior files; keep those files together when moving or publishing the page.
-- Existing unrelated working-tree changes were preserved; no push was made.
-
-### 2026-08-11 17:10 HKT — Codex — Split 平台介面 into five topic sections with focused visuals
 
 Summary:
 - Replaced the single Part 1 replica plus five-card accordion with five independent topic sections: 導覽列、時間與關係圖表、節點資訊區、原始史料區、人工智能分析區.
@@ -12101,3 +12079,139 @@ Verified:
 
 Remaining:
 - No commit or push was made; the updated files remain in the working tree for review.
+
+## 2026-08-11 17:30 HKT — Codex — Exported the platform interface replica to a standalone HTML page
+
+Summary:
+- Added one standalone page containing the five interactive replicas shown in the `平台介面` tab: 導覽列、時間與關係圖表、節點資訊區、原始史料區 and 人工智能分析區.
+- Reused the existing canonical Part 1 data, styling, and interaction modules so the new page remains tied to the reviewed 硃42 demonstration.
+
+Files changed:
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Inspected the live `平台介面` tab before extracting the replica.
+- Confirmed all five mode roots render on the new page, with no browser console errors.
+- Browser-tested chart node opening, AI Skill source highlighting, AI result loading, and adding a candidate to the chart.
+- `node --check` and `git diff --check` passed.
+
+Remaining:
+- The new HTML intentionally references the adjacent Part 1 CSS, data, and behavior files; keep those files together when moving or publishing the page.
+- Existing unrelated working-tree changes were preserved; no push was made.
+
+### 2026-08-11 17:34 HKT — Codex — Restructure 平台運作流程 into topic bars and paragraph cards
+
+Summary:
+- Replaced the old centered Part 2 story-card layout with topic bars for 運作流程圖, 輸入結構化資料, 使用AI從原文中抽取資訊, the four analysis stages, and 視覺化呈現分析的結果.
+- Moved numbered topics into option-number boxes and split every paragraph from 輸入結構化資料 onward into its own left-aligned text card.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 1280px showed eight full-width topic bars, all Part 2 cards sharing the same left edge, and no remaining old story-card or cover-bar markup.
+- Confirmed 40 cards from 輸入結構化資料 onward each contain exactly one paragraph; no horizontal overflow or browser console logs were reported.
+- `git diff --check` passed.
+
+Remaining:
+- Local checkpoint `f693b35` created; unrelated concurrent working-tree edits remain unstaged and nothing was pushed.
+
+## 2026-08-11 17:41 HKT — Claude — Built the 運作流程圖 flowchart for 平台運作流程 (part-2-flow-content)
+
+Summary:
+- Replaced the text-arrow paragraph in `#part-2-flow-content` with a real flowchart: 步驟四 輸入結構化資料 → 步驟五 AI Skills → four parallel analysis-stage nodes (總結文書／重建通信關係／抽取奏摺的資訊／收取上諭的資訊) → 分析結果 視覺化呈現分析的結果. Each node links to its existing anchor (`#part-2-input`, `#part-2-ai`, `#part-2-summary`, `#part-2-communication`, `#part-2-extract`, `#part-2-yu-info`, `#part-2-visualize`).
+- Desktop layout (>900px): horizontal chart with a CSS bus-line/stub fan-out into the four stacked nodes and a matching fan-in, built with `::before`/`::after` pseudo-elements (no SVG/JS).
+- Narrow/phone layout (≤900px): chart switches to a vertical column; the four analysis-stage nodes are grouped inside one dashed "四組 AI Skills" box with a single arrow in and out, instead of drawing four separate diagonal connectors.
+- New CSS lives under the existing `#part-2-content .part2-...` namespace in `storymap-cards.css`, matching the site's ink/paper palette, sharp-cornered cards, and serif/sans type pairing.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- Parsed the edited HTML with BeautifulSoup: all 7 flow nodes present with the intended eyebrow/title text, and all 7 target ids (`part-2-input`, `part-2-ai`, `part-2-summary`, `part-2-communication`, `part-2-extract`, `part-2-yu-info`, `part-2-visualize`) exist in the file.
+- Checked `storymap-cards.css` brace balance (436 open / 436 close).
+- Could not render a live screenshot in this session (sandbox has no browser and cannot install Chromium's system deps); visual check in the browser at `127.0.0.1:8765` still recommended.
+
+Remaining:
+- Visually confirm the desktop fan-out spacing and the mobile dashed-group layout in a real browser, especially around the 900px breakpoint.
+- This edit only touches `storymap-example.html` / `storymap-cards.css`; local commit covers just those two files, not the pre-existing unrelated edits already sitting in `PROJECT_LOG.md` and `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`.
+
+## 2026-08-11 17:52 HKT — Claude — Gave the 運作流程圖 a backdrop panel and fixed phone-layout node sizing
+
+Summary:
+- `.part2-flow-shell` now sits on its own backdrop panel (`--paper-deep` background, `--line` border, extra padding) instead of floating directly on the surrounding surface color.
+- On the ≤900px layout, flow nodes and the dashed "四組 AI Skills" group no longer stretch to full width — they now shrink to fit their text (`width: fit-content`, capped at `min(84vw, 320px)`) and are centered horizontally, with eyebrow/title text centered inside each node.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- Re-checked brace balance (437 open / 437 close).
+- Local checkpoint `6f0714f` created; note the working tree's `.git/index.lock` and `.git/HEAD.lock` could not be `rm`'d directly on this mount (Operation not permitted) but were clearable via rename, after which `git commit` succeeded normally — worth remembering if a future commit here reports a stale lock.
+
+Remaining:
+- Same as above: confirm visually in a real browser.
+
+## 2026-08-11 17:44 HKT — Codex — Turned 運作流程圖 into the second numbered Part 2 text card
+
+Summary:
+- Kept `平台的運作流程` as numbered card 1 and changed `運作流程圖` into a separate numbered card 2.
+- Removed the flow section's topic-bar heading while preserving the clickable flow diagram and its existing links to the detailed Part 2 sections.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview showed card 1 `平台的運作流程` and card 2 `運作流程圖` as separate text cards.
+- Confirmed the flow diagram remains present beneath card 2 and the former `流程概覽` topic bar is gone.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` passed; no browser console errors were reported.
+
+Remaining:
+- Existing concurrent Part 2 flowchart and project-log edits were preserved; nothing was pushed.
+
+## 2026-08-11 17:48 HKT — Codex — Moved the input-result paragraph into the first input card
+
+Summary:
+- Moved `輸入後，網站會讀取這些欄位，並根據文書的收發日期，在時間與關係圖表上建立各份文書的節點；同時，文書區亦會顯示文書的基本資料及完整原文。` into the `在選定研究主題及所使用的奏摺與上諭後` card.
+- Placed it immediately after the parenthetical ending `「重用平台於其他研究主題」中再作介紹。）` and rendered it in bold.
+- Removed the now-redundant standalone paragraph card.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The input section now contains three cards; the first contains one `<strong>` element with the requested sentence and the sentence appears only once.
+- Browser computed the moved text at font weight 700 with no console errors.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
+
+## 2026-08-11 17:57 HKT — Codex — Combined the standalone platform-interface replica
+
+Summary:
+- Reworked `intro Website/Website/storymap/platform-interface-replica.html` from five separate mode-specific sections into one combined full-interface replica based on the previous combined implementation.
+- Kept the navigation bar, time-and-relationship chart, original-document area, AI analysis area, and chart-opened node-information panel together in the same interactive surface.
+
+Files changed:
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview rendered one replica root in `all` mode with four interface regions, four chart nodes, and document/AI/node panels.
+- Clicking a chart node opened the node-information panel; no browser console errors were reported.
+- `node --check intro Website/Website/storymap/part-1-interface.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
