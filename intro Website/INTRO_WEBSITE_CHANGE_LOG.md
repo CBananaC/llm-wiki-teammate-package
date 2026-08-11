@@ -8076,3 +8076,22 @@ Verified:
 
 Remaining:
 - Nothing remaining for this adjustment; nothing was pushed.
+
+### 2026-08-11 19:43 HKT — Codex — Stabilized replica chart dot hover and click
+
+Summary:
+- Prevented the shared HTML-dot hover transform from moving SVG chart circles away from their data coordinates.
+- Excluded chart nodes from the chart pan gesture so clicking a dot opens its AI 分析區 card reliably.
+
+Files changed:
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/platform-interface-replica.html`
+
+Verified:
+- Browser preview confirmed hovering keeps the circle centered on its SVG coordinate and clicking the circle opens the AI 分析區 card.
+- `node --check Website/storymap/part-1-interface.js` passed.
+- `git diff --check` passed.
+
+Remaining:
+- Nothing remaining for this adjustment; nothing was pushed.

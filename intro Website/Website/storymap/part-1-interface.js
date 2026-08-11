@@ -458,6 +458,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     let panScrollTop = 0;
     chartScroll.addEventListener('mousedown', (event) => {
       if (event.button !== 0) return;
+      const target = event.target;
+      if (target instanceof Element && target.closest('[data-chart-node-id]')) return;
       panning = true;
       panX = event.clientX;
       panY = event.clientY;
