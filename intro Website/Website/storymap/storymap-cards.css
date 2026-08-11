@@ -2227,8 +2227,8 @@
   overflow-x: auto;
   overflow-y: hidden;
   padding: clamp(22px, 3vw, 34px) clamp(14px, 2.4vw, 28px);
-  background: var(--paper-deep);
-  border: 1px solid var(--line);
+  background: var(--ink);
+  border: 1px solid var(--ink);
 }
 #part-2-content .part2-flow-chart {
   display: flex;
@@ -2251,7 +2251,7 @@
 #part-2-content .part2-flow-node:focus-visible {
   background: #fffdf8;
   border-color: var(--accent);
-  box-shadow: 0 10px 22px rgba(22, 61, 63, .14);
+  box-shadow: 0 10px 24px rgba(0, 0, 0, .32);
   transform: translateY(-2px);
 }
 #part-2-content .part2-flow-node:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
@@ -2272,18 +2272,19 @@
   flex: 0 0 var(--part2-flow-stub);
   align-self: center;
   height: 1px;
-  background: var(--line);
+  background: rgba(247, 243, 234, .3);
   position: relative;
 }
 #part-2-content .part2-flow-arrow::after {
   content: "";
   position: absolute; right: -1px; top: 50%;
   transform: translateY(-50%);
-  border-left: 7px solid var(--accent);
+  border-left: 7px solid var(--yellow);
   border-top: 5px solid transparent;
   border-bottom: 5px solid transparent;
 }
 
+/* 分支僅用留白區隔四組 Skills，左右已移除匯流排／支線，避免視覺過於擁擠。 */
 #part-2-content .part2-flow-branch {
   position: relative;
   flex: 0 0 auto;
@@ -2291,15 +2292,6 @@
   align-items: stretch;
   padding: 0 var(--part2-flow-stub);
 }
-#part-2-content .part2-flow-branch::before,
-#part-2-content .part2-flow-branch::after {
-  content: "";
-  position: absolute; top: 0; bottom: 0;
-  width: 1px;
-  background: var(--line);
-}
-#part-2-content .part2-flow-branch::before { left: 0; }
-#part-2-content .part2-flow-branch::after { right: 0; }
 #part-2-content .part2-flow-branch-label { display: none; }
 
 #part-2-content .part2-flow-stack {
@@ -2309,17 +2301,6 @@
   gap: clamp(10px, 1.2vw, 18px);
 }
 #part-2-content .part2-flow-node-stack { position: relative; }
-#part-2-content .part2-flow-node-stack::before,
-#part-2-content .part2-flow-node-stack::after {
-  content: "";
-  position: absolute; top: 50%;
-  width: var(--part2-flow-stub);
-  height: 1px;
-  background: var(--line);
-  transform: translateY(-50%);
-}
-#part-2-content .part2-flow-node-stack::before { left: calc(-1 * var(--part2-flow-stub)); }
-#part-2-content .part2-flow-node-stack::after { right: calc(-1 * var(--part2-flow-stub)); }
 
 /* 窄螢幕／手機：改為直向排列，四組 Skills 收進同一個虛線群組，
    群組上／下各接一條垂直箭頭，不再逐一畫支線。 */
@@ -2356,7 +2337,7 @@
     transform: translateX(-50%);
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
-    border-top: 7px solid var(--accent);
+    border-top: 7px solid var(--yellow);
   }
 
   #part-2-content .part2-flow-branch {
@@ -2365,16 +2346,14 @@
     width: 100%;
     max-width: 420px;
     padding: clamp(30px, 9vw, 40px) clamp(16px, 4.4vw, 24px) clamp(14px, 3.4vw, 18px);
-    border: 1px dashed rgba(22, 61, 63, .3);
-    background: rgba(22, 61, 63, .04);
+    border: 1px dashed rgba(247, 243, 234, .32);
+    background: rgba(247, 243, 234, .05);
   }
-  #part-2-content .part2-flow-branch::before,
-  #part-2-content .part2-flow-branch::after { display: none; }
   #part-2-content .part2-flow-branch-label {
     display: block;
     position: absolute; top: 12px; left: 50%;
     transform: translateX(-50%);
-    color: var(--muted);
+    color: rgba(247, 243, 234, .6);
     font: 700 calc(10.5px * var(--font-scale))/1 var(--sans);
     letter-spacing: .1em;
     white-space: nowrap;
@@ -2397,8 +2376,6 @@
     justify-content: center;
     text-align: center;
   }
-  #part-2-content .part2-flow-node-stack::before,
-  #part-2-content .part2-flow-node-stack::after { display: none; }
 }
 
 /* Part 3.0.2 — Shared chart, workflow, and question-gallery layer */
