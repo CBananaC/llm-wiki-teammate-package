@@ -7414,3 +7414,213 @@ Verified:
 
 Remaining:
 - Browser/device visual QA still needed (no headless browser available in this sandbox).
+
+### 2026-08-11 15:07 HKT — Codex — Center the Try a Try handwritten PDF spread
+
+Summary:
+- Centered the visible handwritten Try a Try fold pair instead of right-aligning the `row-reverse` strip.
+- Removed inactive-page fold panels from the desktop layout while retaining the current page's fold state, preventing page-dependent horizontal shifts and right-edge clipping.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Browser geometry at the desktop viewer width showed the open pair centered exactly on `頁 1 / 5`, `頁 4 / 5`, and `頁 5 / 5`; page 4 loaded `3b3a.png` and page 5 loaded `empty3c.png`.
+- No browser console errors or warnings were reported.
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent LLM Wiki edits, cache-busting values, UI draft, and handwritten assets were preserved; no commit or push was made.
+
+### 2026-08-11 15:42 HKT — Codex — Refine OCR, Google Cloud, and LLM Wiki visuals
+
+Summary:
+- Reduced the OCR test visual's `1頁` and `50頁` labels to 22px.
+- Made the Google Cloud gallery stage follow the active image's natural aspect ratio so the image has no extra top or bottom spacing.
+- Replaced the visible `諭13` label in the LLM Wiki answer with the full 上諭 title; source-note provenance in the UI draft still retains the source ID where needed.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+- `Website/UI Idea/29-llm-wiki-network-animation-draft.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview with cache-busting loaded the current StoryMap files: OCR labels computed to 22px; Google Cloud rendered at the image's natural ratio with 0px top and bottom gap; the LLM Wiki answer contained the full 上諭 title and no `諭13`.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- No commit or push was made; the updated files remain in the working tree for review.
+
+### 2026-08-11 17:30 HKT — Codex — Exported the platform interface replica to a standalone HTML page
+
+Summary:
+- Added one standalone page containing the five interactive replicas shown in the `平台介面` tab: 導覽列、時間與關係圖表、節點資訊區、原始史料區 and 人工智能分析區.
+- Reused the existing canonical Part 1 data, styling, and interaction modules so the new page remains tied to the reviewed 硃42 demonstration.
+
+Files changed:
+- `Website/storymap/platform-interface-replica.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- Inspected the live `平台介面` tab before extracting the replica.
+- Confirmed all five mode roots render on the new page, with no browser console errors.
+- Browser-tested chart node opening, AI Skill source highlighting, AI result loading, and adding a candidate to the chart.
+- `node --check` and `git diff --check` passed.
+
+Remaining:
+- The new HTML intentionally references the adjacent Part 1 CSS, data, and behavior files; keep those files together when moving or publishing the page.
+- Existing unrelated working-tree changes were preserved; no push was made.
+
+### 2026-08-11 17:10 HKT — Codex — Split 平台介面 into five topic sections with focused visuals
+
+Summary:
+- Replaced the single Part 1 replica plus five-card accordion with five independent topic sections: 導覽列、時間與關係圖表、節點資訊區、原始史料區、人工智能分析區.
+- Added a dark topic bar for each interface area, matching the internal `步驟二` stage-bar treatment used in the final tab.
+- Put the explanatory text below each bar; the four multi-paragraph topics remain text cards, while the single-paragraph 節點資訊區 is plain text.
+- Reused the source-backed 硃42 demonstration data in five independently initialized replicas, each focused on its own interface area and displayed at full visual width.
+- Added the node-area default panel state and responsive toolbar wrapping so the new section layout remains contained on narrow screens.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/part-1-interface.js` and `node --check Website/storymap/storymap.js` passed.
+- `git diff --check` passed.
+- Browser checks at 1280×900 and 390×844 confirmed five topic bars, four text cards plus one plain-text section, centered full-width visual frames, no narrow-screen horizontal overflow, a visible default node panel, chart-node interaction, source filtering, and AI result loading.
+- Browser console returned no error or warning entries.
+
+Remaining:
+- Create the local Git checkpoint; do not push automatically.
+
+### 2026-08-11 16:23 HKT — Codex — Refine LLM Wiki response wording
+
+Summary:
+- Replaced `起居注於十二月二十七日收悉，同日並以上諭` with `於十二月二十七日收悉，同日以上諭` in the live LLM Wiki visual and its UI draft.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/UI Idea/29-llm-wiki-network-animation-draft.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Rendered LLM Wiki response contained the new wording and no longer contained the old wording.
+- `node --check Website/storymap/storymap.js`, `git diff --check`, and focused source search passed.
+
+Remaining:
+- No commit or push was made; concurrent working-tree edits were preserved.
+
+### 2026-08-11 16:09 HKT — Codex — Refine basic-flow and PaddleOCR result visibility
+
+Summary:
+- Reduced the basic-flow visual's step numbers to 16px and reduced the number-to-title gap to 8px in both desktop and narrow layouts.
+- Reset the PaddleOCR Agentic AI result phase to the top of its scroll container so `Worked for 5m 44s` is followed immediately by the first output sentence.
+- Bumped the StoryMap asset query versions for the new CSS and JavaScript.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks at 390px and 1280px computed the flow number as 16px, its gap as 8px, and the label beginning 8px after the number box.
+- PaddleOCR result phase showed `Worked for 5m 44s` at the top and the first sentence immediately below it, with the result body at scroll position 0.
+- No browser console logs were reported.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Concurrent LLM Wiki and related working-tree edits were preserved; no additional commit or push was made.
+
+### 2026-08-11 15:56 HKT — Codex — Refine Part 3 responsive OCR and source panels
+
+Summary:
+- Reduced the number in the `8` card square in both desktop and narrow layouts.
+- Kept each Part 3 `步驟 X` label aligned with the stage title below it by removing the narrow-layout heading offset.
+- Slowed the OCR reason visual's JSON typing and made Agentic AI PaddleOCR output follow the nearest scrollable window as new text appears.
+- Fixed the expanded 7／8 source drawers so printed pages retain their full visible height and handwritten folds retain a usable height instead of collapsing to a few pixels.
+- Bumped the StoryMap asset query versions so the current CSS and JavaScript are loaded after the responsive fixes.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks at 390px and 1280px showed the step-label/title x-coordinate delta at 0; the `8` number computed to 13px on narrow layout and 17.28px on desktop.
+- Expanded 7 showed the complete current source image without transform or max-height clipping; expanded 8 showed a 319px-tall fold with both open panels visible. OCR output advanced at the slower timing, and the PaddleOCR body followed its maximum scroll position while text was loading.
+- No browser console logs were reported.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Concurrent LLM Wiki and related working-tree edits were preserved; no additional commit or push was made.
+
+### 2026-08-11 16:03 HKT — Codex — Enlarge LLM Wiki node labels and use 起居注 terminology
+
+Summary:
+- Enlarged the LLM Wiki network node labels to 13px on desktop and 11px on narrow screens.
+- Renamed the network node and visible answer references from `硃25` to `起居注`.
+- Kept the full 上諭 title in the answer.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+- `Website/UI Idea/29-llm-wiki-network-animation-draft.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview showed all LLM Wiki node labels at 13px, the node label `起居注`, and no `硃25` in the network or answer text.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- No commit or push was made; the updated files remain in the working tree for review.
+
+### 2026-08-11 16:13 HKT — Codex — Combine the Skill prompt and AI output scroll area
+
+Summary:
+- Updated the `Codex — Create Skill` window in the second AI Skills visual mode so the researcher prompt and AI thinking/result output share one scrollable content area.
+- Kept the Codex title bar fixed while the combined prompt/output area follows newly typed content to the bottom.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed the prompt row and AI phase body share `.agentic-codex-scroll`; the shared container is vertically scrollable and the body no longer owns a separate scrollbar.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- No commit or push was made; the updated files remain in the working tree for review.
+
+### 2026-08-11 16:25 HKT — Codex — Enlarge and contain the phone AI Skills visual
+
+Summary:
+- Increased the phone-specific height of the「建立新的 Skill」visual.
+- Repositioned and resized the VS Code and Codex windows so both remain fully inside the mobile frame instead of being clipped at the right or bottom edges.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry at 390px showed both windows fully contained within the frame: left, right, top, and bottom clipping checks all passed.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- No commit or push was made; the updated files remain in the working tree for review.

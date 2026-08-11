@@ -7,14 +7,14 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="storymap.css?v=20260810-codex-try-folded-01">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260811-claude-wiki-visual-01">
-  <link rel="stylesheet" href="part-1-interface.css">
+  <link rel="stylesheet" href="storymap.css?v=20260811-codex-responsive-02">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260811-claude-wiki-visual-03">
+  <link rel="stylesheet" href="part-1-interface.css?v=20260811-codex-part1-sections-01">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260811-claude-wiki-visual-01" defer></script>
+  <script src="storymap.js?v=20260811-codex-responsive-02" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js" defer></script>
-  <script src="part-1-interface.js" defer></script>
+  <script src="part-1-interface.js?v=20260811-codex-part1-sections-01" defer></script>
   <!-- 第三部分「適合的研究問題」互動圖庫：同樣先載資料，再載行為。 -->
   <script src="part-3-question-gallery-data.js" defer></script>
   <script src="part-3-question-gallery.js" defer></script>
@@ -747,103 +747,106 @@
       <section class="section-hero section-hero-part-2" id="part-2" data-mark="二">
         <div class="section-hero-content">
           <p class="eyebrow">第二部分</p>
-          <h1 id="part-2-title">1. 平台的運作流程</h1>
+          <h1 id="part-2-title">平台的運作流程</h1>
           <p class="section-hero-note">平台旨在處理清代奏摺與上諭研究中的兩大主要困難：文書數量龐大，以及文書之間的通信關係複雜。</p>
         </div>
       </section>
       <div id="part-2-content">
-        <section class="story content-story" id="part-2-overview" data-tab="part-2" data-nav="#part-2-overview" style="--card-x: 7vw; --card-y: 13vh; --card-w: 640px; --story-height: 1100px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="流"></div>
-          <article class="story-card">
-            <h2>1. 平台的運作流程</h2>
-            <p>因此，平台運用人工智能協助研究者總結文書內容、提取重要資訊，供研究者進一步檢視和核驗，從而減輕整理史料的工作量。</p>
-            <p>同時，平台亦運用視覺化工具，透過時間與關係圖表呈現資訊的傳遞網絡，協助研究者掌握文書和事件的時間順序和相互關係。</p>
-          </article>
-        </section>
-        <section class="story content-story" id="part-2-flow" data-tab="part-2" data-nav="#part-2-flow" style="--card-x: 49vw; --card-y: 15vh; --card-w: 660px; --story-height: 900px; --card-accent: #c7543f;">
-          <div class="backdrop network" data-mark="圖"></div>
-          <article class="story-card">
-            <h2>3. 運作流程圖</h2>
-            <p>輸入結構化的原始文書 → AI Skills → 1. 總結文書、2. 重構文書間的通訊關係、3. 收取奏摺的資訊、4. 收取上諭的資訊→載入分析結果 → 研究者審閱 →結果載入至圖表中呈現</p>
-          </article>
-        </section>
-        <section class="story content-story cover-bar-story" id="part-2-input" data-tab="part-2" data-nav="#part-2-input" style="--card-x: 7vw; --card-y: 38vh; --card-w: 650px; --story-height: 1450px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="資"></div>
-          <div class="cover-bar" data-mark="資">
-            <h2>4. 輸入結構化資料</h2>
+        <section class="story surface-a part2-topic-content" id="part-2-overview" data-tab="part-2" data-nav="#part-2-overview">
+          <div class="story-inner">
+            <div class="part2-card-stack">
+              <article class="copybox blk part2-text-card part2-numbered-card">
+                <div class="title-row"><span class="option-number">1</span><h2>平台的運作流程</h2></div>
+                <div class="body">
+                  <p>因此，平台運用人工智能協助研究者總結文書內容、提取重要資訊，供研究者進一步檢視和核驗，從而減輕整理史料的工作量。</p>
+                  <p>同時，平台亦運用視覺化工具，透過時間與關係圖表呈現資訊的傳遞網絡，協助研究者掌握文書和事件的時間順序和相互關係。</p>
+                </div>
+              </article>
+            </div>
           </div>
-          <article class="story-card">
-            <p>在選定研究主題及所使用的奏摺與上諭後，第一步是對史料進行 OCR，並把結果輸出為結構化 的JSON 資料，再載入到平台之中。（由於 OCR 並不是本網站內置的功能，相關方法將留待下一節「重用平台於其他研究主題」中再作介紹。）</p>
-            <p>在結構化資料中，每份奏摺或上諭都需要分成不同欄位，包括文書類型、作者資料、標題、文書編號、文書正文及史料來源。</p>
-            <p>如果史料來自學者編纂的檔案彙編，通常都會清楚標示文書的發送和接收日期，因此亦應加入相關日期的欄位。這些日期資料可以用於排列文書的時間順序，以及重建文書之間的傳遞關係。</p>
-            <p>輸入後，網站會讀取這些欄位，並根據文書的收發日期，在時間與關係圖表上建立各份文書的節點；同時，文書區亦會顯示文書的基本資料及完整原文。</p>
-          </article>
         </section>
-        <section class="story content-story cover-bar-story" id="part-2-ai" data-tab="part-2" data-nav="#part-2-ai" style="--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1450px; --card-accent: #ad7a35;">
-          <div class="backdrop gold" data-mark="AI"></div>
-          <div class="cover-bar" data-mark="AI">
-            <h2>5. 使用AI從原文中抽取資訊</h2>
-          </div>
-          <article class="story-card">
-            <p>完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。</p>
-            <h3>1. AI Skills</h3>
-            <p>AI Skills 是一套預先設計的 AI 指令，讓人工智能按照指定規則處理數據，提取指定資料，並以特定格式輸出結果。</p>
-            <p>平台中的 AI Skills 是根據特定研究問題設計的，要求 AI 從文書中找出與研究問題相關的資訊，並保留相應的原文引文作為證據。</p>
-            <h3>2. 資訊提取的核心理念</h3>
-            <p>平台視 AI 為協助研究的工具，AI 提取的結果需要由研究者作出最後判斷。因此，在 AI 輸出結果後，研究者需要回到原始文書，檢查結果是否準確。相關資訊要經研究者確認，才會加入到圖表之中，成為後續研究和分析的一部分。</p>
-            <h3>3. 四個分析階段</h3>
-            <p>平台共有四組 AI Skills，分別用於四個分析階段：總結文書、重建通信關係、提取奏摺資訊，以及提取上諭資訊。</p>
-          </article>
+        <section class="part2-stage" id="part-2-flow" data-tab="part-2" data-nav="#part-2-flow">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-flow-bar" aria-labelledby="part-2-flow-title">
+            <div class="section-hero-content"><p class="eyebrow">流程概覽</p><h1 id="part-2-flow-title">運作流程圖</h1></div>
+          </section>
+          <section class="story surface-b part2-topic-content" id="part-2-flow-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>輸入結構化的原始文書 → AI Skills → 1. 總結文書、2. 重構文書間的通訊關係、3. 收取奏摺的資訊、4. 收取上諭的資訊→載入分析結果 → 研究者審閱 →結果載入至圖表中呈現</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story cover-bar-story" id="part-2-summary" data-tab="part-2" data-nav="#part-2-summary" style="--card-x: 7vw; --card-y: 38vh; --card-w: 650px; --story-height: 1050px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="總"></div>
-          <div class="cover-bar" data-mark="總">
-            <h2>1.  總結文書</h2>
-          </div>
-          <article class="story-card">
-            <p>第一組 AI Skills 負責總結文書。AI 會先將整份文書概括為一段摘要，再按照內容和功能將原文劃分成不同部分，並為每一部分提供簡短的標題和摘要。</p>
-            <p>摘要和分段結果會顯示在原始文書區中，供研究者在完整閱讀原文前快速瀏覽，掌握文書的主要內容和結構。</p>
-          </article>
+        <section class="part2-stage" id="part-2-input" data-tab="part-2" data-nav="#part-2-input">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-input-bar" aria-labelledby="part-2-input-title">
+            <div class="section-hero-content"><p class="eyebrow">步驟四</p><h1 id="part-2-input-title">輸入結構化資料</h1></div>
+          </section>
+          <section class="story surface-c part2-topic-content" id="part-2-input-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>在選定研究主題及所使用的奏摺與上諭後，第一步是對史料進行 OCR，並把結果輸出為結構化 的JSON 資料，再載入到平台之中。（由於 OCR 並不是本網站內置的功能，相關方法將留待下一節「重用平台於其他研究主題」中再作介紹。）</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>在結構化資料中，每份奏摺或上諭都需要分成不同欄位，包括文書類型、作者資料、標題、文書編號、文書正文及史料來源。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>如果史料來自學者編纂的檔案彙編，通常都會清楚標示文書的發送和接收日期，因此亦應加入相關日期的欄位。這些日期資料可以用於排列文書的時間順序，以及重建文書之間的傳遞關係。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>輸入後，網站會讀取這些欄位，並根據文書的收發日期，在時間與關係圖表上建立各份文書的節點；同時，文書區亦會顯示文書的基本資料及完整原文。</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story cover-bar-story" id="part-2-communication" data-tab="part-2" data-nav="#part-2-communication" style="--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1050px; --card-accent: #c7543f;">
-          <div class="backdrop network" data-mark="關"></div>
-          <div class="cover-bar" data-mark="關">
-            <h2>2. 重建通信關係</h2>
-          </div>
-          <article class="story-card">
-            <p>在奏摺和上諭的結尾，通常會標示奏摺的發送日期、硃批日期及上諭的發布日期。平台會利用這些日期建立文書之間的時間順序及收發關係，形成通信網絡的第一層。</p>
-            <p>然而，文書之間還存在更深層的通訊關係，例如奏摺是否回應了先前的上諭或硃批，以及上諭是否回應了先前收到的奏摺。這便需要從文書正文中尋找相關線索，並與其他文書相互比對，才能確認和重建這些更深層的關係。</p>
-            <p>平台因此設有兩種的 Skills，分別用於辨識一份奏摺所回應的硃批或上諭，以及辨識一份上諭所回應的奏摺。</p>
-          </article>
+        <section class="part2-stage" id="part-2-ai" data-tab="part-2" data-nav="#part-2-ai">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-ai-bar" aria-labelledby="part-2-ai-title">
+            <div class="section-hero-content"><p class="eyebrow">步驟五</p><h1 id="part-2-ai-title">使用AI從原文中抽取資訊</h1></div>
+          </section>
+          <section class="story surface-a part2-topic-content" id="part-2-ai-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>AI Skills</h2></div><div class="body"><p>AI Skills 是一套預先設計的 AI 指令，讓人工智能按照指定規則處理數據，提取指定資料，並以特定格式輸出結果。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>平台中的 AI Skills 是根據特定研究問題設計的，要求 AI 從文書中找出與研究問題相關的資訊，並保留相應的原文引文作為證據。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>資訊提取的核心理念</h2></div><div class="body"><p>平台視 AI 為協助研究的工具，AI 提取的結果需要由研究者作出最後判斷。因此，在 AI 輸出結果後，研究者需要回到原始文書，檢查結果是否準確。相關資訊要經研究者確認，才會加入到圖表之中，成為後續研究和分析的一部分。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">3</span><h2>四個分析階段</h2></div><div class="body"><p>平台共有四組 AI Skills，分別用於四個分析階段：總結文書、重建通信關係、提取奏摺資訊，以及提取上諭資訊。</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story" id="part-2-yu-response" data-tab="part-2" data-nav="#part-2-yu-response" style="--card-x: 7vw; --card-y: 14vh; --card-w: 680px; --story-height: 1650px; --card-accent: #ad7a35;">
-          <div class="backdrop gold" data-mark="諭"></div>
-          <article class="story-card">
-            <h2>1. 辨識奏摺所回應的上諭</h2>
-            <p>「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：</p>
-            <p>首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。</p>
-            <p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p>
-            <p>AI 會輸出結構化的結果，列出相配的上諭和奏摺，並提供兩份文書中的引文和關鍵日期，包括上諭的發佈日期、官員的收到日期和回覆日期，供研究者查核。研究者確認無誤後，便可以把通信關係加入到圖表中。</p>
-          </article>
+        <section class="part2-stage" id="part-2-summary" data-tab="part-2" data-nav="#part-2-summary">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-summary-bar" aria-labelledby="part-2-summary-title">
+            <div class="section-hero-content"><p class="eyebrow">分析階段一</p><h1 id="part-2-summary-title">總結文書</h1></div>
+          </section>
+          <section class="story surface-b part2-topic-content" id="part-2-summary-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>第一組 AI Skills 負責總結文書。AI 會先將整份文書概括為一段摘要，再按照內容和功能將原文劃分成不同部分，並為每一部分提供簡短的標題和摘要。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>摘要和分段結果會顯示在原始文書區中，供研究者在完整閱讀原文前快速瀏覽，掌握文書的主要內容和結構。</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story" id="part-2-zhu-response" data-tab="part-2" data-nav="#part-2-zhu-response" style="--card-x: 50vw; --card-y: 14vh; --card-w: 620px; --story-height: 920px; --card-accent: #a45e4c;">
-          <div class="backdrop ink" data-mark="批"></div>
-          <article class="story-card">
-            <h2>2. 辨識奏摺所回應的硃批</h2>
-            <p>在回應皇帝的硃批時，官員同樣會用「奉硃批」、「奉到硃批」、「敬奉硃批」、「欽奉硃批」或「蒙硃批」等引述標記，再引用硃批原文。因此，辨識奏摺所回應硃批的 Skill，其方法和判斷邏輯與「上諭—回應配對」基本相同。</p>
-          </article>
+        <section class="part2-stage" id="part-2-communication" data-tab="part-2" data-nav="#part-2-communication">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-communication-bar" aria-labelledby="part-2-communication-title">
+            <div class="section-hero-content"><p class="eyebrow">分析階段二</p><h1 id="part-2-communication-title">重建通信關係</h1></div>
+          </section>
+          <section class="story surface-c part2-topic-content" id="part-2-communication-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>在奏摺和上諭的結尾，通常會標示奏摺的發送日期、硃批日期及上諭的發布日期。平台會利用這些日期建立文書之間的時間順序及收發關係，形成通信網絡的第一層。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>然而，文書之間還存在更深層的通訊關係，例如奏摺是否回應了先前的上諭或硃批，以及上諭是否回應了先前收到的奏摺。這便需要從文書正文中尋找相關線索，並與其他文書相互比對，才能確認和重建這些更深層的關係。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>平台因此設有兩種的 Skills，分別用於辨識一份奏摺所回應的硃批或上諭，以及辨識一份上諭所回應的奏摺。</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story" id="part-2-yu-source" data-tab="part-2" data-nav="#part-2-yu-source" style="--card-x: 7vw; --card-y: 14vh; --card-w: 690px; --story-height: 2050px; --card-accent: #4d817c;">
-          <div class="backdrop river" data-mark="源"></div>
-          <article class="story-card">
-            <h2>3. 辨識上諭所回應的奏摺</h2>
-            <p>系統會使用「上諭來源配對」Skill 辨識上諭所回應的奏摺。</p>
-            <p>在評論官員奏報和下達命令前，上諭通常會先使用「據某人奏」、「據某人馳奏」或「據某人奏稱」等引述標記，交代皇帝所收到的官員奏報。</p>
-            <p>然而，與回應上諭的奏摺不同，上諭通常不會註明皇帝何時收到相關奏摺，以及相關奏摺的發送日期。</p>
-            <p>此外，同一項資訊可能由多位官員奏報，而上諭卻大多只會使用「據某人等奏稱」或「據奏」的標記，不會列出所有的奏報官員。因此，不能只用 Python 擷取人名或標記，來確定上諭所回應的奏摺。</p>
-            <p>儘管如此，上諭通常會回應最新收到的奏報，平台會先利用 Python搜尋上諭發布當日，以及發布前5日內收到的奏摺，作為後續分析的候選文本。</p>
-            <p>接著，系統會運用 AI，先提取上諭中有「據奏」標記的資訊，再閱讀每份候選奏摺的正文，判斷該資訊出現於哪一份或哪些奏摺之中，從以辨識哪些奏摺是上諭的回應對象。</p>
-          </article>
+        <section class="story surface-a part2-topic-content" id="part-2-yu-response" data-tab="part-2" data-nav="#part-2-yu-response">
+          <div class="story-inner"><div class="part2-card-stack">
+            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>辨識奏摺所回應的上諭</h2></div><div class="body"><p>「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>AI 會輸出結構化的結果，列出相配的上諭和奏摺，並提供兩份文書中的引文和關鍵日期，包括上諭的發佈日期、官員的收到日期和回覆日期，供研究者查核。研究者確認無誤後，便可以把通信關係加入到圖表中。</p></div></article>
+          </div></div>
+        </section>
+        <section class="story surface-b part2-topic-content" id="part-2-zhu-response" data-tab="part-2" data-nav="#part-2-zhu-response">
+          <div class="story-inner"><div class="part2-card-stack">
+            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>辨識奏摺所回應的硃批</h2></div><div class="body"><p>在回應皇帝的硃批時，官員同樣會用「奉硃批」、「奉到硃批」、「敬奉硃批」、「欽奉硃批」或「蒙硃批」等引述標記，再引用硃批原文。因此，辨識奏摺所回應硃批的 Skill，其方法和判斷邏輯與「上諭—回應配對」基本相同。</p></div></article>
+          </div></div>
+        </section>
+        <section class="story surface-c part2-topic-content" id="part-2-yu-source" data-tab="part-2" data-nav="#part-2-yu-source">
+          <div class="story-inner"><div class="part2-card-stack">
+            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">3</span><h2>辨識上諭所回應的奏摺</h2></div><div class="body"><p>系統會使用「上諭來源配對」Skill 辨識上諭所回應的奏摺。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>在評論官員奏報和下達命令前，上諭通常會先使用「據某人奏」、「據某人馳奏」或「據某人奏稱」等引述標記，交代皇帝所收到的官員奏報。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>然而，與回應上諭的奏摺不同，上諭通常不會註明皇帝何時收到相關奏摺，以及相關奏摺的發送日期。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>此外，同一項資訊可能由多位官員奏報，而上諭卻大多只會使用「據某人等奏稱」或「據奏」的標記，不會列出所有的奏報官員。因此，不能只用 Python 擷取人名或標記，來確定上諭所回應的奏摺。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>儘管如此，上諭通常會回應最新收到的奏報，平台會先利用 Python搜尋上諭發布當日，以及發布前5日內收到的奏摺，作為後續分析的候選文本。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>接著，系統會運用 AI，先提取上諭中有「據奏」標記的資訊，再閱讀每份候選奏摺的正文，判斷該資訊出現於哪一份或哪些奏摺之中，從以辨識哪些奏摺是上諭的回應對象。</p></div></article>
+          </div></div>
         </section>
         <section class="story content-story cover-bar-story" id="part-2-extract" data-tab="part-2" data-nav="#part-2-extract" style="--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1050px; --card-accent: #7e6a39;">
           <div class="backdrop archive" data-mark="取"></div>
@@ -1930,30 +1933,32 @@
                     </div>
                     <div class="agentic-mac-window agentic-window-codex is-agentic-front" data-agentic-window="skills-codex">
                       <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Codex — Create Skill</span></div>
-                      <div class="agentic-codex-user-row"><div class="agentic-codex-user-bubble" data-agentic-codex-prompt>請為我撰寫一個 AI Skill。讓skill 輸入起居注 OCR JSON，並把每一天的文本劃分為互不重疊的事件，並為每個事件分類。輸出 JSON，當中把原文分割成多個事件，在每個事件前標示其類型。保留日期、頁碼及逐字引文。</div></div>
-                      <div class="agentic-window-body agentic-prose agentic-codex-body" data-agentic-codex-phases>
-                        <div class="agentic-codex-phase agentic-codex-thinking" data-agentic-codex-thinking>
-                          <div class="agentic-codex-status">Working…</div>
-                          <div class="agentic-codex-thinking-sequence" data-agentic-codex-thinking-sequence data-agentic-codex-char-delay="9" data-agentic-codex-line-delay="300">
-                            <script type="application/json" data-agentic-lines>[
-                              "<span class='meta-line'><span class='ic'>↳</span>整理每日文本的事件分段與分類規則</span>",
-                              "<span class='meta-line'><span class='ic'>↳</span>確認輸出保留日期、頁碼與逐字引文</span>",
-                              "<span class='line'>我會把每一天的原文分成互不重疊的事件，並為每個事件加上類型標籤。</span>",
-                              "<span class='line'>我會把這些規則整理成可重複使用的 Markdown Skill。</span>"
-                            ]</script>
+                      <div class="agentic-codex-scroll">
+                        <div class="agentic-codex-user-row"><div class="agentic-codex-user-bubble" data-agentic-codex-prompt>請為我撰寫一個 AI Skill。讓skill 輸入起居注 OCR JSON，並把每一天的文本劃分為互不重疊的事件，並為每個事件分類。輸出 JSON，當中把原文分割成多個事件，在每個事件前標示其類型。保留日期、頁碼及逐字引文。</div></div>
+                        <div class="agentic-window-body agentic-prose agentic-codex-body" data-agentic-codex-phases>
+                          <div class="agentic-codex-phase agentic-codex-thinking" data-agentic-codex-thinking>
+                            <div class="agentic-codex-status">Working…</div>
+                            <div class="agentic-codex-thinking-sequence" data-agentic-codex-thinking-sequence data-agentic-codex-char-delay="9" data-agentic-codex-line-delay="300">
+                              <script type="application/json" data-agentic-lines>[
+                                "<span class='meta-line'><span class='ic'>↳</span>整理每日文本的事件分段與分類規則</span>",
+                                "<span class='meta-line'><span class='ic'>↳</span>確認輸出保留日期、頁碼與逐字引文</span>",
+                                "<span class='line'>我會把每一天的原文分成互不重疊的事件，並為每個事件加上類型標籤。</span>",
+                                "<span class='line'>我會把這些規則整理成可重複使用的 Markdown Skill。</span>"
+                              ]</script>
+                            </div>
                           </div>
-                        </div>
-                        <div class="agentic-codex-phase agentic-codex-result" data-agentic-codex-result hidden>
-                          <div class="agentic-codex-result-lines" data-agentic-codex-result-lines>
-                            <script type="application/json" data-agentic-lines>[
-                              "<span class='final-lead'>已整理為 Skill 草稿：</span>",
-                              "<span class='final-item'><code>classify-qianlong-diary-events.md</code></span>",
-                              "<span class='final-label'>11 個固定分類</span>",
-                              "<span class='final-item'>禮儀巡幸祭祀 · 召見朝會筵宴 · 上諭奏摺政務</span>",
-                              "<span class='final-item'>人事任免賞罰 · 刑名司法懲處 · 軍務邊疆臺灣</span>",
-                              "<span class='final-item'>賑恤財賦糧餉 · 河工交通營建 · 文教典籍科舉</span>",
-                              "<span class='final-item'>外藩朝貢外交 · 賜食筵宴賞賚</span>"
-                            ]</script>
+                          <div class="agentic-codex-phase agentic-codex-result" data-agentic-codex-result hidden>
+                            <div class="agentic-codex-result-lines" data-agentic-codex-result-lines>
+                              <script type="application/json" data-agentic-lines>[
+                                "<span class='final-lead'>已整理為 Skill 草稿：</span>",
+                                "<span class='final-item'><code>classify-qianlong-diary-events.md</code></span>",
+                                "<span class='final-label'>11 個固定分類</span>",
+                                "<span class='final-item'>禮儀巡幸祭祀 · 召見朝會筵宴 · 上諭奏摺政務</span>",
+                                "<span class='final-item'>人事任免賞罰 · 刑名司法懲處 · 軍務邊疆臺灣</span>",
+                                "<span class='final-item'>賑恤財賦糧餉 · 河工交通營建 · 文教典籍科舉</span>",
+                                "<span class='final-item'>外藩朝貢外交 · 賜食筵宴賞賚</span>"
+                              ]</script>
+                            </div>
                           </div>
                         </div>
                       </div>
@@ -2050,7 +2055,7 @@
                     </svg>
                   </div>
                   <div class="part3-wiki-answer">
-                    <div class="part3-wiki-answer-worked" data-part3-wiki-worked><span data-part3-wiki-worked-text>已思考 3.4 秒</span><span class="part3-wiki-chev">›</span></div>
+                    <div class="part3-wiki-answer-worked" data-part3-wiki-worked><span data-part3-wiki-worked-text>已思考5分鐘</span><span class="part3-wiki-chev">›</span></div>
                     <div class="part3-wiki-answer-body" data-part3-wiki-answer-body></div>
                     <div class="part3-wiki-answer-tools" data-part3-wiki-tools aria-hidden="true">
                       <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
