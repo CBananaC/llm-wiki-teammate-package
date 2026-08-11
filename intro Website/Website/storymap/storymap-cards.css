@@ -2199,6 +2199,25 @@
   #part-2-content .part2-numbered-card .title-row h2 { font-size: clamp(22px, 7vw, 30px); }
 }
 
+/* Part 2.2 — 運作流程圖：標題與說明沿用 Part 3 的滿版文字排版，不使用卡片背景。 */
+#part-2-flow .lay-stack > .blk {
+  width: 100%;
+  max-width: none;
+  padding: 0;
+}
+#part-2-flow .lay-stack > .blk .title-row h2 {
+  font-size: clamp(27px, 3.4vw, 46px);
+  line-height: 1.12;
+}
+#part-2-flow .lay-stack > .blk .body {
+  width: 100%;
+  max-width: none;
+}
+#part-2-flow .lay-stack > .blk .body > p {
+  font-size: calc(16px * var(--font-scale));
+  line-height: 1.9;
+}
+
 /* Part 2 — 運作流程圖：橫向流程圖（步驟四 → 步驟五 → 四組 AI Skills 並行 → 分析結果）。
    桌面版用水平匯流排＋支線呈現分支／匯合；窄螢幕改用直向排列，四組 Skills
    收在一個虛線群組內，避免同時畫四條斜線造成擁擠。 */

@@ -7682,6 +7682,23 @@ Verified:
 Remaining:
 - Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
 
+### 2026-08-11 18:03 HKT — Codex — Unboxed Part 2.2 flow-chart introduction
+
+Summary:
+- Changed `運作流程圖` in Part 2.2 to use the full-width, no-card text treatment used by Part 3’s `檢視史料的版面及格式`.
+- Removed `點擊任一節點，可跳至該階段的詳細說明。` while keeping the numbered title and existing flow-chart navigation.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Focused source inspection confirmed the introduction is outside the card class and the removed sentence no longer appears.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 2 flow-chart changes were preserved; browser preview was not run in this checkpoint and nothing was pushed.
+
 ### 2026-08-11 17:57 HKT — Codex — Combined the standalone platform-interface replica
 
 Summary:
