@@ -2298,23 +2298,6 @@
   width: 100%;
   min-width: 0;
 }
-#part-2-content .part2-flow-pre-arrow {
-  flex: 0 0 clamp(18px, 2vw, 28px);
-  align-self: center;
-  width: 1px;
-  height: clamp(18px, 2vw, 28px);
-  background: rgba(247, 243, 234, .3);
-  position: relative;
-}
-#part-2-content .part2-flow-pre-arrow::after {
-  content: "";
-  position: absolute; left: 50%; bottom: -1px;
-  transform: translateX(-50%);
-  border-left: 5px solid transparent;
-  border-right: 5px solid transparent;
-  border-top: 7px solid var(--yellow);
-}
-
 #part-2-content .part2-flow-arrow {
   flex: 0 0 var(--part2-flow-stub);
   align-self: center;
