@@ -12465,6 +12465,49 @@ Verified:
 Remaining:
 - Existing concurrent work was preserved; nothing was pushed.
 
+## 2026-08-11 19:27 HKT — Codex — Removed the chart date and zoom bar
+
+Summary:
+- Removed the `1786/12/18 — 1787/01/02` date row and `圖表大小` controls from the platform-interface replica.
+- Kept the four-line chart, including its trackpad scrolling and gesture-based zoom behavior.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser inspection confirmed the date row and zoom controls are absent.
+- Browser interaction confirmed the chart still scrolls vertically; console warnings and errors were empty.
+- `node --check intro Website/Website/storymap/part-1-interface.js`, `node --check intro Website/Website/storymap/storymap.js`, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1 and StoryMap edits were preserved; nothing was pushed.
+
+
+
+## 2026-08-11 19:26 HKT — Codex — Placed the JSON viewer beside structured-data input
+
+Summary:
+- Moved the existing `輸出格式：JSON` filter and JSON viewer into the right side of `輸入結構化資料`.
+- Kept the opening `在選定研究主題和史料後...` paragraph full width above the two-column text-and-visual layout.
+- Kept the two remaining explanatory paragraphs as left-aligned text cards and left Part 3 with its text explanation and anchor.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.js`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` passed.
+- Desktop browser check confirmed the introduction spans the full width, the cards are on the left, and the JSON/filter visual is on the right.
+- Browser interaction check confirmed selecting `標題` still highlights and scrolls to the JSON field.
+- Mobile browser check confirmed the order is introduction, text cards, then JSON visual.
+
+Remaining:
+- Existing concurrent work was preserved; nothing was pushed.
+
 ## 2026-08-11 19:21 HKT — Codex — Added sample-style four-line chart navigation
 
 Summary:
@@ -12547,6 +12590,26 @@ Verified:
 
 Remaining:
 - Existing concurrent work was preserved; nothing was pushed.
+
+## 2026-08-11 19:25 HKT — Codex — Merged the AI Skills explanation into one card
+
+Summary:
+- Kept the existing AI Skills definition and placed the platform-specific explanation immediately after it inside the same numbered `AI Skills` card.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed.
+- `node --check intro Website/Website/embedded-tool/review-tool-embed.js` passed.
+- `git diff --check` passed.
+- Browser preview confirmed the card is visible and contains both paragraphs in the requested order.
+- Browser console still reports the unrelated concurrent Part 1 error `addDot is not defined`.
+
+Remaining:
+- Existing concurrent Part 1 and Part 2 edits were preserved; nothing was pushed.
 
 ## 2026-08-11 19:03 HKT — Codex — Removed the preparation-step connector arrow
 

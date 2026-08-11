@@ -1157,16 +1157,6 @@
 }
 
 .part1-chart > .part1-hotspot { top: 8px; right: 9px; left: auto; }
-.part1-chart-axis-note {
-  height: 26px;
-  box-sizing: border-box;
-  padding: 6px 10px 4px 78px;
-  color: #8a7a58;
-  background: #f8f5ee;
-  border-bottom: 1px solid #ece2d2;
-  font: 600 calc(10px * var(--font-scale))/1.2 var(--sans);
-}
-
 .part1-lane-heads {
   display: grid;
   grid-template-columns: repeat(4, minmax(0, 1fr));
@@ -2444,50 +2434,44 @@
   padding: 0;
   overflow: hidden;
   transform-origin: top left;
-  background: repeating-linear-gradient(to bottom, transparent 0 83px, rgba(218, 205, 184, .52) 83px 84px);
+  background: transparent;
+}
+.part1-chart-scroll .part1-chart-links {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 3;
+  pointer-events: auto;
+  overflow: visible;
+}
+.part1-chart-links .part1-dot {
+  position: static;
+  left: auto;
+  top: auto;
+  margin: 0;
+  width: auto;
+  height: auto;
+  padding: 0;
+  cursor: pointer;
+  pointer-events: all;
+  vector-effect: non-scaling-stroke;
+  outline: none;
+}
+.part1-chart-links .part1-dot:hover,
+.part1-chart-links .part1-dot:focus-visible {
+  stroke: #2d261d;
+  stroke-width: 3;
+}
+.part1-chart-links .part1-dot.is-selected {
+  stroke: #2d261d;
+  stroke-width: 3;
+  transform: none;
 }
 .part1-chart-scroll .part1-ruler-labels {
   top: 0;
   bottom: 0;
 }
-.part1-chart-axis-note {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  padding-right: 150px;
-}
-.part1-chart-axis-range {
-  min-width: 0;
-  white-space: nowrap;
-}
-.part1-chart-zoom-controls {
-  display: inline-flex;
-  align-items: center;
-  gap: 3px;
-  flex: 0 0 auto;
-  color: #8a7a58;
-  white-space: nowrap;
-  font-size: calc(9px * var(--font-scale));
-}
-.part1-chart-zoom-controls button,
-.part1-chart-zoom-controls output {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 22px;
-  height: 20px;
-  padding: 0 5px;
-  color: #5c5142;
-  background: #fffaf1;
-  border: 1px solid #cbbba5;
-  border-radius: 5px;
-  font: inherit;
-  line-height: 1;
-}
-.part1-chart-zoom-controls button { cursor: pointer; }
-.part1-chart-zoom-controls button:hover { background: #efe3cf; }
-.part1-chart-zoom-controls output { min-width: 42px; font-variant-numeric: tabular-nums; }
-
 @media (max-width: 900px) {
   .part1-stage { grid-template-columns: 1fr; height: auto; }
   .part1-chart { min-height: 620px; border-right: 0; border-bottom: 1px solid #e0d5c3; }

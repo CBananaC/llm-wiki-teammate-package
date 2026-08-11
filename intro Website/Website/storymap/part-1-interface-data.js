@@ -62,6 +62,110 @@ window.PART1_INTERFACE_DATA = {
       "short": "皇帝行動"
     }
   ],
+  "chartPreview": {
+    "startAr": "1786/11/01",
+    "endAr": "1787/02/01",
+    "laneRatios": {
+      "events": 0.38,
+      "official": 0.46,
+      "imperial": 0.54,
+      "emperor": 0.66
+    },
+    "nodes": [
+      {
+        "id": "events-evms033otrk12",
+        "lane": "events",
+        "actor": "lin",
+        "dateAr": "1786/12/11",
+        "label": "十二月十一日",
+        "payload": {
+          "id": "evms033otrk12",
+          "actor": "lin",
+          "subtitle": "賊匪於三坎店交戰稍退",
+          "description": "叛軍進逼府城，於三坎店與柴大紀所率官兵交戰，經官軍大施火炮後叛軍攻勢稍退。",
+          "where": "三坎店",
+          "who": [
+            "柴大紀"
+          ],
+          "whenCh": "十二月十一日",
+          "dateAr": "1786/12/11",
+          "category": "done",
+          "aiFilterLabel": "林方行動",
+          "quote": "十一日柴鎮與賊打仗，大施火炮，賊勢稍退",
+          "quoteDocId": "硃42"
+        }
+      },
+      {
+        "id": "official-硃42",
+        "lane": "official",
+        "actor": "official",
+        "dateAr": "1786/12/18",
+        "label": "乾隆五十一年十二月十八日",
+        "payload": {
+          "docId": "硃42",
+          "title": "為彰化諸羅俱失及撥兵等緣由事",
+          "whenCh": "乾隆五十一年十二月十八日",
+          "dateAr": "1786/12/18"
+        }
+      },
+      {
+        "id": "imperial-硃42",
+        "lane": "imperial",
+        "actor": "imperial",
+        "dateAr": "1787/01/02",
+        "label": "乾隆五十二年一月二日",
+        "payload": {
+          "docId": "硃42",
+          "title": "為彰化諸羅俱失及撥兵等緣由事",
+          "whenCh": "乾隆五十二年一月二日",
+          "dateAr": "1787/01/02",
+          "rescriptText": "覽奏俱悉，即有旨諭。欽此。"
+        }
+      },
+      {
+        "id": "emperor-evms035srm109",
+        "lane": "emperor",
+        "actor": "emperor",
+        "dateAr": "1787/01/02",
+        "label": "乾隆五十二年正月初二日",
+        "payload": {
+          "id": "evms035srm109",
+          "actor": "emperor",
+          "subtitle": "據柴大紀於三坎店大施火砲擊退賊眾之報研判臺灣郡城防守嚴密且全臺尚無他虞",
+          "description": "徐嗣曾轉奏典史易鳳翔口述戰情，指總兵柴大紀於十一日大施火砲擊退賊眾。乾隆帝據此於上諭中回應，研判郡城防守業經嚴密部署，全臺根本重地尚不致有其他虞慮，並勉勵柴大紀努力剿捕。",
+          "where": "北京",
+          "who": [
+            "乾隆帝",
+            "柴大紀",
+            "徐嗣曾"
+          ],
+          "whenCh": "乾隆五十二年正月初二日",
+          "dateAr": "1787/01/02",
+          "category": null,
+          "aiFilterLabel": "相關上諭",
+          "quote": "至柴大紀帶兵，於十一日用槍炮攻擊，賊勢稍退，郡城防守嚴密，全臺根本尚不致有他虞。著常青等傳諭該鎮，務須努力剿捕，倘能得守臺灣等處，收復諸、彰二縣，迅速蕆事，朕必加以獎勵，從優議敘。",
+          "quoteDocId": "諭24"
+        }
+      }
+    ],
+    "links": [
+      {
+        "from": "events",
+        "to": "official",
+        "color": "#b5462e"
+      },
+      {
+        "from": "official",
+        "to": "imperial",
+        "color": "#c46a2b"
+      },
+      {
+        "from": "imperial",
+        "to": "emperor",
+        "color": "#7d4ab8"
+      }
+    ]
+  },
   "dots": {
     "events": {
       "id": "evms033otrk12",

@@ -123,6 +123,30 @@ def main() -> int:
     if dot_emperor["quoteDocId"] != "諭24":
         fail("expected the 皇帝行動 dot to be sourced from 諭24")
 
+    # The chart renderer consumes a small, presentation-ready projection rather
+    # than the full review export. Every node payload still comes directly from
+    # the selected sample-state event or the canonical source document above.
+    chart_preview = {
+        "startAr": "1786/11/01",
+        "endAr": "1787/02/01",
+        "laneRatios": {"events": 0.38, "official": 0.46, "imperial": 0.54, "emperor": 0.66},
+        "nodes": [
+            {"id": "events-" + str(dot_event["id"]), "lane": "events", "actor": dot_event["actor"], "dateAr": dot_event["dateAr"], "label": dot_event["whenCh"], "payload": dot_event},
+            {"id": "official-" + DOC_ID, "lane": "official", "actor": "official", "dateAr": document["send_date"][1], "label": document["send_date"][0], "payload": {
+                "docId": document["doc_id"], "title": document["title"], "whenCh": document["send_date"][0], "dateAr": document["send_date"][1]
+            }},
+            {"id": "imperial-" + DOC_ID, "lane": "imperial", "actor": "imperial", "dateAr": document["receive_date"][1], "label": document["receive_date"][0], "payload": {
+                "docId": document["doc_id"], "title": document["title"], "whenCh": document["receive_date"][0], "dateAr": document["receive_date"][1], "rescriptText": document.get("rescript_text")
+            }},
+            {"id": "emperor-" + str(dot_emperor["id"]), "lane": "emperor", "actor": dot_emperor["actor"], "dateAr": dot_emperor["dateAr"], "label": dot_emperor["whenCh"], "payload": dot_emperor},
+        ],
+        "links": [
+            {"from": "events", "to": "official", "color": "#b5462e"},
+            {"from": "official", "to": "imperial", "color": "#c46a2b"},
+            {"from": "imperial", "to": "emperor", "color": "#7d4ab8"},
+        ],
+    }
+
     payload = {
         "_generated_by": "tool/scripts py/build_part1_interface_data.py",
         "_sources": [
@@ -148,6 +172,7 @@ def main() -> int:
             {"key": "imperial", "label": "皇帝硃批下旨", "short": "硃批下旨"},
             {"key": "emperor", "label": "皇帝行動", "short": "皇帝行動"},
         ],
+        "chartPreview": chart_preview,
         "dots": {
             "events": dot_event,
             "official": {

@@ -178,24 +178,13 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         <button class="part1-hotspot" type="button" data-hotspot="chart">
           <span class="part1-hotspot-num">2</span>時間與關係圖表
         </button>
-        <div class="part1-chart-axis-note">
-          <span class="part1-chart-axis-range">${escapeHtml(doc.sendDate[1])}　—　${escapeHtml(doc.receiveDate[1])}</span>
-          <span class="part1-chart-zoom-controls" aria-label="圖表大小">
-            <span>圖表大小</span>
-            <button type="button" data-chart-zoom-out aria-label="縮小圖表">−</button>
-            <output data-chart-zoom-readout>100%</output>
-            <button type="button" data-chart-zoom-in aria-label="放大圖表">＋</button>
-            <button type="button" data-chart-zoom-reset>重設</button>
-          </span>
-        </div>
         <div class="part1-lane-heads">
           ${data.lanes.map((lane) => `<span>${escapeHtml(lane.label)}</span>`).join('')}
         </div>
         <div class="part1-chart-scroll" data-chart-scroll aria-label="可移動及縮放的四線時間與關係圖表">
           <div class="part1-chart-zoomspace" data-chart-zoomspace>
             <div class="part1-lanes" data-lanes>
-              <svg class="part1-chart-links" data-chart-links aria-hidden="true" focusable="false"></svg>
-              ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"><span class="part1-lane-label">${escapeHtml(lane.label)}</span><div class="part1-lane-track"></div></div>`).join('')}
+              <svg class="part1-chart-links" data-chart-links role="img" aria-label="時間與關係圖表"></svg>
               <div class="part1-ruler-labels" aria-hidden="true"><span>1786/11</span><span>11</span><span>21</span><span>1786/12</span><span>11</span><span>21</span><span>1787/1</span><span>11</span></div>
             </div>
           </div>
@@ -314,7 +303,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const lanesEl = replica.querySelector('[data-lanes]');
   const chartScroll = replica.querySelector('[data-chart-scroll]');
   const chartZoomspace = replica.querySelector('[data-chart-zoomspace]');
-  const chartZoomReadout = replica.querySelector('[data-chart-zoom-readout]');
   const linksSvg = replica.querySelector('[data-chart-links]');
   const docBody = replica.querySelector('[data-doc-body]');
   const docSummaryEl = replica.querySelector('[data-doc-summary]');
@@ -341,12 +329,40 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   /* ------------------------------------------------------------ 圖表圓點 */
 
   const parseDate = (value) => {
-    const match = String(value || '').match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
+    const match = String(value || '').match(/^(\d{4})[\/-](\d{1,2})[\/-](\d{1,2})$/);
     return match ? Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : 0;
   };
   const chartPreview = data.chartPreview || {};
-  const chartStart = parseDate(chartPreview.startAr || '1786/11/01');
-  const chartEnd = parseDate(chartPreview.endAr || '1787/02/01');
+  const fallbackChartNodes = laneDots.map(({ lane, actor, dot, label }) => ({
+    id: `${lane}-${dot.id || dot.docId || 'node'}`,
+    lane,
+    actor,
+    dateAr: dot.dateAr,
+    label,
+    payload: dot
+  }));
+  const chartInputNodes = Array.isArray(chartPreview.nodes) && chartPreview.nodes.length
+    ? chartPreview.nodes
+    : fallbackChartNodes;
+  const baseChartNodes = chartInputNodes.map((node, index) => {
+    const payload = node.payload || node.dot || data.dots[node.lane] || {};
+    return {
+      ...node,
+      id: String(node.id || payload.id || `${node.lane || 'node'}-${index}`),
+      lane: node.lane || 'events',
+      actor: node.actor || payload.actor || 'lin',
+      dateAr: node.dateAr || payload.dateAr,
+      label: node.label || payload.whenCh || payload.title || payload.subtitle || '',
+      payload
+    };
+  });
+  const chartDateValues = baseChartNodes.map((node) => parseDate(node.dateAr)).filter(Boolean);
+  const fallbackStart = chartDateValues.length ? Math.min(...chartDateValues) : parseDate('1786/11/01');
+  const fallbackEnd = chartDateValues.length ? Math.max(...chartDateValues) : parseDate('1787/02/01');
+  const defaultChartStart = parseDate('1786/11/01');
+  const defaultChartEnd = parseDate('1787/02/01');
+  const chartStart = parseDate(chartPreview.startAr) || defaultChartStart || fallbackStart;
+  const chartEnd = parseDate(chartPreview.endAr) || defaultChartEnd || (fallbackEnd > chartStart ? fallbackEnd : chartStart + 86400000);
   const CHART_BASE_WIDTH = 1080;
   const CHART_BASE_HEIGHT = 620;
   let chartScale = 1;
@@ -354,7 +370,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     events: 0.38,
     official: 0.46,
     imperial: 0.54,
-    emperor: 0.66
+    emperor: 0.66,
+    ...(chartPreview.laneRatios || {})
   });
   const chartPlot = (chartWidth = lanesEl.clientWidth || CHART_BASE_WIDTH) => {
     const width = chartWidth;
@@ -366,14 +383,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const plot = chartPlot(width || CHART_BASE_WIDTH);
     const ratio = chartLaneRatios[lane] ?? 0.5;
     return plot.left + plot.inner * ratio;
-  };
-  const chartLanePercent = (lane) => {
-    const plot = chartPlot();
-    return plot.width ? (chartLaneX(lane, plot.width) / plot.width) * 100 : 50;
-  };
-  const datePosition = (dateAr) => {
-    const span = chartEnd - chartStart || 1;
-    return Math.max(1, Math.min(99, ((parseDate(dateAr) - chartStart) / span) * 100));
   };
 
   const syncChartHeaders = () => {
@@ -396,7 +405,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     lanesEl.style.transform = `scale(${chartScale})`;
     chartZoomspace.style.width = `${CHART_BASE_WIDTH * chartScale}px`;
     chartZoomspace.style.height = `${CHART_BASE_HEIGHT * chartScale}px`;
-    if (chartZoomReadout) chartZoomReadout.textContent = `${Math.round(chartScale * 100)}%`;
     syncChartHeaders();
   };
 
@@ -469,14 +477,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     chartScroll.addEventListener('scroll', syncChartHeaders, { passive: true });
   }
 
-  replica.querySelector('[data-chart-zoom-out]')?.addEventListener('click', () => zoomChartTo(chartScale / 1.25));
-  replica.querySelector('[data-chart-zoom-in]')?.addEventListener('click', () => zoomChartTo(chartScale * 1.25));
-  replica.querySelector('[data-chart-zoom-reset]')?.addEventListener('click', () => {
-    chartScale = 1;
-    applyChartScale();
-    chartScroll?.scrollTo({ left: 0, top: 0, behavior: 'auto' });
-  });
-
   const eventOffsetLabel = (dateAr) => {
     const start = parseDate(doc.sendDate[1]);
     const date = parseDate(dateAr);
@@ -544,27 +544,18 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     });
   };
 
-  const addDot = ({ lane, actor, dot, label, isNew }) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = `part1-dot${isNew ? ' is-new' : ''}`;
-    button.dataset.actor = actor;
-    button.style.top = `${datePosition(dot.dateAr)}%`;
-    button.style.left = `${chartLanePercent(lane)}%`;
-    button.setAttribute('aria-label', `${dot.subtitle || dot.title}（${label}）`);
-    button.title = `${dot.subtitle || dot.title}`;
-    button._part1 = { dot, lane, label };
-    lanesEl.appendChild(button);
+  const chartExtraNodes = [];
+  const chartNodeElements = new Map();
+  let selectedChartNodeId = '';
 
-    const date = document.createElement('span');
-    date.className = 'part1-dot-date';
-    date.style.top = `${datePosition(dot.dateAr)}%`;
-    date.style.left = `${chartLanePercent(lane)}%`;
-    date.textContent = label;
-    lanesEl.appendChild(date);
-
-    button.addEventListener('click', () => selectDot(button));
-    return button;
+  const nodeColor = (node) => {
+    if (node.color) return node.color;
+    if (node.actor === 'lin') return '#b5462e';
+    if (node.actor === 'qing') return '#3f6f8f';
+    if (node.actor === 'emperor') return '#7d4ab8';
+    if (node.lane === 'imperial') return '#c46a2b';
+    if (node.lane === 'official') return '#2f75b5';
+    return '#8a765a';
   };
 
   const drawLinks = () => {
@@ -573,14 +564,16 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const height = lanesEl.clientHeight || CHART_BASE_HEIGHT;
     if (!width || !height) return;
     linksSvg.setAttribute('viewBox', `0 0 ${width} ${height}`);
+    linksSvg.setAttribute('preserveAspectRatio', 'none');
     linksSvg.innerHTML = '';
+    chartNodeElements.clear();
 
     const NS = 'http://www.w3.org/2000/svg';
-    const plot = chartPlot();
+    const plot = chartPlot(width);
     const daySpan = chartEnd - chartStart || 1;
     const yFor = (dateAr) => {
       const date = parseDate(dateAr);
-      return Math.max(4, Math.min(height - 4, ((date - chartStart) / daySpan) * height));
+      return Math.max(6, Math.min(height - 6, ((date - chartStart) / daySpan) * height));
     };
     const xFor = (lane, offset = 0) => chartLaneX(lane, width) + offset;
     const makeSvg = (tag, attributes, className) => {
@@ -610,27 +603,66 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     // buttons above are the only data nodes; these three segments show how
     // the selected event moves through the official, imperial, and emperor
     // lanes without turning the teaching screenshot into an unreadable mesh.
-    const exampleNodes = [
-      { lane: 'events', dot: data.dots.events, className: 'part1-preview-example-event' },
-      { lane: 'official', dot: data.dots.official, className: 'part1-preview-example-official' },
-      { lane: 'imperial', dot: data.dots.imperial, className: 'part1-preview-example-imperial' },
-      { lane: 'emperor', dot: data.dots.emperor, className: 'part1-preview-example-emperor' }
-    ];
+    const nodes = [...baseChartNodes, ...chartExtraNodes];
     const points = new Map();
-    exampleNodes.forEach(({ lane, dot }) => {
-      if (dot?.dateAr) points.set(lane, { x: xFor(lane), y: yFor(dot.dateAr) });
+    const pointsByLane = new Map();
+    nodes.forEach((node) => {
+      if (!node.dateAr || !parseDate(node.dateAr)) return;
+      const point = { x: xFor(node.lane), y: yFor(node.dateAr), node };
+      points.set(node.id, point);
+      if (!pointsByLane.has(node.lane)) pointsByLane.set(node.lane, point);
     });
-    const lineSpecs = [
-      ['events', 'official', 'part1-preview-example-event'],
-      ['official', 'imperial', 'part1-preview-example-official'],
-      ['imperial', 'emperor', 'part1-preview-example-imperial']
+    const defaultLinks = [
+      { from: 'events', to: 'official', color: '#b5462e' },
+      { from: 'official', to: 'imperial', color: '#c46a2b' },
+      { from: 'imperial', to: 'emperor', color: '#7d4ab8' }
     ];
-    lineSpecs.forEach(([fromLane, toLane, className]) => {
-      const from = points.get(fromLane);
-      const to = points.get(toLane);
-      if (from && to) makeSvg('line', {
-        x1: from.x.toFixed(1), y1: from.y.toFixed(1), x2: to.x.toFixed(1), y2: to.y.toFixed(1)
-      }, className);
+    const linkSpecs = Array.isArray(chartPreview.links) && chartPreview.links.length
+      ? chartPreview.links
+      : defaultLinks;
+    const resolvePoint = (key) => points.get(String(key)) || pointsByLane.get(String(key));
+    linkSpecs.forEach((link, index) => {
+      const from = resolvePoint(link.from || link.source);
+      const to = resolvePoint(link.to || link.target);
+      if (!from || !to) return;
+      makeSvg('line', {
+        x1: from.x.toFixed(1), y1: from.y.toFixed(1),
+        x2: to.x.toFixed(1), y2: to.y.toFixed(1),
+        stroke: link.color || '#c46a2b',
+        'stroke-width': link.width || 1.8,
+        'stroke-linecap': 'round'
+      }, link.className || `part1-preview-link part1-preview-link-${index}`);
+    });
+
+    nodes.forEach((node) => {
+      const point = points.get(node.id);
+      if (!point) return;
+      const label = `${node.payload.subtitle || node.payload.title || '圖表節點'}（${node.label || node.dateAr}）`;
+      const circle = makeSvg('circle', {
+        cx: point.x.toFixed(1),
+        cy: point.y.toFixed(1),
+        r: node.radius || 6.5,
+        fill: nodeColor(node),
+        stroke: '#fffaf2',
+        'stroke-width': 2,
+        tabindex: 0,
+        role: 'button',
+        'aria-label': label,
+        'data-chart-node-id': node.id
+      }, `part1-dot part1-svg-dot${selectedChartNodeId === node.id ? ' is-selected' : ''}`);
+      circle.dataset.actor = node.actor;
+      circle._part1 = node;
+      circle.addEventListener('click', () => selectDot(circle));
+      circle.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' || event.key === ' ') {
+          event.preventDefault();
+          selectDot(circle);
+        }
+      });
+      const title = document.createElementNS(NS, 'title');
+      title.textContent = label;
+      circle.appendChild(title);
+      chartNodeElements.set(node.id, circle);
     });
 
     syncChartHeaders();
@@ -719,12 +751,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   };
 
   const selectDot = (button) => {
-    lanesEl.querySelectorAll('.part1-dot').forEach((el) => el.classList.toggle('is-selected', el === button));
-    const { dot, lane, label } = button._part1;
-    renderNodePanel(dot, lane, label);
+    const node = button?._part1;
+    if (!node) return;
+    selectedChartNodeId = node.id;
+    chartNodeElements.forEach((element) => element.classList.toggle('is-selected', element === button));
+    renderNodePanel(node.payload, node.lane, node.label);
     setRegion('ai', { silent: true });
-    const laneLabel = data.lanes.find((item) => item.key === lane)?.label || '節點';
-    setProgress(`已在 AI 分析區開啟「${dot.subtitle || dot.title}」的${laneLabel}輸出卡片。`);
+    const laneLabel = data.lanes.find((item) => item.key === node.lane)?.label || '節點';
+    setProgress(`已在 AI 分析區開啟「${node.payload.subtitle || node.payload.title}」的${laneLabel}輸出卡片。`);
   };
 
   /* -------------------------------------------------------- 引文定位 */
@@ -1115,16 +1149,21 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (status) status.textContent = '已加入圖表：可在「戰場事件」線上點擊新圓點查看；來源鏈已保留在此卡片下方。';
     card?.querySelector('.part1-source-chain')?.removeAttribute('hidden');
 
-    const button = addDot({
+    const chartNode = {
+      id: String(item.id || `candidate-${index}`),
       lane: 'events',
       actor: item.actor === 'lin' ? 'lin' : 'qing',
-      dot: item,
+      dateAr: item.dateAr,
       label: item.whenCh,
+      payload: item,
       isNew: true
-    });
+    };
+    chartExtraNodes.push(chartNode);
     drawLinks();
     setRegion('chart', { silent: true });
     setProgress(`「${item.subtitle}」已加入戰場事件線。點擊新圓點，或在卡片下方查看其來源鏈。`);
+    const button = chartNodeElements.get(chartNode.id);
+    button?.classList.add('is-new');
     window.setTimeout(() => button?.classList.remove('is-new'), 700);
   };
 
@@ -1241,8 +1280,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     window.clearTimeout(terminalTimer);
     addedCandidates.clear();
     renderedEventItems = [];
-    lanesEl.querySelectorAll('.part1-dot, .part1-dot-date').forEach((element) => element.remove());
-    laneDots.forEach(addDot);
+    chartExtraNodes.length = 0;
+    selectedChartNodeId = '';
     replica.querySelectorAll('.part1-doc mark').forEach((mark) => {
       mark.classList.remove('is-shown', 'is-located');
     });
@@ -1270,14 +1309,13 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   /* -------------------------------------------------------------- 初始化 */
 
-  laneDots.forEach(addDot);
   renderAiIdle();
   drawLinks();
 
   const initialRegion = mode === 'node' ? 'chart' : mode === 'all' ? '' : mode;
   if (initialRegion) setRegion(initialRegion, { silent: true });
   if (mode === 'node') {
-    const firstDot = replica.querySelector('.part1-dot');
+    const firstDot = chartNodeElements.values().next().value;
     if (firstDot) selectDot(firstDot);
   }
 

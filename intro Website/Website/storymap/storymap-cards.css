@@ -2200,6 +2200,9 @@
   align-items: start;
   gap: var(--col-gap);
 }
+#part-2-content .part2-input-layout > .part2-wide-text {
+  grid-column: 1 / -1;
+}
 #part-2-content .part2-input-copy,
 #part-2-content .part2-input-visual {
   min-width: 0;
