@@ -11863,3 +11863,30 @@ Verified:
 Remaining:
 - The original `3c3b3a.png` remains preserved but is no longer used by the Try a Try desktop page list.
 - Existing unrelated concurrent StoryMap edits and UI assets remain untouched; no push was performed.
+
+## 2026-08-11 15:06 HKT — Claude — Merge LLM Wiki cards and add knowledge-network visual
+
+Summary:
+- In the intro website's `#part-3-wiki-data` stage, merged the two previously separate `.story` sections (`#part-3-wiki-intro`, `#part-3-wiki-data`) into one section with the two text cards stacked in a left column and a new right-side "LLM Wiki 知識網絡" visual (question chat bubble → Obsidian-style graph that lights up during a one-shot "thinking" phase → AI answer typed with citations, worked-header row, and decorative tool icons), mirroring the `#part-3-ai-chain` left-copy/right-visual pattern. Preserved `#part-3-wiki-intro-card`/`#part-3-wiki-data-card` ids and the existing `#part-3-wiki-data` flow-step nav target.
+- Added scoped CSS (`.part3-wiki-layout`/`.part3-wiki-visual`/graph/answer rules, 1040px/620px breakpoints) to `storymap-cards.css`, and `initPart3WikiVisual()` to `storymap.js` (ported from the `UI Idea/29-llm-wiki-network-animation-draft.html` draft), using `IntersectionObserver` for one-shot playback and a `prefers-reduced-motion` static fallback.
+- Per user direction, simplified the AI-answer citation text: dropped the quoted 硃批 rescript line and the inline "非資料庫已確認配對" caveat from the visible answer (kept mentioning receipt on 十二月二十七日 and reply by 諭13); shortened the 吳正龍 2018 second-source citation to title+year; renamed the "皇帝及後續官員的回應" citation label to "皇帝的回應" and the sample question to match; added visual spacing between the answer's three parts. The removed uncertainty caveat about the 諭13↔硃25 pairing being inferred (not in `confirmed-pairs.json`) remains fully documented in the draft file's note-list and source-note, per the project's citation/provenance rules.
+- Updated the matching draft file (`29-llm-wiki-network-animation-draft.html`) with the same text/layout changes (visual moved to the right of the combined cards) for consistency.
+- Bumped `storymap-cards.css`/`storymap.js` cache-busting query strings to `...-claude-wiki-visual-01`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/UI Idea/29-llm-wiki-network-animation-draft.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed on `storymap.js` and on the draft file's extracted script.
+- Python-based div/section/article/svg/g tag-balance checks passed on `storymap-example.html`; CSS brace balance passed on `storymap-cards.css` (376/376) and the draft file (79/79).
+- Confirmed no dangling references to the removed `#part-3-wiki-intro` section id (nav target `#part-3-wiki-data` still resolves; card ids unchanged). Pre-existing duplicate ids elsewhere in the file (`difficulty-quantity`, `case-sources`, `case-route`, `case-background`) were confirmed present in `HEAD` before this change and are unrelated.
+- Not tested in a real browser/device (no headless browser available in this sandbox).
+
+Remaining:
+- Browser/device visual QA still needed for the merged wiki section and the new animation (desktop, ≤1040px, ≤620px).
+- Concurrent Codex-session edits continued on this file during this task; re-read immediately before each write, no conflicting overlap observed.

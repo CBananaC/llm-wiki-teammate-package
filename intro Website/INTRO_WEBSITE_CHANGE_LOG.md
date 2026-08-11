@@ -7391,3 +7391,26 @@ Verified:
 Remaining:
 - The original `3c3b3a.png` remains preserved but is no longer used by the Try a Try desktop page list.
 - Existing unrelated concurrent StoryMap edits and UI assets remain untouched; no push was performed.
+
+### 2026-08-11 15:06 HKT — Claude — Merge LLM Wiki cards and add knowledge-network visual
+
+Summary:
+- Merged `#part-3-wiki-intro` and `#part-3-wiki-data` into one `#part-3-wiki-data` section: two text cards left, new right-side "LLM Wiki 知識網絡" visual (chat-bubble question → one-shot Obsidian-style graph "thinking" animation → typed AI answer with citations), mirroring the `#part-3-ai-chain` left-copy/right-visual pattern.
+- Added `initPart3WikiVisual()` to `storymap.js` and matching scoped CSS to `storymap-cards.css` (incl. 1040px/620px breakpoints), ported from `UI Idea/29-llm-wiki-network-animation-draft.html`.
+- Simplified the AI-answer text per user direction: dropped the quoted 硃批 line and the inline 諭13/硃25 uncertainty caveat (kept in the draft's note-list/source-note instead), shortened the 吳正龍 2018 citation, renamed the "皇帝及後續官員的回應" label to "皇帝的回應" (and the sample question to match), added spacing between the answer's three parts.
+- Updated the draft file to match (visual now right of the combined cards) and bumped cache-busting versions to `...-claude-wiki-visual-01`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+- `Website/UI Idea/29-llm-wiki-network-animation-draft.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed on `storymap.js` and the draft's extracted script.
+- Tag/brace balance checks passed on `storymap-example.html`, `storymap-cards.css`, and the draft file; no dangling references to the removed `#part-3-wiki-intro` id.
+
+Remaining:
+- Browser/device visual QA still needed (no headless browser available in this sandbox).

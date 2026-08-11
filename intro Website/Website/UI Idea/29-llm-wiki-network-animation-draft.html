@@ -26,15 +26,17 @@
   .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
 
   /* ==========================================================================
-     版面示意：沿用「後續功能：LLM Wiki」目前的文字卡，新的網絡視覺元素
-     放在文字卡的「左側」（依指示），文字卡在右。
+     版面示意：兩張「後續功能：LLM Wiki」文字卡合併在同一個區塊裡（左側、
+     直向堆疊），新的網絡視覺元素放在文字卡的「右側」（依最新指示，
+     取代先前「視覺在左」的版本）。
      ========================================================================== */
   .mock-section { max-width: 1360px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
   .mock-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
   .mock-title-row h2 { margin: 0; color: var(--ink); font: 500 clamp(22px, 2.4vw, 30px)/1.2 var(--serif); letter-spacing: -.02em; }
 
-  /* 左圖右文 */
-  .wiki-layout { display: grid; grid-template-columns: 52% minmax(0, 1fr); gap: clamp(18px, 2.2vw, 30px); align-items: start; }
+  /* 左文右圖：兩張卡合併在左欄、新視覺元素在右欄——比照
+     #part-3-ai-chain .part3-chain-ring-layout 的左文右圖寫法與比例。 */
+  .wiki-layout { display: grid; grid-template-columns: minmax(0, 1fr) minmax(280px, 44%); gap: clamp(18px, 2.2vw, 30px); align-items: start; }
   .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
   .copybox.blk { display: flex; flex-direction: column; justify-content: center; }
   .copybox + .copybox { margin-top: 14px; }
@@ -128,6 +130,9 @@
   .wiki-answer-tools.is-shown { opacity: 1; }
   .wiki-answer-tools svg { width: 13px; height: 13px; stroke: rgba(247,243,234,.42); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
   .wiki-answer-body .ln { display: block; }
+  /* 三個「部分」之間的間距：已確認的事件（含兩點列）／皇帝的回應／二手研究，
+     各自成一段，段落之間留比同一段內行距更大的空間。 */
+  .wiki-answer-body .ln.gap { margin-top: 14px; }
   .wiki-answer-body .ln.bul { padding-left: 13px; text-indent: -13px; }
   .wiki-answer-body .ln.bul::before { content: "・"; color: var(--wiki-purple); }
   .wiki-answer-body .cite {
@@ -196,7 +201,7 @@
 
   <h1>「後續功能：LLM Wiki」新增視覺元素 — 知識網絡啟動動畫草稿</h1>
   <p class="lead">
-    放在 LLM Wiki 文字卡<b>左側</b>的新視覺元素，用來說明 LLM Wiki 的運作：
+    兩張 LLM Wiki 文字卡合併在同一區塊的左欄，新視覺元素放在<b>右側</b>，用來說明 LLM Wiki 的運作：
     研究者輸入一個研究問題 → 整張<b>類 Obsidian 的知識網絡被「啟動」</b>，
     紫色的光沿著連線一路跑過各個節點（原始資料、二手研究、已抽取的資料、研究問題與方法）→
     最後 AI 依據被點亮的節點，<b>橫向逐字打出</b>一段有引註的答案。
@@ -206,9 +211,9 @@
     <li><b>整段只播一次</b>：捲動到這個區塊、元素進入畫面時才開始播放，跑完就停在最終狀態；之後捲走再捲回來都不會重播，要重看必須重新整理頁面。</li>
     <li>提問改成 AI App 的<b>聊天氣泡</b>（靠右、圓角、右下角收一個尖角），色調改用本站的紙色系，不用截圖裡的灰色。回答比照截圖的 AI 回覆視窗：思考完成後在最上面淡入一列「<b>已思考 3.4 秒 ›</b>」（灰字、細分隔線），內文分行、帶項目符號，整段答案打完後才在最下面淡入<b>複製／讚／不讚／分享</b>四個小圖示（純示意、不可點擊）。</li>
     <li>三個「已抽取的資料」節點（已確認的事件／事件資訊來源／皇帝及後續官員的回應）<b>彼此相連</b>，因為它們描述的是同一個事件的三個面向。「上奏」已改名為「奏摺」，二手研究只留「二手研究」與「GIS」兩個節點（已移除 FYP 手稿），節點分類的圖例已拿掉。</li>
-    <li>依指示移除了「事件資訊來源」那句統計句（383／141）。「皇帝及後續官員的回應」改引<b>諭13</b>：它與硃25 同日（乾隆五十一年十二月二十七日）發出、同樣寫給黃仕簡，內容提及黃仕簡帶兵渡臺並囑「仍加意調攝，勿過勞」，用語呼應硃25 硃批旁註「仍以調養為要，勿過勞」——但這是<b>依日期與內容比對推斷</b>，不是 <code>confirmed-pairs.json</code> 裡已標記的配對（該檔案中諭13 確認配對的回應是硃94、硃105，回覆人是徐嗣曾、常青），答案文字已誠實標註這一點。</li>
-    <li>新增第二筆二手研究引用：吳正龍〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉，《臺灣文獻》第69卷第2期，2018年6月，頁67–124（對應 <code>2nd Material &amp; FYP/(2)二手研究/</code> 內已有的文字檔）。</li>
-    <li>提問氣泡、答案內文、思考狀態字字級都調大；新增 <b>≤1040px</b>（左圖右文收成單欄）與 <b>≤620px</b>（節點字級／半徑略縮、圖表改近正方形比例，避免節點擠在一起）兩組響應式版面。</li>
+    <li>依指示移除了「事件資訊來源」那句統計句（383／141）。回答的第二部分改稱「<b>皇帝的回應</b>」（只提皇帝，問句也拿掉「與各級官員分別」），內文只說硃25 於十二月二十七日收悉、同日以<b>諭13</b>回應，不再引「已有旨了。欽此。」的硃批原句；諭13 提及黃仕簡帶兵渡臺並囑「仍加意調攝，勿過勞」，用語呼應硃25 硃批旁註「仍以調養為要，勿過勞」。諭13 與硃25 的配對其實是<b>依日期與內容比對推斷</b>，不是 <code>confirmed-pairs.json</code> 裡已標記的配對（該檔案中諭13 確認配對的回應是硃94、硃105，回覆人是徐嗣曾、常青）——這個不確定性說明已移出聊天回覆本文（維持口語、簡潔），改為完整記錄在這份 note-list 與下方 <code>source-note</code> 裡。</li>
+    <li>第二筆二手研究引用（吳正龍〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉，《臺灣文獻》第69卷第2期，2018年6月，頁67–124，對應 <code>2nd Material &amp; FYP/(2)二手研究/</code> 內已有的文字檔）在答案本文中簡化為「〈…〉(2018) 可補充彰化戰役中官方的剿撫策略」，完整著錄同樣保留在 <code>source-note</code>。</li>
+    <li>答案分成三個「部分」（已確認的事件＋兩點列／皇帝的回應／二手研究），部分之間加大留白，方便閱讀。提問氣泡、答案內文、思考狀態字字級都調大；新增 <b>≤1040px</b>（左文右圖收成單欄）與 <b>≤620px</b>（節點字級／半徑略縮、圖表改近正方形比例，避免節點擠在一起）兩組響應式版面。</li>
     <li>已加入 <code>IntersectionObserver</code>（畫面外暫停）與 <code>prefers-reduced-motion</code>（顯示最終狀態，不播放動畫）。</li>
   </ul>
 
@@ -216,7 +221,20 @@
     <div class="mock-title-row"><h2>後續功能：LLM Wiki</h2></div>
 
     <div class="wiki-layout">
-      <!-- 左：新的網絡視覺元素 -->
+      <!-- 左：現有兩張文字卡合併在同一欄（內容沿用網站現行文案，未改動） -->
+      <div>
+        <article class="copybox blk">
+          <div class="title-row"><span class="option-number">1</span><h2>LLM Wiki</h2></div>
+          <p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p>
+        </article>
+        <article class="copybox blk">
+          <div class="title-row"><span class="option-number">2</span><h2>LLM Wiki 與歷史研究</h2></div>
+          <p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p>
+          <p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p>
+        </article>
+      </div>
+
+      <!-- 右：新的網絡視覺元素 -->
       <div class="wiki-visual" id="wiki-visual">
         <div class="wiki-ask">
           <div class="wiki-ask-bubble"><span id="wiki-ask-text"></span><span class="wiki-caret" id="wiki-caret"></span></div>
@@ -250,26 +268,13 @@
         <div class="draft-tag" style="right: -6%; top: 34%;"><span class="n">2</span>思考中：紫光多向來回跑</div>
         <div class="draft-tag" style="left: -6%; bottom: 6%;"><span class="n">3</span>思考字換成答案，逐字打出</div>
       </div>
-
-      <!-- 右：現有文字卡（內容沿用網站現行文案，未改動） -->
-      <div>
-        <article class="copybox blk">
-          <div class="title-row"><span class="option-number">1</span><h2>LLM Wiki</h2></div>
-          <p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p>
-        </article>
-        <article class="copybox blk">
-          <div class="title-row"><span class="option-number">2</span><h2>LLM Wiki 與歷史研究</h2></div>
-          <p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p>
-          <p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p>
-        </article>
-      </div>
     </div>
   </div>
 
   <div class="plan-block">
     <h2>套用到正式網站前，還需要確認的事</h2>
     <div class="plan-grid">
-      <div class="plan-item"><span class="n">1</span><div><p><b>放在哪一張卡旁邊</b>：目前 LLM Wiki 有兩張文字卡（<code>#part-3-wiki-intro</code>、<code>#part-3-wiki-data</code>），分屬兩個 <code>.story</code> 區塊。這個草稿把兩張卡併在同一列的右側示意；正式套用時要決定是併成一區（左圖右文），還是只放在其中一張卡旁邊。</p></div></div>
+      <div class="plan-item"><span class="n">1</span><div><p><b>放在哪一張卡旁邊</b>：已依指示定案——兩張文字卡（<code>#part-3-wiki-intro-card</code>、<code>#part-3-wiki-data-card</code>）合併在同一區塊的左欄，新視覺元素在右欄，比照 <code>#part-3-ai-chain</code> 左文右圖的做法。正式套用時會把原本分屬 <code>#part-3-wiki-intro</code>、<code>#part-3-wiki-data</code> 兩個 <code>.story</code> 區塊的內容併成一個區塊。</p></div></div>
       <div class="plan-item"><span class="n">2</span><div><p><b>節點名稱與數量</b>：目前用 12 個節點示意（研究問題／方法 2、已抽取的資料 3、原始資料 4、二手研究 3）。節點文字是否要對應真實的匯出檔名或分類名稱，還需要確認。</p></div></div>
       <div class="plan-item"><span class="n">3</span><div><p><b>AI 回答的內容</b>：草稿只引用資料庫中確實存在的欄位值（硃25 的標題、具奏人、日期、硃批原文），刻意避免任何歷史判斷。若要換成更像研究結論的句子，必須先由研究者撰寫或審核，不能讓草稿自行生成。</p></div></div>
       <div class="plan-item"><span class="n">4</span><div><p><b>時間節奏</b>：提問 1.6 秒、送出停頓 0.55 秒、思考 3.4 秒、作答 4.2 秒，共約 9.8 秒，播完即停（不重播）。思考的長度最容易需要微調——太短看不出「在想」，太長會讓人以為卡住。</p></div></div>
@@ -279,11 +284,13 @@
 
   <p class="source-note">
     AI 回答中引用的欄位值逐字取自 <code>review-tools/shared data/stage1_original_text.json</code> 中 <code>doc_id: 硃25</code>
-    （福建水師提督黃仕簡〈為奏彰化失陷已調兵赴臺事〉，具奏日期乾隆五十一年十二月初十日、奉硃批日期十二月二十七日、硃批「已有旨了。欽此。」）與 <code>doc_id: 諭13</code>
-    （〈諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡〉，乾隆五十一年十二月二十七日）。諭13 與硃25 的配對為草稿依日期、收文人、內容用語比對推斷，
-    非 <code>review-tools/(2) sample/confirmed-pairs.json</code> 已標記的確認配對（該檔案中諭13 的確認配對回應為硃94、硃105），答案文字已在句中標註此點。
-    二手研究引用逐字取自 <code>2nd Material &amp; FYP/(2)二手研究/(1)林爽文事件與戰爭進程/(1)事件性質與戰役/</code> 內吳正龍〈林爽文事件中的彰化戰役：
-    兼論人羣對立與官方剿撫策略〉一文的既有著錄（《臺灣文獻》第69卷第2期，2018年6月，頁67–124）。
+    （福建水師提督黃仕簡〈為奏彰化失陷已調兵赴臺事〉，具奏日期乾隆五十一年十二月初十日、奉硃批日期十二月二十七日）與 <code>doc_id: 諭13</code>
+    （〈諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡〉，乾隆五十一年十二月二十七日）。<b>諭13 與硃25 的配對為草稿依日期、收文人、內容用語比對推斷，
+    非 <code>review-tools/(2) sample/confirmed-pairs.json</code> 已標記的確認配對</b>（該檔案中諭13 的確認配對回應為硃94、硃105）；這個不確定性說明目前只保留在
+    這份草稿頁面（note-list 與本段），聊天回覆本文為求簡潔口語已不再逐句寫出，正式套用前需要研究者確認這個取捨是否合適。
+    二手研究引用（〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉(2018) 可補充彰化戰役中官方的剿撫策略）逐字取自
+    <code>2nd Material &amp; FYP/(2)二手研究/(1)林爽文事件與戰爭進程/(1)事件性質與戰役/</code> 內吳正龍一文的既有著錄
+    （《臺灣文獻》第69卷第2期，2018年6月，頁67–124；完整著錄僅保留在此處，答案本文已簡化）。
     草稿未新增任何歷史判斷、詮釋或未經確認的事實；節點名稱為示意用的分類標籤。
   </p>
 
@@ -412,12 +419,13 @@
       '整理皇帝及後續官員的回應…'
     ];
 
-    const QUESTION = '彰化縣城失陷後，皇帝與各級官員分別作了什麼回應？';
+    const QUESTION = '彰化縣城失陷後，皇帝作了什麼回應？';
 
-    /* AI 回答：做成聊天回覆的口吻，分行、帶項目符號，逐字打出。
+    /* AI 回答：做成聊天回覆的口吻，分三個部分（各自留空隙）、帶項目符號，逐字打出。
        內容只使用資料庫中確實存在的欄位值：
-       - 事件、日期、具奏人、硃批原文 → 取自 doc_id 硃25 的欄位
-       - 諭13 → 與硃25 同日、同收文人，依內容比對推斷（非 confirmed-pairs 已確認配對，句中已標註）
+       - 事件、日期、具奏人 → 取自 doc_id 硃25 的欄位
+       - 諭13 → 與硃25 同日、同收文人，依內容比對推斷（非 confirmed-pairs 已確認配對，
+         此點已誠實記錄在下方 note-list／source-note，但為求聊天回覆簡潔不再逐句寫進答案本文）
        - 二手研究引用 → 吳正龍 2018〈林爽文事件中的彰化戰役〉既有著錄
        不含任何歷史判斷或詮釋。 */
     const ANSWER_LINES = [
@@ -430,15 +438,15 @@
       { bullet: true, parts: [
         { t: '奏報者：福建水師提督黃仕簡，具奏於十二月初十日' }
       ] },
-      { parts: [
-        { t: '「' }, { t: '皇帝及後續官員的回應', cite: true }, { t: '」：硃25 於十二月二十七日奉硃批「已有旨了。欽此。」；同日發出的上諭' },
+      { gap: true, parts: [
+        { t: '「' }, { t: '皇帝的回應', cite: true }, { t: '」：硃25 於十二月二十七日收悉，同日並以上諭' },
         { t: '（諭13）', cite: true },
-        { t: ' 亦提及黃仕簡帶兵渡臺一事，獎勉之餘並囑「仍加意調攝，勿過勞」，與硃25批語用意相呼應' },
-        { t: '（同日、同一收文人，屬內容比對，非資料庫已確認配對）', cite: true }, { t: '。' }
+        { t: ' 回應；諭13 提及黃仕簡帶兵渡臺一事，獎勉之餘並囑「仍加意調攝，勿過勞」，與硃25批語用意相呼應。' }
       ] },
-      { parts: [
-        { t: '另據已上載的' }, { t: '二手研究', cite: true }, { t: '——吳正龍〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉' },
-        { t: '（《臺灣文獻》第69卷第2期，2018，頁67–124）', cite: true }, { t: '，可補充彰化戰役的人群對立背景與官方剿撫策略分析。' }
+      { gap: true, parts: [
+        { t: '另據已上載的' }, { t: '二手研究', cite: true }, { t: '：' },
+        { t: '〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉(2018)', cite: true },
+        { t: ' 可補充彰化戰役中官方的剿撫策略。' }
       ] }
     ];
     const ANSWER_PLAIN = ANSWER_LINES.map((l) => l.parts.map((p) => p.t).join('')).join('');
@@ -460,7 +468,7 @@
           else inner += slice;
           left -= slice.length;
         }
-        html += `<span class="ln${line.bullet ? ' bul' : ''}">${inner}</span>`;
+        html += `<span class="ln${line.bullet ? ' bul' : ''}${line.gap ? ' gap' : ''}">${inner}</span>`;
       }
       answerBody.innerHTML = html;
     }
