@@ -765,15 +765,55 @@
             </div>
           </div>
         </section>
-        <section class="part2-stage" id="part-2-flow" data-tab="part-2" data-nav="#part-2-flow">
-          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-flow-bar" aria-labelledby="part-2-flow-title">
-            <div class="section-hero-content"><p class="eyebrow">流程概覽</p><h1 id="part-2-flow-title">運作流程圖</h1></div>
-          </section>
-          <section class="story surface-b part2-topic-content" id="part-2-flow-content" data-tab="part-2">
-            <div class="story-inner"><div class="part2-card-stack">
-              <article class="copybox blk part2-text-card"><div class="body"><p>輸入結構化的原始文書 → AI Skills → 1. 總結文書、2. 重構文書間的通訊關係、3. 收取奏摺的資訊、4. 收取上諭的資訊→載入分析結果 → 研究者審閱 →結果載入至圖表中呈現</p></div></article>
-            </div></div>
-          </section>
+        <section class="story surface-b part2-topic-content" id="part-2-flow" data-tab="part-2" data-nav="#part-2-flow">
+            <div class="story-inner">
+              <div class="part2-card-stack">
+                <article class="copybox blk part2-text-card part2-numbered-card">
+                  <div class="title-row"><span class="option-number">2</span><h2 id="part-2-flow-title">運作流程圖</h2></div>
+                  <div class="body"><p>下圖概述平台的運作流程：輸入結構化文書後，平台運用四組 AI Skills 分階段分析文書，供研究者審閱，再把結果載入圖表中呈現。點擊任一節點，可跳至該階段的詳細說明。</p></div>
+                </article>
+              </div>
+              <nav class="part2-flow-shell" aria-label="平台運作流程圖">
+                <div class="part2-flow-chart">
+                  <a class="part2-flow-node part2-flow-node-solo" href="#part-2-input">
+                    <span class="part2-flow-node-eyebrow">步驟四</span>
+                    <span class="part2-flow-node-title">輸入結構化資料</span>
+                  </a>
+                  <span class="part2-flow-arrow" aria-hidden="true"></span>
+                  <a class="part2-flow-node part2-flow-node-solo" href="#part-2-ai">
+                    <span class="part2-flow-node-eyebrow">步驟五</span>
+                    <span class="part2-flow-node-title">使用AI從原文中抽取資訊</span>
+                  </a>
+                  <span class="part2-flow-arrow" aria-hidden="true"></span>
+                  <div class="part2-flow-branch">
+                    <div class="part2-flow-branch-label" aria-hidden="true">四組 AI Skills</div>
+                    <div class="part2-flow-stack">
+                      <a class="part2-flow-node part2-flow-node-stack" href="#part-2-summary">
+                        <span class="part2-flow-node-eyebrow">分析階段一</span>
+                        <span class="part2-flow-node-title">總結文書</span>
+                      </a>
+                      <a class="part2-flow-node part2-flow-node-stack" href="#part-2-communication">
+                        <span class="part2-flow-node-eyebrow">分析階段二</span>
+                        <span class="part2-flow-node-title">重建通信關係</span>
+                      </a>
+                      <a class="part2-flow-node part2-flow-node-stack" href="#part-2-extract">
+                        <span class="part2-flow-node-eyebrow">分析階段三</span>
+                        <span class="part2-flow-node-title">抽取奏摺的資訊</span>
+                      </a>
+                      <a class="part2-flow-node part2-flow-node-stack" href="#part-2-yu-info">
+                        <span class="part2-flow-node-eyebrow">分析階段四</span>
+                        <span class="part2-flow-node-title">收取上諭的資訊</span>
+                      </a>
+                    </div>
+                  </div>
+                  <span class="part2-flow-arrow" aria-hidden="true"></span>
+                  <a class="part2-flow-node part2-flow-node-solo" href="#part-2-visualize">
+                    <span class="part2-flow-node-eyebrow">分析結果</span>
+                    <span class="part2-flow-node-title">視覺化呈現分析的結果</span>
+                  </a>
+                </div>
+              </nav>
+            </div>
         </section>
         <section class="part2-stage" id="part-2-input" data-tab="part-2" data-nav="#part-2-input">
           <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-input-bar" aria-labelledby="part-2-input-title">
