@@ -4,9 +4,9 @@
    這個檔案只負責介紹網站內的教學複本。它不會讀取或寫入任何審閱狀態，
    也不會載入 review-tools 內的檔案；所有內容都來自 part-1-interface-data.js。
 
-   四個可點區域（其中圖表另以「節點資訊區」作為獨立展示）：
+   四個可點區域：
      1 導覽列          兩個浮動標籤：輸入與輸出資料、切換介面區域
-     2 時間與關係圖表  四條線各有一個固定圓點，點擊開啟節點資訊區
+     2 時間與關係圖表  四條線各有一個固定圓點，點擊在 AI 分析區開啟對應輸出卡片
      3 原始史料區      示範 AI Skills 篩選標示
      4 AI 分析區       四個步驟：本機執行 → 候選卡片 → 加入圖表 → 引文定位
    ========================================================================== */
@@ -104,8 +104,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     { lane: 'emperor', actor: 'emperor', dot: data.dots.emperor, label: '正月初二日' }
   ];
 
-  const laneIndex = Object.fromEntries(data.lanes.map((lane, index) => [lane.key, index]));
-
   replica.dataset.part1Mode = mode;
   replica.innerHTML = `
     <div class="part1-region part1-toolbar" data-region="nav">
@@ -180,16 +178,28 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         <button class="part1-hotspot" type="button" data-hotspot="chart">
           <span class="part1-hotspot-num">2</span>時間與關係圖表
         </button>
-        <div class="part1-chart-axis-note">${escapeHtml(doc.sendDate[1])}　—　${escapeHtml(doc.receiveDate[1])}</div>
+        <div class="part1-chart-axis-note">
+          <span class="part1-chart-axis-range">${escapeHtml(doc.sendDate[1])}　—　${escapeHtml(doc.receiveDate[1])}</span>
+          <span class="part1-chart-zoom-controls" aria-label="圖表大小">
+            <span>圖表大小</span>
+            <button type="button" data-chart-zoom-out aria-label="縮小圖表">−</button>
+            <output data-chart-zoom-readout>100%</output>
+            <button type="button" data-chart-zoom-in aria-label="放大圖表">＋</button>
+            <button type="button" data-chart-zoom-reset>重設</button>
+          </span>
+        </div>
         <div class="part1-lane-heads">
           ${data.lanes.map((lane) => `<span>${escapeHtml(lane.label)}</span>`).join('')}
         </div>
-        <div class="part1-lanes" data-lanes>
-          <svg class="part1-chart-links" data-chart-links aria-hidden="true" focusable="false"></svg>
-          ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"><span class="part1-lane-label">${escapeHtml(lane.label)}</span><div class="part1-lane-track"></div></div>`).join('')}
+        <div class="part1-chart-scroll" data-chart-scroll aria-label="可移動及縮放的四線時間與關係圖表">
+          <div class="part1-chart-zoomspace" data-chart-zoomspace>
+            <div class="part1-lanes" data-lanes>
+              <svg class="part1-chart-links" data-chart-links aria-hidden="true" focusable="false"></svg>
+              ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"><span class="part1-lane-label">${escapeHtml(lane.label)}</span><div class="part1-lane-track"></div></div>`).join('')}
+              <div class="part1-ruler-labels" aria-hidden="true"><span>1786/11</span><span>11</span><span>21</span><span>1786/12</span><span>11</span><span>21</span><span>1787/1</span><span>11</span></div>
+            </div>
+          </div>
         </div>
-        <div class="part1-ruler-labels" aria-hidden="true"><span>1786/11</span><span>11</span><span>21</span><span>1786/12</span><span>11</span><span>21</span><span>1787/1</span><span>11</span></div>
-        <div class="part1-nodepanel" data-nodepanel hidden></div>
       </div>
 
       <section class="part1-region part1-eventline" data-region="eventline" aria-label="事件鏈">
@@ -302,8 +312,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   `;
 
   const lanesEl = replica.querySelector('[data-lanes]');
+  const chartScroll = replica.querySelector('[data-chart-scroll]');
+  const chartZoomspace = replica.querySelector('[data-chart-zoomspace]');
+  const chartZoomReadout = replica.querySelector('[data-chart-zoom-readout]');
   const linksSvg = replica.querySelector('[data-chart-links]');
-  const nodePanel = replica.querySelector('[data-nodepanel]');
   const docBody = replica.querySelector('[data-doc-body]');
   const docSummaryEl = replica.querySelector('[data-doc-summary]');
   const docDivisionsEl = replica.querySelector('[data-doc-divisions]');
@@ -335,20 +347,23 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const chartPreview = data.chartPreview || {};
   const chartStart = parseDate(chartPreview.startAr || '1786/11/01');
   const chartEnd = parseDate(chartPreview.endAr || '1787/02/01');
+  const CHART_BASE_WIDTH = 1080;
+  const CHART_BASE_HEIGHT = 620;
+  let chartScale = 1;
   const chartLaneRatios = Object.freeze({
     events: 0.38,
     official: 0.46,
     imperial: 0.54,
     emperor: 0.66
   });
-  const chartPlot = () => {
-    const width = lanesEl.clientWidth || 0;
+  const chartPlot = (chartWidth = lanesEl.clientWidth || CHART_BASE_WIDTH) => {
+    const width = chartWidth;
     const left = Math.min(68, Math.max(48, width * 0.12));
     const right = Math.min(11, Math.max(8, width * 0.03));
     return { width, left, right, inner: Math.max(1, width - left - right) };
   };
   const chartLaneX = (lane, width = lanesEl.clientWidth) => {
-    const plot = chartPlot();
+    const plot = chartPlot(width || CHART_BASE_WIDTH);
     const ratio = chartLaneRatios[lane] ?? 0.5;
     return plot.left + plot.inner * ratio;
   };
@@ -360,6 +375,107 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const span = chartEnd - chartStart || 1;
     return Math.max(1, Math.min(99, ((parseDate(dateAr) - chartStart) / span) * 100));
   };
+
+  const syncChartHeaders = () => {
+    const heads = replica.querySelector('.part1-lane-heads');
+    if (!heads || !lanesEl) return;
+    const headsRect = heads.getBoundingClientRect();
+    const canvasRect = lanesEl.getBoundingClientRect();
+    const headElements = heads.querySelectorAll('span');
+    data.lanes.forEach((lane, index) => {
+      const head = headElements[index];
+      if (!head) return;
+      head.style.left = `${canvasRect.left - headsRect.left + chartLaneX(lane.key, CHART_BASE_WIDTH) * chartScale}px`;
+    });
+  };
+
+  const applyChartScale = () => {
+    if (!lanesEl || !chartZoomspace) return;
+    lanesEl.style.width = `${CHART_BASE_WIDTH}px`;
+    lanesEl.style.height = `${CHART_BASE_HEIGHT}px`;
+    lanesEl.style.transform = `scale(${chartScale})`;
+    chartZoomspace.style.width = `${CHART_BASE_WIDTH * chartScale}px`;
+    chartZoomspace.style.height = `${CHART_BASE_HEIGHT * chartScale}px`;
+    if (chartZoomReadout) chartZoomReadout.textContent = `${Math.round(chartScale * 100)}%`;
+    syncChartHeaders();
+  };
+
+  const chartScrollOffset = () => {
+    const scrollRect = chartScroll.getBoundingClientRect();
+    const canvasRect = lanesEl.getBoundingClientRect();
+    return {
+      x: canvasRect.left - scrollRect.left + chartScroll.scrollLeft,
+      y: canvasRect.top - scrollRect.top + chartScroll.scrollTop
+    };
+  };
+
+  const zoomChartTo = (nextScale, clientX = null, clientY = null) => {
+    if (!chartScroll) return;
+    const newScale = Math.max(0.5, Math.min(3, nextScale));
+    if (Math.abs(newScale - chartScale) < 0.001) return;
+    const rect = chartScroll.getBoundingClientRect();
+    const px = clientX == null ? rect.width / 2 : clientX;
+    const py = clientY == null ? rect.height / 2 : clientY;
+    const before = chartScrollOffset();
+    const chartX = (chartScroll.scrollLeft + px - before.x) / chartScale;
+    const chartY = (chartScroll.scrollTop + py - before.y) / chartScale;
+    chartScale = newScale;
+    applyChartScale();
+    const after = chartScrollOffset();
+    chartScroll.scrollLeft = after.x + chartX * chartScale - px;
+    chartScroll.scrollTop = after.y + chartY * chartScale - py;
+    syncChartHeaders();
+  };
+
+  applyChartScale();
+
+  if (chartScroll) {
+    // Match the sample tool: plain two-finger trackpad movement remains native
+    // scrolling, while macOS pinch emits a meta/ctrl wheel event that zooms
+    // around the pointer instead of jumping the whole chart.
+    chartScroll.addEventListener('wheel', (event) => {
+      if (!(event.ctrlKey || event.metaKey)) return;
+      event.preventDefault();
+      const rect = chartScroll.getBoundingClientRect();
+      const factor = Math.exp(-event.deltaY * 0.01);
+      zoomChartTo(chartScale * factor, event.clientX - rect.left, event.clientY - rect.top);
+    }, { passive: false });
+
+    // Click-drag panning is useful when the chart has been enlarged and also
+    // mirrors the sample's mouse fallback for the same scroll viewport.
+    let panning = false;
+    let panX = 0;
+    let panY = 0;
+    let panScrollLeft = 0;
+    let panScrollTop = 0;
+    chartScroll.addEventListener('mousedown', (event) => {
+      if (event.button !== 0) return;
+      panning = true;
+      panX = event.clientX;
+      panY = event.clientY;
+      panScrollLeft = chartScroll.scrollLeft;
+      panScrollTop = chartScroll.scrollTop;
+      chartScroll.classList.add('is-panning');
+    });
+    window.addEventListener('mousemove', (event) => {
+      if (!panning) return;
+      chartScroll.scrollLeft = panScrollLeft - (event.clientX - panX);
+      chartScroll.scrollTop = panScrollTop - (event.clientY - panY);
+    });
+    window.addEventListener('mouseup', () => {
+      panning = false;
+      chartScroll.classList.remove('is-panning');
+    });
+    chartScroll.addEventListener('scroll', syncChartHeaders, { passive: true });
+  }
+
+  replica.querySelector('[data-chart-zoom-out]')?.addEventListener('click', () => zoomChartTo(chartScale / 1.25));
+  replica.querySelector('[data-chart-zoom-in]')?.addEventListener('click', () => zoomChartTo(chartScale * 1.25));
+  replica.querySelector('[data-chart-zoom-reset]')?.addEventListener('click', () => {
+    chartScale = 1;
+    applyChartScale();
+    chartScroll?.scrollTo({ left: 0, top: 0, behavior: 'auto' });
+  });
 
   const eventOffsetLabel = (dateAr) => {
     const start = parseDate(doc.sendDate[1]);
@@ -453,8 +569,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   const drawLinks = () => {
     if (!linksSvg) return;
-    const width = lanesEl.clientWidth;
-    const height = lanesEl.clientHeight;
+    const width = lanesEl.clientWidth || CHART_BASE_WIDTH;
+    const height = lanesEl.clientHeight || CHART_BASE_HEIGHT;
     if (!width || !height) return;
     linksSvg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     linksSvg.innerHTML = '';
@@ -474,30 +590,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       linksSvg.appendChild(element);
       return element;
     };
-    const laneColors = {
-      lin: '#b5462e', qing: '#3f6f8f', emperor: '#7a5c9e',
-      zhupi: '#c46a2b', shangyu: '#7d4ab8'
-    };
-    const gap = Math.max(4, Math.min(9, plot.inner * (12 / 1080)));
-    const eventSize = Math.max(5, Math.min(9, plot.inner * (9.2 / 1080)));
-    const docRadius = Math.max(3, Math.min(5.5, plot.inner * (4.6 / 1080)));
-    const docPoints = new Map();
-    const docBuckets = new Map();
-    const pointKey = (id, side) => `${id}|${side}`;
-    const placeDoc = (doc, side, dateAr) => {
-      if (!dateAr) return null;
-      const bucketKey = `${side}|${dateAr}`;
-      const index = docBuckets.get(bucketKey) || 0;
-      docBuckets.set(bucketKey, index + 1);
-      const offset = side === 'L' ? -index * gap : index * gap;
-      const point = { x: xFor(side === 'L' ? 'official' : 'imperial', offset), y: yFor(dateAr) };
-      docPoints.set(pointKey(doc.id, side), point);
-      makeSvg('circle', {
-        cx: point.x.toFixed(1), cy: point.y.toFixed(1), r: docRadius.toFixed(1), fill: laneColors[doc.type]
-      }, 'part1-preview-doc');
-      return point;
-    };
-
     // Four fixed vertical axes and the same light month/day grid rhythm as the sample.
     ['events', 'official', 'imperial', 'emperor'].forEach((lane) => {
       const x = xFor(lane);
@@ -514,91 +606,115 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       gridDate.setUTCDate(gridDate.getUTCDate() + 1);
     }
 
-    (chartPreview.documents || []).forEach((doc) => {
-      placeDoc(doc, 'L', doc.type === 'zhupi' ? doc.sendAr : null);
-      placeDoc(doc, 'R', doc.type === 'zhupi' ? doc.receiveAr : doc.announceAr);
+    // Keep one readable, source-backed chain in the replica. The four HTML
+    // buttons above are the only data nodes; these three segments show how
+    // the selected event moves through the official, imperial, and emperor
+    // lanes without turning the teaching screenshot into an unreadable mesh.
+    const exampleNodes = [
+      { lane: 'events', dot: data.dots.events, className: 'part1-preview-example-event' },
+      { lane: 'official', dot: data.dots.official, className: 'part1-preview-example-official' },
+      { lane: 'imperial', dot: data.dots.imperial, className: 'part1-preview-example-imperial' },
+      { lane: 'emperor', dot: data.dots.emperor, className: 'part1-preview-example-emperor' }
+    ];
+    const points = new Map();
+    exampleNodes.forEach(({ lane, dot }) => {
+      if (dot?.dateAr) points.set(lane, { x: xFor(lane), y: yFor(dot.dateAr) });
+    });
+    const lineSpecs = [
+      ['events', 'official', 'part1-preview-example-event'],
+      ['official', 'imperial', 'part1-preview-example-official'],
+      ['imperial', 'emperor', 'part1-preview-example-imperial']
+    ];
+    lineSpecs.forEach(([fromLane, toLane, className]) => {
+      const from = points.get(fromLane);
+      const to = points.get(toLane);
+      if (from && to) makeSvg('line', {
+        x1: from.x.toFixed(1), y1: from.y.toFixed(1), x2: to.x.toFixed(1), y2: to.y.toFixed(1)
+      }, className);
     });
 
-    const eventsByDate = new Map();
-    const eventPoints = new Map();
-    (chartPreview.events || []).forEach((event) => {
-      const lane = event.actor === 'emperor' ? 'emperor' : 'events';
-      const key = `${lane}|${event.dateAr}`;
-      const index = eventsByDate.get(key) || 0;
-      eventsByDate.set(key, index + 1);
-      const offset = lane === 'events' ? -index * gap : index * gap;
-      const point = { x: xFor(lane, offset), y: yFor(event.dateAr) };
-      eventPoints.set(String(event.id), point);
-      makeSvg('rect', {
-        x: (point.x - eventSize / 2).toFixed(1), y: (point.y - eventSize / 2).toFixed(1),
-        width: eventSize.toFixed(1), height: eventSize.toFixed(1), rx: 1.5,
-        fill: laneColors[event.actor] || laneColors.qing
-      }, 'part1-preview-event');
-    });
-
-    // Source-backed relationships: event → document and 硃批 send → receive.
-    const lineSpecs = [];
-    (chartPreview.documents || []).forEach((doc) => {
-      const from = docPoints.get(pointKey(doc.id, 'L'));
-      const to = docPoints.get(pointKey(doc.id, 'R'));
-      if (from && to) lineSpecs.push([from, to, 'part1-preview-doc-link']);
-    });
-    (chartPreview.events || []).forEach((event) => {
-      const from = eventPoints.get(String(event.id));
-      if (!from) return;
-      const side = event.actor === 'emperor' ? 'R' : 'L';
-      (event.sourceIds || []).forEach((docId) => {
-        const to = docPoints.get(pointKey(docId, side)) || docPoints.get(pointKey(docId, side === 'L' ? 'R' : 'L'));
-        if (to) lineSpecs.push([from, to, event.actor === 'emperor' ? 'part1-preview-emperor-link' : 'part1-preview-event-link']);
-      });
-    });
-    lineSpecs.forEach(([from, to, className]) => makeSvg('line', {
-      x1: from.x.toFixed(1), y1: from.y.toFixed(1), x2: to.x.toFixed(1), y2: to.y.toFixed(1)
-    }, className));
-
-    // Re-append markers after lines so the dense network never covers them.
-    [...linksSvg.querySelectorAll('.part1-preview-event, .part1-preview-doc')].forEach((marker) => linksSvg.appendChild(marker));
-
-    const heads = replica.querySelectorAll('.part1-lane-heads span');
-    heads.forEach((head, index) => {
-      const lane = data.lanes[index]?.key;
-      if (lane) head.style.left = `${(chartLaneX(lane, width) / width) * 100}%`;
-    });
+    syncChartHeaders();
   };
 
-  /* -------------------------------------------------------- 節點資訊區 */
+  /* ------------------------------------------------ 節點 → AI 輸出卡片 */
 
   const renderNodePanel = (payload, laneKey, label) => {
-    const isDocument = Boolean(payload.docId && !payload.subtitle);
-    const title = payload.subtitle || payload.title;
-    const laneLabel = data.lanes[laneIndex[laneKey]].label;
+    const laneLabels = {
+      events: '戰場事件',
+      official: '官員上奏',
+      imperial: '皇帝硃批下旨',
+      emperor: '皇帝行動'
+    };
+    const laneLabel = laneLabels[laneKey] || '圖表節點';
+    const title = payload.subtitle || payload.title || '未命名結果';
+    const quote = payload.quote || (laneKey === 'imperial' ? payload.rescriptText : '');
+    const quoteDocId = payload.quoteDocId || payload.docId || doc.docId;
+    const factRows = [
+      ['時間', payload.whenCh || label || payload.dateAr],
+      ['地點', payload.where],
+      ['人物', payload.who?.length ? payload.who.join('、') : ''],
+    ].filter(([, value]) => value);
+    const facts = factRows.map(([term, value]) => `<dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd>`).join('');
+    const quoteCard = quote ? `
+      <div class="part1-event-source">
+        <div class="part1-event-source-head"><span>來源引文</span><span class="part1-event-source-role">${escapeHtml(laneKey === 'emperor' ? '相關上諭' : laneKey === 'events' ? '林方報告' : '硃批原文')}</span></div>
+        <button class="part1-quote part1-event-quote" type="button" data-quote="${escapeHtml(quote)}" data-quote-doc="${escapeHtml(quoteDocId)}">
+          「${escapeHtml(quote)}」
+          <span class="part1-quote-src">—${escapeHtml(quoteDocId)}／原文　點按定位</span>
+        </button>
+      </div>` : '';
 
-    const rows = [];
-    if (payload.whenCh || label) rows.push(['時間', payload.whenCh || label]);
-    if (payload.where) rows.push(['地點', payload.where]);
-    if (payload.who && payload.who.length) rows.push(['人物', payload.who.join('、')]);
-    if (payload.aiFilterLabel) rows.push(['AI Skill', payload.aiFilterLabel]);
-    if (isDocument) rows.push(['文書', `${payload.docId}　${payload.title}`]);
-    if (payload.rescriptText) rows.push(['硃批', payload.rescriptText]);
+    let cardMarkup;
+    if (laneKey === 'events' || laneKey === 'emperor') {
+      const isLin = laneKey === 'events';
+      const outputLabel = isLin ? '林方事件' : '皇帝行動';
+      const skillLabel = payload.aiFilterLabel || (isLin ? '林方行動' : '相關上諭');
+      cardMarkup = `
+        <section class="part1-event-group ${isLin ? 'is-lin' : 'is-qing'}">
+          <div class="part1-event-group-head"><span>${escapeHtml(outputLabel)}</span><span>1 項</span></div>
+          <article class="part1-card part1-event-card ${isLin ? 'is-lin' : 'is-qing'} is-confirmed part1-node-output-card">
+            <div class="part1-card-head">
+              <span>AI ${escapeHtml(outputLabel)}</span>
+              <span class="part1-card-skill">${escapeHtml(skillLabel)}</span>
+            </div>
+            <p class="part1-card-title">${escapeHtml(title)}</p>
+            ${payload.description ? `<p class="part1-card-desc">${escapeHtml(payload.description)}</p>` : ''}
+            ${facts ? `<dl class="part1-event-facts">${facts}</dl>` : ''}
+            ${quoteCard}
+            <p class="part1-card-status">由圖表節點開啟；點擊來源引文可回到原始史料區核對。</p>
+          </article>
+        </section>`;
+    } else {
+      const isImperial = laneKey === 'imperial';
+      const outputLabel = isImperial ? '硃批' : '官員上奏';
+      const skillLabel = isImperial ? '硃批' : '官文優先審閱迴圈';
+      const documentFacts = [
+        ['文書', `${payload.docId || doc.docId}　${payload.title || doc.title}`],
+        ['作者', authorLine],
+        ['日期', payload.whenCh || label || payload.dateAr]
+      ].map(([term, value]) => `<dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd>`).join('');
+      cardMarkup = `
+        <article class="part1-card part1-node-document-card ${isImperial ? 'is-imperial' : 'is-official'}">
+          <div class="part1-card-head">
+            <span>AI ${escapeHtml(outputLabel)}</span>
+            <span class="part1-card-skill">${escapeHtml(skillLabel)}</span>
+          </div>
+          <p class="part1-card-title">${escapeHtml(payload.title || doc.title)}</p>
+          <p class="part1-card-desc">${escapeHtml(isImperial ? '皇帝硃批回應此份奏摺，形成後續上諭與行動的依據。' : docSummary)}</p>
+          <dl class="part1-event-facts">${documentFacts}</dl>
+          ${quoteCard}
+          <p class="part1-card-status">由圖表節點開啟；此卡保留文書與批覆的來源脈絡。</p>
+        </article>`;
+    }
 
-    nodePanel.innerHTML = `
-      <div class="part1-nodepanel-head">
-        <strong>節點資訊區</strong>
-        <span style="color:#9a8d79; font:600 calc(10px * var(--font-scale))/1 var(--sans);">${escapeHtml(laneLabel)}</span>
-        <button class="part1-nodepanel-close" type="button" data-node-close aria-label="關閉節點資訊區">×</button>
-      </div>
-      <p class="part1-nodepanel-desc"><strong>${escapeHtml(title)}</strong></p>
-      ${payload.description ? `<p class="part1-nodepanel-desc">${escapeHtml(payload.description)}</p>` : ''}
-      <dl>${rows.map(([term, value]) => `<dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd>`).join('')}</dl>
-      ${payload.quote ? `<button class="part1-quote" type="button" data-quote="${escapeHtml(payload.quote)}" data-quote-doc="${escapeHtml(payload.quoteDocId)}">「${escapeHtml(payload.quote)}」<span class="part1-quote-src">—${escapeHtml(payload.quoteDocId)}　點擊引文，在原始史料區定位</span></button>` : ''}
-    `;
-    nodePanel.hidden = false;
-    nodePanel.querySelector('[data-node-close]')?.addEventListener('click', () => {
-      nodePanel.hidden = true;
-      lanesEl.querySelectorAll('.part1-dot').forEach((el) => el.classList.remove('is-selected'));
-    });
-    nodePanel.querySelector('[data-quote]')?.addEventListener('click', (event) => {
-      locateQuote(event.currentTarget.dataset.quote, event.currentTarget.dataset.quoteDoc);
+    aiBody.innerHTML = `
+      <div class="part1-node-result" data-node-result>
+        <div class="part1-node-result-head"><strong>節點資訊區</strong><span>${escapeHtml(laneLabel)}</span></div>
+        ${cardMarkup}
+      </div>`;
+    aiBody.scrollTop = 0;
+    aiBody.querySelectorAll('[data-quote]').forEach((button) => {
+      button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc));
     });
   };
 
@@ -606,8 +722,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     lanesEl.querySelectorAll('.part1-dot').forEach((el) => el.classList.toggle('is-selected', el === button));
     const { dot, lane, label } = button._part1;
     renderNodePanel(dot, lane, label);
-    setRegion('chart', { silent: true });
-    setProgress(`已開啟「${dot.subtitle || dot.title}」的節點資訊區。若卡片內有引文，點擊引文即可回到原始史料區核對。`);
+    setRegion('ai', { silent: true });
+    const laneLabel = data.lanes.find((item) => item.key === lane)?.label || '節點';
+    setProgress(`已在 AI 分析區開啟「${dot.subtitle || dot.title}」的${laneLabel}輸出卡片。`);
   };
 
   /* -------------------------------------------------------- 引文定位 */
@@ -1019,7 +1136,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   const REGION_HINT = {
     nav: '導覽列負責輸入與輸出資料，以及切換介面區域。兩個標籤分別指向這兩組控制項。',
-    chart: '圖表由四條線組成。點擊任何一個圓點，查看該文書或事件的節點資訊區。',
+    chart: '圖表由四條線組成。點擊任何一個圓點，AI 分析區會以對應的輸出卡片顯示節點資訊。',
     doc: '原始史料區顯示文書的基本資料與完整原文。點擊上方的 AI Skill 標籤，標示該項結果在原文中的位置。',
     ai: '研究者在本機執行 AI Skills，再把結果上載平台逐項核對。跟著步驟試一次完整流程。',
     eventline: '從選取的文書或事件，沿著報告、批覆與回應順序查看整條事件鏈。'
@@ -1126,13 +1243,15 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     renderedEventItems = [];
     lanesEl.querySelectorAll('.part1-dot, .part1-dot-date').forEach((element) => element.remove());
     laneDots.forEach(addDot);
-    nodePanel.hidden = true;
     replica.querySelectorAll('.part1-doc mark').forEach((mark) => {
       mark.classList.remove('is-shown', 'is-located');
     });
     activeFilter = 'all';
     showSummary = false;
     showDivisions = false;
+    chartScale = 1;
+    applyChartScale();
+    chartScroll?.scrollTo({ left: 0, top: 0, behavior: 'auto' });
     if (filterPopover) filterPopover.hidden = true;
     if (viewPopover) viewPopover.hidden = true;
     filterTrigger?.classList.remove('is-open');
@@ -1162,6 +1281,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (firstDot) selectDot(firstDot);
   }
 
-  window.addEventListener('resize', drawLinks);
+  window.addEventListener('resize', () => {
+    drawLinks();
+    syncChartHeaders();
+  });
   if ('ResizeObserver' in window) new ResizeObserver(drawLinks).observe(lanesEl);
 });

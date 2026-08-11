@@ -7753,6 +7753,27 @@ Verified:
 Remaining:
 - Existing concurrent Part 1, sample-data, and StoryMap edits were preserved; nothing was pushed.
 
+### 2026-08-11 19:12 HKT — Codex — Rewrote and widened the Part 2 input introduction
+
+Summary:
+- Replaced the old OCR/input paragraph under `#part-2-input` with the requested explanation, including the reference to `OCR 並結構化原始史料（with embedded website）`.
+- Moved that paragraph out of the text-card treatment and made it span the full StoryMap content width; kept the two later explanatory paragraphs as cards.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed.
+- In the local HTTP StoryMap at `#part-2`, the new block renders at the full content width with transparent background, no border, and no padding; the two remaining cards retain their original treatment.
+- Narrow viewport check at 390px also passed without horizontal overflow.
+- The page-wide browser console still reports the pre-existing `nodePanel is not defined` error from concurrent `part-1-interface.js` work; no Part 2-specific browser error was observed.
+
+Remaining:
+- Preserve the unrelated concurrent edits; no deployment or push was performed.
+
 ### 2026-08-11 18:51 HKT — Codex — Match the replica tools menu and event-chain panel to the sample
 
 Summary:
@@ -7799,3 +7820,150 @@ Verified:
 
 Remaining:
 - The browser session did not provide a separate narrow viewport override for an additional 516px visual pass; no deployment or push was performed.
+
+### 2026-08-11 19:00 HKT — Codex — Matched the replica four-line chart to the sample network
+
+Summary:
+- Replaced the replica's four decorative chart lines with a source-backed vertical timeline preview using the current sample event state and canonical Stage 1 document records.
+- Added aligned 戰場事件／官員上奏／皇帝硃批下旨／皇帝行動 lanes, date grid lines, document circles, event squares, emperor-action squares, and relationship links while preserving the four interactive teaching nodes.
+- Regenerated the preview data and bumped the local asset versions so the standalone replica and StoryMap load the current chart implementation.
+
+Files changed:
+- `tool/scripts py/build_part1_interface_data.py`
+- `Website/storymap/part-1-interface-data.js`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview at the local HTTP-served replica rendered four axes, 318 document circles, 210 event squares, and 316 relationship lines; the chart visually matches the sample's dense lane layout.
+- `node --check Website/storymap/part-1-interface.js`, `node --check Website/storymap/storymap.js`, and `git diff --check` passed.
+- The browser blocks direct `file://` navigation, so the same replica file was verified through the local HTTP preview; no browser warnings or errors were reported.
+
+Remaining:
+- Existing concurrent work was preserved; nothing was pushed.
+
+### 2026-08-11 19:21 HKT — Codex — Added sample-style four-line chart navigation
+
+Summary:
+- Wrapped the replica chart in a native scroll viewport so ordinary two-finger trackpad movement pans the chart.
+- Applied the sample tool's meta/ctrl-wheel pinch-zoom model, zooming around the pointer, with click-drag panning as a mouse fallback.
+- Added compact chart-size controls and kept the four chart nodes, AI result routing, and reset demonstration working.
+
+Files changed:
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Compared the live `http://127.0.0.1:8166/sample` chart and its `dualScroll` wheel/pan implementation in the in-app browser.
+- Confirmed the replica's native chart scroll position changes, the zoom control changes the canvas to 125% and expands its scroll area, reset returns it to 100%, and a chart dot still opens the AI output card.
+- `node --check "intro Website/Website/storymap/part-1-interface.js"`, `git diff --check`, and the browser console warning/error check passed.
+
+Remaining:
+- The in-app browser blocks direct `file://` navigation, so verification used the same file through the documented local HTTP preview. Nothing was pushed.
+
+### 2026-08-11 19:20 HKT — Codex — Hid the embedded-link label from the Part 2 OCR sentence
+
+Summary:
+- Changed the visible wording from `按此(embedded)了解OCR方法` to `按此了解OCR方法`.
+- Kept only `此` as the clickable text, with the same embedded OCR-section target.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+- Browser verification confirmed the link text is exactly `此`, the sentence reads `按此了解OCR方法`, the target remains `#part-3-ocr-definition`, and `(embedded)` is not visible.
+
+Remaining:
+- Existing concurrent work was preserved; nothing was pushed.
+
+### 2026-08-11 19:18 HKT — Codex — Changed the Part 2 OCR reference to an embedded link prompt
+
+Summary:
+- Replaced the visible `方法詳見 OCR 並結構化原始史料（with embedded website）` wording with `按此(embedded)了解OCR方法`.
+- Made `按此(embedded)` link directly to the embedded OCR section at `#part-3-ocr-definition`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+- Browser verification confirmed the link is visible, has the expected anchor, and lands on `#part-3-ocr-definition`.
+
+Remaining:
+- Existing concurrent work was preserved; nothing was pushed.
+
+### 2026-08-11 19:06 HKT — Codex — Simplified the replica chart to one readable data chain
+
+Summary:
+- Removed the dense sample-state network from the replica screenshot.
+- Kept only the four source-backed teaching nodes and three connected segments across the four lanes, with larger, readable markers and solid relationship lines.
+- Removed the generated bulk chart-preview records and bumped the local asset version.
+
+Files changed:
+- `tool/scripts py/build_part1_interface_data.py`
+- `Website/storymap/part-1-interface-data.js`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Local browser preview shows four data dots and three usable relationship lines, with no dense marker mesh.
+- `node --check Website/storymap/part-1-interface.js`, `node --check Website/storymap/storymap.js`, and `git diff --check` passed.
+- Browser console reported no warnings or errors.
+
+Remaining:
+- Existing concurrent work was preserved; nothing was pushed.
+
+### 2026-08-11 19:03 HKT — Codex — Removed the preparation-step connector arrow
+
+Summary:
+- Removed the internal arrow between `選定題目與史料` and `OCR 並結構化史料` while keeping the two bubbles stacked on normal screens.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Confirmed the internal connector markup and CSS are gone; the external flow arrows remain.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, sample-data, and StoryMap edits were preserved; nothing was pushed.
+
+### 2026-08-11 19:14 HKT — Codex — Routed chart node information into AI output cards
+
+Summary:
+- Removed the bottom-of-chart node-information panel from the replica.
+- Clicking a chart dot now switches to the AI 分析區 and opens a type-specific card: 林方事件／皇帝行動 use event-result cards, while 官員上奏／硃批 use document-result cards.
+- Kept the 節點資訊區 label inside the AI panel and preserved clickable source quotations for original-text location.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirmed all four dot types open in the AI panel, no `[data-nodepanel]` remains, and the chart stays free of a bottom overlay.
+- `node --check Website/storymap/part-1-interface.js`, `node --check Website/storymap/storymap.js`, and `git diff --check` passed.
+- Browser console reported no warnings or errors.
+
+Remaining:
+- Existing concurrent work was preserved; nothing was pushed.

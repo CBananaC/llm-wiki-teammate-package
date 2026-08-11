@@ -2674,7 +2674,20 @@ const initOcrScanScene = () => {
 };
 initOcrScanScene();
 
-/* 9. 輸出格式：JSON — 標籤點擊捲動＋持續反白，段落二展開／收合。
+/* 9. 輸出格式：JSON — 放到 Part 2 的「輸入結構化資料」右側，
+   保留 Part 3 的原始標記以方便維護；互動初始化前先搬移一次。 */
+const placeJsonViewerBesidePart2Input = () => {
+  const sourceSlot = document.querySelector('#part-3-json .lay-visual');
+  const targetSlot = document.querySelector('#part-2-input-json-visual');
+  const viewer = sourceSlot?.querySelector('#part-3-json-chart');
+  if (!sourceSlot || !targetSlot || !viewer) return;
+
+  targetSlot.appendChild(viewer);
+  sourceSlot.classList.add('is-moved');
+};
+placeJsonViewerBesidePart2Input();
+
+/* 標籤點擊捲動＋持續反白，段落二展開／收合。
    純互動，沒有動畫迴圈，不需要 IntersectionObserver。 */
 const initJsonViewer = () => {
   const wrap = document.querySelector('.part3-json-viewer-wrap');
