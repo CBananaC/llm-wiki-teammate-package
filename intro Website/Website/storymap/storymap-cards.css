@@ -2134,6 +2134,71 @@
   --part1-visual-max-width: 1480px;
 }
 
+/* Part 2 — 平台運作流程：主題帶、編號卡與逐段閱讀。 */
+#part-2-content .part2-stage {
+  border-top: 1px solid rgba(22, 61, 63, .16);
+}
+#part-2-content .part2-topic-bar {
+  min-height: var(--part2-topic-bar-height, clamp(140px, 19vh, 195px));
+  padding: var(--part2-topic-bar-padding, 28px 0);
+  --hero-pad-t: 28px;
+  --hero-pad-b: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, .16);
+  isolation: isolate;
+}
+#part-2-content .part2-topic-bar::before { content: none; }
+#part-2-content .part2-topic-bar h1 {
+  font-size: var(--part2-topic-title-size, clamp(26px, 3.4vw, 44px));
+}
+#part-2-content .part2-topic-content {
+  padding: var(--part-pad-y) var(--part-pad-x);
+  border-bottom: 1px solid rgba(22, 61, 63, .16);
+  scroll-margin-top: var(--bar-h);
+}
+#part-2-content .part2-card-stack {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: clamp(16px, 1.8vw, 24px);
+  width: 100%;
+}
+#part-2-content .part2-text-card {
+  box-sizing: border-box;
+  width: min(100%, 78ch);
+  max-width: none;
+  margin: 0;
+  padding: var(--part2-card-padding, clamp(18px, 1.8vw, 26px));
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+#part-2-content .part2-text-card .body > p {
+  margin: 0;
+  color: var(--text);
+  font: var(--body-weight) calc(16px * var(--font-scale))/1.9 var(--serif);
+}
+#part-2-content .part2-numbered-card .title-row {
+  align-items: center;
+  margin-bottom: 16px;
+}
+#part-2-content .part2-numbered-card .title-row h2 {
+  margin: 0;
+  color: var(--ink);
+  font: 500 clamp(24px, 2.9vw, 40px)/1.14 var(--serif);
+  letter-spacing: -.03em;
+  overflow-wrap: anywhere;
+}
+#part-2-content .part2-numbered-card .body > p { margin: 0; }
+
+@media (max-width: 620px) {
+  #part-2-content .part2-topic-content {
+    padding: 28px 16px 36px;
+  }
+  #part-2-content .part2-card-stack { gap: 14px; }
+  #part-2-content .part2-text-card { width: 100%; }
+  #part-2-content .part2-numbered-card .title-row { align-items: flex-start; }
+  #part-2-content .part2-numbered-card .title-row h2 { font-size: clamp(22px, 7vw, 30px); }
+}
+
 /* Part 3.0.2 — Shared chart, workflow, and question-gallery layer */
 /* Part 3 的特殊視覺卡片同樣由各自所在區塊的變數控制。 */
 #part-3-content .part3-chart-frame {

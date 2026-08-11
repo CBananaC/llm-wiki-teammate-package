@@ -848,59 +848,55 @@
             <article class="copybox blk part2-text-card"><div class="body"><p>接著，系統會運用 AI，先提取上諭中有「據奏」標記的資訊，再閱讀每份候選奏摺的正文，判斷該資訊出現於哪一份或哪些奏摺之中，從以辨識哪些奏摺是上諭的回應對象。</p></div></article>
           </div></div>
         </section>
-        <section class="story content-story cover-bar-story" id="part-2-extract" data-tab="part-2" data-nav="#part-2-extract" style="--card-x: 48vw; --card-y: 38vh; --card-w: 670px; --story-height: 1050px; --card-accent: #7e6a39;">
-          <div class="backdrop archive" data-mark="取"></div>
-          <div class="cover-bar" data-mark="取">
-            <h2>3. 抽取奏摺的資訊</h2>
-          </div>
-          <article class="story-card">
-            <p>完成通信關係重建後，平台會進一步從奏摺和上諭正文中的資訊。</p>
-            <p>系統把奏摺內容劃分為四類資訊：官員奏報的事件、奏報者與其他官員對事件的回應、以上兩種資訊的來源，以及官員對皇帝先前硃批或上諭的回應。系統會用四種Skills 讓AI抽取以上資訊。</p>
-          </article>
+        <section class="part2-stage" id="part-2-extract" data-tab="part-2" data-nav="#part-2-extract">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-extract-bar" aria-labelledby="part-2-extract-title">
+            <div class="section-hero-content"><p class="eyebrow">分析階段三</p><h1 id="part-2-extract-title">抽取奏摺的資訊</h1></div>
+          </section>
+          <section class="story surface-a part2-topic-content" id="part-2-extract-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>完成通信關係重建後，平台會進一步從奏摺和上諭正文中的資訊。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>系統把奏摺內容劃分為四類資訊：官員奏報的事件、奏報者與其他官員對事件的回應、以上兩種資訊的來源，以及官員對皇帝先前硃批或上諭的回應。系統會用四種Skills 讓AI抽取以上資訊。</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story" id="part-2-events" data-tab="part-2" data-nav="#part-2-events" style="--card-x: 7vw; --card-y: 14vh; --card-w: 700px; --story-height: 1700px; --card-accent: #c7543f;">
-          <div class="backdrop taiwan" data-mark="事"></div>
-          <article class="story-card">
-            <h2>1. 抽取官員奏報的事件、官員對事件的回應</h2>
-            <p>在林爽文民變的案例中，官員奏報的事件就是林爽文及其部眾的軍事行動，官員的回應則包括已採取或計劃採取的軍事行動，以及非軍事措施（如後勤調度、案件調查）。</p>
-            <p>所有事件和回應皆由AI提取，並以結構化格式輸出，包含標題、描述、發生時間及相關引文，供研究者核對、修正及確認。確認無誤後，研究者便可把事件加入到平台的第一條時間線——「戰場事件」上。</p>
-            <p>考慮到每類事件（如軍事事件）包含的細類眾多（如攻城、防守、追捕等），研究者可根據研究需要，在 Skills 中預先限定需抽取的事件類型及細類，亦可不設限制，由讓AI自行判斷和抽取，再由研究者選擇採用的抽取結果。</p>
-            <p>另外，如何在Skills中定義「事件」亦值得注意。事件可以按時間單位（如時辰、日期）劃分，也可以按事件的邏輯關係（如同一任務）劃分。不同的定義會影響 AI 提取事件的「粒度」（Granularity）。研究者應根據研究需要，在 Skills 中定義事件的劃分方式。</p>
-          </article>
+        <section class="story surface-b part2-topic-content" id="part-2-events" data-tab="part-2" data-nav="#part-2-events">
+          <div class="story-inner"><div class="part2-card-stack">
+            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>抽取官員奏報的事件、官員對事件的回應</h2></div><div class="body"><p>在林爽文民變的案例中，官員奏報的事件就是林爽文及其部眾的軍事行動，官員的回應則包括已採取或計劃採取的軍事行動，以及非軍事措施（如後勤調度、案件調查）。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>所有事件和回應皆由AI提取，並以結構化格式輸出，包含標題、描述、發生時間及相關引文，供研究者核對、修正及確認。確認無誤後，研究者便可把事件加入到平台的第一條時間線——「戰場事件」上。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>考慮到每類事件（如軍事事件）包含的細類眾多（如攻城、防守、追捕等），研究者可根據研究需要，在 Skills 中預先限定需抽取的事件類型及細類，亦可不設限制，由讓AI自行判斷和抽取，再由研究者選擇採用的抽取結果。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>另外，如何在Skills中定義「事件」亦值得注意。事件可以按時間單位（如時辰、日期）劃分，也可以按事件的邏輯關係（如同一任務）劃分。不同的定義會影響 AI 提取事件的「粒度」（Granularity）。研究者應根據研究需要，在 Skills 中定義事件的劃分方式。</p></div></article>
+          </div></div>
         </section>
-        <section class="story content-story" id="part-2-sources" data-tab="part-2" data-nav="#part-2-sources" style="--card-x: 49vw; --card-y: 14vh; --card-w: 650px; --story-height: 1200px; --card-accent: #b66d48;">
-          <div class="backdrop paper" data-mark="源"></div>
-          <article class="story-card">
-            <h2>2. 追溯資訊的來源</h2>
-            <p>完成抽取事件後，系統會用「來源鏈追溯」Skill，逐層追溯不同事件的資訊來源。</p>
-            <p>AI 會根據文書中的資訊傳遞標記，識別表示消息來源的文句，例如「字寄」、「咨」、「移會」、「稟」、「據某人稟」、「接據某人」等。</p>
-            <p>不少資訊並非直接來自奏摺作者，而是經多人逐層轉報，AI因此會追蹤資訊由最初報告者逐步傳遞至奏摺作者的過程，重建完整的傳遞鏈，例如「甲 → 乙 → 丙 → 奏摺作者」。</p>
-          </article>
+        <section class="story surface-c part2-topic-content" id="part-2-sources" data-tab="part-2" data-nav="#part-2-sources">
+          <div class="story-inner"><div class="part2-card-stack">
+            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>追溯資訊的來源</h2></div><div class="body"><p>完成抽取事件後，系統會用「來源鏈追溯」Skill，逐層追溯不同事件的資訊來源。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>AI 會根據文書中的資訊傳遞標記，識別表示消息來源的文句，例如「字寄」、「咨」、「移會」、「稟」、「據某人稟」、「接據某人」等。</p></div></article>
+            <article class="copybox blk part2-text-card"><div class="body"><p>不少資訊並非直接來自奏摺作者，而是經多人逐層轉報，AI因此會追蹤資訊由最初報告者逐步傳遞至奏摺作者的過程，重建完整的傳遞鏈，例如「甲 → 乙 → 丙 → 奏摺作者」。</p></div></article>
+          </div></div>
         </section>
-        <section class="story content-story cover-bar-story" id="part-2-yu-info" data-tab="part-2" data-nav="#part-2-yu-info" style="--card-x: 7vw; --card-y: 38vh; --card-w: 700px; --story-height: 1750px; --card-accent: #a45e4c;">
-          <div class="backdrop ink" data-mark="諭"></div>
-          <div class="cover-bar" data-mark="諭">
-            <h2>4. 收取上諭的資訊</h2>
-          </div>
-          <article class="story-card">
-            <h3>1.皇帝上諭對官員奏摺的回應</h3>
-            <p>完成提取奏摺中的事件和來源後，系統可以使用 `extract-yu-emperor-actions.md`，根據先前階段已確認的「上諭回應奏摺」關係，取得相應的上諭，分析皇帝如何回應奏摺中的內容。</p>
-            <p>每份上諭可以產生多項回應的結果，AI 會將每項結果整理成結構化資料，包括上諭、硃批和奏摺中的相關引文，並說明皇帝如何針對奏摺作出評論或命令。</p>
-            <h3>2. 官員對皇帝上諭的回應</h3>
-            <p>同樣，系統亦可以執行 confirmed-yu-response-analysis.md Skill，根據先前階段已確認的「奏摺回應上諭」關係，取得相關的奏摺，分析官員後續如何就上諭中的評論、命令作出回應。</p>
-            <h3>3. 上諭中皇帝所知的事件</h3>
-            <p>除此之外，在單獨分析上諭時，系統亦可以執行 extract-yu-reported-events.md Skill，根據「據奏」等引述標記，辨識皇帝從官員奏報中得知的事件；再根據先前已確認的「上諭來源配對」關係，從相關奏摺中找出報告這些事件的原文，追溯情報的來源。</p>
-          </article>
+        <section class="part2-stage" id="part-2-yu-info" data-tab="part-2" data-nav="#part-2-yu-info">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-yu-info-bar" aria-labelledby="part-2-yu-info-title">
+            <div class="section-hero-content"><p class="eyebrow">分析階段四</p><h1 id="part-2-yu-info-title">收取上諭的資訊</h1></div>
+          </section>
+          <section class="story surface-a part2-topic-content" id="part-2-yu-info-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>皇帝上諭對官員奏摺的回應</h2></div><div class="body"><p>完成提取奏摺中的事件和來源後，系統可以使用 `extract-yu-emperor-actions.md`，根據先前階段已確認的「上諭回應奏摺」關係，取得相應的上諭，分析皇帝如何回應奏摺中的內容。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>每份上諭可以產生多項回應的結果，AI 會將每項結果整理成結構化資料，包括上諭、硃批和奏摺中的相關引文，並說明皇帝如何針對奏摺作出評論或命令。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>官員對皇帝上諭的回應</h2></div><div class="body"><p>同樣，系統亦可以執行 confirmed-yu-response-analysis.md Skill，根據先前階段已確認的「奏摺回應上諭」關係，取得相關的奏摺，分析官員後續如何就上諭中的評論、命令作出回應。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">3</span><h2>上諭中皇帝所知的事件</h2></div><div class="body"><p>除此之外，在單獨分析上諭時，系統亦可以執行 extract-yu-reported-events.md Skill，根據「據奏」等引述標記，辨識皇帝從官員奏報中得知的事件；再根據先前已確認的「上諭來源配對」關係，從相關奏摺中找出報告這些事件的原文，追溯情報的來源。</p></div></article>
+            </div></div>
+          </section>
         </section>
-        <section class="story content-story cover-bar-story" id="part-2-visualize" data-tab="part-2" data-nav="#part-2-visualize" style="--card-x: 48vw; --card-y: 38vh; --card-w: 680px; --story-height: 1100px; --card-accent: #c7543f;">
-          <div class="backdrop network" data-mark="呈"></div>
-          <div class="cover-bar" data-mark="呈">
-            <h2>4. 視覺化呈現分析的結果</h2>
-          </div>
-          <article class="story-card">
-            <p>AI 完成資訊抽取後，研究者可把分析結果匯入至平台，逐一與原文比對，並選擇接受、修改或拒絕結果。系統為被採用的結果，在圖表中建立相應的節點及連線，形成事件與文書之間的關係網絡。</p>
-            <p>研究者亦可以點擊圖表上的文書或事件節點，查看其詳細資料、原文引文和資料來源，也可以開啟事件鏈，沿著時間順序追蹤一項事件由最初的報告者傳遞至官員和皇帝的過程。</p>
-          </article>
+        <section class="part2-stage" id="part-2-visualize" data-tab="part-2" data-nav="#part-2-visualize">
+          <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-visualize-bar" aria-labelledby="part-2-visualize-title">
+            <div class="section-hero-content"><p class="eyebrow">分析結果</p><h1 id="part-2-visualize-title">視覺化呈現分析的結果</h1></div>
+          </section>
+          <section class="story surface-b part2-topic-content" id="part-2-visualize-content" data-tab="part-2">
+            <div class="story-inner"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card"><div class="body"><p>AI 完成資訊抽取後，研究者可把分析結果匯入至平台，逐一與原文比對，並選擇接受、修改或拒絕結果。系統為被採用的結果，在圖表中建立相應的節點及連線，形成事件與文書之間的關係網絡。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>研究者亦可以點擊圖表上的文書或事件節點，查看其詳細資料、原文引文和資料來源，也可以開啟事件鏈，沿著時間順序追蹤一項事件由最初的報告者傳遞至官員和皇帝的過程。</p></div></article>
+            </div></div>
+          </section>
         </section>
       </div>
     </section>
