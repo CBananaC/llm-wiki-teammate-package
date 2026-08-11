@@ -878,11 +878,31 @@
           </section>
         </section>
         <section class="story surface-a part2-topic-content" id="part-2-yu-response" data-tab="part-2" data-nav="#part-2-yu-response">
-          <div class="story-inner"><div class="part2-card-stack">
-            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>辨識奏摺所回應的上諭</h2></div><div class="body"><p>「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>AI 會輸出結構化的結果，列出相配的上諭和奏摺，並提供兩份文書中的引文和關鍵日期，包括上諭的發佈日期、官員的收到日期和回覆日期，供研究者查核。研究者確認無誤後，便可以把通信關係加入到圖表中。</p></div></article>
+          <div class="story-inner"><div class="part2-yu-response-layout">
+            <div class="part2-yu-response-copy"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>辨識奏摺所回應的上諭</h2></div><div class="body"><p>「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：</p></div></article>
+              <article class="copybox blk part2-text-card part2-yu-response-card part2-yu-response-card-markers"><div class="body"><p>首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。</p></div></article>
+              <article class="copybox blk part2-text-card part2-yu-response-card"><div class="body"><p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p></div></article>
+              <article class="copybox blk part2-text-card part2-yu-response-card"><div class="body"><p>AI 會輸出結構化的結果，列出相配的上諭和奏摺，並提供兩份文書中的引文和關鍵日期，包括上諭的發佈日期、官員的收到日期和回覆日期，供研究者查核。研究者確認無誤後，便可以把通信關係加入到圖表中。</p></div></article>
+            </div></div>
+            <figure class="part2-communication-visual visual-frame" aria-label="通信關係複雜：硃113引用並回應三道上諭">
+              <div class="part2-communication-visual-head"><span class="part2-communication-visual-index">02</span><strong>通信關係複雜</strong><span class="part2-communication-visual-caption">日期・官員・引文</span></div>
+              <div class="part2-communication-diagram">
+                <div class="part2-communication-column part2-communication-column-left">
+                  <div class="part2-communication-node"><span>回覆先前上諭 2</span><strong>諭24</strong><small>總須鎮定持重</small></div>
+                </div>
+                <div class="part2-communication-document">
+                  <div class="part2-communication-document-head"><span class="part2-communication-badge">硃</span><strong>硃113</strong></div>
+                  <small>福建巡撫徐嗣曾<br>正月十四日發出</small>
+                  <p>一份奏摺在正文中引用三道先前上諭，並留下收發日期和回應線索。</p>
+                </div>
+                <div class="part2-communication-column part2-communication-column-right">
+                  <div class="part2-communication-node"><span>回覆先前上諭 1</span><strong>諭20</strong><small>鎮定妥辦</small></div>
+                  <div class="part2-communication-node"><span>回覆先前上諭 3</span><strong>諭28</strong><small>同心協力夾攻</small></div>
+                </div>
+              </div>
+              <figcaption class="part2-communication-visual-foot">平台比對「奉上諭」標記、發佈日期、受文官員與引文內容，才能重建一份奏摺回應哪一道上諭。</figcaption>
+            </figure>
           </div></div>
         </section>
         <section class="story surface-b part2-topic-content" id="part-2-zhu-response" data-tab="part-2" data-nav="#part-2-zhu-response">
@@ -1937,76 +1957,32 @@
                 <article class="copybox blk" id="part-3-ai-skills-card-2"><div class="title-row"><span class="option-number">2</span><h2>建立新的 Skill 時，研究者應說明：</h2></div><div class="body"><p>研究者可以按照以下問題，請 Agentic AI修改和建立指令：</p><p>- 這項 Skill 要回答哪一個研究問題；</p><p>- AI 需要從文本中提取哪些資訊；</p><p>- 每項結果需要保存哪些原文引文等。</p><p>完成 Skill 後，應先用少量文書測試，檢查 AI 是否能按照要求提取合適的結果，再進行批次處理。</p></div></article>
               </div></div>
               <div class="part3-ai-skills-visual">
-                <div class="part3-ai-skills-frame visual-frame" id="part-3-ai-skills-chart" role="group" aria-label="以 Codex 對話視窗建立乾隆帝起居注每日事件分類 Skill">
-                  <div class="agentic-scene part3-ai-skills-scene" data-agentic-scene data-agentic-skills-sequence>
+                <div class="part3-ai-skills-frame visual-frame" id="part-3-ai-skills-chart" role="group" aria-label="Visual Studio Code 中的上諭—回應配對 Skill">
+                  <div class="agentic-scene part3-ai-skills-scene" data-agentic-scene>
                     <div class="agentic-mac-window agentic-window-vscode" data-agentic-window="skills-editor" aria-label="Visual Studio Code 中的 Skill 草稿">
-                      <div class="agentic-mac-titlebar" data-agentic-bring-front="skills-editor"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — classify-qianlong-diary-events.md</span></div>
+                      <div class="agentic-mac-titlebar" data-agentic-bring-front="skills-editor"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — yu-response-pairing.md</span></div>
                       <div class="agentic-vscode-shell">
                         <div class="agentic-vscode-activitybar" aria-hidden="true"><span>▤</span><span>⌕</span><span>⑂</span><span>⊞</span><span>⚙</span></div>
                         <div class="agentic-vscode-editor">
-                          <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">classify-qianlong-diary-events.md</span></div>
+                          <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">yu-response-pairing.md</span></div>
                           <div class="agentic-window-body agentic-code agentic-vscode-code" data-agentic-vscode-code data-agentic-sequence data-agentic-char-delay="8" data-agentic-line-delay="180" data-agentic-hold-time="3200">
                             <script type="application/json" data-agentic-lines>[
-                              "<span class='cmt'># classify-qianlong-diary-events.md</span>",
-                              "<span class='cmt'>## 任務</span>",
-                              "讀取起居注 OCR JSON，逐日處理原始文本。",
-                              "把每一天的文本分成互不重疊、按原文順序排列的事件。",
-                              "為每個事件加上固定的中文類型標籤。",
-                              "保留日期、頁碼、逐字引文與 OCR 不確定性。",
-                              "<span class='cmt'>## 輸入</span>",
-                              "輸入是起居注 OCR JSON；日期是主要的處理單位。",
-                              "不得刪除、改寫或重新排列原始文本。",
-                              "<span class='cmt'>## 分段規則</span>",
-                              "依事件內容與時間順序分段，不以固定字數切割。",
-                              "每段原文只能屬於一個事件，事件之間不得重疊。",
-                              "完整涵蓋當日文本，不遺漏任何逐字內容。",
-                              "不補造 OCR 沒有記錄的日期、頁碼、人名或事件。",
-                              "<span class='cmt'>## 固定分類</span>",
-                              "禮儀巡幸祭祀｜召見朝會筵宴｜上諭奏摺政務",
-                              "人事任免賞罰｜刑名司法懲處｜軍務邊疆臺灣",
-                              "賑恤財賦糧餉｜河工交通營建｜文教典籍科舉",
-                              "外藩朝貢外交｜賜食筵宴賞賚",
-                              "<span class='cmt'>## 輸出規則</span>",
-                              "輸出 JSON；每個事件都要保留日期、頁碼、逐字引文與類型。",
-                              "逐字引文必須直接取自輸入原文，不得摘要或潤飾。",
-                              "類型只能使用上述 11 個固定分類，不自行新增分類。",
-                              "<span class='cmt'>## 不確定性與覆核</span>",
-                              "保留 OCR 錯字與無法判讀處，標記待研究者確認。",
-                              "先以少量日期測試分段與分類，再進行批次處理。",
-                              "<span class='ok'>研究者確認事件邊界與引文後，才納入研究結果。</span>"
+                              "<span class='cmt'># Saved Prompt / Skill: 上諭—回應配對</span>",
+                              "<span class='cmt'>## Purpose</span>",
+                              "Identify which official document responds to which 上諭.",
+                              "Scope: 上諭 only; every pair remains provisional for review.",
+                              "<span class='cmt'>## How a pair is determined</span>",
+                              "1. <span class='meta'>Identity</span> — reply author is one of the 上諭 recipients.",
+                              "2. <span class='meta'>Date</span> — reply follows the issued 上諭 in a plausible window.",
+                              "3. <span class='meta'>Citation</span> — 奉上諭／奉廷寄／欽奉諭旨 and matching quotation.",
+                              "<span class='cmt'>## Website Prompt</span>",
+                              "Capture the receipt lead-in and the full quoted 上諭.",
+                              "Keep issue date and receive date separate; never guess either date.",
+                              "<span class='ok'>No pair is ever auto-confirmed; the researcher reviews the evidence.</span>",
+                              "<span class='cmt'>## Output</span>",
+                              "pairs: reply_doc_id · match_level · marker · quote_in_reply",
+                              "matched_yu_span · issue_date · receive_date · receipt"
                             ]</script>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                    <div class="agentic-mac-window agentic-window-codex is-agentic-front" data-agentic-window="skills-codex">
-                      <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Codex — Create Skill</span></div>
-                      <div class="agentic-codex-scroll">
-                        <div class="agentic-codex-user-row"><div class="agentic-codex-user-bubble" data-agentic-codex-prompt>請為我撰寫一個 AI Skill。讓skill 輸入起居注 OCR JSON，並把每一天的文本劃分為互不重疊的事件，並為每個事件分類。輸出 JSON，當中把原文分割成多個事件，在每個事件前標示其類型。保留日期、頁碼及逐字引文。</div></div>
-                        <div class="agentic-window-body agentic-prose agentic-codex-body" data-agentic-codex-phases>
-                          <div class="agentic-codex-phase agentic-codex-thinking" data-agentic-codex-thinking>
-                            <div class="agentic-codex-status">Working…</div>
-                            <div class="agentic-codex-thinking-sequence" data-agentic-codex-thinking-sequence data-agentic-codex-char-delay="9" data-agentic-codex-line-delay="300">
-                              <script type="application/json" data-agentic-lines>[
-                                "<span class='meta-line'><span class='ic'>↳</span>整理每日文本的事件分段與分類規則</span>",
-                                "<span class='meta-line'><span class='ic'>↳</span>確認輸出保留日期、頁碼與逐字引文</span>",
-                                "<span class='line'>我會把每一天的原文分成互不重疊的事件，並為每個事件加上類型標籤。</span>",
-                                "<span class='line'>我會把這些規則整理成可重複使用的 Markdown Skill。</span>"
-                              ]</script>
-                            </div>
-                          </div>
-                          <div class="agentic-codex-phase agentic-codex-result" data-agentic-codex-result hidden>
-                            <div class="agentic-codex-result-lines" data-agentic-codex-result-lines>
-                              <script type="application/json" data-agentic-lines>[
-                                "<span class='final-lead'>已整理為 Skill 草稿：</span>",
-                                "<span class='final-item'><code>classify-qianlong-diary-events.md</code></span>",
-                                "<span class='final-label'>11 個固定分類</span>",
-                                "<span class='final-item'>禮儀巡幸祭祀 · 召見朝會筵宴 · 上諭奏摺政務</span>",
-                                "<span class='final-item'>人事任免賞罰 · 刑名司法懲處 · 軍務邊疆臺灣</span>",
-                                "<span class='final-item'>賑恤財賦糧餉 · 河工交通營建 · 文教典籍科舉</span>",
-                                "<span class='final-item'>外藩朝貢外交 · 賜食筵宴賞賚</span>"
-                              ]</script>
-                            </div>
                           </div>
                         </div>
                       </div>

@@ -7996,6 +7996,9 @@ Verified:
 Remaining:
 - Existing concurrent work was preserved; nothing was pushed.
 
+
+
+
 ### 2026-08-11 19:25 HKT — Codex — Merged the AI Skills explanation into one card
 
 Summary:
@@ -8054,3 +8057,22 @@ Verified:
 
 Remaining:
 - Existing concurrent work was preserved; nothing was pushed.
+
+### 2026-08-11 19:36 HKT — Codex — Centered the Part 2 flow chart horizontally
+
+Summary:
+- Centered the desktop `運作流程圖` flex content within its dark backdrop.
+- Kept the narrow/mobile layout vertically top-aligned so the responsive flow remains unchanged.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed.
+- Browser preview confirmed equal 29px horizontal gaps between the chart and its backdrop on desktop.
+- Confirmed the mobile rule keeps the chart column top-aligned.
+
+Remaining:
+- Nothing remaining for this adjustment; nothing was pushed.
