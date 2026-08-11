@@ -2222,13 +2222,16 @@
    桌面版用水平匯流排＋支線呈現分支／匯合；窄螢幕改用直向排列，四組 Skills
    收在一個虛線群組內，避免同時畫四條斜線造成擁擠。 */
 #part-2-content .part2-flow-shell {
+  /* 背板沿用 Part 3「甚麼是 OCR？」ocr-scan-scene 的深色漸層卡片樣式。 */
   --part2-flow-stub: clamp(20px, 2.4vw, 40px);
   margin-top: clamp(22px, 2.6vw, 34px);
   overflow-x: auto;
   overflow-y: hidden;
   padding: clamp(22px, 3vw, 34px) clamp(14px, 2.4vw, 28px);
-  background: var(--ink);
-  border: 1px solid var(--ink);
+  background: radial-gradient(circle at 22% 16%, rgba(91, 141, 239, .14), transparent 46%),
+              linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+  border: 1px solid var(--line);
+  box-shadow: 0 16px 34px rgba(22, 61, 63, .18);
 }
 #part-2-content .part2-flow-chart {
   display: flex;
