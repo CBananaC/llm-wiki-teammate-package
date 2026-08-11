@@ -1540,3 +1540,156 @@
   .part1-event-card .part1-card-acts { align-items: stretch; }
   .part1-event-card .part1-act { flex: 1 1 auto; }
 }
+
+/* ========================================================================
+   第一部分的新分段版面
+
+   每個介面區域各自擁有一條 topic bar、一段文字和一個獨立複本。
+   複本從 story-inner 中脫離，讓視覺元素在桌面版佔用接近整個視窗寬度；
+   data-part1-mode 再把同一套資料驅動複本收束到目前主題。樣式只控制顯示
+   哪一個介面區域，不改變複本本身的資料和互動邏輯。
+   ======================================================================== */
+
+#part-1-content .part1-topic-bar {
+  min-height: var(--part1-topic-bar-height, clamp(140px, 19vh, 195px));
+  padding: var(--part1-topic-bar-padding, 28px 0);
+  --hero-pad-t: 28px;
+  --hero-pad-b: 28px;
+  border-bottom: 1px solid rgba(255, 255, 255, .16);
+  isolation: isolate;
+}
+
+#part-1-content .part1-topic-bar::before { content: none; }
+#part-1-content .part1-topic-bar h1 {
+  font-size: var(--part1-topic-title-size, clamp(26px, 3.4vw, 44px));
+}
+
+#part-1-content .part1-topic-content > .story-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: clamp(22px, 2.8vw, 40px);
+}
+
+#part-1-content .part1-text-card,
+#part-1-content .part1-text-plain {
+  width: 100%;
+  max-width: 92ch;
+  margin: 0 auto;
+}
+
+#part-1-content .part1-text-card {
+  padding: var(--part1-card-padding, clamp(20px, 2.1vw, 32px));
+}
+
+#part-1-content .part1-text-card .body h3 {
+  margin: 22px 0 8px;
+  color: var(--ink);
+  font: 700 calc(15px * var(--font-scale))/1.55 var(--serif);
+  letter-spacing: .04em;
+}
+
+#part-1-content .part1-text-card .body h3:first-child { margin-top: 0; }
+#part-1-content .part1-text-card .body > p,
+#part-1-content .part1-text-plain .body > p {
+  font-size: var(--part1-body-size, calc(16px * var(--font-scale)));
+  line-height: var(--part1-body-line-height, 1.9);
+}
+
+#part-1-content .part1-section-visual {
+  width: min(var(--part1-visual-width, 90vw), var(--part1-visual-max-width, 1480px));
+  max-width: none;
+  margin: 0 0 0 50%;
+  transform: translateX(-50%);
+}
+
+#part-1-content .part1-section-visual .part1-replica { width: 100%; }
+
+/* 導覽列：只保留工具列和兩個對應的說明標籤。 */
+#part-1-content .part1-replica[data-part1-mode="nav"] {
+  overflow: visible;
+  padding-bottom: 96px;
+}
+#part-1-content .part1-replica[data-part1-mode="nav"] .part1-stage,
+#part-1-content .part1-replica[data-part1-mode="nav"] .part1-progress { display: none; }
+
+/* 圖表／節點資訊區：把原本三欄複本收束成一個滿寬圖表。 */
+#part-1-content .part1-replica[data-part1-mode="chart"] .part1-toolbar,
+#part-1-content .part1-replica[data-part1-mode="chart"] .part1-dock,
+#part-1-content .part1-replica[data-part1-mode="chart"] .part1-progress,
+#part-1-content .part1-replica[data-part1-mode="node"] .part1-toolbar,
+#part-1-content .part1-replica[data-part1-mode="node"] .part1-dock,
+#part-1-content .part1-replica[data-part1-mode="node"] .part1-progress { display: none; }
+
+#part-1-content .part1-replica[data-part1-mode="chart"] .part1-stage,
+#part-1-content .part1-replica[data-part1-mode="node"] .part1-stage {
+  display: block;
+  height: auto;
+}
+#part-1-content .part1-replica[data-part1-mode="chart"] .part1-chart,
+#part-1-content .part1-replica[data-part1-mode="node"] .part1-chart {
+  min-height: 520px;
+  border-right: 0;
+  border-bottom: 0;
+}
+#part-1-content .part1-replica[data-part1-mode="chart"] .part1-lanes,
+#part-1-content .part1-replica[data-part1-mode="node"] .part1-lanes { min-height: 420px; }
+
+/* 原始史料／AI：整個 dock 變成單一展示視窗。 */
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-toolbar,
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-chart,
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-progress,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-toolbar,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-chart,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-progress { display: none; }
+
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-stage,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-stage {
+  display: block;
+  height: auto;
+}
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-dock,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-dock {
+  display: block;
+  height: 620px;
+  background: transparent;
+}
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-doc,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-ai {
+  height: 100%;
+  margin: 0;
+  border-right: 0;
+}
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-ai,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-doc { display: none; }
+#part-1-content .part1-replica[data-part1-mode="doc"] .part1-doc-scroll,
+#part-1-content .part1-replica[data-part1-mode="ai"] .part1-ai-body { max-height: none; }
+
+@media (max-width: 820px) {
+  #part-1-content .part1-section-visual {
+    width: calc(100vw - 32px);
+    max-width: none;
+  }
+  #part-1-content .part1-replica[data-part1-mode="chart"] .part1-chart,
+  #part-1-content .part1-replica[data-part1-mode="node"] .part1-chart { min-height: 460px; }
+  #part-1-content .part1-replica[data-part1-mode="chart"] .part1-lanes,
+  #part-1-content .part1-replica[data-part1-mode="node"] .part1-lanes { min-height: 360px; }
+}
+
+@media (max-width: 560px) {
+  #part-1-content .part1-topic-content > .story-inner { gap: 18px; }
+  #part-1-content .part1-replica[data-part1-mode="nav"] { padding-bottom: 122px; }
+  #part-1-content .part1-replica[data-part1-mode="nav"] .part1-toolbar-start {
+    flex: 1 1 100%;
+    width: 100%;
+    margin-left: 0;
+    flex-wrap: wrap;
+  }
+  #part-1-content .part1-replica[data-part1-mode="nav"] .part1-search {
+    flex: 1 1 100%;
+    min-width: 0;
+    max-width: none;
+  }
+  #part-1-content .part1-replica[data-part1-mode="doc"] .part1-dock,
+  #part-1-content .part1-replica[data-part1-mode="ai"] .part1-dock { height: 600px; }
+}

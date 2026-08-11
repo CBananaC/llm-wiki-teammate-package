@@ -4,21 +4,22 @@
    這個檔案只負責介紹網站內的教學複本。它不會讀取或寫入任何審閱狀態，
    也不會載入 review-tools 內的檔案；所有內容都來自 part-1-interface-data.js。
 
-   四個可點區域：
+   四個可點區域（其中圖表另以「節點資訊區」作為獨立展示）：
      1 導覽列          兩個浮動標籤：輸入與輸出資料、切換介面區域
      2 時間與關係圖表  四條線各有一個固定圓點，點擊開啟節點資訊區
      3 原始史料區      示範 AI Skills 篩選標示
      4 AI 分析區       四個步驟：本機執行 → 候選卡片 → 加入圖表 → 引文定位
    ========================================================================== */
 
-(() => {
+document.querySelectorAll('[data-part1]').forEach((root) => {
   'use strict';
 
   const data = window.PART1_INTERFACE_DATA;
-  const root = document.querySelector('[data-part1]');
-  if (!data || !root) return;
+  if (!data) return;
 
   const replica = root.querySelector('[data-part1-replica]');
+  const mode = root.dataset.part1Mode || 'all';
+  if (!replica) return;
   const progressText = root.querySelector('[data-part1-progress]');
 
   const escapeHtml = (value) => String(value == null ? '' : value)
@@ -78,6 +79,7 @@
 
   const laneIndex = Object.fromEntries(data.lanes.map((lane, index) => [lane.key, index]));
 
+  replica.dataset.part1Mode = mode;
   replica.innerHTML = `
     <div class="part1-region part1-toolbar" data-region="nav">
       <button class="part1-hotspot" type="button" data-hotspot="nav">
@@ -676,9 +678,6 @@
     if (hotspot) setRegion(hotspot.dataset.hotspot);
   });
 
-  /* The explanation cards remain independent StoryMap content. The replica
-     does not use JavaScript to open, close, or retarget them. */
-
   /* -------------------------------------------------------------- 重設 */
 
   const reset = () => {
@@ -706,6 +705,13 @@
   renderAiIdle();
   drawLinks();
 
+  const initialRegion = mode === 'node' ? 'chart' : mode === 'all' ? '' : mode;
+  if (initialRegion) setRegion(initialRegion, { silent: true });
+  if (mode === 'node') {
+    const firstDot = replica.querySelector('.part1-dot');
+    if (firstDot) selectDot(firstDot);
+  }
+
   window.addEventListener('resize', drawLinks);
   if ('ResizeObserver' in window) new ResizeObserver(drawLinks).observe(lanesEl);
-})();
+});

@@ -641,65 +641,103 @@
       <div id="part-1-content">
         <section class="story surface-a" id="part-1-areas" data-tab="part-1" data-nav="#part-1-areas">
           <div class="story-inner">
-          <div class="blk" style="margin-bottom:var(--head-gap)">
-            <div class="title-row"><span class="option-number">1</span><h2>平台的四大區域</h2></div>
-            <div class="body">
-              <p>平台介面主要由四個區域組成，分別是導覽列、時間與關係圖表、原始史料區，以及AI分析區。下方是平台的互動示範複本，載入的示範文書為硃42〈為彰化諸羅俱失及撥兵等緣由事〉。點擊複本上的編號標籤，或點開右側的說明卡片，即可逐一試用四個區域。</p>
+            <div class="blk" style="margin-bottom:var(--head-gap)">
+              <div class="title-row"><span class="option-number">1</span><h2>平台的四大區域</h2></div>
+              <div class="body">
+                <p>平台介面主要由四個區域組成，分別是導覽列、時間與關係圖表、原始史料區，以及AI分析區。下方按五個主題分段介紹這些介面區域，並加入節點資訊區；每個主題均附有獨立的互動示範複本，載入的示範文書為硃42〈為彰化諸羅俱失及撥兵等緣由事〉。</p>
+              </div>
             </div>
           </div>
-          <!-- 互動複本＋說明卡片。複本的版面與行為分別在
-               part-1-interface.css 與 part-1-interface.js 調整；
-               複本顯示的史料資料一律來自 part-1-interface-data.js。 -->
-          <div class="lay-acc part1-layout" data-part1>
-            <div class="acc-visual" aria-label="平台介面互動示範複本">
+        </section>
+
+        <section class="section-hero section-hero-part-1 part1-topic-bar" id="part-1-navigation-bar" aria-labelledby="part-1-navigation-title">
+          <div class="section-hero-content"><p class="eyebrow">介面區域 01</p><h1 id="part-1-navigation-title">導覽列</h1></div>
+        </section>
+        <section class="story surface-b part1-topic-content" id="part-1-navigation" data-tab="part-1" data-nav="#part-1-navigation">
+          <div class="story-inner">
+            <article class="copybox blk part1-text-card">
+              <div class="body">
+                <h3>1. 輸入與輸出資料</h3>
+                <p>研究者可以從本機輸入結構化的原始文本和AI 分析結果；完成檢視和修改後，亦可以將結構化資料輸出至本機，供後續研究使用。</p>
+                <h3>2. 切換介面區域</h3>
+                <p>研究者可以透過導覽列切換不同的介面區域。例如，在閱讀原文後，開啟 AI 分析區，檢視人工智能提取的資訊，同時開啟筆記頁，記錄閱讀所得，並在完成審閱後，點擊「事件鏈」，沿著事件的時間順序，追蹤戰場消息如何向上傳遞、皇帝的命令如何向下傳達，以及官員如何回應先前的硃批或上諭。</p>
+              </div>
+            </article>
+            <div class="part1-section-visual" data-part1 data-part1-mode="nav" role="group" aria-label="導覽列互動示範複本">
               <div class="part1-replica" data-part1-replica aria-live="polite"></div>
             </div>
-            <div class="acc-track part1-track" tabindex="0" aria-label="平台介面說明卡片">
-              <article class="acc-card" id="part-1-navigation" data-part1-card="nav">
-                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="nav"><span class="acc-index">01</span><strong>導覽列</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
-                <div class="acc-body">
-                  <h3>1. 輸入與輸出資料</h3>
-                  <p>研究者可以從本機輸入結構化的原始文本和AI 分析結果；完成檢視和修改後，亦可以將結構化資料輸出至本機，供後續研究使用。</p>
-                  <h3>2. 切換介面區域</h3>
-                  <p>研究者可以透過導覽列切換不同的介面區域。例如，在閱讀原文後，開啟 AI 分析區，檢視人工智能提取的資訊，同時開啟筆記頁，記錄閱讀所得，並在完成審閱後，點擊「事件鏈」，沿著事件的時間順序，追蹤戰場消息如何向上傳遞、皇帝的命令如何向下傳達，以及官員如何回應先前的硃批或上諭。</p>
-                </div>
-              </article>
-              <article class="acc-card" id="part-1-timeline" data-part1-card="chart">
-                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="chart"><span class="acc-index">02</span><strong>時間與關係圖表</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
-                <div class="acc-body">
-                  <p>時間與關係圖表位於介面的主要區域，用以呈現文書和事件的時間及傳遞關係。</p>
-                  <p>時間與關係圖表由四條事件線組成，中間兩條線「官員上奏」及「皇帝硃批下旨」呈現文書的發送及接收時間，資料來源自原始文本中已有的收發時間。一個節點代表一份文書。</p>
-                  <p>兩側的事件線是「戰場事件」和「皇帝行動」，其中的節點分別由「官員上奏」和「皇帝硃批下旨」的節點延伸而成。這些事件首先由 AI 從原始文書中提取，再由研究者閱讀原文查證，經確認後，才會以節點形式加入圖表。</p>
-                  <p>四條線上的文書和事件節點，會按照時間順序排列，並透過連線呈現彼此的傳遞關係。</p>
-                  <p>研究者可以點擊任何節點，查看該文書或事件的詳細資料，或進一步點擊「事件鏈」，沿著時間順序，了解相關文書和事件的具體傳遞關係。</p>
-                  <p class="part1-try">試用：在複本的四條線上各有一個圓點，點擊任何一個，開啟它的節點資訊區。</p>
-                </div>
-              </article>
-              <article class="acc-card" id="part-1-node" data-part1-card="chart">
-                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="chart"><span class="acc-index">03</span><strong>節點資訊區</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
-                <div class="acc-body">
-                  <p>當研究者點擊圖表上的節點時，介面會開啟獨立的資訊面板，顯示該節點的完整 AI 提取結果，包括標題、描述、時間、原文引文及史料來源。</p>
-                </div>
-              </article>
-              <article class="acc-card" id="part-1-original" data-part1-card="doc">
-                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="doc"><span class="acc-index">04</span><strong>原始史料區</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
-                <div class="acc-body">
-                  <p>文書區顯示原始文書的完整原文及基本資料，包括標題、文書類型、作者、收發日期和史料出處。</p>
-                  <p>文書區亦設有篩選功能，用以標示不同 AI Skills 的提取結果。研究者可以點擊相關結果的標籤，查看該項結果的完整資訊。</p>
-                  <p class="part1-try">試用：點擊複本原文上方的 AI Skill 標籤，標示該項結果在硃42原文中的位置。</p>
-                </div>
-              </article>
-              <article class="acc-card" id="part-1-ai" data-part1-card="ai">
-                <button class="acc-heading" type="button" aria-expanded="false" data-part1-target="ai"><span class="acc-index">05</span><strong>人工智能分析區</strong><span class="acc-arrow" aria-hidden="true">▾</span></button>
-                <div class="acc-body">
-                  <p>研究者可以在本機執行 AI Skills，並將整理後的結構化結果上載至網站。上載後，分析結果會以卡片形式顯示於 AI Chat 面板中。</p>
-                  <p>每張卡片均會列出相關原文引文。研究者可以點擊引文，返回原始文書的相應位置進行核對。</p>
-                  <p>確認結果後，研究者可以將其加入圖表，作為獨立事件或事件中的相關資訊；如結果需要修正，研究者可以編輯或拒絕該結果，亦可以手動新增事件。</p>
-                  <p class="part1-try">試用：依複本內的四個步驟操作一次——在本機執行、上載審閱包、核對引文、把結果加入圖表。</p>
-                </div>
-              </article>
+          </div>
+        </section>
+
+        <section class="section-hero section-hero-part-1 part1-topic-bar" id="part-1-timeline-bar" aria-labelledby="part-1-timeline-title">
+          <div class="section-hero-content"><p class="eyebrow">介面區域 02</p><h1 id="part-1-timeline-title">時間與關係圖表</h1></div>
+        </section>
+        <section class="story surface-c part1-topic-content" id="part-1-timeline" data-tab="part-1" data-nav="#part-1-timeline">
+          <div class="story-inner">
+            <article class="copybox blk part1-text-card">
+              <div class="body">
+                <p>時間與關係圖表位於介面的主要區域，用以呈現文書和事件的時間及傳遞關係。</p>
+                <p>時間與關係圖表由四條事件線組成，中間兩條線「官員上奏」及「皇帝硃批下旨」呈現文書的發送及接收時間，資料來源自原始文本中已有的收發時間。一個節點代表一份文書。</p>
+                <p>兩側的事件線是「戰場事件」和「皇帝行動」，其中的節點分別由「官員上奏」和「皇帝硃批下旨」的節點延伸而成。這些事件首先由 AI 從原始文書中提取，再由研究者閱讀原文查證，經確認後，才會以節點形式加入圖表。</p>
+                <p>四條線上的文書和事件節點，會按照時間順序排列，並透過連線呈現彼此的傳遞關係。</p>
+                <p>研究者可以點擊任何節點，查看該文書或事件的詳細資料，或進一步點擊「事件鏈」，沿著時間順序，了解相關文書和事件的具體傳遞關係。</p>
+                <p class="part1-try">試用：在複本的四條線上各有一個圓點，點擊任何一個，開啟它的節點資訊區。</p>
+              </div>
+            </article>
+            <div class="part1-section-visual" data-part1 data-part1-mode="chart" role="group" aria-label="時間與關係圖表互動示範複本">
+              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
             </div>
           </div>
+        </section>
+
+        <section class="section-hero section-hero-part-1 part1-topic-bar" id="part-1-node-bar" aria-labelledby="part-1-node-title">
+          <div class="section-hero-content"><p class="eyebrow">介面區域 03</p><h1 id="part-1-node-title">節點資訊區</h1></div>
+        </section>
+        <section class="story surface-a part1-topic-content" id="part-1-node" data-tab="part-1" data-nav="#part-1-node">
+          <div class="story-inner">
+            <div class="blk part1-text-plain">
+              <div class="body"><p>當研究者點擊圖表上的節點時，介面會開啟獨立的資訊面板，顯示該節點的完整 AI 提取結果，包括標題、描述、時間、原文引文及史料來源。</p></div>
+            </div>
+            <div class="part1-section-visual" data-part1 data-part1-mode="node" role="group" aria-label="節點資訊區互動示範複本">
+              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-hero section-hero-part-1 part1-topic-bar" id="part-1-original-bar" aria-labelledby="part-1-original-title">
+          <div class="section-hero-content"><p class="eyebrow">介面區域 04</p><h1 id="part-1-original-title">原始史料區</h1></div>
+        </section>
+        <section class="story surface-b part1-topic-content" id="part-1-original" data-tab="part-1" data-nav="#part-1-original">
+          <div class="story-inner">
+            <article class="copybox blk part1-text-card">
+              <div class="body">
+                <p>文書區顯示原始文書的完整原文及基本資料，包括標題、文書類型、作者、收發日期和史料出處。</p>
+                <p>文書區亦設有篩選功能，用以標示不同 AI Skills 的提取結果。研究者可以點擊相關結果的標籤，查看該項結果的完整資訊。</p>
+                <p class="part1-try">試用：點擊複本原文上方的 AI Skill 標籤，標示該項結果在硃42原文中的位置。</p>
+              </div>
+            </article>
+            <div class="part1-section-visual" data-part1 data-part1-mode="doc" role="group" aria-label="原始史料區互動示範複本">
+              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="section-hero section-hero-part-1 part1-topic-bar" id="part-1-ai-bar" aria-labelledby="part-1-ai-title">
+          <div class="section-hero-content"><p class="eyebrow">介面區域 05</p><h1 id="part-1-ai-title">人工智能分析區</h1></div>
+        </section>
+        <section class="story surface-c part1-topic-content" id="part-1-ai" data-tab="part-1" data-nav="#part-1-ai">
+          <div class="story-inner">
+            <article class="copybox blk part1-text-card">
+              <div class="body">
+                <p>研究者可以在本機執行 AI Skills，並將整理後的結構化結果上載至網站。上載後，分析結果會以卡片形式顯示於 AI Chat 面板中。</p>
+                <p>每張卡片均會列出相關原文引文。研究者可以點擊引文，返回原始文書的相應位置進行核對。</p>
+                <p>確認結果後，研究者可以將其加入圖表，作為獨立事件或事件中的相關資訊；如結果需要修正，研究者可以編輯或拒絕該結果，亦可以手動新增事件。</p>
+                <p class="part1-try">試用：依複本內的四個步驟操作一次——在本機執行、上載審閱包、核對引文、把結果加入圖表。</p>
+              </div>
+            </article>
+            <div class="part1-section-visual" data-part1 data-part1-mode="ai" role="group" aria-label="人工智能分析區互動示範複本">
+              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
+            </div>
           </div>
         </section>
       </div>

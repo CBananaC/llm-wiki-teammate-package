@@ -2093,6 +2093,24 @@
   #part-3-wiki-data .part3-wiki-thinking { font-size: 13px; }
 }
 
+/* Part 1 — 平台介面：五個獨立 topic bar 與滿版複本
+   每一個介面區域都使用同一套 source-backed demo data，但在自己的視覺
+   視窗中只顯示對應區域。數值集中在這裡，方便之後按整個分頁的比例微調。 */
+#part-1-content .part1-topic-bar {
+  --part1-topic-bar-height: clamp(140px, 19vh, 195px);
+  --part1-topic-bar-padding: 28px 0;
+  --part1-topic-title-size: clamp(26px, 3.4vw, 44px);
+}
+#part-1-content .part1-topic-content {
+  --part1-card-padding: clamp(20px, 2.1vw, 32px);
+  --part1-body-size: calc(16px * var(--font-scale));
+  --part1-body-line-height: 1.9;
+}
+#part-1-content .part1-section-visual {
+  --part1-visual-width: 90vw;
+  --part1-visual-max-width: 1480px;
+}
+
 /* Part 3.0.2 — Shared chart, workflow, and question-gallery layer */
 /* Part 3 的特殊視覺卡片同樣由各自所在區塊的變數控制。 */
 #part-3-content .part3-chart-frame {
