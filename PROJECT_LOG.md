@@ -12215,6 +12215,26 @@ Verified:
 Remaining:
 - Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
 
+## 2026-08-11 18:38 HKT — Codex — Shortened Part 2 flow labels and stacked mobile AI bubbles
+
+Summary:
+- Shortened the Part 2 flow visual labels to `選定題目與史料`, `OCR 並結構化史料`, `輸入結構化史料`, `使用AI抽取資訊`, and `視覺化分析的結果`.
+- Changed the mobile AI Skills group from a 2×2 grid to a single vertical stack so 分析階段一 appears above 分析階段二, matching the desktop flow.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview checked the shortened labels at 1280px and 390px widths.
+- Mobile computed positions confirmed 分析階段一 is above 分析階段二; no browser console warnings or errors were reported.
+- `git diff --check` passed.
+
+Remaining:
+- Existing unrelated Part 1 and sample-data edits were preserved; nothing was pushed.
+
 ## 2026-08-11 18:22 HKT — Codex — Matched the platform replica AI panel to the light sample-tool interface
 
 Summary:

@@ -2218,7 +2218,8 @@
   line-height: 1.9;
 }
 
-/* Part 2 — 運作流程圖：橫向流程圖（步驟四 → 步驟五 → 四組 AI Skills 並行 → 分析結果）。
+/* Part 2 — 運作流程圖：選定題目與史料 → OCR 並結構化史料 → 輸入結構化史料
+   → 使用AI抽取資訊 → 四組 AI Skills → 視覺化分析的結果。
    桌面版用水平匯流排＋支線呈現分支／匯合；窄螢幕改用直向排列，四組 Skills
    收在一個虛線群組內，避免同時畫四條斜線造成擁擠。 */
 #part-2-content .part2-flow-shell {
@@ -2320,7 +2321,7 @@
 #part-2-content .part2-flow-node-stack { position: relative; }
 
 /* 窄螢幕／手機：改為直向排列，四組 Skills 收進同一個虛線群組，
-   群組上／下各接一條垂直箭頭，不再逐一畫支線。 */
+   群組上／下各接一條垂直箭頭；第一組維持在第二組上方。 */
 @media (max-width: 900px) {
   #part-2-content .part2-flow-shell {
     overflow-x: visible;
@@ -2375,20 +2376,18 @@
     letter-spacing: .1em;
     white-space: nowrap;
   }
-  /* 四組 Skills 排成「田」字：1、2 在上排，3、4 在下排；四格同寬同高，
-     只是排版分布，不是表格元素。 */
+  /* 四組 Skills 由上而下排列，讓分析階段一 bubble 位於分析階段二 bubble 上方，
+     並維持每個 bubble 的滿寬觸控區域。 */
   #part-2-content .part2-flow-stack {
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    grid-auto-rows: 1fr;
+    display: flex;
+    flex-direction: column;
     gap: clamp(10px, 3vw, 16px);
     width: 100%;
   }
   #part-2-content .part2-flow-node-stack {
     width: 100%;
     max-width: none;
-    height: 100%;
-    min-height: clamp(84px, 24vw, 104px);
+    min-height: clamp(72px, 18vw, 96px);
     align-items: center;
     justify-content: center;
     text-align: center;
