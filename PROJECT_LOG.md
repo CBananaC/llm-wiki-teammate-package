@@ -12215,6 +12215,28 @@ Verified:
 Remaining:
 - Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
 
+## 2026-08-11 18:40 HKT — Codex — Matched the document-panel states to the supplied tool screenshots
+
+Summary:
+- Reworked the `平台的整體介面` replica's document panel so the default view matches the normal panel, the settings view can show `摘要` plus numbered section cards, and the filter view opens a labeled chip panel with colored source highlights.
+- Replaced text-symbol document controls with light icon controls and enlarged the standalone document-mode embed to match the full-panel reading scale in the references.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Combined replica: normal document view, filter chip labels (`全部`, `林方行動 1`, `清軍事：待執行 2`, `來源鏈 4`), and highlight interaction all rendered.
+- StoryMap document mode: enlarged header/metadata/body typography, summary card, numbered division cards, and filter-popover screenshots matched the supplied layouts.
+- `node --check intro Website/Website/storymap/part-1-interface.js` and `git diff --check` passed.
+- Existing concurrent work was preserved; nothing was pushed.
+
+Remaining:
+- No further changes required for these document-panel reference states. A local Git checkpoint could not be created because the repository metadata is not writable in this session; no repository metadata was altered and nothing was pushed.
+
 ## 2026-08-11 18:38 HKT — Codex — Shortened Part 2 flow labels and stacked mobile AI bubbles
 
 Summary:
@@ -12332,3 +12354,67 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 1, sample-data, and StoryMap edits were preserved; nothing was pushed.
+
+## 2026-08-11 18:46 HKT — Codex — Made document filter and settings controls icon-only
+
+Summary:
+- Removed the visible `篩選` text from the document-panel filter control.
+- Removed backgrounds and borders from both filter and settings buttons; clicking now changes only the icon color to the active green state.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser projection confirmed empty button text, transparent backgrounds, no borders, and beige-to-green color changes after clicking both controls.
+- `node --check intro Website/Website/storymap/part-1-interface.js` and `git diff --check` passed.
+- Existing concurrent work was preserved; nothing was pushed.
+
+Remaining:
+- No further changes required for this control styling adjustment.
+
+## 2026-08-11 18:51 HKT — Codex — Matched the replica tools menu and event-chain panel to the sample
+
+Summary:
+- Replaced the platform-interface replica's compact gear popover with the sample-style four-section settings menu, including 匯入, 介面字級／正文 controls, and connection/timeline sliders with readouts.
+- Changed the 事件鏈 shortcut to open a full-width scrollable event-chain panel with source, reported-event, and imperial-action cards, collapsible details, arrows, and matching controls.
+- Bumped the Part 1 CSS and JavaScript asset query version in the standalone replica and StoryMap shell.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Inspected the live `/sample` toolbar menu and populated 事件鏈 panel in the in-app browser as the visual reference.
+- `node --check "intro Website/Website/storymap/part-1-interface.js"` and `git diff --check` passed.
+- Source checks confirmed the requested settings sections, event-chain trigger/body, and cache-busted assets.
+- The replica itself could not be loaded in the current browser session because the requested `file://` page and separate local 8765 navigation were blocked by browser URL policy; no replica visual pass is claimed.
+
+Remaining:
+- Visually confirm both replica states in a browser that permits the local page.
+- Existing concurrent Part 1, StoryMap, sample-data, and project-log edits were preserved; nothing was pushed.
+
+## 2026-08-11 18:52 HKT — Codex — Matched AI chat overlays in the platform replica
+
+Summary:
+- Added the platform replica's conversation menu, sample-style 功能 menu, and AI settings overlay.
+- Matched the supplied AI-run metadata and settings fields, kept candidate loading available from the relevant action items, and positioned the overlays at viewport level so long menus are not clipped by the dock.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Compared the live `/sample` tool at port 8766 with the local HTTP replica preview.
+- Opened and visually checked the conversation menu, 功能 menu, and 設定 overlay; API-key visibility and candidate-card loading also passed.
+- `node --check` and `git diff --check` passed; no replica browser warnings or errors were reported.
+
+Remaining:
+- A separate narrow viewport override was unavailable in this browser session; no deployment or push was performed.

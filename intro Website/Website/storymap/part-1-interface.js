@@ -17,8 +17,11 @@ const PART1_CHAT_ICONS = {
   jump: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>',
   move: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>',
   close: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>',
+  filter: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="21 4 3 4 10 12.5 10 19 14 21 14 12.5 21 4"/></svg>',
   gear: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15z"/></svg>'
 };
+
+const PART1_CHAT_EYE_ICON = '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg>';
 
 document.querySelectorAll('[data-part1]').forEach((root) => {
   'use strict';
@@ -40,7 +43,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   /* 在原文中把每段引文包成 <mark>，供篩選標示與引文定位使用。
      引文由建置腳本確認過是原文的連續子字串，因此可直接以位置切分。 */
-  const buildDocumentBody = () => {
+  const buildDocumentBody = (rangeStart = 0, rangeEnd = data.document.body.length) => {
     const body = data.document.body;
     const spans = [];
     const seen = new Set();
@@ -57,21 +60,36 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
     spans.sort((a, b) => a.start - b.start);
     let html = '';
-    let cursor = 0;
+    let cursor = rangeStart;
     spans.forEach((span) => {
-      if (span.start < cursor) return;
-      html += escapeHtml(body.slice(cursor, span.start));
-      html += `<mark data-skill="${escapeHtml(span.skill)}" data-quote-key="${escapeHtml(span.key)}">`
-        + `${escapeHtml(body.slice(span.start, span.end))}</mark>`;
-      cursor = span.end;
+      if (span.end <= rangeStart || span.start >= rangeEnd || span.start < cursor) return;
+      const start = Math.max(span.start, rangeStart);
+      const end = Math.min(span.end, rangeEnd);
+      if (start > cursor) html += escapeHtml(body.slice(cursor, start));
+      html += `<mark data-skill="${escapeHtml(span.skill)}" data-source-chain="true" data-quote-key="${escapeHtml(span.key)}">`
+        + `${escapeHtml(body.slice(start, end))}</mark>`;
+      cursor = end;
     });
-    html += escapeHtml(body.slice(cursor));
+    html += escapeHtml(body.slice(cursor, rangeEnd));
     return html.replace(/\n/g, '<br>');
   };
 
   /* ------------------------------------------------------------ 版面組裝 */
 
   const doc = data.document;
+  const docDivisionSpecs = [
+    ['奏題開端', '飛飭各路'],
+    ['軍情來源', '是彰化、諸羅俱已失陷'],
+    ['兵力調度', '至官兵裏帶口糧'],
+    ['結尾與硃批', '乾隆五十一年十二月十八日']
+  ];
+  const docDivisions = docDivisionSpecs.map(([label, marker], index) => {
+    const start = index === 0 ? 0 : Math.max(0, doc.body.indexOf(docDivisionSpecs[index - 1][1]));
+    const end = index === docDivisionSpecs.length - 1 ? doc.body.length : Math.max(start, doc.body.indexOf(marker));
+    const text = doc.body.slice(start, end).trim();
+    return { label, start, end, summary: text.split('。')[0] ? `${text.split('。')[0]}。` : '' };
+  });
+  const docSummary = doc.body.split('。').slice(0, 4).join('。') + '。';
   const authorLine = doc.author.name;
   const sourceLine = `明清台檔${doc.compiledIn.book}, ${doc.compiledIn.page}, ${doc.docId}`;
   const compactDate = (value) => String(value || '').replace(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/, (_, year, month, day) => `${year}/${Number(month)}/${Number(day)}`);
@@ -108,21 +126,43 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         <div class="part1-people-control"><span class="part1-pl">人物</span><select aria-label="選擇人物"><option>— 選擇人物 —</option></select><button type="button" aria-label="新增人物">＋</button></div>
         <label class="part1-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="搜尋原文 / 所有欄位…" aria-label="搜尋原文或所有欄位"></label>
       </div>
-      <span class="part1-toolbar-spacer"></span>
-      <span class="part1-toolgroup" data-toolgroup="io">
-        <button class="part1-toolbtn part1-gear-btn" type="button" data-tool-toggle="tools" aria-label="工具">⚙</button>
-        <div class="part1-menu-pop part1-tools-pop" data-tools-pop hidden>
-          <strong>工具</strong>
-          <div class="part1-tools-row"><button type="button">匯出</button><button type="button">分項匯出</button></div>
-          <div class="part1-tools-row"><button type="button" class="is-pointed">輸入資料</button><button type="button">載入技能輸出</button></div>
-          <div class="part1-tools-divider"></div>
-          <span>字級　介面 A− A＋　正文 A− A＋</span>
-        </div>
-      </span>
       <span class="part1-toolgroup" data-toolgroup="areas">
         <button class="part1-toolbtn" type="button" data-region-trigger="doc">Note</button>
         <button class="part1-toolbtn is-emphasis" type="button" data-region-trigger="ai">AI</button>
-        <button class="part1-toolbtn" type="button" data-region-trigger="chart">事件鏈</button>
+        <button class="part1-toolbtn" type="button" data-region-trigger="eventline">事件鏈</button>
+      </span>
+      <span class="part1-toolgroup" data-toolgroup="io">
+        <button class="part1-toolbtn part1-gear-btn" type="button" data-tool-toggle="tools" aria-label="工具">${PART1_CHAT_ICONS.gear}</button>
+        <div class="part1-menu-pop part1-tools-pop" data-tools-pop hidden>
+          <div class="part1-tools-grid">
+            <section class="part1-tools-section part1-tools-data">
+              <h3>資料</h3>
+              <div class="part1-tools-button-stack">
+                <button type="button" data-tool-action="export">匯出</button>
+                <button type="button" data-tool-action="export-split">分項匯出</button>
+                <label class="part1-tools-file">匯入<input type="file" accept=".data,.json,application/json" aria-label="匯入資料"></label>
+                <button type="button" data-tool-action="load-skills">載入技能輸出</button>
+              </div>
+            </section>
+            <section class="part1-tools-section part1-tools-type">
+              <h3>字級</h3>
+              <div class="part1-tools-setting"><span>介面字級</span><button type="button" data-tool-action="ui-smaller">A−</button><button type="button" data-tool-action="ui-larger">A＋</button></div>
+              <div class="part1-tools-setting"><span>正文</span><button type="button" data-tool-action="body-smaller">A−</button><button type="button" data-tool-action="body-larger">A＋</button></div>
+            </section>
+            <section class="part1-tools-section part1-tools-wide">
+              <h3>連線</h3>
+              <label class="part1-tools-slider"><span>實線透明度</span><input type="range" min="0.05" max="1" step="0.01" value="0.32" data-tool-range aria-label="實線透明度"><output>32%</output></label>
+              <label class="part1-tools-slider"><span>虛線透明度</span><input type="range" min="0.05" max="1" step="0.01" value="0.5" data-tool-range aria-label="虛線透明度"><output>50%</output></label>
+            </section>
+            <section class="part1-tools-section part1-tools-wide">
+              <h3>時間軸</h3>
+              <label class="part1-tools-slider"><span>圓點大小</span><input type="range" min="0.6" max="2.4" step="0.1" value="1" data-tool-range aria-label="圓點大小"><output>1×</output></label>
+              <label class="part1-tools-slider"><span>圓點水平距離</span><input type="range" min="4" max="36" step="1" value="12" data-tool-range aria-label="圓點水平距離"><output>12 px</output></label>
+              <label class="part1-tools-slider"><span>每日距離</span><input type="range" min="4" max="36" step="1" value="11" data-tool-range aria-label="每日距離"><output>11 px</output></label>
+              <label class="part1-tools-slider"><span>四線距離</span><input type="range" min="1.5" max="2.8" step="0.05" value="1.5" data-tool-range aria-label="四線距離"><output>1.5×</output></label>
+            </section>
+          </div>
+        </div>
       </span>
       <span class="part1-count">236/363</span>
       <div class="part1-callout" data-callout="nav-io" hidden>
@@ -148,9 +188,20 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           <svg class="part1-chart-links" data-chart-links aria-hidden="true" focusable="false"></svg>
           ${data.lanes.map((lane) => `<div class="part1-lane" data-lane="${escapeHtml(lane.key)}"><span class="part1-lane-label">${escapeHtml(lane.label)}</span><div class="part1-lane-track"></div></div>`).join('')}
         </div>
-        <div class="part1-ruler-labels" aria-hidden="true"><span>11</span><span>21</span><span>12/18</span><span>21</span><span>1/2</span><span>11</span><span>21</span><span>2/1</span></div>
+        <div class="part1-ruler-labels" aria-hidden="true"><span>1786/11</span><span>11</span><span>21</span><span>1786/12</span><span>11</span><span>21</span><span>1787/1</span><span>11</span></div>
         <div class="part1-nodepanel" data-nodepanel hidden></div>
       </div>
+
+      <section class="part1-region part1-eventline" data-region="eventline" aria-label="事件鏈">
+        <div class="part1-eventline-head">
+          <strong>事件鏈</strong>
+          <div class="part1-eventline-controls">
+            <button type="button" aria-label="移動事件鏈面板">${PART1_CHAT_ICONS.move}</button>
+            <button type="button" aria-label="關閉事件鏈面板" data-eventline-close>${PART1_CHAT_ICONS.close}</button>
+          </div>
+        </div>
+        <div class="part1-eventline-body" data-eventline-body></div>
+      </section>
 
       <aside class="part1-dock">
         <div class="part1-region part1-ai part1-linked-panel part1-tool-box" data-region="ai">
@@ -159,7 +210,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           </button>
           <div class="part1-linked-head tool-box-head">
             <span class="part1-chat-head-actions">
-              <button class="part1-chat-icon-btn" type="button" aria-label="對話目錄"><span aria-hidden="true">${PART1_CHAT_ICONS.list}</span></button>
+              <button class="part1-chat-icon-btn" type="button" data-ai-pop="toc" aria-expanded="false" aria-label="對話目錄"><span aria-hidden="true">${PART1_CHAT_ICONS.list}</span></button>
               <button class="part1-chat-icon-btn" type="button" aria-label="收合輸入面板"><span aria-hidden="true">${PART1_CHAT_ICONS.collapse}</span></button>
               <button class="part1-chat-icon-btn" type="button" aria-label="跳到最近的 AI 結果"><span aria-hidden="true">${PART1_CHAT_ICONS.jump}</span></button>
             </span>
@@ -171,6 +222,30 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           <div class="part1-ai-body tool-box-body" data-ai-body></div>
           <div class="part1-linked-foot"></div>
           <div class="part1-chat-window" aria-label="AI 對話輸入區"></div>
+          <div class="part1-ai-popover part1-ai-toc" data-ai-popover="toc" hidden></div>
+          <div class="part1-ai-popover part1-ai-actions" data-ai-popover="act" hidden></div>
+          <div class="part1-ai-popover part1-ai-settings" data-ai-popover="cfg" hidden>
+            <div class="part1-ai-settings-row">
+              <label>AI 服務<select aria-label="AI 服務"><option>Gemini / Google Cloud</option><option>OpenAI GPT</option><option>ChatGPT via TokenRouter</option><option>Anthropic Claude</option><option>DeepSeek</option><option>第三方 API</option></select></label>
+            </div>
+            <div class="part1-ai-settings-row">
+              <label>模型<input type="text" value="deepseek-v3.2-maas" aria-label="模型"></label>
+            </div>
+            <div class="part1-ai-settings-row">
+              <label>API Base<input type="text" value="https://generativelanguage.googleapis.com/v1beta" aria-label="API Base"></label>
+            </div>
+            <div class="part1-ai-settings-row">
+              <label>API Key
+                <span class="part1-ai-input-with-action"><input type="password" placeholder="API key（只保留至此分頁關閉）" aria-label="API Key"><button type="button" class="part1-ai-key-toggle" data-ai-key-toggle aria-label="顯示或隱藏 API key">${PART1_CHAT_EYE_ICON}</button></span>
+              </label>
+            </div>
+            <div class="part1-ai-settings-row part1-ai-memory-row">
+              <label><input type="checkbox"> 記憶對話（跨訊息記住脈絡）</label>
+            </div>
+            <div class="part1-ai-settings-row">
+              <label>代理網址<input type="text" value="http://127.0.0.1:8766/api/ai" aria-label="代理網址"></label>
+            </div>
+          </div>
         </div>
 
         <div class="part1-region part1-doc part1-ip" data-region="doc">
@@ -178,18 +253,43 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
             <span class="part1-hotspot-num">3</span>原始史料區
           </button>
           <div class="part1-doc-head ip-head">
-            <div class="part1-doc-window-controls" aria-hidden="true"><span>✣</span><span>−</span><span>×</span></div>
+            <div class="part1-doc-window-controls">
+              <button class="part1-doc-window-btn" type="button" aria-label="移動文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
+              <button class="part1-doc-window-btn" type="button" aria-label="收合文書面板"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+              <button class="part1-doc-window-btn" type="button" aria-label="關閉文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+            </div>
             <p class="part1-doc-title"><span class="badge">${escapeHtml(doc.docType.slice(0, 1))}</span>${escapeHtml(doc.title)}</p>
             <p class="part1-doc-meta">${escapeHtml(authorLine)}<br>${escapeHtml(dateLine)}<br>${escapeHtml(sourceLine)}</p>
           </div>
           <div class="part1-filterdock ip-filterdock" data-filterdock>
-            <button class="part1-filter-icon" type="button" aria-label="篩選">⌕</button>
-            <button class="part1-filterbtn" type="button" data-filter="all">全部標示</button>
-            <button class="part1-filter-gear" type="button" aria-label="原文設定">⚙</button>
+            <button class="part1-filterbtn part1-filter-trigger" type="button" data-filter-toggle aria-expanded="false" aria-controls="part1-filter-popover">
+              <span class="part1-filter-icon" aria-hidden="true">${PART1_CHAT_ICONS.filter}</span>
+            </button>
+            <button class="part1-filter-gear" type="button" data-view-toggle aria-expanded="false" aria-label="顯示設定"><span aria-hidden="true">${PART1_CHAT_ICONS.gear}</span></button>
+            <div class="part1-filter-popover" id="part1-filter-popover" data-filter-popover hidden>
+              <div class="part1-filter-chipbar" data-filter-chipbar></div>
+            </div>
+            <div class="part1-view-popover" data-view-popover hidden>
+              <label><input type="checkbox" data-view-summary> 顯示摘要</label>
+              <label><input type="checkbox" data-view-divisions> 顯示分段</label>
+            </div>
           </div>
           <div class="part1-doc-scroll ip-scroll" data-doc-scroll>
+            <div class="part1-doc-summary" data-doc-summary hidden>
+              <h3>摘要</h3>
+              <p>${escapeHtml(docSummary)}</p>
+            </div>
             <p class="part1-doc-section-label">原文</p>
-            <p class="part1-doc-body ip-body" data-doc-body>${buildDocumentBody()}</p>
+            <div class="part1-doc-divisions" data-doc-divisions hidden>
+              ${docDivisions.map((part, index) => `
+                <article class="part1-doc-part">
+                  <h3><span>${index + 1}.</span> ${escapeHtml(part.label)}</h3>
+                  <p class="part1-doc-part-summary">${escapeHtml(part.summary)}</p>
+                  <div class="part1-doc-part-body">${buildDocumentBody(part.start, part.end)}</div>
+                </article>
+              `).join('')}
+            </div>
+            <div class="part1-doc-body ip-body" data-doc-body>${buildDocumentBody()}</div>
           </div>
         </div>
       </aside>
@@ -205,11 +305,24 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const linksSvg = replica.querySelector('[data-chart-links]');
   const nodePanel = replica.querySelector('[data-nodepanel]');
   const docBody = replica.querySelector('[data-doc-body]');
+  const docSummaryEl = replica.querySelector('[data-doc-summary]');
+  const docDivisionsEl = replica.querySelector('[data-doc-divisions]');
   const docScroll = replica.querySelector('[data-doc-scroll]');
   const filterDock = replica.querySelector('[data-filterdock]');
+  const filterTrigger = replica.querySelector('[data-filter-toggle]');
+  const filterPopover = replica.querySelector('[data-filter-popover]');
+  const filterChipbar = replica.querySelector('[data-filter-chipbar]');
+  const viewToggle = replica.querySelector('[data-view-toggle]');
+  const viewPopover = replica.querySelector('[data-view-popover]');
+  const summaryToggle = replica.querySelector('[data-view-summary]');
+  const divisionsToggle = replica.querySelector('[data-view-divisions]');
   const aiBody = replica.querySelector('[data-ai-body]');
+  const eventLineBody = replica.querySelector('[data-eventline-body]');
   const progress = replica.querySelector('[data-part1-progress]');
   let renderedEventItems = [];
+  let activeFilter = 'all';
+  let showSummary = false;
+  let showDivisions = false;
 
   const setProgress = (message) => { if (progress) progress.textContent = message; };
 
@@ -219,34 +332,120 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const match = String(value || '').match(/^(\d{4})\/(\d{2})\/(\d{2})$/);
     return match ? Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : 0;
   };
-  const chartStart = parseDate('1786/12/11');
-  const chartEnd = parseDate('1787/01/02');
+  const chartPreview = data.chartPreview || {};
+  const chartStart = parseDate(chartPreview.startAr || '1786/11/01');
+  const chartEnd = parseDate(chartPreview.endAr || '1787/02/01');
+  const chartLaneRatios = Object.freeze({
+    events: 0.38,
+    official: 0.46,
+    imperial: 0.54,
+    emperor: 0.66
+  });
+  const chartPlot = () => {
+    const width = lanesEl.clientWidth || 0;
+    const left = Math.min(68, Math.max(48, width * 0.12));
+    const right = Math.min(11, Math.max(8, width * 0.03));
+    return { width, left, right, inner: Math.max(1, width - left - right) };
+  };
+  const chartLaneX = (lane, width = lanesEl.clientWidth) => {
+    const plot = chartPlot();
+    const ratio = chartLaneRatios[lane] ?? 0.5;
+    return plot.left + plot.inner * ratio;
+  };
+  const chartLanePercent = (lane) => {
+    const plot = chartPlot();
+    return plot.width ? (chartLaneX(lane, plot.width) / plot.width) * 100 : 50;
+  };
   const datePosition = (dateAr) => {
     const span = chartEnd - chartStart || 1;
-    return Math.max(5, Math.min(95, ((parseDate(dateAr) - chartStart) / span) * 100));
+    return Math.max(1, Math.min(99, ((parseDate(dateAr) - chartStart) / span) * 100));
+  };
+
+  const eventOffsetLabel = (dateAr) => {
+    const start = parseDate(doc.sendDate[1]);
+    const date = parseDate(dateAr);
+    if (!start || !date) return '';
+    const days = Math.round((date - start) / 86400000);
+    if (days === 0) return '同日';
+    return `${Math.abs(days)}日${days < 0 ? '前' : '後'}`;
+  };
+
+  const eventLineCard = ({ title, meta, color, description, quote, selected = false }) => `
+    <article class="part1-eventline-card${selected ? ' is-selected' : ''}" style="--eventline-color:${color}">
+      <div class="part1-eventline-card-row">
+        <span class="part1-eventline-dot" aria-hidden="true"></span>
+        <div class="part1-eventline-main">
+          <strong>${escapeHtml(title)}</strong>
+          <div class="part1-eventline-meta">${escapeHtml(meta)}</div>
+        </div>
+        <span class="part1-eventline-caret" aria-hidden="true">▾</span>
+      </div>
+      <div class="part1-eventline-detail">
+        ${description ? `<p>${escapeHtml(description)}</p>` : ''}
+        ${quote ? `<blockquote>「${escapeHtml(quote)}」</blockquote>` : ''}
+      </div>
+    </article>`;
+
+  const renderEventLine = () => {
+    if (!eventLineBody) return;
+    const officialMeta = `${authorLine}　${doc.sendDate[1]}`;
+    const eventItems = [data.dots.events, ...data.aiCandidates];
+    const actorLabel = (item) => item.actor === 'lin' ? '林方行動' : '清方行動';
+    const actorColor = (item) => item.actor === 'lin' ? '#c4482f' : '#3f789c';
+    const eventCards = eventItems.map((item) => eventLineCard({
+      title: item.subtitle,
+      meta: `${actorLabel(item)}　${item.dateAr}（${eventOffsetLabel(item.dateAr)}）`,
+      color: actorColor(item),
+      description: item.description,
+      quote: item.quote
+    })).join('');
+    const emperor = data.dots.emperor;
+    eventLineBody.innerHTML = `
+      <div class="part1-eventline-seclabel">官方文書・硃批</div>
+      ${eventLineCard({
+        title: doc.title,
+        meta: officialMeta,
+        color: '#c46a2b',
+        description: docSummary,
+        quote: doc.rescriptText,
+        selected: true
+      })}
+      <div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>報告之事件</strong></div>
+      ${eventCards}
+      <div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>皇帝批覆與行動</strong></div>
+      ${eventLineCard({
+        title: emperor.subtitle,
+        meta: `相關上諭　${emperor.dateAr}（${eventOffsetLabel(emperor.dateAr)}）`,
+        color: '#7d4ab8',
+        description: emperor.description,
+        quote: emperor.quote
+      })}`;
+    eventLineBody.querySelectorAll('.part1-eventline-card').forEach((card) => {
+      card.addEventListener('click', () => {
+        const open = card.classList.toggle('is-open');
+        card.querySelector('.part1-eventline-caret').textContent = open ? '▴' : '▾';
+      });
+    });
   };
 
   const addDot = ({ lane, actor, dot, label, isNew }) => {
-    const laneEl = lanesEl.querySelector(`[data-lane="${lane}"]`);
-    const track = laneEl?.querySelector('.part1-lane-track');
-    if (!track) return null;
     const button = document.createElement('button');
     button.type = 'button';
     button.className = `part1-dot${isNew ? ' is-new' : ''}`;
     button.dataset.actor = actor;
     button.style.top = `${datePosition(dot.dateAr)}%`;
-    button.style.left = '50%';
+    button.style.left = `${chartLanePercent(lane)}%`;
     button.setAttribute('aria-label', `${dot.subtitle || dot.title}（${label}）`);
     button.title = `${dot.subtitle || dot.title}`;
     button._part1 = { dot, lane, label };
-    track.appendChild(button);
+    lanesEl.appendChild(button);
 
     const date = document.createElement('span');
     date.className = 'part1-dot-date';
     date.style.top = `${datePosition(dot.dateAr)}%`;
-    date.style.left = '50%';
+    date.style.left = `${chartLanePercent(lane)}%`;
     date.textContent = label;
-    track.appendChild(date);
+    lanesEl.appendChild(date);
 
     button.addEventListener('click', () => selectDot(button));
     return button;
@@ -260,62 +459,111 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     linksSvg.setAttribute('viewBox', `0 0 ${width} ${height}`);
     linksSvg.innerHTML = '';
 
-    /* The sample tool's chart is intentionally dense: the many faint
-       candidate lines provide the network context behind the selected
-       document. This is presentation texture, not additional historical
-       data; the four source-backed dots and their links are added below. */
-    const plotLeft = 68;
-    const plotWidth = Math.max(80, width - plotLeft - 11);
-    for (let i = 0; i < 112; i += 1) {
-      const fromLane = i % 4;
-      const toLane = (i * 3 + 1) % 4;
-      const y1 = 18 + ((i * 47) % Math.max(30, height - 28));
-      const y2 = 26 + ((i * 83 + 31) % Math.max(30, height - 34));
-      const x1 = plotLeft + ((fromLane + .5) / 4) * plotWidth;
-      const x2 = plotLeft + ((toLane + .5) / 4) * plotWidth;
-      const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-      line.setAttribute('class', 'part1-network-line');
-      line.setAttribute('x1', String(Math.round(x1)));
-      line.setAttribute('y1', String(Math.round(y1)));
-      line.setAttribute('x2', String(Math.round(x2)));
-      line.setAttribute('y2', String(Math.round(y2)));
-      linksSvg.appendChild(line);
-      if (i % 2 === 0) {
-        const dot = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-        dot.setAttribute('class', 'part1-network-dot');
-        dot.setAttribute('cx', String(Math.round(x1)));
-        dot.setAttribute('cy', String(Math.round(y1)));
-        dot.setAttribute('r', '2');
-        linksSvg.appendChild(dot);
+    const NS = 'http://www.w3.org/2000/svg';
+    const plot = chartPlot();
+    const daySpan = chartEnd - chartStart || 1;
+    const yFor = (dateAr) => {
+      const date = parseDate(dateAr);
+      return Math.max(4, Math.min(height - 4, ((date - chartStart) / daySpan) * height));
+    };
+    const xFor = (lane, offset = 0) => chartLaneX(lane, width) + offset;
+    const makeSvg = (tag, attributes, className) => {
+      const element = document.createElementNS(NS, tag);
+      if (className) element.setAttribute('class', className);
+      Object.entries(attributes).forEach(([key, value]) => element.setAttribute(key, String(value)));
+      linksSvg.appendChild(element);
+      return element;
+    };
+    const laneColors = {
+      lin: '#b5462e', qing: '#3f6f8f', emperor: '#7a5c9e',
+      zhupi: '#c46a2b', shangyu: '#7d4ab8'
+    };
+    const gap = Math.max(4, Math.min(9, plot.inner * (12 / 1080)));
+    const eventSize = Math.max(5, Math.min(9, plot.inner * (9.2 / 1080)));
+    const docRadius = Math.max(3, Math.min(5.5, plot.inner * (4.6 / 1080)));
+    const docPoints = new Map();
+    const docBuckets = new Map();
+    const pointKey = (id, side) => `${id}|${side}`;
+    const placeDoc = (doc, side, dateAr) => {
+      if (!dateAr) return null;
+      const bucketKey = `${side}|${dateAr}`;
+      const index = docBuckets.get(bucketKey) || 0;
+      docBuckets.set(bucketKey, index + 1);
+      const offset = side === 'L' ? -index * gap : index * gap;
+      const point = { x: xFor(side === 'L' ? 'official' : 'imperial', offset), y: yFor(dateAr) };
+      docPoints.set(pointKey(doc.id, side), point);
+      makeSvg('circle', {
+        cx: point.x.toFixed(1), cy: point.y.toFixed(1), r: docRadius.toFixed(1), fill: laneColors[doc.type]
+      }, 'part1-preview-doc');
+      return point;
+    };
+
+    // Four fixed vertical axes and the same light month/day grid rhythm as the sample.
+    ['events', 'official', 'imperial', 'emperor'].forEach((lane) => {
+      const x = xFor(lane);
+      makeSvg('line', { x1: x.toFixed(1), y1: 0, x2: x.toFixed(1), y2: height }, 'part1-preview-axis');
+    });
+    const gridDate = new Date(chartStart);
+    for (let i = 0; i < 130 && gridDate.getTime() <= chartEnd; i += 1) {
+      const day = gridDate.getUTCDate();
+      if (day === 1 || day === 11 || day === 21) {
+        const dateAr = `${gridDate.getUTCFullYear()}/${String(gridDate.getUTCMonth() + 1).padStart(2, '0')}/${String(day).padStart(2, '0')}`;
+        const y = yFor(dateAr);
+        makeSvg('line', { x1: plot.left, y1: y.toFixed(1), x2: width - plot.right, y2: y.toFixed(1) }, day === 1 ? 'part1-preview-month-grid' : 'part1-preview-grid');
       }
+      gridDate.setUTCDate(gridDate.getUTCDate() + 1);
     }
-    const rootRect = lanesEl.getBoundingClientRect();
-    const dots = [...lanesEl.querySelectorAll('.part1-dot')];
-    const byLane = new Map();
-    dots.forEach((el) => {
-      const key = el._part1.lane;
-      byLane.set(key, [...(byLane.get(key) || []), el]);
+
+    (chartPreview.documents || []).forEach((doc) => {
+      placeDoc(doc, 'L', doc.type === 'zhupi' ? doc.sendAr : null);
+      placeDoc(doc, 'R', doc.type === 'zhupi' ? doc.receiveAr : doc.announceAr);
     });
 
-    /* 依「戰場事件 → 官員上奏 → 皇帝硃批下旨 → 皇帝行動」的順序連線，
-       呈現同一份文書所串起的資訊傳遞。 */
-    const order = data.lanes.map((lane) => lane.key);
-    for (let i = 0; i < order.length - 1; i += 1) {
-      const from = byLane.get(order[i]);
-      const to = byLane.get(order[i + 1]);
-      if (!from || !to) continue;
-      from.forEach((a) => to.forEach((b) => {
-        const ra = a.getBoundingClientRect();
-        const rb = b.getBoundingClientRect();
-        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-        line.setAttribute('class', 'part1-chart-link');
-        line.setAttribute('x1', String(Math.round(ra.left + ra.width / 2 - rootRect.left)));
-        line.setAttribute('y1', String(Math.round(ra.top + ra.height / 2 - rootRect.top)));
-        line.setAttribute('x2', String(Math.round(rb.left + rb.width / 2 - rootRect.left)));
-        line.setAttribute('y2', String(Math.round(rb.top + rb.height / 2 - rootRect.top)));
-        linksSvg.appendChild(line);
-      }));
-    }
+    const eventsByDate = new Map();
+    const eventPoints = new Map();
+    (chartPreview.events || []).forEach((event) => {
+      const lane = event.actor === 'emperor' ? 'emperor' : 'events';
+      const key = `${lane}|${event.dateAr}`;
+      const index = eventsByDate.get(key) || 0;
+      eventsByDate.set(key, index + 1);
+      const offset = lane === 'events' ? -index * gap : index * gap;
+      const point = { x: xFor(lane, offset), y: yFor(event.dateAr) };
+      eventPoints.set(String(event.id), point);
+      makeSvg('rect', {
+        x: (point.x - eventSize / 2).toFixed(1), y: (point.y - eventSize / 2).toFixed(1),
+        width: eventSize.toFixed(1), height: eventSize.toFixed(1), rx: 1.5,
+        fill: laneColors[event.actor] || laneColors.qing
+      }, 'part1-preview-event');
+    });
+
+    // Source-backed relationships: event → document and 硃批 send → receive.
+    const lineSpecs = [];
+    (chartPreview.documents || []).forEach((doc) => {
+      const from = docPoints.get(pointKey(doc.id, 'L'));
+      const to = docPoints.get(pointKey(doc.id, 'R'));
+      if (from && to) lineSpecs.push([from, to, 'part1-preview-doc-link']);
+    });
+    (chartPreview.events || []).forEach((event) => {
+      const from = eventPoints.get(String(event.id));
+      if (!from) return;
+      const side = event.actor === 'emperor' ? 'R' : 'L';
+      (event.sourceIds || []).forEach((docId) => {
+        const to = docPoints.get(pointKey(docId, side)) || docPoints.get(pointKey(docId, side === 'L' ? 'R' : 'L'));
+        if (to) lineSpecs.push([from, to, event.actor === 'emperor' ? 'part1-preview-emperor-link' : 'part1-preview-event-link']);
+      });
+    });
+    lineSpecs.forEach(([from, to, className]) => makeSvg('line', {
+      x1: from.x.toFixed(1), y1: from.y.toFixed(1), x2: to.x.toFixed(1), y2: to.y.toFixed(1)
+    }, className));
+
+    // Re-append markers after lines so the dense network never covers them.
+    [...linksSvg.querySelectorAll('.part1-preview-event, .part1-preview-doc')].forEach((marker) => linksSvg.appendChild(marker));
+
+    const heads = replica.querySelectorAll('.part1-lane-heads span');
+    heads.forEach((head, index) => {
+      const lane = data.lanes[index]?.key;
+      if (lane) head.style.left = `${(chartLaneX(lane, width) / width) * 100}%`;
+    });
   };
 
   /* -------------------------------------------------------- 節點資訊區 */
@@ -369,7 +617,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       setProgress(`此引文出自 ${quoteDocId}，不在目前開啟的 ${doc.docId} 原文之內。在真正的工具中，平台會另外開啟 ${quoteDocId} 的文書面板。`);
       return;
     }
-    const marks = [...docBody.querySelectorAll('mark')];
+    const marks = [...replica.querySelectorAll('.part1-doc mark')];
     const target = marks.find((mark) => mark.textContent === quote);
     marks.forEach((mark) => mark.classList.remove('is-located'));
     if (!target) {
@@ -386,46 +634,79 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   /* ------------------------------------------------------ 原始史料篩選 */
 
-  const skills = [...new Set([
-    data.dots.events.aiFilterLabel,
-    ...data.aiCandidates.map((item) => item.aiFilterLabel)
-  ].filter(Boolean))];
+  const filterChoices = [
+    { key: 'all', label: '全部', count: '', color: '' },
+    { key: '林方行動', label: '林方行動', count: '1', color: '#e3a09a' },
+    { key: '清軍事：已執行', label: '清軍事：待執行', count: '2', color: '#9ebbd4' },
+    { key: 'source-chain', label: '來源鏈', count: '4', color: '#d2b98d' }
+  ];
 
-  skills.forEach((skill) => {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'part1-filterbtn';
-    button.dataset.filter = skill;
-    button.textContent = skill;
-    filterDock.appendChild(button);
-  });
+  const renderFilterChips = () => {
+    if (!filterChipbar) return;
+    filterChipbar.innerHTML = filterChoices.map((choice) => `
+      <button class="part1-filter-chip${activeFilter === choice.key ? ' is-on' : ''}" type="button" data-filter-chip="${escapeHtml(choice.key)}">
+        ${choice.color ? `<span class="part1-filter-chip-dot" style="background:${choice.color}"></span>` : ''}
+        <span>${escapeHtml(choice.label)}</span>${choice.count ? `<b>${escapeHtml(choice.count)}</b>` : ''}
+      </button>
+    `).join('');
+  };
+
+  const renderDocView = () => {
+    if (docSummaryEl) docSummaryEl.hidden = !showSummary;
+    if (docDivisionsEl) docDivisionsEl.hidden = !showDivisions;
+    if (docBody) docBody.hidden = showDivisions;
+    if (summaryToggle) summaryToggle.checked = showSummary;
+    if (divisionsToggle) divisionsToggle.checked = showDivisions;
+  };
 
   const applyFilter = (value) => {
-    filterDock.querySelectorAll('.part1-filterbtn').forEach((button) => {
-      button.classList.toggle('is-on', button.dataset.filter === value);
-    });
-    docBody.querySelectorAll('mark').forEach((mark) => {
-      mark.classList.toggle('is-shown', value === 'all' || mark.dataset.skill === value);
+    activeFilter = value;
+    renderFilterChips();
+    replica.querySelectorAll('.part1-doc mark').forEach((mark) => {
+      const show = value === 'all'
+        || mark.dataset.skill === value
+        || (value === 'source-chain' && mark.dataset.sourceChain === 'true');
+      mark.classList.toggle('is-shown', show);
       mark.classList.remove('is-located');
     });
     setProgress(value === 'all'
       ? '已標示全部 AI Skills 的提取範圍。每個顏色代表一項 Skill。'
-      : `已標示「${value}」這項 AI Skill 在原文中的提取範圍。`);
+      : `已標示「${filterChoices.find((choice) => choice.key === value)?.label || value}」在原文中的提取範圍。`);
   };
 
-  filterDock.addEventListener('click', (event) => {
-    const button = event.target.closest('.part1-filterbtn');
+  filterTrigger?.addEventListener('click', () => {
+    const open = Boolean(filterPopover?.hidden);
+    if (filterPopover) filterPopover.hidden = !open;
+    filterTrigger.setAttribute('aria-expanded', String(open));
+    filterTrigger.classList.toggle('is-open', open);
+    if (open) renderFilterChips();
+  });
+
+  filterChipbar?.addEventListener('click', (event) => {
+    const button = event.target.closest('[data-filter-chip]');
     if (!button) return;
-    const isOn = button.classList.contains('is-on');
-    if (isOn) {
-      filterDock.querySelectorAll('.part1-filterbtn').forEach((item) => item.classList.remove('is-on'));
-      docBody.querySelectorAll('mark').forEach((mark) => mark.classList.remove('is-shown'));
-      setProgress('已關閉標示。');
-      return;
-    }
-    applyFilter(button.dataset.filter);
+    applyFilter(button.dataset.filterChip);
     setRegion('doc', { silent: true });
   });
+
+  viewToggle?.addEventListener('click', () => {
+    const open = Boolean(viewPopover?.hidden);
+    if (viewPopover) viewPopover.hidden = !open;
+    viewToggle.setAttribute('aria-expanded', String(open));
+    viewToggle.classList.toggle('is-open', open);
+  });
+
+  summaryToggle?.addEventListener('change', () => {
+    showSummary = summaryToggle.checked;
+    renderDocView();
+  });
+  divisionsToggle?.addEventListener('change', () => {
+    showDivisions = divisionsToggle.checked;
+    renderDocView();
+  });
+
+  renderFilterChips();
+  renderDocView();
 
   /* ---------------------------------------------------------- AI 分析區 */
 
@@ -439,7 +720,103 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     '<span class="part1-term-dim">請在網站按「輸入資料」上載此審閱包。</span>'
   ];
 
+  const AI_TOC_ROWS = [
+    ['擷取林方行動（3）', '2026-07-25 05:38', 'zhu-december-rerun-g36'],
+    ['擷取清方行動（7）', '2026-07-25 05:38', 'zhu-december-rerun-g36']
+  ];
+
+  const AI_ACTION_GROUPS = [
+    ['官文優先審閱迴圈', '回應的先前上諭', '回應的先前上諭（無引文）', '上諭回應的奏折', '回應的先前硃批'],
+    ['摘要', '分段'],
+    ['林方事件', '林方來源', '全文來源鏈'],
+    ['清方行動（三類合一）'],
+    ['硃批', '上諭', '皇帝行動（奏／諭）', '硃批／上諭來源', '回應時效', '官員回應'],
+    ['整合重複事件', '逐日／期間摘要'],
+    ['管理提示']
+  ];
+
+  const aiPopovers = [...replica.querySelectorAll('[data-ai-popover]')];
+  aiPopovers.forEach((popover) => document.body.appendChild(popover));
+  const getAiPopover = (name) => aiPopovers.find((popover) => popover.dataset.aiPopover === name);
+
+  const closeAiPopovers = () => {
+    aiPopovers.forEach((popover) => {
+      popover.hidden = true;
+      popover.classList.remove('is-viewport');
+      ['top', 'right', 'bottom', 'left', 'width', 'max-height'].forEach((property) => popover.style.removeProperty(property));
+    });
+    replica.querySelectorAll('[data-ai-pop]').forEach((button) => {
+      button.setAttribute('aria-expanded', 'false');
+      button.classList.remove('is-open');
+    });
+  };
+
+  const renderAiToc = () => {
+    const popover = getAiPopover('toc');
+    if (!popover) return;
+    popover.innerHTML = AI_TOC_ROWS.map(([title, time, bundle]) => `
+      <button class="part1-ai-toc-item" type="button" data-ai-menu-item>
+        <span class="part1-ai-toc-title">${escapeHtml(title)}</span>
+        <span class="part1-ai-toc-meta">${escapeHtml(time)}</span>
+        <span class="part1-ai-toc-meta">${escapeHtml(bundle)}</span>
+      </button>`).join('');
+    popover.querySelectorAll('[data-ai-menu-item]').forEach((item) => item.addEventListener('click', closeAiPopovers));
+  };
+
+  const renderAiActions = () => {
+    const popover = getAiPopover('act');
+    if (!popover) return;
+    popover.innerHTML = AI_ACTION_GROUPS.map((group, groupIndex) => `
+      ${groupIndex ? '<div class="part1-ai-menu-divider" role="separator"></div>' : ''}
+      ${group.map((label) => `<button class="part1-ai-menu-item" type="button" data-ai-menu-item${label === '林方事件' || label === '清方行動（三類合一）' ? ' data-ai-action="load-cards"' : ''}>${escapeHtml(label)}</button>`).join('')}
+    `).join('');
+    popover.querySelectorAll('[data-ai-menu-item]').forEach((item) => item.addEventListener('click', () => {
+      if (item.dataset.aiAction === 'load-cards') renderCandidates();
+      closeAiPopovers();
+    }));
+  };
+
+  const toggleAiPopover = (name) => {
+    const popover = getAiPopover(name);
+    if (!popover) return;
+    const wasOpen = !popover.hidden;
+    closeAiPopovers();
+    if (wasOpen) return;
+    if (name === 'toc') renderAiToc();
+    if (name === 'act') renderAiActions();
+    popover.hidden = false;
+    const trigger = replica.querySelector(`[data-ai-pop="${name}"]`);
+    trigger?.setAttribute('aria-expanded', 'true');
+    trigger?.classList.add('is-open');
+
+    const panel = replica.querySelector('.part1-ai')?.getBoundingClientRect();
+    const triggerRect = trigger?.getBoundingClientRect();
+    if (!panel || !triggerRect) return;
+    popover.classList.add('is-viewport');
+    popover.style.setProperty('left', `${Math.max(8, panel.left + 1)}px`, 'important');
+    popover.style.setProperty('right', 'auto', 'important');
+    popover.style.setProperty('bottom', 'auto', 'important');
+    popover.style.setProperty('width', `${Math.max(160, panel.width - 2)}px`, 'important');
+    popover.style.setProperty('max-height', 'calc(100vh - 16px)', 'important');
+    const popoverHeight = popover.getBoundingClientRect().height;
+    const targetTop = name === 'toc'
+      ? triggerRect.bottom + 4
+      : (replica.querySelector('.part1-linked-foot')?.getBoundingClientRect().top || triggerRect.top) - popoverHeight - 6;
+    const top = Math.max(8, Math.min(targetTop, window.innerHeight - popoverHeight - 8));
+    popover.style.setProperty('top', `${top}px`, 'important');
+  };
+
+  getAiPopover('cfg')?.querySelector('[data-ai-key-toggle]')?.addEventListener('click', (event) => {
+    const keyToggle = event.currentTarget;
+    const keyInput = keyToggle.parentElement?.querySelector('input');
+    if (!keyInput) return;
+    const visible = keyInput.type === 'text';
+    keyInput.type = visible ? 'password' : 'text';
+    keyToggle.setAttribute('aria-label', visible ? '顯示或隱藏 API key' : '隱藏 API key');
+  });
+
   const renderAiIdle = () => {
+    closeAiPopovers();
     aiBody.innerHTML = `
       <div class="part1-linked-source">據奏來源（上諭前 0 日收到）</div>
       <div class="part1-linked-doc">
@@ -452,10 +829,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const foot = replica.querySelector('.part1-linked-foot');
     if (foot) foot.innerHTML = `
       <button type="button">請點選文書</button>
-      <button type="button" data-load-cards>功能⌄</button>
-      <button class="part1-chat-settings" type="button" aria-label="AI 設定"><span aria-hidden="true">${PART1_CHAT_ICONS.gear}</span></button>
+      <button type="button" data-ai-pop="act" aria-expanded="false">功能⌄</button>
+      <button class="part1-chat-settings" type="button" data-ai-pop="cfg" aria-expanded="false" aria-label="AI 設定"><span aria-hidden="true">${PART1_CHAT_ICONS.gear}</span></button>
     `;
-    foot?.querySelector('[data-load-cards]')?.addEventListener('click', renderCandidates);
   };
 
   let terminalTimer = 0;
@@ -638,14 +1014,15 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   /* ---------------------------------------------------------- 區域切換 */
 
   const REGION_LABEL = {
-    nav: '導覽列', chart: '時間與關係圖表', doc: '原始史料區', ai: 'AI 分析區'
+    nav: '導覽列', chart: '時間與關係圖表', doc: '原始史料區', ai: 'AI 分析區', eventline: '事件鏈'
   };
 
   const REGION_HINT = {
     nav: '導覽列負責輸入與輸出資料，以及切換介面區域。兩個標籤分別指向這兩組控制項。',
     chart: '圖表由四條線組成。點擊任何一個圓點，查看該文書或事件的節點資訊區。',
     doc: '原始史料區顯示文書的基本資料與完整原文。點擊上方的 AI Skill 標籤，標示該項結果在原文中的位置。',
-    ai: '研究者在本機執行 AI Skills，再把結果上載平台逐項核對。跟著步驟試一次完整流程。'
+    ai: '研究者在本機執行 AI Skills，再把結果上載平台逐項核對。跟著步驟試一次完整流程。',
+    eventline: '從選取的文書或事件，沿著報告、批覆與回應順序查看整條事件鏈。'
   };
 
   let activeRegion = '';
@@ -653,6 +1030,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   function setRegion(region, options = {}) {
     activeRegion = region;
     replica.dataset.activeRegion = region;
+    replica.dataset.eventlineOpen = region === 'eventline' ? 'true' : 'false';
+    if (region === 'eventline') renderEventLine();
     replica.querySelectorAll('.part1-region').forEach((element) => {
       element.classList.toggle('is-active', element.dataset.region === region);
     });
@@ -686,15 +1065,50 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   replica.querySelectorAll('[data-region-trigger]').forEach((button) => {
     button.addEventListener('click', () => setRegion(button.dataset.regionTrigger));
   });
+  replica.querySelector('[data-eventline-close]')?.addEventListener('click', () => setRegion('chart'));
+  toolsPop?.querySelectorAll('[data-tool-range]').forEach((input) => {
+    input.addEventListener('input', () => {
+      const output = input.parentElement?.querySelector('output');
+      if (!output) return;
+      const value = Number(input.value);
+      if (input.getAttribute('aria-label')?.includes('透明度')) output.textContent = `${Math.round(value * 100)}%`;
+      else if (input.getAttribute('aria-label')?.includes('大小') || input.getAttribute('aria-label')?.includes('四線')) output.textContent = `${value}×`;
+      else output.textContent = `${value} px`;
+    });
+  });
   replica.querySelectorAll('[data-tools-pop] button').forEach((button) => {
     button.addEventListener('click', () => {
       toolsPop.hidden = true;
       replica.querySelector('[data-toolgroup="io"]')?.classList.add('is-pointed');
+      button.classList.add('is-pointed');
       setProgress(`「${button.textContent.trim()}」是導覽列工具中的資料操作示範。`);
     });
   });
 
   replica.addEventListener('click', (event) => {
+    const keyToggle = event.target.closest('[data-ai-key-toggle]');
+    if (keyToggle) {
+      const keyInput = keyToggle.parentElement?.querySelector('input');
+      if (keyInput) {
+        const visible = keyInput.type === 'text';
+        keyInput.type = visible ? 'password' : 'text';
+        keyToggle.setAttribute('aria-label', visible ? '顯示或隱藏 API key' : '隱藏 API key');
+      }
+      return;
+    }
+    const aiTrigger = event.target.closest('[data-ai-pop]');
+    if (aiTrigger) {
+      event.stopPropagation();
+      toggleAiPopover(aiTrigger.dataset.aiPop);
+      return;
+    }
+    const aiMenuItem = event.target.closest('[data-ai-menu-item]');
+    if (aiMenuItem) {
+      if (aiMenuItem.dataset.aiAction === 'load-cards') renderCandidates();
+      closeAiPopovers();
+      return;
+    }
+    if (!event.target.closest('[data-ai-popover]')) closeAiPopovers();
     if (!event.target.closest('[data-type-toggle]') && !event.target.closest('[data-type-pop]')
       && !event.target.closest('[data-tool-toggle]') && !event.target.closest('[data-tools-pop]')) {
       if (typePop) typePop.hidden = true;
@@ -713,10 +1127,20 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     lanesEl.querySelectorAll('.part1-dot, .part1-dot-date').forEach((element) => element.remove());
     laneDots.forEach(addDot);
     nodePanel.hidden = true;
-    docBody.querySelectorAll('mark').forEach((mark) => {
+    replica.querySelectorAll('.part1-doc mark').forEach((mark) => {
       mark.classList.remove('is-shown', 'is-located');
     });
-    filterDock.querySelectorAll('.part1-filterbtn').forEach((button) => button.classList.remove('is-on'));
+    activeFilter = 'all';
+    showSummary = false;
+    showDivisions = false;
+    if (filterPopover) filterPopover.hidden = true;
+    if (viewPopover) viewPopover.hidden = true;
+    filterTrigger?.classList.remove('is-open');
+    viewToggle?.classList.remove('is-open');
+    filterTrigger?.setAttribute('aria-expanded', 'false');
+    viewToggle?.setAttribute('aria-expanded', 'false');
+    renderFilterChips();
+    renderDocView();
     replica.querySelectorAll('.part1-callout').forEach((callout) => { callout.hidden = true; });
     renderAiIdle();
     drawLinks();

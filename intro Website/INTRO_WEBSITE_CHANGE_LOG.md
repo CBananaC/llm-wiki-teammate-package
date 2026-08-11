@@ -7752,3 +7752,50 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 1, sample-data, and StoryMap edits were preserved; nothing was pushed.
+
+### 2026-08-11 18:51 HKT — Codex — Match the replica tools menu and event-chain panel to the sample
+
+Summary:
+- Replaced the replica's compact gear popover with the sample-style settings menu containing 資料, 字級, 連線, and 時間軸 sections, including the 匯入 control, exact 介面字級／正文 labels, and live slider readouts.
+- Changed the replica's 事件鏈 shortcut from a chart highlight to a full-width scrollable event-chain panel with source, reported-event, and imperial-action cards, collapsible details, arrows, and matching controls.
+- Bumped the shared Part 1 asset query version so both the standalone replica and StoryMap load this adjustment.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Inspected the live `/sample` toolbar menu and populated 事件鏈 panel in the in-app browser as the visual reference.
+- `node --check "intro Website/Website/storymap/part-1-interface.js"` passed.
+- `git diff --check` passed.
+- Source checks confirmed the full settings sections, event-chain trigger/body, and cache-busted assets are present.
+- The replica itself could not be loaded in the current browser session because the requested `file://` page and the separate local 8765 navigation were blocked by browser URL policy; no replica visual pass is claimed.
+
+Remaining:
+- Open the replica once in a browser that permits the local page and visually confirm the two states at the target viewport.
+- Existing concurrent Part 1, StoryMap, sample-data, and project-log edits were preserved; nothing was pushed.
+
+### 2026-08-11 18:52 HKT — Codex — Matched AI chat overlays in the platform replica
+
+Summary:
+- Added the replica's conversation menu with the two supplied review-run entries and metadata.
+- Added the sample-style 功能 menu with grouped actions and separators.
+- Added the AI settings overlay with provider, model, API Base, API Key, memory, proxy URL, and a working key-visibility control.
+- Positioned all three overlays at the viewport level so the 功能 list is not clipped by the dock.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+
+Verified:
+- Compared against `http://127.0.0.1:8766/sample` in the in-app browser.
+- Opened and visually checked the conversation menu, 功能 menu, and 設定 overlay in the local HTTP replica preview.
+- Confirmed the settings eye control changes the API key input type and the 林方事件 action still loads three candidate cards.
+- `node --check` and `git diff --check` passed; the replica browser console reported no warnings or errors.
+
+Remaining:
+- The browser session did not provide a separate narrow viewport override for an additional 516px visual pass; no deployment or push was performed.
