@@ -416,8 +416,22 @@ const initResponsiveSequentialRows = () => {
         if (isFixedSourceRow(panel) || panel.classList.contains('is-scroll-open')) return;
         const rect = card.getBoundingClientRect();
         if (rect.top <= triggerLine) {
+          /* 展開高度改成量出來的實際高度，而不是沿用固定的面板高度變數。
+             面板在手機版已改為內容決定高度（圖片區依原圖比例收合留白），
+             若還用固定值當 max-height，內容較高時會被裁掉、較矮時則會有
+             一大段「空跑」的緩動，看起來像卡住。先暫時解除限制量測，
+             量完立刻還原，量測發生在同一個 frame 內，不會閃動。 */
+          const prevMax = panel.style.maxHeight;
+          panel.style.maxHeight = 'none';
+          const natural = panel.scrollHeight;
+          panel.style.maxHeight = prevMax;
+          if (natural) panel.style.setProperty('--panel-open-h', `${Math.ceil(natural)}px`);
           card.classList.add('is-scroll-open');
           panel.classList.add('is-scroll-open');
+          /* 動畫結束後解除 max-height 上限（改用 .is-scroll-done）。
+             否則之後圖片載入完成、字體換行改變等讓內容長高時，
+             會被當初量到的高度硬生生裁掉。 */
+          window.setTimeout(() => panel.classList.add('is-scroll-done'), 820);
         }
       });
     };
@@ -429,6 +443,8 @@ const initResponsiveSequentialRows = () => {
       rows.forEach(({ card, panel }) => {
         card.classList.remove('is-scroll-open');
         panel.classList.remove('is-scroll-open');
+        panel.classList.remove('is-scroll-done');
+        panel.style.removeProperty('--panel-open-h');
       });
       if (responsiveQuery.matches) requestRowUpdate();
     };
@@ -448,6 +464,145 @@ const initResponsiveSequentialRows = () => {
   });
 };
 initResponsiveSequentialRows();
+
+/* 手機／窄螢幕：卡片與文字捲進畫面時播放出場效果，讓一張接一張的版面
+   不會顯得呆板。套用範圍有兩個分頁，且效果種類不同：
+     #intro-content   引言 —— 文字、卡片、視覺元素、硃113／硃119面板全套
+     #part-3-content  運用平台研究其他問題 —— 只有文字與卡片（原因見 PART3_GROUPS）
+   只在窄版套用；桌面版雖然也會被掛上 class，但相關樣式全寫在手機版的
+   媒體查詢裡，桌面版看不出任何差別。
+   使用者若在系統開啟「減少動態效果」，CSS 會直接讓元素維持最終狀態
+   （見 storymap.css 對應的 prefers-reduced-motion 規則）。 */
+const initIntroMobileReveal = () => {
+  const responsiveQuery = window.matchMedia('(pointer: coarse) and (hover: none), (max-width: 1040px)');
+  if (typeof IntersectionObserver !== 'function') return;
+
+  /* 依「元素種類」給不同的出場方式，而不是全部用同一種淡入：
+       heading  節標題／編號列   —— 由左側滑入
+       text     卡片外的說明文字 —— 由下方升起
+       card     文字卡           —— 由上緣往下拉開簾子，露出裡面的字
+       inner    區塊內的段落     —— 由下方依序升起（延遲交給 --reveal-i）
+       visual   圖片＋說明面板   —— 放大浮現
+       source   硃113／硃119面板 —— 文件本體由上往下拉開
+     每一類的實際動畫寫在 storymap.css 的「13 ·」區塊。 */
+  const INTRO_GROUPS = [
+    ['card',    '.copybox, .acc-card, .story-card'],
+    /* .acc-panels 也帶著 .visual-frame，但它在手機版是 display:contents——
+       根本不產生方框，套 opacity／transform 完全無效，卻會因為「祖先已在名單」
+       而把裡面真正該動的畫廊與硃113／硃119面板全部擋掉。同理排除
+       .acc-visual／.acc-track 這兩個純版面外框。 */
+    ['visual',  '.photo-gallery, .gif-annotated, .visual-frame:not(.acc-panels):not(.acc-visual):not(.acc-track), .visual-frame-tall:not(.acc-panels), .visual-frame-wide:not(.acc-panels)'],
+    /* 只取外層的 .source-flow-panel：裡面的 .source-flow-visual 是它的子元素，
+       兩層都套動畫會互相疊加。 */
+    ['source',  '.source-flow-panel'],
+    ['heading', '.title-row, .eyebrow'],
+    ['text',    '.story-inner > .blk, .lay-stack > .blk, .annotation-label'],
+  ];
+
+  /* 第三部分（運用平台研究其他問題）只套「文字」與「卡片」兩種效果，
+     刻意不碰視覺元素。原因：這一節的視覺元素是會互動的東西——版面特徵
+     探索器（7／8）、試一試（11）、Agentic AI 動畫場景、以及手機版由
+     JavaScript 動態插入的史料抽屜。抽屜是 position:fixed，只要它的任何一個
+     祖先套上 transform 或 clip-path，該祖先就會變成固定定位的包含塊，
+     抽屜會改用祖先當座標原點而不是視窗，整個彈出位置就會錯掉。
+     只選 .copybox／.blk 這類純文字區塊就完全避開這些元素
+     （已確認第三部分沒有任何 .blk 位在那些互動元件內）。 */
+  const PART3_GROUPS = [
+    ['card',    '.copybox'],
+    ['heading', '.title-row, .eyebrow'],
+    ['text',    '.blk:not(.copybox)'],
+  ];
+
+  const ROOTS = [
+    [document.getElementById('intro-content'), INTRO_GROUPS],
+    [document.getElementById('part-3-content'), PART3_GROUPS],
+  ].filter(([root]) => root);
+  if (!ROOTS.length) return;
+
+  /* 絕對不要讓一個元素在「也會動的祖先」裡面再套一層自己的位移／縮放：
+     兩層 transform 會疊加，子元素看起來會脫離它的卡片。
+
+     注意：不能邊掃邊用 closest('.intro-reveal') 判斷——那只擋得住「祖先比
+     子孫早被標記」的情況。實際上 .title-row 屬於 heading、它的外層 .blk 屬於
+     text，而 text 排在後面才處理，於是兩個都被標記，標題往下移、外層又往下移，
+     標題就掉進下一張卡片裡（節標題被卡片蓋住就是這樣來的）。
+     因此改成兩段式：先收集所有候選，再把「祖先也在候選名單裡」的剔除，
+     這樣不論群組先後順序都不會出現巢狀動畫。 */
+  const targets = [];
+  const innerTargets = [];
+
+  ROOTS.forEach(([root, groups]) => {
+    const candidates = new Map();
+    groups.forEach(([kind, selector]) => {
+      root.querySelectorAll(selector).forEach((el) => {
+        if (!candidates.has(el)) candidates.set(el, kind);   // 先列到的類別優先
+      });
+    });
+
+    const seen = new Set();
+    candidates.forEach((kind, el) => {
+      for (let p = el.parentElement; p && p !== root; p = p.parentElement) {
+        if (candidates.has(p)) return;      // 祖先也會動 → 交給 inner 交錯動畫
+      }
+      seen.add(el);
+      el.classList.add('intro-reveal');
+      el.dataset.revealKind = kind;
+      targets.push(el);
+    });
+
+    /* 區塊內部的標題與段落：依序跟上，形成一行一行浮現的節奏。
+       只處理「不是卡片」的區塊。卡片本身是用簾子由上往下展開來露出內文的，
+       若裡面的字又各自淡入，簾子拉過去時會看到一片空白，
+       等於把「展開露出文字」的效果抵銷掉。
+       也刻意不包含硃113／硃119面板內部：那裡的標籤氣泡與連接線是量出來的
+       座標，加上位移會讓量到的位置全部跑掉。 */
+    root.querySelectorAll('.blk:not(.copybox), .story-inner > .blk, .lay-stack > .blk').forEach((holder) => {
+      if (holder.closest('.source-flow-panel')) return;
+      if (holder.classList.contains('copybox')) return;
+      const inner = [...holder.querySelectorAll(':scope > .title-row, :scope > .body > p, :scope > .body > h3, :scope > .acc-body > p')];
+      inner.slice(0, 8).forEach((el, i) => {
+        if (seen.has(el)) return;
+        seen.add(el);
+        el.classList.add('intro-reveal-inner');
+        el.style.setProperty('--reveal-i', String(i));
+        innerTargets.push(el);
+      });
+    });
+  });
+  if (!targets.length) return;
+
+  /* 進入畫面就播、離開就重設，因此上下捲動都會再看到一次效果。
+     rootMargin 底部收 -6%：元素要真的進到閱讀區才觸發，
+     而不是剛冒出螢幕邊緣就播完。 */
+  const io = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (!responsiveQuery.matches) return;
+      entry.target.classList.toggle('is-revealed', entry.isIntersecting);
+      /* 硃113／硃119面板的標籤氣泡與連接線是量出來的座標。
+         文件本體現在是用 clip-path 拉開的，過程中沒有任何東西移動，
+         座標從頭到尾都正確；這兩次重算只是保險——確保在文件完全露出、
+         以及側邊標籤全部出現之後，各再對位一次。 */
+      if (entry.isIntersecting && entry.target.dataset.revealKind === 'source') {
+        window.setTimeout(scheduleSourceFlowConnectorRefresh, 1300);   // 文件完全露出
+        window.setTimeout(scheduleSourceFlowConnectorRefresh, 1750);   // 側邊標籤全部出現
+      }
+    });
+  }, { threshold: 0.08, rootMargin: '0px 0px -6% 0px' });
+
+  targets.forEach((el) => io.observe(el));
+  innerTargets.forEach((el) => io.observe(el));
+
+  /* 切換到桌面版時，把所有元素直接設為已顯示，避免留下半透明的殘影 */
+  const releaseAll = () => {
+    if (responsiveQuery.matches) return;
+    targets.forEach((el) => el.classList.add('is-revealed'));
+    innerTargets.forEach((el) => el.classList.add('is-revealed'));
+  };
+  if (responsiveQuery.addEventListener) responsiveQuery.addEventListener('change', releaseAll);
+  else responsiveQuery.addListener(releaseAll);
+  releaseAll();
+};
+initIntroMobileReveal();
 
 document.addEventListener('click', (event) => {
   if (!introDropdown.contains(event.target)) setIntroDropdownOpen(false);
@@ -614,14 +769,13 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   const updateMobileScrollExpansion = () => {
     scrollFrame = 0;
     if (!PHOTO_GALLERY_MOBILE_MQ.matches || !body.getClientRects().length) return;
-    const currentScrollY = window.scrollY;
-    const scrollingDown = currentScrollY >= previousScrollY;
-    const photoTop = stage.getBoundingClientRect().top;
-    const expandLine = window.innerHeight * PHOTO_GALLERY_EXPAND_RATIO;
-    const collapseLine = window.innerHeight * PHOTO_GALLERY_COLLAPSE_RATIO;
-    if (scrollingDown && photoTop <= expandLine) body.classList.add('is-expanded');
-    else if (!scrollingDown && photoTop >= collapseLine) body.classList.remove('is-expanded');
-    previousScrollY = currentScrollY;
+    /* 說明區在手機／窄螢幕一律跟著圖片顯示，不再依捲動方向收合。
+       原本「往下捲展開、往回捲收合」會讓說明區在捲動中忽隱忽現，
+       而且說明區收合時圖片區會跟著改變高度，整段版面上下跳動。
+       現在畫廊高度＝圖片（依原圖比例）＋說明區，說明區固定展開，
+       高度就不會隨捲動變化。 */
+    body.classList.add('is-expanded');
+    previousScrollY = window.scrollY;
   };
   const requestMobileScrollExpansion = () => {
     if (!PHOTO_GALLERY_MOBILE_MQ.matches) return;
@@ -633,7 +787,8 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     if (PHOTO_GALLERY_MOBILE_MQ.matches) updateMobileScrollExpansion();
   }, { passive: true });
   const resetMobileScrollExpansion = () => {
-    body.classList.remove('is-expanded');
+    // 切回桌面版才收合（桌面版靠滑鼠移入展開）；切到手機版則保持自動展開
+    if (!PHOTO_GALLERY_MOBILE_MQ.matches) body.classList.remove('is-expanded');
     previousScrollY = window.scrollY;
     if (PHOTO_GALLERY_MOBILE_MQ.matches) requestMobileScrollExpansion();
   };
@@ -651,6 +806,7 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
   }
 
   stage.innerHTML = '';
+  const naturalDesktopGallery = Boolean(gallery.closest('#intro-1-1'));
   pages.forEach((page, i) => {
     const frame = document.createElement('div');
     frame.className = 'photo-gallery-frame' + (i === 0 ? ' is-active' : '');
@@ -675,6 +831,59 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     stage.appendChild(frame);
   });
   const frames = [...stage.querySelectorAll('.photo-gallery-frame')];
+  let index = 0;
+
+  /* 引言 01 的桌面畫廊不使用一個共用固定高度。每次切頁時，圖片區按
+     當前圖片的原始寬高比重算；因此直式圖、橫式圖和下一張圖片各自回到
+     自己的高度，不會沿用上一張圖片的框高。窄螢幕仍交由 responsive CSS
+     控制，保留原有的可讀版面。 */
+  /* 手機／窄螢幕也要「圖片區貼合圖片」：圖片用 object-fit: contain 時，
+     圖片會依比例縮到框內，框比圖片高就會在上下留出底色空白（letterbox）。
+     把圖片區的高度改成「目前這張圖依框寬換算出來的高度」，空白就消失了，
+     而圖片本身的顯示大小完全不變——因為 contain 的情況下限制它的是寬度，
+     高度只是多出來的空間。用 cover 的圖片本來就填滿、沒有空白，因此跳過，
+     否則反而會把刻意裁切的構圖改掉。 */
+  const galleryInAccPanel = Boolean(gallery.closest('.acc-panel'));
+  const usesContainFit = (image) => {
+    if (!image) return false;
+    return window.getComputedStyle(image).objectFit === 'contain';
+  };
+  const syncNaturalDesktopGallerySize = () => {
+    const mobile = PHOTO_GALLERY_MOBILE_MQ.matches;
+    /* 手機版：面板裡的畫廊，以及引言 01 的畫廊，都讓圖片區依「當前這張圖」
+       的原始比例決定高度——每張圖各自貼合自己的高度，換頁時框也跟著換，
+       不會沿用上一張的框高，圖片上下也不會留下底色空白。 */
+    const active = mobile ? (galleryInAccPanel || naturalDesktopGallery) : naturalDesktopGallery;
+    if (!active) {
+      stage.style.removeProperty('height');
+      stage.style.removeProperty('flex');
+      gallery.style.removeProperty('height');
+      return;
+    }
+    const image = frames[index]?.querySelector('img');
+    const stageWidth = stage.clientWidth;
+    if (!image || !image.naturalWidth || !image.naturalHeight || !stageWidth) return;
+    if (mobile && !usesContainFit(image)) {
+      stage.style.removeProperty('height');
+      stage.style.removeProperty('flex');
+      gallery.style.removeProperty('height');
+      return;
+    }
+    stage.style.flex = '0 0 auto';
+    stage.style.height = `${Math.round(stageWidth * image.naturalHeight / image.naturalWidth)}px`;
+    gallery.style.height = 'auto';
+  };
+  frames.forEach((frame) => frame.querySelector('img')?.addEventListener('load', syncNaturalDesktopGallerySize));
+  if ((naturalDesktopGallery || galleryInAccPanel) && 'ResizeObserver' in window) {
+    new ResizeObserver(syncNaturalDesktopGallerySize).observe(gallery);
+  }
+  if (naturalDesktopGallery || galleryInAccPanel) {
+    if (PHOTO_GALLERY_MOBILE_MQ.addEventListener) {
+      PHOTO_GALLERY_MOBILE_MQ.addEventListener('change', syncNaturalDesktopGallerySize);
+    } else {
+      PHOTO_GALLERY_MOBILE_MQ.addListener(syncNaturalDesktopGallerySize);
+    }
+  }
 
   if (pages.length > 1) {
     const prevBtn = document.createElement('button');
@@ -687,7 +896,6 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     counter.className = 'photo-gallery-counter';
     stage.append(prevBtn, nextBtn, counter);
 
-    let index = 0;
     const show = (next) => {
       index = (next + frames.length) % frames.length;
       frames.forEach((frame, i) => {
@@ -695,14 +903,13 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
         frame.hidden = i !== index;
       });
       counter.textContent = `圖 ${index + 1} / ${frames.length}`;
-      /* A touch-expanded page must not leave its larger information area on
-         the next page.  Reset the transient state before rendering the new
-         page; a desktop hover can still expand it again naturally. */
-      body.classList.remove('is-expanded');
+      /* 展開狀態統一由 renderBody() 決定（桌面收合、手機自動展開），
+         這裡不要再各自處理，否則兩邊順序一亂就會互相覆蓋。 */
       body.scrollTop = 0;
       if (pages[index].bodyMaxHeight) body.style.setProperty('--gallery-body-max-h', pages[index].bodyMaxHeight);
       else body.style.removeProperty('--gallery-body-max-h');
       renderBody(pages[index]);
+      syncNaturalDesktopGallerySize();
     };
     prevBtn.addEventListener('click', () => show(index - 1));
     nextBtn.addEventListener('click', () => show(index + 1));
@@ -714,13 +921,21 @@ document.querySelectorAll('[data-photo-gallery]').forEach((gallery) => {
     show(0);
   } else {
     renderBody(pages[0]);
+    syncNaturalDesktopGallerySize();
   }
 
   function renderBody(page) {
     /* Keep each page's optional layout override independent.  This also
        makes a page with a short description return to its own area after a
-       previous page with a longer description was expanded. */
-    body.classList.remove('is-expanded');
+       previous page with a longer description was expanded.
+
+       手機／窄螢幕例外：說明區要跟著圖片自動顯示。
+       這一行原本無條件收合，而且 renderBody() 是在 show() 之後才執行的，
+       所以先前在 show() 裡加上的 is-expanded 每次都被這裡清掉——這正是
+       第 2、3 張圖始終看不到說明區的真正原因。判斷寫在這裡，
+       所有呼叫端（換頁、單張圖）就一次到位。 */
+    if (PHOTO_GALLERY_MOBILE_MQ.matches) body.classList.add('is-expanded');
+    else body.classList.remove('is-expanded');
     body.scrollTop = 0;
     const paragraphs = (page.paragraphs || []).filter(Boolean);
     const hasDescription = paragraphs.length > 0;
@@ -1029,6 +1244,158 @@ const initPart3OriginalCharts = () => {
   });
 };
 initPart3OriginalCharts();
+
+/* 使用AI Api／AI Chain 執行Skills — 環狀 AI Chain 動畫。
+   七個步驟依序填滿一圈的外圈進度環（--p 0→100），代表「一步做完才開始下一步」；
+   第 7 步（輸出JSON）與第 1 步（文書總結）之間刻意不畫連接線，圓圈下方留一個缺口。
+   背景是 Matrix 式文字雨，字元逐字取自硃25（黃仕簡〈為奏彰化失陷已調兵赴臺事〉，
+   與林爽文事件相關）原文的 body 欄位全文，不是隨機亂碼；原文段落換行在拼接成
+   單一字元流時合併為全形空格，僅為動畫需要，不影響逐字內容本身。
+   大小、顏色、版面比例在 storymap-cards.css 的 #part-3-ai-chain 區塊。 */
+const initPart3ChainRing = () => {
+  document.querySelectorAll('[data-part3-chain-ring]').forEach((square) => {
+    const nodes = [...square.querySelectorAll('.part3-chain-ring-node')];
+    const links = [...square.querySelectorAll('.part3-chain-ring-link')];
+    const status = square.querySelector('[data-part3-chain-ring-status]');
+    const canvas = square.querySelector('[data-part3-chain-ring-matrix]');
+    if (!nodes.length || !canvas) return;
+    const ctx = canvas.getContext('2d');
+    if (!ctx) return;
+
+    const STEP_MS = 1100;   // 一個步驟：外圈從 0 填到 100
+    const HOLD_MS = 900;    // 七步都完成後，停留一下再重播
+    const TOTAL_MS = STEP_MS * nodes.length + HOLD_MS;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 純時間軸函式：輸入「這一圈跑了多久」，直接算出畫面該長怎樣，
+    // 不用逐格累加狀態，分頁切走幾秒再切回來也不會亂跳。
+    const render = (elapsed) => {
+      const t = ((elapsed % TOTAL_MS) + TOTAL_MS) % TOTAL_MS;
+      let currentStep = -1;
+      nodes.forEach((node, i) => {
+        const stepStart = i * STEP_MS;
+        const stepEnd = stepStart + STEP_MS;
+        let p;
+        if (t < stepStart) {
+          p = 0;
+        } else if (t < stepEnd) {
+          p = ((t - stepStart) / STEP_MS) * 100;
+          currentStep = i;
+        } else {
+          p = 100;
+        }
+        node.style.setProperty('--p', p.toFixed(1));
+        node.classList.toggle('is-filled', p >= 100);
+      });
+      links.forEach((link, i) => {
+        // 連結 i 接的是 node i → node i+1；node i 填滿後才亮起。
+        link.classList.toggle('is-active', t >= (i + 1) * STEP_MS);
+      });
+      if (status) status.classList.toggle('is-shown', currentStep === -1 && t < TOTAL_MS);
+    };
+
+    // 背景文字雨的字元來源：review-tools/shared data/stage1_original_text.json
+    // 中 doc_id: 硃25 的 body 欄位全文，逐字未改動。
+    const RAIN_SOURCE = '福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治，乃該匪等竟膽敢聚眾攻陷城池。其謀為不軌，四行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。雖未准臺灣鎮、道等報到，未知虛實，急當預為查辦征剿。奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。奴才於初十日帶領官兵登舟候風放洋飛渡之際（硃批：仍以調養為要，勿過勞），接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。奴才直由鹿耳門、郡城南路進兵，會督夾攻。容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。謹奏。　乾隆五十一年十二月初十日　乾隆五十一年十二月二十七日奉硃批：已有旨了。欽此。【本文原收錄於軍錄】';
+    const rainChars = Array.from(RAIN_SOURCE);
+
+    let fontSize = 14;
+    let cols = 0;
+    let drops = [];
+    let offsets = [];
+    let cw = 0;
+    let ch = 0;
+
+    const sizeMatrix = () => {
+      const rect = canvas.getBoundingClientRect();
+      if (!rect.width || !rect.height) return;
+      const dpr = window.devicePixelRatio || 1;
+      cw = rect.width;
+      ch = rect.height;
+      canvas.width = Math.max(1, Math.round(cw * dpr));
+      canvas.height = Math.max(1, Math.round(ch * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+      fontSize = Math.max(11, Math.round(cw / 24));
+      cols = Math.max(1, Math.floor(cw / fontSize));
+      drops = new Array(cols).fill(0).map(() => Math.random() * -30);
+      offsets = new Array(cols).fill(0).map(() => Math.floor(Math.random() * rainChars.length));
+      // 完全透明起手：不再鋪一層深色底，畫布本身沒有任何背景色，
+      // 直接看到頁面本身的底色（不是一片綠色／深色的「背景板」）。
+      ctx.clearRect(0, 0, cw, ch);
+    };
+
+    const drawMatrixFrame = () => {
+      if (!cw || !ch) return;
+      // 用 destination-out 把畫面整體「擦淡」一點，而不是疊一層深色——
+      // 疊色會讓透明度越疊越高，跑久了畫布會整片變深（等於又長出一塊背景）。
+      // 用擦除的方式，舊字會淡出，但畫布不會累積出實色背景。
+      ctx.globalCompositeOperation = 'destination-out';
+      ctx.fillStyle = 'rgba(0, 0, 0, .14)';
+      ctx.fillRect(0, 0, cw, ch);
+      ctx.globalCompositeOperation = 'source-over';
+      ctx.font = fontSize + 'px "SF Mono", ui-monospace, Menlo, Consolas, monospace';
+      ctx.textBaseline = 'top';
+      for (let i = 0; i < cols; i++) {
+        const glyph = rainChars[offsets[i] % rainChars.length];
+        offsets[i] += 1;
+        const y = drops[i] * fontSize;
+        // 深色卡片背景，字元用較亮的綠色才看得清楚。
+        ctx.fillStyle = Math.random() < 0.045 ? 'rgba(214, 255, 230, .42)' : 'rgba(58, 209, 138, .3)';
+        ctx.fillText(glyph, i * fontSize, y);
+        if (y > ch && Math.random() > 0.975) drops[i] = 0;
+        drops[i] += 1;
+      }
+    };
+
+    if (reduceMotion) {
+      // 靜止畫面：文字雨畫一次靜態紋理、外圈示意跑到一半，不持續播放。
+      sizeMatrix();
+      for (let n = 0; n < 40; n += 1) drawMatrixFrame();
+      render(3 * STEP_MS + STEP_MS * 0.5);
+      return;
+    }
+
+    sizeMatrix();
+
+    let raf = null;
+    let visible = false;
+    let lastMatrixDraw = 0;
+    const start = performance.now();
+
+    const loop = (now) => {
+      render(now - start);
+      if (now - lastMatrixDraw > 55) {
+        drawMatrixFrame();
+        lastMatrixDraw = now;
+      }
+      if (visible) raf = requestAnimationFrame(loop);
+    };
+
+    if (typeof IntersectionObserver === 'function') {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          visible = entry.isIntersecting;
+          if (visible && raf === null) {
+            raf = requestAnimationFrame(loop);
+          } else if (!visible && raf !== null) {
+            cancelAnimationFrame(raf);
+            raf = null;
+          }
+        });
+      }, { threshold: .15 }).observe(square);
+    } else {
+      visible = true;
+      raf = requestAnimationFrame(loop);
+    }
+
+    if (typeof ResizeObserver === 'function') {
+      new ResizeObserver(() => sizeMatrix()).observe(canvas);
+    } else {
+      window.addEventListener('resize', sizeMatrix);
+    }
+  });
+};
+initPart3ChainRing();
 
 const initPart3ToolsChecklist = () => {
   document.querySelectorAll('[data-part3-tools-checklist]').forEach((workbench) => {
@@ -1490,7 +1857,10 @@ const initPart3FeatureExplorers = () => {
       // 不可在 render() 內重設 pair，否則按鈕會被立刻覆蓋回原位。
       syncToCurrent = () => {
         const f = features[cur];
-        if (f) pair = pairOf(f.panel || 0);
+        if (!f) return;
+        pair = pairOf(f.panel || 0);
+        // 手機版抽屜：選了特徵就把「目前這一摺」也跳到該特徵所在的摺
+        if (root.__mFold) root.__mFold.syncTo(f.panel || 0);
       };
       render = () => {
         const f = features[cur];
@@ -1523,6 +1893,51 @@ const initPart3FeatureExplorers = () => {
       sizeStrip();
       window.addEventListener('resize', sizeStrip);
       if (typeof ResizeObserver === 'function') new ResizeObserver(sizeStrip).observe(strip.parentElement);
+
+      /* 手機版／窄螢幕的史料抽屜（收合狀態）：抽屜太窄，風琴摺（同時露出
+         所有摺痕）既看不清也放不下，因此改成「一次只顯示一摺」——每摺就是
+         掃描頁面的三分之一，寬度填滿抽屜。展開（is-full）後空間夠了，就直接
+         沿用桌面／窄視窗版原本的風琴摺，不套用這裡的單摺樣式。
+         這裡只維護一個 mfold 索引並在對應的摺子上掛 .is-mopen，桌面版用的
+         .is-open 完全不動，兩套狀態互不干擾。選特徵時會跳到該特徵所在的摺
+         （見 syncToCurrent），收合時的方向鍵則是換特徵。 */
+      let mfold = 0;
+      /* 收合時：只切換 .is-mopen（見 CSS 的 :not(.is-full) 版面）。
+         展開時：直接沿用桌面版風琴摺，靠 .is-open 決定哪兩摺展開，
+         .is-open 只有桌面版的 pair 邏輯（render()）會設定——單摺瀏覽時
+         按 <> 只會移動 mfold，完全不會動到 pair／render／is-open。
+         這代表：如果使用者先用 <> 把單摺切到某個特徵所在的摺，
+         再按「整頁」展開，pair 有可能還停在上一次選特徵時的舊值，
+         is-open 蓋到的兩摺就會跟目前 mfold 對不上，展開後看起來像
+         什麼都沒展開（只有摺痕）。因此展開當下要強制把 pair 對齊
+         pairOf(mfold) 再呼叫 render()，兩套狀態才會一致。 */
+      const applyMobileFold = () => {
+        // 抽屜是 initMobileDocDrawers() 之後才包起來的，這裡用查詢拿，
+        // 不能假設有現成的 drawer 變數（那是另一個函式的作用域）。
+        const drawerEl = root.querySelector('.mdrawer');
+        const full = drawerEl && drawerEl.classList.contains('is-full');
+        if (full) {
+          pair = pairOf(mfold);
+          render();
+          return;
+        }
+        [...strip.children].forEach((el, i) => {
+          el.classList.toggle('is-mopen', i === mfold);
+        });
+      };
+      root.__mFold = {
+        count: panels.length,
+        step: (dir) => {
+          mfold = Math.max(0, Math.min(panels.length - 1, mfold + dir));
+          applyMobileFold();
+        },
+        syncTo: (i) => {
+          mfold = Math.max(0, Math.min(panels.length - 1, i || 0));
+          applyMobileFold();
+        },
+        refresh: applyMobileFold
+      };
+      applyMobileFold();
     }
 
     showFeature(0);
@@ -1624,6 +2039,7 @@ const parseJsonScript = (host) => {
 
 const initAgenticScene = () => {
   document.querySelectorAll('[data-agentic-scene]').forEach((scene) => {
+    if (scene.matches('[data-agentic-skills-sequence]')) return;
     const sequences = [...scene.querySelectorAll('[data-agentic-sequence]')]
       .map((host) => ({ host, lines: parseJsonScript(host) }))
       .filter((item) => item.lines.length);
@@ -1705,6 +2121,7 @@ const typeAgenticCodexPhases = (thinkingPhase, thinkingHost, resultPhase, result
 const initAgenticCodexPhases = () => {
   document.querySelectorAll('[data-agentic-codex-phases]').forEach((body) => {
     const scene = body.closest('[data-agentic-scene]');
+    if (scene?.matches('[data-agentic-skills-sequence]')) return;
     const thinkingPhase = body.querySelector('[data-agentic-codex-thinking]');
     const thinkingHost = body.querySelector('[data-agentic-codex-thinking-sequence]');
     const resultPhase = body.querySelector('[data-agentic-codex-result]');
@@ -1746,12 +2163,109 @@ const initAgenticCodexPhases = () => {
 };
 initAgenticCodexPhases();
 
-// 運用 Agentic AI 使用 PaddleOCR：Codex 對話視窗與 PaddleOCR Python 視窗重疊排列，
-// 點擊任一視窗即可把該視窗切換到最上層。
+// 修改、建立 AI Skills：按「提示 → 思考 → VS Code Skill → Codex 輸出」順序播放。
+// 這個示範需要跨兩個視窗協調，因此不使用一般的並行逐字播放初始化器。
+const playAgenticLinesOnce = async (host, lines, {
+  charDelay = 18,
+  lineDelay = 300,
+  isCurrent = () => true
+} = {}) => {
+  host.innerHTML = '';
+  for (let i = 0; i < lines.length; i += 1) {
+    if (!isCurrent()) return false;
+    await revealAgenticLine(host, lines[i], charDelay);
+    if (!isCurrent()) return false;
+    if (i < lines.length - 1) await wait(lineDelay);
+  }
+  return true;
+};
+
+const initPart3AiSkillsSequence = () => {
+  document.querySelectorAll('[data-agentic-skills-sequence]').forEach((scene) => {
+    const promptBubble = scene.querySelector('[data-agentic-codex-prompt]');
+    const thinkingPhase = scene.querySelector('[data-agentic-codex-thinking]');
+    const thinkingHost = scene.querySelector('[data-agentic-codex-thinking-sequence]');
+    const resultPhase = scene.querySelector('[data-agentic-codex-result]');
+    const resultHost = scene.querySelector('[data-agentic-codex-result-lines]');
+    const vscodeHost = scene.querySelector('[data-agentic-vscode-code]');
+    const vscodeWindow = scene.querySelector('.agentic-window-vscode');
+    const codexWindow = scene.querySelector('.agentic-window-codex');
+    if (!promptBubble || !thinkingPhase || !thinkingHost || !resultPhase || !resultHost || !vscodeHost) return;
+
+    const promptText = promptBubble.textContent.trim();
+    const thinkingLines = parseJsonScript(thinkingHost);
+    const resultLines = parseJsonScript(resultHost);
+    const vscodeLines = parseJsonScript(vscodeHost);
+    if (!promptText || !thinkingLines.length || !resultLines.length || !vscodeLines.length) return;
+
+    const reset = () => {
+      promptBubble.textContent = '';
+      thinkingHost.innerHTML = '';
+      resultHost.innerHTML = '';
+      vscodeHost.innerHTML = '';
+      thinkingPhase.hidden = false;
+      resultPhase.hidden = true;
+      if (vscodeWindow) {
+        vscodeWindow.style.zIndex = '1';
+        vscodeWindow.classList.remove('is-agentic-front');
+      }
+      if (codexWindow) {
+        codexWindow.style.zIndex = '2';
+        codexWindow.classList.add('is-agentic-front');
+      }
+    };
+
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      promptBubble.textContent = promptText;
+      thinkingPhase.hidden = true;
+      resultPhase.hidden = false;
+      thinkingHost.innerHTML = thinkingLines.map((line) => `<span class="line">${line}</span>`).join('');
+      resultHost.innerHTML = resultLines.map((line) => `<span class="line">${line}</span>`).join('');
+      vscodeHost.innerHTML = vscodeLines.map((line) => `<span class="line">${line}</span>`).join('');
+      return;
+    }
+
+    let runToken = 0;
+    let running = false;
+    let hasPlayed = false;
+    const start = () => {
+      if (running || hasPlayed) return;
+      running = true;
+      hasPlayed = true;
+      scene.dataset.agenticSkillsPlayed = 'true';
+      const token = ++runToken;
+      const isCurrent = () => token === runToken;
+      reset();
+      (async () => {
+        await revealAgenticLine(promptBubble, promptText, 14);
+        if (!isCurrent()) return;
+        await playAgenticLinesOnce(thinkingHost, thinkingLines, { charDelay: 9, lineDelay: 300, isCurrent });
+        if (!isCurrent()) return;
+        thinkingPhase.hidden = true;
+        await playAgenticLinesOnce(vscodeHost, vscodeLines, { charDelay: 8, lineDelay: 110, isCurrent });
+        if (!isCurrent()) return;
+        resultPhase.hidden = false;
+        await playAgenticLinesOnce(resultHost, resultLines, { charDelay: 12, lineDelay: 260, isCurrent });
+        if (isCurrent()) running = false;
+      })();
+    };
+    if (typeof IntersectionObserver === 'function') {
+      new IntersectionObserver((entries) => {
+        entries.forEach((entry) => { if (entry.isIntersecting) start(); });
+      }, { threshold: .1 }).observe(scene);
+    } else {
+      start();
+    }
+  });
+};
+initPart3AiSkillsSequence();
+
+// 運用 Agentic AI 使用 PaddleOCR／修改 AI Skills：Codex 與工作視窗的前後層切換。
+// 保留標題列點擊行為，方便日後加入其他示範視窗時重用。
 const initPart3AgenticOcrWindows = () => {
   document.querySelectorAll('[data-agentic-window]').forEach((windowEl) => {
     windowEl.addEventListener('click', () => {
-      const scene = windowEl.closest('.agentic-scene-paddleocr');
+      const scene = windowEl.closest('.agentic-scene-paddleocr, .part3-ai-skills-scene');
       if (!scene) return;
       const target = windowEl.dataset.agenticWindow;
       scene.querySelectorAll('[data-agentic-window]').forEach((win) => {
@@ -2247,6 +2761,8 @@ const initPart3TryIt = () => {
 
   const imgEl = root.querySelector('[data-try-img]');
   const hlHost = root.querySelector('[data-try-hls]');
+  const tryFoldedHost = root.querySelector('[data-try-folded]');
+  const tryFoldStrip = root.querySelector('[data-try-fold-strip]');
   const indEl = root.querySelector('[data-try-ind]');
   const prevBtn = root.querySelector('[data-try-prev]');
   const nextBtn = root.querySelector('[data-try-next]');
@@ -2254,8 +2770,15 @@ const initPart3TryIt = () => {
   const stageHost = root.querySelector('[data-try-stage]');
   const scrollHost = root.querySelector('.part3-try-scroll');
   const guideHost = root.querySelector('[data-try-guide]');
-  const switchHost = document.querySelector('[data-part3-try-switch]');
+  const progressHost = root.querySelector('[data-try-progress]');
+  const switchHosts = [...document.querySelectorAll('[data-part3-try-switch]')];
   const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  /* The desktop PDF stack sizes itself from the image's intrinsic width.
+     Lazy loading can leave that fit-content stack at 0px wide until the user
+     clicks a page button, so the interactive viewer must load its first page
+     immediately. */
+  imgEl.loading = 'eager';
 
   let mode = 'printed';
   let phase = 1;
@@ -2264,6 +2787,8 @@ const initPart3TryIt = () => {
   let pageIdx = 0;
   let compareRaw = '';
   let compareHasRun = false;
+  let tryFoldPair = 0;
+  let tryFoldFeatureKey = null;
   let typingTimer = null;
   const modeStates = Object.fromEntries(Object.keys(data).map((key) => [key, {
     phase: 1,
@@ -2316,24 +2841,110 @@ const initPart3TryIt = () => {
   };
   injectDefaults();
 
+  const useTryFoldedDesktop = () => mode === 'handwritten'
+    && tryFoldedHost && tryFoldStrip
+    && window.matchMedia('(min-width: 1041px)').matches;
+  const desktopPagesFor = (set) => set.desktopPages || set.pages || [];
+  const desktopPageFor = (feature) => Number.isFinite(feature && feature.desktopPage)
+    ? feature.desktopPage : (feature && feature.page) || 0;
+  const foldCountFor = (set, page, featureImage) => {
+    if (featureImage) return 3;
+    const counts = set.desktopFoldCounts || [];
+    return Number(counts[page]) === 3 ? 3 : 2;
+  };
+  const pairCountFor = (count) => count === 3 ? 2 : 1;
+  const tryPairCountFor = (set, page, featureImage) => pairCountFor(foldCountFor(set, page, featureImage));
+
+  /* 試一試的手寫字圖片與 8 辨識手寫字共用同一種「風琴摺」視覺。
+     每一張 desktopPages 都保留自己的摺子；一般掃描頁是兩摺合成圖，
+     特徵示意圖仍使用三摺原圖。按左右箭頭時，舊頁會收起、新頁會展開，
+     而不是整個 viewer 突然換圖。 */
+  const renderTryFolded = (set, currentPage, featureSource, count, pair) => {
+    if (!tryFoldStrip) return;
+    const pages = desktopPagesFor(set);
+    const safeCount = count === 3 ? 3 : 2;
+    const safePair = Math.max(0, Math.min(pairCountFor(safeCount) - 1, pair));
+    const requiredPanels = pages.length * 3;
+    if (tryFoldStrip.children.length !== requiredPanels) {
+      tryFoldStrip.innerHTML = '';
+      pages.forEach((_, page) => {
+        [2, 1, 0].forEach((part) => {
+          const panel = document.createElement('div');
+          panel.className = 'part3-fx-panel';
+          panel.dataset.tryFoldPage = String(page);
+          panel.dataset.tryFoldPart = String(part);
+          panel.style.setProperty('--fold-aspect', '454 / 1000');
+          panel.title = '點擊放大檢視整張奏摺頁面';
+          panel.addEventListener('click', () => openTryGallery(panel));
+          tryFoldStrip.appendChild(panel);
+        });
+      });
+    }
+    const openParts = safeCount === 3
+      ? (safePair === 0 ? [2, 1] : [1, 0])
+      : [1, 0];
+    [...tryFoldStrip.children].forEach((panel) => {
+      const page = Number(panel.dataset.tryFoldPage);
+      const part = Number(panel.dataset.tryFoldPart);
+      const isCurrent = page === currentPage;
+      const pageCount = isCurrent && featureSource
+        ? 3 : foldCountFor(set, page, false);
+      const source = isCurrent && featureSource ? featureSource : `${set.assetDir || ''}${pages[page]}`;
+      const unused = part >= pageCount;
+      const open = isCurrent && !unused && openParts.includes(part);
+      panel.classList.toggle('is-unused', unused);
+      panel.classList.toggle('is-open', open);
+      panel.classList.remove('is-blank');
+      panel.style.setProperty('--src', unused ? 'none' : `url("${source}")`);
+      panel.style.setProperty('--try-fold-size', `${pageCount * 100}%`);
+      panel.style.setProperty('--posx', `${(part / (pageCount - 1)) * 100}%`);
+    });
+    tryFoldedHost.dataset.foldCount = String(safeCount);
+    tryFoldedHost.dataset.foldPair = String(safePair);
+  };
+
   /* ---------- 左半：史料與標示區 ----------
-     恢復成單純一頁一頁顯示：選到某個特徵時，直接把該頁圖片換成該特徵
-     的專屬標示圖（不摺、不裁切），沒有特徵時照 pageIdx 顯示原頁面。 */
+     桌面版手寫字使用與「辨識手寫字」相同的兩摺展開介面；手機版仍保留
+     原本的整張圖片抽屜，避免窄螢幕把三摺壓到無法閱讀。 */
   const renderDoc = (activeKey) => {
     const set = d();
     const feature = phase === 2 && activeKey ? set.features[activeKey] : null;
     const featureImage = feature && feature.image;
-    const visualFile = featureImage || set.pages[pageIdx];
+    const foldedDesktop = useTryFoldedDesktop();
+    const pages = foldedDesktop ? desktopPagesFor(set) : (set.pages || []);
+    const visualPage = feature
+      ? (foldedDesktop ? desktopPageFor(feature) : feature.page || 0)
+      : pageIdx;
+    const visualFile = featureImage || pages[visualPage];
     const assetDir = set.assetDir || '';
     imgEl.src = `${assetDir}${visualFile}`;
     imgEl.alt = featureImage ? `${feature.title || visualFile}示意圖` : '試一試史料頁面';
     imgEl.dataset.tryVisual = featureImage || `page${pageIdx + 1}`;
+    if (foldedDesktop) {
+      if (featureImage && tryFoldFeatureKey !== activeKey) {
+        tryFoldPair = Number.isFinite(feature.foldPair) ? feature.foldPair : 0;
+        tryFoldFeatureKey = activeKey;
+      } else if (!featureImage) {
+        tryFoldFeatureKey = null;
+        tryFoldPair = Math.min(tryFoldPair, tryPairCountFor(set, pageIdx, false) - 1);
+      }
+      renderTryFolded(set, visualPage, featureImage ? `${assetDir}${visualFile}` : null,
+        foldCountFor(set, visualPage, featureImage), tryFoldPair);
+      tryFoldedHost.hidden = false;
+    } else if (tryFoldedHost) {
+      tryFoldedHost.hidden = true;
+    }
     /* 只要正在顯示某個特徵的專屬圖片，一律用標題取代「頁X／Y」。 */
-    indEl.textContent = featureImage
-      ? (feature.title || visualFile.replace(/\.png$/i, ''))
-      : `頁 ${pageIdx + 1} / ${set.pages.length}`;
-    prevBtn.disabled = Boolean(featureImage) || pageIdx === 0;
-    nextBtn.disabled = Boolean(featureImage) || pageIdx === set.pages.length - 1;
+    const pairCount = foldedDesktop ? tryPairCountFor(set, visualPage, Boolean(featureImage)) : 1;
+    indEl.textContent = foldedDesktop
+      ? `頁 ${visualPage + 1} / ${pages.length}`
+      : (featureImage ? (feature.title || visualFile.replace(/\.png$/i, '')) : `頁 ${pageIdx + 1} / ${set.pages.length}`);
+    prevBtn.disabled = foldedDesktop
+      ? (featureImage ? tryFoldPair === 0 : tryFoldPair === 0 && pageIdx === 0)
+      : (Boolean(featureImage) || pageIdx === 0);
+    nextBtn.disabled = foldedDesktop
+      ? (featureImage ? tryFoldPair >= pairCount - 1 : tryFoldPair >= pairCount - 1 && pageIdx === pages.length - 1)
+      : (Boolean(featureImage) || pageIdx === set.pages.length - 1);
     hlHost.innerHTML = '';
     if (featureImage) return;
     Object.keys(set.features).forEach((key) => {
@@ -2385,7 +2996,8 @@ const initPart3TryIt = () => {
     const step = phase === 2 ? d().steps[cur] : null;
     if (step && step.feature) {
       const f = d().features[step.feature];
-      if (f && f.page !== pageIdx) pageIdx = f.page;
+      const targetPage = useTryFoldedDesktop() ? desktopPageFor(f) : f.page;
+      if (f && targetPage !== pageIdx) pageIdx = targetPage;
       renderDoc(step.feature);
     } else {
       renderDoc(null);
@@ -2443,9 +3055,8 @@ const initPart3TryIt = () => {
       const state = n < phase ? 'done' : n === phase ? 'current' : 'pending';
       return `<span class="part3-try-dot is-${state}" aria-hidden="true">${n}</span>`;
     }).join('');
-    todoHost.innerHTML = `<div class="part3-try-progress"><span class="cap">進度</span>${dots}</div>`;
-    const progressRow = todoHost.firstElementChild;
-    if (switchHost && progressRow) progressRow.appendChild(switchHost);
+    if (progressHost) progressHost.innerHTML = `<span class="cap">進度</span>${dots}`;
+    todoHost.innerHTML = '';
   };
 
   /* ---------- 第一步：下載史料 ---------- */
@@ -2933,11 +3544,41 @@ const initPart3TryIt = () => {
   /* ---------- 翻頁與模式切換 ---------- */
   prevBtn.addEventListener('click', () => {
     animateHandwrittenTurn(-1);
+    if (useTryFoldedDesktop()) {
+      const set = d();
+      const step = phase === 2 ? set.steps[cur] : null;
+      const feature = step && step.feature ? set.features[step.feature] : null;
+      const count = tryPairCountFor(set, feature ? desktopPageFor(feature) : pageIdx, Boolean(feature && feature.image));
+      if (feature && tryFoldPair > 0) tryFoldPair -= 1;
+      else if (!feature && tryFoldPair > 0) tryFoldPair -= 1;
+      else {
+        const pages = desktopPagesFor(set);
+        pageIdx = (pageIdx - 1 + pages.length) % pages.length;
+        tryFoldPair = tryPairCountFor(set, pageIdx, false) - 1;
+      }
+      syncDoc();
+      return;
+    }
     pageIdx = (pageIdx - 1 + d().pages.length) % d().pages.length;
     syncDoc();
   });
   nextBtn.addEventListener('click', () => {
     animateHandwrittenTurn(1);
+    if (useTryFoldedDesktop()) {
+      const set = d();
+      const step = phase === 2 ? set.steps[cur] : null;
+      const feature = step && step.feature ? set.features[step.feature] : null;
+      const count = tryPairCountFor(set, feature ? desktopPageFor(feature) : pageIdx, Boolean(feature && feature.image));
+      const pairCount = count;
+      if (tryFoldPair < pairCount - 1) tryFoldPair += 1;
+      else {
+        const pages = desktopPagesFor(set);
+        pageIdx = (pageIdx + 1) % pages.length;
+        tryFoldPair = 0;
+      }
+      syncDoc();
+      return;
+    }
     pageIdx = (pageIdx + 1) % d().pages.length;
     syncDoc();
   });
@@ -2958,7 +3599,7 @@ const initPart3TryIt = () => {
     else renderPhase3();
   };
 
-  if (switchHost) {
+  switchHosts.forEach((switchHost) => {
     switchHost.addEventListener('click', (e) => {
       const btn = e.target.closest('button');
       if (!btn || !data[btn.dataset.tryMode]) return;
@@ -2966,10 +3607,12 @@ const initPart3TryIt = () => {
       mode = btn.dataset.tryMode;
       restoreModeState();
       root.dataset.tryMode = mode;
-      [...switchHost.children].forEach((b) => b.classList.toggle('is-on', b === btn));
+      switchHosts.forEach((host) => {
+        [...host.children].forEach((b) => b.classList.toggle('is-on', b.dataset.tryMode === mode));
+      });
       renderCurrentPhase();
     });
-  }
+  });
 
   resetAll();
 };
@@ -3046,35 +3689,6 @@ applyMobileTryText();
 
 initPart3TryIt();
 
-/* ---------------------------------------------------------------------------
-   選用的 AI Model：手機版兩頁垂直模型卡
-   桌面版維持六欄比較表；手機版先顯示 Claude／GPT，再用第一張卡的箭頭
-   切換至 DeepSeek／Gemini。
-   --------------------------------------------------------------------------- */
-const initPart3ModelMobile = () => {
-  const table = document.querySelector('#part-3-model .part3-model-table');
-  if (!table) return;
-  const buttons = [...table.querySelectorAll('[data-model-mobile-next]')];
-  if (!buttons.length) return;
-  let page = 'primary';
-  const setPage = (next) => {
-    page = next;
-    table.dataset.mobilePage = page;
-    buttons.forEach((button) => {
-      const secondary = page === 'secondary';
-      button.textContent = secondary ? '←' : '→';
-      button.setAttribute('aria-label', secondary
-        ? '返回 Claude Opus 和 GPT（5.6）'
-        : '查看 DeepSeek Flash／Pro 和 Gemini Flash');
-    });
-  };
-  buttons.forEach((button) => button.addEventListener('click', () => {
-    setPage(page === 'primary' ? 'secondary' : 'primary');
-  }));
-  setPage(page);
-};
-initPart3ModelMobile();
-
 const activateFromLocation = () => {
   const hash = window.location.hash || '#cover';
   const tabName = panelForHash(hash);
@@ -3093,10 +3707,9 @@ activateFromLocation();
    - 分頁只保留「平台簡介」與「運用平台研究其他問題」可以點擊，其餘（主頁、
      平台介面、平台運作流程）維持看得見但不能點。
    - 一進入頁面就直接跳到第三部分「步驟二 · OCR 並結構化原始史料」。
-   - 只留步驟二・OCR並結構化原始史料完全開放；步驟二之前（適合的研究問題／
-     所需的工具與資源／重用平台的基本流程）從預覽中移除，步驟三至五・運用AI
-     抽取資訊，以及步驟八之後（後續功能：LLM Wiki）的內容變淡、不能點擊，
-     並標示「尚在開發中」。
+   - 只留步驟二・OCR並結構化原始史料作為預覽的起始位置；步驟二之前（適合的
+     研究問題／所需的工具與資源）從預覽中移除，「重用平台的基本流程」在所有版本保留。
+     其餘第三部分內容維持原本的完整顯示，不再加上「尚在開發中」的淡化區塊。
    分享給老師的連結範例：storymap-example.html?preview=ocr */
 (() => {
   const params = new URLSearchParams(window.location.search);
@@ -3135,28 +3748,15 @@ activateFromLocation();
     }
   });
 
-  /* 步驟二之前的三個小節不再在 OCR 預覽中佔據空間；
-     步驟三至五（#part-3-ai）與步驟八之後（#part-3-wiki）維持淡化鎖定。 */
+  /* 步驟二之前的兩個小節不再在 OCR 預覽中佔據空間；
+     Part 3 後續內容不加尚在開發中的淡化遮罩，保持正常顯示。 */
   const PREVIEW_HIDDEN_SECTION_IDS = [
-    'part-3-research-questions', 'part-3-tools', 'part-3-basic-flow'
+    'part-3-research-questions', 'part-3-tools'
   ];
   PREVIEW_HIDDEN_SECTION_IDS.forEach((id) => {
     const el = document.getElementById(id);
     if (el) el.hidden = true;
   });
-  const LOCKED_SECTION_IDS = ['part-3-ai', 'part-3-wiki'];
-  LOCKED_SECTION_IDS.forEach((id) => {
-    const el = document.getElementById(id);
-    if (!el) return;
-    el.classList.add('is-preview-faded');
-    el.setAttribute('aria-hidden', 'true');
-    el.setAttribute('inert', ''); /* 連鍵盤 Tab 也跳過這個區塊；不支援的舊瀏覽器會忽略此屬性，不影響上面的視覺與滑鼠鎖定 */
-    const badge = document.createElement('div');
-    badge.className = 'preview-faded-badge';
-    badge.textContent = '此部分尚在開發中，暫未開放於此預覽';
-    el.prepend(badge);
-  });
-
   /* 不論網址原本帶什麼 hash，教師預覽一律直接跳到步驟二。 */
   setActiveTab('part-3', { updateHash: false, scrollTarget: '#part-3-ocr' });
 })();
@@ -3207,8 +3807,19 @@ const initMobileDocDrawers = () => {
           <button type="button" data-m-next aria-label="下一個特徵">${IC.next}</button>
           <button type="button" data-m-full aria-label="整頁／縮小">${IC.ex}</button>
           <button type="button" data-m-close aria-label="收起">${IC.cl}</button>
-        </div>
-        <button type="button" class="mdrawer-grip" data-m-grip aria-label="調整寬度">${IC.grip}</button>`);
+        </div>`);
+
+      /* 寬度調整鈕要「騎」在抽屜的右邊界上（邊界線正好穿過按鈕中間），
+         所以不能放在抽屜裡面：.mdrawer 有 overflow:hidden（避免史料圖
+         溢出蓋掉頁首頁尾），又因為滑入動畫用了 transform 而成為固定定位的
+         包含塊，放在裡面一定會被裁掉一半。因此改成 root 的子元素，用
+         position:fixed 對齊 --mdrawer-w，並把該變數改設在 root 上讓兩者共用。 */
+      const grip = document.createElement('button');
+      grip.type = 'button';
+      grip.className = 'mdrawer-grip';
+      grip.setAttribute('aria-label', '調整寬度');
+      grip.innerHTML = IC.grip;
+      root.appendChild(grip);
 
       /* 2. 拉手與遮罩（固定在視窗上，只有捲到這一節時才出現） */
       const puller = document.createElement('button');
@@ -3226,7 +3837,6 @@ const initMobileDocDrawers = () => {
       const edgeL = drawer.querySelector('.mdrawer-edge.l');
       const edgeR = drawer.querySelector('.mdrawer-edge.r');
       const fullBtn = drawer.querySelector('[data-m-full]');
-      const grip = drawer.querySelector('[data-m-grip]');
       let zoom = 1;
       const setZoom = (z) => { zoom = Math.max(1, Math.min(4, z)); drawer.style.setProperty('--z', zoom); };
 
@@ -3291,6 +3901,8 @@ const initMobileDocDrawers = () => {
         if (on) closers.forEach((fn) => fn !== setOpen && fn(false));
         drawer.classList.toggle('is-open', on);
         scrim.classList.toggle('is-on', on);
+        // 寬度調整鈕現在是 root 的子元素，得自己跟著抽屜開合顯示／隱藏
+        grip.classList.toggle('is-on', on && !drawer.classList.contains('is-full'));
         puller.setAttribute('aria-expanded', String(on));
       };
       closers.push(setOpen);
@@ -3301,9 +3913,20 @@ const initMobileDocDrawers = () => {
         const full = drawer.classList.toggle('is-full');
         fullBtn.innerHTML = full ? IC.sh : IC.ex;
         setZoom(1);
+        // 展開時佔滿整個畫面寬度，沒有可調的右邊界，寬度鈕就收起來
+        grip.classList.toggle('is-on', !full);
+        if (root.__mFold) root.__mFold.refresh();
       });
 
       const stepFeature = (dir) => {
+        /* 8 辨識手寫字（收合的抽屜）：方向鍵換「特徵」，換到的特徵會自動
+           跳到它所在的那一摺；只有展開（is-full）後才改為換頁／換摺，
+           因為展開後才看得到完整的風琴摺。 */
+        if (root.__mFold && drawer.classList.contains('is-full')) {
+          const btn = root.querySelector(dir > 0 ? '[data-part3-fx-next]' : '[data-part3-fx-prev]');
+          if (btn && !btn.disabled) btn.click();
+          return;
+        }
         if (!tags.length) {
           /* 11 試一試沒有特徵，方向鍵改為翻頁 */
           const btn = root.querySelector(dir > 0 ? '[data-try-next]' : '[data-try-prev]');
@@ -3329,7 +3952,8 @@ const initMobileDocDrawers = () => {
       grip.addEventListener('pointermove', (e) => {
         if (!rs) return;
         const w = Math.max(150, Math.min(window.innerWidth, rs.w + (e.clientX - rs.x)));
-        drawer.style.setProperty('--mdrawer-w', w + 'px');
+        // 設在 root 上：抽屜與（現在是 root 子元素的）寬度調整鈕共用同一個值
+        root.style.setProperty('--mdrawer-w', w + 'px');
       });
       const endRs = () => { if (rs) { drawer.classList.remove('is-resizing'); rs = null; } };
       grip.addEventListener('pointerup', endRs);
@@ -3372,7 +3996,12 @@ const initMobileDocDrawers = () => {
         pts.delete(e.pointerId);
         if (pts.size < 2) pinch = null;
         if (!drag) return;
-        if (over > 52 && pageBtns.next) pageBtns.next.click();
+        /* 8 辨識手寫字且抽屜收合時：拖到邊界再拖 = 換上一／下一摺
+           （展開後與其他區塊一樣是翻頁）。 */
+        if (root.__mFold && !drawer.classList.contains('is-full')) {
+          if (over > 52) root.__mFold.step(1);
+          else if (over < -52) root.__mFold.step(-1);
+        } else if (over > 52 && pageBtns.next) pageBtns.next.click();
         else if (over < -52 && pageBtns.prev) pageBtns.prev.click();
         edgeL.classList.remove('is-on'); edgeR.classList.remove('is-on');
         drag = null; over = 0;

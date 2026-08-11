@@ -6074,6 +6074,107 @@ Verified:
 Remaining:
 - Not tested in a real browser/device.
 
+### 2026-08-10 15:44 HKT — Codex — Remove Part 3 developing blur from OCR preview
+
+Summary:
+- Removed the `尚在開發中` faded/blurred overlay and interaction lock from `#part-3-ai` and `#part-3-wiki` in `?preview=ocr`, so the later Part 3 content displays normally.
+- Kept the existing OCR preview entry point and the hidden `#part-3-research-questions` / `#part-3-tools` sections unchanged.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed no `is-preview-faded`, `preview-faded-badge`, or `LOCKED_SECTION_IDS` references remain.
+- Browser QA: `?preview=ocr` showed no faded/badge/inert state on the later Part 3 sections; the normal page did not receive preview styling.
+
+Remaining:
+- None for this adjustment.
+
+### 2026-08-10 00:24 HKT — Codex — Keep the normal desktop Codex title bar visible
+
+Summary:
+- Moved the Part 4 Codex window 4px inside the scene in normal desktop mode so its title bar is not clipped by the scene's `overflow: hidden` boundary.
+- Left mobile and narrow-computer positioning unchanged.
+- Refreshed the StoryMap asset version query strings.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Confirmed the Part 4 markup still contains only the Codex window.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- The in-app browser blocked the local file preview, so the normal desktop visual still needs a manual reload in the user's open preview.
+
+### 2026-08-10 00:09 HKT — Codex — Simplify Part 4 and reclaim Try a Try visual space
+
+Summary:
+- Removed the PaddleOCR Python window from Part 4 in every layout and changed the Codex request to “set up PaddleOCR on my computer”.
+- Moved the desktop Codex window into the former right-side window area, aligned its top edge with the Part 4 text card, and reduced its desktop height.
+- Styled the JSON field controls to match the feature buttons used in Part 7.
+- Kept the 印刷字／手寫字 switch beside「11 試一試」and removed the rendered 進度／1／2／3 bar so each step has more visual space.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Browser checked desktop Part 4: Codex top edge matches the text card; Python window count is 0.
+- Browser checked JSON controls and the Try a Try header; the JSON controls use the Part 7 button treatment and the progress bar is absent.
+- Browser checked the narrow layout and reset the temporary viewport override.
+- `node --check Website/storymap/storymap.js`, CSS brace checks, and `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 11:53 HKT — Codex — Make the intro 01 gallery image-proportional and align intro 03 labels
+
+Summary:
+- Removed the normal desktop gallery's shared fixed height for `清代奏折制度`; each page now sizes its image stage from that image's native aspect ratio and recalculates when the gallery changes pages.
+- Reduced the normal desktop gap between the `清代奏折制度` and `清代奏折的研究價值` cards.
+- Applied the narrow layout's source-label positioning to the normal desktop `研究清代奏折的主要困難` panel so computed `--source-bubble-top` values are used.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+
+Verified:
+- Browser checked the local site at 1280px: gallery stage heights were independently measured as 427px, 430px, and 854px for pages 1–3; the card gap was 12px.
+- Browser checked the narrow 980px fallback and confirmed the responsive gallery sizing remained active.
+- Normal source labels received non-zero computed positions from `--source-bubble-top`.
+- `node --check Website/storymap/storymap.js` passed.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 00:00 HKT — Codex — Responsive header, tools height, and OCR JSON timing
+
+Summary:
+- Kept the website name visible on the left side of the top bar in mobile and narrow computer modes.
+- Set `所需的工具與資源` to fill the viewport height below the top bar in both modes.
+- Slowed the JSON wording animation in the `使用OCR的原因` visual from 9ms to 18ms per character.
+- Updated the StoryMap CSS and JavaScript cache-busting query versions.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed and `git diff --check` passed.
+- Confirmed the responsive header, tools height, and JSON timing overrides are present after the existing mobile/narrow rules.
+
+Remaining:
+- Mobile and narrow-screen visual checking still requires a manual reload in the user’s browser.
+
 ### 2026-08-08 17:22 HKT — Codex — Give OCR definition/test visuals more narrow-screen height
 
 Summary:
@@ -6089,6 +6190,127 @@ Verified:
 - At 390×844, OCR definition is 782px high with a 320.7px centered visual; OCR test has a 303.8px centered visual, and both groups fit within their sections.
 - At 1024×900, both sections are 838px high; the OCR visual is 342px and the test visual is 324px, centered horizontally.
 - Browser screenshots show the enlarged visuals without adding inner page scrolling.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-09 22:40 HKT — Codex — Responsive menu, OCR preview, and Part 3 visual fixes
+
+Summary:
+- Made the compact mobile menu button toggle the dropdown closed when clicked again.
+- Removed the three pre-OCR sections from the OCR teacher preview so no developing blur area remains above OCR; later unfinished sections remain faded.
+- Reduced the Agentic AI／PaddleOCR mobile typography, removed the 7／8 feature-filter backdrop, and changed the 9 JSON field controls to mobile pill buttons without arrows.
+- Unified the mobile JSON text size across 7／8 and 9, and made the 11 PDF page fill its available area responsively with aspect-ratio-preserving containment.
+- Updated the StoryMap script query version so the browser picks up the responsive fixes after reload.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed and `git diff --check` passed.
+- Cache-busted HTTP preview confirmed the three pre-OCR sections are hidden while `part-3-ai` and `part-3-wiki` remain faded.
+- Existing concurrent StoryMap CSS changes and untracked handwritten image assets remain preserved.
+
+Remaining:
+- The in-app browser does not expose a mobile viewport and blocks the local `file://` tab, so final narrow-screen visual checking still requires a manual reload in the user’s browser.
+
+### 2026-08-08 18:16 HKT — Codex — Recombine folded 手寫字 scans into two-panel pages
+
+Summary:
+- Divided each of `page1.png`, `page2.png`, and `page3.png` into equal horizontal panels using the requested order: right = `a`, middle = `b`, left = `c`.
+- Recombined the panels into `1a1b`, `1c2a`, `2b2c`, `3a3b`, and `3c`, with a blank right half on `3c`.
+
+Files changed:
+- `Website/storymap/試一試/手寫字/1a1b.png`
+- `Website/storymap/試一試/手寫字/1c2a.png`
+- `Website/storymap/試一試/手寫字/2b2c.png`
+- `Website/storymap/試一試/手寫字/3a3b.png`
+- `Website/storymap/試一試/手寫字/3c.png`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- All five outputs are 3106×3423 RGB PNGs.
+- Each output was visually inspected; source scans remain unchanged.
+- `git diff --check` passes.
+
+Remaining:
+- None for this scan recombination.
+
+### 2026-08-08 18:03 HKT — Codex — Add responsive row extension and narrow source windows
+
+Summary:
+- Added a smooth scroll-triggered extension for the normal responsive list rows in Parts 3 and 6; Part 3 rows 02–03 remain fully expanded as the zhu113/zhu119 communication views.
+- Reduced normal expanded visual heights so the card, visual, and expanded information area fit approximately within the top-bar-excluded viewport, while preserving proportional image fitting.
+- Narrowed and centered both source-document windows, kept their labels on both sides with controlled overlap, and hid source-detail hover text in the responsive modes.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed Part 3 rows 02–03 are excluded from the scroll-extension class and that the responsive source labels use the connector-calculated positions.
+- Existing unrelated OCR and drawer/layout edits remain unstaged and preserved.
+
+Remaining:
+- Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
+
+### 2026-08-08 18:09 HKT — Codex — Continue responsive row and source-window adjustment
+
+Summary:
+- Kept the scroll extension limited to ordinary rows and the 97% height target limited to the ordinary expanded row layout.
+- Kept Part 3 rows 02–03 expanded and exempt from the row animation, with narrower zhu113/zhu119 documents and side labels that may overlap the windows.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- `git diff --check` passed.
+
+Remaining:
+- Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
+
+### 2026-08-08 18:06 HKT — Codex — Set cover/research group to a 60% height target
+
+Summary:
+- Set the combined `運用平台研究其他的問題`＋`適合的研究問題` responsive target to 60% of the top-bar-excluded viewport.
+- Allowed the research section to grow to its content minimum on narrow screens so the research card remains fully readable instead of being clipped.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 390×844, the cover is 287.0px and the content-safe research section is 367.0px.
+- At 1024×900, the cover is 306px and the content-safe research section is 319.9px.
+- CSS and syntax checks passed.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-08 17:41 HKT — Codex — Narrow OCR visual width and test visual height
+
+Summary:
+- In mobile and narrow-computer modes, reduced the `使用OCR的原因` visual to 70% width and centered it horizontally.
+- Reduced the `OCR測試` visual to 60% of its available visual height and centered it within the visual area.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 390×844, the OCR visual is 250.6px wide and the test visual is 281.5px high from a 469.1px available area.
+- At 1024×900, the OCR visual is 668.1px wide and the test visual is 389.3px high from a 648.9px available area.
+- Both remain centered; syntax and CSS balance checks passed.
 
 Remaining:
 - No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
@@ -6149,6 +6371,25 @@ Verified:
 Remaining:
 - Review the responsive layout visually when the local browser can load the updated file.
 
+### 2026-08-08 17:49 HKT — Codex — Make OCR visual proportional and test section content-sized
+
+Summary:
+- Kept the `使用OCR的原因` visual at 70% width, but changed its height to a proportional 1.05:1 width-to-height ratio so the pages and JSON output scale together.
+- Restored `OCR測試` to a natural 1:1 visual size and removed the forced 130% section height; the whole part now follows the text, gap, visual, and original padding.
+- Reduced the test text-to-visual gap to the normal compact section gap.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 390×844, the OCR visual is 250.6×238.7px; the OCR test part is 866.3px high with a 322.2px visual.
+- At 1024×900, the OCR visual is 668.1×636.3px; the OCR test part is 996.9px high with a 560px visual.
+- Both modes retain the original 56px／61.44px section padding and the visuals are centered.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
 ### 2026-08-08 17:53 HKT — Codex — Trigger gallery panels from current image position
 
 Summary:
@@ -6190,3 +6431,963 @@ Verified:
 
 Remaining:
 - Live visual browser verification remains unavailable because the local file URL is blocked by the in-app browser policy.
+
+### 2026-08-08 17:56 HKT — Codex — Widen the 7/8 mobile史料抽屜 and focus each highlight
+
+Summary:
+- Widened the default 7/8史料抽屜, enlarged the four bottom controls, and kept the width grip centered on the right border.
+- Added per-feature focus coordinates and scale values so each annotated printed or handwritten image opens with its highlighted area centered.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed; CSS brace checks passed; `git diff --check` passed.
+- Checked all 7 printed and 8 handwritten annotated assets and added a focus rule for each feature.
+
+Remaining:
+- Reload the live page and check the drawer at a narrow viewport.
+
+### 2026-08-08 18:01 HKT — Codex — Content-size OCR definition section
+
+Summary:
+- Increased the `使用OCR的原因` visual to 80% width and kept its 1.05:1 proportional height.
+- Removed the fixed 150% height from the OCR definition part; its height now follows cards 1 and 2, the compact gap, the visual, and the restored original padding.
+- Removed the extra top space above `甚麼是 OCR？` and bottom space below the visual.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- At 390×844, the part is 802.0px high, the centered visual is 286.4×272.8px, and the original 56px padding is restored.
+- At 1024×900, the part is 1185.2px high, the centered visual is 763.5×727.1px, and the original 61.44px padding is restored.
+- The card-to-visual gap is approximately 14px in both narrow modes.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-09 22:54 HKT — Codex — Move Try a Try download controls into Step 1
+
+Summary:
+- Removed the `下載` and `已下載` buttons from the PDF metadata strip for both 印刷字 and 手寫字 modes.
+- Added the two buttons below the Step 1 guide text, using the same primary／secondary interaction style as `一 · 安裝工具`.
+- Kept `下載` opening the selected PDF before advancing, while `已下載` advances without opening it.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed and `git diff --check` passed.
+- Live HTTP inspection confirmed both modes show the correct PDF filename, no old download-strip buttons, and the two Step 1 guide buttons.
+
+Remaining:
+- Narrow-screen visual checking still requires a manual reload in the user’s browser.
+
+### 2026-08-09 23:07 HKT — Codex — Adjust folded 手寫字 scan recombinations
+
+Summary:
+- Rebuilt the folded scan outputs using the confirmed panel order `1b1a`, `2a1c`, `2c2b`, and `3c3b3a`.
+- Removed the superseded derived outputs so the folder contains only the current recombinations.
+
+Files changed:
+- `Website/storymap/試一試/手寫字/1b1a.png`
+- `Website/storymap/試一試/手寫字/2a1c.png`
+- `Website/storymap/試一試/手寫字/2c2b.png`
+- `Website/storymap/試一試/手寫字/3c3b3a.png`
+- Removed superseded `1a1b.png`, `1c2a.png`, `2b2c.png`, `3a3b.png`, and `3c.png`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `1b1a.png`, `2a1c.png`, and `2c2b.png` are 3106×3423 RGB PNGs.
+- `3c3b3a.png` is a 4659×3423 RGB PNG.
+- Visual inspection confirmed the requested left-to-right panel sequences.
+
+Remaining:
+- No git commit created because concurrent Claude/user edits remain in the worktree; those changes were preserved.
+
+### 2026-08-09 23:11 HKT — Codex — Hide the pre-步驟二 flow responsively
+
+Summary:
+- Hid `重用平台的基本流程` from normal computer mode because it appears before `步驟二`.
+- Kept its title and explanation on mobile／narrow computer layouts, while hiding the 8-square flow chart and removing its reserved height.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed and `git diff --check` passed.
+- Confirmed the desktop and narrow-screen visibility rules are separated by the existing 1040px breakpoint.
+
+Remaining:
+- Narrow-screen visual checking still requires a manual reload in the user’s browser.
+
+### 2026-08-09 23:16 HKT — Codex — Keep the pre-步驟二 chart visible
+
+Summary:
+- Removed the responsive hide rules so `重用平台的基本流程` and its 8-square chart remain visible in normal computer, mobile, and narrow computer modes.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed and `git diff --check` passed.
+
+Remaining:
+- Narrow-screen visual checking still requires a manual reload in the user’s browser.
+
+### 2026-08-09 HKT — Claude — Fix 辨識手寫字 source image missing in mobile 史料 drawer
+
+Summary:
+- Section 8 renders its source as a 3D accordion of CSS background-image panels (thirds of a sheet), not `<img>`, so the drawer's image rules never matched and the panel showed blank.
+- Drawer now shows one fold at a time at full drawer width (aspect from `--fold-aspect`); expanded shows two folds side by side.
+- `<` / `>` step fold-by-fold in section 8; picking a feature chip jumps to that feature's fold; drag-to-edge and pinch zoom supported.
+- Desktop accordion logic untouched (`.is-open` vs the new mobile-only `.is-mopen`).
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; cascade order and JSON fold/feature indices confirmed.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 16:27 HKT — Codex — Add Codex-style AI Skills example for daily event classification
+
+Summary:
+- Added a right-side Codex-style conversation to `修改、建立AI Skills`, using `qianlong37_dates_by_day.json` as the user-provided input example.
+- The prompt asks AI to segment each day into atomic events and classify them into the established 11 categories. The response presents a reusable Skill draft, `classify-qianlong-diary-events.md`, with `qianlong37_events_by_category.json` as the output target.
+- The visual preserves source provenance, exact quotations, OCR uncertainty, and a researcher-review checkpoint, and stacks below the explanatory cards on narrow screens.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed; the existing Agentic Codex animation handled the new scene without JavaScript changes.
+- In-app browser check passed at desktop and 390×844: desktop side-by-side geometry, mobile stacking, contained response scrolling, and completed animated response were confirmed.
+
+Remaining:
+- Unrelated concurrent StoryMap edits and four untracked handwritten-image assets remain untouched in the worktree.
+- The visual is a draft Skill example for teaching; it does not execute the full classification pipeline.
+
+### 2026-08-09 HKT — Claude — Refine 辨識手寫字 mobile drawer
+
+Summary:
+- `直排單欄` / `正文字體` moved from fold 0a to 1b so the drawer shows the fold containing their highlight.
+- Collapsed drawer arrows switch feature again; fold/page stepping only in the expanded drawer (drag-to-edge matches).
+- Width grip moved out of `.mdrawer` (its overflow+transform clipped it) to the root, now fixed-positioned so the right border runs through the button's centre; `--mdrawer-w` moved to the root accordingly.
+- Collapsed drawer shows the fold at full drawer width (no padding).
+- Expanded drawer reuses the original accordion, centred both ways, instead of the two-fold layout.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; feature JSON re-parsed; specificity of new overrides confirmed.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 00:18 HKT — Codex — Separate Part 7/8 backdrop and PDF colors
+
+Summary:
+- Gave「7 辨識印刷字」and「8 辨識手寫字」separate backdrop and PDF color tokens.
+- Kept the printed PDF a cool paper white and the handwritten PDF a warm manuscript-paper tone, with distinct dark backdrops behind each viewer.
+- Applied the same separation to the responsive drawer, including the handwritten folded panels.
+
+Files changed:
+- `Website/storymap/storymap.css`
+
+Verified:
+- Browser checked both viewers at the default desktop viewport and at 390×844.
+- Computed styles confirm separate backdrop/PDF layers: printed `rgb(23, 61, 64)` / `rgb(255, 253, 248)` and handwritten `rgb(38, 59, 62)` / `rgb(234, 216, 184)`.
+- `git diff --check` passed; temporary browser viewport was reset.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-09 HKT — Claude — Assign remaining 辨識手寫字 features to their fold
+
+Summary:
+- 臣字款→1b (panel 4), 抬頭→2b (panel 7), 硃批→2a (panel 6), 印章→3a (panel 9); 浮水印 already correct at 3b (panel 10). 上奏官員 left unchanged (0a, not mentioned).
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Re-parsed feature JSON, confirmed all resulting labels match the request.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 00:26 HKT — Codex — Lighten the Try a Try PDF backdrop
+
+Summary:
+- Replaced the dark green surrounding area in「11 試一試」with a very light grey backdrop in both 印刷字 and 手寫字 modes.
+- Kept the printed PDF near-white and the handwritten PDF warm beige so the document surface remains distinct from the surrounding area.
+- Applied the same colors to the narrow/mobile layout.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Browser checked both modes at the default viewport and at 390×844.
+- Computed styles confirm light-grey backdrops and separate PDF surfaces in both modes.
+- `node --check` and `git diff --check` passed; temporary browser viewport was reset.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 HKT — Claude — Fix width-grip position; more fold assignments
+
+Summary:
+- Grip was floating mid-image because `.mdrawer`'s width default and `.mdrawer-grip`'s left default were two different hardcoded values. Fixed by declaring `--mdrawer-w` once on the explorer root and having both consume the inherited value — single source of truth.
+- 上奏官員→1b, 硃批→1c, 印章→1c (same fold as 硃批); 浮水印 unchanged at 3b.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; feature JSON re-parsed, all 8 fold labels confirmed.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 00:33 HKT — Codex — Enlarge and align the Part 4 Codex visual
+
+Summary:
+- Enlarged the Agentic AI visual window in desktop and narrow layouts.
+- Increased Codex text to 18px and the title bar text to 14px in all animation states.
+- Removed the frame inset so the desktop Codex top aligns with the text card; the narrow layout now places the larger window directly below the card.
+
+Files changed:
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Browser checked desktop and 390×844 layouts.
+- Desktop Codex top and text-card top both compute to `138.859375px`; narrow Codex is enlarged to `329.36 × 504px` with 18px text.
+- `node --check` and `git diff --check` passed; temporary browser viewport was reset.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 HKT — Claude — Fix expanded mode blank for 辨識手寫字 drawer
+
+Summary:
+- Stepping folds via `<`/`>` while collapsed never updated the desktop accordion's `pair`/`.is-open` state, so expanding ("整頁") after arrow-stepping showed nothing (all panels stayed as closed slivers).
+- Fixed: expanding now syncs `pair` to the current fold and calls the shared `render()`, so the right pair opens immediately.
+
+Files changed:
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check` passed; call path traced (fullBtn → refresh → sync+render on every expand).
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 00:39 HKT — Codex — Shorten the Part 4 Agentic AI visual
+
+Summary:
+- Reduced the Agentic AI visual height in both desktop and narrow layouts.
+- Kept the enlarged 18px Codex text and aligned the shorter window to the text card on desktop and directly below it on narrow screens.
+- Content remains scrollable inside the shorter Codex window.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Browser checked desktop and 390×844 layouts.
+- Desktop visual/codex height is `499.20 / 429.30px`; narrow visual/codex height is `460 / 395.59px`, with 18px text.
+- Temporary browser viewport was reset.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 11:40 HKT — Codex — Restore normal-mode Part 3 steps and Try It desktop panel
+
+Summary:
+- Kept the sections before `步驟二` visible in normal mode; the explicit OCR preview remains the mode that hides them.
+- Restored the desktop `試一試` info-panel top bar with `進度 1 2 3` and the `印刷字／手寫字` switch.
+- Restored the dark-green PDF surround and made the desktop PDF use the available document height while preserving its aspect ratio; narrow mode keeps its existing mobile drawer layout.
+- Added cache-busting version strings so the edited HTML, CSS, and JavaScript are loaded together.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Browser checked normal desktop at 1280×900, including both 印刷字 and 手寫字 modes.
+- Browser checked narrow mode at 390×844; the desktop panel header is hidden and the mobile switch/drawer remains active.
+- `node --check Website/storymap/storymap.js`, `git diff --check`, and CSS brace checks passed.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 11:47 HKT — Codex — Match the Try It floating-paper composition
+
+Summary:
+- Adjusted the normal desktop `試一試` viewer to match the reference composition: a centered paper stack floating within the dark-green backdrop, with visible surrounding space and layered paper shadows.
+- Kept the Try It document free of feature labels and preserved the narrow/mobile drawer layout.
+- Added `--try-pdf-display-h` in `storymap-cards.css` as the single manual control for the desktop paper height; it is currently `76%` of the document backdrop.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser checked the centered desktop paper geometry at 1280×900.
+- Browser checked narrow mode at 390×844; its drawer and title-row switch remain active while the desktop panel top bar stays hidden.
+- `node --check Website/storymap/storymap.js`, `git diff --check`, and CSS brace checks passed.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 11:52 HKT — Codex — Correct the normal handwritten Try It scan ratio
+
+Summary:
+- Corrected the normal desktop handwritten PDF to use its native landscape three-fold ratio (`4649:3380`) instead of stretching into a tall panel.
+- Kept the handwritten page centered inside the floating paper stack and preserved the printed mode’s proportions.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser checked handwritten mode at 1280×900: the rendered image now follows the source ratio and remains centered on the green backdrop.
+- Browser switched back to printed mode and confirmed its existing `76%` floating-paper geometry remains unchanged.
+- `node --check Website/storymap/storymap.js`, `git diff --check`, and CSS brace checks passed.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 12:02 HKT — Codex — Keep 重用平台的基本流程 visible in every version
+
+Summary:
+- Removed `part-3-basic-flow` from the `?preview=ocr` hidden-section list.
+- Kept the existing normal, narrow, and mobile layouts unchanged while allowing the section to remain visible in all modes.
+- Updated the preview documentation and cache-busting version.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser checked `重用平台的基本流程` at normal 1280px, narrow 980px, and mobile 390px with the OCR preview URL; the section remained unhidden and its title was present.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes were preserved; no mixed commit was created.
+
+### 2026-08-10 HKT — Claude — Improve intro tab mobile UI
+
+Summary:
+- Added a scroll-in reveal (fade/rise/scale, plays once) for intro cards on mobile via `initIntroMobileReveal()`; sections 3 and 6's tap-to-open panels now pop open with an overshoot easing, animating to a JS-measured real height and releasing the cap afterwards.
+- Removed gallery letterbox spacing on mobile by sizing the image area to the active image's aspect ratio (image size unchanged; `cover` images skipped).
+- Tightened spacing around the 硃113/硃119 panels without changing their height.
+- Shrank the 研究成果 GIF frame on mobile (`--intro-5-visual-scale`, default .78).
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `node --check` passed; CSS depth-scans balanced; HTML tag balance unchanged; scripted check confirmed every new rule sits inside a mobile media query (desktop untouched).
+
+Remaining:
+- Not tested in a real browser/device. Tuning variables exposed for the new sizes/gaps.
+
+### 2026-08-10 HKT — Codex — Normal handwritten Try It folded scan viewer
+
+Summary:
+- Normal desktop `試一試` handwritten mode now uses the supplied combined scans `1b1a.png`, `2a1c.png`, `2c2b.png`, and `3c3b3a.png`.
+- Base two-part scans render in the same two-fold UI as `8 辨識手寫字`; three-part feature images such as `直欄.png` render as two adjacent folds and can switch to the second pair.
+- Narrow/mobile mode continues to use the original single-image viewer, with a CSS safeguard hiding the desktop folded strip.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/試一試/手寫字/1b1a.png`
+- `Website/storymap/試一試/手寫字/2a1c.png`
+- `Website/storymap/試一試/手寫字/2c2b.png`
+- `Website/storymap/試一試/手寫字/3c3b3a.png`
+
+Verified:
+- Browser checked desktop 1280×900 geometry and the annotated feature transition from `摺 1 / 2` to `摺 2 / 2`.
+- Browser checked narrow 390×844 fallback: the folded strip is hidden and the original image remains visible.
+- `node --check`, `git diff --check`, and CSS brace-depth checks passed.
+
+Remaining:
+- Existing concurrent worktree changes were preserved; no mixed commit or deployment was made.
+
+### 2026-08-10 HKT — Codex — Simplify handwritten Try It spreads and final-page layout
+
+Summary:
+- Removed the brown fold-edge backdrop and paper-stack layers from normal desktop `試一試` handwritten mode.
+- The indicator now shows only `頁 X / 4`.
+- The final source spread now opens with a blank page on the left and the rightmost source page on the right.
+- Updated `Website/storymap/試一試/手寫字/1b1a.png` so the isolated `奏` is smaller and centered while preserving the original image size and document details.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/試一試/手寫字/1b1a.png`
+
+Verified:
+- Desktop browser checked `頁 1 / 4` and `頁 4 / 4` states, including the final blank-left spread.
+- `1b1a.png` remains 3106×3423 RGB PNG.
+- `node --check`, `git diff --check`, and CSS brace-depth checks passed.
+
+Remaining:
+- Existing concurrent worktree changes were preserved; no mixed commit or deployment was made.
+
+### 2026-08-10 HKT — Codex — Correct handwritten Try It proportions and accordion transitions
+
+Summary:
+- Corrected the desktop handwritten Try It frame so the open pair keeps the supplied scan ratio rather than using the old stretched landscape ratio.
+- Changed the desktop renderer to a persistent accordion strip like `8 辨識手寫字`: page folds remain in the strip, the previous page collapses, and the next page opens during arrow navigation.
+- Kept the three-part annotated feature pair switching and the narrow/mobile single-image fallback.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Desktop 1280×900 browser geometry matched the source ratio; page and annotated-feature transitions were checked.
+- Narrow 390×844 browser fallback remained on the original image viewer.
+- `node --check`, `git diff --check`, and CSS brace-depth checks passed.
+
+Remaining:
+- Existing concurrent worktree changes were preserved; no mixed commit or deployment was made.
+
+### 2026-08-10 HKT — Claude — Intro mobile round 2
+
+Summary:
+- Gallery info panel now auto-shows for every image (2nd/3rd included) — it was being cleared on every page change and could only be restored by scrolling. Panel now expands downward (gallery height content-driven) instead of shrinking the image, and each image's window fits its own aspect ratio on mobile.
+- Reveal system rebuilt: stronger motion, replays both scroll directions, with distinct effects per element type (heading slide-in, text rise, card rise+scale, visual scale, table and 硃113/硃119 panel opening top-to-bottom) plus staggered text inside cards/panels.
+- Added muted per-section backdrop variation across the intro (`--intro-bg-1..6`), mobile-only.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `node --check` passed; CSS depth-scans balanced; scripted checks confirmed no reveal rule leaks to desktop and the source-panel selector no longer double-targets nested elements.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Fix heading layout and missing 硃113/硃119 panels
+
+Summary:
+- Heading looked detached because `.title-row` inside `.copybox` got its own transform on top of the card's. Added a nesting guard so nested elements only use the opacity-based inner stagger.
+- The two doc panels were blank because `clip-path` cut away their side callouts and created a clipping context. Removed clip-path from all reveal effects (opacity + transform only); top-to-bottom open now uses `scaleY` + top origin, and the JS-measured connectors are refreshed after the animation settles.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; confirmed no clip-path animation remains and no TDZ on the connector-refresh reference.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Fix card overlapping section subtitle
+
+Summary:
+- Heading and its wrapper were both being animated (the previous guard was order-dependent), so the heading translated into the next card and got painted over. Replaced with an order-independent two-phase nesting filter; nested elements now use the opacity-only inner stagger.
+- Also fixed `.acc-panels` (which carries `.visual-frame` and is `display: contents` on mobile) swallowing the reveal for the galleries and both source panels.
+- Reduced travel distances below the block gaps and added z-index so transitioning elements can't be covered.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; simulated the nesting algorithm on the real DOM — 0 kept elements nested inside another, both source panels retained.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Heading spacing, source-panel gaps, doc-panel unfold
+
+Summary:
+- Added breathing room between section heading, intro text and the first card (`--intro-head-gap`, `--intro-title-gap`).
+- Tightened 通信關係複雜/資訊流向複雜 rows: stronger negative margins so each panel hugs its card, removed panel padding, cut the top inset, and made the document fill the panel so the empty bottom band goes away.
+- Doc panel now unfolds: outer frame opacity-only (its callouts are JS-positioned), `.ip-body` scales open from the header, then body text, then staggered side callouts and connector lines. Connector geometry recomputed twice after the animation settles.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `node --check` passed; CSS depth-scans balanced; all new source rules confirmed inside the mobile media query; reduced-motion covered so `.ip-body` can't stay squashed.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Card expand effect, longer durations, gallery fixes
+
+Summary:
+- All cards now unfold downward from their top edge (`scaleY`, layout-neutral so nothing below jumps); contents fade in after the unfold. Removed a conflicting ID-prefixed rule that would have pinned sections 03/06 cards open.
+- Lengthened all reveal durations (`--reveal-fade` .7s / `--reveal-move` .95s, 110ms stagger) and pushed the connector refreshes to match.
+- Fixed images 2/3 info panel for real: `renderBody()` was stripping `is-expanded` after `show()` set it; the decision now lives in `renderBody()` alone.
+- Removed the grey/white board behind images: the `max-height` caps made contain-fit images shrink and expose the stage background. Caps dropped and stage/image backgrounds made transparent on mobile.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `node --check` passed; CSS depth-scans balanced; `is-expanded` handled in exactly one place; no mobile stage max-height caps remain.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Card expand reworked as a true reveal
+
+Summary:
+- Card now uncovers its text via a `clip-path` curtain from the top edge instead of `scaleY` (which squashed the text). Layout-neutral, so nothing below shifts as it replays on scroll.
+- Negative left/right/bottom insets keep the card's shadow from being clipped.
+- Cards no longer fade in; the staggered inner-text animation is now limited to non-card blocks so the curtain isn't sweeping over invisible text.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; reduced-motion still resets clip-path.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Doc panel uses the card curtain reveal
+
+Summary:
+- `.ip-body` now reveals via `clip-path` from the header downward (text at normal size) instead of `scaleY`, matching the card effect.
+- Safe because the side callouts/connectors live outside `.ip-body`; clipping the outer panel is still avoided.
+- Removed the separate body-text fade so the curtain isn't sweeping over blank space; callouts keep their staggered fade.
+
+Files changed:
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+
+Verified:
+- `node --check` passed; CSS depth-scan balanced; no scaleY left on `.ip-body`; reduced-motion still resets clip-path.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 HKT — Claude — Text/card reveal effects extended to Part 3
+
+Summary:
+- Reveal system now supports multiple roots with different scopes. Part 3 gets text + card effects only; the intro keeps the full set.
+- Part 3 deliberately excludes visuals: its visual elements are interactive (explorers, 試一試, agentic scenes) and the mobile 史料 drawer is `position: fixed`, so a transform/clip-path on any ancestor would break its positioning.
+
+Files changed:
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check` passed; simulated Part 3 targeting on the real DOM — 26 targets, 0 nested, 0 touching interactive widgets; intro regression check unchanged (27 targets, both source panels intact).
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 15:46 HKT — Claude — Remove gallery backdrop, left-align 硃113/硃119 doc panel, widen 研究成果 visual
+
+Summary:
+- Image galleries wrapped in `.acc-panel` (difficulty-quantity, case-background, case-route, case-sources) previously showed a second frame: `.acc-panel`'s own background/border/box-shadow sat behind `.photo-gallery`'s own background/border, reading as an extra "backdrop" between the image+caption panel and the page background. Removed via `.acc-panel:has(> .photo-gallery) { background: transparent; border: 0; box-shadow: none; }`, scoped to `#intro-1-3-a`/`#intro-1-6-a-source` and mobile-only, so the two 硃113/硃119 source-flow panels (not photo galleries) are untouched. Uses `:has()`, which needs a fairly recent browser (Chrome 105+/Safari 15.4+/Firefox 121+).
+- 硃113/硃119 doc panel (mobile/narrow only): panel now left-aligns (`margin-left: 0`) instead of centering inside `.source-flow-visual`. Both label groups (`.source-callouts`/`-left` and `.source-callouts-right`), previously flanking the panel on both sides, now sit side by side on the right (`right: calc(var(--intro3-callout-w) + 10px)` and `right: 0`), freeing the left edge entirely for the document. Added shared `--intro3-callout-w` var on `#intro-1-3-a` so the panel's right-side padding reservation and both label columns stay in sync. Desktop is untouched (its `.source-callouts` rule is unconditional/unscoped by breakpoint and still flanks both sides).
+- 研究成果 visual (`#intro-1-5 .review-capture-frame`, mobile only): width changed from `calc(100% * var(--intro-5-visual-scale, .78))` (78% of the padded `.story-inner` column) to a viewport breakout at 97% of screen width, reusing the same `margin: calc(50% - 48.5vw)`-style technique already used by `.part3-feature-explorer`. Default var renamed from `.78` to `.97`.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- CSS brace-depth scan balanced on both stylesheets; `node --check storymap.js` unaffected (no JS touched).
+- BeautifulSoup check against the real HTML: exactly the 4 photo-gallery-containing `.acc-panel`s (difficulty-quantity, case-background, case-route, case-sources) match `:has(> .photo-gallery)`; the two source-flow `.acc-panel`s (difficulty-relations, difficulty-network) do not.
+- Confirmed `.source-callouts source-callouts-left`/`.source-callouts source-callouts-right` and `.source-flow-document` class names in the HTML match the selectors used.
+
+Remaining:
+- Not tested in a real browser/device — no way to confirm the label columns don't visually collide with each other at very narrow widths, or that connector lines (still visible in the 981–1040px non-touch sliver) redraw correctly against the new right-side label positions. The connector geometry is computed at runtime from actual element positions, so it should adapt automatically, but this needs an on-device check.
+- `:has()` selector support should be confirmed against whatever browser will actually be used to present this to the teacher, if it's an older one.
+
+### 2026-08-10 16:14 HKT — Claude — Revert 硃113/硃119 doc panel to centered + left/right labels
+
+Summary:
+- Undid the earlier left-align + right-stacked-labels layout for the mobile/narrow 硃113/硃119 doc panel, per user request to go back to the previous UI.
+- `#intro-1-3-a .source-flow-document` (mobile): `margin-left` back to `auto` (centered again). Width (`min(85%, 760px)`) and `margin-bottom: 20px` were left as-is — those look like a manual tweak made directly in the file since the last session entry, not part of what was being reverted.
+- Removed the mobile-only overrides on `#intro-1-3-a .source-flow-visual` padding and `#intro-1-3-a .source-callouts`/`.source-callouts-right`. With those gone, both label groups fall back to the unconditional base rule earlier in the file (left group at `left: 0`, right group at `right: 0`) — the original flanking layout.
+- `--intro3-callout-w` variable is left in place (still used by the base `.source-callouts` width rule); it's just no longer referenced by the mobile block.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- CSS brace-depth scan balanced.
+
+Remaining:
+- Not tested in a real browser/device.
+
+### 2026-08-10 16:45 HKT — Codex — Simplify AI Skills example response
+
+Summary:
+- Updated the `修改、建立AI Skills` example with the requested Traditional-Chinese prompt for a reusable Skill that divides each day's 起居注 OCR text into non-overlapping events and classifies them.
+- Reduced the AI response to `已整理為 Skill 草稿：`, `classify-qianlong-diary-events.md`, `11 個固定分類`, and the 11 fixed category labels only; removed JSON event examples and extra output details.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- In-app browser check confirmed the exact prompt, completed response, hidden thinking phase, and no JSON event item.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+- This remains a visual draft example and does not execute the full 220-day classification pipeline.
+
+### 2026-08-10 16:53 HKT — Codex — Add VS Code Skill editor behind Codex response
+
+Summary:
+- Added a VS Code-style window behind the Codex conversation in the `修改、建立AI Skills` visual.
+- Put the actual `classify-qianlong-diary-events.md` Skill draft in the editor animation, including daily non-overlapping event segmentation, Traditional-Chinese fixed categories, JSON output requirements, verbatim quotations, and researcher review safeguards.
+- Removed the English category identifiers from the Codex response; it now shows only the Traditional-Chinese category labels and no JSON event items.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- In-app browser check confirmed the VS Code window is behind Codex, both animations render, the Codex response completes, and no English type identifiers appear in the response.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+- This remains a visual Skill draft example and does not execute the full 220-day classification pipeline.
+
+### 2026-08-10 17:01 HKT — Codex — Make the VS Code Skill editor clickable and complete
+
+Summary:
+- Extended the Part 3 window interaction so the VS Code Skill editor can be clicked to move in front of Codex, while Codex remains available as the other layer.
+- Expanded the editor animation to show the complete `classify-qianlong-diary-events.md` draft: task, input, segmentation rules, fixed Traditional-Chinese categories, JSON output requirements, verbatim evidence, uncertainty handling, and researcher review.
+- Refreshed the StoryMap JavaScript version query so the new click behavior is loaded in the browser.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap.css`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- In-app browser check confirmed clicking the visible VS Code title bar raises it to the front and the complete Skill text renders.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+- This remains a visual Skill draft example and does not execute the full 220-day classification pipeline.
+
+### 2026-08-10 17:10 HKT — Codex — Restore staged Codex and VS Code animation
+
+Summary:
+- Restored the Part 3 AI Skills sequence: typed Codex prompt, Codex thinking, VS Code Skill typing, then typed Codex output.
+- Removed the green background from the AI Skills scene by making its scene background transparent.
+- Added clearly grouped manual size, position, title-font, and content-font variables for both windows in base, narrow, and mobile sections of `storymap-cards.css`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- In-app browser timing check confirmed the four stages occur in order, Codex output appears after the full VS Code text, the scene background is transparent, and clicking VS Code raises it to the front.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+- This remains a visual Skill draft example and does not execute the full 220-day classification pipeline.
+
+### 2026-08-10 17:21 HKT — Codex — Increase AI Skills visual frame height
+
+Summary:
+- Increased the `修改、建立AI Skills` visual frame height through its existing responsive `--part3-ai-skills-frame-height` variables.
+- Updated desktop, narrow, and mobile values so the taller frame remains manually adjustable per mode.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- Browser geometry check confirmed the desktop frame now renders at 680px height.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+### 2026-08-10 17:29 HKT — Codex — Play AI Skills animation once per reload
+
+Summary:
+- Changed the `修改、建立AI Skills` animation controller to run once per page reload instead of restarting whenever the section re-enters the viewport.
+- The prompt, thinking, VS Code Skill typing, and Codex output sequence now keeps its one-shot state while scrolling away and back.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- Browser check confirmed the one-shot flag remains set after scrolling away and returning to the section.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+### 2026-08-10 17:34 HKT — Codex — Add numbered Skill instruction card
+
+Summary:
+- Added the `2` number box to `建立新的 Skill 時，研究者應說明：`.
+- Replaced the card copy with the requested question-led instructions and retained the small-document testing step before batch processing.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed the card renders the number box and exact revised Traditional-Chinese content.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+### 2026-08-10 17:56 HKT — Codex — Rename AI API and AI Chain execution cards
+
+Summary:
+- Renamed the first AI execution card to `使用AI Api 執行Skills`.
+- Turned the repeated-operation explanation into a numbered card titled `使用AI Chain 執行Skills`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed both cards render their requested titles and number boxes.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+### 2026-08-10 17:58 HKT — Codex — Correct AI extraction card numbering
+
+Summary:
+- Corrected the visible number boxes under `運用AI抽取資訊` to one sequence: Skills 1–2, API 3, Chain 4, Model 5, and Google Cloud 6.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- Confirmed the six AI extraction cards render the corrected number boxes.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+### 2026-08-10 18:25 HKT — Codex — Replace AI model card with full-width format section
+
+Summary:
+- Removed the `5 選用的AI Model` section, including its explanatory paragraphs, comparison table, mobile interaction code, and unused styling.
+- Kept `6 檢視史料的版面及格式` as the full-width, no-card section already present in Part 3.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- Targeted browser check confirmed no `#part-3-model` section remains and the `6 檢視史料的版面及格式` block is no-card and spans the full story width.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits, a modified UI Idea draft, and four untracked handwritten-image assets; no unrelated files were staged or removed.
+
+### 2026-08-10 18:27 HKT — Claude — Add circular AI Chain visual to #part-3-ai-chain
+
+Summary:
+- Replaced the horizontal six-node `.workflow-chain` bar (`#part-3-ai-chain-chart`, `data-part3-chart-toggle="chain-1".."chain-6"`) with a new circular AI Chain visual placed beside the two existing text cards (`使用AI Api 執行Skills` / `使用AI Chain 執行Skills`, kept exactly as Codex last renamed/renumbered them in this same worktree — this change does not touch their text or option numbers).
+- New visual: seven round step cards (renamed per prior user instruction: 文書總結 → 抽取事件 → 抽取官員行動 → 追溯資訊來源 → 抽取皇帝回應 → 抽取官員後續回應 → 輸出JSON) arranged on an arc, each filling via a conic-gradient progress ring in sequence; step 7 deliberately has no connecting arc back to step 1 (gap stays visible). Background is a Matrix-style falling-text canvas using verbatim characters from `doc_id: 硃25`'s `body` field in `review-tools/shared data/stage1_original_text.json` (黃仕簡, 為奏彰化失陷已調兵赴臺事 — directly about the 林爽文事件), not random glyphs; original paragraph breaks were collapsed into single full-width spaces to form one continuous character stream, no wording altered.
+- Layout: new `#part-3-ai-chain .part3-chain-ring-layout` grid (left column stacks the two existing text cards via `.part3-chain-ring-copy`, right column is the new `.part3-chain-ring-visual`), mirroring the existing `#part-3-ai-skills .part3-ai-skills-layout` left-copy/right-visual pattern, including the same 1040px collapse-to-one-column breakpoint.
+- New JS: `initPart3ChainRing()` in `storymap.js`, following the existing `initOcrScanScene`/`initGifAnnotations` conventions (`[data-part3-chain-ring]` container query, `IntersectionObserver` gated start/stop, `ResizeObserver`-driven canvas sizing, `prefers-reduced-motion` static fallback). The now-generic `initPart3OriginalCharts()` toggle handler is untouched and simply matches zero elements for this section now (it still serves `#part-3-basic-flow-chart`, unaffected).
+- Bumped cache-busting query strings for the two files actually changed: `storymap-cards.css?v=20260810-claude-chain-ring-01`, `storymap.js?v=20260810-claude-chain-ring-01`. `storymap.css` was not modified, so its query string is untouched.
+- This is an adaptation of the previously drafted `UI Idea/28-ai-chain-circle-scan-animation-draft.html`, developed interactively over several rounds with the user, now wired into the live section instead of the standalone draft.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Python-based structural checks: balanced `<div>`/`<section>` tags, balanced CSS braces in both stylesheets, exactly 7 `.part3-chain-ring-node` and 6 `.part3-chain-ring-link` elements, no leftover `part3-chain-frame` / `part-3-ai-chain-chart` references, no duplicate `id` introduced by this change (four pre-existing duplicate ids elsewhere — `case-route`, `case-background`, `case-sources`, `difficulty-quantity` — are unrelated to this edit and were not touched).
+- Re-read the live HTML/CSS immediately before each edit to check for concurrent Codex changes to the same lines; none occurred between read and write this time.
+
+Remaining:
+- Not tested in a real browser/device — no headless browser was available in this session to screenshot the result. Please check rendering, the matrix-rain performance, and mobile/narrow layout on an actual device before treating this as final.
+- The worktree still contains unrelated concurrent StoryMap edits from the other active session; only the three files above were staged by this change.
+- Open questions carried over from the draft: whether the matrix-rain source text should rotate across multiple documents instead of only 硃25, and whether the circular visual's timing (1.1s/step, 55ms per rain glyph refresh) needs tuning once seen live.
+
+### 2026-08-10 18:35 HKT — Claude — Drop backdrop and captions on the AI Chain ring; expose sizing variables
+
+Summary:
+- Removed the `例如，研究者可以建立一條處理奏摺的 AI Chain：` lead line and the `7 → 1 不相連` gap caption from the circular AI Chain visual; the visual now has no on-canvas text besides the seven step names and the completion badge.
+- Removed the solid `background: var(--ink)` "card" behind the whole visual — it now sits directly on the section's own background with just a thin `--line`-toned border, no fill, no drop-shadow.
+- Rewrote the Matrix-rain canvas logic in `initPart3ChainRing()` (`storymap.js`): the old approach painted an opaque dark fill on init plus a semi-transparent `fillRect` every frame, which (regardless of the container's own background) built up into a solid dark-green backdrop inside the canvas itself as frames accumulated. Replaced with a `globalCompositeOperation = 'destination-out'` erase pass each frame (fades old glyphs by reducing alpha instead of painting over them), so the canvas never accumulates a solid fill and starts fully transparent (`clearRect`, no initial `fillRect`).
+- Because the backdrop is gone, the rain glyphs and idle link strokes (previously light cream, tuned for a dark backdrop) were invisible against the section's light paper background. Switched idle glyphs/leader glyphs to darker saturated greens and idle link strokes to a dark ink tone; active-link glow switched from a yellow-on-yellow shadow to an accent-orange glow for better separation.
+- Exposed `--part3-chain-ring-max-width` / `--part3-chain-ring-margin` as overridable custom properties on `#part-3-ai-chain .part3-chain-ring-visual`, with distinct override points at desktop (base rule), ≤1040px, and ≤620px — mirroring the `--agentic-vscode-*` manual-tuning pattern already used under `#part-3-ai-skills`. Desktop overall width is still controlled by the existing `--part3-chain-ring-visual-width` (% of the grid row) in the `#part-3-ai-chain` root block. These four variables are the intended hooks for manually repositioning/resizing the visual per breakpoint going forward.
+- Bumped `storymap-cards.css`/`storymap.js` cache-busting queries to `...-claude-chain-ring-02`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed.
+- Balanced HTML tags, balanced CSS braces; no leftover `chain-ring-gap-note` / `chain-ring-lead` references in either file; still exactly 7 step nodes and 6 arcs.
+
+Remaining:
+- Still not tested in a real browser/device this session — the destination-out fade technique and the new glyph colors should be checked visually, especially glyph legibility against the actual `.surface-b` paper tone at small sizes.
+- The four new sizing/position variables are only wired for the three documented breakpoints; no UI control exists yet for adjusting them, they're meant to be edited directly in `storymap-cards.css`.
+
+### 2026-08-10 18:45 HKT — Claude — Restore the AI Chain ring's dark card backdrop
+
+Summary:
+- User asked to bring the backdrop back after the previous change removed it. Restored `background: var(--ink)`, the border alpha, and the drop-shadow on `#part-3-ai-chain .part3-chain-ring-visual`.
+- Restored the original light-on-dark colors that pair with a dark card: rain glyphs back to the bright greens (`rgba(214,255,230,.42)` / `rgba(58,209,138,.3)`), idle link stroke back to light cream (`rgba(247,243,234,.22)`), active-link glow back to the yellow-tinted shadow (`rgba(243,201,103,.55)`).
+- Kept the `destination-out` alpha-erase fix from the previous change (it prevents the canvas from self-accumulating an extra dark tint over time regardless of whether the card behind it is dark or transparent) — only the color values and the card's own background/border/shadow were reverted, not the fade technique itself.
+- Bumped cache-busting queries to `...-claude-chain-ring-03`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap.js`
+
+Verified:
+- `node --check Website/storymap/storymap.js` passed; CSS brace balance checked.
+
+Remaining:
+- Still not tested in a real browser/device this session.
+
+### 2026-08-11 14:03 HKT — Codex — Let Google Cloud text card fit its content
+
+Summary:
+- Updated the Google Cloud layout so the text card no longer stretches to the gallery's width or height.
+- Kept the gallery at its independent visual height and allowed the card to shrink-wrap its text at desktop and narrow widths.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- `git diff --check` passed.
+- `node --check Website/storymap/storymap.js` passed.
+- Browser geometry confirmed independent sizing at 1280px and 390px viewports.
+
+Remaining:
+- The worktree contains unrelated concurrent StoryMap edits and a modified AI Chain UI draft; no unrelated files were staged or removed.
+
+### 2026-08-11 14:12 HKT — Codex — Consolidate the LLM Wiki text cards
+
+Summary:
+- Combined the former second and third LLM Wiki cards into one research card.
+- Added number-box titles to the two remaining cards: `LLM Wiki` and `LLM Wiki 與歷史研究`.
+- Updated the matching StoryMap CSS selectors and removed the unused third-card styling.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed.
+- `git diff --check` passed; no stale `part-3-wiki-analysis` references remain in the live StoryMap files.
+- Browser check at 1280×720 showed both numbered cards with the requested titles; a 390×844 DOM check confirmed both cards fit the narrow width and the combined card contains both paragraphs.
+- No browser console errors or warnings were reported.
+
+Remaining:
+- The narrow live screenshot remains affected by the pre-existing mobile scroll-reveal state, which was left outside this content-only change.
+- Existing concurrent StoryMap edits and untracked handwritten-image assets remain untouched; no push was performed.
+
+### 2026-08-11 14:27 HKT — Codex — Fix initial Try a Try PDF rendering
+
+Summary:
+- Changed the shared Try a Try PDF image from lazy to eager loading.
+- Set eager loading again during initialization so the fit-content desktop page stack receives intrinsic image dimensions before the first render.
+- Bumped the StoryMap script query string so browsers load the fix.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed.
+- `git diff --check` passed.
+- Browser reproduction showed printed mode page 1 loading immediately at 297px wide instead of collapsing to 2px; handwritten mode showed two initial fold panels with image backgrounds and a 588px-wide stack.
+- No browser console errors or warnings were reported.
+
+Remaining:
+- Existing unrelated concurrent StoryMap edits, UI drafts, and handwritten-image assets remain untouched; no push was performed.
+
+### 2026-08-11 14:40 HKT — Codex — Split the final handwritten Try a Try spread
+
+Summary:
+- Replaced the final desktop handwritten composite page with two normal two-fold pages: `3b3a.png`, followed by `empty3c.png` with a blank left half and 3c on the right.
+- Removed the special final-page blank-fold logic and updated the handwritten desktop page count to five.
+- Moved the `水印` feature mapping to the new final page while preserving the original combined scan asset.
+
+Files changed:
+- `Website/storymap/試一試/手寫字/3b3a.png`
+- `Website/storymap/試一試/手寫字/empty3c.png`
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Both derived PNGs are exact 3106×3423 RGB composites; `3b3a.png` matches the source middle+right crop, and `empty3c.png` preserves the source 3c crop on its right half.
+- `node --check intro Website/Website/storymap/storymap.js` passed.
+- `git diff --check` passed.
+- Browser check showed `頁 4 / 5` using `3b3a.png` with two open folds, then `頁 5 / 5` using `empty3c.png` with the blank-left／3c-right layout; no browser errors or warnings were reported.
+
+Remaining:
+- The original `3c3b3a.png` remains preserved but is no longer used by the Try a Try desktop page list.
+- Existing unrelated concurrent StoryMap edits and UI assets remain untouched; no push was performed.

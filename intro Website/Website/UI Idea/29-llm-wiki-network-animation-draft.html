@@ -1,0 +1,579 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>29 · 後續功能：LLM Wiki — 知識網絡啟動動畫草稿</title>
+<style>
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+    --muted: #6d756f; --accent: #c45d38; --yellow: #f3c967;
+    --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+    --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
+    --body-weight: 500;
+    /* 這個視覺元素專用的紫色系（Obsidian graph view 的感覺） */
+    --wiki-purple: #a97bf5;
+    --wiki-purple-soft: rgba(169, 123, 245, .55);
+    --wiki-purple-dim: rgba(169, 123, 245, .18);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 44px 24px 100px; background: var(--paper); color: var(--text); font: 500 15px/1.7 var(--serif); }
+  h1 { font: 700 22px/1.3 var(--sans); color: var(--ink); margin: 0 0 6px; }
+  .lead { color: var(--muted); font: 500 14px/1.6 var(--sans); max-width: 860px; margin: 0 0 12px; }
+  .lead b { color: var(--accent); }
+  .note-list { max-width: 860px; margin: 0 0 40px; padding-left: 1.2em; color: var(--ink-soft); font: 500 13.5px/1.8 var(--sans); }
+  .note-list li { margin: 4px 0; }
+  .note-list code { background: rgba(22,61,63,.08); padding: 1px 5px; border-radius: 3px; }
+
+  /* ==========================================================================
+     版面示意：沿用「後續功能：LLM Wiki」目前的文字卡，新的網絡視覺元素
+     放在文字卡的「左側」（依指示），文字卡在右。
+     ========================================================================== */
+  .mock-section { max-width: 1360px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
+  .mock-title-row h2 { margin: 0; color: var(--ink); font: 500 clamp(22px, 2.4vw, 30px)/1.2 var(--serif); letter-spacing: -.02em; }
+
+  /* 左圖右文 */
+  .wiki-layout { display: grid; grid-template-columns: 52% minmax(0, 1fr); gap: clamp(18px, 2.2vw, 30px); align-items: start; }
+  .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
+  .copybox.blk { display: flex; flex-direction: column; justify-content: center; }
+  .copybox + .copybox { margin-top: 14px; }
+  .copybox .title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .copybox .option-number { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; background: var(--accent); color: #fff; font: 800 13px var(--sans); border-radius: 3px; flex: none; }
+  .copybox h2 { margin: 0; color: var(--ink); font: 500 22px/1.3 var(--serif); }
+  .copybox p { margin: 0; color: var(--text); font: var(--body-weight) 15px/1.9 var(--serif); }
+  .copybox p + p { margin-top: 12px; }
+
+  /* ---- 視覺元素外框：深色卡片，沿用 AI Chain 環狀動畫的作法 ---- */
+  .wiki-visual {
+    position: relative; display: flex; flex-direction: column; gap: 10px;
+    padding: clamp(16px, 1.8vw, 22px);
+    color: #f7f3ea; background: var(--ink);
+    border: 1px solid rgba(22, 61, 63, .22);
+    box-shadow: 0 10px 26px rgba(22, 61, 63, .14);
+  }
+
+  /* 1) 最上方：使用者提問，做成 AI App 的聊天氣泡（靠右、圓角、淺色底），
+        色調改用本站的紙色系，不用截圖裡的灰色。 */
+  .wiki-ask { display: flex; justify-content: flex-end; }
+  .wiki-ask-bubble {
+    max-width: 86%;
+    padding: 10px 15px;
+    background: rgba(247, 243, 234, .12);
+    border: 1px solid rgba(247, 243, 234, .16);
+    border-radius: 16px 16px 4px 16px;
+    font: var(--body-weight) 15px/1.65 var(--serif);
+    color: rgba(247, 243, 234, .94);
+  }
+  .wiki-caret {
+    display: inline-block; width: 6px; height: 12px; margin-left: 2px;
+    background: var(--wiki-purple); vertical-align: -2px; opacity: 0;
+  }
+  .wiki-caret.is-on { opacity: 1; animation: wiki-blink 1s steps(1) infinite; }
+  @keyframes wiki-blink { 50% { opacity: 0; } }
+
+  /* 2) 中間：知識網絡（Obsidian graph 風格） */
+  .wiki-graph-wrap { position: relative; width: 100%; aspect-ratio: 4 / 3; }
+  .wiki-graph { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+
+  .wiki-edge { fill: none; stroke: rgba(247,243,234,.16); stroke-width: 1.2; transition: stroke .3s; }
+  .wiki-edge.is-lit { stroke: var(--wiki-purple-soft); }
+  /* 沿著線跑的紫色脈衝：用 dash 的位移做出「一段光在線上前進」 */
+  .wiki-pulse {
+    fill: none; stroke: var(--wiki-purple); stroke-width: 2.2; stroke-linecap: round;
+    opacity: 0; filter: drop-shadow(0 0 4px rgba(169,123,245,.9));
+  }
+  .wiki-pulse.is-running { opacity: 1; }
+
+  .wiki-node-dot {
+    fill: rgba(22,61,63,.95); stroke: rgba(247,243,234,.35); stroke-width: 1.4;
+    transition: fill .3s, stroke .3s, r .3s;
+  }
+  .wiki-node.is-lit .wiki-node-dot {
+    fill: rgba(169,123,245,.9); stroke: #e4d7ff; stroke-width: 1.8;
+    filter: drop-shadow(0 0 6px rgba(169,123,245,.85));
+  }
+  .wiki-node-label {
+    fill: rgba(247,243,234,.6); font: 700 10px var(--sans);
+    text-anchor: middle; transition: fill .3s;
+    paint-order: stroke; stroke: rgba(18,40,42,.85); stroke-width: 2.4px; stroke-linejoin: round;
+  }
+  .wiki-node.is-lit .wiki-node-label { fill: #efe6ff; }
+  /* 分類色帶：三群節點各有自己的底色（未點亮時的細微差別） */
+  .wiki-node[data-group="source"] .wiki-node-dot { stroke: rgba(243,201,103,.5); }
+  .wiki-node[data-group="second"] .wiki-node-dot { stroke: rgba(196,93,56,.55); }
+  .wiki-node[data-group="extract"] .wiki-node-dot { stroke: rgba(122,199,166,.5); }
+  .wiki-node[data-group="ask"] .wiki-node-dot { stroke: rgba(169,123,245,.6); }
+
+  /* 3) 最下方：AI 回答。完全比照 AI App 的回覆版面——
+        最上面一列「已思考 N 秒 ›」的灰字＋分隔線，中間是分行／點列的內文，
+        最下面一排 複製／讚／不讚／分享 的小圖示。 */
+  .wiki-answer { display: flex; flex-direction: column; min-height: 150px; }
+  .wiki-answer-worked {
+    display: flex; align-items: center; gap: 5px;
+    padding-bottom: 7px; margin-bottom: 9px;
+    border-bottom: 1px solid rgba(247,243,234,.12);
+    color: rgba(247,243,234,.42); font: 600 12px/1.4 var(--sans);
+    opacity: 0; transition: opacity .3s;
+  }
+  .wiki-answer-worked.is-shown { opacity: 1; }
+  .wiki-answer-worked .chev { font-size: 10px; opacity: .8; }
+  .wiki-answer-body { flex: 1; min-width: 0; font: var(--body-weight) 15px/1.8 var(--serif); color: rgba(247,243,234,.88); }
+  /* 底部工具列：複製、讚、不讚、分享（純示意，不可點） */
+  .wiki-answer-tools {
+    display: flex; align-items: center; gap: 13px;
+    margin-top: 10px; padding-top: 2px;
+    opacity: 0; transition: opacity .4s;
+  }
+  .wiki-answer-tools.is-shown { opacity: 1; }
+  .wiki-answer-tools svg { width: 13px; height: 13px; stroke: rgba(247,243,234,.42); fill: none; stroke-width: 1.7; stroke-linecap: round; stroke-linejoin: round; }
+  .wiki-answer-body .ln { display: block; }
+  .wiki-answer-body .ln.bul { padding-left: 13px; text-indent: -13px; }
+  .wiki-answer-body .ln.bul::before { content: "・"; color: var(--wiki-purple); }
+  .wiki-answer-body .cite {
+    color: #d9c6ff; border-bottom: 1px dotted rgba(217,198,255,.5);
+  }
+  .wiki-answer-body .num { color: var(--yellow); font-weight: 700; }
+  /* 思考中：文字用淺淡的流光掃過，像 AI App 的 "Thinking…" 狀態 */
+  .wiki-thinking {
+    display: inline-block;
+    background: linear-gradient(90deg, rgba(247,243,234,.35) 0%, rgba(217,198,255,.95) 50%, rgba(247,243,234,.35) 100%);
+    background-size: 200% 100%;
+    -webkit-background-clip: text; background-clip: text;
+    color: transparent;
+    animation: wiki-shimmer 1.5s linear infinite;
+    font: 700 14px/1.8 var(--sans);
+  }
+  @keyframes wiki-shimmer { from { background-position: 100% 0; } to { background-position: -100% 0; } }
+
+  /* 構圖標註（草稿用，正式版不會出現） */
+  .draft-tag {
+    position: absolute; z-index: 5;
+    display: flex; align-items: center; gap: 6px;
+    padding: 4px 9px; background: rgba(255,255,255,.96);
+    border: 1px solid var(--line); border-radius: 3px;
+    font: 700 11px/1 var(--sans); color: var(--ink); white-space: nowrap;
+  }
+  .draft-tag .n {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 15px; height: 15px; border-radius: 50%;
+    background: var(--accent); color: #fff; font: 800 9.5px/1 var(--sans);
+  }
+
+  .plan-block { max-width: 1360px; margin: 34px auto 0; }
+  .plan-block h2 { font: 700 15px var(--sans); color: var(--ink); margin: 0 0 10px; }
+  .plan-grid { display: grid; gap: 10px; }
+  .plan-item { display: flex; gap: 10px; padding: 12px 14px; background: var(--card); border: 1px solid var(--line); }
+  .plan-item .n { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--accent); color: #fff; font: 800 11px var(--sans); }
+  .plan-item div p { margin: 0; font: 500 13px/1.7 var(--sans); color: var(--ink-soft); }
+  .plan-item div b { color: var(--ink); }
+
+  .source-note { max-width: 1360px; margin: 20px auto 0; padding: 12px 16px; background: var(--card); border: 1px solid var(--line); font: 500 12.5px/1.7 var(--sans); color: var(--ink-soft); }
+
+  /* ==========================================================================
+     窄版電腦（≤1040px）：比照 #part-3-ai-skills／#part-3-ai-chain 的斷點，
+     左圖右文收成單欄，視覺元素在上、文字卡在下。
+     ========================================================================== */
+  @media (max-width: 1040px) {
+    .wiki-layout { grid-template-columns: 1fr; }
+    .wiki-visual { max-width: 640px; margin: 0 auto; }
+  }
+
+  /* ==========================================================================
+     手機（≤620px）：節點字級、半徑略縮，圖表改高一點的比例讓節點不擠在一起；
+     提問氣泡、答案文字維持可讀的字級（不因為版面變窄而縮小）。
+     ========================================================================== */
+  @media (max-width: 620px) {
+    .wiki-graph-wrap { aspect-ratio: 1 / 1; }
+    .wiki-node-label { font-size: 9px; }
+    .wiki-ask-bubble { max-width: 94%; font-size: 14px; }
+    .wiki-answer-body { font-size: 14px; }
+    .wiki-thinking { font-size: 13px; }
+  }
+</style>
+</head>
+<body>
+
+  <h1>「後續功能：LLM Wiki」新增視覺元素 — 知識網絡啟動動畫草稿</h1>
+  <p class="lead">
+    放在 LLM Wiki 文字卡<b>左側</b>的新視覺元素，用來說明 LLM Wiki 的運作：
+    研究者輸入一個研究問題 → 整張<b>類 Obsidian 的知識網絡被「啟動」</b>，
+    紫色的光沿著連線一路跑過各個節點（原始資料、二手研究、已抽取的資料、研究問題與方法）→
+    最後 AI 依據被點亮的節點，<b>橫向逐字打出</b>一段有引註的答案。
+  </p>
+  <ul class="note-list">
+    <li>四個階段是同一條時間軸：<b>提問逐字打出 → 訊息送出、短暫停頓 → 思考（紫光在網絡裡多向來回跑，輸出區顯示 Thinking 狀態字）→ 思考完成，狀態字整段換成答案並逐字打出</b>。</li>
+    <li><b>整段只播一次</b>：捲動到這個區塊、元素進入畫面時才開始播放，跑完就停在最終狀態；之後捲走再捲回來都不會重播，要重看必須重新整理頁面。</li>
+    <li>提問改成 AI App 的<b>聊天氣泡</b>（靠右、圓角、右下角收一個尖角），色調改用本站的紙色系，不用截圖裡的灰色。回答比照截圖的 AI 回覆視窗：思考完成後在最上面淡入一列「<b>已思考 3.4 秒 ›</b>」（灰字、細分隔線），內文分行、帶項目符號，整段答案打完後才在最下面淡入<b>複製／讚／不讚／分享</b>四個小圖示（純示意、不可點擊）。</li>
+    <li>三個「已抽取的資料」節點（已確認的事件／事件資訊來源／皇帝及後續官員的回應）<b>彼此相連</b>，因為它們描述的是同一個事件的三個面向。「上奏」已改名為「奏摺」，二手研究只留「二手研究」與「GIS」兩個節點（已移除 FYP 手稿），節點分類的圖例已拿掉。</li>
+    <li>依指示移除了「事件資訊來源」那句統計句（383／141）。「皇帝及後續官員的回應」改引<b>諭13</b>：它與硃25 同日（乾隆五十一年十二月二十七日）發出、同樣寫給黃仕簡，內容提及黃仕簡帶兵渡臺並囑「仍加意調攝，勿過勞」，用語呼應硃25 硃批旁註「仍以調養為要，勿過勞」——但這是<b>依日期與內容比對推斷</b>，不是 <code>confirmed-pairs.json</code> 裡已標記的配對（該檔案中諭13 確認配對的回應是硃94、硃105，回覆人是徐嗣曾、常青），答案文字已誠實標註這一點。</li>
+    <li>新增第二筆二手研究引用：吳正龍〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉，《臺灣文獻》第69卷第2期，2018年6月，頁67–124（對應 <code>2nd Material &amp; FYP/(2)二手研究/</code> 內已有的文字檔）。</li>
+    <li>提問氣泡、答案內文、思考狀態字字級都調大；新增 <b>≤1040px</b>（左圖右文收成單欄）與 <b>≤620px</b>（節點字級／半徑略縮、圖表改近正方形比例，避免節點擠在一起）兩組響應式版面。</li>
+    <li>已加入 <code>IntersectionObserver</code>（畫面外暫停）與 <code>prefers-reduced-motion</code>（顯示最終狀態，不播放動畫）。</li>
+  </ul>
+
+  <div class="mock-section">
+    <div class="mock-title-row"><h2>後續功能：LLM Wiki</h2></div>
+
+    <div class="wiki-layout">
+      <!-- 左：新的網絡視覺元素 -->
+      <div class="wiki-visual" id="wiki-visual">
+        <div class="wiki-ask">
+          <div class="wiki-ask-bubble"><span id="wiki-ask-text"></span><span class="wiki-caret" id="wiki-caret"></span></div>
+        </div>
+
+        <div class="wiki-graph-wrap">
+          <svg class="wiki-graph" id="wiki-graph" viewBox="0 0 480 360" aria-hidden="true">
+            <g id="wiki-edges"></g>
+            <g id="wiki-pulses"></g>
+            <g id="wiki-nodes"></g>
+          </svg>
+        </div>
+
+        <div class="wiki-answer">
+          <div class="wiki-answer-worked" id="wiki-answer-worked"><span id="wiki-worked-text">已檢索 3.4 秒</span><span class="chev">›</span></div>
+          <div class="wiki-answer-body" id="wiki-answer-body"></div>
+          <div class="wiki-answer-tools" id="wiki-answer-tools" aria-hidden="true">
+            <!-- 複製 -->
+            <svg viewBox="0 0 24 24"><rect x="9" y="9" width="11" height="11" rx="2"/><path d="M5 15V5a2 2 0 0 1 2-2h8"/></svg>
+            <!-- 讚 -->
+            <svg viewBox="0 0 24 24"><path d="M7 10v10H4V10zM7 10l4-7a2 2 0 0 1 3 2l-1 5h5a2 2 0 0 1 2 2.4l-1.3 6A2 2 0 0 1 16.7 20H7z"/></svg>
+            <!-- 不讚 -->
+            <svg viewBox="0 0 24 24"><path d="M17 14V4h3v10zM17 14l-4 7a2 2 0 0 1-3-2l1-5H6a2 2 0 0 1-2-2.4l1.3-6A2 2 0 0 1 7.3 4H17z"/></svg>
+            <!-- 分享／重試 -->
+            <svg viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8"/></svg>
+          </div>
+        </div>
+
+        <!-- 構圖標註 -->
+        <div class="draft-tag" style="left: -6%; top: -3%;"><span class="n">1</span>聊天氣泡：提問逐字打出後送出</div>
+        <div class="draft-tag" style="right: -6%; top: 34%;"><span class="n">2</span>思考中：紫光多向來回跑</div>
+        <div class="draft-tag" style="left: -6%; bottom: 6%;"><span class="n">3</span>思考字換成答案，逐字打出</div>
+      </div>
+
+      <!-- 右：現有文字卡（內容沿用網站現行文案，未改動） -->
+      <div>
+        <article class="copybox blk">
+          <div class="title-row"><span class="option-number">1</span><h2>LLM Wiki</h2></div>
+          <p>完成 AI 分析及研究者審核後，研究者可進一步將本平台與 LLM Wiki 整合，擴展平台的應用功能。LLM Wiki 可視為大型語言模型的知識庫，讓 AI 在回答問題前，先搜尋其中的相關資料，再根據搜尋結果生成答案，以減少 AI 幻覺，提升回答的準確度。</p>
+        </article>
+        <article class="copybox blk">
+          <div class="title-row"><span class="option-number">2</span><h2>LLM Wiki 與歷史研究</h2></div>
+          <p>研究者可將已審核的資料按類型匯出為多份結構化資料，包括已確認的事件、事件資訊來源、皇帝及後續官員的回應等，一同匯入至 LLM Wiki，為 AI 建立研究主題的專屬知識庫。</p>
+          <p>LLM Wiki 於是可以利用這些結構化資料進行更複雜的資訊整合及推理，協助研究者深化史料分析、整理研究成果和撰寫論文。</p>
+        </article>
+      </div>
+    </div>
+  </div>
+
+  <div class="plan-block">
+    <h2>套用到正式網站前，還需要確認的事</h2>
+    <div class="plan-grid">
+      <div class="plan-item"><span class="n">1</span><div><p><b>放在哪一張卡旁邊</b>：目前 LLM Wiki 有兩張文字卡（<code>#part-3-wiki-intro</code>、<code>#part-3-wiki-data</code>），分屬兩個 <code>.story</code> 區塊。這個草稿把兩張卡併在同一列的右側示意；正式套用時要決定是併成一區（左圖右文），還是只放在其中一張卡旁邊。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>節點名稱與數量</b>：目前用 12 個節點示意（研究問題／方法 2、已抽取的資料 3、原始資料 4、二手研究 3）。節點文字是否要對應真實的匯出檔名或分類名稱，還需要確認。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>AI 回答的內容</b>：草稿只引用資料庫中確實存在的欄位值（硃25 的標題、具奏人、日期、硃批原文），刻意避免任何歷史判斷。若要換成更像研究結論的句子，必須先由研究者撰寫或審核，不能讓草稿自行生成。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>時間節奏</b>：提問 1.6 秒、送出停頓 0.55 秒、思考 3.4 秒、作答 4.2 秒，共約 9.8 秒，播完即停（不重播）。思考的長度最容易需要微調——太短看不出「在想」，太長會讓人以為卡住。</p></div></div>
+      <div class="plan-item"><span class="n">5</span><div><p><b>手機／窄螢幕</b>：網絡節點在窄螢幕下會擠在一起，字級也會太小；需要決定是縮減節點數量，還是改成上下排列、放大整張圖。</p></div></div>
+    </div>
+  </div>
+
+  <p class="source-note">
+    AI 回答中引用的欄位值逐字取自 <code>review-tools/shared data/stage1_original_text.json</code> 中 <code>doc_id: 硃25</code>
+    （福建水師提督黃仕簡〈為奏彰化失陷已調兵赴臺事〉，具奏日期乾隆五十一年十二月初十日、奉硃批日期十二月二十七日、硃批「已有旨了。欽此。」）與 <code>doc_id: 諭13</code>
+    （〈諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡〉，乾隆五十一年十二月二十七日）。諭13 與硃25 的配對為草稿依日期、收文人、內容用語比對推斷，
+    非 <code>review-tools/(2) sample/confirmed-pairs.json</code> 已標記的確認配對（該檔案中諭13 的確認配對回應為硃94、硃105），答案文字已在句中標註此點。
+    二手研究引用逐字取自 <code>2nd Material &amp; FYP/(2)二手研究/(1)林爽文事件與戰爭進程/(1)事件性質與戰役/</code> 內吳正龍〈林爽文事件中的彰化戰役：
+    兼論人羣對立與官方剿撫策略〉一文的既有著錄（《臺灣文獻》第69卷第2期，2018年6月，頁67–124）。
+    草稿未新增任何歷史判斷、詮釋或未經確認的事實；節點名稱為示意用的分類標籤。
+  </p>
+
+  <script>
+  (function () {
+    const visual = document.getElementById('wiki-visual');
+    const svg = document.getElementById('wiki-graph');
+    const edgeLayer = document.getElementById('wiki-edges');
+    const pulseLayer = document.getElementById('wiki-pulses');
+    const nodeLayer = document.getElementById('wiki-nodes');
+    const askText = document.getElementById('wiki-ask-text');
+    const caret = document.getElementById('wiki-caret');
+    const answerBody = document.getElementById('wiki-answer-body');
+    const workedRow = document.getElementById('wiki-answer-worked');
+    const workedText = document.getElementById('wiki-worked-text');
+    const toolsRow = document.getElementById('wiki-answer-tools');
+    const NS = 'http://www.w3.org/2000/svg';
+
+    /* ---------------- 網絡結構 ----------------
+       group: ask（研究問題、方法）／extract（已抽取的資料）
+              source（原始資料）／second（二手研究）
+       wave : 第幾波被點亮（0 = 最先亮） */
+    const NODES = [
+      { id: 'q',   label: '研究問題',   x: 62,  y: 176, r: 9, group: 'ask',     wave: 0 },
+      { id: 'm',   label: '研究方法',   x: 72,  y: 268, r: 7, group: 'ask',     wave: 0 },
+
+      { id: 'ev',  label: '已確認的事件',       x: 196, y: 96,  r: 8.5, group: 'extract', wave: 1 },
+      { id: 'src', label: '事件資訊來源',       x: 186, y: 196, r: 8.5, group: 'extract', wave: 1 },
+      { id: 'rsp', label: '皇帝及後續官員的回應', x: 196, y: 296, r: 8.5, group: 'extract', wave: 1 },
+
+      { id: 'z25', label: '硃25',   x: 330, y: 58,  r: 6.5, group: 'source', wave: 2 },
+      { id: 'z1',  label: '硃批',   x: 356, y: 138, r: 6.5, group: 'source', wave: 2 },
+      { id: 'y1',  label: '上諭',   x: 344, y: 226, r: 6.5, group: 'source', wave: 2 },
+      { id: 'a1',  label: '奏摺',   x: 328, y: 306, r: 6.5, group: 'source', wave: 2 },
+
+      { id: 's1',  label: '二手研究', x: 442, y: 132, r: 6, group: 'second', wave: 3 },
+      { id: 's3',  label: 'GIS',     x: 440, y: 244, r: 6, group: 'second', wave: 3 }
+    ];
+
+    const EDGES = [
+      ['q','m'],
+      ['q','ev'], ['q','src'], ['q','rsp'],
+      ['m','src'], ['m','rsp'],
+      // 三個「已抽取的資料」節點彼此相連（同一事件的事件本身／來源／回應是一組）
+      ['ev','src'], ['src','rsp'], ['ev','rsp'],
+      ['ev','z25'], ['ev','z1'], ['ev','a1'],
+      ['src','z25'], ['src','y1'],
+      ['rsp','z1'], ['rsp','y1'], ['rsp','a1'],
+      ['z25','s1'], ['z1','s1'], ['y1','s3'], ['a1','s3'], ['s1','s3']
+    ];
+
+    const byId = Object.fromEntries(NODES.map((n) => [n.id, n]));
+    const MAX_WAVE = Math.max(...NODES.map((n) => n.wave));
+
+    // ---- 建立 SVG 元素 ----
+    const edgeEls = EDGES.map(([a, b]) => {
+      const A = byId[a], B = byId[b];
+      const line = document.createElementNS(NS, 'line');
+      line.setAttribute('class', 'wiki-edge');
+      line.setAttribute('x1', A.x); line.setAttribute('y1', A.y);
+      line.setAttribute('x2', B.x); line.setAttribute('y2', B.y);
+      edgeLayer.appendChild(line);
+
+      // 每條線各自有一段「脈衝」，用 dasharray 讓一小段亮線沿著它跑
+      const pulse = document.createElementNS(NS, 'line');
+      pulse.setAttribute('class', 'wiki-pulse');
+      pulse.setAttribute('x1', A.x); pulse.setAttribute('y1', A.y);
+      pulse.setAttribute('x2', B.x); pulse.setAttribute('y2', B.y);
+      const len = Math.hypot(B.x - A.x, B.y - A.y);
+      pulse.setAttribute('stroke-dasharray', `18 ${len}`);
+      pulseLayer.appendChild(pulse);
+
+      // 這條線屬於「第幾波」：取兩端較晚亮的那一端。
+      // phase／period／forward 讓每條線的脈衝各自錯開、速度不一、方向交替，
+      // 思考期間看起來就是「訊號在網絡裡多向來回跑」，而不是整齊劃一的一次掃描。
+      return {
+        el: line, pulse, len,
+        wave: Math.max(A.wave, B.wave),
+        phase: Math.random(),
+        period: 620 + Math.random() * 520,
+        forward: Math.random() < .5
+      };
+    });
+
+    const nodeEls = NODES.map((n) => {
+      const g = document.createElementNS(NS, 'g');
+      g.setAttribute('class', 'wiki-node');
+      g.setAttribute('data-group', n.group);
+
+      const dot = document.createElementNS(NS, 'circle');
+      dot.setAttribute('class', 'wiki-node-dot');
+      dot.setAttribute('cx', n.x); dot.setAttribute('cy', n.y); dot.setAttribute('r', n.r);
+      g.appendChild(dot);
+
+      const label = document.createElementNS(NS, 'text');
+      label.setAttribute('class', 'wiki-node-label');
+      label.setAttribute('x', n.x);
+      label.setAttribute('y', n.y - n.r - 5);
+      label.textContent = n.label;
+      g.appendChild(label);
+
+      nodeLayer.appendChild(g);
+      return { el: g, wave: n.wave };
+    });
+
+    /* ---------------- 時間軸 ----------------
+       全部由 elapsed（毫秒）算出畫面狀態，不用逐格累加，
+       分頁切走再切回來也不會亂跳。整段只播一次（見最後的 finished 旗標）。
+
+       四個階段：打字提問 → 送出後的停頓 → 思考（紫光多向來回跑、
+       輸出區顯示思考中的字）→ 思考完，思考字整段換成答案並逐字打出。 */
+    const ASK_MS    = 1600;   // 打字：研究者的問題
+    const SEND_MS   = 550;    // 送出後、開始思考前的短暫停頓
+    const THINK_MS  = 3400;   // 思考：網絡點亮＋紫光多向來回
+    const ANSWER_MS = 4200;   // AI 逐字作答
+    const T_ASK_END    = ASK_MS;
+    const T_SEND_END   = T_ASK_END + SEND_MS;
+    const T_THINK_END  = T_SEND_END + THINK_MS;
+    const T_ANSWER_END = T_THINK_END + ANSWER_MS;
+
+    // 思考中輪流顯示的狀態字（像 AI App 的 Thinking… 狀態）
+    const THINKING_STEPS = [
+      '正在檢索知識庫…',
+      '比對「已確認的事件」…',
+      '追溯事件資訊來源…',
+      '整理皇帝及後續官員的回應…'
+    ];
+
+    const QUESTION = '彰化縣城失陷後，皇帝與各級官員分別作了什麼回應？';
+
+    /* AI 回答：做成聊天回覆的口吻，分行、帶項目符號，逐字打出。
+       內容只使用資料庫中確實存在的欄位值：
+       - 事件、日期、具奏人、硃批原文 → 取自 doc_id 硃25 的欄位
+       - 諭13 → 與硃25 同日、同收文人，依內容比對推斷（非 confirmed-pairs 已確認配對，句中已標註）
+       - 二手研究引用 → 吳正龍 2018〈林爽文事件中的彰化戰役〉既有著錄
+       不含任何歷史判斷或詮釋。 */
+    const ANSWER_LINES = [
+      { parts: [
+        { t: '已在「' }, { t: '已確認的事件', cite: true }, { t: '」中找到「彰化縣城失陷」：' }
+      ] },
+      { bullet: true, parts: [
+        { t: '事件時間：乾隆五十一年十一月二十九日辰刻攻城、午刻城陷' }
+      ] },
+      { bullet: true, parts: [
+        { t: '奏報者：福建水師提督黃仕簡，具奏於十二月初十日' }
+      ] },
+      { parts: [
+        { t: '「' }, { t: '皇帝及後續官員的回應', cite: true }, { t: '」：硃25 於十二月二十七日奉硃批「已有旨了。欽此。」；同日發出的上諭' },
+        { t: '（諭13）', cite: true },
+        { t: ' 亦提及黃仕簡帶兵渡臺一事，獎勉之餘並囑「仍加意調攝，勿過勞」，與硃25批語用意相呼應' },
+        { t: '（同日、同一收文人，屬內容比對，非資料庫已確認配對）', cite: true }, { t: '。' }
+      ] },
+      { parts: [
+        { t: '另據已上載的' }, { t: '二手研究', cite: true }, { t: '——吳正龍〈林爽文事件中的彰化戰役：兼論人羣對立與官方剿撫策略〉' },
+        { t: '（《臺灣文獻》第69卷第2期，2018，頁67–124）', cite: true }, { t: '，可補充彰化戰役的人群對立背景與官方剿撫策略分析。' }
+      ] }
+    ];
+    const ANSWER_PLAIN = ANSWER_LINES.map((l) => l.parts.map((p) => p.t).join('')).join('');
+
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    // 依「已打出幾個字」重建整段回覆的 HTML（保留分行、項目符號與標示樣式）
+    function renderAnswer(count) {
+      let left = count;
+      let html = '';
+      for (const line of ANSWER_LINES) {
+        if (left <= 0) break;
+        let inner = '';
+        for (const part of line.parts) {
+          if (left <= 0) break;
+          const slice = part.t.slice(0, left);
+          if (part.cite) inner += `<span class="cite">${slice}</span>`;
+          else if (part.num) inner += `<span class="num">${slice}</span>`;
+          else inner += slice;
+          left -= slice.length;
+        }
+        html += `<span class="ln${line.bullet ? ' bul' : ''}">${inner}</span>`;
+      }
+      answerBody.innerHTML = html;
+    }
+
+    function render(elapsed) {
+      const t = Math.min(elapsed, T_ANSWER_END); // 只播一次，結束後停在最終狀態
+
+      // 1) 提問逐字（打完游標就收起來，像訊息已送出）
+      if (t < T_ASK_END) {
+        const n = Math.floor((t / ASK_MS) * QUESTION.length);
+        askText.textContent = QUESTION.slice(0, n);
+        caret.classList.add('is-on');
+      } else {
+        askText.textContent = QUESTION;
+        caret.classList.remove('is-on');
+      }
+
+      const thinking = t >= T_SEND_END && t < T_THINK_END;
+      const tp = Math.min(1, Math.max(0, (t - T_SEND_END) / THINK_MS)); // 思考進度 0–1
+
+      // 2) 思考中：節點逐波亮起，紫光在每條線上多向、來回反覆跑
+      const waveFront = Math.min(1, tp / .7) * (MAX_WAVE + 1);
+      nodeEls.forEach((n) => {
+        n.el.classList.toggle('is-lit', t >= T_SEND_END && waveFront >= n.wave + .35);
+      });
+      edgeEls.forEach((e) => {
+        if (!thinking) {
+          // 思考結束：脈衝收起來，走過的線維持點亮
+          e.pulse.classList.remove('is-running');
+          e.el.classList.toggle('is-lit', t >= T_THINK_END);
+          return;
+        }
+        // 每條線有自己的起始相位與速度，所以會此起彼落、不同步；
+        // 每跑完一趟就換一次方向，看起來像訊號在網絡裡來回傳遞。
+        const cycle = (t - T_SEND_END) / e.period + e.phase;
+        const pass = Math.floor(cycle);
+        const local = cycle - pass;                    // 這一趟跑到哪裡（0–1）
+        const forward = (pass % 2 === 0) === e.forward; // 逐趟交替方向
+        const travelled = forward ? local : 1 - local;
+        e.pulse.classList.add('is-running');
+        e.pulse.setAttribute('stroke-dashoffset', String(e.len - travelled * (e.len + 18)));
+        e.el.classList.toggle('is-lit', waveFront >= e.wave + .35);
+      });
+
+      // 3) 輸出區：思考中顯示 Thinking 狀態字，思考完整段換成答案並逐字打出；
+      //    比照截圖：思考完成後在最上面顯示「已思考 N 秒 ›」，
+      //    整段答案打完後才淡入底部的複製／讚／不讚／分享工具列。
+      workedRow.classList.toggle('is-shown', t >= T_THINK_END);
+      if (t === T_THINK_END || (t > T_THINK_END && workedText.dataset.set !== '1')) {
+        workedText.textContent = '已思考 ' + (THINK_MS / 1000).toFixed(1) + ' 秒';
+        workedText.dataset.set = '1';
+      }
+      toolsRow.classList.toggle('is-shown', t >= T_ANSWER_END);
+
+      if (t < T_SEND_END) {
+        answerBody.innerHTML = '';
+      } else if (thinking) {
+        const step = THINKING_STEPS[Math.min(
+          THINKING_STEPS.length - 1,
+          Math.floor(tp * THINKING_STEPS.length)
+        )];
+        answerBody.innerHTML = `<span class="wiki-thinking">${step}</span>`;
+      } else {
+        const n = Math.floor(((t - T_THINK_END) / ANSWER_MS) * ANSWER_PLAIN.length);
+        renderAnswer(Math.min(ANSWER_PLAIN.length, n));
+      }
+    }
+
+    if (reduceMotion) {
+      render(T_ANSWER_END); // 直接顯示最終狀態
+      return;
+    }
+
+    /* 只播一次：捲到畫面內才開始，跑完就停在最終狀態；
+       之後再捲走、捲回來都不會重播，要重看必須重新整理頁面。 */
+    render(0);
+    let raf = null;
+    let started = false;
+    let finished = false;
+    let start = 0;
+
+    function loop(now) {
+      const elapsed = now - start;
+      render(elapsed);
+      if (elapsed >= T_ANSWER_END) {
+        finished = true;
+        raf = null;
+        return;
+      }
+      raf = requestAnimationFrame(loop);
+    }
+
+    function play() {
+      if (started || finished) return;
+      started = true;
+      start = performance.now();
+      raf = requestAnimationFrame(loop);
+    }
+
+    if (typeof IntersectionObserver === 'function') {
+      const io = new IntersectionObserver((entries) => {
+        entries.forEach((entry) => {
+          if (!entry.isIntersecting) return;
+          play();
+          io.disconnect(); // 播過就不再監看
+        });
+      }, { threshold: .25 });
+      io.observe(visual);
+    } else {
+      play();
+    }
+  })();
+  </script>
+
+</body>
+</html>

@@ -98,16 +98,6 @@ img { max-width: 100%; }
 .is-preview-locked-tab { opacity: .38; cursor: not-allowed; pointer-events: auto; }
 .is-preview-locked-tab:hover { color: rgba(247, 243, 234, .72) !important; }
 
-/* 教師預覽模式：步驟二之前／步驟八之後的內容維持在畫面上，但變淡、
-   不能互動，並在區塊最上面加一個小標籤，說明這部分尚在開發中。 */
-.is-preview-faded { position: relative; opacity: .38; filter: grayscale(.4); pointer-events: none; user-select: none; }
-.preview-faded-badge {
-  position: sticky; top: 12px; left: 12px; z-index: 5;
-  display: inline-block; width: fit-content;
-  margin: 0 0 14px; padding: 6px 14px; border-radius: 999px;
-  background: var(--ink); color: #fff; font-family: var(--sans);
-  font-weight: 700; font-size: calc(11.5px * var(--font-scale)); letter-spacing: .06em;
-}
 .nav-dropdown { position: static; display: flex; align-items: center; height: 100%; }
 .nav-dropdown-chevron { font-size: 10px; opacity: .7; transition: transform .22s; }
 .nav-dropdown:hover .nav-dropdown-chevron,
@@ -715,13 +705,24 @@ img { max-width: 100%; }
     opacity: 0;
   }
   .photo-gallery-body:not(.is-expanded) .photo-gallery-title { margin-bottom: 0; }
+  /* 手機版說明區「向下延伸」，不再從圖片借高度：
+     畫廊高度已改為內容決定（圖片區依原圖比例 ＋ 說明區），若這裡還留著
+     百分比上限，會變成「父層高度取決於子層、子層上限又取決於父層」的
+     循環，瀏覽器只能解成 none 或量出奇怪的值；直接寫 none 最明確，
+     說明區完整顯示，整個畫廊往下長，圖片大小不受影響。 */
   .photo-gallery-body.is-expanded {
-    max-height: var(--gallery-body-max-h, 62%);
-    overflow-y: auto;
+    max-height: none;
+    overflow: visible;
   }
   .photo-gallery-body.is-expanded .photo-gallery-more { grid-template-rows: 1fr; opacity: 1; }
   .photo-gallery-body.is-expanded .photo-gallery-title { margin-bottom: 12px; }
   .photo-gallery-body.is-expanded .photo-gallery-hint { opacity: 0; height: 0; margin: 0; overflow: hidden; }
+
+  /* 圖片區與圖片本身都不要底色：圖片區高度已依原圖比例貼合，理論上不會
+     露出底色；但圖片載入前、或比例有零點幾像素誤差時，原本的 #e8e1d6
+     會沿著邊緣透出來，看起來像圖片下多墊了一塊底板。設成透明最保險。 */
+  .photo-gallery-stage { background: transparent; }
+  .photo-gallery-frame img { background: transparent; }
 }
 
 /* ============================================================================
@@ -1699,6 +1700,23 @@ img { max-width: 100%; }
   grid-template-rows: minmax(0, 1fr);
   overflow: hidden;
 }
+/* 7／8：把史料欄的 backdrop 與 PDF 紙面分成兩組明確的色彩層。
+   7 使用較冷的印刷紙白，8 使用較暖的手稿紙色；兩者都保留深色
+   backdrop，讓原件邊緣、翻頁陰影與高亮區清楚浮出。 */
+#part-3-printed-explorer {
+  --fx-backdrop-fill: #173d40;
+  --fx-backdrop-surface: radial-gradient(circle at 22% 18%, rgba(196, 93, 56, .14), transparent 42%),
+                          linear-gradient(150deg, #173d40 0%, #255254 56%, #3c6b64 100%);
+  --fx-pdf-fill: #fffdf8;
+  --fx-pdf-edge-fill: #f0e5d5;
+}
+#part-3-handwritten-explorer {
+  --fx-backdrop-fill: #263b3e;
+  --fx-backdrop-surface: radial-gradient(circle at 78% 20%, rgba(197, 148, 92, .13), transparent 44%),
+                          linear-gradient(150deg, #263b3e 0%, #344b4d 54%, #4f625d 100%);
+  --fx-pdf-fill: #ead8b8;
+  --fx-pdf-edge-fill: #c9ae82;
+}
 /* 兩份原件都是暖褐色紙張，配深綠底（與 Agentic AI 動畫場景同一組綠）
    才能把紙張推到前景。標籤浮貼在原件兩側，因此左右另留出標籤的空白。 */
 .part3-fx-doc {
@@ -1747,9 +1765,8 @@ img { max-width: 100%; }
   max-height: none;
   align-self: center;
   box-sizing: border-box;
-  background-color: transparent;
-  background-image: radial-gradient(circle at 22% 18%, rgba(196, 93, 56, .16), transparent 42%),
-                    linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+  background-color: var(--fx-backdrop-fill, #173d40);
+  background-image: var(--fx-backdrop-surface);
   background-repeat: no-repeat;
   background-position: center, center;
   background-size: 100% var(--fx-pdf-backdrop-h, 100%), 100% var(--fx-pdf-backdrop-h, 100%);
@@ -1768,6 +1785,23 @@ img { max-width: 100%; }
 #part-3-printed-explorer .part3-fx-turn img {
   height: auto;
   max-height: var(--fx-pdf-max-h, 100%);
+}
+#part-3-printed-explorer .part3-fx-pagestack::before,
+#part-3-printed-explorer .part3-fx-pagestack::after,
+#part-3-handwritten-explorer .part3-fx-pagestack::before,
+#part-3-handwritten-explorer .part3-fx-pagestack::after {
+  background: var(--fx-pdf-edge-fill);
+}
+#part-3-printed-explorer .part3-fx-page,
+#part-3-printed-explorer .part3-fx-turn {
+  background-color: var(--fx-pdf-fill);
+}
+#part-3-handwritten-explorer .part3-fx-doc {
+  background-color: #263b3e;
+  background-image: var(--fx-backdrop-surface);
+}
+#part-3-handwritten-explorer .part3-fx-panel {
+  background-color: var(--fx-pdf-fill);
 }
 
 /* --- 8 手寫字：風琴摺，展開的兩摺保持掃描原比例，其餘收成摺痕 --- */
@@ -2271,6 +2305,50 @@ img { max-width: 100%; }
 .agentic-window-html .agentic-window-title,
 .agentic-window-ocr .agentic-window-title,
 .agentic-window-skills .agentic-window-title { font-size: var(--agentic-window-title-size, 10px); }
+.agentic-window-vscode {
+  left: var(--agentic-vscode-left, 3%); top: var(--agentic-vscode-top, 5%);
+  width: var(--agentic-vscode-width, 92%); height: var(--agentic-vscode-height, 89%);
+  z-index: 1; background: #1e1e1e; cursor: pointer;
+  opacity: .92; transition: transform .32s ease, opacity .24s ease, box-shadow .32s ease;
+  --agentic-window-title-size: var(--agentic-vscode-title-size, 10px);
+}
+.agentic-window-vscode.is-agentic-front {
+  opacity: 1; transform: translateY(-4px) scale(1);
+  box-shadow: 0 22px 38px rgba(0, 0, 0, .28);
+}
+.agentic-window-vscode .agentic-mac-titlebar {
+  background: #252526; border-bottom-color: #3b3b3b;
+}
+.agentic-window-vscode .agentic-window-title { color: #bdbdbd; }
+.agentic-vscode-shell {
+  display: grid; grid-template-columns: 29px minmax(0, 1fr);
+  flex: 1; min-height: 0; background: #1e1e1e;
+}
+.agentic-vscode-activitybar {
+  display: flex; flex-direction: column; align-items: center; gap: 13px;
+  padding: 13px 0; color: #858585; background: #333333;
+  font: 12px/1 var(--sans); border-right: 1px solid #424242;
+}
+.agentic-vscode-activitybar span:last-child { margin-top: auto; }
+.agentic-vscode-editor {
+  display: flex; flex-direction: column; min-width: 0; min-height: 0;
+}
+.agentic-vscode-tabs {
+  display: flex; flex: none; min-height: 28px; align-items: stretch;
+  background: #252526; border-bottom: 1px solid #333333;
+}
+.agentic-vscode-tab {
+  display: flex; align-items: center; max-width: 100%; padding: 0 10px;
+  color: #d4d4d4; background: #1e1e1e; border-top: 1px solid #e6b86a;
+  font: 10px/1.2 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+}
+.agentic-window-vscode .agentic-window-body {
+  padding: 12px 14px; color: #d4d4d4; background: #1e1e1e;
+  overflow-x: hidden; overflow-y: auto; scrollbar-width: none; overflow-wrap: anywhere;
+  font: var(--agentic-vscode-font-size, 10px)/1.55 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+.agentic-window-vscode .agentic-window-body::-webkit-scrollbar { display: none; }
 .agentic-code .cmt { color: #6a9955; }
 .agentic-code .str { color: #ce9178; }
 .agentic-code .kw { color: #c586c0; }
@@ -2281,8 +2359,8 @@ img { max-width: 100%; }
 .agentic-code .line { display: block; min-height: 1.55em; }
 
 /* ----------------------------------------------------------------------------
-   運用 Agentic AI 使用 PaddleOCR：淺色 Codex 對話視窗 + 深色 PaddleOCR Python 視窗，
-   重疊排列，點擊任一視窗即可切換前後層（見 storymap.js 的 initPart3AgenticOcrWindows()）。
+   運用 Agentic AI 使用 PaddleOCR：淺色 Codex 對話視窗。
+   點擊視窗即可切換前後層（見 storymap.js 的 initPart3AgenticOcrWindows()）。
    尺寸與位置變數見 storymap-cards.css 的 #part-3-agentic-ocr-chart 區塊。
 
    注意：外層容器刻意不用 .part3-chart-frame（那是 display:grid + auto 高度的
@@ -2293,36 +2371,25 @@ img { max-width: 100%; }
 .part3-agentic-ocr-frame {
   position: relative; display: flex; flex-direction: column;
   height: var(--visual-size);
-  padding: clamp(16px, 2vw, 26px);
+  /* Let the Codex window use the full visual column so its top edge follows
+     the text card instead of starting below an oversized inset. */
+  padding: 0;
   background: transparent;
   border: 0;
   box-shadow: none;
 }
 .part3-agentic-ocr-frame > .agentic-scene { flex: 1 1 auto; min-height: 0; }
 .agentic-scene-paddleocr { background: transparent; }
-.agentic-window-pyocr,
 .agentic-window-codex { cursor: pointer; }
-.agentic-window-pyocr {
-  left: var(--agentic-pyocr-left, 34%); top: var(--agentic-pyocr-top, -4%);
-  width: var(--agentic-pyocr-width, 66%); height: var(--agentic-pyocr-height, 56%);
-  z-index: 1; transform: rotate(var(--agentic-pyocr-angle, 0deg)) scale(.97);
-  --agentic-window-title-size: var(--agentic-pyocr-font-size, 11px);
-}
 .agentic-window-codex {
   left: var(--agentic-codex-left, 0%); top: var(--agentic-codex-top, 16%);
   width: var(--agentic-codex-width, 74%); height: var(--agentic-codex-height, 84%);
   z-index: 2; transform: rotate(var(--agentic-codex-angle, 0deg));
   background: var(--card); --agentic-window-title-size: var(--agentic-codex-font-size, 11px);
 }
-.agentic-window-pyocr,
 .agentic-window-codex {
   opacity: .92;
   transition: transform .32s ease, opacity .24s ease, box-shadow .32s ease;
-}
-.agentic-window-pyocr.is-agentic-front {
-  opacity: 1;
-  transform: rotate(var(--agentic-pyocr-angle, 0deg)) scale(1);
-  box-shadow: 0 22px 38px rgba(0, 0, 0, .42);
 }
 .agentic-window-codex.is-agentic-front {
   opacity: 1;
@@ -2330,17 +2397,11 @@ img { max-width: 100%; }
   box-shadow: 0 22px 38px rgba(0, 0, 0, .18);
 }
 .agentic-window-codex .agentic-mac-titlebar { background: #efe8dc; border-bottom-color: rgba(22, 61, 63, .14); cursor: pointer; }
-.agentic-window-pyocr .agentic-mac-titlebar { cursor: pointer; }
 .agentic-window-codex .agentic-window-title { color: #7a7263; }
-.agentic-window-pyocr .agentic-window-body,
 .agentic-window-codex .agentic-window-body {
   padding: 12px 15px; overflow-x: hidden; overflow-y: auto; scrollbar-width: none; overflow-wrap: anywhere;
 }
-.agentic-window-pyocr .agentic-window-body::-webkit-scrollbar,
 .agentic-window-codex .agentic-window-body::-webkit-scrollbar { display: none; }
-.agentic-window-pyocr .agentic-window-body {
-  color: #d4d4d4; font: var(--agentic-window-font-size, 12px)/1.85 "SF Mono", ui-monospace, Menlo, Consolas, monospace;
-}
 .agentic-window-codex .agentic-window-body {
   color: var(--ink); font: var(--agentic-codex-text-size, 16px)/1.75 var(--sans);
 }
@@ -2633,25 +2694,27 @@ img { max-width: 100%; }
 .part3-json-nav:active { color: var(--accent); transform: translateY(1px); }
 .part3-json-nav:disabled { opacity: .22; cursor: default; }
 .part3-json-label {
-  appearance: none; cursor: pointer; background: transparent;
-  border: none; border-bottom: 4px solid transparent;
-  padding: 6px 4px 8px; font-family: var(--sans); font-weight: 700;
-  font-size: var(--json-label-font-size, 12.5px); line-height: 1.4;
-  color: rgba(22, 61, 63, .55);
-  transition: color .16s ease, border-color .16s ease;
+  appearance: none; cursor: pointer; background: rgba(22, 61, 63, .06);
+  border: 0; border-radius: 4px; padding: 8px 14px;
+  color: #22403f;
+  font: 700 var(--json-label-font-size, 13.5px)/1.4 var(--sans);
+  box-shadow: 0 2px 7px rgba(22, 61, 63, .12);
+  transition: color .16s ease, background-color .16s ease, filter .16s ease;
 }
 .part3-json-label:hover,
 .part3-json-label:focus-visible {
-  color: var(--ink);
-  border-color: rgba(22, 61, 63, .25);
+  color: #22403f;
+  background: rgba(22, 61, 63, .12);
+  filter: brightness(.97);
 }
 .part3-json-label:active { color: var(--accent); }
 .part3-json-label.is-selected {
-  color: var(--ink);
-  border-color: var(--accent);
+  color: #fff;
+  background: var(--ink);
+  filter: none;
 }
 .part3-json-label.is-selected:hover,
-.part3-json-label.is-selected:focus-visible { border-color: var(--accent); }
+.part3-json-label.is-selected:focus-visible { background: var(--ink); }
 
 .part3-json-window {
   display: flex; flex-direction: column; width: var(--json-window-w, 100%);
@@ -3034,12 +3097,11 @@ img { max-width: 100%; }
    「Part 3.4.10 — 試一試」區塊；此處只是預設值。
    ========================================================================== */
 
-/* 進度列最右側的印刷字／手寫字切換 */
+/* 「11 試一試」標題旁的印刷字／手寫字切換 */
 .part3-try-switch {
   margin-left: auto; display: inline-flex; gap: 3px; padding: 3px;
   background: rgba(22, 61, 63, .07); border-radius: 999px;
 }
-.part3-try-progress .part3-try-switch { margin-left: auto; flex: 0 0 auto; }
 .part3-try-switch button {
   appearance: none; border: none; cursor: pointer; background: transparent; border-radius: 999px;
   padding: 6px 16px; font-family: var(--sans); font-weight: 700;
@@ -3055,6 +3117,19 @@ img { max-width: 100%; }
   height: var(--try-explorer-h, calc(95svh - var(--bar-h, 62px)));
   grid-template-rows: minmax(0, 1fr);
   overflow: hidden;
+}
+
+/* 11 試一試：兩種模式共用很淺的灰色 backdrop，讓白色 PDF 頁面有清楚
+   的邊界；手寫模式只保留紙頁本身的暖色，不再把 PDF 放在深綠底上。 */
+#part-3-try-explorer {
+  --try-backdrop-fill: #eef0f0;
+  --try-backdrop-surface: linear-gradient(150deg, #f5f6f5 0%, #eef0f0 58%, #e7eae9 100%);
+  --try-pdf-fill: #fffdf8;
+}
+#part-3-try-explorer[data-try-mode="handwritten"] {
+  --try-backdrop-fill: #eef0ef;
+  --try-backdrop-surface: linear-gradient(150deg, #f4f5f3 0%, #eef0ef 58%, #e5e9e7 100%);
+  --try-pdf-fill: #ead8b8;
 }
 
 /* 左半：史料——PDF 依比例縮放置中，不裁切；左側 backdrop 依內容收合。 */
@@ -3077,9 +3152,8 @@ img { max-width: 100%; }
   max-height: none;
   align-self: center;
   box-sizing: border-box;
-  background-color: transparent;
-  background-image: radial-gradient(circle at 22% 18%, rgba(196, 93, 56, .16), transparent 42%),
-                    linear-gradient(150deg, #12363a 0%, #1c464a 55%, #3a5f5a 100%);
+  background-color: var(--try-backdrop-fill);
+  background-image: var(--try-backdrop-surface);
   background-repeat: no-repeat;
   background-position: center, center;
   background-size: 100% var(--try-pdf-backdrop-h, 100%), 100% var(--try-pdf-backdrop-h, 100%);
@@ -3093,6 +3167,7 @@ img { max-width: 100%; }
   height: auto;
   max-height: var(--try-pdf-max-h, 100%);
   display: block;
+  background-color: var(--try-pdf-fill);
 }
 #part-3-try-explorer .part3-fx-page img {
   height: auto;
@@ -3181,8 +3256,8 @@ img { max-width: 100%; }
   border-top: 1px solid var(--line);
 }
 
-/* 進度改用純數字圓點：全部只用綠色系表達狀態——
-   已完成＝實心綠、目前＝淺綠底描邊、未開始＝灰底。 */
+/* 「試一試」資訊面板頂端的進度列；桌面版與模式切換並排，
+   手機版會在下方媒體查詢中隱藏，保留原本的標題列切換。 */
 .part3-try-progress {
   display: flex; align-items: center; gap: 9px;
   margin-bottom: var(--try-progress-gap, 16px);
@@ -3201,6 +3276,9 @@ img { max-width: 100%; }
 .part3-try-dot.is-done { background: var(--try-ok, #2e7d5b); color: #fff; }
 .part3-try-dot.is-current { background: rgba(46, 125, 91, .14); border-color: var(--try-ok, #2e7d5b); color: var(--try-ok, #2e7d5b); }
 .part3-try-dot.is-pending { background: rgba(22, 61, 63, .09); color: rgba(22, 61, 63, .38); }
+.part3-try-panel-topbar { display: flex; align-items: flex-start; gap: 18px; flex: 0 0 auto; }
+.part3-try-panel-topbar .part3-try-progress { flex: 1 1 auto; min-width: 0; }
+.part3-try-panel-topbar .part3-try-switch { flex: 0 0 auto; margin-left: auto; white-space: nowrap; }
 
 /* RPG 引導對話框（固定於面板底部） */
 /* 引導框走網站敘述文用的 --serif（跟其他章節的說明文字同一種字體），
@@ -3547,6 +3625,13 @@ img { max-width: 100%; }
   #part-3-handwritten-explorer {
     display: block; width: auto; max-width: none; margin-left: 0; margin-right: 0;
     height: auto; grid-template-rows: none; overflow: visible;
+    /* 抽屜寬度的「唯一真實來源」：宣告在這裡（史料探索器的根節點），
+       讓 .mdrawer（史料欄的外框）跟 .mdrawer-grip（寬度調整鈕，現在是
+       根節點的直接子元素，兩者都是這個根節點的子孫）透過 CSS 繼承拿到
+       同一個值。原本兩邊各自寫一份 fallback（.mdrawer 用 min(74vw,300px)、
+       .mdrawer-grip 用 172px）預設值不一致，使用者還沒拖曳過寬度鈕時，
+       鈕的位置跟抽屜實際的右邊界對不上，才會浮在圖片中間而不是邊界上。 */
+    --mdrawer-w: min(74vw, 300px);
   }
   .part3-fx-out, .part3-try-panel {
     height: auto; min-height: 0; max-height: none; overflow: visible;
@@ -3612,13 +3697,13 @@ img { max-width: 100%; }
   }
   #part-3-json-chart .part3-json-label {
     flex: 0 0 auto;
-    border: 1px solid rgba(22, 61, 63, .14);
-    border-radius: 999px;
+    border: 1px solid transparent;
+    border-radius: 7px;
     padding: 6px 11px;
     background: rgba(22, 61, 63, .06);
-    font-size: calc(12px * var(--font-scale));
-    line-height: 1.25;
-    color: rgba(22, 61, 63, .72);
+    color: var(--text);
+    font: 600 calc(12px * var(--font-scale))/1.25 var(--sans);
+    box-shadow: none;
   }
   #part-3-json-chart .part3-json-label.is-selected {
     background: var(--ink);
@@ -3653,10 +3738,10 @@ img { max-width: 100%; }
   }
   .mdrawer-scrim.is-on { opacity: 1; pointer-events: auto; }
 
-  /* --- 抽屜本體：預設只比底部四顆鈕寬一點 --- */
+  /* --- 抽屜本體：預設留出史料閱讀空間 --- */
   .mdrawer {
     display: flex; position: fixed; left: 0; top: 0; bottom: 0; z-index: 70;
-    width: var(--mdrawer-w, 172px);
+    width: var(--mdrawer-w);
     transform: translateX(-101%);
     transition: transform .3s cubic-bezier(.4, 0, .2, 1);
     background: linear-gradient(160deg, #123336, #1c4a4a);
@@ -3674,6 +3759,7 @@ img { max-width: 100%; }
      絕不跨到別的章節上面。is-inview 由 storymap.js 的 IntersectionObserver 掛上。 */
   .part3-feature-explorer:not(.is-inview) .mdrawer,
   .part3-feature-explorer:not(.is-inview) .mdrawer-puller,
+  .part3-feature-explorer:not(.is-inview) .mdrawer-grip,
   .part3-feature-explorer:not(.is-inview) .mdrawer-scrim { display: none; }
 
   .mdrawer-bar { display: flex; flex: 0 0 auto; align-items: center; gap: 9px; padding: 12px 12px 9px; }
@@ -3691,6 +3777,13 @@ img { max-width: 100%; }
     overflow: auto; touch-action: pan-y;
     display: flex; align-items: center; justify-content: center;
   }
+  /* 抽屜版仍保留與 PDF 紙面不同的 backdrop；否則 background:none 會讓
+     紙頁與整個網站底色融在一起。 */
+  #part-3-printed-explorer .mdrawer > .part3-fx-doc,
+  #part-3-handwritten-explorer .mdrawer > .part3-fx-doc {
+    background-color: var(--fx-backdrop-fill, #263b3e);
+    background-image: var(--fx-backdrop-surface);
+  }
   .mdrawer > .part3-fx-doc .part3-fx-nav,
   .mdrawer > .part3-fx-doc [data-part3-fx-tags],
   .mdrawer > .part3-fx-doc .part3-fx-caption { display: none; }
@@ -3706,9 +3799,65 @@ img { max-width: 100%; }
   .mdrawer .part3-fx-page img, .mdrawer [data-try-img] {
     display: block; height: calc(100% * var(--fxdoc-h, 1)); width: auto; max-width: none; margin: auto;
     pointer-events: none; user-select: none;
-    transform: translate(var(--fxdoc-x, 0px), var(--fxdoc-y, 0px)) scale(var(--fxdoc-scale, 1));
+    transform: translate(
+      calc(var(--fxdoc-x, 0px) + (50% - var(--fxdoc-focus-x, 50%))),
+      calc(var(--fxdoc-y, 0px) + (50% - var(--fxdoc-focus-y, 50%)))
+    ) scale(var(--fxdoc-scale, 1));
     transform-origin: var(--fxdoc-origin, center center);
   }
+  /* --- 8 辨識手寫字：抽屜裡改成「一次一摺」，不用風琴摺 ---
+     桌面版的 .part3-fx-strip 是 3D 風琴摺：所有摺子同時排在一列、各自
+     rotateY 傾斜，只有選中的一組展開，其餘收成 7px 的摺痕。抽屜只有
+     一百多像素寬，這種排法會把每一摺壓到幾乎看不見（先前手寫字的頁面
+     在抽屜裡等於整片空白，就是這個原因；而且摺子是用 background-image
+     畫的，抽屜原本只處理 <img>，兩邊都對不上）。
+     因此抽屜裡改成：預設只顯示一摺，寬度填滿抽屜、高度依掃描比例；
+     展開（is-full）時並排顯示兩摺，等同桌面版的一組。
+     由 storymap.js 的 root.__mFold 在該摺掛上 .is-mopen。 */
+  /* 只在「收合」的抽屜套用單摺版面；展開後直接用原本的風琴摺（見下面
+     .mdrawer.is-full 的置中規則），所以下列選擇器全部加上 :not(.is-full)。 */
+  .mdrawer:not(.is-full) .part3-fx-striparea { width: 100%; height: auto; margin: 0; }
+  .mdrawer:not(.is-full) .part3-fx-strip {
+    display: flex;
+    flex-direction: row-reverse;   /* 與桌面版一致：右起為前一摺 */
+    align-items: flex-start;
+    width: 100%;
+    height: auto;
+    max-height: none;
+    perspective: none;
+    overflow: visible;
+  }
+  .mdrawer:not(.is-full) .part3-fx-panel {
+    display: none;
+    flex: 0 0 auto;
+    width: 100%;
+    min-width: 0;
+    height: auto;
+    aspect-ratio: var(--fold-aspect, 344 / 747);
+    /* 收摺用的傾斜、外擴、半透明、紙邊陰影全部取消 */
+    transform: none !important;
+    opacity: 1 !important;
+    margin-inline: 0;
+    box-shadow: none;
+    background-color: transparent;
+  }
+  #part-3-handwritten-explorer .mdrawer .part3-fx-panel {
+    background-color: var(--fx-pdf-fill);
+  }
+  .mdrawer:not(.is-full) .part3-fx-panel::after { opacity: 0; }
+  .mdrawer:not(.is-full) .part3-fx-panel.is-mopen { display: block; }
+  /* 收合時史料圖要滿版：抽屜左右不留內距，摺子才能與抽屜同寬 */
+  .mdrawer:not(.is-full) > .part3-fx-doc { padding: 0; }
+
+  /* 展開：沿用原本的風琴摺，整組在畫面中垂直、水平置中 */
+  .mdrawer.is-full > .part3-fx-doc {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mdrawer.is-full .part3-fx-striparea {
+    display: flex; align-items: center; justify-content: center;
+  }
+  .mdrawer.is-full .part3-fx-strip { margin: auto; }
+
   /* 展開後：PDF 置中，並可單獨縮放（不影響整個網頁） */
   .mdrawer.is-full > .part3-fx-doc { padding: 14px; }
   .mdrawer.is-full .part3-fx-pagestack, .mdrawer.is-full .part3-try-pagestack,
@@ -3727,30 +3876,36 @@ img { max-width: 100%; }
   .mdrawer-edge.l { left: 6px; } .mdrawer-edge.r { right: 6px; }
   .mdrawer-edge.is-on { opacity: 1; }
 
-  /* 右邊界中間的寬度調整鈕 */
+  /* 寬度調整鈕：騎在抽屜的右邊界上——邊界線正好從按鈕正中間穿過，
+     而不是貼在邊界內側。因此改用 position:fixed 對齊 --mdrawer-w
+     （抽屜寬度＝右邊界的 x 座標），再用 translateX(-50%) 讓按鈕中心
+     落在那條線上。它是 root 的子元素（不在 .mdrawer 裡），否則會被
+     抽屜的 overflow:hidden 裁掉一半，見 storymap.js 的說明。 */
   .mdrawer-grip {
-    display: grid; position: absolute; right: 0; top: 50%; transform: translateY(-50%);
+    display: none; position: fixed;
+    left: var(--mdrawer-w); top: 50%;
+    transform: translate(-50%, -50%);
     z-index: 75; appearance: none; cursor: ew-resize; border: 0; padding: 0;
-    width: 26px; height: 52px; border-radius: 8px;
+    width: 30px; height: 64px; border-radius: 9px;
     background: linear-gradient(160deg, #1d4a4d, #2c6360); color: rgba(247, 243, 234, .85);
-    place-items: center; box-shadow: 3px 3px 12px rgba(12, 30, 32, .4); touch-action: none;
+    place-items: center; box-shadow: 0 3px 12px rgba(12, 30, 32, .45); touch-action: none;
   }
+  .mdrawer-grip.is-on { display: grid; }
   .mdrawer-grip svg { width: 15px; height: 15px; }
-  .mdrawer.is-full .mdrawer-grip { display: none; }
 
-  /* 底部四顆鈕：連在一起、置中 */
+  /* 底部四顆鈕：連在一起、置中；加大觸控面積 */
   .mdrawer-foot {
     display: flex; flex: 0 0 auto; align-items: center; justify-content: center; gap: 0;
     padding: 9px 6px; border-top: 1px solid rgba(255, 255, 255, .14);
   }
   .mdrawer-foot button {
-    appearance: none; cursor: pointer; width: 34px; height: 34px; border-radius: 0;
+    appearance: none; cursor: pointer; width: 48px; height: 46px; border-radius: 0;
     border: 1px solid rgba(247, 243, 234, .3); border-right-width: 0;
     background: transparent; color: #f4efe6; display: grid; place-items: center; padding: 0;
   }
   .mdrawer-foot button:first-child { border-radius: 8px 0 0 8px; }
   .mdrawer-foot button:last-child { border-radius: 0 8px 8px 0; border-right-width: 1px; }
-  .mdrawer-foot button svg { width: 16px; height: 16px; }
+  .mdrawer-foot button svg { width: 21px; height: 21px; }
   .mdrawer-foot button:disabled { opacity: .28; }
 
   /* PDF 縮放：只用雙指／雙擊／ctrl+滾輪，不放 ＋－ 按鈕 */
@@ -3796,10 +3951,8 @@ img { max-width: 100%; }
   #part-3-content #part-3-agentic-ocr #part-3-agentic-ocr-chart {
     height: var(--agentic-frame-height, 560px);
     min-height: 0;
-    --agentic-pyocr-font-size: 9px;
-    --agentic-window-font-size: 9px;
-    --agentic-codex-font-size: 10px;
-    --agentic-codex-text-size: 12px;
+    --agentic-codex-font-size: 14px;
+    --agentic-codex-text-size: 18px;
   }
   #part-3-content #part-3-agentic-ocr #part-3-agentic-ocr-chart > .agentic-scene {
     height: 100%;
@@ -3821,6 +3974,7 @@ img { max-width: 100%; }
 .mtry-win, .mtry-winbar { display: none; }
 
 @media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  #part-3-try-explorer .part3-try-panel-topbar { display: none; }
   #part-3-try-explorer {
     display: flex; flex-direction: column;
     height: calc(100svh - var(--bar-h, 62px));
@@ -3864,7 +4018,10 @@ img { max-width: 100%; }
   #part-3-try-explorer .part3-try-doc {
     flex: 1 1 auto; min-height: 0; height: auto; max-height: none; width: auto;
     display: flex; align-items: center; justify-content: center;
-    padding: 8px; margin: 0; border: 0; background: #123336; overflow: hidden;
+    padding: 8px; margin: 0; border: 0;
+    background-color: var(--try-backdrop-fill);
+    background-image: var(--try-backdrop-surface);
+    overflow: hidden;
   }
   #part-3-try-explorer .part3-try-pagestack,
   #part-3-try-explorer .part3-try-doc .part3-fx-page {
@@ -3987,8 +4144,8 @@ img { max-width: 100%; }
 .part3-tools-mnav { display: none; }
 
 @media (pointer: coarse) and (hover: none), (max-width: 1040px) {
-  /* 第三部分封面＋適合的研究問題合計佔滿頂欄以下的一個視窗高度；
-     所需的工具與資源則獨立佔滿下一個視窗。 */
+  /* 第三部分封面＋適合的研究問題以頂欄以下 60% 為目標；
+     若研究卡內容較高，研究區可按內容最低高度增長。 */
   #part-3,
   #part-3-research-questions,
   #part-3-tools {
@@ -3998,11 +4155,14 @@ img { max-width: 100%; }
   #part-3-research-questions {
     display: flex;
     align-items: stretch;
+    height: auto;
+    min-height: 0;
+    overflow: visible;
   }
   #part-3-research-questions > .story-inner {
     display: flex;
     align-items: center;
-    height: 100%;
+    height: auto;
   }
   #part-3-research-questions .lay-split { width: 100%; }
 
@@ -4017,8 +4177,8 @@ img { max-width: 100%; }
     min-height: 0;
   }
 
-  /* OCR 定義：1、2 號卡片與掃描視覺元素共用頂欄以下 150% 的高度；
-     OCR測試的 10 號卡片與批次視覺元素共用 130% 的高度。 */
+  /* OCR 定義與 OCR測試都按文字與視覺內容自然決定整節高度；
+     OCR 定義的視覺寬度為 80%，並按比例縮放高度。 */
   #part-3-ocr-definition,
   #part-3-test {
     display: flex;
@@ -4032,6 +4192,25 @@ img { max-width: 100%; }
     align-items: center;
     height: 100%;
     min-height: 0;
+  }
+  #part-3-test {
+    height: auto;
+    overflow: visible;
+  }
+  #part-3-ocr-definition {
+    height: auto;
+    overflow: visible;
+  }
+  #part-3-ocr-definition > .story-inner {
+    height: auto;
+  }
+  #part-3-ocr-definition .part3-ocr-def-layout {
+    height: auto;
+    justify-content: flex-start;
+    gap: clamp(8px, 1.2vh, 14px);
+  }
+  #part-3-test > .story-inner {
+    height: auto;
   }
   #part-3-ocr-definition .part3-ocr-def-layout,
   #part-3-test .lay-split {
@@ -4058,12 +4237,25 @@ img { max-width: 100%; }
     max-width: 100%;
     margin: 0 auto;
   }
+  #part-3-ocr-definition .ocr-scan-scene {
+    flex: 0 0 auto;
+    min-height: 0;
+    aspect-ratio: var(--part3-narrow-visual-aspect, 1.05 / 1);
+  }
+  #part-3-test .lay-split {
+    height: auto;
+    justify-content: flex-start;
+    gap: clamp(8px, 1.2vh, 14px);
+  }
+  #part-3-test .lay-visual {
+    flex: 0 0 auto;
+  }
   #part-3-test .batch-scene {
     width: min(90%, 560px);
-    flex: 0 0 var(--part3-narrow-visual-height-ratio, 60%);
-    height: var(--part3-narrow-visual-height-ratio, 60%);
+    flex: 0 0 auto;
+    height: auto;
     min-height: 0;
-    aspect-ratio: auto;
+    aspect-ratio: var(--batch-aspect, 1 / 1);
   }
   #part-3-test .lay-visual {
     display: flex;
@@ -4342,5 +4534,157 @@ img { max-width: 100%; }
   #part-3-tools .part3-tools-checklist {
     height: 100%;
     min-height: 0;
+  }
+}
+
+/* ============================================================================
+   13 · 手機版／窄螢幕：引言分頁的卡片浮現效果
+   引言是一張卡片接一張卡片的版面，在手機上一路往下捲容易顯得單調，
+   因此讓每張卡片捲進畫面時「浮現」一次：淡入＋微微上移＋輕微放大。
+   .intro-reveal 這個 class 由 storymap.js 的 initIntroMobileReveal() 掛上，
+   捲到時再加上 .is-revealed；只播一次，往回捲不重播。
+
+   重要：預設狀態（沒有 .is-revealed）必須是「完全正常顯示」，
+   收合／位移只寫在下面的手機版媒體查詢裡。這樣一來，桌面版即使被掛上
+   .intro-reveal 也完全看不出差別，而且萬一 JavaScript 沒有執行、或
+   IntersectionObserver 不支援，內容也絕不會變成永遠隱形。
+   ========================================================================== */
+@media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+  /* 共通：出場動畫比先前明顯——位移距離加大、加入放大與輕微回彈。
+     .is-revealed 由 IntersectionObserver 進入時加上、離開時移除，
+     因此上下捲動都會重播一次。 */
+  /* 刻意不使用 clip-path：它會建立新的裁切／堆疊環境，把卡片的陰影和
+     硃113／硃119面板裡「浮」在兩側的標籤氣泡一起切掉，面板因此整片看不見。
+     所有出場效果一律只用 opacity ＋ transform。 */
+  .intro-reveal {
+    opacity: 0;
+    /* 位移中的元素要疊在相鄰元素之上：卡片有自己的底色與陰影，
+       節標題若在動畫途中被卡片蓋住，看起來就像標題被切掉。 */
+    position: relative;
+    z-index: 1;
+    transition:
+      opacity var(--reveal-fade, .7s) ease,
+      transform var(--reveal-move, .95s) cubic-bezier(.18, .89, .32, 1.08),
+      clip-path var(--reveal-open, 1.05s) cubic-bezier(.22, .72, .24, 1);
+    will-change: opacity, transform, clip-path;
+  }
+  .intro-reveal.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+
+  /* 位移距離刻意小於各區塊之間的間距：位移量若比間距大，動畫途中元素會
+     跨進上下相鄰區塊的位置而互相重疊。 */
+  /* 節標題／編號列（卡片外的那些）：由左滑入。左右位移不會撞到上下的區塊，
+     所以可以放大一點，最顯眼。 */
+  .intro-reveal[data-reveal-kind="heading"] { transform: translateX(-30px); z-index: 3; }
+  /* 卡片外的說明文字（含節標題外框）：由下升起 */
+  .intro-reveal[data-reveal-kind="text"] { transform: translateY(16px); z-index: 3; }
+  /* 圖片＋說明面板：整組放大浮現 */
+  .intro-reveal[data-reveal-kind="visual"] { transform: translateY(16px) scale(.93); }
+
+  /* 文字卡：從卡片上緣往下「長出來」，像拉開一道簾子把裡面的字露出來。
+     用 clip-path 而不是 scaleY，也不是動高度：
+       · scaleY 會把裡面的字一起壓扁，展開途中文字是變形的——不是「露出」。
+       · 動高度（height／max-height）會改變版面，卡片長大時下方內容跟著位移，
+         而這個效果會隨捲動來回重播，位移就變成畫面不斷跳動。
+     clip-path 兩者都避開：文字維持原本大小，只是被逐漸露出來，
+     而且完全不影響版面計算。
+     左右與下緣留 -40px 的負值，卡片自己的陰影才不會被裁掉
+     （clip-path 是連陰影一起裁的）。 */
+  .intro-reveal[data-reveal-kind="card"] {
+    /* 卡片不用淡入：簾子本身就是效果，再加淡入反而讓文字看起來霧霧的 */
+    opacity: 1;
+    transform: none;
+    clip-path: inset(0 -40px 100% -40px);
+  }
+  .intro-reveal[data-reveal-kind="card"].is-revealed {
+    clip-path: inset(0 -40px -40px -40px);
+  }
+  /* 硃113／硃119面板：外框只做淡入，不位移也不縮放——它的標籤氣泡與連接線
+     座標是量出來的，外框一動，裡面全部跟著跑掉。
+     「由上往下展開」的動作改由裡面的文件面板負責（見下方 .ip-body）。 */
+  .intro-reveal[data-reveal-kind="source"] {
+    transform: none;
+    transition: opacity .6s ease;
+  }
+
+  /* --- 文件面板：從標題列往下展開，露出裡面的內文 --- */
+  /* 和文字卡用同一種做法：以 clip-path 當簾子，從標題列（.ip-head）的下緣
+     往下把 .ip-body 露出來。文字維持原本大小、不被壓扁，也不改變版面。
+
+     這裡用 clip-path 是安全的，而外層面板則刻意不用——差別在於「誰在框外」：
+     兩側的來源標籤（.source-callout）和連接線是 .source-flow-document 的
+     兄弟元素，位在 .ip-body 之外，所以裁切 .ip-body 完全不會碰到它們。
+     若把 clip-path 套在外層面板上，那些標籤就會整片被裁掉。
+
+     額外的好處：clip-path 不會移動任何東西，內文裡的標記位置從頭到尾固定，
+     連接線的座標因此一直是正確的（先前的 scaleY 會讓標記在動畫途中移動）。 */
+  .intro-reveal[data-reveal-kind="source"] .ip-body {
+    transform: none;
+    opacity: 1;
+    clip-path: inset(0 0 100% 0);
+    transition: clip-path var(--reveal-open, 1.05s) cubic-bezier(.22, .72, .24, 1) .18s;
+  }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .ip-body {
+    clip-path: inset(0 0 0 0);
+  }
+  /* 內文不再另外淡入：簾子拉開的過程就是在露出文字，
+     若文字同時還在淡入，簾子掃過去時會看到一片空白。 */
+  /* 兩側的來源標籤：只做透明度，不碰位置——位置是 JS 量出來寫進
+     --source-bubble-top 的，一旦位移就會和連接線對不上。依序出現。 */
+  .intro-reveal[data-reveal-kind="source"] .source-callout {
+    opacity: 0;
+    transition: opacity .55s ease;
+  }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .source-callout {
+    opacity: 1;
+  }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .source-callout-1 { transition-delay: 1.0s; }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .source-callout-2 { transition-delay: 1.18s; }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .source-callout-3 { transition-delay: 1.36s; }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .source-callout-4 { transition-delay: 1.54s; }
+  /* 連接線跟著標籤一起出現 */
+  .intro-reveal[data-reveal-kind="source"] .source-connector-layer {
+    opacity: 0;
+    transition: opacity .6s ease;
+  }
+  .intro-reveal[data-reveal-kind="source"].is-revealed .source-connector-layer {
+    opacity: 1;
+    transition: opacity .6s ease 1.0s;
+  }
+
+  /* 卡片／面板內部的文字：等卡片展開得差不多（.42s）之後才依序跟上，
+     每一項再多延遲 110ms，形成一行一行浮現的節奏。 */
+  .intro-reveal-inner {
+    opacity: 0;
+    transform: translateY(16px);
+    transition:
+      opacity .6s ease calc(.42s + var(--reveal-i, 0) * 110ms),
+      transform .72s cubic-bezier(.18, .89, .32, 1.1) calc(.42s + var(--reveal-i, 0) * 110ms);
+  }
+  .intro-reveal-inner.is-revealed {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+/* 系統若開啟「減少動態效果」，一律直接顯示，不做位移與縮放。
+   寫在媒體查詢之外並提高權重，確保不論視窗寬度都生效。 */
+@media (prefers-reduced-motion: reduce) {
+  .intro-reveal,
+  .intro-reveal.is-revealed,
+  .intro-reveal-inner,
+  .intro-reveal-inner.is-revealed,
+  /* 文件面板的展開與其內部元素也一併停用，否則 .ip-body 會停在
+     clip-path: inset(0 0 100% 0)（完全被裁掉），面板等於看不見。 */
+  .intro-reveal .ip-body,
+  .intro-reveal .ip-scroll,
+  .intro-reveal .source-callout,
+  .intro-reveal .source-connector-layer {
+    opacity: 1 !important;
+    transform: none !important;
+    clip-path: none !important;
+    transition: none !important;
   }
 }

@@ -2,7 +2,7 @@
 <html lang="zh-Hant">
 <head>
 <meta charset="UTF-8">
-<title>28 · 執行 AI Skills 的方法：AI Chain 環狀掃描動畫草稿</title>
+<title>28 · 執行 AI Skills 的方法：AI Chain 環狀動畫草稿（v4：Matrix 式文字雨）</title>
 <style>
   :root {
     --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
@@ -26,11 +26,11 @@
      新增的正方形視覺元素放在第一張卡（執行 AI Skills 的方法）右側。
      第二張卡（撰寫 Python 代碼串聯 Chain）維持原本全寬放在下方。
      ========================================================================== */
-  .mock-section { max-width: 1280px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
+  .mock-section { max-width: 1360px; margin: 0 auto; background: #efe8d8; border: 1px solid var(--line); padding: clamp(28px, 4vw, 52px); }
   .mock-title-row { display: flex; align-items: baseline; gap: 10px; margin-bottom: 20px; }
   .mock-title-row h2 { margin: 0; color: var(--ink); font: 500 clamp(22px, 2.4vw, 30px)/1.2 var(--serif); letter-spacing: -.02em; }
 
-  .aichain-row { display: grid; grid-template-columns: minmax(0, 1fr) 38%; gap: clamp(18px, 2.2vw, 30px); align-items: stretch; margin-bottom: 14px; }
+  .aichain-row { display: grid; grid-template-columns: minmax(0, 1fr) 44%; gap: clamp(18px, 2.2vw, 30px); align-items: stretch; margin-bottom: 14px; }
   .copybox { padding: clamp(18px, 1.8vw, 26px); background: var(--card); border: 1px solid var(--line); }
   .copybox.blk { display: flex; flex-direction: column; justify-content: center; }
   .copybox .title-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
@@ -49,80 +49,59 @@
   }
   .aichain-square > .aichain-lead { margin: 0; color: rgba(247, 243, 234, .82); font: var(--body-weight) 13.5px/1.7 var(--serif); }
 
-  .aichain-ring-wrap { position: relative; width: 100%; aspect-ratio: 1 / 1; margin: 0 auto; }
-  .aichain-svg { position: absolute; inset: 0; width: 100%; height: 100%; overflow: visible; }
+  .aichain-ring-wrap { position: relative; width: 100%; aspect-ratio: 1 / 1; margin: 0 auto; overflow: hidden; }
+
+  /* ---- 背景：Matrix 式文字雨，字元逐一取自硃25（林爽文事件）原文 ----
+     不再有任何「視窗」外框；文字連續由畫面上方落下，鋪滿整個正方形，
+     從第 1 個圓形卡片的位置一路到第 7 個，圓形卡片的邊緣直接疊在文字上面。 */
+  .aichain-matrix { position: absolute; inset: 0; z-index: 0; width: 100%; height: 100%; display: block; }
+
+  .aichain-svg { position: absolute; inset: 0; z-index: 1; width: 100%; height: 100%; overflow: visible; }
   .aichain-link { fill: none; stroke: rgba(247, 243, 234, .22); stroke-width: 2.5; stroke-linecap: round; }
   .aichain-link.is-active { stroke: var(--yellow); filter: drop-shadow(0 0 4px rgba(243, 201, 103, .55)); }
   .aichain-gap-note {
-    position: absolute; left: 50%; bottom: 1.5%; transform: translateX(-50%);
-    color: rgba(247, 243, 234, .38); font: 700 9px/1 var(--sans); letter-spacing: .08em;
+    position: absolute; z-index: 4; left: 50%; bottom: 1.5%; transform: translateX(-50%);
+    color: rgba(247, 243, 234, .55); font: 700 9px/1 var(--sans); letter-spacing: .08em;
     white-space: nowrap; pointer-events: none;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, .6);
   }
 
-  /* 六個步驟小圓點：位置用 left/top 百分比（半徑固定，圓心在中央），
-     缺口留在正下方（第 6 點與第 1 點之間不連接）。 */
+  /* 七個步驟的圓形卡片：位置用 left/top 百分比（半徑固定，圓心在中央），
+     缺口留在正下方（第 7 個與第 1 個之間不連接）。
+     卡片放技能名稱，所以尺寸較大；填滿效果是「外圈進度環」，
+     圈內的實心圓（背景固定深色、半透明）永遠讀得到文字，不會被填色蓋過。 */
   .aichain-node {
     --p: 0; /* 0–100，由 JS 每一格動畫更新，代表這一步「填滿」的進度 */
-    position: absolute; transform: translate(-50%, -50%);
-    width: clamp(20px, 6.4%, 26px); aspect-ratio: 1 / 1; border-radius: 50%;
-    display: grid; place-items: center;
-    background: conic-gradient(var(--yellow) calc(var(--p) * 1%), rgba(255, 255, 255, .1) 0);
-    border: 1.5px solid rgba(247, 243, 234, .38);
+    position: absolute; z-index: 3; transform: translate(-50%, -50%);
+    width: 22%; aspect-ratio: 1 / 1; border-radius: 50%;
+    background: conic-gradient(var(--yellow) calc(var(--p) * 1%), rgba(255, 255, 255, .14) 0);
     box-shadow: 0 0 0 3px rgba(22, 61, 63, .9);
-    transition: border-color .25s, box-shadow .25s;
+    transition: box-shadow .25s;
   }
-  .aichain-node span {
-    display: grid; place-items: center; width: 68%; aspect-ratio: 1 / 1; border-radius: 50%;
-    background: var(--ink);
-    color: rgba(247, 243, 234, .8); font: 800 9px/1 var(--sans);
-    transition: background .25s, color .25s;
+  .aichain-node-inner {
+    position: absolute; inset: 12%; border-radius: 50%;
+    display: grid; place-items: center; padding: 4%;
+    background: rgba(22, 61, 63, .92);
+    border: 1px solid rgba(247, 243, 234, .22);
+    transition: border-color .25s, background .25s;
   }
-  .aichain-node.is-filled { border-color: var(--yellow); box-shadow: 0 0 0 3px rgba(22, 61, 63, .9), 0 0 10px rgba(243, 201, 103, .5); }
-  .aichain-node.is-filled span { background: transparent; color: #12363a; }
+  .aichain-node-inner span {
+    color: rgba(247, 243, 234, .88); font: 700 clamp(9.5px, 2.1vw, 12px)/1.2 var(--sans);
+    text-align: center; letter-spacing: .01em;
+  }
+  .aichain-node.is-filled { box-shadow: 0 0 0 3px rgba(22, 61, 63, .9), 0 0 12px rgba(243, 201, 103, .55); }
+  .aichain-node.is-filled .aichain-node-inner { border-color: var(--yellow); background: rgba(27, 75, 77, .92); }
+  .aichain-node.is-filled .aichain-node-inner span { color: #fdf6e6; }
 
-  /* ---- 中央：VS Code 風格 JSON 視窗，模擬正在被逐步分析、掃描 ---- */
-  .aichain-vscode {
-    position: absolute; left: 50%; top: 50%; transform: translate(-50%, -50%);
-    width: 47%; aspect-ratio: 3 / 2;
-    display: flex; flex-direction: column;
-    background: #1e1e1e; border-radius: 6px; overflow: hidden;
-    box-shadow: 0 10px 20px rgba(0, 0, 0, .4);
-    border: 1px solid rgba(255, 255, 255, .08);
+  /* 右上角：七步全部完成時短暫顯示的小徽章 */
+  .aichain-status-badge {
+    position: absolute; z-index: 4; right: 3%; top: 3%;
+    padding: 2px 7px; color: #12363a; background: var(--yellow);
+    font: 800 8px/1.4 var(--sans); letter-spacing: .04em; border-radius: 2px;
+    opacity: 0; transform: translateY(-2px); transition: opacity .3s, transform .3s;
+    pointer-events: none;
   }
-  .aichain-vscode-bar { display: flex; align-items: center; gap: 4px; padding: 4px 6px; background: #2b2b2b; border-bottom: 1px solid rgba(255, 255, 255, .06); flex: none; }
-  .aichain-vscode-bar .dot { width: 5px; height: 5px; border-radius: 50%; }
-  .aichain-vscode-bar .dot.red { background: #ff5f57; }
-  .aichain-vscode-bar .dot.yellow { background: #febc2e; }
-  .aichain-vscode-bar .dot.green { background: #28c840; }
-  .aichain-vscode-bar span.file { margin-left: 4px; color: rgba(255, 255, 255, .5); font: 600 7px/1 var(--sans); letter-spacing: .02em; }
-  .aichain-vscode-body { position: relative; flex: 1; min-height: 0; padding: 5px 7px; overflow: hidden; font: 6.4px/1.55 "SF Mono", ui-monospace, Menlo, Consolas, monospace; color: #d4d4d4; }
-  .aichain-vscode-body .line { display: block; white-space: pre; }
-  .aichain-vscode-body .key { color: #9cdcfe; }
-  .aichain-vscode-body .str { color: #ce9178; }
-  .aichain-vscode-body .punc { color: #858585; }
-  /* 掃描光暈：由 JS 控制 top（百分比），每一步從頭掃到尾一次，
-     速度＝該步驟的小圓點填滿速度，兩者共用同一個時間軸。 */
-  .aichain-scanline {
-    position: absolute; left: 0; right: 0; height: 26%;
-    background: linear-gradient(180deg, rgba(120, 180, 255, 0) 0%, rgba(120, 180, 255, .38) 48%, rgba(120, 180, 255, 0) 100%);
-    mix-blend-mode: screen; pointer-events: none; opacity: 0; transition: opacity .2s;
-  }
-  .aichain-scanline.is-visible { opacity: 1; }
-  .aichain-vscode-status {
-    position: absolute; right: 6px; bottom: 4px;
-    padding: 1px 5px; color: #12363a; background: var(--yellow);
-    font: 800 6.5px/1.4 var(--sans); letter-spacing: .04em; border-radius: 2px;
-    opacity: 0; transform: translateY(2px); transition: opacity .3s, transform .3s;
-  }
-  .aichain-vscode-status.is-shown { opacity: 1; transform: translateY(0); }
-
-  /* ---- 圖例：對應六個小圓點的實際步驟名稱（含可及性用途） ---- */
-  .aichain-legend { display: grid; gap: 3px; margin: 0; padding: 0; list-style: none; font: 700 10.5px/1.5 var(--sans); }
-  .aichain-legend li { display: flex; gap: 6px; align-items: baseline; color: rgba(247, 243, 234, .45); transition: color .25s; }
-  .aichain-legend li .n { flex: none; color: rgba(247, 243, 234, .35); }
-  .aichain-legend li.is-current { color: var(--yellow); }
-  .aichain-legend li.is-current .n { color: var(--yellow); }
-  .aichain-legend li.is-done { color: rgba(247, 243, 234, .75); }
+  .aichain-status-badge.is-shown { opacity: 1; transform: translateY(0); }
 
   /* 構圖標註（草稿用，正式版不會出現） */
   .draft-tag {
@@ -151,18 +130,17 @@
 </head>
 <body>
 
-  <h1>「執行 AI Skills 的方法」新增正方形視覺元素 — AI Chain 環狀掃描動畫草稿</h1>
+  <h1>「執行 AI Skills 的方法」新增正方形視覺元素 — AI Chain 環狀動畫草稿（v5：拿掉左下角圖例、文字雨調淡）</h1>
   <p class="lead">
-    放在「執行 AI Skills 的方法」文字卡右側的新視覺元素：六個步驟畫成一圈小圓點，依序逐一「填滿」代表
-    <b>一個步驟做完才開始下一個</b>；因為「文書總結、分段」並不是「輸出結構化 JSON」的下一步，
-    第 6 點與第 1 點之間<b>刻意不連接</b>，圓圈下方留一個缺口。中央是一個 VS Code 風格的 JSON 視窗，
-    掃描光暈會在每一步跟著該步驟的小圓點填滿速度，從頭掃到尾一次，讓人感覺「這一步正在分析文書」。
+    v5 調整：拿掉左下角的文字圖例（原本列「抽取事件」到「輸出JSON」六項），畫面上不再有那張小卡片。
+    背景的 Matrix 式文字雨整體調得更淡：字元本身的透明度、還有每格淡出用的疊色都調低了，
+    落下的文字現在只是很輕的背景質感，不會蓋過圓形卡片上的技能名稱。
   </p>
   <ul class="note-list">
-    <li>六個步驟文字逐字取自網站現有的 <code>#part-3-ai-chain-chart</code>：文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON，未新增或更動任何步驟名稱。</li>
-    <li>圓點本身不放文字（版面太小），改用小圓點旁的圖例對應數字，滑鼠不需要互動也能看懂目前跑到第幾步。</li>
-    <li>動畫是純時間軸驅動（<code>performance.now()</code> 取模），不是逐格用 <code>setInterval</code> 累加狀態，所以分頁切走再切回來不會卡住或跳格。</li>
-    <li>已加入 <code>IntersectionObserver</code>（畫面外暫停）與 <code>prefers-reduced-motion</code>（改成靜止的示意畫面，不跑動畫）。</li>
+    <li>七個圓形卡片、外圈填滿動畫、連接線的缺口邏輯都沒有變，只是拿掉了左下角那張圖例小卡片。</li>
+    <li>Matrix 文字雨用 <code>&lt;canvas&gt;</code> 畫，字元來源是 <code>review-tools/shared data/stage1_original_text.json</code> 中 <code>doc_id: 硃25</code> 的 <code>body</code> 欄位全文（逐字未改動；原文的段落換行合併為一個全形空格，純粹是給文字雨用的連續字元流，不是引文排版）。</li>
+    <li>七個步驟名稱維持上一版：文書總結 → 抽取事件 → 抽取官員行動 → 追溯資訊來源 → 抽取皇帝回應 → 抽取官員後續回應 → <b>輸出JSON</b>（沿用上一輪指示，未改回「輸出結構化 JSON」；如果其實是想改回長名稱，請再告知）。</li>
+    <li>已加入 <code>IntersectionObserver</code>（畫面外暫停）與 <code>prefers-reduced-motion</code>（改成靜止的文字雨畫面，不持續下落）。</li>
   </ul>
 
   <div class="mock-section">
@@ -174,54 +152,35 @@
         <div class="body"><p>完成修改或建立 AI Skills 後，研究者便可透過 AI API，在本機呼叫 AI Model，根據 AI Skills 的設定，批次分析大量結構化史料。</p></div>
       </article>
 
-      <div class="aichain-square" id="aichain-square" role="group" aria-label="文書總結、分段 → 抽取事件及官員行動 → 追溯資訊來源 → 抽取上諭中皇帝對奏摺的回應 → 抽取後續官員的回應 → 輸出結構化 JSON">
+      <div class="aichain-square" id="aichain-square" role="group" aria-label="1 文書總結 → 2 抽取事件 → 3 抽取官員行動 → 4 追溯資訊來源 → 5 抽取皇帝回應 → 6 抽取官員後續回應 → 7 輸出JSON">
         <p class="aichain-lead">例如，處理奏摺的 AI Chain：</p>
         <div class="aichain-ring-wrap">
-          <svg class="aichain-svg" viewBox="0 0 240 240" aria-hidden="true">
-            <path class="aichain-link" data-link="0" d="M76,196.21 A88,88 0 0,1 32,120" />
-            <path class="aichain-link" data-link="1" d="M32,120 A88,88 0 0,1 76,43.79" />
-            <path class="aichain-link" data-link="2" d="M76,43.79 A88,88 0 0,1 164,43.79" />
-            <path class="aichain-link" data-link="3" d="M164,43.79 A88,88 0 0,1 208,120" />
-            <path class="aichain-link" data-link="4" d="M208,120 A88,88 0 0,1 164,196.21" />
+          <canvas class="aichain-matrix" id="aichain-matrix" aria-hidden="true"></canvas>
+
+          <svg class="aichain-svg" viewBox="0 0 400 400" aria-hidden="true">
+            <path class="aichain-link" data-link="0" d="M139.26,326.14 A140,140 0 0,1 63.51,231.15" />
+            <path class="aichain-link" data-link="1" d="M63.51,231.15 A140,140 0 0,1 90.54,112.71" />
+            <path class="aichain-link" data-link="2" d="M90.54,112.71 A140,140 0 0,1 200,60" />
+            <path class="aichain-link" data-link="3" d="M200,60 A140,140 0 0,1 309.46,112.71" />
+            <path class="aichain-link" data-link="4" d="M309.46,112.71 A140,140 0 0,1 336.49,231.15" />
+            <path class="aichain-link" data-link="5" d="M336.49,231.15 A140,140 0 0,1 260.74,326.14" />
           </svg>
 
-          <div class="aichain-node" data-node="0" style="left:31.667%; top:81.756%;" aria-hidden="true"><span>1</span></div>
-          <div class="aichain-node" data-node="1" style="left:13.333%; top:50%;" aria-hidden="true"><span>2</span></div>
-          <div class="aichain-node" data-node="2" style="left:31.667%; top:18.244%;" aria-hidden="true"><span>3</span></div>
-          <div class="aichain-node" data-node="3" style="left:68.333%; top:18.244%;" aria-hidden="true"><span>4</span></div>
-          <div class="aichain-node" data-node="4" style="left:86.667%; top:50%;" aria-hidden="true"><span>5</span></div>
-          <div class="aichain-node" data-node="5" style="left:68.333%; top:81.756%;" aria-hidden="true"><span>6</span></div>
+          <div class="aichain-node" data-node="0" style="left:34.815%; top:81.535%;" aria-hidden="true"><div class="aichain-node-inner"><span>文書總結</span></div></div>
+          <div class="aichain-node" data-node="1" style="left:15.877%; top:57.788%;" aria-hidden="true"><div class="aichain-node-inner"><span>抽取事件</span></div></div>
+          <div class="aichain-node" data-node="2" style="left:22.635%; top:28.177%;" aria-hidden="true"><div class="aichain-node-inner"><span>抽取官員行動</span></div></div>
+          <div class="aichain-node" data-node="3" style="left:50%; top:15%;" aria-hidden="true"><div class="aichain-node-inner"><span>追溯資訊來源</span></div></div>
+          <div class="aichain-node" data-node="4" style="left:77.365%; top:28.177%;" aria-hidden="true"><div class="aichain-node-inner"><span>抽取皇帝回應</span></div></div>
+          <div class="aichain-node" data-node="5" style="left:84.123%; top:57.788%;" aria-hidden="true"><div class="aichain-node-inner"><span>抽取官員後續回應</span></div></div>
+          <div class="aichain-node" data-node="6" style="left:65.185%; top:81.535%;" aria-hidden="true"><div class="aichain-node-inner"><span>輸出JSON</span></div></div>
 
-          <span class="aichain-gap-note" aria-hidden="true">6 → 1 不相連</span>
-
-          <div class="aichain-vscode" aria-hidden="true">
-            <div class="aichain-vscode-bar"><span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span><span class="file">硃25.json</span></div>
-            <div class="aichain-vscode-body" id="aichain-json-body">
-              <span class="line"><span class="punc">{</span></span>
-              <span class="line">&nbsp;<span class="key">"doc_id"</span><span class="punc">:</span> <span class="str">"硃25"</span><span class="punc">,</span></span>
-              <span class="line">&nbsp;<span class="key">"step"</span><span class="punc">:</span> <span class="str">"…"</span><span class="punc">,</span></span>
-              <span class="line">&nbsp;<span class="key">"events"</span><span class="punc">:</span> <span class="punc">[</span></span>
-              <span class="line">&nbsp;&nbsp;<span class="punc">{</span> <span class="key">"quote"</span><span class="punc">:</span> <span class="str">"…"</span> <span class="punc">}</span></span>
-              <span class="line">&nbsp;<span class="punc">]</span></span>
-              <span class="line"><span class="punc">}</span></span>
-              <div class="aichain-scanline" id="aichain-scanline"></div>
-            </div>
-            <span class="aichain-vscode-status" id="aichain-status">6 步完成</span>
-          </div>
+          <span class="aichain-gap-note" aria-hidden="true">7 → 1 不相連</span>
+          <span class="aichain-status-badge" id="aichain-status">7 步完成</span>
 
           <!-- 構圖標註 -->
-          <div class="draft-tag" style="left: -4%; top: -10%;"><span class="n">1</span>小圓點＝六個步驟，逐一填滿</div>
-          <div class="draft-tag" style="right: -10%; top: 40%;"><span class="n">2</span>掃描光暈速度＝該步驟填滿速度</div>
+          <div class="draft-tag" style="left: -4%; top: -8%;"><span class="n">1</span>圓形卡片內顯示技能名稱，逐一填滿外圈</div>
+          <div class="draft-tag" style="right: -8%; top: 42%;"><span class="n">2</span>背景文字雨（已調淡）＝硃25 原文字元，持續落下</div>
         </div>
-
-        <ol class="aichain-legend" id="aichain-legend">
-          <li data-legend="0"><span class="n">1</span>文書總結、分段</li>
-          <li data-legend="1"><span class="n">2</span>抽取事件及官員行動</li>
-          <li data-legend="2"><span class="n">3</span>追溯資訊來源</li>
-          <li data-legend="3"><span class="n">4</span>抽取上諭中皇帝對奏摺的回應</li>
-          <li data-legend="4"><span class="n">5</span>抽取後續官員的回應</li>
-          <li data-legend="5"><span class="n">6</span>輸出結構化 JSON</li>
-        </ol>
       </div>
     </div>
 
@@ -234,15 +193,18 @@
     <h2>套用到正式網站前，還需要確認的事</h2>
     <div class="plan-grid">
       <div class="plan-item"><span class="n">1</span><div><p><b>是否取代現有的橫向版本</b>：目前 <code>#part-3-ai-chain-chart</code> 下方已有一條可點擊的橫向六節點鏈（<code>data-part3-chart-toggle</code>）。這個環狀版本要放在文字卡右側「新增」，還是直接取代整條橫向鏈，尚待確認。</p></div></div>
-      <div class="plan-item"><span class="n">2</span><div><p><b>手機／窄螢幕版面</b>：正方形視覺元素在窄螢幕下建議整寬顯示、疊在文字卡下方（比照其他 <code>part3-*-grid</code> 在窄螢幕收成單欄的做法），圓點與圖例字級也需要再放大測試可讀性。</p></div></div>
-      <div class="plan-item"><span class="n">3</span><div><p><b>中央 JSON 內容</b>：目前只是示意用的精簡欄位（<code>doc_id / step / events</code>），未對應任何真實文書的逐字內容；若要放上正式網站，需要決定是否改成某一份真實奏摺 JSON 的節錄（比照「甚麼是 OCR？」視覺元素的作法）。</p></div></div>
-      <div class="plan-item"><span class="n">4</span><div><p><b>時間節奏</b>：草稿先用「每步 1.1 秒填滿、六步跑完後停留 0.9 秒再重播」，之後可依實際觀感調整快慢。</p></div></div>
+      <div class="plan-item"><span class="n">2</span><div><p><b>手機／窄螢幕版面</b>：正方形視覺元素在窄螢幕下建議整寬顯示、疊在文字卡下方（比照其他 <code>part3-*-grid</code> 在窄螢幕收成單欄的做法），圓形卡片字級也需要再放大測試可讀性。</p></div></div>
+      <div class="plan-item"><span class="n">3</span><div><p><b>文字雨的史料選擇</b>：目前只用硃25 一份文書的全文循環播放；若要放上正式網站，需要決定是固定用這一份，還是改成隨機抽取多份已收錄文書的原文（仍必須逐字、不可改動或翻譯）。</p></div></div>
+      <div class="plan-item"><span class="n">4</span><div><p><b>時間節奏</b>：外圈「每步 1.1 秒填滿、七步跑完後停留 0.9 秒再重播」；背景文字雨是持續迴圈、與七步節奏各自獨立，之後可依實際觀感分別調整快慢與掉落速度。</p></div></div>
+      <div class="plan-item"><span class="n">5</span><div><p><b>步驟名稱與現有橫向鏈不一致</b>：這一版的七個步驟名稱是依最新指示重新命名、精簡過的版本，與網站現有 <code>#part-3-ai-chain-chart</code> 橫向鏈的六個步驟文字不同。若確定採用這一版名稱，橫向鏈（若保留）也需要一併更新，避免同一頁面出現兩種不同的步驟命名。</p></div></div>
+      <div class="plan-item"><span class="n">6</span><div><p><b>沒有圖例後如何核對步驟名稱</b>：拿掉左下角圖例後，步驟名稱只剩圓形卡片本身（及卡片下方的 <code>aria-label</code>）可以核對；若使用者仍需要一份清楚列出七個步驟名稱的清單，需要另外決定放在哪裡（例如卡片正下方，或沿用左側文字卡的說明）。</p></div></div>
     </div>
   </div>
 
   <p class="source-note">
-    六個步驟文字與圓圈缺口（第 6 步不接回第 1 步）的邏輯，均取自
-    <code>Website/storymap/storymap-example.html</code> 中 <code>#part-3-ai-chain-chart</code> 的現有內容，未新增或更動步驟名稱。
+    背景文字雨的字元逐字取自 <code>review-tools/shared data/stage1_original_text.json</code> 中 <code>doc_id: 硃25</code>
+    （黃仕簡〈為奏彰化失陷已調兵赴臺事〉）的 <code>body</code> 欄位全文，內容未經改動；原文中的段落換行在拼接成單一字元流時
+    合併為全形空格，僅為動畫需要，不影響逐字內容本身。七個步驟名稱依最新指示重新命名、精簡；左下角圖例依最新指示整個移除；文字雨的透明度亦依指示調淡。
   </p>
 
   <script>
@@ -250,12 +212,10 @@
       const square = document.getElementById('aichain-square');
       const nodes = Array.from(square.querySelectorAll('.aichain-node'));
       const links = Array.from(square.querySelectorAll('.aichain-link'));
-      const legendItems = Array.from(square.querySelectorAll('#aichain-legend li'));
-      const scanline = document.getElementById('aichain-scanline');
       const status = document.getElementById('aichain-status');
 
-      const STEP_MS = 1100;   // 一個步驟：小圓點從 0 填到 100，同時掃描光暈掃一次
-      const HOLD_MS = 900;    // 六步都完成後，停留一下再重播
+      const STEP_MS = 1100;   // 一個步驟：卡片外圈從 0 填到 100
+      const HOLD_MS = 900;    // 七步都完成後，停留一下再重播
       const TOTAL_MS = STEP_MS * nodes.length + HOLD_MS;
 
       const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -288,37 +248,80 @@
           link.classList.toggle('is-active', t >= nodeDoneAt);
         });
 
-        legendItems.forEach((li, i) => {
-          li.classList.toggle('is-current', i === currentStep);
-          li.classList.toggle('is-done', currentStep === -1 ? t >= TOTAL_MS - HOLD_MS : i < currentStep);
-        });
+        status.classList.toggle('is-shown', currentStep === -1 && t < TOTAL_MS);
+      }
 
-        if (currentStep >= 0) {
-          const within = (t - currentStep * STEP_MS) / STEP_MS; // 0–1
-          scanline.classList.add('is-visible');
-          scanline.style.top = (within * 74).toFixed(1) + '%';
-          status.classList.remove('is-shown');
-        } else if (t >= nodes.length * STEP_MS) {
-          scanline.classList.remove('is-visible');
-          status.classList.add('is-shown');
-        } else {
-          scanline.classList.remove('is-visible');
-          status.classList.remove('is-shown');
+      // ------------------------------------------------------------------
+      // 背景文字雨：字元逐字取自硃25（林爽文事件相關奏摺）原文，
+      // 不是隨機亂碼；用 canvas 畫，鋪滿整個正方形，圓形卡片疊在上面。
+      // ------------------------------------------------------------------
+      const SOURCE_TEXT = '福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。茲本年十二月初五日戌刻，訪聞得臺灣彰化縣屬又有匪徒聚集會黨，於十一月二十九日辰刻，攻打彰化縣城。至午刻，縣城被陷，文武官員不知生死之事。查臺灣不法民番，甫經兩次大加懲治，乃該匪等竟膽敢聚眾攻陷城池。其謀為不軌，四行無忌，烏合之眾，自必甚多，罪惡至此已極，殊堪痛恨。雖未准臺灣鎮、道等報到，未知虛實，急當預為查辦征剿。奴才一面委令提標右營遊擊邱維揚，先帶兵二百名渡臺，確查賊匪共有若干，為首者何人，作何起釁，四近村莊有無擾害，臺地文武曾否業已收復城池，首夥均行捕獲，如尚有散逃，協同追拿盡淨。一面飭令挑選提標五營員弁及備戰兵丁一千名，配足軍火、器械，封備商哨船只齊足。奴才冬間舊染風症，雖復時愈時發，現在心神氣力不能如常，但仰蒙聖主深恩，值海疆緊要事務，當即力疾星速親赴該地剿捕。所有廈門地方，札達督臣檄委金門鎮總兵羅英笈，就近前來彈壓照應。又慮賊匪聞拿竄逃內地，飛札撫臣、陸路提臣、藩臬兩司、興泉道及水師各鎮協營，並臺灣鎮、道，一體嚴飭營、縣在於各口岸要隘，堵緝盤拿。仍擬續調水陸官兵酌由鹿耳門、淡水南北兩路夾攻在案。現在派撥本標五營官兵，軍械船隻均點驗齊備，未據臺地報到事宜緊急救援。奴才於初十日帶領官兵登舟候風放洋飛渡之際（硃批：仍以調養為要，勿過勞），接據署北路淡水同知程峻、守備董得魁會稟稱，彰化縣匪犯林爽文等，結黨肆虐，擒捕未獲。十一月二十九日，彰邑大肚社番字寄淡屬大甲社通事據稱，本月二十七日夜，本縣俞在大墩地方拿匪被害。二十九早，彰城失陷，卑職等督同兵役，整齊槍炮，募集鄉勇社番，在於扼要〔處〕所，分頭堵禦，一面救援。第兵力單薄，道路隔絕，伏祈迅發大兵拯救。再，彰城失陷，被害文武官員若干，此時探聽維艱，未知的實，俟查確另稟。等情前來。查，奴才原擬淡水一路，已屬必須由此救援夾攻。省城直對淡水，際此北風當令，渡往甚易。除星飛咨行陸路提臣、水師、海壇、閩安、烽火各鎮、協、營，立就近省營分，續調官兵北路援剿。奴才直由鹿耳門、郡城南路進兵，會督夾攻。容俟在接實在情形具奏外，合將聞報彰化賊匪殺官陷城，及奴才辦理赴剿緣由，謹先恭摺由驛六百里奏聞，伏乞皇上睿鑒。謹奏。　乾隆五十一年十二月初十日　乾隆五十一年十二月二十七日奉硃批：已有旨了。欽此。【本文原收錄於軍錄】';
+      const rainChars = Array.from(SOURCE_TEXT);
+
+      const canvas = document.getElementById('aichain-matrix');
+      const ctx = canvas.getContext('2d');
+      let fontSize = 14;
+      let cols = 0;
+      let drops = [];
+      let offsets = [];
+      let cw = 0, ch = 0;
+
+      function sizeMatrix() {
+        const rect = canvas.getBoundingClientRect();
+        const dpr = window.devicePixelRatio || 1;
+        cw = rect.width;
+        ch = rect.height;
+        canvas.width = Math.max(1, Math.round(cw * dpr));
+        canvas.height = Math.max(1, Math.round(ch * dpr));
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        fontSize = Math.max(11, Math.round(cw / 24));
+        cols = Math.max(1, Math.floor(cw / fontSize));
+        drops = new Array(cols).fill(0).map(() => Math.random() * -30);
+        offsets = new Array(cols).fill(0).map(() => Math.floor(Math.random() * rainChars.length));
+        ctx.clearRect(0, 0, cw, ch);
+        ctx.fillStyle = 'rgba(13, 33, 35, .55)';
+        ctx.fillRect(0, 0, cw, ch);
+      }
+
+      function drawMatrixFrame() {
+        ctx.fillStyle = 'rgba(11, 27, 29, .22)';
+        ctx.fillRect(0, 0, cw, ch);
+        ctx.font = fontSize + 'px "SF Mono", ui-monospace, Menlo, Consolas, monospace';
+        ctx.textBaseline = 'top';
+        for (let i = 0; i < cols; i++) {
+          const ch2 = rainChars[offsets[i] % rainChars.length];
+          offsets[i] += 1;
+          const y = drops[i] * fontSize;
+          ctx.fillStyle = Math.random() < 0.045 ? 'rgba(214, 255, 230, .42)' : 'rgba(58, 209, 138, .3)';
+          ctx.fillText(ch2, i * fontSize, y);
+          if (y > ch && Math.random() > 0.975) {
+            drops[i] = 0;
+          }
+          drops[i] += 1;
         }
       }
 
       if (reduceMotion) {
-        // 靜止畫面：示意跑到一半（第 4 步進行中），不啟動動畫迴圈。
+        // 靜止畫面：示意跑到一半（第 4 步進行中），文字雨畫一次靜態紋理、不持續下落。
+        sizeMatrix();
+        for (let n = 0; n < 40; n++) drawMatrixFrame();
         render(3 * STEP_MS + STEP_MS * 0.5);
         return;
       }
 
+      sizeMatrix();
+
       let raf = null;
       let visible = false;
+      let lastMatrixDraw = 0;
       const start = performance.now();
 
       function loop(now) {
         render(now - start);
+        if (now - lastMatrixDraw > 55) {
+          drawMatrixFrame();
+          lastMatrixDraw = now;
+        }
         if (visible) raf = requestAnimationFrame(loop);
       }
 
@@ -334,6 +337,12 @@
         });
       }, { threshold: 0.15 });
       io.observe(square);
+
+      let resizeTimer = null;
+      window.addEventListener('resize', () => {
+        clearTimeout(resizeTimer);
+        resizeTimer = setTimeout(sizeMatrix, 150);
+      });
     })();
   </script>
 
