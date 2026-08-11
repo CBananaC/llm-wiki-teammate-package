@@ -599,10 +599,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       gridDate.setUTCDate(gridDate.getUTCDate() + 1);
     }
 
-    // Keep one readable, source-backed chain in the replica. The four HTML
-    // buttons above are the only data nodes; these three segments show how
-    // the selected event moves through the official, imperial, and emperor
-    // lanes without turning the teaching screenshot into an unreadable mesh.
+    // Keep one readable, source-backed chain in the replica. The preview model
+    // supplies the four teaching nodes; these three segments show how the
+    // selected event moves through the official, imperial, and emperor lanes.
     const nodes = [...baseChartNodes, ...chartExtraNodes];
     const points = new Map();
     const pointsByLane = new Map();

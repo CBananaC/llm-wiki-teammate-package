@@ -12355,6 +12355,30 @@ Verified:
 Remaining:
 - Existing concurrent Part 1, sample-data, and StoryMap edits were preserved; nothing was pushed.
 
+## 2026-08-11 19:32 HKT — Codex — Rebuilt replica chart geometry from one SVG data model
+
+Summary:
+- Replaced separately CSS-positioned replica dots and SVG lines with a shared JavaScript-rendered SVG chart.
+- Added a compact `chartPreview` projection sourced from the sample review state, including lane ratios, nodes, dates, and links; SVG coordinates now follow the sample tool's shared lane-X/date-Y pattern.
+- Kept chart-dot keyboard/click activation, AI output cards, candidate insertion, reset, and responsive redraw behavior.
+
+Files changed:
+- `tool/scripts py/build_part1_interface_data.py`
+- `intro Website/Website/storymap/part-1-interface-data.js`
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser comparison checked the replica against `http://127.0.0.1:8166/sample`; the replica rendered four SVG dots and three links, and every link endpoint matched its corresponding dot coordinate exactly.
+- Clicking the event SVG dot opened the expected AI output card; both pages reported no warning or error logs.
+- Parsed `/Users/creamybanana/Downloads/sample_all.data`: all 25 events had usable `dateAr` values, and representative records normalized to the renderer's `{id, lane, actor, dateAr}` node shape.
+- `node --check "intro Website/Website/storymap/part-1-interface.js"` and `git diff --check` passed.
+
+Remaining:
+- Direct `file://` navigation was blocked by the in-app browser security policy; verification used the equivalent local HTTP preview at port 8765. No push was performed.
+
 ## 2026-08-11 19:12 HKT — Codex — Rewrote and widened the Part 2 input introduction
 
 Summary:
