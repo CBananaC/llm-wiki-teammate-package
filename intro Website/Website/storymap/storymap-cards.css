@@ -2271,6 +2271,20 @@
 #part-2-content .part2-flow-node-solo { min-width: clamp(148px, 14vw, 204px); }
 #part-2-content .part2-flow-node-stack { min-width: clamp(186px, 16vw, 236px); }
 
+/* 平台以外完成的前置步驟（選定研究主題與史料／OCR 並結構化原始史料）：
+   半透明卡片，融入深色背板，跟後面實心米色的平台步驟區分開來；
+   滑鼠移入／聚焦時比照一般節點變回實心米色卡片，維持互動一致。 */
+#part-2-content .part2-flow-node-pre {
+  background: rgba(247, 243, 234, .14);
+  border: 1px solid rgba(247, 243, 234, .3);
+}
+#part-2-content .part2-flow-node-pre .part2-flow-node-eyebrow { color: rgba(247, 243, 234, .62); }
+#part-2-content .part2-flow-node-pre .part2-flow-node-title { color: #f7f3ea; }
+#part-2-content .part2-flow-node-pre:hover .part2-flow-node-eyebrow,
+#part-2-content .part2-flow-node-pre:focus-visible .part2-flow-node-eyebrow { color: var(--accent); }
+#part-2-content .part2-flow-node-pre:hover .part2-flow-node-title,
+#part-2-content .part2-flow-node-pre:focus-visible .part2-flow-node-title { color: var(--ink); }
+
 #part-2-content .part2-flow-arrow {
   flex: 0 0 var(--part2-flow-stub);
   align-self: center;
