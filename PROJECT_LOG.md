@@ -12312,3 +12312,23 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
+
+## 2026-08-11 18:45 HKT — Codex — Restored mobile AI grid and stacked normal-screen preparation steps
+
+Summary:
+- Restored the previous mobile 2×2 layout for the four AI Skills bubbles.
+- Added a normal-screen vertical group so 步驟一 `選定題目與史料` sits above 步驟二 `OCR 並結構化史料`, with the same stacked-bubble treatment used for the analysis stages.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 1280px confirmed 步驟一 is above 步驟二 and the AI bubbles remain vertically stacked on normal screens.
+- Browser preview at 390px confirmed the four AI bubbles use the restored 2×2 grid; no browser console warnings or errors were reported.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, sample-data, and StoryMap edits were preserved; nothing was pushed.
