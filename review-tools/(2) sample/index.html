@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="utf-8" />
+  <meta name="color-scheme" content="light" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>林爽文事件 Stage 1 Timeline</title>
   <style>
@@ -3490,25 +3491,10 @@
   if(uiFsUp) uiFsUp.onclick=()=>setUiFs(getUiFs()+.1);
   applyFs(); applyUiFs(); applyLineOpacity();
 
-  function initialTheme(){
-    try{
-      const saved=localStorage.getItem('timelineTheme');
-      if(saved==='dark'||saved==='light') return saved;
-    }catch(e){}
-    return window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-  }
-  function applyTheme(theme){
-    const dark=theme==='dark';
-    document.body.classList.toggle('dark-mode', dark);
-    const btn=document.getElementById('theme-toggle');
-    if(btn) btn.textContent=dark?'淺色':'深色';
-    try{ localStorage.setItem('timelineTheme', theme); }catch(e){}
-  }
-  applyTheme(initialTheme());
-  const themeToggle=document.getElementById('theme-toggle');
-  if(themeToggle) themeToggle.addEventListener('click',()=>{
-    applyTheme(document.body.classList.contains('dark-mode')?'light':'dark');
-  });
+  // The sample is intentionally light-only; clear any older saved theme and
+  // prevent OS-level dark-mode preferences from changing its presentation.
+  document.body.classList.remove('dark-mode');
+  try{ localStorage.setItem('timelineTheme', 'light'); }catch(e){}
 
   let clickInfo={rid:null, side:null, count:0, timer:null};
   function openSelected(rid, count, side){
@@ -6286,7 +6272,7 @@
       addButton(menu,'隱藏清單',()=>{closeMenu();openHiddenList();}); divider();
       addButton(menu,labelOf('d-togglechart','隱藏圖'),()=>clickControl('d-togglechart'));
       const more=document.createElement('div');more.className='tcm-more';const mb=document.createElement('button');mb.type='button';mb.setAttribute('role','menuitem');mb.innerHTML='<span>更多</span><span aria-hidden="true">›</span>';more.appendChild(mb);
-      const sub=document.createElement('div');sub.className='tcm-submenu';sub.setAttribute('role','menu');[['ed-export-all','匯出'],['ed-export-split','分項匯出'],['ed-import-all','匯入'],['ed-load-skills','載入技能輸出'],['theme-toggle','切換主題']].forEach(([id,f])=>{if(document.getElementById(id))addButton(sub,labelOf(id,f),()=>clickControl(id));});more.appendChild(sub);menu.appendChild(more);document.body.appendChild(menu);
+      const sub=document.createElement('div');sub.className='tcm-submenu';sub.setAttribute('role','menu');[['ed-export-all','匯出'],['ed-export-split','分項匯出'],['ed-import-all','匯入'],['ed-load-skills','載入技能輸出']].forEach(([id,f])=>{if(document.getElementById(id))addButton(sub,labelOf(id,f),()=>clickControl(id));});more.appendChild(sub);menu.appendChild(more);document.body.appendChild(menu);
       const r=menu.getBoundingClientRect();menu.style.left=Math.max(8,Math.min(e.clientX,innerWidth-r.width-8))+'px';menu.style.top=Math.max(8,Math.min(e.clientY,innerHeight-r.height-8))+'px';if(e.clientX+r.width+220>innerWidth)menu.classList.add('open-left');if(more.getBoundingClientRect().top+215>innerHeight)more.classList.add('submenu-up');const first=menu.querySelector('button');if(first)first.focus({preventScroll:true});
     }
     wsChart.addEventListener('contextmenu',openMenu);document.addEventListener('pointerdown',e=>{if(menu&&!menu.contains(e.target))closeMenu();},true);document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenu();});window.addEventListener('blur',closeMenu);window.addEventListener('resize',closeMenu);scroll.addEventListener('scroll',closeMenu,{passive:true});
@@ -13324,9 +13310,6 @@ body mark.hl, body.dark-mode mark.hl {
     var exp=document.getElementById('ed-export-all');
     var dataPill=exp&&exp.closest('.pill');
     if(dataPill){var s=document.createElement('div');s.className='tb-sec';s.textContent='\u8CC7\u6599';pop.appendChild(s);pop.appendChild(dataPill);}
-    var theme=document.getElementById('theme-toggle');
-    if(theme){var d=document.createElement('div');d.className='tb-div';pop.appendChild(d);
-      var s2=document.createElement('div');s2.className='tb-sec';s2.textContent='\u986F\u793A';pop.appendChild(s2);pop.appendChild(theme);}
     btn.addEventListener('click',function(e){e.stopPropagation();wrap.classList.toggle('open');});
     document.addEventListener('click',function(e){if(!wrap.contains(e.target))wrap.classList.remove('open');});
   }

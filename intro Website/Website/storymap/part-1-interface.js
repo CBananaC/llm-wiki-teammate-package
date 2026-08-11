@@ -11,6 +11,15 @@
      4 AI 分析區       四個步驟：本機執行 → 候選卡片 → 加入圖表 → 引文定位
    ========================================================================== */
 
+const PART1_CHAT_ICONS = {
+  list: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="18" x2="20" y2="18"/><line x1="3.5" y1="6" x2="3.51" y2="6"/><line x1="3.5" y1="12" x2="3.51" y2="12"/><line x1="3.5" y1="18" x2="3.51" y2="18"/></svg>',
+  collapse: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>',
+  jump: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg>',
+  move: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>',
+  close: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>',
+  gear: '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15z"/></svg>'
+};
+
 document.querySelectorAll('[data-part1]').forEach((root) => {
   'use strict';
 
@@ -148,8 +157,20 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           <button class="part1-hotspot" type="button" data-hotspot="ai">
             <span class="part1-hotspot-num">4</span>AI 分析區
           </button>
-          <div class="part1-linked-head tool-box-head"><span>☷</span><span>⌄</span><span>↪</span><span class="part1-window-controls">✣　×</span></div>
+          <div class="part1-linked-head tool-box-head">
+            <span class="part1-chat-head-actions">
+              <button class="part1-chat-icon-btn" type="button" aria-label="對話目錄"><span aria-hidden="true">${PART1_CHAT_ICONS.list}</span></button>
+              <button class="part1-chat-icon-btn" type="button" aria-label="收合輸入面板"><span aria-hidden="true">${PART1_CHAT_ICONS.collapse}</span></button>
+              <button class="part1-chat-icon-btn" type="button" aria-label="跳到最近的 AI 結果"><span aria-hidden="true">${PART1_CHAT_ICONS.jump}</span></button>
+            </span>
+            <span class="part1-chat-window-actions">
+              <button class="part1-chat-icon-btn" type="button" aria-label="移動 AI 面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
+              <button class="part1-chat-icon-btn" type="button" aria-label="關閉 AI 面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+            </span>
+          </div>
           <div class="part1-ai-body tool-box-body" data-ai-body></div>
+          <div class="part1-linked-foot"></div>
+          <div class="part1-chat-window" aria-label="AI 對話輸入區"></div>
         </div>
 
         <div class="part1-region part1-doc part1-ip" data-region="doc">
@@ -427,9 +448,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         <blockquote><b>①</b>「${escapeHtml('提臣黃仕簡已於十五日由廈門出口放洋')}」</blockquote>
         <blockquote><b>②</b>「${escapeHtml('任承恩亦配兵登舟，合之郝壯猷所帶，計共兵六千人')}」</blockquote>
       </div>
-      <div class="part1-linked-foot"><span>${escapeHtml(doc.docId)}</span><button type="button" data-load-cards>查看 AI 結果</button><button type="button">功能⌄</button><span>⚙</span></div>
     `;
-    aiBody.querySelector('[data-load-cards]')?.addEventListener('click', renderCandidates);
+    const foot = replica.querySelector('.part1-linked-foot');
+    if (foot) foot.innerHTML = `
+      <button type="button">請點選文書</button>
+      <button type="button" data-load-cards>功能⌄</button>
+      <button class="part1-chat-settings" type="button" aria-label="AI 設定"><span aria-hidden="true">${PART1_CHAT_ICONS.gear}</span></button>
+    `;
+    foot?.querySelector('[data-load-cards]')?.addEventListener('click', renderCandidates);
   };
 
   let terminalTimer = 0;

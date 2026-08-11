@@ -12177,6 +12177,24 @@ Verified:
 Remaining:
 - Existing concurrent Part 2 flowchart and project-log edits were preserved; nothing was pushed.
 
+## 2026-08-11 18:10 HKT — Claude — Restyled the 運作流程圖 flowchart backdrop, removed branch connector lines
+
+Summary:
+- Iterated on `#part-2-content .part2-flow-shell` (the flowchart card added earlier today): tried a flat dark-`--ink` backdrop per the user's chosen color option, removed the bus/stub connector lines that fanned into the four analysis-stage nodes (kept the plain arrows between stages), then swapped the backdrop again to reuse Part 3's `#part-3-ocr-definition .ocr-scan-scene` dark gradient panel style (`radial-gradient` glow + `linear-gradient(150deg, #12363a → #1c464a → #3a5f5a)`, `border: 1px solid var(--line)`, matching box-shadow) so the flowchart's backdrop now visually matches the "甚麼是 OCR？" visual card.
+- Also generated a standalone two-option color preview (`flow-color-options.html`, not part of the repo) so the user could compare a cool `surface-green` backdrop against the dark-ink backdrop before deciding.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+
+Verified:
+- Brace-balance check on `storymap-cards.css` after each edit (434 open / 434 close).
+- Caught and fixed a commit-scope mistake: a `git commit` after `git add <single file>` unexpectedly picked up already-staged, unrelated changes to `PROJECT_LOG.md` and `review-tools/(2) sample/index.html` (leftover in the index from a concurrent agent/session, likely due to an earlier interrupted commit under this sandbox's lock-file quirk — see note below). Used `git reset --soft HEAD~1` + `git restore --staged` to unstage those two files and recommit with only `storymap-cards.css`, confirmed via `git show --stat HEAD`.
+- Local checkpoint `1e53b50` created; nothing pushed.
+
+Remaining:
+- **Lock-file / shared-index caution for future agents**: this mount intermittently leaves stale `.git/index.lock` / `.git/HEAD.lock` files that `rm` cannot delete (`Operation not permitted`) but `os.rename(...)` can clear. After clearing a lock and retrying `git commit`, always run `git show --stat HEAD` to confirm the commit contains *only* the intended files — the index can silently hold staged changes from another concurrent agent/session, and a plain retry will absorb them into your commit.
+- `PROJECT_LOG.md` and `review-tools/(2) sample/index.html` still carry pre-existing unrelated edits in the working tree (not mine); left untouched.
+
 ## 2026-08-11 17:48 HKT — Codex — Moved the input-result paragraph into the first input card
 
 Summary:
@@ -12197,6 +12215,28 @@ Verified:
 Remaining:
 - Existing concurrent Part 2 and project-log edits were preserved; nothing was pushed.
 
+## 2026-08-11 18:22 HKT — Codex — Matched the platform replica AI panel to the light sample-tool interface
+
+Summary:
+- Updated the AI panel inside the combined `平台的整體介面` replica to match the supplied screenshot's light toolbar, source-content area, bottom action row, and blank bordered chat area.
+- Replaced text-symbol controls with the sample tool's light SVG-style controls and kept the existing AI-result loading action on `功能⌄`.
+- Omitted the chat bubbles/text and orange `清空範例` button as requested.
+
+Files changed:
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- Cache-busted browser preview rendered five AI-panel toolbar controls, the `請點選文書` / `功能⌄` / gear row, and the blank chat area in the combined replica.
+- Browser screenshot confirmed the panel is light and the requested chat bubbles/text and orange button are absent.
+- `node --check Website/storymap/part-1-interface.js` and `git diff --check` passed.
+- Existing concurrent StoryMap changes were preserved; nothing was pushed.
+
+Remaining:
+- No further changes required for this screenshot-matching adjustment. A scoped local Git checkpoint could not be created because `.git/index.lock` is currently held by another process; no lock was removed and nothing was pushed.
+
 ## 2026-08-11 18:03 HKT — Codex — Unboxed Part 2.2 flow-chart introduction
 
 Summary:
@@ -12215,6 +12255,24 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 2 flow-chart changes were preserved; browser preview was not run in this checkpoint and nothing was pushed.
+
+## 2026-08-11 18:06 HKT — Codex — Made the sample review tool light-only
+
+Summary:
+- Changed the sample review tool to force the light presentation regardless of saved theme state or the operating system's dark preference.
+- Removed the sample's theme-switch path from the context-menu and toolbar enhancement code; the formal review tool remains unchanged because this was an explicit sample-only request.
+
+Files changed:
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- The served `/sample` route returned the updated HTML with `color-scheme: light`.
+- The sample now clears `dark-mode` on load and persists `timelineTheme` as `light`; no theme-toggle or dark-preference initializer remains in the runtime code.
+- `git diff --check` passed. The in-app browser could not connect to the separately started 8166 server, so browser visual QA remains pending.
+
+Remaining:
+- Existing intro-Website edits were preserved; nothing was pushed.
 
 ## 2026-08-11 17:57 HKT — Codex — Combined the standalone platform-interface replica
 
