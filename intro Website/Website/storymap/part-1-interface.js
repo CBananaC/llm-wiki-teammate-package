@@ -138,8 +138,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
               <div class="part1-tools-button-stack">
                 <button type="button" data-tool-action="export">匯出</button>
                 <button type="button" data-tool-action="export-split">分項匯出</button>
-                <label class="part1-tools-file">匯入<input type="file" accept=".data,.json,application/json" aria-label="匯入資料"></label>
+                <label class="part1-tools-file">匯入<input type="file" accept=".data,.json,application/json" data-import-file aria-label="匯入資料"></label>
                 <button type="button" data-tool-action="load-skills">載入技能輸出</button>
+                <input type="file" accept=".data,.json,application/json" data-skills-file aria-label="載入技能輸出檔" hidden>
               </div>
             </section>
             <section class="part1-tools-section part1-tools-type">
@@ -366,6 +367,39 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const chartEnd = parseDate(chartPreview.endAr) || defaultChartEnd || (fallbackEnd > chartStart ? fallbackEnd : chartStart + 86400000);
   const CHART_BASE_WIDTH = 1080;
   const CHART_BASE_HEIGHT = 620;
+  const REPLICA_SETTINGS_KEY = 'introWebsite.part1Replica.settings.v1';
+  const REPLICA_DEFAULTS = Object.freeze({
+    uiScale: 1,
+    bodyScale: 1,
+    solidOpacity: 0.32,
+    dashedOpacity: 0.5,
+    dotSize: 1,
+    dotGap: 12,
+    daySpacing: 11,
+    laneSpacing: 1.5
+  });
+  const clamp = (value, min, max) => Math.max(min, Math.min(max, Number(value)));
+  const roundTo = (value, places = 2) => {
+    const factor = 10 ** places;
+    return Math.round(Number(value) * factor) / factor;
+  };
+  const readReplicaSettings = () => {
+    try {
+      const stored = JSON.parse(localStorage.getItem(REPLICA_SETTINGS_KEY) || '{}');
+      return { ...REPLICA_DEFAULTS, ...stored };
+    } catch (error) {
+      return { ...REPLICA_DEFAULTS };
+    }
+  };
+  const storedReplicaSettings = readReplicaSettings();
+  let uiScale = clamp(storedReplicaSettings.uiScale, 0.8, 2.2);
+  let bodyScale = clamp(storedReplicaSettings.bodyScale, 0.8, 2.6);
+  let solidOpacity = clamp(storedReplicaSettings.solidOpacity, 0.05, 1);
+  let dashedOpacity = clamp(storedReplicaSettings.dashedOpacity, 0.05, 1);
+  let dotSizeScale = clamp(storedReplicaSettings.dotSize, 0.6, 2.4);
+  let dotGap = clamp(storedReplicaSettings.dotGap, 4, 36);
+  let daySpacing = clamp(storedReplicaSettings.daySpacing, 4, 36);
+  let laneSpacing = clamp(storedReplicaSettings.laneSpacing, 1.5, 2.8);
   let chartScale = 1;
   const chartLaneRatios = Object.freeze({
     events: 0.38,
@@ -382,9 +416,12 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   };
   const chartLaneX = (lane, width = lanesEl.clientWidth) => {
     const plot = chartPlot(width || CHART_BASE_WIDTH);
-    const ratio = chartLaneRatios[lane] ?? 0.5;
+    const baseRatio = chartLaneRatios[lane] ?? 0.5;
+    const ratio = 0.5 + (baseRatio - 0.5) * (laneSpacing / REPLICA_DEFAULTS.laneSpacing);
     return plot.left + plot.inner * ratio;
   };
+
+  const chartHeight = () => Math.max(360, Math.round(CHART_BASE_HEIGHT * (daySpacing / REPLICA_DEFAULTS.daySpacing)));
 
   const syncChartHeaders = () => {
     const heads = replica.querySelector('.part1-lane-heads');
@@ -402,12 +439,201 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const applyChartScale = () => {
     if (!lanesEl || !chartZoomspace) return;
     lanesEl.style.width = `${CHART_BASE_WIDTH}px`;
-    lanesEl.style.height = `${CHART_BASE_HEIGHT}px`;
+    lanesEl.style.height = `${chartHeight()}px`;
     lanesEl.style.transform = `scale(${chartScale})`;
     chartZoomspace.style.width = `${CHART_BASE_WIDTH * chartScale}px`;
-    chartZoomspace.style.height = `${CHART_BASE_HEIGHT * chartScale}px`;
+    chartZoomspace.style.height = `${chartHeight() * chartScale}px`;
     syncChartRuler();
     syncChartHeaders();
+  };
+
+  /* ------------------------------------------------------ 工具設定與資料 */
+
+  const persistReplicaSettings = () => {
+    try {
+      localStorage.setItem(REPLICA_SETTINGS_KEY, JSON.stringify({
+        uiScale: roundTo(uiScale, 2),
+        bodyScale: roundTo(bodyScale, 2),
+        solidOpacity: roundTo(solidOpacity, 2),
+        dashedOpacity: roundTo(dashedOpacity, 2),
+        dotSize: roundTo(dotSizeScale, 2),
+        dotGap: roundTo(dotGap, 2),
+        daySpacing: roundTo(daySpacing, 2),
+        laneSpacing: roundTo(laneSpacing, 2)
+      }));
+    } catch (error) {
+      // Private browsing and embedded previews can deny localStorage. The
+      // controls still work for the current page in that case.
+    }
+  };
+
+  const applyReplicaCssSettings = () => {
+    replica.style.setProperty('--font-scale', String(uiScale));
+    replica.style.setProperty('--body-font-scale', String(bodyScale));
+  };
+
+  const formatToolValue = (input, value) => {
+    const label = input.getAttribute('aria-label') || '';
+    if (label.includes('透明度')) return `${Math.round(value * 100)}%`;
+    if (label.includes('大小') || label.includes('四線')) return `${roundTo(value, 2)}×`;
+    return `${roundTo(value, 2)} px`;
+  };
+
+  const syncToolControls = () => {
+    const values = {
+      實線透明度: solidOpacity,
+      虛線透明度: dashedOpacity,
+      圓點大小: dotSizeScale,
+      圓點水平距離: dotGap,
+      每日距離: daySpacing,
+      四線距離: laneSpacing
+    };
+    toolsPop?.querySelectorAll('[data-tool-range]').forEach((input) => {
+      const label = input.getAttribute('aria-label') || '';
+      const key = Object.keys(values).find((candidate) => label.includes(candidate));
+      if (!key) return;
+      input.value = String(values[key]);
+      const output = input.parentElement?.querySelector('output');
+      if (output) output.textContent = formatToolValue(input, values[key]);
+    });
+  };
+
+  const serialiseChartNode = (node) => ({
+    id: node.id,
+    lane: node.lane,
+    actor: node.actor,
+    dateAr: node.dateAr,
+    label: node.label,
+    color: node.color,
+    radius: node.radius,
+    payload: node.payload
+  });
+
+  const getReplicaState = () => ({
+    settings: {
+      uiScale: roundTo(uiScale, 2),
+      bodyScale: roundTo(bodyScale, 2),
+      solidOpacity: roundTo(solidOpacity, 2),
+      dashedOpacity: roundTo(dashedOpacity, 2),
+      dotSize: roundTo(dotSizeScale, 2),
+      dotGap: roundTo(dotGap, 2),
+      daySpacing: roundTo(daySpacing, 2),
+      laneSpacing: roundTo(laneSpacing, 2)
+    },
+    chartScale: roundTo(chartScale, 2),
+    chartScroll: { left: chartScroll?.scrollLeft || 0, top: chartScroll?.scrollTop || 0 },
+    activeFilter,
+    showSummary,
+    showDivisions,
+    chartExtraNodes: chartExtraNodes.map(serialiseChartNode)
+  });
+
+  const downloadJson = (filename, value) => {
+    const blob = new Blob([JSON.stringify(value, null, 2)], { type: 'application/json' });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement('a');
+    anchor.href = url;
+    anchor.download = filename;
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1500);
+  };
+
+  const exportReplica = () => {
+    downloadJson('part1-replica.data', {
+      format: 'intro-website-part1-replica',
+      version: 1,
+      exportedAt: new Date().toISOString(),
+      document: { id: doc.docId, title: doc.title },
+      state: getReplicaState()
+    });
+    setProgress('已匯出示範複本狀態。檔案只包含此複本的設定與已加入節點。');
+  };
+
+  const exportReplicaSplit = () => {
+    const sourceItems = [data.dots.events, ...data.aiCandidates, ...chartExtraNodes.map((node) => node.payload)]
+      .filter(Boolean);
+    const withQuote = sourceItems.filter((item) => item.quote);
+    downloadJson('part1-replica-split.data', {
+      format: 'intro-website-part1-replica-split',
+      version: 1,
+      document: { id: doc.docId, title: doc.title },
+      summary: [{ doc_id: doc.docId, title: doc.title, text: docSummary }],
+      'division-parts': docDivisions.map((part) => ({ doc_id: doc.docId, ...part })),
+      'lin-events': sourceItems.filter((item) => item.actor === 'lin'),
+      'qing-events': sourceItems.filter((item) => item.actor === 'qing'),
+      'emperor-events': [data.dots.emperor],
+      'event-drafts': chartExtraNodes.map((node) => node.payload),
+      'source-chain': withQuote.map((item) => ({ doc_id: item.quoteDocId, quote: item.quote, event_id: item.id })),
+      'manual-edits': [{ kind: 'replica-settings', settings: getReplicaState().settings }],
+      'chat-log': []
+    });
+    setProgress('已分項匯出示範複本資料；每個分項可獨立檢查其來源。');
+  };
+
+  const normalizeImportedNode = (node, index) => {
+    if (!node || typeof node !== 'object') return null;
+    const payload = node.payload || node;
+    const dateAr = node.dateAr || payload.dateAr || payload.whenAr;
+    if (!dateAr || !parseDate(dateAr)) return null;
+    const lane = ['events', 'official', 'imperial', 'emperor'].includes(node.lane) ? node.lane : 'events';
+    return {
+      ...node,
+      id: String(node.id || payload.id || `imported-${index}`),
+      lane,
+      actor: node.actor || payload.actor || (lane === 'emperor' ? 'emperor' : 'qing'),
+      dateAr,
+      label: node.label || payload.whenCh || payload.title || payload.subtitle || dateAr,
+      payload,
+      isNew: true
+    };
+  };
+
+  const getImportedState = (imported) => {
+    if (!imported || typeof imported !== 'object') return null;
+    if (imported.state && typeof imported.state === 'object') return imported.state;
+    if (imported.replicaState && typeof imported.replicaState === 'object') return imported.replicaState;
+    const eventCandidates = imported.chartExtraNodes || imported.__events || imported.events || imported['event-drafts'];
+    if (Array.isArray(eventCandidates)) return { ...imported, chartExtraNodes: eventCandidates };
+    if (Array.isArray(imported['manual-edits'])) {
+      const edit = imported['manual-edits'].find((item) => item?.kind === 'replica-settings');
+      if (edit) return { ...imported, settings: edit.settings };
+    }
+    return null;
+  };
+
+  const applyImportedState = (imported) => {
+    const state = getImportedState(imported);
+    if (!state) throw new Error('這不是可供複本使用的資料檔。');
+    const settings = state.settings || {};
+    uiScale = clamp(settings.uiScale ?? uiScale, 0.8, 2.2);
+    bodyScale = clamp(settings.bodyScale ?? bodyScale, 0.8, 2.6);
+    solidOpacity = clamp(settings.solidOpacity ?? solidOpacity, 0.05, 1);
+    dashedOpacity = clamp(settings.dashedOpacity ?? dashedOpacity, 0.05, 1);
+    dotSizeScale = clamp(settings.dotSize ?? dotSizeScale, 0.6, 2.4);
+    dotGap = clamp(settings.dotGap ?? dotGap, 4, 36);
+    daySpacing = clamp(settings.daySpacing ?? daySpacing, 4, 36);
+    laneSpacing = clamp(settings.laneSpacing ?? laneSpacing, 1.5, 2.8);
+    chartExtraNodes.length = 0;
+    const importedNodes = Array.isArray(state.chartExtraNodes) ? state.chartExtraNodes : [];
+    importedNodes.forEach((node, index) => {
+      const normalized = normalizeImportedNode(node, index);
+      if (normalized) chartExtraNodes.push(normalized);
+    });
+    activeFilter = filterChoices.some((choice) => choice.key === state.activeFilter) ? state.activeFilter : 'all';
+    showSummary = Boolean(state.showSummary);
+    showDivisions = Boolean(state.showDivisions);
+    chartScale = clamp(state.chartScale ?? chartScale, 0.5, 3);
+    applyReplicaCssSettings();
+    applyChartScale();
+    renderFilterChips();
+    renderDocView();
+    drawLinks();
+    chartScroll?.scrollTo({ left: Number(state.chartScroll?.left) || 0, top: Number(state.chartScroll?.top) || 0, behavior: 'auto' });
+    syncToolControls();
+    persistReplicaSettings();
+    setProgress(`已匯入複本資料：${chartExtraNodes.length} 個新增圖表節點。`);
   };
 
   // Keep the date ruler aligned vertically with the chart while cancelling
@@ -600,7 +826,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     // Four fixed vertical axes and the same light month/day grid rhythm as the sample.
     ['events', 'official', 'imperial', 'emperor'].forEach((lane) => {
       const x = xFor(lane);
-      makeSvg('line', { x1: x.toFixed(1), y1: 0, x2: x.toFixed(1), y2: height }, 'part1-preview-axis');
+      makeSvg('line', { x1: x.toFixed(1), y1: 0, x2: x.toFixed(1), y2: height, opacity: solidOpacity }, 'part1-preview-axis');
     });
     const gridDate = new Date(chartStart);
     for (let i = 0; i < 130 && gridDate.getTime() <= chartEnd; i += 1) {
@@ -608,7 +834,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       if (day === 1 || day === 11 || day === 21) {
         const dateAr = `${gridDate.getUTCFullYear()}/${String(gridDate.getUTCMonth() + 1).padStart(2, '0')}/${String(day).padStart(2, '0')}`;
         const y = yFor(dateAr);
-        makeSvg('line', { x1: plot.left, y1: y.toFixed(1), x2: width - plot.right, y2: y.toFixed(1) }, day === 1 ? 'part1-preview-month-grid' : 'part1-preview-grid');
+        makeSvg('line', { x1: plot.left, y1: y.toFixed(1), x2: width - plot.right, y2: y.toFixed(1), opacity: dashedOpacity }, day === 1 ? 'part1-preview-month-grid' : 'part1-preview-grid');
       }
       gridDate.setUTCDate(gridDate.getUTCDate() + 1);
     }
@@ -619,9 +845,17 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const nodes = [...baseChartNodes, ...chartExtraNodes];
     const points = new Map();
     const pointsByLane = new Map();
+    const nodesByLane = new Map();
+    nodes.forEach((node) => {
+      if (!nodesByLane.has(node.lane)) nodesByLane.set(node.lane, []);
+      nodesByLane.get(node.lane).push(node);
+    });
     nodes.forEach((node) => {
       if (!node.dateAr || !parseDate(node.dateAr)) return;
-      const point = { x: xFor(node.lane), y: yFor(node.dateAr), node };
+      const laneNodes = nodesByLane.get(node.lane) || [];
+      const nodeIndex = laneNodes.indexOf(node);
+      const horizontalOffset = (nodeIndex - (laneNodes.length - 1) / 2) * dotGap;
+      const point = { x: xFor(node.lane, horizontalOffset), y: yFor(node.dateAr), node };
       points.set(node.id, point);
       if (!pointsByLane.has(node.lane)) pointsByLane.set(node.lane, point);
     });
@@ -643,7 +877,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         x2: to.x.toFixed(1), y2: to.y.toFixed(1),
         stroke: link.color || '#c46a2b',
         'stroke-width': link.width || 1.8,
-        'stroke-linecap': 'round'
+        'stroke-linecap': 'round',
+        opacity: solidOpacity
       }, link.className || `part1-preview-link part1-preview-link-${index}`);
     });
 
@@ -654,7 +889,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       const circle = makeSvg('circle', {
         cx: point.x.toFixed(1),
         cy: point.y.toFixed(1),
-        r: node.radius || 6.5,
+        r: (node.radius || 6.5) * dotSizeScale,
         fill: nodeColor(node),
         stroke: '#fffaf2',
         'stroke-width': 2,
@@ -1217,6 +1452,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
      點線類型在左側，工具與介面區域切換在右側。 */
   const typePop = replica.querySelector('[data-type-pop]');
   const toolsPop = replica.querySelector('[data-tools-pop]');
+  const importFile = replica.querySelector('[data-import-file]');
+  const skillsFile = replica.querySelector('[data-skills-file]');
+  applyReplicaCssSettings();
+  syncToolControls();
   replica.querySelector('[data-type-toggle]')?.addEventListener('click', (event) => {
     event.stopPropagation();
     if (typePop) typePop.hidden = !typePop.hidden;
@@ -1237,22 +1476,70 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   replica.querySelector('[data-eventline-close]')?.addEventListener('click', () => setRegion('chart'));
   toolsPop?.querySelectorAll('[data-tool-range]').forEach((input) => {
     input.addEventListener('input', () => {
-      const output = input.parentElement?.querySelector('output');
-      if (!output) return;
       const value = Number(input.value);
-      if (input.getAttribute('aria-label')?.includes('透明度')) output.textContent = `${Math.round(value * 100)}%`;
-      else if (input.getAttribute('aria-label')?.includes('大小') || input.getAttribute('aria-label')?.includes('四線')) output.textContent = `${value}×`;
-      else output.textContent = `${value} px`;
+      const label = input.getAttribute('aria-label') || '';
+      if (label.includes('實線透明度')) solidOpacity = clamp(value, 0.05, 1);
+      else if (label.includes('虛線透明度')) dashedOpacity = clamp(value, 0.05, 1);
+      else if (label.includes('圓點大小')) dotSizeScale = clamp(value, 0.6, 2.4);
+      else if (label.includes('圓點水平距離')) dotGap = clamp(value, 4, 36);
+      else if (label.includes('每日距離')) daySpacing = clamp(value, 4, 36);
+      else if (label.includes('四線距離')) laneSpacing = clamp(value, 1.5, 2.8);
+      const output = input.parentElement?.querySelector('output');
+      if (output) output.textContent = formatToolValue(input, value);
+      persistReplicaSettings();
+      if (label.includes('每日距離')) applyChartScale();
+      drawLinks();
+      setProgress(`已套用「${label}」：${formatToolValue(input, value)}。設定會保留在此教學複本。`);
     });
   });
-  replica.querySelectorAll('[data-tools-pop] button').forEach((button) => {
-    button.addEventListener('click', () => {
+
+  const changeFontScale = (kind, delta) => {
+    if (kind === 'ui') uiScale = roundTo(clamp(uiScale + delta, 0.8, 2.2), 2);
+    else bodyScale = roundTo(clamp(bodyScale + delta, 0.8, 2.6), 2);
+    applyReplicaCssSettings();
+    persistReplicaSettings();
+    setProgress(`已調整${kind === 'ui' ? '介面字級' : '正文'}至 ${kind === 'ui' ? uiScale : bodyScale}×。`);
+  };
+
+  const toolActions = {
+    export: exportReplica,
+    'export-split': exportReplicaSplit,
+    'ui-smaller': () => changeFontScale('ui', -0.1),
+    'ui-larger': () => changeFontScale('ui', 0.1),
+    'body-smaller': () => changeFontScale('body', -0.1),
+    'body-larger': () => changeFontScale('body', 0.1),
+    'load-skills': () => {
+      setProgress('請選擇本機的 AI Skill 輸出或審閱包（.data / .json）。');
+      skillsFile?.click();
+    }
+  };
+
+  toolsPop?.querySelectorAll('button[data-tool-action]').forEach((button) => {
+    button.addEventListener('click', (event) => {
+      event.stopPropagation();
       toolsPop.hidden = true;
       replica.querySelector('[data-toolgroup="io"]')?.classList.add('is-pointed');
       button.classList.add('is-pointed');
-      setProgress(`「${button.textContent.trim()}」是導覽列工具中的資料操作示範。`);
+      toolActions[button.dataset.toolAction]?.();
     });
   });
+
+  const readJsonFile = async (input, message) => {
+    const file = input?.files?.[0];
+    if (!file) return;
+    try {
+      const imported = JSON.parse(await file.text());
+      applyImportedState(imported);
+      if (message) setProgress(message);
+    } catch (error) {
+      setProgress(`載入失敗：${error.message || '資料檔格式無法辨識。'}`);
+    } finally {
+      input.value = '';
+    }
+  };
+
+  importFile?.addEventListener('change', () => readJsonFile(importFile, '已匯入並套用複本設定；原始史料內容未被修改。'));
+  skillsFile?.addEventListener('change', () => readJsonFile(skillsFile, '已載入 AI Skill 輸出；可點擊新增圓點檢查其資料。'));
 
   replica.addEventListener('click', (event) => {
     const keyToggle = event.target.closest('[data-ai-key-toggle]');
@@ -1301,6 +1588,16 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     activeFilter = 'all';
     showSummary = false;
     showDivisions = false;
+    uiScale = REPLICA_DEFAULTS.uiScale;
+    bodyScale = REPLICA_DEFAULTS.bodyScale;
+    solidOpacity = REPLICA_DEFAULTS.solidOpacity;
+    dashedOpacity = REPLICA_DEFAULTS.dashedOpacity;
+    dotSizeScale = REPLICA_DEFAULTS.dotSize;
+    dotGap = REPLICA_DEFAULTS.dotGap;
+    daySpacing = REPLICA_DEFAULTS.daySpacing;
+    laneSpacing = REPLICA_DEFAULTS.laneSpacing;
+    try { localStorage.removeItem(REPLICA_SETTINGS_KEY); } catch (error) { /* current-page reset still applies */ }
+    applyReplicaCssSettings();
     chartScale = 1;
     applyChartScale();
     chartScroll?.scrollTo({ left: 0, top: 0, behavior: 'auto' });
@@ -1312,6 +1609,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     viewToggle?.setAttribute('aria-expanded', 'false');
     renderFilterChips();
     renderDocView();
+    syncToolControls();
     replica.querySelectorAll('.part1-callout').forEach((callout) => { callout.hidden = true; });
     renderAiIdle();
     drawLinks();

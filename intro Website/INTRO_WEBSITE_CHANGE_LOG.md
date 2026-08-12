@@ -8243,3 +8243,21 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 1 edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:14 HKT — Codex — Hid the empty Part 2 overview section reversibly
+
+Summary:
+- Hid the entire empty `part-2-overview` section so no blank card area remains after removing its card.
+- Preserved the section and complete card markup in one reversible HTML comment.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the `part-2-overview` section is absent from the rendered DOM and the following `運作流程圖` section remains present.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1 edits remain untouched; nothing was pushed.
