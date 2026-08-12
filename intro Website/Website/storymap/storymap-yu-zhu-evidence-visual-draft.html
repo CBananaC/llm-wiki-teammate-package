@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="UTF-8">
+<title>諭43／硃160 引文比對 — 草稿視覺（未接入正式頁面）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@500;600;700&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+<style>
+  /*
+    草稿說明（給日後接入 storymap-example.html 的人看）：
+    - 這是「辨識奏摺所回應的上諭」卡片堆疊中第三張卡片
+      （系統會根據三項條件篩選候選文書……）右側要放的新視覺草稿。
+    - 尚未接入正式頁面／storymap-cards.css／storymap.js，是獨立單檔案，
+      方便先審視互動與配色，再比照 storymap-layer3-cover-ideas.html
+      的作法搬進正式版面。
+    - 內文逐字取自 review-tools/shared data/stage1_original_text.json
+      （doc_id: 諭43、doc_id: 硃160）與
+      review-tools/(1) formal/confirmed-pairs.json（諭43 → 硃160 該筆
+      confirmed pair 的 evidence 欄位），未新增、未改寫任何字句；
+      硃160 僅節錄使用者指定的段落，前後以「（前略）」「（後略）」
+      標示，避免誤以為節錄即全文。
+  */
+  :root {
+    --ink: #163d3f; --ink-soft: #31575a; --text: #3c5754;
+    --paper: #f4efe6; --card: #fffaf2; --line: rgba(22, 61, 63, .18);
+    --muted: #6d756f; --accent: #c45d38; --accent-soft: #f1d6c6;
+    --zhu-orange: #c46a2b; --yu-teal: #2f5c5c;
+    --hl-marker: #f3c967; --hl-date: #6fa3a3; --hl-quote: #d98a63;
+    --serif: "Noto Serif TC", Georgia, serif;
+    --sans: Inter, ui-sans-serif, system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; padding: 36px 20px 70px; background: var(--paper); font-family: var(--sans); color: var(--ink); }
+  .wrap { max-width: 1180px; margin: 0 auto; }
+
+  /* -------- 上方文字卡（沿用平台卡片語氣，僅供對照，非最終樣式） -------- */
+  .context-card {
+    max-width: 62ch; margin: 0 0 26px;
+    padding: 18px 22px; background: var(--card);
+    border: 1px solid var(--line); border-radius: 4px;
+  }
+  .context-card p { margin: 0; color: var(--text); font: 500 15.5px/1.85 var(--serif); }
+
+  /* -------- 視覺框（figure） -------- */
+  .evidence-visual {
+    margin: 0; padding: 22px 24px 26px;
+    background: #e8dfd1; border: 1px solid var(--line); border-radius: 4px;
+  }
+  .evidence-head {
+    display: flex; align-items: baseline; gap: 10px; margin-bottom: 16px;
+    color: var(--ink); font: 700 15px/1.3 var(--serif);
+  }
+  .evidence-head .idx {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 26px; height: 26px; color: #fffaf2; background: var(--ink);
+    border-radius: 50%; font: 800 12px/1 var(--sans);
+  }
+  .evidence-hint {
+    margin: 0 0 16px; padding: 7px 12px;
+    color: var(--ink-soft); background: rgba(255, 250, 242, .7);
+    border: 1px dashed var(--line); border-radius: 6px;
+    font: 600 12.5px/1.6 var(--sans);
+  }
+
+  /* -------- 兩份文書並排 -------- */
+  .evidence-stage {
+    display: grid;
+    grid-template-columns: minmax(0, .82fr) minmax(0, 1.18fr);
+    gap: 18px; align-items: stretch;
+  }
+  .doc-panel {
+    display: flex; flex-direction: column;
+    background: #fffdf8; border: 1px solid #d7ccba; border-radius: 6px;
+    box-shadow: 0 10px 22px rgba(47, 57, 52, .16);
+    overflow: hidden;
+  }
+  .doc-panel.is-primary {
+    border-color: #c9a98c;
+    box-shadow: 0 16px 32px rgba(47, 57, 52, .24);
+  }
+  .doc-panel-head {
+    display: flex; gap: 10px; align-items: flex-start;
+    padding: 14px 16px 12px; background: #fffdf8; border-bottom: 1px solid #e1d8c9;
+  }
+  .badge {
+    flex: 0 0 auto; display: inline-flex; align-items: center; justify-content: center;
+    width: 30px; height: 30px; border-radius: 7px;
+    color: #fffaf2; font: 800 15px/1 var(--serif);
+  }
+  .badge-yu { background: var(--yu-teal); }
+  .badge-zhu { background: var(--zhu-orange); }
+  .doc-panel-head h3 { margin: 0 0 4px; color: var(--ink); font: 700 15.5px/1.35 var(--serif); }
+  .doc-panel-meta { margin: 0; color: #6b6152; font: 500 11.5px/1.55 var(--sans); }
+  .doc-panel-meta .ok { color: #3f7a4e; font-weight: 700; }
+  .doc-panel-body {
+    flex: 1 1 auto; padding: 14px 16px 18px;
+    color: var(--text); font: 500 14.5px/2 var(--serif); text-align: left;
+    max-height: 420px; overflow-y: auto;
+  }
+  .doc-panel-body .excerpt-note {
+    margin: 0 0 6px; color: var(--muted);
+    font: 600 12px/1.6 var(--sans); font-style: italic;
+  }
+  .doc-panel-body .excerpt-note:last-child { margin: 6px 0 0; }
+
+  /* -------- 硃160：三色重點（可點擊） -------- */
+  .zhu-hl {
+    cursor: pointer; border-radius: 3px; padding: 0 1px;
+    transition: background-color .2s, box-shadow .2s;
+  }
+  .zhu-hl[data-hl="marker"] { background: rgba(243, 201, 103, .55); }
+  .zhu-hl[data-hl="date"] { background: rgba(111, 163, 163, .38); }
+  .zhu-hl[data-hl="quote"] { background: rgba(217, 138, 99, .32); }
+  .zhu-hl.is-active { box-shadow: 0 0 0 2px var(--ink) inset; }
+  .zhu-hl:hover { filter: brightness(.94); }
+
+  /* -------- 諭43：對應目標（預設不顯示，點擊後淡入） -------- */
+  .yu-hl {
+    border-radius: 3px; padding: 0 1px;
+    background: transparent; box-shadow: none;
+    transition: background-color .35s ease, box-shadow .35s ease;
+  }
+  .yu-hl.is-active[data-target="a"] {
+    background: rgba(111, 163, 163, .4);
+    box-shadow: 0 0 0 2px var(--yu-teal) inset;
+  }
+  .yu-hl.is-active[data-target="b"] {
+    background: rgba(217, 138, 99, .34);
+    box-shadow: 0 0 0 2px var(--zhu-orange) inset;
+  }
+
+  /* -------- 圖例 + 條件對照 -------- */
+  .evidence-legend {
+    display: flex; flex-wrap: wrap; gap: 10px 22px;
+    margin: 18px 0 4px; padding-top: 14px; border-top: 1px solid rgba(22, 61, 63, .14);
+  }
+  .legend-item { display: flex; align-items: center; gap: 7px; color: var(--ink-soft); font: 600 12px/1.5 var(--sans); }
+  .legend-swatch { width: 13px; height: 13px; border-radius: 3px; flex: 0 0 auto; }
+  .legend-swatch.marker { background: var(--hl-marker); }
+  .legend-swatch.date { background: var(--hl-date); }
+  .legend-swatch.quote { background: var(--hl-quote); }
+  .legend-item .cond-no { color: var(--muted); font-weight: 700; }
+
+  .evidence-visual figcaption {
+    margin: 14px 0 0; padding-top: 12px;
+    color: var(--muted); border-top: 1px solid rgba(22, 61, 63, .14);
+    font: 600 12px/1.75 var(--sans);
+  }
+  .evidence-visual figcaption strong { color: var(--ink-soft); }
+
+  @media (max-width: 900px) {
+    .evidence-stage { grid-template-columns: 1fr; }
+    .doc-panel-body { max-height: 320px; }
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <!-- 上方文字卡：僅供對照「系統會根據三項條件篩選候選文書」原句位置，非最終樣式 -->
+  <article class="context-card">
+    <p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p>
+  </article>
+
+  <figure class="evidence-visual" aria-label="以諭43／硃160為例，示範三項篩選條件如何在原文中互相對應">
+    <div class="evidence-head"><span class="idx">03</span><span>條件比對範例：諭43 → 硃160</span></div>
+    <p class="evidence-hint">👆 點擊右側硃160原文中的標色文字，左側諭43會亮出對應的原文依據。</p>
+
+    <div class="evidence-stage">
+
+      <!-- 左：諭43（上諭，次要面板） -->
+      <div class="doc-panel doc-panel-yu" id="panelYu">
+        <div class="doc-panel-head">
+          <span class="badge badge-yu">諭</span>
+          <div>
+            <h3>諭43｜諭兩廣總督孫士毅毋庸親往潮州</h3>
+            <p class="doc-panel-meta">大學士公阿桂、大學士和珅 字寄兩廣總督孫<span class="ok">（士毅）</span>　·　發佈 乾隆五十二年正月十三日（1787/01/13）　·　《天地會》1，頁231</p>
+          </div>
+        </div>
+        <div class="doc-panel-body" id="yuBody">
+          <p>大學士公阿、大學士和，字寄兩廣總督孫，<span class="yu-hl" data-target="a">乾隆五十二年正月十三日奉上諭</span>：<span class="yu-hl" data-target="b">據孫士毅奏，接準閩省諮文，挑備水師戰兵一千名，立即起程，前赴南澳，以資策應。並知會署提臣彭承堯，先赴潮州稽查彈壓，數日內略爲料理地方事務，即親赴潮州駐紮，以便就近辦理等語，已於折內詳悉批示。閩粵境壤毗連，臺匪糾衆滋事，孫士毅接準諮文，派兵前往預備策應，及嚴飭各隘口，嚴密盤潔，遇有形跡可疑之人，立即究辦。此係當辦之事。至林爽文不過一烏合之衆，無難速就撲滅。前因該省水陸兩提督概行渡臺，朕尚以爲過當。孫士毅系鄰省總督，止當鎮靜地方，密飭各隘口堵拿逸犯，豈得輕離省城，以致粵東內地民人心懷疑惑。外省各督撫遇有此等事件，每以親身前往，見其急公，而不權事理之輕重緩急。督撫固不可養尊處優，身耽安逸，然當鎮靜辦理之事，亦不可過涉張皇，斷無因一二賊匪騷動各省之理。著傳諭孫士毅，此時如尚未起程，即毋庸前往。若業已起程，亦即回省城。潮州現有彭承堯在彼，盡足以資彈壓。若續得閩省臺地信息，即行迅速具奏。將此由六百里加緊諭令知之。</span>欽此。遵旨寄信前來。</p>
+        </div>
+      </div>
+
+      <!-- 右：硃160（硃批，主要面板，節錄） -->
+      <div class="doc-panel doc-panel-zhu is-primary" id="panelZhu">
+        <div class="doc-panel-head">
+          <span class="badge badge-zhu">硃</span>
+          <div>
+            <h3>硃160｜為奏料理撤兵及回省日期事</h3>
+            <p class="doc-panel-meta">孫士毅<span class="ok">（兩廣總督兼署廣東巡撫）</span>　·　發出 乾隆五十二年正月二十六日　·　奉硃批 乾隆五十二年二月十四日　·　明清台檔30，頁329</p>
+          </div>
+        </div>
+        <div class="doc-panel-body">
+          <p class="excerpt-note">（前略：孫士毅奏，於上年十二月二十四日具奏挑備戰兵一摺，本年正月二十四日敬奉硃批「另有旨諭」……）</p>
+          <p>同日，<span class="zhu-hl" data-hl="marker">接奉廷寄</span><span class="zhu-hl" data-hl="date">乾隆五十二年正月十三日</span><span class="zhu-hl" data-hl="marker">奉上諭</span>：「<span class="zhu-hl" data-hl="quote">據孫士毅奏，接准閩省咨文，挑備水師戰兵一千名，立即起程前赴南澳，以資策應，並知會署提臣彭承堯先赴潮州稽查彈壓。等語。閩粵境壤毗連，臺匪糾眾滋事，各隘口嚴密盤詰，此係當辦之事。孫士毅止當鎮靜地方，密飭隘口堵拿逸犯，豈得輕離省城，以致內地民人心懷疑惑。著孫士毅如尚未起程，即毋庸前往。若已起程，亦即速回省城。</span>」等因。欽此。</p>
+          <p class="excerpt-note">（後略：臣跪讀之下，仰見我皇上睿謨廣運……臣已於正月二十一日起，先將督標官兵陸續撤回歸伍……理合由驛四百里覆奏，伏乞皇上睿鑒。謹奏。）</p>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="evidence-legend">
+      <span class="legend-item"><span class="legend-swatch marker"></span><span class="cond-no">條件一線索</span>　引述標記「接奉廷寄」「奉上諭」</span>
+      <span class="legend-item"><span class="legend-swatch date"></span><span class="cond-no">條件一</span>　日期須與上諭發佈日期相符</span>
+      <span class="legend-item"><span class="legend-swatch quote"></span><span class="cond-no">條件三</span>　引文須與上諭內容完全或大致相同</span>
+    </div>
+
+    <figcaption>
+      條件二（奏摺作者應為上諭受文官員之一）不在原文中以顏色標示，而是比對兩側「作者／字寄對象」欄位：硃160作者為<strong>孫士毅</strong>，諭43字寄對象為<strong>兩廣總督孫（士毅）</strong>，兩者相符。<br>
+      條件三另需留意：硃160引文是<strong>節略改寫</strong>，非逐字照錄——諭43原文另有「至林爽文不過一烏合之衆，無難速就撲滅」「外省各督撫遇有此等事件……」等句，硃160引文未收錄；結尾諭43作「亦即回省城」，硃160引作「亦即速回省城」，多一「速」字。此為研究者查核引文相似度時應留意的落差，AI 僅判定「大致相同」，最終仍須人工核對。
+    </figcaption>
+  </figure>
+
+</div>
+<script>
+  (function () {
+    var zhuHls = Array.prototype.slice.call(document.querySelectorAll('.zhu-hl'));
+    var yuBody = document.getElementById('yuBody');
+
+    function clearActive() {
+      zhuHls.forEach(function (el) { el.classList.remove('is-active'); });
+      yuBody.querySelectorAll('.yu-hl').forEach(function (el) { el.classList.remove('is-active'); });
+    }
+
+    function activateGroup(group) {
+      var targetKey = (group === 'quote') ? 'b' : 'a';
+      clearActive();
+      zhuHls.filter(function (el) { return el.dataset.hl === group; })
+        .forEach(function (el) { el.classList.add('is-active'); });
+      var target = yuBody.querySelector('.yu-hl[data-target="' + targetKey + '"]');
+      if (target) {
+        target.classList.add('is-active');
+        target.scrollIntoView({ block: 'center', behavior: 'smooth' });
+      }
+    }
+
+    zhuHls.forEach(function (el) {
+      el.addEventListener('click', function () { activateGroup(el.dataset.hl); });
+    });
+  })();
+</script>
+</body>
+</html>

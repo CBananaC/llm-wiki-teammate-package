@@ -13692,3 +13692,248 @@ Verified:
 Remaining:
 - Manual browser QA of the auto-scroll behavior together with the card expand/type sequence from the previous entry.
 - Same outstanding items as before (bubble-flow QA, stray `.git/*.bak` lock files, not pushed).
+
+## 2026-08-12 17:05 HKT — Claude — Extended the layer-3 substage cover to four more sub-topics
+
+Summary:
+- Applied the `.part2-substage-cover` pattern (established for `#part-2-yu-response` earlier today) to four more sub-topics, replacing each one's numbered-card title with the flush-left, gradient, edge-fading cover:
+  - `#part-2-zhu-response` 辨識奏摺所回應的硃批 — `2-2 之二`, crumb `重建通信關係`.
+  - `#part-2-yu-source` 辨識上諭所回應的奏摺 — `2-3 之三`, crumb `重建通信關係`.
+  - `#part-2-events` 抽取官員奏報的事件、官員對事件的回應 — `3-1 之一`, crumb `抽取奏摺的資訊`.
+  - `#part-2-sources` 追溯資訊的來源 — `3-2 之二`, crumb `抽取奏摺的資訊`.
+- For each, removed the `.title-row`/`option-number`/`<h2>` from the first card and kept its paragraph as a plain, untitled card (no content was reworded or dropped).
+- Made the `border-bottom` transparent on whichever section immediately precedes each new cover (`#part-2-yu-response`, `#part-2-zhu-response`, `#part-2-extract-content`, `#part-2-events`) so no visible seam shows behind the flush-left cover, matching the earlier `#part-2-communication-content` fix.
+- Cleaned up two now-dead `.part2-numbered-card` compound selectors in `storymap-cards.css` (`#part-2-yu-response`/`#part-2-zhu-response` width rules) left over from removing those classes.
+- No new CSS classes were needed — the existing `.part2-substage-cover` rule block (generic, not scoped to one id) already styles all five instances.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Re-read each edited HTML block and the updated CSS selector list to confirm markup/selectors match and no other section's border-bottom was touched.
+- Could not browser-QA live (see prior entry's note on the Chrome tool blocking local navigation); user should refresh and confirm visually, in particular that the five covers (`2-1`…`2-3`, `3-1`…`3-2`) read correctly in sequence and none overlaps its neighbour.
+- `git status` still shows this branch (`codex/current-project-update`) has other uncommitted activity from a concurrent session (a commit `13d490e` landed between my last entry and this one) and a `.git/index.lock` warning persists; no `git add`/`git commit` was run to avoid colliding with that concurrent work.
+
+Remaining:
+- User visual sign-off on all five covers.
+- Local checkpoint commit still needed once the concurrent git activity on this branch has settled.
+
+### 2026-08-12 17:38 HKT — Codex — Grouped Part 2 cards and attached visuals to their requested parts
+
+Summary:
+- Kept each requested explanation as an individual card while grouping the cards into explicit parts for `辨識奏摺所回應的上諭`, `辨識上諭所回應的奏摺`, `抽取官員奏報的事件、官員對事件的回應`, `追溯資訊的來源`, and `收取上諭的資訊`.
+- Placed the `通信關係複雜` visual in the first part of `辨識奏摺所回應的上諭`; placed the Visual Studio Code visuals in the requested first or second parts for the extraction substages.
+- Added `為奏聞提臣等赴臺並飭沿海官員嚴密巡查事` to the second card of `辨識奏摺所回應的硃批`.
+- Moved the requested explanatory sentences into the cover tabs for `辨識上諭所回應的奏摺` and `抽取奏摺的資訊`.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+
+Verified:
+- `git diff --check` passed and the stylesheet brace count remains balanced (`651` opening / `651` closing braces).
+- Browser QA passed at the default wide viewport and a temporary 390px viewport: card-part counts and visual alignment matched the requested groups, mobile visual order follows its associated part, and browser console warnings/errors were empty.
+- Preserved the existing concurrent uncommitted edits; no staging, commit, or push was performed.
+
+Remaining:
+- User visual sign-off on the updated Part 2 card groupings.
+- Local checkpoint commit remains pending until concurrent git activity settles.
+
+### 2026-08-12 18:04 HKT — Codex — Corrected Part 2 row layout and removed inter-part strips
+
+Summary:
+- Kept each requested Part 2 part as one full-width backdrop containing one text card; the card now stays in the left column and its requested visual sits in the right column of the same row.
+- Removed the vertical grid gaps between adjacent parts so no thin page-background strips appear between the backdrops.
+- Left the Part 3 `修改、建立 AI Skills` area untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed; stylesheet braces remain balanced (`666` opening / `666` closing).
+- Browser QA passed at the wide viewport and temporary 390px viewport: text cards stay left of visuals on desktop, adjacent part gaps are `0px`, full-width backdrop pseudo-elements reach both viewport edges, every target part contains exactly one text card, the five covers remain 390px wide, and browser warnings/errors are empty.
+- Diff inspection shows no changes to the Part 3 `修改、建立 AI Skills` area.
+
+Remaining:
+- User visual sign-off on the corrected Part 2 rows.
+- Local checkpoint commit remains pending until concurrent git activity settles; no staging, commit, or push was performed.
+
+### 2026-08-12 18:12 HKT — Codex — Applied the latest Part 2 card grouping request
+
+Summary:
+- Kept `辨識奏摺所回應的上諭` as three individual card parts with `通信關係複雜` in the first part, and `辨識奏摺所回應的硃批` as four individual card parts with the `為奏聞提臣等赴臺並飭沿海官員嚴密巡查事` visual in the second part.
+- Kept the requested cover-tab notes for `辨識上諭所回應的奏摺` and `抽取奏摺的資訊`.
+- Grouped the later cards as requested: 上諭來源配 `3+2`, 抽取事件 `2+2` with the VS Code visual in the second group, 追溯來源 `1+2` with the visual in the first group, and 收取上諭資訊 `2+1+1`.
+- Removed the inherited visual top offset so each visual is contained by its assigned part backdrop.
+- Left Part 3 `修改、建立 AI Skills` untouched.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed; stylesheet braces remain balanced (`666` opening / `666` closing).
+- Browser QA passed at the wide viewport and temporary 390px viewport: requested article counts and visual row assignments matched, visuals stayed inside their assigned parts, card rows had no gaps, all five covers remained 390px wide, and browser warnings/errors were empty.
+- Diff inspection showed no changes to the Part 3 `修改、建立 AI Skills` area.
+
+Remaining:
+- User visual sign-off on the latest Part 2 grouping.
+- Local checkpoint commit remains pending until concurrent git activity settles; no staging, commit, or push was performed.
+
+### 2026-08-12 18:29 HKT — Codex — Tightened the 3-1 substage cover section
+
+Summary:
+- Treated `抽取官員奏報的事件、官員對事件的回應` like the compact substage cover treatment under `重建通信關係`, removing the extra section padding around the cover.
+- Made the 3-1 section's top and bottom borders transparent, kept the cover's existing gradient and typography, and restored flush-left/viewport-edge alignment on desktop and mobile.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed; stylesheet braces remain balanced (`670` opening / `670` closing).
+- Browser QA passed at the wide viewport and temporary 390px viewport: the 3-1 cover has zero surrounding section padding, transparent borders, desktop cover bounds left `0` and mobile bounds `0–390`, and browser warnings/errors were empty.
+
+Remaining:
+- User visual sign-off on the compact 3-1 cover.
+- Local checkpoint commit remains pending until concurrent git activity settles; no staging, commit, or push was performed.
+
+## 2026-08-12 18:26 HKT — Codex — Removed the 02 通信關係複雜 visual
+
+Summary:
+- Hid the `02 通信關係複雜` visual beside `辨識奏摺所回應的上諭`.
+- Preserved the complete figure markup in a reversible HTML comment.
+- Expanded the remaining text-card column across the row so no empty visual column remains.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the visual is absent from the rendered DOM and the three related text-card parts remain visible.
+- Confirmed the no-visual layout uses one full-width grid column.
+- `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending until the active Git lock is released; nothing was pushed.
+
+### 2026-08-12 18:32 HKT — Codex — Applied compact spacing to all substage cover sections
+
+Summary:
+- Extended the compact-cover treatment from `3-1` to all five substage sections: `2-1` 上諭回應、`2-2` 硃批回應、`2-3` 上諭來源、`3-1` 事件抽取及 `3-2` 來源鏈追溯.
+- Removed the inherited top and bottom section padding, made each section border transparent, and kept every cover flush with the viewport edge.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed; stylesheet braces remain balanced (`669` opening / `669` closing).
+- Browser QA passed at the wide viewport and temporary 390px viewport, including `辨識奏摺所回應的硃批`: all five sections have zero top/bottom padding, transparent borders, covers starting at left `0`, mobile cover widths exactly `390px`, and browser warnings/errors were empty.
+- Preserved the concurrent `通信關係複雜` visual removal and other unrelated edits.
+
+Remaining:
+- User visual sign-off on the compact substage covers.
+- Local checkpoint commit remains pending until concurrent git activity settles; no staging, commit, or push was performed.
+
+### 2026-08-12 18:35 HKT — Codex — Removed remaining substage-cover border lines
+
+Summary:
+- Made the border lines on the full-width backdrop pseudo-elements transparent for all five substage sections, in addition to the already transparent section borders.
+- Preserved the cover gradients, text, sizing, and viewport-edge alignment.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `git diff --check` passed; stylesheet braces remain balanced (`670` opening / `670` closing).
+- Browser QA confirmed both section borders and backdrop borders compute as transparent for `2-1` through `3-2`; browser warnings/errors were empty.
+
+Remaining:
+- User visual sign-off on the borderless substage covers.
+- Local checkpoint commit remains pending until concurrent git activity settles; no staging, commit, or push was performed.
+
+### 2026-08-12 18:38 HKT — Codex — Narrowed the 上諭-response text cards
+
+Summary:
+- Set the text cards in `辨識奏摺所回應的上諭` to occupy 45vw on wide screens.
+- Kept the cards left-aligned and restored the existing full-width card sizing below the narrow-screen breakpoint.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Scoped the width rule to `#part-2-yu-response` so other Part 2 text cards are unchanged.
+- Preserved the reversible hidden `02 通信關係複雜` visual markup.
+- Browser QA at a 1280px viewport measured all three cards at 576px (45vw) with the same left edge; the hidden visual count remained zero.
+- `git diff --check`, JavaScript syntax validation, and stylesheet brace validation passed.
+
+Remaining:
+- Local checkpoint commit remains blocked by the active `.git/index.lock` held by another process; nothing was staged or pushed.
+
+### 2026-08-12 18:45 HKT — Codex — Rebuilt the Part 1 chart dots from the sample backup
+
+Summary:
+- Rebuilt the intro Website replica chart projection from `/Users/creamybanana/Downloads/sample_all-2.data` and the canonical Stage 1 documents instead of the previous four-placeholder-node fallback.
+- Preserved the sample’s dated placement rules: document circles on the official and imperial lines, event squares on the event and emperor lines, same-date horizontal spreading, and stored source/response relationships.
+- Kept undated or hidden event records out of the rendered chart, matching the sample renderer’s behavior.
+- Updated the replica and StoryMap example cache versions so the rebuilt data and renderer load together.
+
+Files changed:
+- `intro Website/tool/scripts py/build_part1_interface_data.py`
+- `intro Website/Website/storymap/part-1-interface-data.js`
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Generated 363/363 source document records, 513 dated document placements, 210 event squares, 723 chart nodes, and 459 stored chart links.
+- JavaScript syntax checks, Python compilation, and `git diff --check` passed.
+- Browser QA confirmed a middle document click opens the AI and document panels, while an outer event click opens the 節點資訊區 alongside the existing panels; browser warnings/errors were empty.
+
+Remaining:
+- Continue the remaining sample-tool parity work after the dot reconstruction is visually approved.
+- Local checkpoint commit remains pending while the active Git lock/concurrent work is present; nothing was staged or pushed.
+
+## 2026-08-12 18:52 HKT — Claude — Standalone draft: 三項條件篩選候選文書 evidence-comparison visual (諭43／硃160)
+
+Summary:
+- Added a new standalone draft mockup (not yet linked from or merged into `storymap-example.html`) for the visual requested to sit to the right of the `辨識奏摺所回應的上諭` card stack's third card ("系統會根據三項條件篩選候選文書……"), following the same "prototype first" pattern as `storymap-layer3-cover-ideas.html`.
+- Two side-by-side document panels: 諭43 (secondary, left) and 硃160 (primary/emphasized, right, since 硃160 is the reply memorial actually being evaluated). 硃160's panel shows only the requested excerpt ("同日，接奉廷寄乾隆五十二年正月十三日奉上諭……" through "……亦即速回省城。」等因。欽此。"), clearly marked with "（前略）"/"（後略）" since it is not the full memorial.
+- Three colour-coded, clickable highlights in 硃160's excerpt: citation markers "接奉廷寄"/"奉上諭" (condition-1 marker), the date "乾隆五十二年正月十三日" (condition 1), and the quoted content "據孫士毅…（至）…速回省城。" (condition 3). Clicking a marker or date highlight lights up "乾隆五十二年正月十三日奉上諭" in 諭43's panel; clicking the quote highlight lights up the corresponding passage in 諭43 (from "據孫士毅奏，接準閩省諮文…" through "…將此由六百里加緊諭令知之。").
+- Condition 2 (author is a recipient of the 上諭) is called out via the meta lines (孫士毅 vs 兩廣總督孫（士毅）) rather than a text highlight, since it isn't a substring match — this matches how the underlying skill actually checks it.
+- The figcaption explicitly flags that 硃160's quotation is a condensed paraphrase, not a verbatim copy of 諭43 (it omits several clauses and changes "亦即回省城" to "亦即速回省城"), per the project's rule to keep evidence and interpretation separate and mark uncertainty.
+- All embedded document text (諭43's full body, 硃160's excerpt) was copied from `review-tools/shared data/stage1_original_text.json` (doc_id 諭43 / 硃160) and cross-checked against the confirmed pair `review-tools/(1) formal/confirmed-pairs.json` (yu_doc_id 諭43 → reply_doc_id 硃160); nothing was invented. A programmatic diff confirmed the embedded strings match the canonical `body` fields exactly (the pairing bundle's `matched_yu_span` has a stray "001" OCR-artifact not present in the canonical `stage1_original_text.json` body — the draft uses the clean canonical text, not the artifact-bearing copy).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-yu-zhu-evidence-visual-draft.html` (new, standalone, not linked from the live site)
+- `PROJECT_LOG.md`
+
+Verified:
+- Python: parsed `stage1_original_text.json`, extracted the raw `body` fields for 諭43/硃160, and diffed them programmatically against the text embedded in the draft HTML — both the full 諭43 body and the 硃160 excerpt match the canonical source exactly (`True`/`True` on direct string equality).
+- Python `html.parser`-based tag-balance check on the draft file passed (no unclosed/mismatched tags).
+- Not yet opened in an actual browser to confirm the click-to-highlight interaction visually, and not yet reviewed/approved for integration into the live page.
+- Did not touch `storymap-example.html`/`storymap-cards.css`/other shared files in this change, specifically to avoid colliding with another in-progress, uncommitted session's edits to those same files (see the two entries directly above this one, from "Codex", both noting a pending local commit blocked by the same `.git` lock issue this project has been hitting all day).
+
+Remaining:
+- User review of the draft's layout/interaction/colours before deciding whether and how to integrate it into `#part-2-yu-response`'s third card in `storymap-example.html` (as a per-card visual, distinct from the existing whole-section `02 通信關係複雜` figure).
+- Not committed yet — holding off on `git add`/`commit` in this entry so as not to interleave with the concurrent, uncommitted Codex session's changes to shared files; the new draft file itself touches nothing else and can be committed on its own once it's safe to run git again.
