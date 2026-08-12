@@ -8,6 +8,9 @@
      1 → VS Code 風格視窗（點擊或點泡泡開始打字 quick-summary.md）
      2 → divide-into-parts.md 分頁籤（第一個 Skill 打完字後出現）
      3 → 文書面板（第二個 Skill 打完字後出現，點擊套用摘要／分段）
+   - 套用摘要／分段時（步驟 3），摘要卡與 1–5 號分段卡逐一展開
+     （max-height／透明度動畫），每張卡片展開後以較快速度逐字打出
+     其文字內容（標題不參與打字），一張打完才展開下一張。
    - 每一步都只播放一次；套用之後兩個視窗變成一般可任意點擊切換
      前後順序的浮動視窗，標題列十字圖示可拖曳移動，右下角把手可
      拖曳縮放。
@@ -187,8 +190,69 @@
       docWin.classList.add('is-applied');
       requestAnimationFrame(() => {
         docWin.classList.add('is-applied-visible');
+        revealCards();
       });
     }, 300);
+  }
+
+  /* -------------------------------------------------- 卡片展開＋快速打字 */
+  function typeTextFast(el, fullText, done) {
+    let i = 0;
+    el.textContent = '';
+    const caret = document.createElement('span');
+    caret.className = 'part2-summary-doc-caret';
+    const timer = setInterval(() => {
+      i += 5;
+      if (i >= fullText.length) {
+        clearInterval(timer);
+        el.textContent = fullText;
+        if (done) done();
+        return;
+      }
+      el.textContent = fullText.slice(0, i);
+      el.appendChild(caret);
+    }, 10);
+  }
+
+  function typeTextsSequentially(texts, i, done) {
+    if (i >= texts.length) { done(); return; }
+    typeTextFast(texts[i], texts[i].dataset.fullText, () => {
+      typeTextsSequentially(texts, i + 1, done);
+    });
+  }
+
+  function revealCards() {
+    const summaryEl = docWin.querySelector('.part2-summary-doc-summary');
+    const partEls = Array.from(docWin.querySelectorAll('.part2-summary-doc-part'));
+
+    const queue = [];
+    if (summaryEl) {
+      const p = summaryEl.querySelector('p');
+      if (p) queue.push({ card: summaryEl, texts: [p] });
+    }
+    partEls.forEach((part) => {
+      const texts = Array.from(part.querySelectorAll('.part2-summary-doc-part-summary, .part2-summary-doc-part-excerpt'));
+      if (texts.length) queue.push({ card: part, texts });
+    });
+
+    // 先快取原文，再清空文字，讓卡片展開時內容是空的，之後才逐字打出。
+    queue.forEach((item) => {
+      item.texts.forEach((t) => {
+        if (t.dataset.fullText === undefined) t.dataset.fullText = t.textContent;
+        t.textContent = '';
+      });
+    });
+
+    function revealNext(idx) {
+      if (idx >= queue.length) return;
+      const { card, texts } = queue[idx];
+      card.classList.add('is-revealed');
+      window.setTimeout(() => {
+        typeTextsSequentially(texts, 0, () => revealNext(idx + 1));
+      }, 160);
+    }
+
+    revealNext(0);
   }
 
   tabs.forEach((tab, i) => {
