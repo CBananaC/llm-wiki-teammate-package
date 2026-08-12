@@ -8171,6 +8171,25 @@ Verified:
 Remaining:
 - Existing concurrent StoryMap and Part 3 edits remain untouched; nothing was pushed.
 
+### 2026-08-12 13:21 HKT — Codex — Activated the Part 1 replica tools dropdown
+
+Summary:
+- Matched the sample review tool's settings behavior in the platform-interface replica: export, split export, import, skill-output loading, interface/body font controls, line opacity, dot spacing, day spacing, and lane spacing now perform real scoped actions.
+- Kept replica state isolated under its own local-storage key and made import/export operate on the teaching replica's state without changing formal or sample saved data.
+- Added a scoped body-font override so the 正文 control changes document/event reading text independently of 介面字級.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+
+Verified:
+- `node --check Website/storymap/part-1-interface.js` passed.
+- `git diff --check` passed.
+- Browser check over the local HTTP preview confirmed the settings panel opens, timeline sliders redraw, font controls apply, split export reports success, and both JSON file inputs restore an imported chart node; no browser warnings or errors were reported.
+
+Remaining:
+- Nothing remaining for this adjustment; nothing was pushed.
+
 ### 2026-08-12 12:59 HKT — Codex — Added source-backed AI Skill panels to Part 2 workflow cards
 
 Summary:

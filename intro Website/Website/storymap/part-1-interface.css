@@ -2222,6 +2222,24 @@
 
 .part1-eventline-arrow-head { font-size: 18px; line-height: 1; }
 
+/* The tools menu's 正文 buttons change reading text only; 介面字級 remains
+   independent through the replica-scoped --font-scale variable. */
+#part-1-content .part1-replica .part1-doc-body {
+  font-size: calc(11.5px * var(--font-scale) * var(--body-font-scale, 1)) !important;
+}
+#part-1-content .part1-replica .part1-doc-summary p {
+  font-size: calc(14px * var(--font-scale) * var(--body-font-scale, 1)) !important;
+}
+#part-1-content .part1-replica .part1-doc-part-summary {
+  font-size: calc(12px * var(--font-scale) * var(--body-font-scale, 1)) !important;
+}
+#part-1-content .part1-replica .part1-doc-part-body {
+  font-size: calc(13px * var(--font-scale) * var(--body-font-scale, 1)) !important;
+}
+#part-1-content .part1-replica .part1-eventline-detail {
+  font-size: calc(13px * var(--font-scale) * var(--body-font-scale, 1));
+}
+
 @media (max-width: 760px) {
   .part1-tools-pop { right: -8px; width: min(700px, calc(100vw - 20px)); }
   .part1-tools-grid { grid-template-columns: 1fr; grid-template-areas: "data" "type" "wide" "timeline"; }
