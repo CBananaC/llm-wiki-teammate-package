@@ -13959,5 +13959,78 @@ Verified:
 - Not yet opened in an actual browser to confirm the click/pulse/scroll interaction visually.
 - Checked `PROJECT_LOG.md`'s tail before editing — no new concurrent entries since the previous checkpoint, so this commit only touches the draft file and the log (still deliberately avoiding `storymap-example.html`/`storymap-cards.css`, which the concurrent Codex session may still be mid-edit on).
 
+### 2026-08-12 19:04 HKT — Codex — Opened each clicked document dot in its own document panel
+
+Summary:
+- Embedded the full canonical source records for the 363 document IDs represented by chart dots, so the intro Website replica can open any selected document without a server-only fetch.
+- Changed document-dot clicks to update the right-hand document panel with that dot’s own title, metadata, summary, and original text.
+- Removed the hard-coded `AI 官員上奏` / `AI 硃批` output-card fallback from document-dot clicks; the AI panel now shows a neutral selected-document state while event dots retain their existing event output behavior.
+- Updated both replica HTML cache versions for the new data and click behavior.
+
+Files changed:
+- `intro Website/tool/scripts py/build_part1_interface_data.py`
+- `intro Website/Website/storymap/part-1-interface-data.js`
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Official dot `doc-奏2-L` opened 奏2’s title and original text; the AI panel contained no `AI 官員上奏` card.
+- Imperial dot `doc-硃42-R` opened 硃42’s title and original text; the AI panel contained no generic document-output card.
+- An event square still opened 節點資訊區 and kept the existing AI panel behavior.
+- The preview rendered 363/363 document records, 513 document circles, and 210 event squares; browser warnings/errors were empty.
+- JavaScript syntax checks, Python compilation, and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
 Remaining:
 - Same as previous entry — user review, then decide on integration into the live page once the shared files are free to edit safely.
+
+### 2026-08-12 19:13 HKT — Codex — Removed document context text from the AI panel
+
+Summary:
+- Removed the auto-filled `已開啟文書` title, document ID, and explanatory placeholder from the AI panel after a document-dot click.
+- Kept the selected document’s full source text and metadata in the right-hand document panel.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- After clicking `doc-奏2-L`, the AI body is empty and the document panel still shows 奏2’s original text.
+- An event square still renders its content in 節點資訊區.
+- JavaScript syntax validation and `git diff --check` passed; browser diagnostics were empty.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+## 2026-08-12 19:15 HKT — Claude — 諭43／硃160 evidence draft: overlay reveal animation + colour/typography pass
+
+Summary:
+- Further revised `storymap-yu-zhu-evidence-visual-draft.html` (still standalone/unlinked) per another round of feedback:
+  - Unified highlight colours so each trigger/target pair shares one colour family instead of three separate colours: 接奉廷寄／奉上諭／乾隆五十二年正月十三日 (硃160) and their target in 諭43 are now one teal-family colour; the quote evidence and its four target segments in 諭43 are one orange-family colour.
+  - Removed all box-shadow/ring "borders" from highlights; states (idle/hover/clicked) are now differentiated purely by background-colour depth (深淺度), with a brief background-only flash animation (no border) when a target lights up.
+  - Removed the "諭43｜"/"硃160｜" id prefixes from the panel titles (badge already conveys the type).
+  - Narrowed both panels (硃160 capped at 560px, 諭43 overlay capped at ~330px) and increased body/title/meta font sizes.
+  - Reworked the interaction into a reveal sequence: on load, only the 硃160 panel is visible (wider, alone). 諭43 stays hidden as a smaller panel positioned overlapping 硃160's upper-left corner. The *first* click on any highlighted span in 硃160 triggers a one-time animation — 諭43 expands open top-to-bottom over 硃160's corner, then its text is typed out (fast typewriter, same technique as the 總結文書 step-3 work: type a plain-text pass, then restore the original `<mark>`-tagged HTML), after which the clicked evidence's target lights up. Every subsequent highlight click just swaps which target is lit (no replay of the expand/type animation) until the page is reloaded.
+  - Added a bouncing hint bubble ("①") pointing at the very first highlighted span (接奉廷寄) to invite the first click; it disappears on first interaction.
+- Re-verified after the rewrite: reconstructed/diffed both full document bodies against the canonical `stage1_original_text.json` again (still exact matches — this pass only touched markup/CSS/JS, not the quoted text), and re-ran the tag-balance check (clean).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-yu-zhu-evidence-visual-draft.html` (standalone, still not linked from the live site)
+- `PROJECT_LOG.md`
+
+Verified:
+- Python reconstruction/diff of both full document bodies against canonical source — exact match, confirming the text-content rewrite didn't alter any quoted characters.
+- `html.parser` tag-balance check — clean.
+- Not yet opened in an actual browser to confirm the expand/type/highlight interaction visually.
+- Checked `PROJECT_LOG.md`'s tail before editing (another Codex entry had landed since the last checkpoint); only this draft file and the log were touched, avoiding the shared site files that session is mid-edit on.
+
+Remaining:
+- Same as previous entries — user review, then decide on integration into the live page once the shared files are free to edit safely.
