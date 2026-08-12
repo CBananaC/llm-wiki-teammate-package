@@ -174,17 +174,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         </div>
       </div>
 
-      <section class="part1-region part1-eventline" data-region="eventline" aria-label="事件鏈">
-        <div class="part1-eventline-head">
-          <strong>事件鏈</strong>
-          <div class="part1-eventline-controls">
-            <button type="button" aria-label="移動事件鏈面板">${PART1_CHAT_ICONS.move}</button>
-            <button type="button" aria-label="關閉事件鏈面板" data-eventline-close>${PART1_CHAT_ICONS.close}</button>
-          </div>
-        </div>
-        <div class="part1-eventline-body" data-eventline-body></div>
-      </section>
-
       <aside class="part1-dock">
         <div class="part1-region part1-ai part1-linked-panel part1-tool-box" data-region="ai">
           <div class="part1-linked-head tool-box-head">
@@ -195,7 +184,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
             </span>
             <span class="part1-chat-window-actions">
               <button class="part1-chat-icon-btn" type="button" aria-label="移動 AI 面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
-              <button class="part1-chat-icon-btn" type="button" aria-label="關閉 AI 面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+              <button class="part1-chat-icon-btn" type="button" data-panel-close="ai" aria-label="關閉 AI 面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
             </span>
           </div>
           <div class="part1-ai-body tool-box-body" data-ai-body></div>
@@ -227,12 +216,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           </div>
         </div>
 
+        <div class="part1-panel-resizer" data-panel-resizer role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="75" aria-valuenow="46" tabindex="0" aria-label="調整 AI 與文書面板寬度"></div>
+
         <div class="part1-region part1-doc part1-ip" data-region="doc">
           <div class="part1-doc-head ip-head">
             <div class="part1-doc-window-controls">
               <button class="part1-doc-window-btn" type="button" aria-label="移動文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
               <button class="part1-doc-window-btn" type="button" aria-label="收合文書面板"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
-              <button class="part1-doc-window-btn" type="button" aria-label="關閉文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+              <button class="part1-doc-window-btn" type="button" data-panel-close="doc" aria-label="關閉文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
             </div>
             <p class="part1-doc-title"><span class="badge">${escapeHtml(doc.docType.slice(0, 1))}</span>${escapeHtml(doc.title)}</p>
             <p class="part1-doc-meta">${escapeHtml(authorLine)}<br>${escapeHtml(dateLine)}<br>${escapeHtml(sourceLine)}</p>
@@ -268,6 +259,17 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
             <div class="part1-doc-body ip-body" data-doc-body>${buildDocumentBody()}</div>
           </div>
         </div>
+
+        <section class="part1-region part1-eventline part1-linked-panel part1-tool-box" data-region="eventline" aria-label="事件鏈">
+          <div class="part1-linked-head tool-box-head">
+            <span>事件鏈</span>
+            <span class="part1-chat-window-actions">
+              <button class="part1-chat-icon-btn" type="button" aria-label="移動事件鏈面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
+              <button class="part1-chat-icon-btn" type="button" aria-label="關閉事件鏈面板" data-eventline-close><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+            </span>
+          </div>
+          <div class="part1-eventline-body tool-box-body" data-eventline-body></div>
+        </section>
       </aside>
     </div>
   `;
@@ -289,6 +291,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const viewPopover = replica.querySelector('[data-view-popover]');
   const summaryToggle = replica.querySelector('[data-view-summary]');
   const divisionsToggle = replica.querySelector('[data-view-divisions]');
+  const dock = replica.querySelector('.part1-dock');
+  const aiPanel = replica.querySelector('.part1-ai');
+  const docPanel = replica.querySelector('.part1-doc');
+  const panelResizer = replica.querySelector('[data-panel-resizer]');
   const aiBody = replica.querySelector('[data-ai-body]');
   const eventLineBody = replica.querySelector('[data-eventline-body]');
   let renderedEventItems = [];
@@ -682,8 +688,84 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     return `${Math.abs(days)}日${days < 0 ? '前' : '後'}`;
   };
 
-  const eventLineCard = ({ title, meta, color, description, quote, selected = false }) => `
-    <article class="part1-eventline-card${selected ? ' is-selected' : ''}" style="--eventline-color:${color}">
+  const chartExtraNodes = [];
+  const chartNodeElements = new Map();
+  let selectedChartNodeId = '';
+
+  const chartNodePayload = (node) => node?.payload || node || {};
+  const chartNodeTitle = (node) => {
+    const payload = chartNodePayload(node);
+    return payload.subtitle || payload.title || payload.what || node?.label || node?.id || '未命名節點';
+  };
+  const chartNodeDescription = (node) => {
+    const payload = chartNodePayload(node);
+    return payload.description || payload.what || '';
+  };
+  const chartNodeDate = (node) => {
+    const payload = chartNodePayload(node);
+    return node?.dateAr || payload.dateAr || payload.whenAr || '';
+  };
+  const chartNodeDateLabel = (node) => {
+    const payload = chartNodePayload(node);
+    return payload.whenCh || payload.dateCh || chartNodeDate(node);
+  };
+  const chartNodeSourceIds = (node) => {
+    const payload = chartNodePayload(node);
+    const ids = [];
+    const add = (value) => {
+      if (value == null || String(value).trim() === '') return;
+      const key = String(value);
+      if (!ids.includes(key)) ids.push(key);
+    };
+    ['docId', 'quoteDocId', 'sourceDocId', 'responseDocId', 'actionDocId', 'emperorDocId', 'memDoc'].forEach((key) => add(payload[key]));
+    (Array.isArray(payload.sources) ? payload.sources : []).forEach((source) => add(source?.doc_id || source?.docId));
+    (Array.isArray(payload.provenance) ? payload.provenance : []).forEach((chain) => {
+      (Array.isArray(chain?.hops) ? chain.hops : []).forEach((hop) => add(hop?.doc_id || hop?.docId));
+    });
+    return ids;
+  };
+  const chartNodeQuote = (node) => {
+    const payload = chartNodePayload(node);
+    if (payload.quote || payload.quotation || payload.rescriptText) return payload.quote || payload.quotation || payload.rescriptText;
+    const source = Array.isArray(payload.sources) ? payload.sources.find((item) => item?.quote || item?.quotation) : null;
+    if (source) return source.quote || source.quotation;
+    const provenance = Array.isArray(payload.provenance) ? payload.provenance : [];
+    const hop = provenance.flatMap((chain) => Array.isArray(chain?.hops) ? chain.hops : []).find((item) => item?.quote);
+    return hop?.quote || '';
+  };
+  const chartNodeQuoteDocId = (node) => chartNodeSourceIds(node)[0] || doc.docId;
+  const chartNodeActorLabel = (node) => {
+    if (node?.lane === 'official') return '官員上奏';
+    if (node?.lane === 'imperial') return '皇帝硃批下旨';
+    if (node?.lane === 'emperor') return '皇帝行動';
+    return chartNodePayload(node).actor === 'qing' ? '清方行動' : '林方事件';
+  };
+  const chartNodeColor = (node) => {
+    if (node?.color) return node.color;
+    if (node?.lane === 'official') return '#2f75b5';
+    if (node?.lane === 'imperial') return '#c46a2b';
+    if (node?.lane === 'emperor') return '#7d4ab8';
+    return chartNodePayload(node).actor === 'qing' ? '#3f6f8f' : '#b5462e';
+  };
+  const allChartNodes = () => {
+    const byId = new Map();
+    [...baseChartNodes, ...chartExtraNodes].forEach((node) => {
+      if (node?.id && !byId.has(String(node.id))) byId.set(String(node.id), node);
+    });
+    return [...byId.values()];
+  };
+  const sameSource = (left, right) => {
+    const rightIds = new Set(chartNodeSourceIds(right));
+    return chartNodeSourceIds(left).some((id) => rightIds.has(id));
+  };
+  const linkedEventIds = (node) => {
+    const payload = chartNodePayload(node);
+    return [payload.respondsToEventId, ...(Array.isArray(payload.alsoRespondsToEventIds) ? payload.alsoRespondsToEventIds : [])]
+      .filter(Boolean).map(String);
+  };
+
+  const eventLineCard = ({ title, meta, color, description, quote, quoteDocId, nodeId = '', selected = false }) => `
+    <article class="part1-eventline-card${selected ? ' is-selected' : ''}"${nodeId ? ` data-eventline-node-id="${escapeHtml(nodeId)}"` : ''} style="--eventline-color:${color}">
       <div class="part1-eventline-card-row">
         <span class="part1-eventline-dot" aria-hidden="true"></span>
         <div class="part1-eventline-main">
@@ -694,55 +776,108 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       </div>
       <div class="part1-eventline-detail">
         ${description ? `<p>${escapeHtml(description)}</p>` : ''}
-        ${quote ? `<blockquote>「${escapeHtml(quote)}」</blockquote>` : ''}
+        ${quote ? `<button class="part1-eventline-quote" type="button" data-eventline-quote="${escapeHtml(quote)}" data-eventline-quote-doc="${escapeHtml(quoteDocId || '')}">「${escapeHtml(quote)}」</button>` : ''}
       </div>
     </article>`;
 
+  const resolveEventLine = () => {
+    const nodes = allChartNodes();
+    const selected = nodes.find((node) => String(node.id) === String(selectedChartNodeId));
+    if (!selected) return null;
+    const selectedSourceIds = new Set(chartNodeSourceIds(selected));
+    const sourceMatch = (node) => sameSource(node, selected);
+    const eventNodes = nodes.filter((node) => node.lane === 'events' && (
+      String(node.id) === String(selected.id)
+      || sourceMatch(node)
+      || linkedEventIds(selected).includes(String(node.id))
+      || linkedEventIds(node).includes(String(selected.id))
+    )).sort((a, b) => (parseDate(chartNodeDate(a)) || 0) - (parseDate(chartNodeDate(b)) || 0));
+    const officialNodes = nodes.filter((node) => node.lane === 'official' && (sourceMatch(node) || selected.lane === 'official'));
+    const imperialNodes = nodes.filter((node) => node.lane === 'imperial' && (sourceMatch(node) || selected.lane === 'imperial'));
+    const emperorNodes = nodes.filter((node) => node.lane === 'emperor' && (
+      sourceMatch(node)
+      || selected.lane === 'emperor'
+      || imperialNodes.length > 0
+      || (Array.isArray(chartPreview.links) && chartPreview.links.some((link) => link.from === 'imperial' && link.to === 'emperor'))
+    ));
+    const responseIds = new Set([
+      ...eventNodes.flatMap((node) => linkedEventIds(node)),
+      ...linkedEventIds(selected)
+    ]);
+    const responseNodes = nodes.filter((node) => node.lane === 'events' && responseIds.has(String(node.id)) && !eventNodes.some((item) => item.id === node.id));
+    const sourceDocId = [...selectedSourceIds][0] || chartNodeQuoteDocId(selected);
+    const officialNode = officialNodes[0];
+    return {
+      selected,
+      eventNodes,
+      responseNodes,
+      officialNodes,
+      imperialNodes,
+      emperorNodes,
+      sourceDocId,
+      sourceTitle: chartNodePayload(officialNode).title || (sourceDocId === doc.docId ? doc.title : sourceDocId),
+      sourceDescription: sourceDocId === doc.docId ? docSummary : '此節點保存的來源文書尚未載入完整文書面板。',
+      sourceQuote: officialNode ? chartNodeQuote(officialNode) : '',
+      sourceAuthor: sourceDocId === doc.docId ? authorLine : '',
+      sourceDate: officialNode ? chartNodeDateLabel(officialNode) : (sourceDocId === doc.docId ? doc.sendDate[1] : '')
+    };
+  };
+
   const renderEventLine = () => {
     if (!eventLineBody) return;
-    const officialMeta = `${authorLine}　${doc.sendDate[1]}`;
-    const eventItems = [data.dots.events, ...data.aiCandidates];
-    const actorLabel = (item) => item.actor === 'lin' ? '林方行動' : '清方行動';
-    const actorColor = (item) => item.actor === 'lin' ? '#c4482f' : '#3f789c';
-    const eventCards = eventItems.map((item) => eventLineCard({
-      title: item.subtitle,
-      meta: `${actorLabel(item)}　${item.dateAr}（${eventOffsetLabel(item.dateAr)}）`,
-      color: actorColor(item),
-      description: item.description,
-      quote: item.quote
-    })).join('');
-    const emperor = data.dots.emperor;
-    eventLineBody.innerHTML = `
-      <div class="part1-eventline-seclabel">官方文書・硃批</div>
-      ${eventLineCard({
-        title: doc.title,
-        meta: officialMeta,
-        color: '#c46a2b',
-        description: docSummary,
-        quote: doc.rescriptText,
-        selected: true
-      })}
-      <div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>報告之事件</strong></div>
-      ${eventCards}
-      <div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>皇帝批覆與行動</strong></div>
-      ${eventLineCard({
-        title: emperor.subtitle,
-        meta: `相關上諭　${emperor.dateAr}（${eventOffsetLabel(emperor.dateAr)}）`,
-        color: '#7d4ab8',
-        description: emperor.description,
-        quote: emperor.quote
-      })}`;
+    const chain = resolveEventLine();
+    if (!chain) {
+      eventLineBody.innerHTML = '<div class="part1-eventline-empty">點選圖上任一圓點，顯示該點與相關圓點的事件鏈。<span>僅顯示目前複本資料中已有來源關係的節點。</span></div>';
+      return;
+    }
+    const selectedId = String(chain.selected.id);
+    const sourceMeta = [chain.sourceAuthor, chain.sourceDate].filter(Boolean).join('　');
+    const eventCard = (node) => eventLineCard({
+      nodeId: node.id,
+      title: chartNodeTitle(node),
+      meta: `${chartNodeActorLabel(node)}　${chartNodeDateLabel(node)}${eventOffsetLabel(chartNodeDate(node)) ? `（${eventOffsetLabel(chartNodeDate(node))}）` : ''}`,
+      color: chartNodeColor(node),
+      description: chartNodeDescription(node),
+      quote: chartNodeQuote(node),
+      quoteDocId: chartNodeQuoteDocId(node),
+      selected: String(node.id) === selectedId
+    });
+    let html = `<div class="part1-eventline-seclabel">官方文書 · ${escapeHtml(chain.sourceDocId || '來源未明')}</div>`;
+    html += eventLineCard({
+      title: chain.sourceTitle,
+      meta: sourceMeta || `來源文書　${chain.sourceDocId || '未明'}`,
+      color: '#c46a2b',
+      description: chain.sourceDescription,
+      quote: chain.sourceQuote,
+      quoteDocId: chain.sourceDocId,
+      selected: chain.selected.lane === 'official'
+    });
+    if (chain.eventNodes.length) {
+      html += '<div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>報告之事件</strong></div>';
+      html += chain.eventNodes.map(eventCard).join('');
+    }
+    if (chain.imperialNodes.length || chain.emperorNodes.length) {
+      html += '<div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>皇帝批覆與行動</strong></div>';
+      html += [...chain.imperialNodes, ...chain.emperorNodes].map(eventCard).join('');
+    }
+    if (chain.responseNodes.length) {
+      html += '<div class="part1-eventline-arrow"><span class="part1-eventline-arrow-line"></span><span class="part1-eventline-arrow-head">▼</span><strong>相關回應</strong></div>';
+      html += chain.responseNodes.map(eventCard).join('');
+    }
+    eventLineBody.innerHTML = html;
     eventLineBody.querySelectorAll('.part1-eventline-card').forEach((card) => {
       card.addEventListener('click', () => {
         const open = card.classList.toggle('is-open');
         card.querySelector('.part1-eventline-caret').textContent = open ? '▴' : '▾';
       });
     });
+    eventLineBody.querySelectorAll('[data-eventline-quote]').forEach((quote) => {
+      quote.addEventListener('click', (event) => {
+        event.stopPropagation();
+        locateQuote(quote.dataset.eventlineQuote, quote.dataset.eventlineQuoteDoc);
+      });
+    });
   };
-
-  const chartExtraNodes = [];
-  const chartNodeElements = new Map();
-  let selectedChartNodeId = '';
 
   const nodeColor = (node) => {
     if (node.color) return node.color;
@@ -1022,12 +1157,18 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const selectDot = (button) => {
     const node = button?._part1;
     if (!node) return;
+    const keepEventLineOpen = replica.dataset.eventlineOpen === 'true';
     selectedChartNodeId = node.id;
     chartNodeElements.forEach((element) => element.classList.toggle('is-selected', element === button));
     renderNodePanel(node.payload, node.lane, node.label);
-    setRegion('ai', { silent: true });
+    if (keepEventLineOpen) {
+      setRegion('eventline', { silent: true });
+      renderEventLine();
+    } else {
+      setRegion('ai', { silent: true });
+    }
     const laneLabel = data.lanes.find((item) => item.key === node.lane)?.label || '節點';
-    setProgress(`已在 AI 分析區開啟「${node.payload.subtitle || node.payload.title}」的${laneLabel}輸出卡片。`);
+    setProgress(`已開啟「${chartNodeTitle(node)}」的${laneLabel}輸出卡片；事件鏈會同步使用此圓點的來源資料。`);
   };
 
   /* -------------------------------------------------------- 引文定位 */
@@ -1434,8 +1575,70 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     window.setTimeout(() => button?.classList.remove('is-new'), 700);
   };
 
+  const PANEL_MIN_WIDTH = 180;
+  let panelWidthRatio = 0.46;
+
+  const applyPanelWidthRatio = (nextRatio = panelWidthRatio) => {
+    panelWidthRatio = clamp(nextRatio, 0.25, 0.75);
+    if (!dock) return;
+    dock.style.setProperty('--part1-ai-ratio', `${roundTo(panelWidthRatio * 100, 2)}%`);
+    dock.style.setProperty('--part1-doc-ratio', `${roundTo((1 - panelWidthRatio) * 100, 2)}%`);
+    panelResizer?.setAttribute('aria-valuenow', String(Math.round(panelWidthRatio * 100)));
+  };
+
+  const setPanelOpen = (kind, open) => {
+    const panel = kind === 'ai' ? aiPanel : docPanel;
+    if (!panel) return;
+    panel.hidden = false;
+    panel.classList.toggle('is-panel-closed', !open);
+    panel.setAttribute('aria-hidden', String(!open));
+    dock?.setAttribute(`data-${kind}-closed`, String(!open));
+    if (!open && kind === 'ai') closeAiPopovers();
+  };
+
+  applyPanelWidthRatio();
+  setPanelOpen('ai', true);
+  setPanelOpen('doc', true);
+
+  panelResizer?.addEventListener('pointerdown', (event) => {
+    if (event.button !== 0 || !dock || aiPanel?.classList.contains('is-panel-closed') || docPanel?.classList.contains('is-panel-closed')) return;
+    const dockRect = dock.getBoundingClientRect();
+    const dividerWidth = panelResizer.getBoundingClientRect().width || 10;
+    const availableWidth = Math.max(1, dockRect.width - dividerWidth);
+    const startPanelWidth = aiPanel?.getBoundingClientRect().width || availableWidth * panelWidthRatio;
+    const startX = event.clientX;
+    const minWidth = Math.min(PANEL_MIN_WIDTH, Math.max(0, availableWidth / 2 - 1));
+    panelResizer.setPointerCapture?.(event.pointerId);
+    panelResizer.classList.add('is-dragging');
+    event.preventDefault();
+
+    const updateWidth = (moveEvent) => {
+      const nextWidth = clamp(startPanelWidth + moveEvent.clientX - startX, minWidth, availableWidth - minWidth);
+      applyPanelWidthRatio(nextWidth / availableWidth);
+    };
+    const finish = (finishEvent) => {
+      panelResizer.classList.remove('is-dragging');
+      panelResizer.releasePointerCapture?.(finishEvent.pointerId);
+      panelResizer.removeEventListener('pointermove', updateWidth);
+      panelResizer.removeEventListener('pointerup', finish);
+      panelResizer.removeEventListener('pointercancel', finish);
+    };
+    panelResizer.addEventListener('pointermove', updateWidth);
+    panelResizer.addEventListener('pointerup', finish);
+    panelResizer.addEventListener('pointercancel', finish);
+  });
+
+  panelResizer?.addEventListener('keydown', (event) => {
+    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') return;
+    event.preventDefault();
+    if (event.key === 'Home') applyPanelWidthRatio(0.25);
+    else if (event.key === 'End') applyPanelWidthRatio(0.75);
+    else applyPanelWidthRatio(panelWidthRatio + (event.key === 'ArrowRight' ? 0.03 : -0.03));
+  });
+
   function setRegion(region, options = {}) {
     replica.dataset.eventlineOpen = region === 'eventline' ? 'true' : 'false';
+    if (region === 'doc' || region === 'ai') setPanelOpen(region, true);
     if (region === 'eventline') renderEventLine();
   }
 
@@ -1599,6 +1802,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     dotGap = REPLICA_DEFAULTS.dotGap;
     daySpacing = REPLICA_DEFAULTS.daySpacing;
     laneSpacing = REPLICA_DEFAULTS.laneSpacing;
+    panelWidthRatio = 0.46;
+    applyPanelWidthRatio();
+    setPanelOpen('ai', true);
+    setPanelOpen('doc', true);
     try { localStorage.removeItem(REPLICA_SETTINGS_KEY); } catch (error) { /* current-page reset still applies */ }
     applyReplicaCssSettings();
     chartScale = 1;

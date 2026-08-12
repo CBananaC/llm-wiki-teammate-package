@@ -2146,6 +2146,12 @@
   border-bottom: 1px solid rgba(255, 255, 255, .16);
   isolation: isolate;
 }
+#part-2-content #part-2-input-bar {
+  --part2-topic-bar-height: clamp(230px, 30vh, 300px);
+}
+#part-2-content #part-2-ai-bar {
+  --part2-topic-bar-height: clamp(230px, 30vh, 300px);
+}
 #part-2-content .part2-topic-bar::before { content: none; }
 #part-2-content .part2-topic-bar h1 {
   font-size: var(--part2-topic-title-size, clamp(26px, 3.4vw, 44px));

@@ -1967,20 +1967,28 @@
 
 .part1-replica[data-eventline-open="true"] .part1-stage {
   display: grid;
-  grid-template-columns: minmax(0, 1fr);
+  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
   height: 640px;
 }
 
-.part1-replica[data-eventline-open="true"] .part1-chart,
-.part1-replica[data-eventline-open="true"] .part1-dock { display: none; }
+.part1-replica[data-eventline-open="true"] .part1-dock {
+  display: block;
+  height: 100%;
+  overflow: hidden;
+}
+
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-ai,
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-panel-resizer,
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-doc { display: none; }
 
 .part1-replica[data-eventline-open="true"] .part1-eventline {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  height: calc(100% - 16px);
+  margin: 8px;
   min-width: 0;
   min-height: 0;
   overflow: hidden;
-  background: #fffdf8;
 }
 
 .part1-eventline-head {
@@ -2106,6 +2114,60 @@
   font: inherit;
 }
 
+.part1-eventline-quote {
+  display: block;
+  width: 100%;
+  margin: 0;
+  padding: 8px 10px;
+  color: #6b5b47;
+  background: #f6f0e0;
+  border: 0;
+  border-left: 3px solid var(--eventline-color, #888);
+  text-align: left;
+  cursor: pointer;
+  font: inherit;
+}
+
+.part1-eventline-quote:hover,
+.part1-eventline-quote:focus-visible { background: #eee5d2; outline: 0; }
+
+.part1-eventline-empty {
+  padding: 18px 12px;
+  color: #8d8173;
+  text-align: center;
+  font: 500 calc(12px * var(--font-scale))/1.65 var(--serif);
+}
+
+.part1-eventline-empty span { display: block; margin-top: 5px; font-size: .9em; }
+
+/* The event chain is a docked tool panel, so keep its cards at the same
+   compact reading scale as the AI and document panels. */
+.part1-replica[data-eventline-open="true"] .part1-eventline-body { padding: 10px; }
+.part1-replica[data-eventline-open="true"] .part1-eventline-seclabel {
+  margin-bottom: 6px;
+  font-size: calc(10px * var(--font-scale));
+}
+.part1-replica[data-eventline-open="true"] .part1-eventline-card {
+  padding: 8px 9px;
+  border-radius: 0 8px 8px 0;
+}
+.part1-replica[data-eventline-open="true"] .part1-eventline-card-row { gap: 8px; }
+.part1-replica[data-eventline-open="true"] .part1-eventline-main strong {
+  font-size: calc(12px * var(--font-scale));
+}
+.part1-replica[data-eventline-open="true"] .part1-eventline-meta {
+  margin-top: 3px;
+  font-size: calc(9px * var(--font-scale));
+}
+.part1-replica[data-eventline-open="true"] .part1-eventline-detail {
+  margin: 8px 0 0 21px;
+  font-size: calc(10px * var(--font-scale) * var(--body-font-scale, 1));
+}
+.part1-replica[data-eventline-open="true"] .part1-eventline-arrow {
+  margin: 8px 0;
+  font-size: calc(10px * var(--font-scale));
+}
+
 .part1-eventline-arrow {
   display: flex;
   flex-direction: column;
@@ -2148,7 +2210,8 @@
   .part1-tools-wide:last-child { grid-area: timeline; }
   .part1-tools-slider { grid-template-columns: minmax(92px, 1fr) minmax(0, 1.5fr) 52px; gap: 8px; }
   .part1-eventline-body { padding: 14px 12px 24px; }
-  .part1-replica[data-eventline-open="true"] .part1-stage { height: 600px; }
+  .part1-replica[data-eventline-open="true"] .part1-stage { height: auto; }
+  .part1-replica[data-eventline-open="true"] .part1-dock { height: 520px; }
 }
 
 /* AI chat popovers ---------------------------------------------------------
@@ -2387,6 +2450,71 @@
   .part1-chart { min-height: 620px; border-right: 0; border-bottom: 1px solid #e0d5c3; }
   .part1-dock { min-height: 520px; }
 }
+
+/* Docked panel controls --------------------------------------------------
+   The sample review tool keeps each information panel independently
+   dismissible and uses a vertical drag target between the two panels. */
+.part1-dock {
+  --part1-ai-ratio: 46%;
+  --part1-doc-ratio: 54%;
+  grid-template-columns:
+    minmax(0, calc(var(--part1-ai-ratio) - 5px))
+    10px
+    minmax(0, calc(var(--part1-doc-ratio) - 5px));
+}
+
+.part1-dock > [hidden] { display: none !important; }
+
+.part1-panel-resizer {
+  position: relative;
+  z-index: 4;
+  min-width: 0;
+  margin: 8px 0;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.part1-panel-resizer::before {
+  content: "";
+  position: absolute;
+  top: 38%;
+  bottom: 38%;
+  left: 4px;
+  width: 2px;
+  border-radius: 2px;
+  background: #d1c2ad;
+  transition: background .15s ease, transform .15s ease;
+}
+.part1-panel-resizer:hover::before,
+.part1-panel-resizer:focus-visible::before,
+.part1-panel-resizer.is-dragging::before {
+  background: #a67d4f;
+  transform: scaleX(1.8);
+}
+.part1-panel-resizer:focus-visible { outline: 2px solid rgba(166, 125, 79, .45); outline-offset: -1px; }
+.part1-panel-resizer[hidden] { display: none !important; }
+
+.part1-dock[data-ai-closed="true"] {
+  grid-template-columns: 0 0 minmax(0, 1fr);
+}
+.part1-dock[data-doc-closed="true"] {
+  grid-template-columns: minmax(0, 1fr) 0 0;
+}
+.part1-dock[data-ai-closed="true"] .part1-ai,
+.part1-dock[data-doc-closed="true"] .part1-doc {
+  visibility: hidden;
+  pointer-events: none;
+}
+.part1-dock[data-ai-closed="true"] .part1-panel-resizer,
+.part1-dock[data-doc-closed="true"] .part1-panel-resizer {
+  visibility: hidden;
+  pointer-events: none;
+}
+.part1-dock[data-ai-closed="true"][data-doc-closed="true"] { display: none; }
+
+.part1-chat-icon-btn[data-panel-close],
+.part1-doc-window-btn[data-panel-close] { cursor: pointer; }
+
 /* Compact toolbar --------------------------------------------------------
    Keep the sample-like controls readable while giving the replica more room
    for the chart and docked document panels. */
@@ -2427,6 +2555,7 @@
   .part1-panel-resizer { display: none !important; }
   #part-1-content .part1-replica .part1-toolbar { min-height: 72px; padding: 4px 6px; gap: 4px; }
 }
+
 /* Compact settings dropdown -------------------------------------------- */
 #part-1-content .part1-replica .part1-tools-pop {
   width: min(410px, calc(100vw - 16px));

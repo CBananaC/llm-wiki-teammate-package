@@ -8,8 +8,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="storymap.css?v=20260811-codex-responsive-02">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260811-claude-wiki-visual-03-part2-json-02">
-  <link rel="stylesheet" href="part-1-interface.css?v=20260812-settings-compact-02">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260812-step4-cover-bar-01">
+  <link rel="stylesheet" href="part-1-interface.css?v=20260812-panel-controls-02">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js?v=20260812-part2-flow-02" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
@@ -837,8 +837,8 @@
           <section class="story surface-c part2-topic-content" id="part-2-input-content" data-tab="part-2">
             <div class="story-inner"><div class="part2-input-layout">
               <div class="part2-input-copy"><div class="part2-card-stack">
-                <article class="copybox blk part2-text-card"><div class="body"><p>在結構化資料中，每份奏摺或上諭都需要分成不同欄位，包括文書類型、作者資料、標題、文書編號、文書正文及史料來源。</p></div></article>
-                <article class="copybox blk part2-text-card"><div class="body"><p>如果史料來自學者編纂的檔案彙編，通常都會清楚標示文書的發送和接收日期，因此亦應加入相關日期的欄位。這些日期資料可以用於排列文書的時間順序，以及重建文書之間的傳遞關係。</p></div></article>
+                <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>JSON中的文本資料</h2></div><div class="body"><p>在結構化資料中，每份奏摺或上諭都需要分成不同欄位，包括文書類型、作者資料、標題、文書編號、文書正文及史料來源。</p></div></article>
+                <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>收發日期</h2></div><div class="body"><p>如果史料來自學者編纂的檔案彙編，通常都會清楚標示文書的發送和接收日期，因此亦應加入相關日期的欄位。這些日期資料可以用於排列文書的時間順序，以及重建文書之間的傳遞關係。</p></div></article>
               </div></div>
               <div class="part2-input-visual" id="part-2-input-json-visual" aria-label="輸出格式：JSON互動示範"></div>
             </div></div>
@@ -846,11 +846,10 @@
         </section>
         <section class="part2-stage" id="part-2-ai" data-tab="part-2" data-nav="#part-2-ai">
           <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-ai-bar" aria-labelledby="part-2-ai-title">
-            <div class="section-hero-content"><p class="eyebrow">步驟四</p><h1 id="part-2-ai-title">使用AI從原文中抽取資訊</h1></div>
+            <div class="section-hero-content"><p class="eyebrow">步驟四</p><h1 id="part-2-ai-title">使用AI從原文中抽取資訊</h1><p class="section-hero-note">完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。</p></div>
           </section>
           <section class="story surface-a part2-topic-content" id="part-2-ai-content" data-tab="part-2">
             <div class="story-inner"><div class="part2-card-stack">
-              <article class="copybox blk part2-text-card"><div class="body"><p>完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。</p></div></article>
               <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>AI Skills</h2></div><div class="body"><p>AI Skills 是一套預先設計的 AI 指令，讓人工智能按照指定規則處理數據，提取指定資料，並以特定格式輸出結果。</p><p>平台中的 AI Skills 是根據特定研究問題設計的，要求 AI 從文書中找出與研究問題相關的資訊，並保留相應的原文引文作為證據。</p></div></article>
               <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>資訊提取的核心理念</h2></div><div class="body"><p>平台視 AI 為協助研究的工具，AI 提取的結果需要由研究者作出最後判斷。因此，在 AI 輸出結果後，研究者需要回到原始文書，檢查結果是否準確。相關資訊要經研究者確認，才會加入到圖表之中，成為後續研究和分析的一部分。</p></div></article>
               <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">3</span><h2>四個分析階段</h2></div><div class="body"><p>平台共有四組 AI Skills，分別用於四個分析階段：總結文書、重建通信關係、提取奏摺資訊，以及提取上諭資訊。</p></div></article>

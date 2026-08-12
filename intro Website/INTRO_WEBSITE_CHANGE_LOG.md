@@ -8340,6 +8340,27 @@ Verified:
 Remaining:
 - Existing concurrent Part 1, StoryMap routing, and log edits remain untouched; nothing was pushed.
 
+### 2026-08-12 13:38 HKT — Codex — Removed the Part 1 teaching overlay
+
+Summary:
+- Removed the four numbered area labels (`導覽列`, `時間與關係圖表`, `原始史料區`, and `AI 分析區`) from the replica.
+- Removed their explanatory callouts, progress/reset strip, dimmed-region treatment, active border, and hotspot behavior.
+- Kept the recreated tool's actual toolbar, chart, document panel, AI panel, event-chain control, chart nodes, and chart gestures.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser inspection found zero hotspot, callout, progress, active-region, or active-class elements; the chart and four tool regions still load.
+- Browser interaction confirmed the AI toolbar control still works without restoring any highlight overlay.
+- Browser console reported no warnings or errors; `node --check` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent StoryMap and log edits remain untouched; nothing was pushed.
+
 ### 2026-08-12 13:28 HKT — Codex — Moved the structured-data introduction to the cover tab
 
 Summary:
@@ -8358,3 +8379,240 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 1, StoryMap routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:38 HKT — Codex — Placed the structured-data text under the Step 3 title
+
+Summary:
+- Moved the structured-data introduction from the home cover into the `輸入結構化資料` section hero, directly below the title shown in the Step 3 header.
+- Kept the OCR-method link on `此` and removed the cover-only version.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview of `#part-2-input` confirmed the text is visible directly beneath `輸入結構化資料` and the cover copy is absent.
+- Browser console reported no warnings or errors; `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, StoryMap routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:45 HKT — Codex — Increased the Step 3 cover-bar height
+
+Summary:
+- Increased only the `輸入結構化資料` cover bar to `230px` at the current desktop viewport so its title and explanatory text have more vertical space.
+- Bumped the `storymap-cards.css` version query so the new height loads without stale browser CSS.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview measured the Step 3 cover bar at `230px`; the explanatory text remained visible and the browser console reported no warnings or errors.
+- `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 14:02 HKT — Codex — Docked the event chain and connected it to uploaded chart data
+
+Summary:
+- Moved 事件鏈 into the Part 1 tool dock so it opens as a panel beside the chart, alongside the AI and document panels.
+- Replaced the hardcoded event-chain cards with a renderer driven by the selected chart node, source IDs, response links, dates, descriptions, quotations, and imported raw records.
+- Kept the event-chain panel open when a dot is selected, and excluded unconfirmed AI candidates from the displayed chain unless they become chart data.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Imported `/Users/creamybanana/Downloads/sample_all.data` through the replica's existing 匯入 control; the chart expanded to 29 dots and selecting imported `匪徒於大墩殺害官員` displayed source-backed data from `硃25` and related events.
+- Reload returned to the four built-in dots, confirming the upload test did not replace the starting dataset.
+- `node --check`, `git diff --check`, and browser error/warning diagnostics passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; no clean local checkpoint was created because the two implementation files contain overlapping pre-existing edits.
+
+### 2026-08-12 14:01 HKT — Codex — Matched the settings panel to the sample scale
+
+Summary:
+- Reduced the settings dropdown again to a 410px desktop maximum with compact 26px controls, smaller labels, tighter spacing, and a 380px mobile maximum.
+- Kept the dropdown open for `介面字級` and `正文` button clicks so users can make repeated adjustments without reopening it.
+- Bumped the interface stylesheet query so the latest sizing rules load immediately.
+
+Files changed:
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser preview measured the open settings panel at `410px × 410px`, with all 7 buttons and 6 sliders present.
+- Clicking `介面字級 A＋` and `正文 A＋` kept the dropdown open and updated the scoped font variables.
+- `node --check Website/Website/storymap/part-1-interface.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:57 HKT — Codex — Resized the settings dropdown
+
+Summary:
+- Reduced the settings dropdown to a 620px desktop maximum with smaller padding, section gaps, buttons, typography, slider rows, and slider thumbs.
+- Added a viewport-safe maximum height and a narrower mobile width so the complete settings list remains usable without dominating the interface.
+- Bumped the interface stylesheet query so the resized dropdown loads immediately.
+
+Files changed:
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser preview measured the open settings panel at `620px × 483px`, with all 7 buttons and 6 sliders present.
+- `node --check Website/Website/storymap/part-1-interface.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:51 HKT — Codex — Reduced the Part 1 replica top bar
+
+Summary:
+- Reduced the toolbar height, padding, gaps, button heights, search field, people selector, gear button, and mobile wrapped height so the top bar takes less vertical space without changing chart/document panel sizes.
+- Bumped the interface stylesheet query so the compact toolbar rules load immediately.
+
+Files changed:
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser preview measured the toolbar at `44px`, its controls at `29px`, and loaded `part-1-interface.css?v=20260812-toolbar-compact-01`.
+- `node --check Website/storymap/part-1-interface.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:47 HKT — Codex — Refreshed the replica font stylesheet
+
+Summary:
+- Bumped the Part 1 interface stylesheet query in the standalone replica and StoryMap embed so the live page loads the CSS rule that applies the separate 介面字級 and 正文 controls.
+
+Files changed:
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+
+Verified:
+- Browser preview loaded `part-1-interface.css?v=20260812-tools-font-01`.
+- The rendered document text changed from `17.94px` to `15.18px` after one 正文 decrease, and interface controls changed from `16.9px` to `15.6px` after one 介面字級 decrease.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:52 HKT — Codex — Restored document-dot AI chat provenance
+
+Summary:
+- Added saved `硃40.chat` and `諭24.chat` projections to the Part 1 replica so the AI output that forms the clear-demo event and emperor-action dots can be loaded and inspected in the AI analysis area.
+- Added a matched source panel on the chart node for the `諭24` emperor-action dot, and updated the formal/sample document-dot handlers so the underlying review tools open the matching AI card as well.
+- Kept the replica's existing 硃42 document viewer while labelling the clear-demo chat sources separately.
+
+Files changed:
+- `Website/storymap/part-1-interface-data.js`
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `../review-tools/(1) formal/index.html`
+- `../review-tools/(2) sample/index.html`
+- `../tool/scripts py/build_part1_interface_data.py`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA loaded `硃40.chat` (10 output items) and `諭24.chat` (32 output items) from the replica; clicking the emperor-action node revealed its linked `諭24.chat` output.
+- `node --check`, generated-data parsing, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:57 HKT — Codex — Moved the Step 4 explanatory sentence into its cover bar
+
+Summary:
+- Placed `完成輸入結構化原始文書後，下一步便是運用 AI 和AI Skills，從史料中提取特定的資訊。` directly below `使用AI從原文中抽取資訊` in the Part 2 cover bar.
+- Removed the duplicate paragraph from the first content card below the cover bar.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed the sentence is visible beneath the Step 4 title and appears zero times in the content cards.
+- Browser console reported no warnings or errors; `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:59 HKT — Codex — Added closable and resizable replica panels
+
+Summary:
+- Added working X controls for the AI chat and document panels in the standalone Part 1 replica.
+- Added a keyboard- and pointer-resizable divider between the two panels, with min/max width limits and toolbar reopening after either panel is closed.
+- Kept the behavior available to the shared Part 1 interface renderer used by the StoryMap example.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA closed AI, expanded the document panel, reopened AI from the toolbar, closed the document panel, expanded AI, and reopened both with Note.
+- Keyboard divider resizing changed the AI/document split from `46%/54%` to `51.31%/48.69%`.
+- `node --check`, `git diff --check`, and browser diagnostics passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 14:01 HKT — Codex — Increased the Step 4 cover-bar height
+
+Summary:
+- Increased only the `使用AI從原文中抽取資訊` cover bar to `230px`, matching the additional space used for Step 3.
+- Bumped the `storymap-cards.css` version query so the new height loads without stale browser CSS.
+
+Files changed:
+- `Website/storymap/storymap-cards.css`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview measured the Step 4 cover bar at `230px`; the title and explanatory sentence remained visible.
+- Browser console reported no warnings or errors; `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 14:02 HKT — Codex — Added numbered cards for structured-data fields and dates
+
+Summary:
+- Converted the two Part 2 structured-data paragraphs into numbered text cards.
+- Set the first card subtitle to `JSON中的文本資料` and the second to `收發日期`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the two cards render with number boxes `1` and `2` and the requested subtitles.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
