@@ -2135,6 +2135,12 @@
 }
 
 /* Part 2 — 平台運作流程：主題帶、編號卡與逐段閱讀。 */
+#part-2-content {
+  /* 調整這三項即可控制本分頁的文字卡：一般卡片寬度、總結文書卡寬度，以及兩段之間的留白。 */
+  --part2-text-card-width: 66ch;
+  --part2-summary-card-width: 60ch;
+  --part2-summary-paragraph-gap: 1.35em;
+}
 #part-2-content .part2-stage {
   border-top: 1px solid rgba(22, 61, 63, .16);
 }
@@ -2170,7 +2176,7 @@
 }
 #part-2-content .part2-text-card {
   box-sizing: border-box;
-  width: min(100%, 78ch);
+  width: min(100%, var(--part2-text-card-width, 78ch));
   max-width: none;
   margin: 0;
   padding: var(--part2-card-padding, clamp(18px, 1.8vw, 26px));
@@ -2181,6 +2187,12 @@
   margin: 0;
   color: var(--text);
   font: var(--body-weight) calc(16px * var(--font-scale))/1.9 var(--serif);
+}
+#part-2-content .part2-summary-card {
+  width: min(100%, var(--part2-summary-card-width, var(--part2-text-card-width, 78ch)));
+}
+#part-2-content .part2-summary-card .body > p + p {
+  margin-top: var(--part2-summary-paragraph-gap, 1.35em);
 }
 #part-2-content .part2-wide-text {
   box-sizing: border-box;
@@ -2546,7 +2558,7 @@
     padding: 28px 16px 36px;
   }
   #part-2-content .part2-card-stack { gap: 14px; }
-  #part-2-content .part2-text-card { width: 100%; }
+  #part-2-content .part2-text-card { width: min(100%, var(--part2-text-card-width, 78ch)); }
   #part-2-content .part2-numbered-card .title-row { align-items: flex-start; }
   #part-2-content .part2-numbered-card .title-row h2 { font-size: clamp(22px, 7vw, 30px); }
   #part-2-content #part-2-yu-response .part2-communication-visual-head { align-items: flex-start; flex-wrap: wrap; }

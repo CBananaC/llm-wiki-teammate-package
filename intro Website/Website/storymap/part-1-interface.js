@@ -176,6 +176,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
       <aside class="part1-dock">
         <div class="part1-region part1-ai part1-linked-panel part1-tool-box" data-region="ai">
+          <div class="part1-panel-resize-left" data-panel-resize-left="ai" role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="75" aria-valuenow="46" tabindex="0" aria-label="調整 AI 面板寬度"></div>
           <div class="part1-linked-head tool-box-head">
             <span class="part1-chat-head-actions">
               <button class="part1-chat-icon-btn" type="button" data-ai-pop="toc" aria-expanded="false" aria-label="對話目錄"><span aria-hidden="true">${PART1_CHAT_ICONS.list}</span></button>
@@ -216,9 +217,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           </div>
         </div>
 
-        <div class="part1-panel-resizer" data-panel-resizer role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="75" aria-valuenow="46" tabindex="0" aria-label="調整 AI 與文書面板寬度"></div>
-
         <div class="part1-region part1-doc part1-ip" data-region="doc">
+          <div class="part1-panel-resize-left" data-panel-resize-left="doc" role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="75" aria-valuenow="46" tabindex="0" aria-label="調整文書面板寬度"></div>
           <div class="part1-doc-head ip-head">
             <div class="part1-doc-window-controls">
               <button class="part1-doc-window-btn" type="button" aria-label="移動文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
@@ -261,6 +261,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         </div>
 
         <section class="part1-region part1-eventline part1-linked-panel part1-tool-box" data-region="eventline" aria-label="事件鏈">
+          <div class="part1-panel-resize-left" data-panel-resize-left="eventline" role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0" aria-label="調整事件鏈面板寬度"></div>
           <div class="part1-linked-head tool-box-head">
             <span>事件鏈</span>
             <span class="part1-chat-window-actions">
@@ -291,10 +292,13 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const viewPopover = replica.querySelector('[data-view-popover]');
   const summaryToggle = replica.querySelector('[data-view-summary]');
   const divisionsToggle = replica.querySelector('[data-view-divisions]');
+  const stage = replica.querySelector('.part1-stage');
   const dock = replica.querySelector('.part1-dock');
   const aiPanel = replica.querySelector('.part1-ai');
   const docPanel = replica.querySelector('.part1-doc');
+  const eventLinePanel = replica.querySelector('.part1-eventline');
   const panelResizer = replica.querySelector('[data-panel-resizer]');
+  const panelResizeHandles = [...replica.querySelectorAll('[data-panel-resize-left]')];
   const aiBody = replica.querySelector('[data-ai-body]');
   const eventLineBody = replica.querySelector('[data-eventline-body]');
   let renderedEventItems = [];
@@ -1576,14 +1580,61 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   };
 
   const PANEL_MIN_WIDTH = 180;
-  let panelWidthRatio = 0.46;
+  const CHART_MIN_WIDTH = 360;
+  let aiPanelWidth = 0;
+  let docPanelWidth = 0;
+  // Track width includes the event-chain panel's 8px margins on both sides.
+  let eventLinePanelWidth = 220;
 
-  const applyPanelWidthRatio = (nextRatio = panelWidthRatio) => {
-    panelWidthRatio = clamp(nextRatio, 0.25, 0.75);
+  const syncDockWidth = (aiWidth = aiPanelWidth, docWidth = docPanelWidth) => {
     if (!dock) return;
-    dock.style.setProperty('--part1-ai-ratio', `${roundTo(panelWidthRatio * 100, 2)}%`);
-    dock.style.setProperty('--part1-doc-ratio', `${roundTo((1 - panelWidthRatio) * 100, 2)}%`);
-    panelResizer?.setAttribute('aria-valuenow', String(Math.round(panelWidthRatio * 100)));
+    const eventlineWidth = replica.matches('[data-eventline-open="true"]') ? eventLinePanelWidth : 0;
+    dock.style.setProperty('--part1-dock-width', `${roundTo(aiWidth + docWidth + eventlineWidth, 2)}px`);
+  };
+
+  const applyEventLinePanelWidth = (panelWidth) => {
+    if (!dock || !eventLinePanel) return;
+    eventLinePanelWidth = Math.max(220, panelWidth + 16);
+    dock.style.setProperty('--part1-eventline-width', `${roundTo(eventLinePanelWidth, 2)}px`);
+    syncDockWidth();
+    eventLinePanel.style.removeProperty('width');
+    eventLinePanel.style.marginLeft = 'auto';
+    eventLinePanel.style.marginRight = '8px';
+  };
+
+  const panelWidthLimit = (otherWidth) => {
+    const stageWidth = stage?.getBoundingClientRect().width || 0;
+    return stageWidth > 0
+      ? Math.max(PANEL_MIN_WIDTH, stageWidth - CHART_MIN_WIDTH - otherWidth)
+      : 1200;
+  };
+
+  const applyPanelWidths = ({ aiWidth = aiPanelWidth, docWidth = docPanelWidth } = {}) => {
+    if (!dock) return;
+    const defaultDockWidth = 420;
+    const currentAiWidth = aiPanelWidth || defaultDockWidth * 0.46;
+    const currentDocWidth = docPanelWidth || defaultDockWidth - currentAiWidth;
+    const nextAiWidth = clamp(aiWidth || currentAiWidth, PANEL_MIN_WIDTH, panelWidthLimit(docWidth || currentDocWidth));
+    const nextDocWidth = clamp(docWidth || currentDocWidth, PANEL_MIN_WIDTH, panelWidthLimit(nextAiWidth));
+    aiPanelWidth = nextAiWidth;
+    docPanelWidth = nextDocWidth;
+    dock.style.setProperty('--part1-ai-width', `${roundTo(nextAiWidth, 2)}px`);
+    dock.style.setProperty('--part1-doc-width', `${roundTo(nextDocWidth, 2)}px`);
+    syncDockWidth(nextAiWidth, nextDocWidth);
+    const maxAi = panelWidthLimit(nextDocWidth);
+    const maxDoc = panelWidthLimit(nextAiWidth);
+    panelResizeHandles.forEach((handle) => {
+      const kind = handle.dataset.panelResizeLeft;
+      if (kind === 'ai') {
+        handle.setAttribute('aria-valuemin', String(PANEL_MIN_WIDTH));
+        handle.setAttribute('aria-valuemax', String(Math.round(maxAi)));
+        handle.setAttribute('aria-valuenow', String(Math.round(nextAiWidth)));
+      } else if (kind === 'doc') {
+        handle.setAttribute('aria-valuemin', String(PANEL_MIN_WIDTH));
+        handle.setAttribute('aria-valuemax', String(Math.round(maxDoc)));
+        handle.setAttribute('aria-valuenow', String(Math.round(nextDocWidth)));
+      }
+    });
   };
 
   const setPanelOpen = (kind, open) => {
@@ -1596,50 +1647,115 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (!open && kind === 'ai') closeAiPopovers();
   };
 
-  applyPanelWidthRatio();
+  applyPanelWidths();
   setPanelOpen('ai', true);
   setPanelOpen('doc', true);
 
-  panelResizer?.addEventListener('pointerdown', (event) => {
-    if (event.button !== 0 || !dock || aiPanel?.classList.contains('is-panel-closed') || docPanel?.classList.contains('is-panel-closed')) return;
-    const dockRect = dock.getBoundingClientRect();
-    const dividerWidth = panelResizer.getBoundingClientRect().width || 10;
-    const availableWidth = Math.max(1, dockRect.width - dividerWidth);
-    const startPanelWidth = aiPanel?.getBoundingClientRect().width || availableWidth * panelWidthRatio;
-    const startX = event.clientX;
-    const minWidth = Math.min(PANEL_MIN_WIDTH, Math.max(0, availableWidth / 2 - 1));
-    panelResizer.setPointerCapture?.(event.pointerId);
-    panelResizer.classList.add('is-dragging');
-    event.preventDefault();
+  panelResizeHandles.forEach((handle) => {
+    handle.addEventListener('pointerdown', (event) => {
+      const kind = handle.dataset.panelResizeLeft;
+      if (kind === 'eventline') {
+        if (event.button !== 0 || !dock || !eventLinePanel || !replica.matches('[data-eventline-open="true"]')) return;
+        const startPanelWidth = eventLinePanel.getBoundingClientRect().width;
+        const startX = event.clientX;
+        const minWidth = 220;
+        const maxWidth = Math.max(minWidth, (stage?.getBoundingClientRect().width || startPanelWidth) - CHART_MIN_WIDTH);
+        handle.setPointerCapture?.(event.pointerId);
+        handle.classList.add('is-dragging');
+        event.preventDefault();
 
-    const updateWidth = (moveEvent) => {
-      const nextWidth = clamp(startPanelWidth + moveEvent.clientX - startX, minWidth, availableWidth - minWidth);
-      applyPanelWidthRatio(nextWidth / availableWidth);
-    };
-    const finish = (finishEvent) => {
-      panelResizer.classList.remove('is-dragging');
-      panelResizer.releasePointerCapture?.(finishEvent.pointerId);
-      panelResizer.removeEventListener('pointermove', updateWidth);
-      panelResizer.removeEventListener('pointerup', finish);
-      panelResizer.removeEventListener('pointercancel', finish);
-    };
-    panelResizer.addEventListener('pointermove', updateWidth);
-    panelResizer.addEventListener('pointerup', finish);
-    panelResizer.addEventListener('pointercancel', finish);
-  });
+        const updateWidth = (moveEvent) => {
+          const nextWidth = clamp(startPanelWidth - (moveEvent.clientX - startX), minWidth, maxWidth);
+          applyEventLinePanelWidth(nextWidth);
+        };
+        const finish = (finishEvent) => {
+          handle.classList.remove('is-dragging');
+          handle.releasePointerCapture?.(finishEvent.pointerId);
+          handle.removeEventListener('pointermove', updateWidth);
+          handle.removeEventListener('pointerup', finish);
+          handle.removeEventListener('pointercancel', finish);
+        };
+        handle.addEventListener('pointermove', updateWidth);
+        handle.addEventListener('pointerup', finish);
+        handle.addEventListener('pointercancel', finish);
+        return;
+      }
+      if (event.button !== 0 || !dock || (kind === 'ai' && aiPanel?.classList.contains('is-panel-closed')) || (kind === 'doc' && docPanel?.classList.contains('is-panel-closed'))) return;
+      const startAiWidth = aiPanelWidth;
+      const startDocWidth = docPanelWidth;
+      const startX = event.clientX;
+      const startWidth = kind === 'ai' ? startAiWidth : startDocWidth;
+      const otherWidth = kind === 'ai' ? startDocWidth : startAiWidth;
+      const maxWidth = panelWidthLimit(otherWidth);
+      handle.setPointerCapture?.(event.pointerId);
+      handle.classList.add('is-dragging');
+      event.preventDefault();
 
-  panelResizer?.addEventListener('keydown', (event) => {
-    if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') return;
-    event.preventDefault();
-    if (event.key === 'Home') applyPanelWidthRatio(0.25);
-    else if (event.key === 'End') applyPanelWidthRatio(0.75);
-    else applyPanelWidthRatio(panelWidthRatio + (event.key === 'ArrowRight' ? 0.03 : -0.03));
+      const updateWidth = (moveEvent) => {
+        const nextWidth = clamp(startWidth - (moveEvent.clientX - startX), PANEL_MIN_WIDTH, maxWidth);
+        applyPanelWidths({
+          aiWidth: kind === 'ai' ? nextWidth : startAiWidth,
+          docWidth: kind === 'doc' ? nextWidth : startDocWidth
+        });
+      };
+      const finish = (finishEvent) => {
+        handle.classList.remove('is-dragging');
+        handle.releasePointerCapture?.(finishEvent.pointerId);
+        handle.removeEventListener('pointermove', updateWidth);
+        handle.removeEventListener('pointerup', finish);
+        handle.removeEventListener('pointercancel', finish);
+      };
+      handle.addEventListener('pointermove', updateWidth);
+      handle.addEventListener('pointerup', finish);
+      handle.addEventListener('pointercancel', finish);
+    });
+
+    handle.addEventListener('keydown', (event) => {
+      if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight' && event.key !== 'Home' && event.key !== 'End') return;
+      event.preventDefault();
+      if (handle.dataset.panelResizeLeft === 'eventline') {
+        if (!eventLinePanel || !replica.matches('[data-eventline-open="true"]')) return;
+        const dockWidth = stage?.getBoundingClientRect().width || 0;
+        const currentWidth = eventLinePanel.getBoundingClientRect().width;
+        const minWidth = 220;
+        const maxWidth = Math.max(minWidth, dockWidth - CHART_MIN_WIDTH);
+        const nextWidth = event.key === 'Home'
+          ? maxWidth
+          : event.key === 'End'
+            ? minWidth
+            : clamp(currentWidth + (event.key === 'ArrowLeft' ? 24 : -24), minWidth, maxWidth);
+        applyEventLinePanelWidth(nextWidth);
+        handle.setAttribute('aria-valuenow', String(Math.round((nextWidth / Math.max(1, dockWidth)) * 100)));
+        return;
+      }
+      const kind = handle.dataset.panelResizeLeft;
+      const currentAiWidth = aiPanelWidth;
+      const currentDocWidth = docPanelWidth;
+      const currentWidth = kind === 'ai' ? currentAiWidth : currentDocWidth;
+      const otherWidth = kind === 'ai' ? currentDocWidth : currentAiWidth;
+      const maxWidth = panelWidthLimit(otherWidth);
+      const nextWidth = event.key === 'Home'
+        ? maxWidth
+        : event.key === 'End'
+          ? PANEL_MIN_WIDTH
+          : clamp(currentWidth + (event.key === 'ArrowLeft' ? 24 : -24), PANEL_MIN_WIDTH, maxWidth);
+      applyPanelWidths({
+        aiWidth: kind === 'ai' ? nextWidth : currentAiWidth,
+        docWidth: kind === 'doc' ? nextWidth : currentDocWidth
+      });
+    });
   });
 
   function setRegion(region, options = {}) {
     replica.dataset.eventlineOpen = region === 'eventline' ? 'true' : 'false';
     if (region === 'doc' || region === 'ai') setPanelOpen(region, true);
-    if (region === 'eventline') renderEventLine();
+    if (region === 'eventline') {
+      dock?.style.setProperty('--part1-eventline-width', `${eventLinePanelWidth}px`);
+      syncDockWidth();
+      renderEventLine();
+    } else {
+      syncDockWidth();
+    }
   }
 
   /* 導覽列的下拉選單是展示用互動，但保留真正樣本工具的控制層級：
@@ -1794,6 +1910,11 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     activeFilter = 'all';
     showSummary = false;
     showDivisions = false;
+    eventLinePanel?.style.removeProperty('width');
+    eventLinePanel?.style.removeProperty('margin-left');
+    eventLinePanel?.style.removeProperty('margin-right');
+    eventLinePanelWidth = 220;
+    dock?.style.removeProperty('--part1-eventline-width');
     uiScale = REPLICA_DEFAULTS.uiScale;
     bodyScale = REPLICA_DEFAULTS.bodyScale;
     solidOpacity = REPLICA_DEFAULTS.solidOpacity;
@@ -1802,8 +1923,13 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     dotGap = REPLICA_DEFAULTS.dotGap;
     daySpacing = REPLICA_DEFAULTS.daySpacing;
     laneSpacing = REPLICA_DEFAULTS.laneSpacing;
-    panelWidthRatio = 0.46;
-    applyPanelWidthRatio();
+    aiPanelWidth = 0;
+    docPanelWidth = 0;
+    dock?.style.removeProperty('--part1-ai-width');
+    dock?.style.removeProperty('--part1-doc-width');
+    dock?.style.removeProperty('--part1-dock-width');
+    dock?.style.removeProperty('--part1-eventline-width');
+    applyPanelWidths();
     setPanelOpen('ai', true);
     setPanelOpen('doc', true);
     try { localStorage.removeItem(REPLICA_SETTINGS_KEY); } catch (error) { /* current-page reset still applies */ }

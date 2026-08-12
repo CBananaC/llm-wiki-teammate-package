@@ -1967,22 +1967,45 @@
 
 .part1-replica[data-eventline-open="true"] .part1-stage {
   display: grid;
-  grid-template-columns: minmax(0, .92fr) minmax(0, 1.08fr);
+  grid-template-columns: minmax(0, .76fr) minmax(0, 1.24fr);
   height: 640px;
 }
 
 .part1-replica[data-eventline-open="true"] .part1-dock {
-  display: block;
+  display: grid;
+  grid-template-columns:
+    minmax(220px, .6fr)
+    minmax(180px, var(--part1-ai-fr, .46))
+    10px
+    minmax(180px, var(--part1-doc-fr, .54));
+  grid-template-rows: 1fr;
   height: 100%;
-  overflow: hidden;
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 
-.part1-replica[data-eventline-open="true"] .part1-dock > .part1-ai,
-.part1-replica[data-eventline-open="true"] .part1-dock > .part1-panel-resizer,
-.part1-replica[data-eventline-open="true"] .part1-dock > .part1-doc { display: none; }
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-ai {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+}
+
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-panel-resizer {
+  display: block;
+  grid-column: 3;
+  grid-row: 1;
+}
+
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-doc {
+  display: grid;
+  grid-column: 4;
+  grid-row: 1;
+}
 
 .part1-replica[data-eventline-open="true"] .part1-eventline {
   display: grid;
+  grid-column: 1;
+  grid-row: 1;
   grid-template-rows: auto minmax(0, 1fr);
   height: calc(100% - 16px);
   margin: 8px;
@@ -2422,7 +2445,7 @@
   left: auto;
   top: auto;
   margin: 0;
-  width: auto;
+  width: var(--part1-dock-width, auto);
   height: auto;
   padding: 0;
   cursor: pointer;
@@ -2452,8 +2475,7 @@
 }
 
 /* Docked panel controls --------------------------------------------------
-   The sample review tool keeps each information panel independently
-   dismissible and uses a vertical drag target between the two panels. */
+   Each panel owns the left-edge resize handle used by the sample review tool. */
 .part1-dock {
   --part1-ai-ratio: 46%;
   --part1-doc-ratio: 54%;
@@ -2514,6 +2536,51 @@
 
 .part1-chat-icon-btn[data-panel-close],
 .part1-doc-window-btn[data-panel-close] { cursor: pointer; }
+
+.part1-ai,
+.part1-doc,
+.part1-eventline { position: relative; }
+
+/* Match the sample tool's left-edge resize affordance on every docked panel. */
+.part1-panel-resize-left {
+  position: absolute;
+  z-index: 9;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.part1-panel-resize-left::before {
+  content: "";
+  position: absolute;
+  top: 38%;
+  bottom: 38%;
+  left: 3px;
+  width: 2px;
+  border-radius: 2px;
+  background: #d1c2ad;
+  opacity: .7;
+  transition: background .15s ease, opacity .15s ease, transform .15s ease;
+}
+.part1-panel-resize-left:hover::before,
+.part1-panel-resize-left:focus-visible::before,
+.part1-panel-resize-left.is-dragging::before {
+  background: #a67d4f;
+  opacity: 1;
+  transform: scaleX(1.8);
+}
+.part1-panel-resize-left:focus-visible {
+  outline: 2px solid rgba(166, 125, 79, .45);
+  outline-offset: -1px;
+}
+.part1-dock[data-ai-closed="true"] .part1-panel-resize-left[data-panel-resize-left="ai"],
+.part1-dock[data-doc-closed="true"] .part1-panel-resize-left[data-panel-resize-left="doc"] {
+  visibility: hidden;
+  pointer-events: none;
+}
 
 /* Compact toolbar --------------------------------------------------------
    Keep the sample-like controls readable while giving the replica more room
@@ -2609,5 +2676,91 @@
   #part-1-content .part1-replica .part1-tools-pop {
     right: -4px;
     width: min(380px, calc(100vw - 12px));
+  }
+}
+
+/* Event chain is a peer panel, placed before the existing AI/document panels. */
+.part1-replica[data-eventline-open="true"] .part1-dock[data-ai-closed="true"] {
+  grid-template-columns: minmax(220px, .6fr) 0 0 minmax(180px, 1fr);
+}
+.part1-replica[data-eventline-open="true"] .part1-dock[data-doc-closed="true"] {
+  grid-template-columns: minmax(220px, .6fr) minmax(180px, 1fr) 0 0;
+}
+.part1-replica[data-eventline-open="true"] .part1-dock[data-ai-closed="true"][data-doc-closed="true"] {
+  display: grid;
+  grid-template-columns: minmax(220px, 1fr) 0 0 0;
+}
+
+@media (max-width: 900px) {
+  .part1-replica[data-eventline-open="true"] .part1-stage {
+    grid-template-columns: 1fr;
+    height: auto;
+  }
+  .part1-replica[data-eventline-open="true"] .part1-dock {
+    height: 520px;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+}
+
+/* Independent panel sizing ------------------------------------------------
+   Each panel owns its left edge. The dock is anchored on the right, so a
+   panel can grow or shrink without changing its neighbour's width. */
+.part1-stage {
+  grid-template-columns: minmax(0, 1fr) auto;
+}
+.part1-dock {
+  grid-template-columns:
+    var(--part1-ai-width, minmax(0, calc(46% - 5px)))
+    var(--part1-doc-width, minmax(0, calc(54% - 5px)));
+  width: var(--part1-dock-width, auto);
+  justify-self: end;
+}
+.part1-dock[data-ai-closed="true"] {
+  grid-template-columns: 0 var(--part1-doc-width, minmax(0, 1fr));
+  width: var(--part1-doc-width, auto);
+}
+.part1-dock[data-doc-closed="true"] {
+  grid-template-columns: var(--part1-ai-width, minmax(0, 1fr)) 0;
+  width: var(--part1-ai-width, auto);
+}
+.part1-dock[data-ai-closed="true"][data-doc-closed="true"] { width: 0; }
+
+/* The document panel's left handle is the single handle at the shared edge. */
+.part1-panel-resizer { display: none !important; }
+
+.part1-replica[data-eventline-open="true"] .part1-dock {
+  grid-template-columns:
+    var(--part1-eventline-width, minmax(220px, .6fr))
+    var(--part1-ai-width, minmax(0, 46%))
+    var(--part1-doc-width, minmax(0, 54%));
+  width: auto;
+  overflow-x: auto;
+  overflow-y: hidden;
+}
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-eventline {
+  display: grid;
+  grid-column: 1;
+  grid-row: 1;
+}
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-ai {
+  display: grid;
+  grid-column: 2;
+  grid-row: 1;
+}
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-doc {
+  display: grid;
+  grid-column: 3;
+  grid-row: 1;
+}
+
+@media (max-width: 900px) {
+  .part1-stage {
+    grid-template-columns: 1fr;
+  }
+  .part1-dock,
+  .part1-dock[data-ai-closed="true"],
+  .part1-dock[data-doc-closed="true"] {
+    width: auto !important;
   }
 }

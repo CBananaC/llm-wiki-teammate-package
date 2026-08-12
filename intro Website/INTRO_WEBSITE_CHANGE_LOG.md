@@ -8417,6 +8417,49 @@ Verified:
 Remaining:
 - Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
 
+### 2026-08-12 14:20 HKT — Codex — Merged and narrowed the Part 2 summary card
+
+Summary:
+- Combined the `第一組 AI Skills 負責總結文書` and `摘要和分段結果會顯示在原始文書區中` paragraphs into one unnumbered, untitled text card.
+- Added a visible paragraph gap controlled by `--part2-summary-paragraph-gap`.
+- Added CSS controls for the shared Part 2 text-card width and the narrower summary-card width.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the summary stage contains one text card with two paragraphs and no number box or subtitle.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 14:46 HKT — Codex — Corrected panel resizing to independent left-edge handles
+
+Summary:
+- Removed the shared AI/document divider behavior. The only desktop resize affordances are now the left edge of each panel: AI between the chart and AI panel, and document between the AI and document panels.
+- Moving a handle left or right changes only the panel that owns that left edge; the neighboring panel width remains unchanged, the dock stays anchored to the right, and the chart absorbs the available space without overlap.
+- Kept the event-chain panel's own left-edge handle and independent width behavior.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA changed AI from `183px` to `207px` while document stayed `215px`, then changed document to `239px` while AI stayed `207px`.
+- The chart-to-dock boundary remained flush and the panel gap remained `9px`; after closing AI, the document remained `239px` wide with no chart/document overlap.
+- Browser diagnostics, `node --check`, and `git diff --check` passed; both panels reopened from the toolbar.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
 ### 2026-08-12 14:02 HKT — Codex — Docked the event chain and connected it to uploaded chart data
 
 Summary:
@@ -8613,6 +8656,72 @@ Files changed:
 Verified:
 - Confirmed the two cards render with number boxes `1` and `2` and the requested subtitles.
 - `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 14:11 HKT — Codex — Added left-edge resize handles to every replica panel
+
+Summary:
+- Added sample-tool-style left-edge resize handles to the AI, document, and event-chain panels.
+- Kept keyboard support on every handle and retained the shared divider as an additional desktop control for the AI/document split.
+- Added event-chain width persistence during the current view and reset support.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview found visible left-edge handles for AI and document panels.
+- AI and document handles independently changed the split from `46%/54%` to `43%/57%` and back to `46%/54%` with keyboard resizing.
+- Event-chain handle changed its width from `225px` to `249px`; browser diagnostics, `node --check`, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+## 2026-08-12 14:14 HKT — Codex — Put the event chain beside existing panels
+
+Summary:
+- Kept AI and document panels visible when 事件鏈 opens.
+- Positioned 事件鏈 as the first same-level panel to the left of the existing AI/resizer/document columns.
+- Preserved panel resizing flex ratios and kept the eventline usable when one or both existing panels are closed; narrow layouts scroll horizontally across the peer panels.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry: eventline x=510 width=248, AI x=771 width=192, divider x=968 width=10, doc x=982 width=225; all share y=48 and height=624.
+- Clicking the built-in event dot kept eventline open, kept AI/document displays active, and showed the source-backed `硃42` chain.
+- `node --check`, `git diff --check`, and browser diagnostics passed.
+
+Remaining:
+- Existing overlapping project edits remain untouched; no clean checkpoint was created and nothing was pushed.
+
+### 2026-08-12 14:54 HKT — Codex — Synchronized the event-chain backdrop with its panel width
+
+Summary:
+- Bound the brown dock backdrop width to the event-chain panel track plus the unchanged AI/document panel tracks.
+- When the event-chain left handle moves, its right edge and the AI/document panels remain fixed; the backdrop expands or contracts from the left with the event-chain panel.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry changed the event-chain panel from `204px` to `236px` while AI stayed `183px` and document stayed `215px`.
+- The brown dock backdrop expanded from `640px` to `664px`, its left edge moved left, and the event-chain right edge stayed fixed; shrinking reversed this without overlap.
+- Browser diagnostics, `node --check`, and `git diff --check` passed.
 
 Remaining:
 - Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
