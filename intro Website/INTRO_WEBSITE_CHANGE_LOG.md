@@ -8077,6 +8077,44 @@ Verified:
 Remaining:
 - Nothing remaining for this adjustment; nothing was pushed.
 
+### 2026-08-12 13:00 HKT — Codex — Hid the requested Part 2 hero note and card number
+
+Summary:
+- Hid the Part 2 hero sentence beginning `平台旨在處理清代奏摺與上諭研究中的兩大主要困難`.
+- Hid the `1` marker from the `平台的運作流程` card while keeping its heading and explanatory paragraphs visible.
+- Preserved both original snippets in reversible HTML comments.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the requested sentence and number are inside reversible comments and are no longer rendered as page content.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent StoryMap and Part 3 edits remain untouched; nothing was pushed.
+
+### 2026-08-12 12:59 HKT — Codex — Added source-backed AI Skill panels to Part 2 workflow cards
+
+Summary:
+- Added VS Code-style panels on the right of the related Part 2 text-card groups for event extraction, source tracing, and the three 上諭 analysis Skills.
+- Displayed the actual Skill filenames and representative rules from `extract-lin-actions.md`, `extract-qing-actions-all.md`, `trace-source-chain.md`, `extract-yu-emperor-actions.md`, `confirmed-yu-response-analysis.md`, and `extract-yu-reported-events.md`.
+- Kept the Qing action extraction as one three-category output (`done`, `plan`, `nonmil`) and retained the quoted-evidence / researcher-review boundary.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+
+Verified:
+- Agentic-line JSON blocks parsed successfully (`12/12`); `node --check Website/storymap/storymap.js` passed.
+- Browser desktop check confirmed the VS Code window is to the right of each related card group.
+- Browser mobile check at 390px confirmed the panels stack below the cards, remain visible, and produce no horizontal overflow; console reported no warnings or errors.
+
+Remaining:
+- Existing concurrent Part 1 and other StoryMap edits were preserved; nothing was pushed.
+
 ### 2026-08-11 19:43 HKT — Codex — Stabilized replica chart dot hover and click
 
 Summary:

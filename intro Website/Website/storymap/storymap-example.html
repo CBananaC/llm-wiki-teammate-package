@@ -11,7 +11,7 @@
   <link rel="stylesheet" href="storymap-cards.css?v=20260811-claude-wiki-visual-03-part2-json-02">
   <link rel="stylesheet" href="part-1-interface.css?v=20260811-node-card-01">
   <link rel="stylesheet" href="part-3-question-gallery.css">
-  <script src="storymap.js?v=20260811-codex-responsive-02-part2-json-01" defer></script>
+  <script src="storymap.js?v=20260812-part2-flow-01" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js?v=20260811-node-card-01" defer></script>
   <script src="part-1-interface.js?v=20260811-node-card-01" defer></script>
@@ -745,10 +745,12 @@
 
     <section class="tab-panel" id="part-2-panel" data-tab-panel="part-2" aria-labelledby="part-2-title" hidden>
       <section class="section-hero section-hero-part-2" id="part-2" data-mark="二">
-        <div class="section-hero-content">
+          <div class="section-hero-content">
           <p class="eyebrow">第二部分</p>
           <h1 id="part-2-title">平台的運作流程</h1>
+          <!-- Reversible removal (2026-08-12): hidden at the user's request. Uncomment to restore.
           <p class="section-hero-note">平台旨在處理清代奏摺與上諭研究中的兩大主要困難：文書數量龐大，以及文書之間的通信關係複雜。</p>
+          -->
         </div>
       </section>
       <div id="part-2-content">
@@ -756,7 +758,7 @@
           <div class="story-inner">
             <div class="part2-card-stack">
               <article class="copybox blk part2-text-card part2-numbered-card">
-                <div class="title-row"><span class="option-number">1</span><h2>平台的運作流程</h2></div>
+                <div class="title-row"><!-- Reversible removal (2026-08-12): hidden at the user's request. Uncomment to restore: <span class="option-number">1</span> --><h2>平台的運作流程</h2></div>
                 <div class="body">
                   <p>因此，平台運用人工智能協助研究者總結文書內容、提取重要資訊，供研究者進一步檢視和核驗，從而減輕整理史料的工作量。</p>
                   <p>同時，平台亦運用視覺化工具，透過時間與關係圖表呈現資訊的傳遞網絡，協助研究者掌握文書和事件的時間順序和相互關係。</p>
@@ -787,13 +789,13 @@
                   </div>
                   <span class="part2-flow-arrow" aria-hidden="true"></span>
                   <a class="part2-flow-node part2-flow-node-solo" href="#part-2-input">
-                    <span class="part2-flow-node-eyebrow">步驟四</span>
-                    <span class="part2-flow-node-title">輸入結構化史料</span>
+                    <span class="part2-flow-node-eyebrow">步驟三</span>
+                    <span class="part2-flow-node-title">輸入結構化資料</span>
                   </a>
                   <span class="part2-flow-arrow" aria-hidden="true"></span>
                   <a class="part2-flow-node part2-flow-node-solo" href="#part-2-ai">
-                    <span class="part2-flow-node-eyebrow">步驟五</span>
-                    <span class="part2-flow-node-title">使用AI抽取資訊</span>
+                    <span class="part2-flow-node-eyebrow">步驟四</span>
+                    <span class="part2-flow-node-title">使用AI從原文中抽取資訊</span>
                   </a>
                   <span class="part2-flow-arrow" aria-hidden="true"></span>
                   <div class="part2-flow-branch">
@@ -820,7 +822,7 @@
                   <span class="part2-flow-arrow" aria-hidden="true"></span>
                   <a class="part2-flow-node part2-flow-node-solo" href="#part-2-visualize">
                     <span class="part2-flow-node-eyebrow">分析結果</span>
-                    <span class="part2-flow-node-title">視覺化分析的結果</span>
+                    <span class="part2-flow-node-title">視覺化呈現分析的結果</span>
                   </a>
                 </div>
             </nav>
@@ -828,7 +830,7 @@
         </section>
         <section class="part2-stage" id="part-2-input" data-tab="part-2" data-nav="#part-2-input">
           <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-input-bar" aria-labelledby="part-2-input-title">
-            <div class="section-hero-content"><p class="eyebrow">步驟四</p><h1 id="part-2-input-title">輸入結構化資料</h1></div>
+            <div class="section-hero-content"><p class="eyebrow">步驟三</p><h1 id="part-2-input-title">輸入結構化資料</h1></div>
           </section>
           <section class="story surface-c part2-topic-content" id="part-2-input-content" data-tab="part-2">
             <div class="story-inner"><div class="part2-input-layout">
@@ -843,7 +845,7 @@
         </section>
         <section class="part2-stage" id="part-2-ai" data-tab="part-2" data-nav="#part-2-ai">
           <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-ai-bar" aria-labelledby="part-2-ai-title">
-            <div class="section-hero-content"><p class="eyebrow">步驟五</p><h1 id="part-2-ai-title">使用AI從原文中抽取資訊</h1></div>
+            <div class="section-hero-content"><p class="eyebrow">步驟四</p><h1 id="part-2-ai-title">使用AI從原文中抽取資訊</h1></div>
           </section>
           <section class="story surface-a part2-topic-content" id="part-2-ai-content" data-tab="part-2">
             <div class="story-inner"><div class="part2-card-stack">
@@ -906,8 +908,79 @@
           </div></div>
         </section>
         <section class="story surface-b part2-topic-content" id="part-2-zhu-response" data-tab="part-2" data-nav="#part-2-zhu-response">
-          <div class="story-inner"><div class="part2-card-stack">
-            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>辨識奏摺所回應的硃批</h2></div><div class="body"><p>在回應皇帝的硃批時，官員同樣會用「奉硃批」、「奉到硃批」、「敬奉硃批」、「欽奉硃批」或「蒙硃批」等引述標記，再引用硃批原文。因此，辨識奏摺所回應硃批的 Skill，其方法和判斷邏輯與「上諭—回應配對」基本相同。</p></div></article>
+          <div class="story-inner"><div class="part2-zhu-response-layout">
+            <div class="part2-zhu-response-copy"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>辨識奏摺所回應的硃批</h2></div><div class="body"><p>「硃批—回應配對」Skill 會辨識一份奏摺所回應的硃批。硃批是皇帝寫在官員較早奏摺上的批語，後來的奏摺若引用這段批語，便可能形成一組通信關係。</p></div></article>
+              <article class="copybox blk part2-text-card part2-zhu-response-card"><div class="body"><p>首先，官員通常會使用「奉硃批」、「奉到硃批」、「敬奉硃批」、「欽奉硃批」或「蒙硃批」等引述標記，接著引用硃批原文。平台會從奏摺中擷取標記、硃批引文、硃批收訖日期，以及奏摺所提及的較早奏摺名稱和日期。</p></div></article>
+              <article class="copybox blk part2-text-card part2-zhu-response-card"><div class="body"><p>系統會根據三項條件篩選候選文書。第一，候選文書必須由同一名官員較早發出，並載有硃批；第二，候選文書的硃批日期必須早於回應奏摺的發送日期；第三，回應奏摺引號中的硃批文字，必須與候選文書的硃批原文完全或大致相同。</p></div></article>
+              <article class="copybox blk part2-text-card part2-zhu-response-card"><div class="body"><p>AI 會輸出結構化結果，列出硃批文書、回應奏摺、配對強度、完整引文、相符的硃批文字、原奏摺名稱、硃批收訖日期及接收方式，供研究者回到原文查核。配對永遠只是候選結果，必須經研究者確認後，才加入圖表。</p></div></article>
+            </div></div>
+            <figure class="part2-source-visual visual-frame" aria-label="通信關係複雜：沿用引言的硃113文書通信示意">
+              <div class="source-flow-visual part2-source-flow-visual" data-source-flow="zhu113-part2">
+                <div class="source-callouts source-callouts-left" aria-label="硃113通信來源（左側）">
+                  <div class="source-callout source-callout-1" data-source-bubble="source-1" title="收發時間｜發出：乾隆五十二年正月十四日｜收批：乾隆五十二年正月二十七日">
+                    <span class="source-callout-label">收發時間</span>
+                    <span class="source-callout-detail">發出：乾隆五十二年正月十四日；收批：乾隆五十二年正月二十七日。</span>
+                  </div>
+                  <div class="source-callout source-callout-3" data-source-bubble="source-3" title="諭24｜諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻｜發出：乾隆五十二年一月二日">
+                    <span class="source-callout-label">回覆先前上諭2</span>
+                    <span class="source-callout-detail">諭24｜諭閩浙總督常青等總須鎮定持重並俟兵丁到齊約期夾攻<br>發出：乾隆五十二年一月二日</span>
+                  </div>
+                </div>
+                <div class="source-callouts source-callouts-right" aria-label="硃113通信來源（右側）">
+                  <div class="source-callout source-callout-2" data-source-bubble="source-2" title="諭20｜諭閩浙總督常青等鎮定妥辦不必紛紛赴臺｜發出：乾隆五十一年十二月二十九日">
+                    <span class="source-callout-label">回覆先前上諭1</span>
+                    <span class="source-callout-detail">諭20｜諭閩浙總督常青等鎮定妥辦不必紛紛赴臺<br>發出：乾隆五十一年十二月二十九日</span>
+                  </div>
+                  <div class="source-callout source-callout-4" data-source-bubble="source-4" title="諭28｜諭閩浙總督常青等務須同心協力俟大兵到齊夾攻｜發出：乾隆五十二年一月三日">
+                    <span class="source-callout-label">回覆先前上諭3</span>
+                    <span class="source-callout-detail">諭28｜諭閩浙總督常青等務須同心協力俟大兵到齊夾攻<br>發出：乾隆五十二年一月三日</span>
+                  </div>
+                </div>
+                <svg class="source-connector-layer" aria-hidden="true" focusable="false"></svg>
+                <div class="source-flow-document ip" aria-label="硃113原文文件面板">
+                  <div class="ip-head">
+                    <div class="ip-titles">
+                      <div class="m1"><span class="badge b-zhu">硃</span> <b>為奏聞提臣等赴臺並飭沿海官員嚴密巡查事</b></div>
+                      <table class="meta-table">
+                        <tbody>
+                          <tr><td>福建巡撫徐嗣曾</td></tr>
+                          <tr><td>乾隆52年1月14日發出、乾隆52年1月27日硃批。</td></tr>
+                          <tr><td>明清台檔30, 244, 硃113</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                    <div class="ip-btns">
+                      <button class="ip-move" type="button" title="按住拖曳：移動" aria-label="移動"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></button>
+                      <button class="ip-min" type="button" title="收合 / 展開" aria-label="收合 / 展開"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+                      <button class="ip-close" type="button" title="關閉" aria-label="關閉"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+                    </div>
+                    <div class="ip-head-resize" title="拖曳調整標頭高度"></div>
+                  </div>
+                  <div class="ip-body">
+                    <div class="ip-filterdock">
+                      <button class="ip-filterbtn" type="button" title="篩選" aria-label="篩選"><span class="filter-icon" aria-hidden="true"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="21 4 3 4 10 12.5 10 19 14 21 14 12.5 21 4"/></svg></span></button>
+                      <button class="ip-settingsbtn" type="button" title="顯示設定" aria-label="顯示設定"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82V9a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 1-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 1 1.82.33H9a1.65 1.65 0 0 1 1.51-1V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 1 15.4 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0 .33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 1 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15z"/></svg></button>
+                    </div>
+                    <div class="ip-scroll">
+                      <div class="ip-pane ix active">
+                        <div class="ix-cols">
+                          <div class="ix-text">
+                            <div class="blk">
+                              <span class="blk-label">原文</span>
+                              <div class="source-flow-body-text" data-source-body>
+                                福建巡撫臣徐嗣曾跪奏，為欽奉諭旨，恭摺覆奏事。<mark class="source-highlight source-highlight-2" data-source-highlight="source-2">正月十一日承准廷寄，十二月二十九日奉上諭</mark>：「著傳諭徐嗣曾，務宜不動聲色，彈壓坐鎮，並飭沿海口岸文武員弁，嚴密巡查。遇有竄逸偷渡匪犯，即擒拿究辦。」等因。欽此。正在繕摺覆奏，<mark class="source-highlight source-highlight-3" data-source-highlight="source-3">又於十三日亥刻，承准廷寄，正月初二日奉上諭</mark>：「常青摺內稱：逆首林爽文係漳州人，其附從之徒率皆籍隸漳屬，其中難保無內外勾連情事。」等因。欽此。<mark class="source-highlight source-highlight-4" data-source-highlight="source-4">又於十四日子刻承准廷寄，正月初三日奉上諭</mark>：「從前康熙年間奸民朱一貴聚眾滋事，至於全臺失陷。官兵剿捕不及一月，即已收復葳功。今此等么麼賊匪，不過佔據縣城，較之從前更易辦理。」等因。欽此。⋯⋯<br><br><mark class="source-highlight source-highlight-1" data-source-highlight="source-1">乾隆五十二年正月十四日</mark><br><mark class="source-highlight source-highlight-1" data-source-highlight="source-1">乾隆五十二年正月二十七日奉硃批</mark>：爾等未免過於張皇矣。欽此。【本文原收錄於軍錄】
+                              </div>
+                            </div>
+                          </div>
+                          <div class="ix-margin" aria-hidden="true"></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </figure>
           </div></div>
         </section>
         <section class="story surface-c part2-topic-content" id="part-2-yu-source" data-tab="part-2" data-nav="#part-2-yu-source">
@@ -932,18 +1005,82 @@
           </section>
         </section>
         <section class="story surface-b part2-topic-content" id="part-2-events" data-tab="part-2" data-nav="#part-2-events">
-          <div class="story-inner"><div class="part2-card-stack">
-            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>抽取官員奏報的事件、官員對事件的回應</h2></div><div class="body"><p>在林爽文民變的案例中，官員奏報的事件就是林爽文及其部眾的軍事行動，官員的回應則包括已採取或計劃採取的軍事行動，以及非軍事措施（如後勤調度、案件調查）。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>所有事件和回應皆由AI提取，並以結構化格式輸出，包含標題、描述、發生時間及相關引文，供研究者核對、修正及確認。確認無誤後，研究者便可把事件加入到平台的第一條時間線——「戰場事件」上。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>考慮到每類事件（如軍事事件）包含的細類眾多（如攻城、防守、追捕等），研究者可根據研究需要，在 Skills 中預先限定需抽取的事件類型及細類，亦可不設限制，由讓AI自行判斷和抽取，再由研究者選擇採用的抽取結果。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>另外，如何在Skills中定義「事件」亦值得注意。事件可以按時間單位（如時辰、日期）劃分，也可以按事件的邏輯關係（如同一任務）劃分。不同的定義會影響 AI 提取事件的「粒度」（Granularity）。研究者應根據研究需要，在 Skills 中定義事件的劃分方式。</p></div></article>
+          <div class="story-inner"><div class="part2-skill-layout">
+            <div class="part2-skill-copy"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>抽取官員奏報的事件、官員對事件的回應</h2></div><div class="body"><p>在林爽文民變的案例中，官員奏報的事件就是林爽文及其部眾的軍事行動，官員的回應則包括已採取或計劃採取的軍事行動，以及非軍事措施（如後勤調度、案件調查）。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>所有事件和回應皆由AI提取，並以結構化格式輸出，包含標題、描述、發生時間及相關引文，供研究者核對、修正及確認。確認無誤後，研究者便可把事件加入到平台的第一條時間線——「戰場事件」上。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>考慮到每類事件（如軍事事件）包含的細類眾多（如攻城、防守、追捕等），研究者可根據研究需要，在 Skills 中預先限定需抽取的事件類型及細類，亦可不設限制，由讓AI自行判斷和抽取，再由研究者選擇採用的抽取結果。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>另外，如何在Skills中定義「事件」亦值得注意。事件可以按時間單位（如時辰、日期）劃分，也可以按事件的邏輯關係（如同一任務）劃分。不同的定義會影響 AI 提取事件的「粒度」（Granularity）。研究者應根據研究需要，在 Skills 中定義事件的劃分方式。</p></div></article>
+            </div></div>
+            <figure class="part2-skill-visual visual-frame" aria-label="Visual Studio Code 中的林方事件與清方行動 Skills">
+              <div class="agentic-scene part2-skill-scene" data-agentic-scene aria-hidden="true">
+                <div class="agentic-mac-window agentic-window-vscode part2-skill-window" data-agentic-window="part2-events-skill">
+                  <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — events Skills</span></div>
+                  <div class="agentic-vscode-shell">
+                    <div class="agentic-vscode-activitybar"><span>▦</span><span>⌕</span><span>⑂</span><span>▣</span><span>⚙</span></div>
+                    <div class="agentic-vscode-editor">
+                      <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">extract-lin-actions.md</span><span class="agentic-vscode-tab">extract-qing-actions-all.md</span></div>
+                      <div class="agentic-window-body agentic-code agentic-vscode-code" data-agentic-sequence data-agentic-char-delay="7" data-agentic-line-delay="150" data-agentic-hold-time="3600">
+                        <script type="application/json" data-agentic-lines>
+                          [
+                            "<span class=\"cmt\"># extract-lin-actions.md · 抽取官員奏報的事件</span>",
+                            "<span class=\"meta\">Kind:</span> events   <span class=\"meta\">Actor:</span> lin",
+                            "只擷取林爽文一方實際執行的行動，保留完整原文引文。",
+                            "",
+                            "<span class=\"cmt\"># extract-qing-actions-all.md · 清方行動（三類合一）</span>",
+                            "<span class=\"meta\">Kind:</span> events   <span class=\"meta\">Actor:</span> qing   <span class=\"meta\">Category:</span> all",
+                            "<span class=\"kw\">done</span>  已實際執行的軍事／防剿行動",
+                            "<span class=\"kw\">plan</span>  計畫、奏請、命令或預備行動",
+                            "<span class=\"kw\">nonmil</span>  已執行的非軍事行政與善後措施",
+                            "每則事件保留 subtitle、description、whenCh、howKnown 與逐字 quote。",
+                            "不擷取林方行動、純粹奏報／轉述，或舊奏舊諭中的行動。",
+                            "<span class=\"ok\">✓ one call → three categories → researcher review</span>"
+                          ]
+                        </script>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </figure>
           </div></div>
         </section>
         <section class="story surface-c part2-topic-content" id="part-2-sources" data-tab="part-2" data-nav="#part-2-sources">
-          <div class="story-inner"><div class="part2-card-stack">
-            <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>追溯資訊的來源</h2></div><div class="body"><p>完成抽取事件後，系統會用「來源鏈追溯」Skill，逐層追溯不同事件的資訊來源。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>AI 會根據文書中的資訊傳遞標記，識別表示消息來源的文句，例如「字寄」、「咨」、「移會」、「稟」、「據某人稟」、「接據某人」等。</p></div></article>
-            <article class="copybox blk part2-text-card"><div class="body"><p>不少資訊並非直接來自奏摺作者，而是經多人逐層轉報，AI因此會追蹤資訊由最初報告者逐步傳遞至奏摺作者的過程，重建完整的傳遞鏈，例如「甲 → 乙 → 丙 → 奏摺作者」。</p></div></article>
+          <div class="story-inner"><div class="part2-skill-layout">
+            <div class="part2-skill-copy"><div class="part2-card-stack">
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>追溯資訊的來源</h2></div><div class="body"><p>完成抽取事件後，系統會用「來源鏈追溯」Skill，逐層追溯不同事件的資訊來源。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>AI 會根據文書中的資訊傳遞標記，識別表示消息來源的文句，例如「字寄」、「咨」、「移會」、「稟」、「據某人稟」、「接據某人」等。</p></div></article>
+              <article class="copybox blk part2-text-card"><div class="body"><p>不少資訊並非直接來自奏摺作者，而是經多人逐層轉報，AI因此會追蹤資訊由最初報告者逐步傳遞至奏摺作者的過程，重建完整的傳遞鏈，例如「甲 → 乙 → 丙 → 奏摺作者」。</p></div></article>
+            </div></div>
+            <figure class="part2-skill-visual visual-frame" aria-label="Visual Studio Code 中的來源鏈追溯 Skill">
+              <div class="agentic-scene part2-skill-scene" data-agentic-scene aria-hidden="true">
+                <div class="agentic-mac-window agentic-window-vscode part2-skill-window" data-agentic-window="part2-source-skill">
+                  <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — trace-source-chain.md</span></div>
+                  <div class="agentic-vscode-shell">
+                    <div class="agentic-vscode-activitybar"><span>▦</span><span>⌕</span><span>⑂</span><span>▣</span><span>⚙</span></div>
+                    <div class="agentic-vscode-editor">
+                      <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">trace-source-chain.md</span></div>
+                      <div class="agentic-window-body agentic-code agentic-vscode-code" data-agentic-sequence data-agentic-char-delay="7" data-agentic-line-delay="150" data-agentic-hold-time="3600">
+                        <script type="application/json" data-agentic-lines>
+                          [
+                            "<span class=\"cmt\"># Skill: Trace Source / Provenance Chain</span>",
+                            "<span class=\"meta\">Kind:</span> source-chain",
+                            "每個 hop 的 whenCh 填發送方實際發出消息的日期。",
+                            "只根據原文的「字寄／咨／移會／稟／據／接據」判斷方向。",
+                            "<span class=\"fn\">甲 → 乙 → 丙 → 奏摺作者</span>",
+                            "每位中間傳遞者都要同時保留 incoming 與 outgoing hop。",
+                            "上諭只追溯有證據的 official → emperor 最終連結。",
+                            "不得補出原文沒有的姓名、地點、日期或未載的中間傳遞者。",
+                            "<span class=\"meta\">output:</span> source_documents + source_quote + relation",
+                            "<span class=\"ok\">✓ unbroken provenance chain kept for review</span>"
+                          ]
+                        </script>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </figure>
           </div></div>
         </section>
         <section class="part2-stage" id="part-2-yu-info" data-tab="part-2" data-nav="#part-2-yu-info">
@@ -951,11 +1088,46 @@
             <div class="section-hero-content"><p class="eyebrow">分析階段四</p><h1 id="part-2-yu-info-title">收取上諭的資訊</h1></div>
           </section>
           <section class="story surface-a part2-topic-content" id="part-2-yu-info-content" data-tab="part-2">
-            <div class="story-inner"><div class="part2-card-stack">
-              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>皇帝上諭對官員奏摺的回應</h2></div><div class="body"><p>完成提取奏摺中的事件和來源後，系統可以使用 `extract-yu-emperor-actions.md`，根據先前階段已確認的「上諭回應奏摺」關係，取得相應的上諭，分析皇帝如何回應奏摺中的內容。</p></div></article>
-              <article class="copybox blk part2-text-card"><div class="body"><p>每份上諭可以產生多項回應的結果，AI 會將每項結果整理成結構化資料，包括上諭、硃批和奏摺中的相關引文，並說明皇帝如何針對奏摺作出評論或命令。</p></div></article>
-              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>官員對皇帝上諭的回應</h2></div><div class="body"><p>同樣，系統亦可以執行 confirmed-yu-response-analysis.md Skill，根據先前階段已確認的「奏摺回應上諭」關係，取得相關的奏摺，分析官員後續如何就上諭中的評論、命令作出回應。</p></div></article>
-              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">3</span><h2>上諭中皇帝所知的事件</h2></div><div class="body"><p>除此之外，在單獨分析上諭時，系統亦可以執行 extract-yu-reported-events.md Skill，根據「據奏」等引述標記，辨識皇帝從官員奏報中得知的事件；再根據先前已確認的「上諭來源配對」關係，從相關奏摺中找出報告這些事件的原文，追溯情報的來源。</p></div></article>
+            <div class="story-inner"><div class="part2-skill-layout part2-skill-layout-yu-info">
+              <div class="part2-skill-copy"><div class="part2-card-stack">
+                <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>皇帝上諭對官員奏摺的回應</h2></div><div class="body"><p>完成提取奏摺中的事件和來源後，系統可以使用 `extract-yu-emperor-actions.md`，根據先前階段已確認的「上諭回應奏摺」關係，取得相應的上諭，分析皇帝如何回應奏摺中的內容。</p></div></article>
+                <article class="copybox blk part2-text-card"><div class="body"><p>每份上諭可以產生多項回應的結果，AI 會將每項結果整理成結構化資料，包括上諭、硃批和奏摺中的相關引文，並說明皇帝如何針對奏摺作出評論或命令。</p></div></article>
+                <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>官員對皇帝上諭的回應</h2></div><div class="body"><p>同樣，系統亦可以執行 confirmed-yu-response-analysis.md Skill，根據先前階段已確認的「奏摺回應上諭」關係，取得相關的奏摺，分析官員後續如何就上諭中的評論、命令作出回應。</p></div></article>
+                <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">3</span><h2>上諭中皇帝所知的事件</h2></div><div class="body"><p>除此之外，在單獨分析上諭時，系統亦可以執行 extract-yu-reported-events.md Skill，根據「據奏」等引述標記，辨識皇帝從官員奏報中得知的事件；再根據先前已確認的「上諭來源配對」關係，從相關奏摺中找出報告這些事件的原文，追溯情報的來源。</p></div></article>
+              </div></div>
+              <figure class="part2-skill-visual visual-frame" aria-label="Visual Studio Code 中的三個上諭分析 Skills">
+                <div class="agentic-scene part2-skill-scene" data-agentic-scene aria-hidden="true">
+                  <div class="agentic-mac-window agentic-window-vscode part2-skill-window" data-agentic-window="part2-yu-info-skills">
+                    <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — 上諭分析 Skills</span></div>
+                    <div class="agentic-vscode-shell">
+                      <div class="agentic-vscode-activitybar"><span>▦</span><span>⌕</span><span>⑂</span><span>▣</span><span>⚙</span></div>
+                      <div class="agentic-vscode-editor">
+                        <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">extract-yu-emperor-actions.md</span><span class="agentic-vscode-tab">confirmed-yu-response-analysis.md</span><span class="agentic-vscode-tab">extract-yu-reported-events.md</span></div>
+                        <div class="agentic-window-body agentic-code agentic-vscode-code" data-agentic-sequence data-agentic-char-delay="7" data-agentic-line-delay="150" data-agentic-hold-time="4200">
+                          <script type="application/json" data-agentic-lines>
+                            [
+                              "<span class=\"cmt\"># extract-yu-emperor-actions.md</span>",
+                              "只擷取上諭中皇帝自己的評論、准駁、詢問與具體命令。",
+                              "<span class=\"meta\">exclude:</span> 皇帝轉述的「據奏」情報",
+                              "<span class=\"str\">quote = 皇帝原話逐字</span>",
+                              "",
+                              "<span class=\"cmt\"># confirmed-yu-response-analysis.md</span>",
+                              "只分析已確認配對的官文如何回應每一道上諭。",
+                              "<span class=\"meta\">response_type:</span> done | progress | defence | clarification | request | ack",
+                              "排除官員重引的皇帝話語，保留官員自己的回應引文。",
+                              "",
+                              "<span class=\"cmt\"># extract-yu-reported-events.md</span>",
+                              "只擷取皇帝透過奏報得知的既往林／清事件，並追溯來源奏摺。",
+                              "<span class=\"meta\">output:</span> edict_quote + source_documents[] + source_quote",
+                              "<span class=\"ok\">✓ three Skills → quoted evidence → researcher review</span>"
+                            ]
+                          </script>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </figure>
             </div></div>
           </section>
         </section>
@@ -1957,32 +2129,66 @@
                 <article class="copybox blk" id="part-3-ai-skills-card-2"><div class="title-row"><span class="option-number">2</span><h2>建立新的 Skill 時，研究者應說明：</h2></div><div class="body"><p>研究者可以按照以下問題，請 Agentic AI修改和建立指令：</p><p>- 這項 Skill 要回答哪一個研究問題；</p><p>- AI 需要從文本中提取哪些資訊；</p><p>- 每項結果需要保存哪些原文引文等。</p><p>完成 Skill 後，應先用少量文書測試，檢查 AI 是否能按照要求提取合適的結果，再進行批次處理。</p></div></article>
               </div></div>
               <div class="part3-ai-skills-visual">
-                <div class="part3-ai-skills-frame visual-frame" id="part-3-ai-skills-chart" role="group" aria-label="Visual Studio Code 中的上諭—回應配對 Skill">
-                  <div class="agentic-scene part3-ai-skills-scene" data-agentic-scene>
+                <div class="part3-ai-skills-frame visual-frame" id="part-3-ai-skills-chart" role="group" aria-label="以 Codex 對話視窗建立硃批—回應配對 Skill">
+                  <div class="agentic-scene part3-ai-skills-scene" data-agentic-scene data-agentic-skills-sequence>
                     <div class="agentic-mac-window agentic-window-vscode" data-agentic-window="skills-editor" aria-label="Visual Studio Code 中的 Skill 草稿">
-                      <div class="agentic-mac-titlebar" data-agentic-bring-front="skills-editor"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — yu-response-pairing.md</span></div>
+                      <div class="agentic-mac-titlebar" data-agentic-bring-front="skills-editor"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Visual Studio Code — zhu-response-pairing.md</span></div>
                       <div class="agentic-vscode-shell">
                         <div class="agentic-vscode-activitybar" aria-hidden="true"><span>▤</span><span>⌕</span><span>⑂</span><span>⊞</span><span>⚙</span></div>
                         <div class="agentic-vscode-editor">
-                          <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">yu-response-pairing.md</span></div>
+                          <div class="agentic-vscode-tabs"><span class="agentic-vscode-tab">zhu-response-pairing.md</span></div>
                           <div class="agentic-window-body agentic-code agentic-vscode-code" data-agentic-vscode-code data-agentic-sequence data-agentic-char-delay="8" data-agentic-line-delay="180" data-agentic-hold-time="3200">
                             <script type="application/json" data-agentic-lines>[
-                              "<span class='cmt'># Saved Prompt / Skill: 上諭—回應配對</span>",
+                              "<span class='cmt'># Saved Prompt / Skill: 硃批—回應配對</span>",
                               "<span class='cmt'>## Purpose</span>",
-                              "Identify which official document responds to which 上諭.",
-                              "Scope: 上諭 only; every pair remains provisional for review.",
+                              "辨識哪一份奏摺正在回應哪一份硃批。",
+                              "硃批是皇帝寫在同一官員較早奏摺上的批語。",
                               "<span class='cmt'>## How a pair is determined</span>",
-                              "1. <span class='meta'>Identity</span> — reply author is one of the 上諭 recipients.",
-                              "2. <span class='meta'>Date</span> — reply follows the issued 上諭 in a plausible window.",
-                              "3. <span class='meta'>Citation</span> — 奉上諭／奉廷寄／欽奉諭旨 and matching quotation.",
-                              "<span class='cmt'>## Website Prompt</span>",
-                              "Capture the receipt lead-in and the full quoted 上諭.",
-                              "Keep issue date and receive date separate; never guess either date.",
-                              "<span class='ok'>No pair is ever auto-confirmed; the researcher reviews the evidence.</span>",
+                              "1. <span class='meta'>Identity</span> — 候選文書由同一名官員較早發出。",
+                              "2. <span class='meta'>Date</span> — 候選硃批日期早於回應奏摺發送日期。",
+                              "3. <span class='meta'>Citation</span> — 奉硃批／奉到硃批後的引文匹配硃批原文。",
+                              "<span class='cmt'>## Evidence</span>",
+                              "保留引述標記、完整引文、相符硃批文字與原奏摺名稱。",
+                              "捕捉硃批收訖日期，並標記 direct／court_letter／handed／copy。",
+                              "短硃批必須逐字或近乎逐字相符，不以寬鬆語意猜測。",
                               "<span class='cmt'>## Output</span>",
-                              "pairs: reply_doc_id · match_level · marker · quote_in_reply",
-                              "matched_yu_span · issue_date · receive_date · receipt"
+                              "輸出 pairs JSON：zhu_doc_id · match_level · evidence",
+                              "evidence 包括 marker · quote_in_reply · matched_zhu_span",
+                              "own_memorial_ref · original_memorial_date · receive_date · receipt",
+                              "<span class='ok'>所有配對保持候選，必須由研究者確認後才加入圖表。</span>"
                             ]</script>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="agentic-mac-window agentic-window-codex is-agentic-front" data-agentic-window="skills-codex">
+                      <div class="agentic-mac-titlebar"><span class="agentic-mac-dot red"></span><span class="agentic-mac-dot yellow"></span><span class="agentic-mac-dot green"></span><span class="agentic-window-title">Codex — Create Skill</span></div>
+                      <div class="agentic-codex-scroll">
+                        <div class="agentic-codex-user-row"><div class="agentic-codex-user-bubble" data-agentic-codex-prompt>請為我撰寫一個「硃批—回應配對」AI Skill。輸入一份後來的奏摺和同一官員較早、載有硃批的候選文書，辨識奏摺回應哪一份硃批。保留引述標記、完整引文、相符硃批文字、原奏摺名稱、日期和接收方式，輸出供研究者覆核的 JSON。</div></div>
+                        <div class="agentic-window-body agentic-prose agentic-codex-body" data-agentic-codex-phases>
+                          <div class="agentic-codex-phase agentic-codex-thinking" data-agentic-codex-thinking>
+                            <div class="agentic-codex-status">Working…</div>
+                            <div class="agentic-codex-thinking-sequence" data-agentic-codex-thinking-sequence data-agentic-codex-char-delay="9" data-agentic-codex-line-delay="300">
+                              <script type="application/json" data-agentic-lines>[
+                                "<span class='meta-line'><span class='ic'>↳</span>整理同一官員的較早奏摺與硃批候選</span>",
+                                "<span class='meta-line'><span class='ic'>↳</span>確認引文、日期、原奏摺名稱與接收方式</span>",
+                                "<span class='line'>我會要求硃批引文逐字或近乎逐字匹配，不用寬鬆語意猜測。</span>",
+                                "<span class='line'>我會把每一組配對保留為候選，交由研究者回到原文覆核。</span>"
+                              ]</script>
+                            </div>
+                          </div>
+                          <div class="agentic-codex-phase agentic-codex-result" data-agentic-codex-result hidden>
+                            <div class="agentic-codex-result-lines" data-agentic-codex-result-lines>
+                              <script type="application/json" data-agentic-lines>[
+                                "<span class='final-lead'>已整理為 Skill 草稿：</span>",
+                                "<span class='final-item'><code>zhu-response-pairing.md</code></span>",
+                                "<span class='final-label'>三項配對條件</span>",
+                                "<span class='final-item'>同一官員的較早奏摺 · 硃批日期早於回應奏摺</span>",
+                                "<span class='final-item'>奉硃批／奉到硃批標記 · 引文匹配硃批原文</span>",
+                                "<span class='final-item'>保留完整引文 · 原奏摺名稱 · 收訖日期 · 接收方式</span>",
+                                "<span class='final-item'>輸出 high／partial／weak 候選，研究者確認後才加入圖表</span>"
+                              ]</script>
+                            </div>
                           </div>
                         </div>
                       </div>

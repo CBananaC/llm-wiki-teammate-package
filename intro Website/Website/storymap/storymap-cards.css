@@ -1620,12 +1620,12 @@
   --part3-body-size: calc(16px * var(--font-scale));
   --part3-body-line-height: 1.9;
   --part3-ai-skills-visual-width: 54%;
-  --part3-ai-skills-frame-height: clamp(600px, 48vw, 760px);
+  --part3-ai-skills-frame-height: clamp(680px, 48vw, 800px);
 }
 
-/* Part 3.5.2.3 — 修改、建立 AI Skills：在 VS Code 中閱讀真實 Skill
-   手動調整視窗：以下 base／窄版／手機三組變數控制 VS Code 的
-   left、top、width、height、標題字級及內容字級。 */
+/* Part 3.5.2.3 — 修改、建立 AI Skills：使用 Codex 對話建立每日事件分類 Skill
+   手動調整視窗：以下 base／窄版／手機三組變數分別控制 VS Code 與 Codex
+   的 left、top、width、height、標題字級及內容字級。 */
 #part-3-ai-skills .part3-ai-skills-layout {
   display: grid;
   grid-template-columns: minmax(0, calc(100% - var(--part3-ai-skills-visual-width) - var(--col-gap))) minmax(360px, var(--part3-ai-skills-visual-width));
@@ -1652,12 +1652,18 @@
   border: 0;
   box-shadow: none;
   --visual-h: var(--part3-ai-skills-frame-height);
-  --agentic-vscode-left: 0;
-  --agentic-vscode-top: 0;
-  --agentic-vscode-width: 100%;
-  --agentic-vscode-height: 100%;
-  --agentic-vscode-font-size: 15px;
-  --agentic-vscode-title-size: 14px;
+  --agentic-vscode-left: 2%;
+  --agentic-vscode-top: 3%;
+  --agentic-vscode-width: 92%;
+  --agentic-vscode-height: 89%;
+  --agentic-vscode-font-size: 20px;
+  --agentic-vscode-title-size: 15px;
+  --agentic-codex-left: 15%;
+  --agentic-codex-top: 25%;
+  --agentic-codex-width: 78%;
+  --agentic-codex-height: 70%;
+  --agentic-codex-font-size: 15px;
+  --agentic-codex-text-size: 20px;
 }
 #part-3-ai-skills .part3-ai-skills-frame > .agentic-scene {
   flex: 1 1 auto;
@@ -1666,13 +1672,44 @@
 #part-3-ai-skills .part3-ai-skills-scene {
   background: transparent;
 }
-#part-3-ai-skills .agentic-window-vscode {
-  opacity: 1;
-  cursor: default;
-  box-shadow: 0 22px 38px rgba(0, 0, 0, .24);
-}
 #part-3-ai-skills .agentic-window-vscode .agentic-window-body {
   line-height: 1.42;
+}
+#part-3-ai-skills .agentic-window-codex {
+  overflow: hidden;
+}
+#part-3-ai-skills .agentic-codex-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+#part-3-ai-skills .agentic-codex-scroll::-webkit-scrollbar { display: none; }
+#part-3-ai-skills .agentic-window-codex .agentic-window-body {
+  flex: none;
+  min-height: 0;
+  padding: 11px 14px;
+  overflow: visible;
+}
+#part-3-ai-skills .agentic-codex-user-row {
+  padding: 11px 14px 0;
+}
+#part-3-ai-skills .agentic-codex-user-bubble {
+  max-width: 100%;
+  overflow-wrap: anywhere;
+}
+#part-3-ai-skills .agentic-codex-thinking,
+#part-3-ai-skills .agentic-codex-result {
+  font-size: var(--agentic-codex-text-size);
+  line-height: 1.62;
+}
+#part-3-ai-skills .agentic-prose .line,
+#part-3-ai-skills .agentic-prose .meta-line {
+  margin-bottom: 8px;
+}
+#part-3-ai-skills .agentic-prose .final-item {
+  margin-bottom: 7px;
 }
 
 @media (max-width: 1040px) {
@@ -1680,25 +1717,43 @@
     grid-template-columns: 1fr;
   }
   #part-3-ai-skills .part3-ai-skills-frame {
-    --part3-ai-skills-frame-height: clamp(560px, 96vw, 700px);
-    --agentic-vscode-left: 0;
-    --agentic-vscode-top: 0;
-    --agentic-vscode-width: 100%;
-    --agentic-vscode-height: 100%;
-    --agentic-vscode-font-size: 14px;
-    --agentic-vscode-title-size: 12px;
+    --part3-ai-skills-frame-height: clamp(620px, 96vw, 740px);
+    --agentic-vscode-left: 2%;
+    --agentic-vscode-top: 3%;
+    --agentic-vscode-width: 94%;
+    --agentic-vscode-height: 84%;
+    --agentic-vscode-font-size: 20px;
+    --agentic-vscode-title-size: 9px;
+    --agentic-codex-left: 10%;
+    --agentic-codex-top: 22%;
+    --agentic-codex-width: 84%;
+    --agentic-codex-height: 72%;
+    --agentic-codex-font-size: 20px;
+    --agentic-codex-text-size: 20px;
   }
 }
 
 @media (max-width: 620px) {
   #part-3-ai-skills .part3-ai-skills-frame {
-    --part3-ai-skills-frame-height: clamp(520px, 148vw, 720px);
-    --agentic-vscode-left: 0;
-    --agentic-vscode-top: 0;
-    --agentic-vscode-width: 100%;
-    --agentic-vscode-height: 100%;
-    --agentic-vscode-font-size: 12px;
-    --agentic-vscode-title-size: 10px;
+    --part3-ai-skills-frame-height: clamp(700px, 190vw, 820px);
+    --agentic-vscode-left: 2%;
+    --agentic-vscode-top: 2%;
+    --agentic-vscode-width: 96%;
+    --agentic-vscode-height: 86%;
+    --agentic-vscode-font-size: 15px;
+    --agentic-vscode-title-size: 9px;
+    --agentic-codex-left: 7%;
+    --agentic-codex-top: 20%;
+    --agentic-codex-width: 88%;
+    --agentic-codex-height: 73%;
+    --agentic-codex-font-size: 15px;
+    --agentic-codex-text-size: 15px;
+  }
+  #part-3-ai-skills .agentic-window-codex .agentic-window-body {
+    padding: 10px 12px;
+  }
+  #part-3-ai-skills .agentic-codex-user-row {
+    padding: 10px 12px 0;
   }
 }
 
@@ -2157,6 +2212,86 @@
 }
 #part-2-content .part2-input-visual .part3-json-viewer-wrap {
   width: 100%;
+}
+
+/* Part 2.5 — 研究者指定的 AI Skills：文字卡左、真實 Skill 摘要的 VS Code 視窗右。 */
+#part-2-content .part2-skill-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(360px, var(--part2-skill-visual-width, 52%));
+  align-items: start;
+  gap: var(--col-gap);
+}
+#part-2-content .part2-skill-copy,
+#part-2-content .part2-skill-visual {
+  min-width: 0;
+}
+#part-2-content .part2-skill-copy .part2-card-stack {
+  align-items: stretch;
+}
+#part-2-content .part2-skill-copy .part2-text-card {
+  width: 100%;
+}
+#part-2-content .part2-skill-visual {
+  position: sticky;
+  top: calc(var(--bar-h) + 18px);
+  width: 100%;
+  height: var(--part2-skill-frame-height, clamp(480px, 42vw, 640px));
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: hidden;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  --visual-h: var(--part2-skill-frame-height, clamp(480px, 42vw, 640px));
+  --agentic-vscode-left: 0;
+  --agentic-vscode-top: 0;
+  --agentic-vscode-width: 100%;
+  --agentic-vscode-height: 100%;
+  --agentic-vscode-font-size: 12px;
+  --agentic-vscode-title-size: 12px;
+}
+#part-2-content .part2-skill-visual > .part2-skill-scene {
+  min-height: 0;
+  background: transparent;
+}
+#part-2-content .part2-skill-window {
+  opacity: 1;
+  cursor: default;
+  box-shadow: 0 22px 38px rgba(0, 0, 0, .24);
+}
+#part-2-content .part2-skill-window .agentic-window-body {
+  line-height: 1.48;
+}
+#part-2-content .part2-skill-window .agentic-vscode-tabs {
+  overflow-x: auto;
+  scrollbar-width: none;
+}
+#part-2-content .part2-skill-window .agentic-vscode-tabs::-webkit-scrollbar { display: none; }
+
+@media (max-width: 1040px) {
+  #part-2-content .part2-skill-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #part-2-content .part2-skill-visual {
+    position: static;
+    height: clamp(520px, 86vw, 700px);
+    --visual-h: clamp(520px, 86vw, 700px);
+    --agentic-vscode-font-size: 13px;
+    --agentic-vscode-title-size: 12px;
+  }
+}
+
+@media (max-width: 620px) {
+  #part-2-content .part2-skill-visual {
+    height: clamp(500px, 142vw, 700px);
+    --visual-h: clamp(500px, 142vw, 700px);
+    --agentic-vscode-font-size: 11px;
+    --agentic-vscode-title-size: 10px;
+  }
+  #part-2-content .part2-skill-window .agentic-window-body {
+    padding: 11px 12px;
+  }
 }
 
 /* Part 2.4 — 辨識奏摺所回應的上諭：文字卡左、通信關係視覺右。 */
