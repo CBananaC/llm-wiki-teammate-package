@@ -2813,14 +2813,6 @@
   --p2sv-sample-orange: #c86138;
   position: relative;
 }
-#part-2-content .part2-summary-caption {
-  margin: 0 0 14px;
-  min-height: 40px;
-  color: var(--text);
-  font: 500 calc(14.5px * var(--font-scale))/1.7 var(--serif);
-  border-left: 3px solid var(--accent);
-  padding-left: 13px;
-}
 #part-2-content .part2-summary-stage {
   position: relative;
   min-height: 640px;
