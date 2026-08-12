@@ -2319,3 +2319,43 @@
   .part1-chart { min-height: 620px; border-right: 0; border-bottom: 1px solid #e0d5c3; }
   .part1-dock { min-height: 520px; }
 }
+/* Compact toolbar --------------------------------------------------------
+   Keep the sample-like controls readable while giving the replica more room
+   for the chart and docked document panels. */
+#part-1-content .part1-replica .part1-toolbar {
+  min-height: 44px;
+  padding: 4px 7px;
+  gap: 5px;
+}
+#part-1-content .part1-replica .part1-toolgroup { gap: 4px; }
+#part-1-content .part1-replica .part1-pill-button,
+#part-1-content .part1-replica .part1-people-control,
+#part-1-content .part1-replica .part1-search,
+#part-1-content .part1-replica .part1-toolbtn {
+  min-height: 29px;
+  border-radius: 6px;
+}
+#part-1-content .part1-replica .part1-pill-button { padding: 4px 8px; }
+#part-1-content .part1-replica .part1-people-control { gap: 4px; padding: 3px 5px 3px 7px; }
+#part-1-content .part1-replica .part1-people-control select {
+  height: 23px;
+  min-width: 120px;
+  padding: 2px 5px;
+}
+#part-1-content .part1-replica .part1-people-control button { width: 24px; height: 23px; font-size: 15px; }
+#part-1-content .part1-replica .part1-search {
+  min-width: 160px;
+  max-width: 300px;
+  height: 29px;
+  padding: 0 8px;
+}
+#part-1-content .part1-replica .part1-toolbtn { height: 29px; padding: 4px 9px; }
+#part-1-content .part1-replica .part1-gear-btn { width: 36px; font-size: 18px; }
+#part-1-content .part1-replica .part1-gear-btn .part1-chat-svg { width: 19px; height: 19px; }
+#part-1-content .part1-replica .part1-count { font-size: calc(11.5px * var(--font-scale)); }
+
+@media (max-width: 560px) {
+  .part1-dock { display: block; height: auto; overflow: visible; }
+  .part1-panel-resizer { display: none !important; }
+  #part-1-content .part1-replica .part1-toolbar { min-height: 72px; padding: 4px 6px; gap: 4px; }
+}
