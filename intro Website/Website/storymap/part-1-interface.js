@@ -185,7 +185,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           <div class="part1-chart-zoomspace" data-chart-zoomspace>
             <div class="part1-lanes" data-lanes>
               <svg class="part1-chart-links" data-chart-links role="img" aria-label="時間與關係圖表"></svg>
-              <div class="part1-ruler-labels" aria-hidden="true"><span>1786/11</span><span>11</span><span>21</span><span>1786/12</span><span>11</span><span>21</span><span>1787/1</span><span>11</span></div>
+              <div class="part1-ruler-labels" data-chart-ruler aria-hidden="true"><span>1786/11</span><span>11</span><span>21</span><span>1786/12</span><span>11</span><span>21</span><span>1787/1</span><span>11</span></div>
             </div>
           </div>
         </div>
@@ -303,6 +303,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const lanesEl = replica.querySelector('[data-lanes]');
   const chartScroll = replica.querySelector('[data-chart-scroll]');
   const chartZoomspace = replica.querySelector('[data-chart-zoomspace]');
+  const chartRuler = replica.querySelector('[data-chart-ruler]');
   const linksSvg = replica.querySelector('[data-chart-links]');
   const docBody = replica.querySelector('[data-doc-body]');
   const docSummaryEl = replica.querySelector('[data-doc-summary]');
@@ -405,7 +406,15 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     lanesEl.style.transform = `scale(${chartScale})`;
     chartZoomspace.style.width = `${CHART_BASE_WIDTH * chartScale}px`;
     chartZoomspace.style.height = `${CHART_BASE_HEIGHT * chartScale}px`;
+    syncChartRuler();
     syncChartHeaders();
+  };
+
+  // Keep the date ruler aligned vertically with the chart while cancelling
+  // only the horizontal scroll of the wider timeline canvas.
+  const syncChartRuler = () => {
+    if (!chartRuler || !chartScroll) return;
+    chartRuler.style.transform = `translateX(${chartScroll.scrollLeft / chartScale}px)`;
   };
 
   const chartScrollOffset = () => {
@@ -476,7 +485,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       panning = false;
       chartScroll.classList.remove('is-panning');
     });
-    chartScroll.addEventListener('scroll', syncChartHeaders, { passive: true });
+    chartScroll.addEventListener('scroll', () => {
+      syncChartRuler();
+      syncChartHeaders();
+    }, { passive: true });
   }
 
   const eventOffsetLabel = (dateAr) => {

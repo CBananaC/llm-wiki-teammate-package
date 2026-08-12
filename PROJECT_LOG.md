@@ -12720,6 +12720,62 @@ Verified:
 Remaining:
 - Nothing remaining for this adjustment; nothing was pushed.
 
+## 2026-08-12 13:11 HKT — Codex — Expanded Part 2 Skill panels to full text and single-run typing
+
+Summary:
+- Expanded the Part 2 VS Code panels from representative excerpts to the full text of all six source-backed Skills requested for the workflow.
+- Kept the editor body scrollable so complete Skills remain readable within the same visual window.
+- Made the typing animation run once per page load and retain the complete text; reloading the page starts it again.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- All six requested Skill filenames and full source blocks are embedded in the three panels; all `12/12` Agentic-line JSON blocks parse successfully.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1 and other StoryMap edits were preserved; nothing was pushed.
+
+## 2026-08-12 13:08 HKT — Codex — Removed the replica area-list subtitle
+
+Summary:
+- Removed the `導覽列・時間與關係圖表・原始史料區・人工智能分析區` subtitle beneath `完整平台介面複本`.
+- Kept the four interactive interface areas and their labels inside the replica unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser inspection confirmed the subtitle is absent and the replica still loads.
+- `node --check intro Website/Website/storymap/part-1-interface.js`, `node --check intro Website/Website/storymap/storymap.js`, and `git diff --check` passed.
+
+Remaining:
+- Nothing remaining for this adjustment; nothing was pushed.
+
+## 2026-08-12 13:09 HKT — Codex — Froze the replica chart date column
+
+Summary:
+- Kept the chart's date/ruler column fixed at the left edge while the four-line timeline scrolls horizontally.
+- Preserved the ruler's shared vertical and zoom coordinate system so its labels remain aligned with the chart dates.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed the ruler stays at the left edge after horizontal chart scrolling.
+- `node --check intro Website/Website/storymap/part-1-interface.js` passed.
+- `git diff --check` passed.
+
+Remaining:
+- Nothing remaining for this adjustment; nothing was pushed.
+
 ## 2026-08-12 13:00 HKT — Codex — Hid the requested Part 2 hero note and card number
 
 Summary:
@@ -12796,3 +12852,21 @@ Verified:
 
 Remaining:
 - Nothing remaining for this adjustment; nothing was pushed.
+
+## 2026-08-12 13:15 HKT — Codex — Hid the full Part 2 overview card reversibly
+
+Summary:
+- Hid the entire `平台的運作流程` overview card, including its heading, number box, and both explanatory paragraphs.
+- Preserved the complete card markup in one reversible HTML comment.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Confirmed the overview card is no longer rendered while the full original text remains in HTML comments.
+- `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1 edits remain untouched; nothing was pushed.
