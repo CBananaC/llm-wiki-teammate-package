@@ -7870,6 +7870,28 @@ Verified:
 Remaining:
 - Existing concurrent work was preserved; nothing was pushed.
 
+### 2026-08-12 13:05 HKT — Codex — Renumbered and wired the Part 2 flow chart
+
+Summary:
+- Renumbered the Part 2 flow chart's structured-input and AI-extraction nodes from steps 4/5 to steps 3/4.
+- Updated the matching Part 2 cover labels and aligned the flow-node titles with the requested section titles, including the final `視覺化呈現分析的結果` label.
+- Made Part 2 nested hashes and flow-node clicks reveal the `平台運作流程` panel and scroll to the requested stage, including 分析階段一至四.
+- Bumped the existing StoryMap script version query so browsers load the updated routing code.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check "intro Website/Website/storymap/storymap.js"` and `git diff --check` passed.
+- Browser verification at 1280px and 390px confirmed all seven requested flow links show the correct Part 2 cover/title and keep Part 2 visible.
+- Direct `#part-2-summary` deep-link routing was confirmed; the browser reported no warnings or errors.
+
+Remaining:
+- Existing concurrent StoryMap edits remain preserved; nothing was pushed.
+
 ### 2026-08-11 19:27 HKT — Codex — Removed the chart date and zoom bar
 
 Summary:
@@ -8129,6 +8151,23 @@ Files changed:
 Verified:
 - Browser preview confirmed hovering keeps the circle centered on its SVG coordinate and clicking the circle opens the AI 分析區 card.
 - `node --check Website/storymap/part-1-interface.js` passed.
+- `git diff --check` passed.
+
+Remaining:
+- Nothing remaining for this adjustment; nothing was pushed.
+
+### 2026-08-12 13:05 HKT — Codex — Renumbered the Part 2 workflow diagram card
+
+Summary:
+- Changed the number box beside `運作流程圖` from `2` to `1`.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the `運作流程圖` card now renders with number `1`.
 - `git diff --check` passed.
 
 Remaining:

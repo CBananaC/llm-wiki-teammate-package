@@ -1623,7 +1623,7 @@
   --part3-ai-skills-frame-height: clamp(680px, 48vw, 800px);
 }
 
-/* Part 3.5.2.3 — 修改、建立 AI Skills：使用 Codex 對話建立每日事件分類 Skill
+/* Part 3.5.2.3 — 修改、建立 AI Skills：使用 Codex 對話建立硃批—回應配對 Skill
    手動調整視窗：以下 base／窄版／手機三組變數分別控制 VS Code 與 Codex
    的 left、top、width、height、標題字級及內容字級。 */
 #part-3-ai-skills .part3-ai-skills-layout {
@@ -2431,6 +2431,88 @@
   color: var(--muted);
   border-top: 1px solid rgba(22, 61, 63, .14);
   font: 600 12px/1.65 var(--sans);
+}
+
+/* Part 2.6 — 辨識奏摺所回應的硃批：文字卡左、引言通信視覺右。 */
+#part-2-content #part-2-zhu-response .part2-zhu-response-layout {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(460px, 56%);
+  align-items: start;
+  gap: var(--col-gap);
+}
+#part-2-content #part-2-zhu-response .part2-zhu-response-copy,
+#part-2-content #part-2-zhu-response .part2-source-visual {
+  min-width: 0;
+}
+#part-2-content #part-2-zhu-response .part2-zhu-response-copy .part2-card-stack {
+  align-items: stretch;
+}
+#part-2-content #part-2-zhu-response .part2-zhu-response-card,
+#part-2-content #part-2-zhu-response .part2-zhu-response-copy .part2-numbered-card {
+  width: 100%;
+}
+#part-2-content #part-2-zhu-response .part2-source-visual {
+  position: sticky;
+  top: calc(var(--bar-h) + 18px);
+  width: 100%;
+  height: clamp(600px, 58vw, 820px);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  --source-panel-width: 100%;
+  --source-panel-height: 100%;
+  --source-panel-margin-top: 0px;
+  --source-panel-margin-right: 0px;
+  --source-panel-margin-bottom: 0px;
+  --source-panel-margin-left: 0px;
+  --source-panel-source-space: clamp(78px, 15%, 132px);
+  --source-flow-top-gap: 0px;
+}
+#part-2-content #part-2-zhu-response .part2-source-flow-visual {
+  height: 100%;
+  padding-top: 0;
+  --source-flow-top-gap: 0px;
+}
+#part-2-content #part-2-zhu-response .part2-source-flow-visual .source-flow-document {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+#part-2-content #part-2-zhu-response .part2-source-flow-visual .source-callouts {
+  width: clamp(92px, 17%, 148px);
+}
+#part-2-content #part-2-zhu-response .part2-source-flow-visual .source-callout-detail {
+  display: none;
+}
+#part-2-content #part-2-zhu-response .part2-source-flow-visual .source-callout {
+  top: var(--source-bubble-top, auto) !important;
+}
+
+@media (max-width: 1040px) {
+  #part-2-content #part-2-zhu-response .part2-zhu-response-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #part-2-content #part-2-zhu-response .part2-source-visual {
+    position: static;
+    height: clamp(600px, 95vw, 820px);
+  }
+}
+
+@media (max-width: 620px) {
+  #part-2-content #part-2-zhu-response .part2-source-visual {
+    height: clamp(580px, 178vw, 760px);
+  }
+  #part-2-content #part-2-zhu-response .part2-source-flow-visual {
+    --source-flow-top-gap: 0px;
+    padding-top: 0;
+  }
+  #part-2-content #part-2-zhu-response .part2-source-flow-visual .source-flow-document {
+    height: calc(100% - 0px);
+  }
 }
 
 /* JSON 的互動視覺已移到 Part 2；Part 3 保留文字說明及錨點。 */
