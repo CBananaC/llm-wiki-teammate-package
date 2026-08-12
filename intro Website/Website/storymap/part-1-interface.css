@@ -2359,3 +2359,58 @@
   .part1-panel-resizer { display: none !important; }
   #part-1-content .part1-replica .part1-toolbar { min-height: 72px; padding: 4px 6px; gap: 4px; }
 }
+/* Compact settings dropdown -------------------------------------------- */
+#part-1-content .part1-replica .part1-tools-pop {
+  width: min(620px, calc(100vw - 20px));
+  max-height: min(650px, calc(100vh - 12px));
+  padding: 9px;
+  border-radius: 10px;
+  overflow-y: auto;
+}
+#part-1-content .part1-replica .part1-tools-grid { gap: 8px; }
+#part-1-content .part1-replica .part1-tools-section {
+  padding: 8px 10px 9px;
+  border-radius: 8px;
+}
+#part-1-content .part1-replica .part1-tools-section h3 {
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+#part-1-content .part1-replica .part1-tools-button-stack { gap: 6px; }
+#part-1-content .part1-replica .part1-tools-button-stack button,
+#part-1-content .part1-replica .part1-tools-file,
+#part-1-content .part1-replica .part1-tools-setting button {
+  min-height: 30px;
+  padding: 4px 8px;
+  border-radius: 6px;
+  font-size: 15px;
+}
+#part-1-content .part1-replica .part1-tools-setting {
+  grid-template-columns: minmax(0, 1fr) minmax(54px, .62fr) minmax(54px, .62fr);
+  gap: 6px;
+  padding: 3px 0;
+  font-size: 14px;
+}
+#part-1-content .part1-replica .part1-tools-setting button { min-height: 30px; font-size: 17px; }
+#part-1-content .part1-replica .part1-tools-slider {
+  grid-template-columns: minmax(105px, 130px) minmax(0, 1fr) 48px;
+  gap: 8px;
+  min-height: 30px;
+  font-size: 14px;
+}
+#part-1-content .part1-replica .part1-tools-slider output { font-size: 14px; }
+#part-1-content .part1-replica .part1-tools-slider input[type="range"]::-webkit-slider-thumb {
+  width: 20px;
+  height: 20px;
+}
+#part-1-content .part1-replica .part1-tools-slider input[type="range"]::-moz-range-thumb {
+  width: 20px;
+  height: 20px;
+}
+
+@media (max-width: 760px) {
+  #part-1-content .part1-replica .part1-tools-pop {
+    right: -4px;
+    width: min(520px, calc(100vw - 16px));
+  }
+}
