@@ -13599,3 +13599,54 @@ Verified:
 
 Remaining:
 - Existing concurrent edits remain untouched; no clean checkpoint was created and nothing was pushed.
+
+## 2026-08-12 16:47 HKT — Claude — Added a layer-3 substage cover for 辨識奏摺所回應的上諭
+
+Summary:
+- Added a new "layer 3" sub-cover for the `重建通信關係` (layer 2) child topic `辨識奏摺所回應的上諭`, replacing the previous pattern of putting the sub-title inside a numbered `.part2-text-card`.
+- New `.part2-substage-cover` reuses the layer-2 hero gradient (family relation still reads) but is flush to the left screen edge (negative margin cancels the section's own `--part-pad-x`), spans ~55–58vw, and fades to full transparency on the right via an 11-stop eased `mask-image` (no fade on the left).
+- Shows a large faint stage numeral (`2-1` / `之一`) in place of layer 2's small eyebrow.
+- Only applied to `#part-2-yu-response` so far; `#part-2-zhu-response` (辨識奏摺所回應的硃批) still uses the old numbered-card title pending sign-off on this style.
+- Iterated first as a standalone mockup (`storymap-layer3-cover-ideas.html`) before implementing in the live page.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-layer3-cover-ideas.html` (new standalone mockup, not linked from the site)
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Re-read the edited HTML/CSS regions to confirm the markup and selectors match.
+- Could not browser-QA the live page: local navigation to `http://127.0.0.1:8765/...` was blocked by the Chrome tool's own safety check ("Could not verify this site's safety category"); user should refresh and confirm visually.
+- `git status` on this branch (`codex/current-project-update`) shows pre-existing staged changes not made in this session (including `part2-summary-visual.js`); left uncommitted rather than bundling an unrelated staged file into a checkpoint. A `.git/index.lock` was also present. No `git add`/`git commit` was run.
+
+Remaining:
+- User visual sign-off on the new cover, then decide whether to apply the same treatment to `#part-2-zhu-response`.
+- Local checkpoint commit still needed once the pre-existing staged/lock state is resolved or reviewed.
+
+## 2026-08-12 16:49 HKT — Claude — Replaced 總結文書's hint labels with a step-by-step quest-bubble animation (commit combined with the concurrent layer-3 cover edit above)
+
+Summary:
+- Replaced the static "①/②" hint-label mechanic in the 總結文書 (analysis stage 1) interactive demo with a bouncing, numbered quest-bubble that follows the next clickable target across three steps: the Skill window (1) → the `divide-into-parts.md` tab (2) → the document panel (3).
+- Split the previous single-click "type both Skills automatically" flow into a step-by-step flow (`idle-0 → typing-0 → ready-1 → typing-1 → ready-doc → applied`); each step now requires its own click (on the target or the bubble) before advancing.
+- Removed the old `.part2-summary-hint*` CSS and the `.part2-summary-doc-win.is-invite` pulse-outline animation; added `.part2-summary-bubble` / `-num` / `-ring` styles with bounce and ping keyframes (scoped under `#part-2-content`, using the existing `--yellow` variable).
+- Mobile (<=900px) behavior unchanged in spirit: scrolling the Skill window into view still auto-plays both Skills and auto-applies the result; the bubble is hidden on mobile via the existing breakpoint.
+- Bumped the script's cache-busting query string so the rewritten JS loads.
+- Note on the commit: `.git/index.lock` was present (and repeatedly un-removable — see Verified below) when I staged and committed. The file content at commit time already included the previous entry's `#part-2-yu-response` layer-3 substage-cover edit (which that session had made but not yet committed), so commit `119ec09` on `codex/current-project-update` contains both changes together rather than as two separate checkpoints. Nothing was lost or overwritten; the two edits touch different sections of the same files and do not conflict.
+
+Files changed (this session's own edits):
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-summary-visual.js`
+
+Verified:
+- Subagent re-read all three files: confirmed `--yellow` resolves from `storymap.css`'s `:root`, `.part2-summary-stage` still has `position: relative`, exactly one `.part2-summary-bubble` element exists, no leftover `.part2-summary-hint`/`is-invite`/`caption` references remain, and the script tag loads the updated file.
+- `node --check` passed on `part2-summary-visual.js`.
+- `.git/index.lock`, several `.git/objects/*/tmp_obj_*` files, and `.git/HEAD.lock` could not be unlinked by git itself in this sandbox (`Operation not permitted`), leaving stale lock/tmp files after every git command; working around this by renaming `index.lock` out of the way immediately before each git call. `git add` and `git commit` both completed successfully (exit 0) despite the unlink warnings; `git log`/`git show` confirm commit `119ec09` has the expected content.
+- Not yet verified in an actual browser (no visual/interaction QA run this session) — recommend a manual click-through before treating the demo as final.
+
+Remaining:
+- Manual browser QA of the new bubble-guided flow (desktop drag/resize + mobile auto-play) is still outstanding.
+- The stray `.git/index.lock`-style files (this session's `.git/stale-lock-*.bak*`, and older `.git/index.lock.bak5`, `.git/index.lock.bak6`, `.git/next-index-9.lock` from prior sessions) remain in `.git/` and could not be deleted from this sandbox; harmless to git operation but worth a human cleaning them up from the actual machine if they accumulate.
+- Local commit only (`119ec09`); not pushed.
