@@ -13673,3 +13673,22 @@ Verified:
 Remaining:
 - Manual browser QA of the step-3 card expand + fast-typing sequence (timing/legibility, and that `max-height: 600px` is enough headroom for the longest excerpt at default and resized window widths).
 - Same outstanding items as the previous entry (bubble-flow QA, stray `.git/*.bak` lock files, not pushed).
+
+## 2026-08-12 17:00 HKT — Claude — 總結文書 step 3: doc panel now auto-scrolls to follow the newest text
+
+Summary:
+- Fixed a follow-up issue with the step-3 card expand/fast-type animation: while a card was expanding and its text was typing in, the `.part2-summary-doc-scroll` panel stayed scrolled to wherever it was (often the top/first line), so on longer content the user couldn't see the text actually being typed unless they scrolled manually.
+- Added `keepLatestInView(el)` in `part2-summary-visual.js`, which compares the target element's `getBoundingClientRect()` against the scroll panel's and nudges `scrollTop` just enough to keep it in view (only scrolls when needed, so short cards that already fit don't jitter). Called on every typing tick in `typeTextFast`, and on a short interval while each card's `max-height` expand transition is running (before its text starts typing), so the panel already tracks the card as it opens, not just once typing starts.
+
+Files changed:
+- `intro Website/Website/storymap/part2-summary-visual.js`
+- `intro Website/Website/storymap/storymap-example.html` (script cache-busting query bump only)
+
+Verified:
+- `node --check` passed on the updated JS.
+- `git status` before commit showed only these two files modified; committed cleanly as `13d490e` on `codex/current-project-update`.
+- Not yet verified in an actual browser.
+
+Remaining:
+- Manual browser QA of the auto-scroll behavior together with the card expand/type sequence from the previous entry.
+- Same outstanding items as before (bubble-flow QA, stray `.git/*.bak` lock files, not pushed).
