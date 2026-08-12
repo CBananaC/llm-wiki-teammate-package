@@ -60,8 +60,12 @@ def load_document() -> dict:
     fail(f"{DOC_ID} not found in {STAGE1}")
 
 
-def load_events() -> list:
+def load_state() -> dict:
     state = json.loads(SAMPLE_STATE.read_text(encoding="utf-8"))
+    return state
+
+
+def load_events(state: dict) -> list:
     return state.get("__events", [])
 
 
@@ -98,6 +102,92 @@ def event_payload(event: dict) -> dict:
     }
 
 
+def chat_item_payload(item: dict, source_doc_id: str, event_ids: list[str], kind: str) -> dict:
+    """Keep the source-backed fields needed to show one saved AI output item."""
+    title = item.get("subtitle") or item.get("title") or item.get("summary") or "未命名輸出"
+    quote = item.get("quote")
+    if not quote and item.get("sources"):
+        quote = (item.get("sources") or [{}])[0].get("quote")
+    return {
+        "kind": kind,
+        "title": title,
+        "description": item.get("description") or item.get("how") or item.get("summary"),
+        "where": item.get("where"),
+        "who": item.get("who") or [],
+        "whenCh": item.get("whenCh"),
+        "whenAr": item.get("whenAr") or item.get("date") or item.get("response_date"),
+        "quote": quote,
+        "sourceDocId": source_doc_id,
+        "eventIds": event_ids,
+        "responseDocId": item.get("doc_id"),
+    }
+
+
+def chat_source_projection(state: dict, doc_id: str) -> dict:
+    """Project the saved .chat history without copying unrelated review state."""
+    doc_state = state.get(doc_id) or {}
+    clear_demo = state.get("__clearDemo") or {}
+    selected = ((clear_demo.get("event_dots") or {}).get("selected_data") or {}).get(doc_id) or {}
+    selected_event_ids = selected.get("event_ids") or []
+    event_by_id = {event.get("id"): event for event in state.get("__events", [])}
+
+    selected_quotes = {}
+    for event_id in selected_event_ids:
+        event = event_by_id.get(event_id) or {}
+        source = (event.get("sources") or [{}])[0]
+        selected_quotes[event_id] = source.get("quote") or ""
+
+    def matching_event_ids(item: dict) -> list[str]:
+        item_quote = item.get("quote") or ""
+        return [
+            event_id for event_id, event_quote in selected_quotes.items()
+            if item_quote and event_quote and (item_quote == event_quote or item_quote in event_quote or event_quote in item_quote)
+        ]
+
+    turns = []
+    output_item_count = 0
+    for turn_index, turn in enumerate(doc_state.get("chat") or []):
+        output_items = []
+        for item_index, item in enumerate(turn.get("items") or []):
+            if turn.get("kind") == "edictmatch" and item.get("points"):
+                for point_index, point in enumerate(item.get("points") or []):
+                    event_ids = matching_event_ids(point)
+                    output_items.append({
+                        **chat_item_payload(point, doc_id, event_ids, "emperor_action"),
+                        "itemIndex": item_index,
+                        "pointIndex": point_index,
+                    })
+            else:
+                event_ids = matching_event_ids(item)
+                if item.get("__evId") in selected_event_ids:
+                    event_ids = [item.get("__evId")]
+                output_items.append({
+                    **chat_item_payload(item, doc_id, event_ids, turn.get("kind") or "output"),
+                    "itemIndex": item_index,
+                })
+        if output_items:
+            output_item_count += len(output_items)
+        turns.append({
+            "turnIndex": turn_index,
+            "kind": turn.get("kind"),
+            "bundleName": turn.get("__skillBundleName"),
+            "runId": turn.get("__skillRunId"),
+            "model": turn.get("model"),
+            "prompt": turn.get("prompt"),
+            "outputItems": output_items,
+        })
+
+    return {
+        "docId": doc_id,
+        "role": selected.get("role"),
+        "aiOutputPath": selected.get("ai_output_path") or f"{doc_id}.chat",
+        "eventIds": selected_event_ids,
+        "turnCount": len(turns),
+        "outputItemCount": output_item_count,
+        "turns": turns,
+    }
+
+
 def check_quote(body: str, quote: str, label: str) -> None:
     """The replica highlights quotations inside the original text, so every quote
     must be a literal substring of the canonical body."""
@@ -107,7 +197,8 @@ def check_quote(body: str, quote: str, label: str) -> None:
 
 def main() -> int:
     document = load_document()
-    events = load_events()
+    state = load_state()
+    events = load_events(state)
     body = document["body"]
 
     dot_event = event_payload(find_event(events, DOT_EVENT))
@@ -122,6 +213,14 @@ def main() -> int:
     # source document rather than the memorial body.
     if dot_emperor["quoteDocId"] != "諭24":
         fail("expected the 皇帝行動 dot to be sourced from 諭24")
+
+    clear_demo = state.get("__clearDemo") or {}
+    selected_data = ((clear_demo.get("event_dots") or {}).get("selected_data") or {})
+    ai_chat_sources = [
+        chat_source_projection(state, doc_id)
+        for doc_id in selected_data
+        if doc_id in {"硃40", "諭24"}
+    ]
 
     # The chart renderer consumes a small, presentation-ready projection rather
     # than the full review export. Every node payload still comes directly from
@@ -191,6 +290,7 @@ def main() -> int:
             "emperor": dot_emperor,
         },
         "aiCandidates": candidates,
+        "aiChatSources": ai_chat_sources,
     }
 
     header = (
@@ -212,6 +312,7 @@ def main() -> int:
     print(f"  document: {DOC_ID} ({len(body)} chars)")
     print(f"  dots: {', '.join(payload['dots'].keys())}")
     print(f"  ai candidates: {len(candidates)}")
+    print(f"  saved AI chat sources: {', '.join(source['docId'] for source in ai_chat_sources)}")
     return 0
 
 

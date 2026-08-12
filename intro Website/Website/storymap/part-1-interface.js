@@ -873,6 +873,70 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   /* ------------------------------------------------ 節點 → AI 輸出卡片 */
 
+  const aiChatSources = Array.isArray(data.aiChatSources) ? data.aiChatSources : [];
+  const chatKindLabel = (kind) => ({
+    extract: '事件抽取',
+    edictmatch: '上諭分析',
+    officialresponse: '官員回應',
+    emperor_action: '皇帝行動',
+    output: 'AI 輸出'
+  }[kind] || kind || 'AI 輸出');
+  const chatSourceByEventId = (eventId) => {
+    if (!eventId) return null;
+    for (const source of aiChatSources) {
+      for (const turn of source.turns || []) {
+        for (const item of turn.outputItems || []) {
+          if ((item.eventIds || []).includes(eventId)) return { source, turn, item };
+        }
+      }
+    }
+    return null;
+  };
+  const sourceRoleLabel = (source) => source?.role === 'event_source' ? '事件圓點來源' : source?.role === 'emperor_action_source' ? '皇帝行動圓點來源' : 'AI 輸出來源';
+  const chatItemMarkup = (item, compact = false) => `
+    <article class="part1-chat-output-item${compact ? ' is-compact' : ''}"${item.eventIds?.length ? ` data-chat-event-id="${escapeHtml(item.eventIds[0])}"` : ''}>
+      <div class="part1-chat-output-head"><span>${escapeHtml(chatKindLabel(item.kind))}</span><span>${escapeHtml(item.sourceDocId || '')}</span></div>
+      <p class="part1-chat-output-title">${escapeHtml(item.title)}</p>
+      ${item.description ? `<p class="part1-chat-output-desc">${escapeHtml(item.description)}</p>` : ''}
+      ${(item.where || item.who?.length || item.whenCh || item.whenAr) ? `<p class="part1-chat-output-meta">${escapeHtml([item.whenCh || item.whenAr, item.where, item.who?.length ? item.who.join('、') : ''].filter(Boolean).join('　'))}</p>` : ''}
+      ${item.quote ? `<button class="part1-quote part1-chat-output-quote" type="button" data-quote="${escapeHtml(item.quote)}" data-quote-doc="${escapeHtml(item.sourceDocId || '')}">「${escapeHtml(item.quote)}」<span class="part1-quote-src">—${escapeHtml(item.sourceDocId || '')}／AI 輸出引文　點按定位</span></button>` : ''}
+      ${item.eventIds?.length ? `<p class="part1-chat-output-link">形成圖表圓點：${escapeHtml(item.eventIds.join('、'))}</p>` : ''}
+    </article>`;
+  const chatSourceButton = (source) => `<button class="part1-chat-source-btn" type="button" data-chat-source-doc="${escapeHtml(source.docId)}">載入 ${escapeHtml(source.aiOutputPath || `${source.docId}.chat`)}（${escapeHtml(source.outputItemCount)} 項輸出）</button>`;
+  const chatSourceLauncher = () => aiChatSources.length ? `
+    <section class="part1-chat-source-box">
+      <div class="part1-chat-source-head"><strong>目前 sample 的 AI 對話輸出</strong><span>已保存</span></div>
+      <p>這些是形成示範圓點的原始 AI 輸出：${aiChatSources.map((source) => `${escapeHtml(source.docId)} → ${escapeHtml(source.aiOutputPath)}`).join('；')}。</p>
+      <div class="part1-chat-source-actions">${aiChatSources.map(chatSourceButton).join('')}</div>
+    </section>` : '';
+  const loadChatSource = (docId, focusEventId = '') => {
+    const source = aiChatSources.find((item) => item.docId === docId);
+    if (!source) return;
+    aiBody.innerHTML = `
+      <div class="part1-chat-source-view">
+        <div class="part1-node-result-head"><strong>${escapeHtml(sourceRoleLabel(source))}</strong><span>${escapeHtml(source.docId)}.chat</span></div>
+        <p class="part1-chat-source-summary">${escapeHtml(source.docId)} 的保存輸出共有 ${escapeHtml(source.turnCount)} 個對話回合、${escapeHtml(source.outputItemCount)} 項輸出；下列每項都保留其回合、技能組包與事件圓點對應。</p>
+        ${(source.turns || []).map((turn) => `<details class="part1-chat-output-turn"${turn.outputItems?.some((item) => (item.eventIds || []).includes(focusEventId)) ? ' open' : ''}>
+          <summary>第 ${escapeHtml(Number(turn.turnIndex) + 1)} 回　${escapeHtml(chatKindLabel(turn.kind))}　${escapeHtml(turn.outputItems?.length || 0)} 項</summary>
+          <div class="part1-chat-output-turn-meta">${escapeHtml(turn.bundleName || '未標示技能組包')} ${turn.runId ? `／${escapeHtml(turn.runId)}` : ''}${turn.prompt ? `<br>提示：${escapeHtml(turn.prompt)}` : ''}</div>
+          ${(turn.outputItems || []).map((item) => chatItemMarkup(item, false)).join('') || '<p class="part1-chat-output-empty">此回合沒有可顯示的輸出卡。</p>'}
+        </details>`).join('')}
+        <div class="part1-chat-source-actions">${chatSourceButton(source)}${chatSourceLauncher()}</div>
+      </div>`;
+    aiBody.querySelectorAll('[data-quote]').forEach((button) => button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc)));
+    const focus = focusEventId && aiBody.querySelector(`[data-chat-event-id="${CSS.escape(focusEventId)}"]`);
+    if (focus && typeof focus.scrollIntoView === 'function') focus.scrollIntoView({ block: 'center' });
+    setRegion('ai', { silent: true });
+    setProgress(`已載入 ${source.aiOutputPath || `${source.docId}.chat`}；這裡就是示範圓點所依據的保存 AI 輸出。`);
+  };
+  const matchedChatSourceMarkup = (match) => match ? `
+    <section class="part1-chat-source-box is-matched">
+      <div class="part1-chat-source-head"><strong>此圓點的 AI 對話輸出來源</strong><span>${escapeHtml(match.source.docId)}.chat</span></div>
+      <p>此圓點由保存的 ${escapeHtml(match.source.docId)} AI 輸出形成；以下是對應回合中的原始結果卡。</p>
+      ${chatItemMarkup(match.item, true)}
+      <button class="part1-chat-source-btn" type="button" data-chat-source-doc="${escapeHtml(match.source.docId)}" data-chat-focus-event="${escapeHtml(match.item.eventIds?.[0] || '')}">載入完整 ${escapeHtml(match.source.aiOutputPath || `${match.source.docId}.chat`)}</button>
+    </section>` : chatSourceLauncher();
+
   const renderNodePanel = (payload, laneKey, label) => {
     const laneLabels = {
       events: '戰場事件',
@@ -884,6 +948,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const title = payload.subtitle || payload.title || '未命名結果';
     const quote = payload.quote || (laneKey === 'imperial' ? payload.rescriptText : '');
     const quoteDocId = payload.quoteDocId || payload.docId || doc.docId;
+    const matchedChat = chatSourceByEventId(payload.id);
     const factRows = [
       ['時間', payload.whenCh || label || payload.dateAr],
       ['地點', payload.where],
@@ -946,6 +1011,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       <div class="part1-node-result" data-node-result>
         <div class="part1-node-result-head"><strong>節點資訊區</strong><span>${escapeHtml(laneLabel)}</span></div>
         ${cardMarkup}
+        ${matchedChatSourceMarkup(matchedChat)}
       </div>`;
     aiBody.scrollTop = 0;
     aiBody.querySelectorAll('[data-quote]').forEach((button) => {
@@ -1179,6 +1245,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         <blockquote><b>①</b>「${escapeHtml('提臣黃仕簡已於十五日由廈門出口放洋')}」</blockquote>
         <blockquote><b>②</b>「${escapeHtml('任承恩亦配兵登舟，合之郝壯猷所帶，計共兵六千人')}」</blockquote>
       </div>
+      ${chatSourceLauncher()}
     `;
     const foot = replica.querySelector('.part1-linked-foot');
     if (foot) foot.innerHTML = `
@@ -1441,7 +1508,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   toolsPop?.querySelectorAll('button[data-tool-action]').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.stopPropagation();
-      toolsPop.hidden = true;
+      const keepToolsOpen = ['ui-smaller', 'ui-larger', 'body-smaller', 'body-larger']
+        .includes(button.dataset.toolAction);
+      if (!keepToolsOpen) toolsPop.hidden = true;
       replica.querySelector('[data-toolgroup="io"]')?.classList.add('is-pointed');
       button.classList.add('is-pointed');
       toolActions[button.dataset.toolAction]?.();
@@ -1466,6 +1535,18 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   skillsFile?.addEventListener('change', () => readJsonFile(skillsFile, '已載入 AI Skill 輸出；可點擊新增圓點檢查其資料。'));
 
   replica.addEventListener('click', (event) => {
+    const panelClose = event.target.closest('[data-panel-close]');
+    if (panelClose) {
+      event.stopPropagation();
+      setPanelOpen(panelClose.dataset.panelClose, false);
+      return;
+    }
+    const chatSourceTrigger = event.target.closest('[data-chat-source-doc]');
+    if (chatSourceTrigger) {
+      event.stopPropagation();
+      loadChatSource(chatSourceTrigger.dataset.chatSourceDoc, chatSourceTrigger.dataset.chatFocusEvent || '');
+      return;
+    }
     const keyToggle = event.target.closest('[data-ai-key-toggle]');
     if (keyToggle) {
       const keyInput = keyToggle.parentElement?.querySelector('input');

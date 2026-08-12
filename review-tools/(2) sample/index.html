@@ -3503,7 +3503,8 @@
     selRid=Number(rid);
     hlDocRid=Number(rid); hlDocSide=side||preferredReviewSide(rec, 'open'); hlEventId=null;   // clicking a doc dot also shows its event/official/emperor chain
     render();
-    openCard(rec, count>=3?3:count===2?2:1);
+    const card=openCard(rec, count>=3?3:count===2?2:1);
+    if(card && window.__scopeAIto) window.__scopeAIto([card]);
     requestAnimationFrame(()=>{ if(window.__focusDot) window.__focusDot(rid); });
   }
 

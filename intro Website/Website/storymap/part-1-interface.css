@@ -1551,10 +1551,78 @@
 .part1-source-event:hover,
 .part1-source-event:focus-visible { color: #2f5c8a; }
 
+/* ------------------------------------------------------------------------
+   Saved AI chat provenance for the clear sample demonstration.
+   The chart dot and its saved .chat output remain visibly linked without
+   pretending that a generated summary is the original source document.
+   ------------------------------------------------------------------------ */
+
+.part1-chat-source-box {
+  margin-top: 10px;
+  padding: 9px;
+  background: #f7f1e7;
+  border: 1px solid #d8c9b0;
+  border-left: 3px solid #8a765a;
+  border-radius: 8px;
+}
+
+.part1-chat-source-box.is-matched { border-left-color: #7d4ab8; background: #faf4fb; }
+.part1-chat-source-head,
+.part1-chat-output-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 8px;
+  color: #5c4a2c;
+  font: 700 calc(10px * var(--font-scale))/1.35 var(--sans);
+}
+
+.part1-chat-source-head span,
+.part1-chat-output-head span:last-child {
+  color: #8a7a68;
+  font-weight: 600;
+}
+
+.part1-chat-source-box > p,
+.part1-chat-source-summary {
+  margin: 5px 0 8px;
+  color: #6a5d49;
+  font: 500 calc(9.5px * var(--font-scale))/1.5 var(--sans);
+}
+
+.part1-chat-source-actions { display: flex; flex-wrap: wrap; gap: 5px; }
+.part1-chat-source-btn {
+  padding: 5px 7px;
+  color: #3c3526;
+  background: #fffaf1;
+  border: 1px solid #cbbba5;
+  border-radius: 5px;
+  cursor: pointer;
+  text-align: left;
+  font: 700 calc(9.5px * var(--font-scale))/1.25 var(--sans);
+}
+
+.part1-chat-source-btn:hover,
+.part1-chat-source-btn:focus-visible { color: #2f5c8a; border-color: #7d9ab6; }
+.part1-chat-source-view { padding-bottom: 10px; }
+.part1-chat-output-turn { margin-top: 7px; border: 1px solid #e2d8c4; border-radius: 6px; background: #fffdf8; }
+.part1-chat-output-turn summary { padding: 7px; color: #5c4a2c; cursor: pointer; font: 700 calc(10px * var(--font-scale))/1.35 var(--sans); }
+.part1-chat-output-turn-meta { padding: 0 7px 6px; color: #8a7a68; font: 500 calc(8.5px * var(--font-scale))/1.4 var(--sans); overflow-wrap: anywhere; }
+.part1-chat-output-item { margin: 0 7px 7px; padding: 7px; border: 1px solid #e2d8c4; border-left: 3px solid #8a765a; border-radius: 6px; background: #fff; }
+.part1-chat-output-item.is-compact { margin: 7px 0; background: #fffdf8; }
+.part1-chat-output-title { margin: 4px 0; color: #3c3526; font: 700 calc(10px * var(--font-scale))/1.4 var(--sans); }
+.part1-chat-output-desc { margin: 0 0 5px; color: #5c5142; font: 500 calc(9.5px * var(--font-scale))/1.5 var(--sans); }
+.part1-chat-output-meta { margin: 0 0 5px; color: #8a7a68; font: 500 calc(8.5px * var(--font-scale))/1.4 var(--sans); }
+.part1-chat-output-quote { margin: 0; color: #5c5142; background: #f1efe6; border-left-color: #8a765a; }
+.part1-chat-output-link { margin: 5px 0 0; color: #7d4ab8; font: 600 calc(8.5px * var(--font-scale))/1.35 var(--sans); overflow-wrap: anywhere; }
+.part1-chat-output-empty { padding: 0 7px 7px; color: #8a7a68; font: 500 calc(9px * var(--font-scale))/1.4 var(--sans); }
+
 @media (max-width: 560px) {
   .part1-event-group-head { font-size: calc(10px * var(--font-scale)); }
   .part1-event-card .part1-card-acts { align-items: stretch; }
   .part1-event-card .part1-act { flex: 1 1 auto; }
+  .part1-chat-source-head,
+  .part1-chat-output-head { align-items: flex-start; flex-direction: column; gap: 2px; }
 }
 
 /* ========================================================================
@@ -2361,56 +2429,56 @@
 }
 /* Compact settings dropdown -------------------------------------------- */
 #part-1-content .part1-replica .part1-tools-pop {
-  width: min(620px, calc(100vw - 20px));
-  max-height: min(650px, calc(100vh - 12px));
-  padding: 9px;
-  border-radius: 10px;
+  width: min(410px, calc(100vw - 16px));
+  max-height: min(520px, calc(100vh - 12px));
+  padding: 7px;
+  border-radius: 9px;
   overflow-y: auto;
 }
-#part-1-content .part1-replica .part1-tools-grid { gap: 8px; }
+#part-1-content .part1-replica .part1-tools-grid { gap: 6px; }
 #part-1-content .part1-replica .part1-tools-section {
-  padding: 8px 10px 9px;
-  border-radius: 8px;
+  padding: 6px 8px 7px;
+  border-radius: 7px;
 }
 #part-1-content .part1-replica .part1-tools-section h3 {
-  margin-bottom: 6px;
-  font-size: 15px;
+  margin-bottom: 4px;
+  font-size: 14px;
 }
-#part-1-content .part1-replica .part1-tools-button-stack { gap: 6px; }
+#part-1-content .part1-replica .part1-tools-button-stack { gap: 5px; }
 #part-1-content .part1-replica .part1-tools-button-stack button,
 #part-1-content .part1-replica .part1-tools-file,
 #part-1-content .part1-replica .part1-tools-setting button {
-  min-height: 30px;
-  padding: 4px 8px;
-  border-radius: 6px;
-  font-size: 15px;
+  min-height: 26px;
+  padding: 3px 6px;
+  border-radius: 5px;
+  font-size: 13px;
 }
 #part-1-content .part1-replica .part1-tools-setting {
-  grid-template-columns: minmax(0, 1fr) minmax(54px, .62fr) minmax(54px, .62fr);
-  gap: 6px;
-  padding: 3px 0;
-  font-size: 14px;
+  grid-template-columns: minmax(0, 1fr) minmax(46px, .55fr) minmax(46px, .55fr);
+  gap: 5px;
+  padding: 2px 0;
+  font-size: 12px;
 }
-#part-1-content .part1-replica .part1-tools-setting button { min-height: 30px; font-size: 17px; }
+#part-1-content .part1-replica .part1-tools-setting button { min-height: 26px; font-size: 15px; }
 #part-1-content .part1-replica .part1-tools-slider {
-  grid-template-columns: minmax(105px, 130px) minmax(0, 1fr) 48px;
-  gap: 8px;
-  min-height: 30px;
-  font-size: 14px;
+  grid-template-columns: minmax(92px, 112px) minmax(0, 1fr) 40px;
+  gap: 6px;
+  min-height: 26px;
+  font-size: 12px;
 }
-#part-1-content .part1-replica .part1-tools-slider output { font-size: 14px; }
+#part-1-content .part1-replica .part1-tools-slider output { font-size: 12px; }
 #part-1-content .part1-replica .part1-tools-slider input[type="range"]::-webkit-slider-thumb {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 #part-1-content .part1-replica .part1-tools-slider input[type="range"]::-moz-range-thumb {
-  width: 20px;
-  height: 20px;
+  width: 16px;
+  height: 16px;
 }
 
 @media (max-width: 760px) {
   #part-1-content .part1-replica .part1-tools-pop {
     right: -4px;
-    width: min(520px, calc(100vw - 16px));
+    width: min(380px, calc(100vw - 12px));
   }
 }
