@@ -196,6 +196,20 @@
   }
 
   /* -------------------------------------------------- 卡片展開＋快速打字 */
+  const docScroll = docWin.querySelector('.part2-summary-doc-scroll');
+
+  // 讓面板捲動跟著最新展開／打出的內容，而不是停留在第一行。
+  function keepLatestInView(el) {
+    if (!docScroll) return;
+    const boxRect = docScroll.getBoundingClientRect();
+    const elRect = el.getBoundingClientRect();
+    if (elRect.bottom > boxRect.bottom) {
+      docScroll.scrollTop += (elRect.bottom - boxRect.bottom) + 14;
+    } else if (elRect.top < boxRect.top) {
+      docScroll.scrollTop -= (boxRect.top - elRect.top) + 14;
+    }
+  }
+
   function typeTextFast(el, fullText, done) {
     let i = 0;
     el.textContent = '';
@@ -206,11 +220,13 @@
       if (i >= fullText.length) {
         clearInterval(timer);
         el.textContent = fullText;
+        keepLatestInView(el);
         if (done) done();
         return;
       }
       el.textContent = fullText.slice(0, i);
       el.appendChild(caret);
+      keepLatestInView(el);
     }, 10);
   }
 
@@ -247,7 +263,15 @@
       if (idx >= queue.length) return;
       const { card, texts } = queue[idx];
       card.classList.add('is-revealed');
+      // 卡片展開動畫進行中（max-height 過渡）也持續跟隨捲動到底部。
+      let ticks = 0;
+      const followExpand = setInterval(() => {
+        keepLatestInView(card);
+        ticks += 1;
+        if (ticks > 20) clearInterval(followExpand);
+      }, 25);
       window.setTimeout(() => {
+        clearInterval(followExpand);
         typeTextsSequentially(texts, 0, () => revealNext(idx + 1));
       }, 160);
     }
