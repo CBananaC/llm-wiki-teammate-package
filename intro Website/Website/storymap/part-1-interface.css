@@ -678,6 +678,53 @@
 .part1-menu-pop strong { display: block; margin-bottom: 6px; color: var(--ink); }
 .part1-type-pop label { display: block; padding: 3px 0; }
 .part1-type-pop input { accent-color: var(--sample-orange); }
+.part1-skill-bundle-picker {
+  position: fixed;
+  z-index: 12000;
+  width: min(460px, calc(100vw - 20px));
+  max-height: min(60vh, 420px);
+  box-sizing: border-box;
+  padding: 10px;
+  overflow-y: auto;
+  color: var(--ink);
+  background: #fffdf8;
+  border: 1px solid #cdbfa9;
+  border-radius: 10px;
+  box-shadow: 0 12px 32px rgba(60, 44, 20, .28);
+  font: 500 calc(10.5px * var(--font-scale))/1.5 var(--sans);
+}
+.part1-skill-bundle-card {
+  margin: 0 0 7px;
+  overflow: hidden;
+  background: #fffaf1;
+  border: 1px solid #d9cbb7;
+  border-radius: 9px;
+}
+.part1-skill-bundle-card:last-child { margin-bottom: 0; }
+.part1-skill-bundle-card-head { padding: 8px 9px 5px; }
+.part1-skill-bundle-name {
+  display: block;
+  width: 100%;
+  padding: 0;
+  color: var(--ink);
+  background: transparent;
+  border: 0;
+  cursor: pointer;
+  font: 700 calc(12.5px * var(--font-scale))/1.3 var(--sans);
+  overflow-wrap: anywhere;
+  text-align: left;
+}
+.part1-skill-bundle-name:hover,
+.part1-skill-bundle-name:focus-visible { text-decoration: underline; }
+.part1-skill-bundle-meta,
+.part1-skill-bundle-preview {
+  color: var(--muted);
+  font: 500 calc(10.5px * var(--font-scale))/1.45 var(--sans);
+  overflow-wrap: anywhere;
+}
+.part1-skill-bundle-meta { margin-top: 3px; }
+.part1-skill-bundle-preview { padding: 0 9px 7px; }
+.part1-skill-bundle-empty { padding: 12px 6px; color: var(--muted); text-align: center; }
 .part1-tools-row { display: flex; gap: 5px; margin: 5px 0; }
 .part1-tools-row button {
   flex: 1;
@@ -1606,6 +1653,7 @@
 .part1-chat-source-btn:focus-visible { color: #2f5c8a; border-color: #7d9ab6; }
 .part1-chat-source-view { padding-bottom: 10px; }
 .part1-chat-output-turn { margin-top: 7px; border: 1px solid #e2d8c4; border-radius: 6px; background: #fffdf8; }
+.part1-chat-output-turn:not([open]) > :not(summary) { display: none !important; }
 .part1-chat-output-turn summary { padding: 7px; color: #5c4a2c; cursor: pointer; font: 700 calc(10px * var(--font-scale))/1.35 var(--sans); }
 .part1-chat-output-turn-meta { padding: 0 7px 6px; color: #8a7a68; font: 500 calc(8.5px * var(--font-scale))/1.4 var(--sans); overflow-wrap: anywhere; }
 .part1-chat-output-item { margin: 0 7px 7px; padding: 7px; border: 1px solid #e2d8c4; border-left: 3px solid #8a765a; border-radius: 6px; background: #fff; }
@@ -1616,6 +1664,141 @@
 .part1-chat-output-quote { margin: 0; color: #5c5142; background: #f1efe6; border-left-color: #8a765a; }
 .part1-chat-output-link { margin: 5px 0 0; color: #7d4ab8; font: 600 calc(8.5px * var(--font-scale))/1.35 var(--sans); overflow-wrap: anywhere; }
 .part1-chat-output-empty { padding: 0 7px 7px; color: #8a7a68; font: 500 calc(9px * var(--font-scale))/1.4 var(--sans); }
+
+/* Skill-specific saved-output cards --------------------------------------
+   The sample tool changes the card anatomy with the skill: extracted events
+   carry facts and a category badge, emperor actions foreground the edict,
+   responses show both sides of a pairing, and tracing/pairing skills expose
+   their provenance flow. Keep these as one shared visual language without
+   flattening the distinctions between result types. */
+.part1-chat-skill-card {
+  padding: 9px 10px;
+  border-left-width: 3px;
+  background: #fffdf8;
+}
+.part1-chat-skill-card.is-extract { border-left-color: #a83232; }
+.part1-chat-skill-card.is-emperor-action { border-left-color: #c7a44a; background: #fffdf8; }
+.part1-chat-skill-card.is-official-response { border-left-color: #6f9bc4; }
+.part1-chat-skill-card.is-document-pair { border-left-color: #7d4ab8; }
+.part1-chat-skill-card.is-source-trace { border-left-color: #8a765a; }
+.part1-chat-skill-card.is-shangyu-loop { border-left-color: #4d817c; }
+
+.part1-skill-category {
+  display: inline-block;
+  margin: 0 0 6px;
+  padding: 1px 8px;
+  border-radius: 999px;
+  font: 700 calc(9.5px * var(--font-scale))/1.5 var(--sans);
+}
+.part1-skill-category-done { color: #3b6d11; background: #eaf3de; }
+.part1-skill-category-plan { color: #854f0b; background: #faeeda; }
+.part1-skill-category-nonmil { color: #185fa5; background: #e6f1fb; }
+.part1-chat-skill-subtitle,
+.part1-chat-skill-numbered-title,
+.part1-chat-skill-response-title {
+  margin: 0 0 6px;
+  color: #3a2c14;
+  font: 700 calc(12px * var(--font-scale))/1.45 var(--serif);
+}
+.part1-chat-skill-numbered-title span { margin-right: 2px; }
+.part1-chat-skill-desc {
+  margin: 0 0 7px;
+  color: #4a4030;
+  font: 500 calc(11px * var(--font-scale))/1.6 var(--serif);
+}
+.part1-chat-skill-facts {
+  display: grid;
+  grid-template-columns: auto minmax(0, 1fr);
+  gap: 3px 8px;
+  margin: 8px 0 7px;
+  padding-top: 7px;
+  border-top: 1px solid #eee5d8;
+  color: #5c5142;
+  font: 500 calc(9.5px * var(--font-scale))/1.5 var(--sans);
+}
+.part1-chat-skill-facts dt { color: #8a7a68; font-weight: 700; }
+.part1-chat-skill-facts dd { min-width: 0; margin: 0; overflow-wrap: anywhere; }
+.part1-chat-skill-quote {
+  display: block;
+  width: 100%;
+  margin: 7px 0;
+  padding: 7px 9px;
+  color: #5c5142;
+  text-align: left;
+  background: #f6efe1;
+  border: 1px solid #e0d4b6;
+  border-left: 3px solid #c9b79a;
+  border-radius: 0 6px 6px 0;
+  cursor: pointer;
+  font: 500 calc(10.5px * var(--font-scale))/1.65 var(--serif);
+}
+.part1-chat-skill-quote:hover,
+.part1-chat-skill-quote:focus-visible { background: #efe6d2; }
+.part1-chat-skill-quote.is-emperor-quote { border-left-color: #c9a24a; background: #faf3df; color: #6a5417; }
+.part1-chat-skill-quote.is-official-quote { border-left-color: #6f9bc4; background: #e9f1f8; color: #2f4a63; }
+.part1-chat-skill-quote .part1-quote-src { display: block; margin-top: 4px; color: #8a7a68; font: 600 calc(8.5px * var(--font-scale))/1.2 var(--sans); }
+.part1-chat-skill-source { margin: 4px 0 0; color: #8a7a68; font: 500 calc(8.5px * var(--font-scale))/1.35 var(--sans); }
+.part1-chat-labeled-quote { margin: 7px 0; }
+.part1-chat-quote-label {
+  display: inline-block;
+  margin: 0 0 3px;
+  color: #8a7a68;
+  font: 700 calc(9px * var(--font-scale))/1.3 var(--sans);
+}
+.part1-chat-quote-label.is-emperor { color: #8a6b22; }
+.part1-chat-quote-label.is-official { color: #376482; }
+.part1-chat-skill-actions {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 5px 8px;
+  margin-top: 8px;
+  padding-top: 7px;
+  border-top: 1px solid #eee5d8;
+  font: 600 calc(9px * var(--font-scale))/1.4 var(--sans);
+}
+.part1-chat-skill-status { color: #2e7d4f; }
+.part1-chat-skill-actions .part1-chat-output-link { margin: 0; color: #7d4ab8; }
+
+.part1-chat-pair-flow { margin: 8px 0 10px; padding-left: 19px; position: relative; }
+.part1-chat-pair-flow::before { content: ""; position: absolute; left: 5px; top: 9px; bottom: 13px; width: 2px; background: #c9bd9c; }
+.part1-chat-pair-node { position: relative; margin-bottom: 12px; }
+.part1-chat-pair-node:last-child { margin-bottom: 0; }
+.part1-chat-pair-dot { position: absolute; left: -20px; top: 4px; width: 10px; height: 10px; border: 2px solid #efe7d4; border-radius: 50%; }
+.part1-chat-pair-dot.is-emperor { background: #5a86c4; }
+.part1-chat-pair-dot.is-official { background: #5a9e6f; }
+.part1-chat-pair-label { margin-bottom: 3px; color: #3a2c14; font: 600 calc(10.5px * var(--font-scale))/1.4 var(--serif); }
+.part1-chat-pair-connector { margin: 0 0 10px; color: #8f876f; font: 500 calc(9px * var(--font-scale))/1.3 var(--sans); }
+.part1-chat-trace-chain { margin: 7px 0; padding: 7px 8px; background: #fbf7ef; border: 1px solid #d8c9b0; border-radius: 7px; }
+.part1-chat-trace-title { margin: 0 0 5px; color: #6a5535; font: 700 calc(10px * var(--font-scale))/1.3 var(--sans); }
+.part1-chat-trace-hop { display: flex; align-items: center; gap: 6px; padding: 3px 0; color: #5c5142; font: 600 calc(9px * var(--font-scale))/1.35 var(--sans); }
+.part1-chat-trace-hop span:first-child { overflow-wrap: anywhere; }
+.part1-chat-trace-event { padding-top: 5px; margin-top: 4px; border-top: 1px dotted #eadfca; color: #5c5142; font: 600 calc(9px * var(--font-scale))/1.4 var(--sans); }
+.part1-chat-trace-event .part1-chat-skill-quote { margin: 4px 0 0; }
+.part1-chat-skill-empty { margin: 0; color: #8a7a68; font: 500 calc(9.5px * var(--font-scale))/1.4 var(--sans); }
+
+/* In the dedicated AI section, give the cards the reading scale of the
+   sample tool instead of retaining the compressed three-column dock scale. */
+.part1-replica[data-part1-mode="ai"] .part1-ai-body { padding: 18px 24px 30px; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-output-turn { margin-top: 12px; border-radius: 10px; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-output-turn summary { padding: 12px 14px; font-size: clamp(14px, 1.5vw, 20px); }
+.part1-replica[data-part1-mode="ai"] .part1-chat-output-turn-meta { padding: 0 14px 10px; font-size: clamp(11px, 1.1vw, 15px); }
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-card { margin: 0 12px 12px; padding: 16px 18px; border-radius: 10px; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-subtitle,
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-numbered-title,
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-response-title { font-size: clamp(18px, 2vw, 29px); line-height: 1.55; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-desc { font-size: clamp(15px, 1.7vw, 24px); line-height: 1.8; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-facts { font-size: clamp(13px, 1.4vw, 19px); gap: 5px 14px; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-quote { padding: 12px 16px; font-size: clamp(15px, 1.65vw, 23px); line-height: 1.8; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-quote .part1-quote-src,
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-source,
+.part1-replica[data-part1-mode="ai"] .part1-chat-skill-actions,
+.part1-replica[data-part1-mode="ai"] .part1-chat-quote-label { font-size: clamp(12px, 1.15vw, 16px); }
+.part1-replica[data-part1-mode="ai"] .part1-skill-category { font-size: clamp(13px, 1.3vw, 18px); padding: 2px 10px; }
+.part1-replica[data-part1-mode="ai"] .part1-chat-pair-label { font-size: clamp(15px, 1.5vw, 21px); }
+.part1-replica[data-part1-mode="ai"] .part1-chat-pair-connector { font-size: clamp(13px, 1.3vw, 18px); }
+.part1-replica[data-part1-mode="ai"] .part1-chat-trace-hop,
+.part1-replica[data-part1-mode="ai"] .part1-chat-trace-event { font-size: clamp(13px, 1.3vw, 18px); }
 
 @media (max-width: 560px) {
   .part1-event-group-head { font-size: calc(10px * var(--font-scale)); }
@@ -2416,6 +2599,39 @@
   overscroll-behavior: contain;
 }
 .part1-chart-scroll.is-panning { cursor: grabbing; }
+.part1-chart-lane-tabs {
+  position: relative;
+  z-index: 10;
+  display: block;
+  flex: 0 0 74px;
+  height: 74px;
+  width: 100%;
+  min-width: 0;
+  box-sizing: border-box;
+  background: rgba(255, 253, 248, .98);
+  border-bottom: 1px solid #e0d5c3;
+  overflow: hidden;
+  pointer-events: none;
+}
+.part1-chart-lane-tab {
+  position: absolute;
+  top: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  height: 74px;
+  padding: 0 10px;
+  box-sizing: border-box;
+  transform: translateX(-50%);
+  color: #8a765a;
+  white-space: nowrap;
+  font: 700 calc(16px * var(--font-scale))/1.1 var(--serif);
+}
+.part1-chart-lane-tab[data-chart-lane-tab="events"] { color: #b5462e; }
+.part1-chart-lane-tab[data-chart-lane-tab="official"] { color: #2f75b5; }
+.part1-chart-lane-tab[data-chart-lane-tab="imperial"] { color: #c46a2b; }
+.part1-chart-lane-tab[data-chart-lane-tab="emperor"] { color: #7d4ab8; }
 .part1-chart-zoomspace {
   position: relative;
   flex: 0 0 auto;
@@ -2472,6 +2688,72 @@
   .part1-stage { grid-template-columns: 1fr; height: auto; }
   .part1-chart { min-height: 620px; border-right: 0; border-bottom: 1px solid #e0d5c3; }
   .part1-dock { min-height: 520px; }
+}
+
+/* Chart node layout -------------------------------------------------------
+   Middle-lane clicks keep the existing AI/document pair. Outer-lane clicks
+   add the selected node card as the leftmost docked panel. */
+.part1-node-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  margin: 8px 5px;
+  border: 1px solid #cdbfa9;
+  border-radius: 10px;
+  background: #fffdf8;
+  box-shadow: 0 3px 12px rgba(60, 44, 20, .13);
+  overflow: hidden;
+}
+.part1-node-panel[hidden] { display: none !important; }
+.part1-node-panel { grid-template-rows: minmax(0, 1fr); }
+.part1-node-panel-body {
+  min-height: 0;
+  padding: 0;
+  overflow: auto;
+}
+.part1-dock[data-node-closed="false"] {
+  grid-template-columns:
+    var(--part1-node-width, 236px)
+    var(--part1-ai-width, minmax(0, calc(46% - 5px)))
+    var(--part1-doc-width, minmax(0, calc(54% - 5px)));
+  width: var(--part1-dock-width, auto);
+}
+.part1-dock[data-node-closed="false"] > .part1-node-panel { grid-column: 1; grid-row: 1; }
+.part1-dock[data-node-closed="false"] > .part1-ai { grid-column: 2; grid-row: 1; }
+.part1-dock[data-node-closed="false"] > .part1-doc { grid-column: 3; grid-row: 1; }
+
+/* If the event-chain panel is already open, the node card remains the
+   leftmost panel and the existing chain/AI/document order is preserved. */
+.part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] {
+  grid-template-columns:
+    var(--part1-node-width, 236px)
+    var(--part1-eventline-width, 236px)
+    var(--part1-ai-width, 193px)
+    var(--part1-doc-width, 227px);
+  width: var(--part1-dock-width, auto);
+}
+.part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] > .part1-node-panel { grid-column: 1; grid-row: 1; }
+.part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] > .part1-eventline { grid-column: 2; grid-row: 1; }
+.part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] > .part1-ai { grid-column: 3; grid-row: 1; }
+.part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] > .part1-doc { grid-column: 4; grid-row: 1; }
+
+@media (max-width: 900px) {
+  .part1-dock[data-node-closed="false"],
+  .part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] {
+    display: block;
+    width: auto !important;
+    height: auto;
+    overflow: visible;
+  }
+  .part1-dock[data-node-closed="false"] > .part1-node-panel,
+  .part1-dock[data-node-closed="false"] > .part1-ai,
+  .part1-dock[data-node-closed="false"] > .part1-doc,
+  .part1-replica[data-eventline-open="true"] .part1-dock[data-node-closed="false"] > .part1-eventline {
+    display: grid;
+    min-height: 340px;
+    margin: 8px;
+  }
 }
 
 /* Docked panel controls --------------------------------------------------
@@ -2709,6 +2991,9 @@
 .part1-stage {
   grid-template-columns: minmax(0, 1fr) auto;
 }
+.part1-replica[data-eventline-open="true"] .part1-stage {
+  grid-template-columns: minmax(0, 1fr) var(--part1-dock-width, auto);
+}
 .part1-dock {
   grid-template-columns:
     var(--part1-ai-width, minmax(0, calc(46% - 5px)))
@@ -2731,10 +3016,10 @@
 
 .part1-replica[data-eventline-open="true"] .part1-dock {
   grid-template-columns:
-    var(--part1-eventline-width, minmax(220px, .6fr))
-    var(--part1-ai-width, minmax(0, 46%))
-    var(--part1-doc-width, minmax(0, 54%));
-  width: auto;
+    var(--part1-eventline-width, 236px)
+    var(--part1-ai-width, 193px)
+    var(--part1-doc-width, 227px);
+  width: var(--part1-dock-width, calc(var(--part1-eventline-width, 236px) + var(--part1-ai-width, 193px) + var(--part1-doc-width, 227px)));
   overflow-x: auto;
   overflow-y: hidden;
 }
@@ -2753,6 +3038,9 @@
   grid-column: 3;
   grid-row: 1;
 }
+.part1-replica[data-eventline-open="true"] .part1-dock > .part1-eventline {
+  margin: 8px;
+}
 
 @media (max-width: 900px) {
   .part1-stage {
@@ -2763,4 +3051,35 @@
   .part1-dock[data-doc-closed="true"] {
     width: auto !important;
   }
+}
+
+/* Dedicated AI-section view: release the dock from the right-anchored
+   multi-panel width so skill cards use the complete reading column. */
+.part1-replica[data-part1-mode="ai"] .part1-toolbar,
+.part1-replica[data-part1-mode="ai"] .part1-chart { display: none; }
+.part1-replica[data-part1-mode="ai"] .part1-stage {
+  display: block;
+  grid-template-columns: 1fr;
+  height: 620px;
+}
+.part1-replica[data-part1-mode="ai"] .part1-dock {
+  display: block;
+  width: 100% !important;
+  max-width: none;
+  justify-self: stretch;
+  height: 620px;
+  overflow: hidden;
+}
+.part1-replica[data-part1-mode="ai"] .part1-ai {
+  display: grid;
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.part1-replica[data-part1-mode="ai"] .part1-doc { display: none; }
+
+/* AI cards use a neutral outline; the skill label carries the colour cue. */
+.part1-ai :is(.part1-card, .part1-chat-output-item, .part1-chat-skill-card, .part1-event-card, .part1-node-document-card),
+.part1-node-panel :is(.part1-card, .part1-chat-output-item, .part1-chat-skill-card, .part1-event-card, .part1-node-document-card) {
+  border-left: 1px solid #e2d8c4 !important;
 }

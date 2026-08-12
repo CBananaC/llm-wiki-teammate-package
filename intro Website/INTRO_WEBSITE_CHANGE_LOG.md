@@ -8417,6 +8417,71 @@ Verified:
 Remaining:
 - Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
 
+### 2026-08-12 16:18 HKT — Codex — Matched 載入技能輸出 to the sample bundle picker
+
+Summary:
+- Replaced the replica's native file-chooser-only behavior with the sample tool's newest-first bundle picker.
+- Bundle cards now show the bundle name as the load action, timestamp, skill chain, document count, and a compact `文書：…` preview.
+- Selected bundles load their saved JSON outputs into the replica's AI panel using the existing skill-specific cards; no extra chart dots are created.
+- Added the local review API route as the preferred source, with the replica's bundled sample outputs and file chooser retained as standalone fallbacks.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `../review-tools/server.py`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA opened the picker from `工具 → 載入技能輸出`, showed two fallback bundle cards, and loaded `yu-first-5-gemini36` as 9 turns / 32 output cards.
+- Browser QA loaded `zhu-december-rerun-g36` as 10 turns / 10 output cards.
+- `node --check Website/storymap/part-1-interface.js`, `python3 -m py_compile ../review-tools/server.py`, and `git diff --check` passed.
+
+Remaining:
+- The local review API must be running at `127.0.0.1:8166` for the full live bundle list; standalone file use falls back to the bundled sample outputs or manual `.data` / `.json` selection.
+
+### 2026-08-12 16:14 HKT — Codex — Added numbered communication-relation cards
+
+Summary:
+- Converted the two paragraphs under `重建通信關係` into numbered text cards.
+- Added the labels `第一層的通信關係` and `深層的通信關係`, with the original paragraph content retained beneath each label.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed both cards render below the communication-relation cover bar with number boxes `1` and `2`.
+- Browser console reported no warnings or errors; `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 15:06 HKT — Codex — Corrected the event-chain backdrop boundary
+
+Summary:
+- Removed the unused brown stage area to the left of the event-chain panel by making the eventline stage column exactly match the dock width.
+- Kept the event-chain backdrop to the panel's 8px outer margin and synchronized that boundary as the panel expands or contracts.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser geometry showed chart and dock boundaries meeting at `x=575`, then `x=551` after widening; the backdrop remained only `8px` left of the event-chain card.
+- The event-chain panel widened from `204px` to `228px` while AI/document widths stayed unchanged; browser screenshot matched the corrected boundary.
+- Browser diagnostics, `node --check`, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
 ### 2026-08-12 14:20 HKT — Codex — Merged and narrowed the Part 2 summary card
 
 Summary:
@@ -8704,6 +8769,47 @@ Verified:
 Remaining:
 - Existing overlapping project edits remain untouched; no clean checkpoint was created and nothing was pushed.
 
+### 2026-08-12 15:44 HKT — Codex — Restored frozen four-line chart tabs
+
+Summary:
+- Restored the four chart tabs `戰場事件`, `官員上奏`, `皇帝硃批下旨`, and `皇帝行動`.
+- Kept the tab row fixed above the chart's scroll viewport and synchronized each tab's horizontal position with its lane axis and dots during panning and redraws.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser replica showed all four labels with no diagnostics.
+- Vertical scrolling left the tabs fixed; horizontal panning moved the labels with the chart content.
+- `node --check` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent edits remain untouched; no clean checkpoint was created and nothing was pushed.
+
+### 2026-08-12 15:54 HKT — Codex — Bound chart-tab text to 介面字級
+
+Summary:
+- Changed the four frozen chart-tab labels to use the replica's `--font-scale`, controlled by `介面字級`; `正文` remains independent.
+
+Files changed:
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser font size changed from `22.4px` at `1.4×` to `24px` at `1.5×` after using the `介面字級` A＋ control.
+- Browser diagnostics, `node --check`, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent edits remain untouched; no clean checkpoint was created and nothing was pushed.
+
 ### 2026-08-12 14:54 HKT — Codex — Synchronized the event-chain backdrop with its panel width
 
 Summary:
@@ -8722,6 +8828,116 @@ Verified:
 - Browser geometry changed the event-chain panel from `204px` to `236px` while AI stayed `183px` and document stayed `215px`.
 - The brown dock backdrop expanded from `640px` to `664px`, its left edge moved left, and the event-chain right edge stayed fixed; shrinking reversed this without overlap.
 - Browser diagnostics, `node --check`, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.
+
+## 2026-08-12 15:23 HKT — Codex — Matched AI chat cards to each skill type
+
+Summary:
+- Replaced the one generic saved-output card with data-driven layouts for event extraction, emperor actions, official responses, document pairing, source tracing, and 上諭審閱迴圈 outputs.
+- Added Qing action status badges, labelled 上諭／官員回應 quotations, provenance-flow styling, and explicit non-overlapping expanded skill cards.
+- Released the dedicated AI view from the right-anchored dock width so the cards use the full AI reading panel.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Dedicated AI panel width is 1150px at the desktop browser preview.
+- `硃40.chat` rendered 10 extraction cards with separate 林方／清方 headers and seven `清軍事：已執行` badges.
+- `諭24.chat` rendered 8 emperor-action cards and 24 official-response cards; expanded cards had no overlap.
+- Clicking the emperor-action chart dot opened the specialized card and its saved source card with two locatable quotations; browser diagnostics were clear.
+- `node --check`, `git diff --check`, and browser diagnostics passed.
+
+Remaining:
+- Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; no clean checkpoint was created and nothing was pushed.
+
+## 2026-08-12 15:40 HKT — Codex — Applied 正文 scaling to AI chat content
+
+Summary:
+- Scoped the AI chat/source body to the combined `介面字級 × 正文` scale while leaving the AI panel chrome on `介面字級`.
+- Bumped the shared Part 1 behavior script version in the standalone replica and StoryMap page.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `正文` A＋ changed the linked AI source title from `23.52px` to `25.48px` while the settings panel remained open at `410px × 410px`.
+- `aiBody` received the updated local scale (`1.68` → `1.82`); JavaScript syntax and diff checks passed.
+
+Remaining:
+- Existing concurrent Part 1, StoryMap data, routing, stylesheet, and log edits remain untouched; no deployment or push was performed.
+
+## 2026-08-12 15:44 HKT — Codex — Removed node summary bars and coloured card edges
+
+Summary:
+- Removed the visible `節點資訊區／戰場事件` header from selected chart-node cards.
+- Removed the `擷取林方行動` and `皇帝行動` group bars from node-card views.
+- Replaced coloured left accents on AI cards with neutral one-pixel outlines while preserving the card content, quotations, and source actions.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser node view showed no node-summary or event-group bars and retained the event title, description, quotation, facts, and saved-source content.
+- Event-card computed `border-left` was neutral (`1px solid rgb(226, 216, 196)`) rather than the red skill accent; browser diagnostics were clear.
+- `node --check` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent edits remain untouched; no clean checkpoint was created and nothing was pushed.
+
+### 2026-08-12 15:57 HKT — Codex — Routed four-line chart clicks into the panel dock
+
+Summary:
+- Middle-line dots now open the AI result card on the left and the document panel on the right.
+- The leftmost and rightmost dots now open their type-specific `節點資訊區` card to the left of the existing panels.
+- When the event-chain panel is already open, an outer-lane click keeps the order `[節點資訊區][事件鏈][AI][文書]`.
+- Kept the four source-backed dots readable and clickable by sizing the chart to the available viewport instead of rendering an oversized unusable canvas.
+
+Files changed:
+- `Website/storymap/part-1-interface.js`
+- `Website/storymap/part-1-interface.css`
+- `Website/storymap/platform-interface-replica.html`
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed the left outer node opens `戰場事件`, the right outer node opens `皇帝行動`, and both retain visible AI and document panels.
+- Browser QA confirmed a middle node hides the node card while retaining AI plus document panels.
+- Browser QA confirmed event-chain ordering with an outer node open.
+- `node --check Website/storymap/part-1-interface.js` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent edits remain untouched; no deployment or push was performed.
+
+### 2026-08-12 16:12 HKT — Codex — Moved the communication-Skills explanation into its cover tab
+
+Summary:
+- Moved `平台設有兩種的 Skills，用於辨識一份奏摺所回應的硃批或上諭，以及辨識一份上諭所回應的奏摺。` beneath the `重建通信關係` cover title.
+- Removed the duplicate paragraph card from the section body.
+- Increased the cover-tab height with a dedicated `#part-2-communication-bar` CSS control.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap-cards.css`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Confirmed the paragraph appears once as the cover subtitle and is absent from the body-card list.
+- Confirmed the communication cover uses the increased `clamp(260px, 34vh, 340px)` height control.
+- `git diff --check` passed.
 
 Remaining:
 - Existing concurrent Part 1, review-tool, StoryMap data, routing, and log edits remain untouched; nothing was pushed.

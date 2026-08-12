@@ -164,6 +164,12 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
     <div class="part1-stage">
       <div class="part1-region part1-chart" data-region="chart">
+        <div class="part1-chart-lane-tabs" data-chart-lane-tabs aria-label="四線圖表標籤">
+          <span class="part1-chart-lane-tab" data-chart-lane-tab="events">戰場事件</span>
+          <span class="part1-chart-lane-tab" data-chart-lane-tab="official">官員上奏</span>
+          <span class="part1-chart-lane-tab" data-chart-lane-tab="imperial">皇帝硃批下旨</span>
+          <span class="part1-chart-lane-tab" data-chart-lane-tab="emperor">皇帝行動</span>
+        </div>
         <div class="part1-chart-scroll" data-chart-scroll aria-label="可移動及縮放的四線時間與關係圖表">
           <div class="part1-chart-zoomspace" data-chart-zoomspace>
             <div class="part1-lanes" data-lanes>
@@ -175,6 +181,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       </div>
 
       <aside class="part1-dock">
+        <section class="part1-node-panel part1-linked-panel part1-tool-box" data-node-panel hidden aria-label="圖表節點內容" aria-hidden="true">
+          <div class="part1-linked-head tool-box-head">
+            <strong>節點資訊區</strong>
+            <span class="part1-node-panel-lane" data-node-panel-lane></span>
+            <button class="part1-chat-icon-btn" type="button" data-node-panel-close aria-label="關閉節點資訊區"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+          </div>
+          <div class="part1-node-panel-body tool-box-body" data-node-panel-body></div>
+        </section>
         <div class="part1-region part1-ai part1-linked-panel part1-tool-box" data-region="ai">
           <div class="part1-panel-resize-left" data-panel-resize-left="ai" role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="75" aria-valuenow="46" tabindex="0" aria-label="調整 AI 面板寬度"></div>
           <div class="part1-linked-head tool-box-head">
@@ -278,6 +292,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const lanesEl = replica.querySelector('[data-lanes]');
   const chartScroll = replica.querySelector('[data-chart-scroll]');
   const chartZoomspace = replica.querySelector('[data-chart-zoomspace]');
+  const chartLaneTabs = replica.querySelector('[data-chart-lane-tabs]');
+  const chartLaneTabElements = new Map([...replica.querySelectorAll('[data-chart-lane-tab]')].map((tab) => [tab.dataset.chartLaneTab, tab]));
   const chartRuler = replica.querySelector('[data-chart-ruler]');
   const linksSvg = replica.querySelector('[data-chart-links]');
   const docBody = replica.querySelector('[data-doc-body]');
@@ -294,6 +310,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const divisionsToggle = replica.querySelector('[data-view-divisions]');
   const stage = replica.querySelector('.part1-stage');
   const dock = replica.querySelector('.part1-dock');
+  const nodePanel = replica.querySelector('[data-node-panel]');
+  const nodePanelBody = replica.querySelector('[data-node-panel-body]');
+  const nodePanelLane = replica.querySelector('[data-node-panel-lane]');
   const aiPanel = replica.querySelector('.part1-ai');
   const docPanel = replica.querySelector('.part1-doc');
   const eventLinePanel = replica.querySelector('.part1-eventline');
@@ -348,6 +367,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const chartStart = parseDate(chartPreview.startAr) || defaultChartStart || fallbackStart;
   const chartEnd = parseDate(chartPreview.endAr) || defaultChartEnd || (fallbackEnd > chartStart ? fallbackEnd : chartStart + 86400000);
   const CHART_BASE_WIDTH = 1080;
+  const CHART_MIN_WIDTH = 360;
   const CHART_BASE_HEIGHT = 620;
   const REPLICA_SETTINGS_KEY = 'introWebsite.part1Replica.settings.v1';
   const REPLICA_DEFAULTS = Object.freeze({
@@ -403,15 +423,35 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     return plot.left + plot.inner * ratio;
   };
 
+  // The tab row stays at the top of the scroll viewport, while each label
+  // remains in the chart's horizontal coordinate system so it follows its
+  // lane axis and dots during pan/zoom.
+  const syncChartLaneTabs = () => {
+    if (!chartLaneTabs || !lanesEl) return;
+    const headerRect = chartLaneTabs.getBoundingClientRect();
+    const lanesRect = lanesEl.getBoundingClientRect();
+    const chartWidth = lanesEl.clientWidth || chartViewportWidth();
+    chartLaneTabElements.forEach((tab, lane) => {
+      tab.style.left = `${lanesRect.left - headerRect.left + chartLaneX(lane, chartWidth) * chartScale}px`;
+    });
+  };
+
   const chartHeight = () => Math.max(360, Math.round(CHART_BASE_HEIGHT * (daySpacing / REPLICA_DEFAULTS.daySpacing)));
+
+  const chartViewportWidth = () => Math.max(
+    CHART_MIN_WIDTH,
+    Math.min(CHART_BASE_WIDTH, chartScroll?.clientWidth || CHART_BASE_WIDTH)
+  );
 
   const applyChartScale = () => {
     if (!lanesEl || !chartZoomspace) return;
-    lanesEl.style.width = `${CHART_BASE_WIDTH}px`;
+    const width = chartViewportWidth();
+    lanesEl.style.width = `${width}px`;
     lanesEl.style.height = `${chartHeight()}px`;
     lanesEl.style.transform = `scale(${chartScale})`;
-    chartZoomspace.style.width = `${CHART_BASE_WIDTH * chartScale}px`;
+    chartZoomspace.style.width = `${width * chartScale}px`;
     chartZoomspace.style.height = `${chartHeight() * chartScale}px`;
+    syncChartLaneTabs();
     syncChartRuler();
   };
 
@@ -438,6 +478,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const applyReplicaCssSettings = () => {
     replica.style.setProperty('--font-scale', String(uiScale));
     replica.style.setProperty('--body-font-scale', String(bodyScale));
+    // AI content is reading text too: keep its panel chrome at 介面字級,
+    // while letting 正文 scale its rendered chat/source content.
+    aiBody?.style.setProperty('--font-scale', String(roundTo(uiScale * bodyScale, 2)));
   };
 
   const formatToolValue = (input, value) => {
@@ -680,6 +723,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     });
     chartScroll.addEventListener('scroll', () => {
       syncChartRuler();
+      syncChartLaneTabs();
     }, { passive: true });
   }
 
@@ -1008,18 +1052,35 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       chartNodeElements.set(node.id, circle);
     });
 
+    syncChartLaneTabs();
+
   };
 
   /* ------------------------------------------------ 節點 → AI 輸出卡片 */
 
-  const aiChatSources = Array.isArray(data.aiChatSources) ? data.aiChatSources : [];
-  const chatKindLabel = (kind) => ({
-    extract: '事件抽取',
-    edictmatch: '上諭分析',
-    officialresponse: '官員回應',
-    emperor_action: '皇帝行動',
-    output: 'AI 輸出'
-  }[kind] || kind || 'AI 輸出');
+  const aiChatSources = Array.isArray(data.aiChatSources)
+    ? data.aiChatSources.map((source) => ({ ...source, turns: Array.isArray(source.turns) ? source.turns.slice() : [] }))
+    : [];
+  const loadedSkillBundles = new Map();
+  const chatKindLabel = (kind, context = {}) => {
+    const turn = context.turn || context;
+    const hint = `${turn?.prompt || ''} ${turn?.bundleName || ''}`.toLowerCase();
+    if (kind === 'extract') {
+      if (hint.includes('qing')) return '擷取清方行動';
+      if (hint.includes('lin')) return '擷取林方行動';
+      return '擷取事件';
+    }
+    return ({
+      edictmatch: '皇帝行動',
+      officialresponse: '官員回應',
+      emperor_action: '皇帝行動',
+      docpair: '文書配對分析',
+      trace: '追溯來源',
+      infosource: '資訊來源',
+      shangyuloop: '上諭審閱迴圈',
+      output: 'AI 輸出'
+    }[kind] || kind || 'AI 輸出');
+  };
   const chatSourceByEventId = (eventId) => {
     if (!eventId) return null;
     for (const source of aiChatSources) {
@@ -1032,15 +1093,139 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     return null;
   };
   const sourceRoleLabel = (source) => source?.role === 'event_source' ? '事件圓點來源' : source?.role === 'emperor_action_source' ? '皇帝行動圓點來源' : 'AI 輸出來源';
-  const chatItemMarkup = (item, compact = false) => `
-    <article class="part1-chat-output-item${compact ? ' is-compact' : ''}"${item.eventIds?.length ? ` data-chat-event-id="${escapeHtml(item.eventIds[0])}"` : ''}>
-      <div class="part1-chat-output-head"><span>${escapeHtml(chatKindLabel(item.kind))}</span><span>${escapeHtml(item.sourceDocId || '')}</span></div>
-      <p class="part1-chat-output-title">${escapeHtml(item.title)}</p>
+  const chatOutputDocId = (item, context = {}) => String(
+    item.sourceDocId || item.source_doc_id || item.quoteDocId || item.quote_doc_id || item.doc_id || item.responseDocId || context.source?.docId || ''
+  );
+  const chatOutputDate = (item) => item.whenCh || item.whenAr || item.dateAr || item.date || '';
+  const chatOutputSkill = (item, context = {}) => {
+    if (item.aiFilterLabel) return item.aiFilterLabel;
+    const turn = context.turn || context;
+    const hint = `${turn?.prompt || ''} ${turn?.bundleName || ''}`.toLowerCase();
+    if (item.kind === 'extract' && hint.includes('qing-actions-planned')) return '清軍事：待執行';
+    if (item.kind === 'extract' && hint.includes('qing-actions-nonmilitary')) return '清軍事：非軍事';
+    if (item.kind === 'extract' && hint.includes('qing')) return '清軍事：已執行';
+    if (item.kind === 'extract' && hint.includes('lin')) return '林方行動';
+    if (item.kind === 'emperor_action' || turn?.kind === 'edictmatch') return '相關上諭';
+    return '';
+  };
+  const chatSkillCategory = (label) => {
+    if (!label || !/清軍事/.test(label)) return '';
+    const code = /待執行/.test(label) ? 'plan' : /非軍事/.test(label) ? 'nonmil' : 'done';
+    return `<span class="part1-skill-category part1-skill-category-${code}">${escapeHtml(label)}</span>`;
+  };
+  const chatFactsMarkup = (item, extra = []) => {
+    const rows = [
+      ['地點', item.where],
+      item.who?.length ? ['人物', item.who.join('、')] : null,
+      ['發生日期', chatOutputDate(item)],
+      ...extra
+    ].filter((row) => row && row[1]);
+    return rows.length ? `<dl class="part1-chat-skill-facts">${rows.map(([term, value]) => `<dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd>`).join('')}</dl>` : '';
+  };
+  const chatQuoteMarkup = (quote, docId, label = 'AI 輸出引文', quoteClass = '') => quote ? `
+    <button class="part1-chat-skill-quote ${quoteClass}" type="button" data-quote="${escapeHtml(quote)}" data-quote-doc="${escapeHtml(docId)}">
+      「${escapeHtml(quote)}」<span class="part1-quote-src">—${escapeHtml(docId)}／${escapeHtml(label)}　點按定位</span>
+    </button>` : '';
+  const chatSkillActions = (item, context = {}) => {
+    const ids = item.eventIds || [];
+    return `<div class="part1-chat-skill-actions">
+      <span class="part1-chat-skill-status">${ids.length ? '✓ 已形成圖表圓點' : '已保存 AI 輸出'}</span>
+      ${ids.length ? `<span class="part1-chat-output-link">${escapeHtml(ids.join('、'))}</span>` : ''}
+    </div>`;
+  };
+  const chatSkillCard = (item, compact, classes, body, context = {}) => `
+    <article class="part1-chat-output-item part1-chat-skill-card ${classes}${compact ? ' is-compact' : ''}"${item.eventIds?.length ? ` data-chat-event-id="${escapeHtml(item.eventIds[0])}"` : ''}>${body}</article>`;
+  const chatExtractCard = (item, compact, context) => {
+    const docId = chatOutputDocId(item, context);
+    const label = chatOutputSkill(item, context);
+    return chatSkillCard(item, compact, 'is-extract', `
+      ${chatSkillCategory(label)}
+      <p class="part1-chat-skill-subtitle">${escapeHtml(item.title || item.subtitle || '（事件）')}</p>
+      ${item.description ? `<p class="part1-chat-skill-desc">${escapeHtml(item.description)}</p>` : ''}
+      ${chatQuoteMarkup(item.quote, docId)}
+      ${chatFactsMarkup(item)}
+      ${docId ? `<p class="part1-chat-skill-source">來源文書：${escapeHtml(docId)}</p>` : ''}
+      ${chatSkillActions(item, context)}`, context);
+  };
+  const chatEmperorCard = (item, compact, context) => {
+    const docId = chatOutputDocId(item, context);
+    const number = Number.isFinite(Number(item.pointIndex)) ? `${Number(item.pointIndex) + 1}. ` : '';
+    return chatSkillCard(item, compact, 'is-emperor-action', `
+      <p class="part1-chat-skill-numbered-title"><span>${escapeHtml(number)}</span>${escapeHtml(item.title || item.subtitle || '皇帝行動')}</p>
+      ${item.quote || item.action_quote ? `<div class="part1-chat-labeled-quote"><span class="part1-chat-quote-label">上諭</span>${chatQuoteMarkup(item.action_quote || item.quote, docId, '上諭')}</div>` : ''}
+      ${chatFactsMarkup(item, [['來源文書', docId]])}
+      ${item.description ? `<p class="part1-chat-skill-desc part1-chat-emperor-desc">${escapeHtml(item.description)}</p>` : ''}
+      ${chatSkillActions(item, context)}`, context);
+  };
+  const chatOfficialResponseCard = (item, compact, context) => {
+    const sourceDocId = String(item.action_doc_id || item.action_doc_ids?.[0] || item.source_doc_ids?.[0] || item.sourceDocId || context.source?.docId || '');
+    const responseDocId = String(item.doc_id || item.responseDocId || item.response_doc_id || '');
+    const actionQuote = item.action_quote || item.actionQuote || item.edictQuote || '';
+    const responseQuote = item.response_quote || item.responseQuote || item.quote || '';
+    const description = item.how || item.description || '';
+    return chatSkillCard(item, compact, 'is-official-response', `
+      <p class="part1-chat-skill-response-title">回應 ${Number.isFinite(Number(context.itemIndex)) ? Number(context.itemIndex) + 1 : ''}：${escapeHtml(item.subtitle || item.title || '官員回應')}</p>
+      ${actionQuote ? `<div class="part1-chat-labeled-quote"><span class="part1-chat-quote-label is-emperor">上諭</span>${chatQuoteMarkup(actionQuote, sourceDocId, '上諭')}</div>` : ''}
+      ${responseQuote ? `<div class="part1-chat-labeled-quote"><span class="part1-chat-quote-label is-official">官員回應</span>${chatQuoteMarkup(responseQuote, responseDocId, '官員回應')}</div>` : ''}
+      ${description ? `<p class="part1-chat-skill-desc">${escapeHtml(description)}</p>` : ''}
+      ${chatFactsMarkup(item, [['回應文書', responseDocId], ['上諭文書', sourceDocId]])}
+      ${chatSkillActions(item, context)}`, context);
+  };
+  const chatShangyuLoopCard = (item, compact, context) => {
+    const docId = chatOutputDocId(item, context);
+    const quote = item.edictQuote || item.action_quote || item.quote || '';
+    const responseQuote = item.response_quote || item.commentQuote || '';
+    return chatSkillCard(item, compact, 'is-shangyu-loop', `
+      <p class="part1-chat-skill-subtitle">${escapeHtml(item.title || item.subtitle || '上諭審閱結果')}</p>
+      ${item.description ? `<p class="part1-chat-skill-desc">${escapeHtml(item.description)}</p>` : ''}
+      ${quote ? `<div class="part1-chat-labeled-quote"><span class="part1-chat-quote-label is-emperor">上諭</span>${chatQuoteMarkup(quote, docId, '上諭')}</div>` : ''}
+      ${responseQuote ? `<div class="part1-chat-labeled-quote"><span class="part1-chat-quote-label is-official">官員回應</span>${chatQuoteMarkup(responseQuote, item.responseDocId || item.doc_id || '', '官員回應')}</div>` : ''}
+      ${chatFactsMarkup(item, [['來源文書', docId]])}
+      ${chatSkillActions(item, context)}`, context);
+  };
+  const chatPairCard = (item, compact, context) => {
+    const pair = item.pair || item;
+    const yuId = String(pair.yu_doc_id || pair.zhu_doc_id || pair.action_doc_id || '');
+    const replyId = String(pair.reply_doc_id || pair.responseDocId || pair.doc_id || '');
+    const yuQuote = pair.matched_yu_span || pair.matched_zhu_span || pair.action_quote || pair.yu_quote || '';
+    const replyQuote = pair.quote_in_reply || pair.response_quote || pair.reply_quote || pair.quote || '';
+    const yuTitle = pair.yu_title || pair.zhu_title || pair.action_title || yuId || '上諭／硃批';
+    const replyTitle = pair.reply_title || pair.response_title || replyId || '官員回應';
+    return chatSkillCard(item, compact, 'is-document-pair', `
+      <div class="part1-chat-pair-flow">
+        <div class="part1-chat-pair-node"><span class="part1-chat-pair-dot is-emperor"></span><div class="part1-chat-pair-label">${escapeHtml(yuTitle)}</div>${chatQuoteMarkup(yuQuote, yuId, '上諭／硃批', 'is-emperor-quote')}</div>
+        <div class="part1-chat-pair-connector">↩ 回應${pair.interval ? `（${escapeHtml(pair.interval)}）` : ''}</div>
+        <div class="part1-chat-pair-node"><span class="part1-chat-pair-dot is-official"></span><div class="part1-chat-pair-label">${escapeHtml(replyTitle)}</div>${chatQuoteMarkup(replyQuote, replyId, '官員回應', 'is-official-quote')}</div>
+      </div>
+      ${chatFactsMarkup(item, [['上諭文書', yuId], ['回應文書', replyId]])}
+      ${chatSkillActions(item, context)}`, context);
+  };
+  const chatTraceCard = (item, compact, context) => {
+    const chains = item.chains || item.items || item.sourceChains || [];
+    const chainMarkup = chains.length ? chains.map((chain, index) => `
+      <div class="part1-chat-trace-chain">
+        <p class="part1-chat-trace-title">來源鏈 ${index + 1}</p>
+        ${(chain.hops || chain.steps || []).map((hop) => `<div class="part1-chat-trace-hop"><span>${escapeHtml(hop.doc_id || hop.docId || hop.title || '文書')}</span><span>→</span><span>${escapeHtml(hop.reporter || hop.role || '')}</span></div>`).join('')}
+        ${(chain.events || []).map((event) => `<div class="part1-chat-trace-event">${escapeHtml(event.subtitle || event.title || '事件')}${event.quote ? chatQuoteMarkup(event.quote, event.doc_id || event.docId || '', '來源引文') : ''}</div>`).join('')}
+      </div>`).join('') : '<p class="part1-chat-skill-empty">未能從原文追溯來源。</p>';
+    return chatSkillCard(item, compact, 'is-source-trace', `${chainMarkup}${chatSkillActions(item, context)}`, context);
+  };
+  const chatItemMarkup = (item, compact = false, context = {}) => {
+    const kind = context.turn?.kind === 'shangyuloop' ? 'shangyuloop' : (item.kind || context.turn?.kind || 'output');
+    if (kind === 'extract') return chatExtractCard(item, compact, context);
+    if (kind === 'emperor_action' || kind === 'edictmatch') return chatEmperorCard(item, compact, context);
+    if (kind === 'officialresponse') return chatOfficialResponseCard(item, compact, context);
+    if (kind === 'docpair') return chatPairCard(item, compact, context);
+    if (kind === 'shangyuloop') return chatShangyuLoopCard(item, compact, context);
+    if (kind === 'trace' || kind === 'infosource') return chatTraceCard(item, compact, context);
+    return chatSkillCard(item, compact, 'is-generic', `
+      <div class="part1-chat-output-head"><span>${escapeHtml(chatKindLabel(kind, context))}</span><span>${escapeHtml(chatOutputDocId(item, context))}</span></div>
+      <p class="part1-chat-output-title">${escapeHtml(item.title || item.subtitle || 'AI 輸出')}</p>
       ${item.description ? `<p class="part1-chat-output-desc">${escapeHtml(item.description)}</p>` : ''}
-      ${(item.where || item.who?.length || item.whenCh || item.whenAr) ? `<p class="part1-chat-output-meta">${escapeHtml([item.whenCh || item.whenAr, item.where, item.who?.length ? item.who.join('、') : ''].filter(Boolean).join('　'))}</p>` : ''}
-      ${item.quote ? `<button class="part1-quote part1-chat-output-quote" type="button" data-quote="${escapeHtml(item.quote)}" data-quote-doc="${escapeHtml(item.sourceDocId || '')}">「${escapeHtml(item.quote)}」<span class="part1-quote-src">—${escapeHtml(item.sourceDocId || '')}／AI 輸出引文　點按定位</span></button>` : ''}
-      ${item.eventIds?.length ? `<p class="part1-chat-output-link">形成圖表圓點：${escapeHtml(item.eventIds.join('、'))}</p>` : ''}
-    </article>`;
+      ${chatFactsMarkup(item)}
+      ${chatQuoteMarkup(item.quote, chatOutputDocId(item, context))}
+      ${chatSkillActions(item, context)}`, context);
+  };
   const chatSourceButton = (source) => `<button class="part1-chat-source-btn" type="button" data-chat-source-doc="${escapeHtml(source.docId)}">載入 ${escapeHtml(source.aiOutputPath || `${source.docId}.chat`)}（${escapeHtml(source.outputItemCount)} 項輸出）</button>`;
   const chatSourceLauncher = () => aiChatSources.length ? `
     <section class="part1-chat-source-box">
@@ -1055,10 +1240,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       <div class="part1-chat-source-view">
         <div class="part1-node-result-head"><strong>${escapeHtml(sourceRoleLabel(source))}</strong><span>${escapeHtml(source.docId)}.chat</span></div>
         <p class="part1-chat-source-summary">${escapeHtml(source.docId)} 的保存輸出共有 ${escapeHtml(source.turnCount)} 個對話回合、${escapeHtml(source.outputItemCount)} 項輸出；下列每項都保留其回合、技能組包與事件圓點對應。</p>
-        ${(source.turns || []).map((turn) => `<details class="part1-chat-output-turn"${turn.outputItems?.some((item) => (item.eventIds || []).includes(focusEventId)) ? ' open' : ''}>
-          <summary>第 ${escapeHtml(Number(turn.turnIndex) + 1)} 回　${escapeHtml(chatKindLabel(turn.kind))}　${escapeHtml(turn.outputItems?.length || 0)} 項</summary>
+        ${(source.turns || []).map((turn) => `<details class="part1-chat-output-turn"${!focusEventId || turn.outputItems?.some((item) => (item.eventIds || []).includes(focusEventId)) ? ' open' : ''}>
+          <summary>第 ${escapeHtml(Number(turn.turnIndex) + 1)} 回　${escapeHtml(chatKindLabel(turn.kind, { turn }))}　${escapeHtml(turn.outputItems?.length || 0)} 項</summary>
           <div class="part1-chat-output-turn-meta">${escapeHtml(turn.bundleName || '未標示技能組包')} ${turn.runId ? `／${escapeHtml(turn.runId)}` : ''}${turn.prompt ? `<br>提示：${escapeHtml(turn.prompt)}` : ''}</div>
-          ${(turn.outputItems || []).map((item) => chatItemMarkup(item, false)).join('') || '<p class="part1-chat-output-empty">此回合沒有可顯示的輸出卡。</p>'}
+          ${(turn.outputItems || []).map((item, itemIndex) => chatItemMarkup(item, false, { turn, source, itemIndex })).join('') || '<p class="part1-chat-output-empty">此回合沒有可顯示的輸出卡。</p>'}
         </details>`).join('')}
         <div class="part1-chat-source-actions">${chatSourceButton(source)}${chatSourceLauncher()}</div>
       </div>`;
@@ -1072,11 +1257,282 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     <section class="part1-chat-source-box is-matched">
       <div class="part1-chat-source-head"><strong>此圓點的 AI 對話輸出來源</strong><span>${escapeHtml(match.source.docId)}.chat</span></div>
       <p>此圓點由保存的 ${escapeHtml(match.source.docId)} AI 輸出形成；以下是對應回合中的原始結果卡。</p>
-      ${chatItemMarkup(match.item, true)}
+      ${chatItemMarkup(match.item, true, { turn: match.turn, source: match.source, itemIndex: (match.turn.outputItems || []).indexOf(match.item) })}
       <button class="part1-chat-source-btn" type="button" data-chat-source-doc="${escapeHtml(match.source.docId)}" data-chat-focus-event="${escapeHtml(match.item.eventIds?.[0] || '')}">載入完整 ${escapeHtml(match.source.aiOutputPath || `${match.source.docId}.chat`)}</button>
     </section>` : chatSourceLauncher();
 
-  const renderNodePanel = (payload, laneKey, label) => {
+  /* ------------------------------------------------------ 技能組包載入
+     The sample review tool loads a saved review-bundle by choosing its manifest
+     card, rather than asking the researcher to type a filename into a native
+     file picker. Keep the same compact picker here. The replica can read the
+     review-tool API when it is served by that local server, while the bundled
+     sample outputs remain available as a standalone file:// fallback. */
+  const bundleArray = (value) => {
+    if (!value) return [];
+    if (Array.isArray(value)) return value;
+    if (typeof value !== 'object') return [];
+    if (value.doc_id || value.id || value.document_id || value.source_id) return [value];
+    for (const key of ['documents', 'records', 'results', 'items', 'events', 'parts', 'summaries', 'chains', 'outputs', 'pairs']) {
+      if (Array.isArray(value[key])) return value[key];
+    }
+    return Object.entries(value).map(([key, item]) => typeof item === 'object'
+      ? { doc_id: key, ...item }
+      : { doc_id: key, text: item });
+  };
+  const bundleDocId = (item, fallback = '') => String(
+    item?.doc_id || item?.id || item?.document_id || item?.source_id || item?.sourceDocId || item?.source_doc_id || fallback || ''
+  ).trim();
+  const bundleEventItem = (raw, actor, rel, fallbackDocId) => {
+    const item = raw && typeof raw === 'object' ? raw : { text: raw };
+    const docId = bundleDocId(item, fallbackDocId);
+    const title = item.subtitle || item.title || item.event_title || item.event || '事件';
+    return {
+      ...item,
+      kind: 'extract',
+      actor,
+      title,
+      subtitle: item.subtitle || item.title || item.event_title || title,
+      description: item.description || item.summary || item.explanation || item.text || '',
+      where: item.where || item.location || item.place || '',
+      whenCh: item.whenCh || item.date_chinese || item.event_date_chinese || item.chinese_date || '',
+      whenAr: item.whenAr || item.dateAr || item.date_arabic || item.event_date || item.gregorian_date || '',
+      dateAr: item.dateAr || item.whenAr || item.date_arabic || item.event_date || '',
+      who: Array.isArray(item.who)
+        ? item.who
+        : String(item.who || item.people || item.actor_name || '').split(/[、,，；;]/).map((value) => value.trim()).filter(Boolean),
+      quote: item.quote || item.excerpt || item.source_quote || '',
+      sourceDocId: docId,
+      aiFilterLabel: item.aiFilterLabel || item.category || (actor === 'lin' ? '林方行動' : '清軍事：已執行')
+    };
+  };
+  const bundleSourceForExistingData = (bundleName) => {
+    const existing = loadedSkillBundles.get(bundleName);
+    if (existing) return existing;
+    const parts = aiChatSources.filter((source) => (source.turns || []).some((turn) => turn.bundleName === bundleName));
+    if (!parts.length) return null;
+    const turns = parts.flatMap((source) => (source.turns || [])
+      .filter((turn) => turn.bundleName === bundleName)
+      .map((turn) => ({ ...turn, outputItems: (turn.outputItems || []).map((item) => ({ ...item })) })))
+      .map((turn, index) => ({ ...turn, turnIndex: index }));
+    const source = {
+      docId: `bundle:${bundleName}`,
+      role: 'skill_bundle',
+      aiOutputPath: bundleName,
+      bundleName,
+      turnCount: turns.length,
+      outputItemCount: turns.reduce((sum, turn) => sum + (turn.outputItems || []).length, 0),
+      turns
+    };
+    aiChatSources.push(source);
+    loadedSkillBundles.set(bundleName, source);
+    return source;
+  };
+  const bundleSourceFromResponse = (bundle) => {
+    const bundleName = String(bundle?.name || '').trim();
+    if (!bundleName) return null;
+    const existing = loadedSkillBundles.get(bundleName);
+    if (existing) return existing;
+    const manifest = bundle.manifest || {};
+    const fallbackDocId = Array.isArray(manifest.doc_ids) ? String(manifest.doc_ids[0] || '') : '';
+    const turns = [];
+    const files = bundle.files || {};
+    let outputItemCount = 0;
+    const addTurn = (kind, rel, items, extra = {}) => {
+      const outputItems = items.filter(Boolean);
+      if (!outputItems.length) return;
+      turns.push({
+        turnIndex: turns.length,
+        kind,
+        bundleName,
+        runId: `bundle:${bundleName}`,
+        model: manifest.model || 'local skill output',
+        prompt: `（本機技能輸出：${rel}）`,
+        outputItems,
+        ...extra
+      });
+      outputItemCount += outputItems.length;
+    };
+    Object.keys(files).sort((a, b) => a.localeCompare(b)).forEach((rel) => {
+      if (!/\.json$/i.test(rel)) return;
+      const lower = rel.toLowerCase();
+      const rawRows = bundleArray(files[rel]);
+      if (!rawRows.length) return;
+      if (/lin.*(?:event|action)|林.*(?:事件|行動)/.test(lower)) {
+        rawRows.forEach((row) => addTurn('extract', rel, [bundleEventItem(row, 'lin', rel, fallbackDocId)]));
+        return;
+      }
+      if (/qing.*(?:event|action)|清.*(?:事件|行動)/.test(lower)) {
+        rawRows.forEach((row) => addTurn('extract', rel, [bundleEventItem(row, 'qing', rel, fallbackDocId)]));
+        return;
+      }
+      if (/official.?response|官員回應/.test(lower)) {
+        rawRows.forEach((row) => {
+          const items = Array.isArray(row.items) && row.items.length ? row.items : [row];
+          addTurn('officialresponse', rel, items.map((item, itemIndex) => ({
+            ...item,
+            kind: 'officialresponse',
+            title: item.title || item.subtitle || row.evTitle || '官員回應',
+            subtitle: item.subtitle || item.title || row.evTitle || '官員回應',
+            action_doc_id: item.action_doc_id || row.action_doc_id || row.doc_id || fallbackDocId,
+            source_doc_ids: item.source_doc_ids || row.source_doc_ids || [],
+            responseDocId: item.responseDocId || item.doc_id || row.doc_id || '',
+            itemIndex
+          })));
+        });
+        return;
+      }
+      if (/source.?chain|trace|來源鏈/.test(lower)) {
+        rawRows.forEach((row) => addTurn('trace', rel, [{
+          ...row,
+          kind: 'trace',
+          items: row.items || row.chains || (row.hops ? [row] : []),
+          sourceDocId: bundleDocId(row, fallbackDocId)
+        }]));
+        return;
+      }
+      if (/confirmed.?pair|yu.?pairing|zhu.?pairing|doc.?pair|配對/.test(lower)) {
+        addTurn('docpair', rel, rawRows.map((row) => ({ kind: 'docpair', pair: row, ...row })));
+        return;
+      }
+      if (/info.?source|資訊來源|硃批來源|上諭來源/.test(lower)) {
+        rawRows.forEach((row) => addTurn('infosource', rel, [{
+          ...row,
+          kind: 'infosource',
+          sourceDocId: bundleDocId(row, fallbackDocId),
+          items: row.items || []
+        }]));
+        return;
+      }
+      if (/edict|emperor|shangyu|上諭|皇帝|zhupi|硃批/.test(lower)) {
+        rawRows.forEach((row) => {
+          const items = Array.isArray(row.items) ? row.items : (Array.isArray(row.edicts) ? row.edicts : [row]);
+          addTurn('edictmatch', rel, items.map((item, itemIndex) => ({
+            ...item,
+            kind: 'edictmatch',
+            sourceDocId: bundleDocId(item, bundleDocId(row, fallbackDocId)),
+            pointIndex: item.pointIndex ?? itemIndex
+          })));
+        });
+        return;
+      }
+      rawRows.forEach((row) => addTurn('output', rel, [{
+        ...row,
+        kind: 'output',
+        title: row.title || row.subtitle || row.name || rel,
+        sourceDocId: bundleDocId(row, fallbackDocId),
+        response: typeof row === 'string' ? row : row.response || row.text || JSON.stringify(row, null, 2)
+      }]));
+    });
+    if (!turns.length) return null;
+    const source = {
+      docId: `bundle:${bundleName}`,
+      role: 'skill_bundle',
+      aiOutputPath: bundleName,
+      bundleName,
+      turnCount: turns.length,
+      outputItemCount,
+      turns
+    };
+    aiChatSources.push(source);
+    loadedSkillBundles.set(bundleName, source);
+    return source;
+  };
+  const skillApiBase = replica.dataset.skillApiBase || (window.location.protocol === 'file:' ? 'http://127.0.0.1:8166' : '');
+  const localSkillApi = (path) => fetch(`${skillApiBase}${path}`, { cache: 'no-store' }).then((response) => response.json().then((body) => {
+    if (!response.ok || body?.error) throw new Error(body?.error || response.statusText || '本機 review-bundle API 無法使用。');
+    return body;
+  }));
+  const fallbackBundleRows = () => {
+    const grouped = new Map();
+    aiChatSources.forEach((source) => (source.turns || []).forEach((turn) => {
+      const name = String(turn.bundleName || '').trim();
+      if (!name) return;
+      if (!grouped.has(name)) grouped.set(name, { name, manifest: { doc_ids: [], chain: [] }, __fallback: true });
+      const row = grouped.get(name);
+      const docId = String(source.docId || '').replace(/^bundle:/, '');
+      if (docId && !row.manifest.doc_ids.includes(docId)) row.manifest.doc_ids.push(docId);
+      const kind = chatKindLabel(turn.kind, { turn });
+      if (kind && !row.manifest.chain.includes(kind)) row.manifest.chain.push(kind);
+    }));
+    return [...grouped.values()];
+  };
+  const closeSkillBundlePicker = () => {
+    document.querySelectorAll('.part1-skill-bundle-picker').forEach((picker) => picker.remove());
+    document.removeEventListener('mousedown', skillBundlePickerOutside, true);
+  };
+  const skillBundlePickerOutside = (event) => {
+    if (!event.target.closest('.part1-skill-bundle-picker') && !event.target.closest('[data-tool-action="load-skills"]')) closeSkillBundlePicker();
+  };
+  const renderSkillBundlePicker = (bundles, openBundle) => {
+    closeSkillBundlePicker();
+    const button = replica.querySelector('[data-tool-action="load-skills"]');
+    const rect = button?.getBoundingClientRect() || { left: 20, bottom: 40 };
+    const picker = document.createElement('div');
+    picker.className = 'part1-skill-bundle-picker';
+    picker.style.left = `${Math.max(8, Math.min(rect.left, window.innerWidth - Math.min(460, window.innerWidth - 20) - 8))}px`;
+    picker.style.top = `${Math.max(8, Math.min(rect.bottom + 4, window.innerHeight - Math.min(420, window.innerHeight - 16) - 8))}px`;
+    const sorted = bundles.slice().sort((a, b) => String((b.manifest || {}).created_at || '').localeCompare(String((a.manifest || {}).created_at || '')));
+    picker.innerHTML = sorted.map((bundle) => {
+      const manifest = bundle.manifest || {};
+      const ids = Array.isArray(manifest.doc_ids) ? manifest.doc_ids.map(String) : [];
+      const when = manifest.created_at ? String(manifest.created_at).replace('T', ' ').slice(0, 16) : '（本頁保存輸出）';
+      const chain = (manifest.chain || []).join('・') || '（不明步驟）';
+      const preview = ids.length ? `${ids.slice(0, 8).map(escapeHtml).join('、')}${ids.length > 8 ? ' …' : ''}` : '未提供文書清單';
+      return `<article class="part1-skill-bundle-card"><div class="part1-skill-bundle-card-head"><button class="part1-skill-bundle-name" type="button" data-bundle-name="${escapeHtml(bundle.name)}">${escapeHtml(bundle.name)}</button><div class="part1-skill-bundle-meta">${escapeHtml(when)} · ${escapeHtml(chain)} · ${ids.length} 份文書</div></div><div class="part1-skill-bundle-preview">文書：${preview}</div></article>`;
+    }).join('') || '<div class="part1-skill-bundle-empty">找不到組包。</div>';
+    picker.querySelectorAll('[data-bundle-name]').forEach((open) => open.addEventListener('click', async () => {
+      closeSkillBundlePicker();
+      await openBundle(open.dataset.bundleName);
+    }));
+    document.body.appendChild(picker);
+    window.setTimeout(() => document.addEventListener('mousedown', skillBundlePickerOutside, true), 0);
+  };
+  const applyLocalSkillBundle = async (bundleName, fallbackRows = []) => {
+    const existing = loadedSkillBundles.get(bundleName) || bundleSourceForExistingData(bundleName);
+    if (existing) {
+      loadChatSource(existing.docId);
+      return;
+    }
+    try {
+      const bundle = await localSkillApi(`/api/bundles/${encodeURIComponent(bundleName)}`);
+      const source = bundleSourceFromResponse(bundle);
+      if (!source) throw new Error('這個組包沒有可顯示的 JSON 技能輸出。');
+      loadChatSource(source.docId);
+    } catch (error) {
+      const fallback = fallbackRows.find((row) => row.name === bundleName);
+      const source = fallback ? bundleSourceForExistingData(bundleName) : null;
+      if (source) {
+        loadChatSource(source.docId);
+        return;
+      }
+      skillsFile?.click();
+      setProgress(`本機組包 API 無法使用；請選擇 ${bundleName} 的 .data／.json 輸出。`);
+    }
+  };
+  const loadLocalSkillOutputs = async () => {
+    closeSkillBundlePicker();
+    let bundles;
+    try {
+      bundles = await localSkillApi('/api/bundles');
+    } catch (error) {
+      bundles = fallbackBundleRows();
+      if (!bundles.length) {
+        skillsFile?.click();
+        return;
+      }
+    }
+    if (!bundles.length) {
+      skillsFile?.click();
+      return;
+    }
+    if (bundles.length === 1) {
+      await applyLocalSkillBundle(bundles[0].name, bundles);
+      return;
+    }
+    renderSkillBundlePicker(bundles, (bundleName) => applyLocalSkillBundle(bundleName, bundles));
+  };
+
+  const renderNodePanel = (payload, laneKey, label, target = 'ai') => {
     const laneLabels = {
       events: '戰場事件',
       official: '官員上奏',
@@ -1104,24 +1560,17 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       </div>` : '';
 
     let cardMarkup;
-    if (laneKey === 'events' || laneKey === 'emperor') {
-      const isLin = laneKey === 'events';
-      const outputLabel = isLin ? '林方事件' : '皇帝行動';
-      const skillLabel = payload.aiFilterLabel || (isLin ? '林方行動' : '相關上諭');
+    if (laneKey === 'events') {
+      const eventItem = { ...payload, kind: 'extract', title, sourceDocId: quoteDocId };
       cardMarkup = `
-        <section class="part1-event-group ${isLin ? 'is-lin' : 'is-qing'}">
-          <div class="part1-event-group-head"><span>${escapeHtml(outputLabel)}</span><span>1 項</span></div>
-          <article class="part1-card part1-event-card ${isLin ? 'is-lin' : 'is-qing'} is-confirmed part1-node-output-card">
-            <div class="part1-card-head">
-              <span>AI ${escapeHtml(outputLabel)}</span>
-              <span class="part1-card-skill">${escapeHtml(skillLabel)}</span>
-            </div>
-            <p class="part1-card-title">${escapeHtml(title)}</p>
-            ${payload.description ? `<p class="part1-card-desc">${escapeHtml(payload.description)}</p>` : ''}
-            ${facts ? `<dl class="part1-event-facts">${facts}</dl>` : ''}
-            ${quoteCard}
-            <p class="part1-card-status">由圖表節點開啟；點擊來源引文可回到原始史料區核對。</p>
-          </article>
+        <section class="part1-event-group is-lin">
+          ${chatExtractCard(eventItem, false, { source: { docId: quoteDocId }, itemIndex: 0 })}
+        </section>`;
+    } else if (laneKey === 'emperor') {
+      const emperorItem = { ...payload, kind: 'emperor_action', title, sourceDocId: quoteDocId };
+      cardMarkup = `
+        <section class="part1-event-group is-qing">
+          ${chatEmperorCard(emperorItem, false, { source: { docId: quoteDocId }, itemIndex: 0 })}
         </section>`;
     } else {
       const isImperial = laneKey === 'imperial';
@@ -1146,14 +1595,19 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         </article>`;
     }
 
-    aiBody.innerHTML = `
-      <div class="part1-node-result" data-node-result>
-        <div class="part1-node-result-head"><strong>節點資訊區</strong><span>${escapeHtml(laneLabel)}</span></div>
-        ${cardMarkup}
-        ${matchedChatSourceMarkup(matchedChat)}
-      </div>`;
-    aiBody.scrollTop = 0;
-    aiBody.querySelectorAll('[data-quote]').forEach((button) => {
+    const outputMarkup = `${cardMarkup}${matchedChatSourceMarkup(matchedChat)}`;
+    const targetBody = target === 'node' && nodePanelBody ? nodePanelBody : aiBody;
+    if (target === 'node' && nodePanelBody) {
+      if (nodePanelLane) nodePanelLane.textContent = data.lanes.find((item) => item.key === laneKey)?.label || '節點';
+      nodePanelBody.innerHTML = outputMarkup;
+    } else {
+      aiBody.innerHTML = `
+        <div class="part1-node-result" data-node-result>
+          ${outputMarkup}
+        </div>`;
+    }
+    targetBody.scrollTop = 0;
+    targetBody.querySelectorAll('[data-quote]').forEach((button) => {
       button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc));
     });
   };
@@ -1164,7 +1618,11 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const keepEventLineOpen = replica.dataset.eventlineOpen === 'true';
     selectedChartNodeId = node.id;
     chartNodeElements.forEach((element) => element.classList.toggle('is-selected', element === button));
-    renderNodePanel(node.payload, node.lane, node.label);
+    const isOuterLane = node.lane === 'events' || node.lane === 'emperor';
+    renderNodePanel(node.payload, node.lane, node.label, isOuterLane ? 'node' : 'ai');
+    setPanelOpen('ai', true);
+    setPanelOpen('doc', true);
+    setNodePanelOpen(isOuterLane);
     if (keepEventLineOpen) {
       setRegion('eventline', { silent: true });
       renderEventLine();
@@ -1473,6 +1931,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
             <span>AI ${escapeHtml(actorLabel(item.actor))}</span>
             <span class="part1-card-skill">${escapeHtml(item.aiFilterLabel)}</span>
           </div>
+          ${item.actor === 'qing' ? chatSkillCategory(item.aiFilterLabel) : ''}
           <p class="part1-card-title">${escapeHtml(item.subtitle)}</p>
           <p class="part1-card-desc">${escapeHtml(item.description)}</p>
           <dl class="part1-event-facts">
@@ -1580,16 +2039,19 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   };
 
   const PANEL_MIN_WIDTH = 180;
-  const CHART_MIN_WIDTH = 360;
   let aiPanelWidth = 0;
   let docPanelWidth = 0;
+  let nodePanelWidth = 236;
   // Track width includes the event-chain panel's 8px margins on both sides.
   let eventLinePanelWidth = 220;
 
   const syncDockWidth = (aiWidth = aiPanelWidth, docWidth = docPanelWidth) => {
     if (!dock) return;
+    const nodeWidth = nodePanel && !nodePanel.hidden ? nodePanelWidth : 0;
     const eventlineWidth = replica.matches('[data-eventline-open="true"]') ? eventLinePanelWidth : 0;
-    dock.style.setProperty('--part1-dock-width', `${roundTo(aiWidth + docWidth + eventlineWidth, 2)}px`);
+    const width = `${roundTo(aiWidth + docWidth + nodeWidth + eventlineWidth, 2)}px`;
+    dock.style.setProperty('--part1-dock-width', width);
+    stage?.style.setProperty('--part1-dock-width', width);
   };
 
   const applyEventLinePanelWidth = (panelWidth) => {
@@ -1598,14 +2060,15 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     dock.style.setProperty('--part1-eventline-width', `${roundTo(eventLinePanelWidth, 2)}px`);
     syncDockWidth();
     eventLinePanel.style.removeProperty('width');
-    eventLinePanel.style.marginLeft = 'auto';
+    eventLinePanel.style.marginLeft = '8px';
     eventLinePanel.style.marginRight = '8px';
   };
 
   const panelWidthLimit = (otherWidth) => {
     const stageWidth = stage?.getBoundingClientRect().width || 0;
+    const nodeWidth = nodePanel && !nodePanel.hidden ? nodePanelWidth : 0;
     return stageWidth > 0
-      ? Math.max(PANEL_MIN_WIDTH, stageWidth - CHART_MIN_WIDTH - otherWidth)
+      ? Math.max(PANEL_MIN_WIDTH, stageWidth - CHART_MIN_WIDTH - otherWidth - nodeWidth)
       : 1200;
   };
 
@@ -1647,9 +2110,21 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (!open && kind === 'ai') closeAiPopovers();
   };
 
+  const setNodePanelOpen = (open) => {
+    if (!nodePanel) return;
+    nodePanel.hidden = !open;
+    nodePanel.classList.toggle('is-panel-closed', !open);
+    nodePanel.setAttribute('aria-hidden', String(!open));
+    dock?.setAttribute('data-node-closed', String(!open));
+    syncDockWidth();
+    applyChartScale();
+    drawLinks();
+  };
+
   applyPanelWidths();
   setPanelOpen('ai', true);
   setPanelOpen('doc', true);
+  setNodePanelOpen(false);
 
   panelResizeHandles.forEach((handle) => {
     handle.addEventListener('pointerdown', (event) => {
@@ -1752,10 +2227,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (region === 'eventline') {
       dock?.style.setProperty('--part1-eventline-width', `${eventLinePanelWidth}px`);
       syncDockWidth();
+      eventLinePanel?.style.setProperty('margin-left', '8px');
+      eventLinePanel?.style.setProperty('margin-right', '8px');
       renderEventLine();
     } else {
       syncDockWidth();
     }
+    applyChartScale();
+    drawLinks();
   }
 
   /* 導覽列的下拉選單是展示用互動，但保留真正樣本工具的控制層級：
@@ -1818,10 +2297,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     'ui-larger': () => changeFontScale('ui', 0.1),
     'body-smaller': () => changeFontScale('body', -0.1),
     'body-larger': () => changeFontScale('body', 0.1),
-    'load-skills': () => {
-      setProgress('請選擇本機的 AI Skill 輸出或審閱包（.data / .json）。');
-      skillsFile?.click();
-    }
+    'load-skills': () => { loadLocalSkillOutputs().catch(() => skillsFile?.click()); }
   };
 
   toolsPop?.querySelectorAll('button[data-tool-action]').forEach((button) => {
@@ -1858,6 +2334,13 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (panelClose) {
       event.stopPropagation();
       setPanelOpen(panelClose.dataset.panelClose, false);
+      return;
+    }
+    const nodePanelClose = event.target.closest('[data-node-panel-close]');
+    if (nodePanelClose) {
+      event.stopPropagation();
+      setNodePanelOpen(false);
+      chartNodeElements.forEach((element) => element.classList.remove('is-selected'));
       return;
     }
     const chatSourceTrigger = event.target.closest('[data-chat-source-doc]');
@@ -1925,13 +2408,16 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     laneSpacing = REPLICA_DEFAULTS.laneSpacing;
     aiPanelWidth = 0;
     docPanelWidth = 0;
+    nodePanelWidth = 236;
     dock?.style.removeProperty('--part1-ai-width');
     dock?.style.removeProperty('--part1-doc-width');
     dock?.style.removeProperty('--part1-dock-width');
+    stage?.style.removeProperty('--part1-dock-width');
     dock?.style.removeProperty('--part1-eventline-width');
     applyPanelWidths();
     setPanelOpen('ai', true);
     setPanelOpen('doc', true);
+    setNodePanelOpen(false);
     try { localStorage.removeItem(REPLICA_SETTINGS_KEY); } catch (error) { /* current-page reset still applies */ }
     applyReplicaCssSettings();
     chartScale = 1;
@@ -1966,7 +2452,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   }
 
   window.addEventListener('resize', () => {
+    applyChartScale();
     drawLinks();
+    syncChartLaneTabs();
   });
   if ('ResizeObserver' in window) new ResizeObserver(drawLinks).observe(lanesEl);
 });

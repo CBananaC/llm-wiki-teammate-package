@@ -8,13 +8,13 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="storymap.css?v=20260811-codex-responsive-02">
-  <link rel="stylesheet" href="storymap-cards.css?v=20260812-part2-card-width-01">
-    <link rel="stylesheet" href="part-1-interface.css?v=20260812-node-panel-layout-02">
+  <link rel="stylesheet" href="storymap-cards.css?v=20260812-part2-communication-cover-01">
+    <link rel="stylesheet" href="part-1-interface.css?v=20260812-skill-bundle-picker-02">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js?v=20260812-part2-flow-02" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js?v=20260812-chat-source-01" defer></script>
-    <script src="part-1-interface.js?v=20260812-node-panel-layout-02" defer></script>
+    <script src="part-1-interface.js?v=20260812-skill-bundle-picker-02" defer></script>
   <!-- 第二部分「總結文書」互動示範：VS Code 風格 Skill 視窗＋文書面板複本。 -->
   <script src="part2-summary-visual.js?v=20260812-01" defer></script>
   <!-- 第三部分「適合的研究問題」互動圖庫：同樣先載資料，再載行為。 -->
@@ -666,7 +666,7 @@
               </div>
             </article>
             <div class="part1-section-visual" data-part1 data-part1-mode="nav" role="group" aria-label="導覽列互動示範複本">
-              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
+          <div class="part1-replica" data-part1-replica data-skill-api-base="http://127.0.0.1:8166" aria-live="polite"></div>
             </div>
           </div>
         </section>
@@ -886,7 +886,6 @@
                         <span class="part2-summary-tab" data-tab="1"><span class="part2-summary-tab-dot"></span>divide-into-parts.md</span>
                       </div>
                       <div class="part2-summary-skill-body"></div>
-                      <span class="part2-summary-hint part2-summary-hint-skill">① 點擊查看 AI Skills 指令</span>
                       <span class="part2-summary-resize-handle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="21" y1="10" x2="10" y2="21"/><line x1="21" y1="16" x2="16" y2="21"/></svg></span>
                     </div>
 
@@ -953,13 +952,12 @@
         </section>
         <section class="part2-stage" id="part-2-communication" data-tab="part-2" data-nav="#part-2-communication">
           <section class="section-hero section-hero-part-2 part2-topic-bar" id="part-2-communication-bar" aria-labelledby="part-2-communication-title">
-            <div class="section-hero-content"><p class="eyebrow">分析階段二</p><h1 id="part-2-communication-title">重建通信關係</h1></div>
+            <div class="section-hero-content"><p class="eyebrow">分析階段二</p><h1 id="part-2-communication-title">重建通信關係</h1><p class="section-hero-note">平台設有兩種的 Skills，用於辨識一份奏摺所回應的硃批或上諭，以及辨識一份上諭所回應的奏摺。</p></div>
           </section>
           <section class="story surface-c part2-topic-content" id="part-2-communication-content" data-tab="part-2">
             <div class="story-inner"><div class="part2-card-stack">
-              <article class="copybox blk part2-text-card"><div class="body"><p>在奏摺和上諭的結尾，通常會標示奏摺的發送日期、硃批日期及上諭的發布日期。平台會利用這些日期建立文書之間的時間順序及收發關係，形成通信網絡的第一層。</p></div></article>
-              <article class="copybox blk part2-text-card"><div class="body"><p>然而，文書之間還存在更深層的通訊關係，例如奏摺是否回應了先前的上諭或硃批，以及上諭是否回應了先前收到的奏摺。這便需要從文書正文中尋找相關線索，並與其他文書相互比對，才能確認和重建這些更深層的關係。</p></div></article>
-              <article class="copybox blk part2-text-card"><div class="body"><p>平台因此設有兩種的 Skills，分別用於辨識一份奏摺所回應的硃批或上諭，以及辨識一份上諭所回應的奏摺。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>第一層的通信關係</h2></div><div class="body"><p>在奏摺和上諭的結尾，通常會標示奏摺的發送日期、硃批日期及上諭的發布日期。平台會利用這些日期建立文書之間的時間順序及收發關係，形成通信網絡的第一層。</p></div></article>
+              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">2</span><h2>深層的通信關係</h2></div><div class="body"><p>然而，文書之間還存在更深層的通信關係，例如奏摺是否回應了先前的上諭或硃批，以及上諭是否回應了先前收到的奏摺。這便需要從文書正文中尋找相關線索，並與其他文書相互比對，才能確認和重建這些更深層的關係。</p></div></article>
             </div></div>
           </section>
         </section>
