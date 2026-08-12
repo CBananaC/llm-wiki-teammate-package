@@ -13937,3 +13937,27 @@ Verified:
 Remaining:
 - User review of the draft's layout/interaction/colours before deciding whether and how to integrate it into `#part-2-yu-response`'s third card in `storymap-example.html` (as a per-card visual, distinct from the existing whole-section `02 通信關係複雜` figure).
 - Not committed yet — holding off on `git add`/`commit` in this entry so as not to interleave with the concurrent, uncommitted Codex session's changes to shared files; the new draft file itself touches nothing else and can be committed on its own once it's safe to run git again.
+
+## 2026-08-12 19:03 HKT — Claude — Revised the 諭43／硃160 evidence-comparison draft per feedback
+
+Summary:
+- Reworked `storymap-yu-zhu-evidence-visual-draft.html` (still standalone/unlinked) based on user feedback on the first pass:
+  - Doc panels now copy the actual UI of the platform, not a custom look: re-used the `.part1-doc` / `.part1-doc-head` / `.part1-doc-window-btn` / `.part1-doc-title` + `.badge` / `.part1-doc-meta` / `.part1-doc-scroll` / `.part1-doc-body` class structure and CSS values from `part-1-interface.css` / `part-1-interface.js` (as loaded by `platform-interface-replica.html`), scoped locally into this standalone file rather than pulling in the whole external stylesheet.
+  - Both panels now show the **full** document text (previously 硃160 was excerpted with "前略/後略"). 諭43's full body and 硃160's full body are both present verbatim.
+  - Switched the highlighted spans from `<span>` to `<mark>` (matching the platform's own `.part1-doc-body mark` convention) and switched the 諭43-side "quote" target from one continuous span to four separate, non-contiguous `<mark data-target="b">` segments (the parts of 諭43 that most directly correspond to 硃160's paraphrase), per the exact segment boundaries the user specified — leaving the omitted clauses (the "數日內略爲料理…" aside, the "至林爽文不過一烏合之衆…" aside, the "外省各督撫遇有此等事件…" aside, and the "潮州現有彭承堯在彼…" tail) as plain, unhighlighted text in between.
+  - Removed all of the explanatory chrome the user flagged: the "03 條件比對範例" header, the "👆 點擊右側…" hint line, the full colour legend, and the figcaption's discrepancy note. The visual is now just the two doc panels, nothing else.
+  - Added a visible "effect" on click: clicking a highlight in 硃160 now applies the platform's own "located" treatment (`#f7dc8a` fill + amber ring, the same visual language the real chart uses when it jumps to source text) to the corresponding `<mark>`(s) in 諭43, plus a one-shot outward pulse animation, and scrolls the located text into view.
+- Re-verified: reconstructed both full bodies from the individual HTML fragments in Python and diffed against the canonical `stage1_original_text.json` `body` fields — both matched exactly (`True`/`True`); re-ran the tag-balance check (clean).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-yu-zhu-evidence-visual-draft.html` (standalone, still not linked from the live site)
+- `PROJECT_LOG.md`
+
+Verified:
+- Python reconstruction/diff of both full document bodies against the canonical source — exact match.
+- `html.parser` tag-balance check — clean.
+- Not yet opened in an actual browser to confirm the click/pulse/scroll interaction visually.
+- Checked `PROJECT_LOG.md`'s tail before editing — no new concurrent entries since the previous checkpoint, so this commit only touches the draft file and the log (still deliberately avoiding `storymap-example.html`/`storymap-cards.css`, which the concurrent Codex session may still be mid-edit on).
+
+Remaining:
+- Same as previous entry — user review, then decide on integration into the live page once the shared files are free to edit safely.
