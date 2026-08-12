@@ -76,7 +76,13 @@
     box-shadow: 0 10px 22px rgba(47, 57, 52, .16);
     overflow: hidden;
   }
-  #panelZhu { position: absolute; top: 0; right: 0; width: var(--panel-w); height: 100%; }
+  /* 硃160：初始佔滿整個舞台寬度（較寬，單獨顯示）；第一次展開時
+     收縮為與諭43相同的寬度，兩者變成 50:50 並排。 */
+  #panelZhu {
+    position: absolute; top: 0; right: 0; width: 100%; height: 100%;
+    transition: width .5s cubic-bezier(.22, 1, .36, 1);
+  }
+  #panelZhu.is-shown { width: var(--panel-w); }
   #panelYu {
     position: absolute; top: 0; right: calc(var(--panel-w) + var(--panel-gap)); z-index: 4;
     width: 0; height: 100%;
@@ -226,7 +232,7 @@
           <p class="part1-doc-meta">大學士公阿桂、大學士和珅 字寄兩廣總督孫（士毅）<br>發佈 乾隆五十二年正月十三日（1787/01/13）<br>《天地會》1，頁231</p>
         </div>
         <div class="part1-doc-scroll">
-          <p class="part1-doc-body" id="yuBody">大學士公阿、大學士和，字寄兩廣總督孫，<mark data-target="a">乾隆五十二年正月十三日奉上諭</mark>：<mark data-target="b">據孫士毅奏，接準閩省諮文，挑備水師戰兵一千名，立即起程，前赴南澳，以資策應。並知會署提臣彭承堯，先赴潮州稽查彈壓</mark>，數日內略爲料理地方事務，即親赴潮州駐紮，以便就近辦理等語，已於折內詳悉批示。<mark data-target="b">閩粵境壤毗連，臺匪糾衆滋事，孫士毅接準諮文，派兵前往預備策應，及嚴飭各隘口，嚴密盤潔，遇有形跡可疑之人，立即究辦。此係當辦之事。</mark>至林爽文不過一烏合之衆，無難速就撲滅。前因該省水陸兩提督概行渡臺，朕尚以爲過當。<mark data-target="b">孫士毅系鄰省總督，止當鎮靜地方，密飭各隘口堵拿逸犯，豈得輕離省城，以致粵東內地民人心懷疑惑。</mark>外省各督撫遇有此等事件，每以親身前往，見其急公，而不權事理之輕重緩急。督撫固不可養尊處優，身耽安逸，然當鎮靜辦理之事，亦不可過涉張皇，斷無因一二賊匪騷動各省之理。<mark data-target="b">著傳諭孫士毅，此時如尚未起程，即毋庸前往。若業已起程，亦即回省城。</mark>潮州現有彭承堯在彼，盡足以資彈壓。若續得閩省臺地信息，即行迅速具奏。將此由六百里加緊諭令知之。欽此。遵旨寄信前來。</p>
+          <p class="part1-doc-body" id="yuBody"><mark data-target="a">大學士公阿、大學士和，字寄兩廣總督孫，乾隆五十二年正月十三日奉上諭</mark>：<mark data-target="b">據孫士毅奏，接準閩省諮文，挑備水師戰兵一千名，立即起程，前赴南澳，以資策應。並知會署提臣彭承堯，先赴潮州稽查彈壓</mark>，數日內略爲料理地方事務，即親赴潮州駐紮，以便就近辦理等語，已於折內詳悉批示。<mark data-target="b">閩粵境壤毗連，臺匪糾衆滋事，孫士毅接準諮文，派兵前往預備策應，及嚴飭各隘口，嚴密盤潔，遇有形跡可疑之人，立即究辦。此係當辦之事。</mark>至林爽文不過一烏合之衆，無難速就撲滅。前因該省水陸兩提督概行渡臺，朕尚以爲過當。<mark data-target="b">孫士毅系鄰省總督，止當鎮靜地方，密飭各隘口堵拿逸犯，豈得輕離省城，以致粵東內地民人心懷疑惑。</mark>外省各督撫遇有此等事件，每以親身前往，見其急公，而不權事理之輕重緩急。督撫固不可養尊處優，身耽安逸，然當鎮靜辦理之事，亦不可過涉張皇，斷無因一二賊匪騷動各省之理。<mark data-target="b">著傳諭孫士毅，此時如尚未起程，即毋庸前往。若業已起程，亦即回省城。</mark>潮州現有彭承堯在彼，盡足以資彈壓。若續得閩省臺地信息，即行迅速具奏。將此由六百里加緊諭令知之。欽此。遵旨寄信前來。</p>
         </div>
       </div>
 
@@ -239,6 +245,7 @@
 <script>
   (function () {
     var stage = document.getElementById('stage');
+    var zhuPanel = document.getElementById('panelZhu');
     var zhuMarks = Array.prototype.slice.call(document.querySelectorAll('#panelZhu mark[data-hl]'));
     var yuPanel = document.getElementById('panelYu');
     var yuBody = document.getElementById('yuBody');
@@ -265,6 +272,7 @@
     }
 
     function revealYuPanelThenType(targetKey) {
+      zhuPanel.classList.add('is-shown');
       yuPanel.classList.add('is-shown');
       window.setTimeout(function () {
         var plain = yuBody.textContent;

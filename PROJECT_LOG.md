@@ -14085,3 +14085,47 @@ Verified:
 
 Remaining:
 - Same as previous entries — user review, then decide on integration into the live page once the shared files (`storymap-example.html`, `storymap-cards.css`) are free to edit safely.
+
+### 2026-08-12 19:35 HKT — Codex — Removed saved-chat source chrome
+
+Summary:
+- Removed the `AI 輸出來源` header, `.chat` filename, saved-output summary, sample launcher, and load controls from the per-document AI panel.
+- Kept each saved turn’s heading, skill/prompt metadata, output cards, quotations, and document-specific results; documents without saved chat remain empty.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The replica rendered 513 document circles and 210 event squares after reload.
+- 硃42 opened 133 saved turns with 151 cards, with no source header, `.chat` label, launcher, load text, or summary.
+- 硃65 opened with an empty AI body and no placeholder text.
+- An event square still opened a populated node panel without the source wrapper.
+- JavaScript syntax checks, `git diff --check`, and browser error/warning checks passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+## 2026-08-12 19:36 HKT — Claude — 諭43／硃160 evidence draft: widened target-A span, 硃160 now shrinks to 50:50 on reveal
+
+Summary:
+- Two more refinements to `storymap-yu-zhu-evidence-visual-draft.html` (still standalone/unlinked):
+  - Target A's highlighted span in 諭43 now starts from the very beginning of the body — "大學士公阿、大學士和，字寄兩廣總督孫，乾隆五十二年正月十三日奉上諭" — instead of just "乾隆五十二年正月十三日奉上諭"; it now includes the sender preamble, still pairing with the 接奉廷寄／奉上諭／date marks in 硃160 (unchanged on that side).
+  - 硃160's panel now starts at full stage width (visually "wider," alone) and, on the first highlight click, animates its own width down to match 諭43's width at the same time 諭43 grows in from the right-anchored 0-width state — both transitions run concurrently and land on an exact 50:50 split. Implemented by giving `#panelZhu` a `width: 100%` resting state plus its own `transition: width`, and adding `.is-shown` to both panels together in `revealYuPanelThenType()` (previously only 諭43 got that class).
+- Re-verified: both full document bodies still match `stage1_original_text.json` exactly (only the mark boundary moved, no characters added/removed — confirmed via diff), tag-balance check clean.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-yu-zhu-evidence-visual-draft.html` (standalone, still not linked from the live site)
+- `PROJECT_LOG.md`
+
+Verified:
+- Python reconstruction/diff of both full document bodies against canonical source — exact match.
+- `html.parser` tag-balance check — clean.
+- Confirmed via regex extraction that the target-a `<mark>` now contains exactly "大學士公阿、大學士和，字寄兩廣總督孫，乾隆五十二年正月十三日奉上諭".
+- Not yet opened in an actual browser to confirm the simultaneous shrink/grow-to-50:50 animation visually.
+
+Remaining:
+- Same as previous entries — user review, then decide on integration into the live page once the shared files (`storymap-example.html`, `storymap-cards.css`) are free to edit safely.
