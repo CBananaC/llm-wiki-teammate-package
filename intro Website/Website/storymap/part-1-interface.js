@@ -179,9 +179,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         <button class="part1-hotspot" type="button" data-hotspot="chart">
           <span class="part1-hotspot-num">2</span>時間與關係圖表
         </button>
-        <div class="part1-lane-heads">
-          ${data.lanes.map((lane) => `<span>${escapeHtml(lane.label)}</span>`).join('')}
-        </div>
         <div class="part1-chart-scroll" data-chart-scroll aria-label="可移動及縮放的四線時間與關係圖表">
           <div class="part1-chart-zoomspace" data-chart-zoomspace>
             <div class="part1-lanes" data-lanes>

@@ -12871,6 +12871,25 @@ Verified:
 Remaining:
 - Existing concurrent Part 1 edits remain untouched; nothing was pushed.
 
+## 2026-08-12 13:15 HKT — Codex — Removed the four chart lane labels
+
+Summary:
+- Removed the visible four-label row above the chart: `戰場事件`, `官員上奏`, `皇帝硃批下旨`, and `皇帝行動`.
+- Kept the four-line chart, chart nodes, and numbered interface markers unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser inspection confirmed the lane-label row is absent and all four labels have zero rendered matches inside the chart.
+- The chart still loads with no browser warnings or errors.
+- `node --check intro Website/Website/storymap/part-1-interface.js`, `node --check intro Website/Website/storymap/storymap.js`, and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1 CSS edits remain untouched; nothing was pushed.
+
 ## 2026-08-12 13:14 HKT — Codex — Hid the empty Part 2 overview section reversibly
 
 Summary:
