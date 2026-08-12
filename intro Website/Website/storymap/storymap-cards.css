@@ -2315,6 +2315,89 @@
   }
 }
 
+/* Part 2.3b — Layer-3 substage cover（重建通信關係之下：辨識奏摺所回應的上諭／硃批）。
+   刻意與 layer 2 的 .part2-topic-bar 沿用同一組漸層與底部強調線，維持家族關係可辨識，
+   但改為：貼齊螢幕左側（負左邊距抵消 section 本身的 --part-pad-x）、寬度僅約螢幕的
+   55–60%、右側以長而平滑的 mask 漸層淡出至完全透明（非硬邊）。左側完全不淡出。
+   數字標記（2-1 之一／2-2 之二）取代 layer 2 的小型 eyebrow，作為主要的子階段辨識線索。
+   刻意不放入 .part2-text-card／.part2-numbered-card，避免與一般內文卡片混淆。 */
+#part-2-content .part2-substage-cover {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  width: min(720px, 58vw);
+  min-width: 320px;
+  margin: 12px 0 0 calc(-1 * var(--part-pad-x));
+  padding: 26px 34px 26px calc(var(--part-pad-x) + 4px);
+  color: #f7f3ea;
+  background: linear-gradient(120deg, #173b3f 5%, #456e69 50%, #b36f58 145%);
+  -webkit-mask-image: linear-gradient(to right,
+    black 0%, black 34%,
+    rgba(0, 0, 0, .99) 40%,
+    rgba(0, 0, 0, .95) 46%,
+    rgba(0, 0, 0, .89) 52%,
+    rgba(0, 0, 0, .81) 58%,
+    rgba(0, 0, 0, .71) 64%,
+    rgba(0, 0, 0, .59) 70%,
+    rgba(0, 0, 0, .45) 76%,
+    rgba(0, 0, 0, .31) 82%,
+    rgba(0, 0, 0, .16) 88%,
+    rgba(0, 0, 0, 0) 100%);
+          mask-image: linear-gradient(to right,
+    black 0%, black 34%,
+    rgba(0, 0, 0, .99) 40%,
+    rgba(0, 0, 0, .95) 46%,
+    rgba(0, 0, 0, .89) 52%,
+    rgba(0, 0, 0, .81) 58%,
+    rgba(0, 0, 0, .71) 64%,
+    rgba(0, 0, 0, .59) 70%,
+    rgba(0, 0, 0, .45) 76%,
+    rgba(0, 0, 0, .31) 82%,
+    rgba(0, 0, 0, .16) 88%,
+    rgba(0, 0, 0, 0) 100%);
+}
+#part-2-content .part2-substage-num {
+  flex: 0 0 auto;
+  font: 500 44px/1 var(--serif);
+  color: rgba(247, 243, 234, .38);
+  letter-spacing: -.02em;
+}
+#part-2-content .part2-substage-num small {
+  display: block;
+  margin-top: 3px;
+  font: 700 9.5px/1 var(--sans);
+  letter-spacing: .16em;
+  color: var(--yellow);
+}
+#part-2-content .part2-substage-divider {
+  flex: 0 0 auto;
+  width: 1px;
+  align-self: stretch;
+  background: rgba(247, 243, 234, .28);
+}
+#part-2-content .part2-substage-copy { min-width: 0; }
+#part-2-content .part2-substage-crumb {
+  margin: 0 0 5px;
+  font: 700 10px/1 var(--sans);
+  letter-spacing: .14em;
+  color: var(--yellow);
+}
+#part-2-content .part2-substage-copy h2 {
+  margin: 0;
+  font: 500 clamp(19px, 1.9vw, 25px)/1.24 var(--serif);
+  letter-spacing: -.02em;
+  color: #f7f3ea;
+}
+@media (max-width: 720px) {
+  #part-2-content .part2-substage-cover {
+    width: calc(100% + var(--part-pad-x));
+    padding: 22px 20px 22px calc(var(--part-pad-x) + 2px);
+    gap: 14px;
+  }
+  #part-2-content .part2-substage-num { font-size: 34px; }
+}
+
 /* Part 2.4 — 辨識奏摺所回應的上諭：文字卡左、通信關係視覺右。 */
 #part-2-content #part-2-yu-response .part2-yu-response-layout {
   display: grid;
@@ -2942,16 +3025,9 @@
   box-shadow: 0 14px 30px rgba(47, 57, 52, .22);
   z-index: 2;
   cursor: pointer;
-  outline: 3px solid transparent;
-  outline-offset: 3px;
-  transition: box-shadow .3s, outline-color .3s;
+  transition: box-shadow .3s;
 }
 #part-2-content .part2-summary-doc-win.is-top { z-index: 5; }
-#part-2-content .part2-summary-doc-win.is-invite { animation: part2-summary-invite-pulse 1.6s ease-in-out infinite; }
-@keyframes part2-summary-invite-pulse {
-  0%, 100% { outline-color: rgba(196, 93, 56, 0); }
-  50% { outline-color: rgba(196, 93, 56, .55); }
-}
 
 #part-2-content .part2-summary-doc-head {
   position: relative; flex: 0 0 auto;
@@ -3036,25 +3112,42 @@
 #part-2-content .part2-summary-doc-part-summary { margin: 0 0 8px; color: #9d8e7a; font: 600 calc(13px * var(--font-scale))/1.6 var(--serif); }
 #part-2-content .part2-summary-doc-part-excerpt { margin: 0; color: var(--text); font: 500 calc(15px * var(--font-scale))/2 var(--serif); }
 
-/* -------- 提示標籤 -------- */
-#part-2-content .part2-summary-hint {
+/* -------- 提示泡泡：RPG 風格 NPC 驚嘆號，依序引導點擊 -------- */
+#part-2-content .part2-summary-bubble {
   position: absolute;
-  display: flex; align-items: center; gap: 6px;
-  padding: 5px 11px;
-  color: #f7f3ea; background: var(--ink);
-  font: 700 calc(11px * var(--font-scale))/1.4 var(--sans);
-  white-space: nowrap;
-  opacity: 0; transform: translateY(4px); pointer-events: none;
-  transition: opacity .3s, transform .3s;
-  z-index: 6;
+  width: 30px; height: 30px;
+  display: flex; align-items: center; justify-content: center;
+  color: #4a2c12; background: var(--yellow);
+  border: 2px solid #fffaf2; border-radius: 50%;
+  font: 800 calc(16px * var(--font-scale))/1 var(--sans);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .3);
+  cursor: pointer;
+  z-index: 20;
+  opacity: 0; transform: translate(-50%, -50%) scale(.4);
+  pointer-events: none;
+  transition: opacity .25s, transform .25s;
 }
-#part-2-content .part2-summary-hint.is-shown { opacity: 1; transform: translateY(0); }
-#part-2-content .part2-summary-hint::after {
-  content: ""; position: absolute; left: 16px; bottom: -5px;
-  width: 9px; height: 9px; background: var(--ink); transform: rotate(45deg);
+#part-2-content .part2-summary-bubble.is-shown {
+  opacity: 1; pointer-events: auto;
+  animation: part2-summary-bubble-bounce 1.1s ease-in-out infinite;
 }
-#part-2-content .part2-summary-hint-skill { top: -30px; left: 8px; }
-#part-2-content .part2-summary-hint-apply { top: 60px; left: 40px; }
+#part-2-content .part2-summary-bubble-num { position: relative; z-index: 1; }
+#part-2-content .part2-summary-bubble-ring {
+  position: absolute; inset: -8px; border-radius: 50%;
+  border: 2px solid var(--yellow);
+  opacity: 0;
+}
+#part-2-content .part2-summary-bubble.is-shown .part2-summary-bubble-ring {
+  animation: part2-summary-bubble-ping 1.6s ease-out infinite;
+}
+@keyframes part2-summary-bubble-bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1) translateY(0); }
+  50% { transform: translate(-50%, -50%) scale(1) translateY(-7px); }
+}
+@keyframes part2-summary-bubble-ping {
+  0% { opacity: .65; transform: scale(.75); }
+  100% { opacity: 0; transform: scale(1.55); }
+}
 
 /* -------- 縮放把手 -------- */
 #part-2-content .part2-summary-resize-handle {
@@ -3082,7 +3175,7 @@
     width: 100%; max-width: 100%;
   }
   #part-2-content .part2-summary-doc-win { height: auto; max-height: 640px; }
-  #part-2-content .part2-summary-hint,
+  #part-2-content .part2-summary-bubble,
   #part-2-content .part2-summary-resize-handle { display: none; }
   #part-2-content .part2-summary-move { cursor: default; touch-action: auto; }
 }

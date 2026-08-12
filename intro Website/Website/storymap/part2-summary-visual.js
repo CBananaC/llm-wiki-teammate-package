@@ -4,18 +4,20 @@
    兩個 Skill 如何把硃40 從「僅有原文」變成「摘要＋分段」。
 
    行為（桌面）：
-   - 點擊 VS Code 風格視窗 → 逐字打出兩個 Skill 的指令內容（只播放一次）。
-   - 播放完成後，文書面板出現邀請脈動；點擊文書面板套用摘要／分段
-     （淡出原文、淡入摘要與分段卡片，只套用一次）。
-   - 套用之後，兩個視窗變成一般可任意點擊切換前後順序的浮動視窗；
-     視窗標題列的十字圖示可拖曳移動，右下角把手可拖曳縮放。
+   - 一顆會彈跳的黃色提示泡泡（RPG NPC 驚嘆號樣式）依序指向下一步：
+     1 → VS Code 風格視窗（點擊或點泡泡開始打字 quick-summary.md）
+     2 → divide-into-parts.md 分頁籤（第一個 Skill 打完字後出現）
+     3 → 文書面板（第二個 Skill 打完字後出現，點擊套用摘要／分段）
+   - 每一步都只播放一次；套用之後兩個視窗變成一般可任意點擊切換
+     前後順序的浮動視窗，標題列十字圖示可拖曳移動，右下角把手可
+     拖曳縮放。
    - 打字完成後，直接點擊分頁籤（quick-summary.md／divide-into-parts.md）
      可即時切換顯示完整內容，不會重播打字動畫。
 
    行為（手機／窄螢幕，<=900px）：
-   - 兩個視窗改為直向堆疊，VS Code 視窗在上。捲動到 VS Code 視窗時
-     自動觸發打字效果；捲動到文書面板時自動套用摘要／分段。不支援
-     拖曳與縮放（版面已固定為全寬堆疊）。
+   - 兩個視窗改為直向堆疊，VS Code 視窗在上，泡泡隱藏。捲動到 VS Code
+     視窗時自動依序打出兩個 Skill 並套用摘要／分段，不需分次點擊。
+     不支援拖曳與縮放（版面已固定為全寬堆疊）。
 
    本檔只服務 #part-2-summary-content 內的 [data-part2-summary-visual]
    容器，不影響頁面其他區域。
@@ -31,10 +33,9 @@
   const docWin = root.querySelector('.part2-summary-doc-win');
   const skillBody = root.querySelector('.part2-summary-skill-body');
   const tabs = Array.from(root.querySelectorAll('.part2-summary-tab'));
-  const hintSkill = root.querySelector('.part2-summary-hint-skill');
-  const hintApply = root.querySelector('.part2-summary-hint-apply');
-  const caption = root.querySelector('.part2-summary-caption');
   const docBody = root.querySelector('.part2-summary-doc-body');
+  const bubble = root.querySelector('.part2-summary-bubble');
+  const bubbleNum = root.querySelector('.part2-summary-bubble-num');
   if (!stage || !skillWin || !docWin || !skillBody || !docBody) return;
 
   const SKILLS = [
@@ -71,19 +72,13 @@
     }
   ];
 
-  const messages = {
-    idle: '點擊左側視窗，查看「總結文書」所使用的兩個 AI Skill 指令。',
-    typing: 'AI Skill 正在載入指令……',
-    ready: '指令載入完成。點擊文書面板，套用摘要與分段結果。',
-    applied: '摘要與分段已套用至文書面板；研究者仍需回到原文核對，確認無誤後才能加入圖表。點擊任一視窗可切換前後順序，標題列的十字圖示可拖曳移動，右下角把手可拖曳縮放。'
-  };
-
-  let phase = 'idle';
-  let typing = false;
-  let skillsTyped = false;
+  /* phase: idle-0 -> typing-0 -> ready-1 -> typing-1 -> ready-doc -> applied */
+  let phase = 'idle-0';
+  let typedCount = 0;
   const isMobile = window.matchMedia('(max-width: 900px)').matches;
+  let bubbleFollowTarget = null;
+  let bubbleRaf = null;
 
-  function setCaption(p) { if (caption) caption.textContent = messages[p]; }
   function stripTags(html) { return html.replace(/<[^>]+>/g, ''); }
 
   function setActiveTab(index) {
@@ -120,39 +115,73 @@
     }, 34);
   }
 
-  function startTyping() {
-    if (phase !== 'idle' || typing) return;
-    typing = true;
-    phase = 'typing';
-    setCaption('typing');
-    if (hintSkill) hintSkill.classList.remove('is-shown');
-    if (!isMobile) { skillWin.classList.add('is-top'); docWin.classList.add('is-dim'); }
+  function bringToFront(el, other) {
+    other.classList.remove('is-top');
+    el.classList.add('is-top');
+  }
 
+  /* ------------------------------------------------------------ 泡泡定位 */
+  function positionBubbleAt(target) {
+    if (!bubble) return;
+    const targetRect = target.getBoundingClientRect();
+    const stageRect = stage.getBoundingClientRect();
+    bubble.style.left = (targetRect.left - stageRect.left + targetRect.width / 2) + 'px';
+    bubble.style.top = (targetRect.top - stageRect.top) + 'px';
+  }
+
+  function showBubbleOn(target, num) {
+    if (!bubble) return;
+    bubbleFollowTarget = target;
+    positionBubbleAt(target);
+    if (bubbleNum) bubbleNum.textContent = String(num);
+    bubble.classList.add('is-shown');
+    if (!bubbleRaf) {
+      const loop = () => {
+        if (bubbleFollowTarget) positionBubbleAt(bubbleFollowTarget);
+        bubbleRaf = requestAnimationFrame(loop);
+      };
+      bubbleRaf = requestAnimationFrame(loop);
+    }
+  }
+
+  function hideBubble() {
+    bubbleFollowTarget = null;
+    if (bubble) bubble.classList.remove('is-shown');
+    if (bubbleRaf) { cancelAnimationFrame(bubbleRaf); bubbleRaf = null; }
+  }
+
+  /* ------------------------------------------------------------ 流程步驟 */
+  function startFirstSkill() {
+    if (phase !== 'idle-0') return;
+    phase = 'typing-0';
+    hideBubble();
+    if (!isMobile) bringToFront(skillWin, docWin);
     typeSkill(0, () => {
-      setTimeout(() => {
-        typeSkill(1, () => {
-          typing = false;
-          skillsTyped = true;
-          phase = 'ready';
-          setCaption('ready');
-          skillWin.classList.add('is-done');
-          docWin.classList.remove('is-dim');
-          if (!isMobile) {
-            skillWin.classList.remove('is-top');
-            docWin.classList.add('is-invite');
-            if (hintApply) hintApply.classList.add('is-shown');
-          }
-        });
-      }, 320);
+      typedCount = 1;
+      phase = 'ready-1';
+      if (!isMobile) showBubbleOn(tabs[1], 2);
+      else startSecondSkill();
+    });
+  }
+
+  function startSecondSkill() {
+    if (phase !== 'ready-1') return;
+    phase = 'typing-1';
+    hideBubble();
+    typeSkill(1, () => {
+      typedCount = 2;
+      phase = 'ready-doc';
+      skillWin.classList.add('is-done');
+      if (!isMobile) showBubbleOn(docWin, 3);
+      else applyResult();
     });
   }
 
   function applyResult() {
-    if (phase === 'applied') return;
+    if (phase !== 'ready-doc') return;
     phase = 'applied';
-    setCaption('applied');
-    if (hintApply) hintApply.classList.remove('is-shown');
-    docWin.classList.remove('is-invite');
+    hideBubble();
+    if (!isMobile) bringToFront(docWin, skillWin);
     docBody.classList.add('is-fading');
     window.setTimeout(() => {
       docWin.classList.add('is-applied');
@@ -162,16 +191,12 @@
     }, 300);
   }
 
-  function bringToFront(el, other) {
-    other.classList.remove('is-top');
-    el.classList.add('is-top');
-  }
-
   tabs.forEach((tab, i) => {
     tab.addEventListener('click', (e) => {
       e.stopPropagation();
-      if (!skillsTyped) return;
-      renderTabFull(i);
+      if (i === 0 && phase === 'idle-0') { startFirstSkill(); return; }
+      if (i === 1 && phase === 'ready-1') { startSecondSkill(); return; }
+      if (typedCount >= i + 1 || typedCount === 2) renderTabFull(i);
     });
   });
 
@@ -249,36 +274,48 @@
     makeResizable(docWin, docWin.querySelector('.part2-summary-resize-handle'), { minW: 380, minH: 320, maxW: 860, maxH: 780 });
 
     skillWin.addEventListener('click', () => {
+      if (phase === 'idle-0') { startFirstSkill(); return; }
       if (phase === 'applied') { bringToFront(skillWin, docWin); return; }
-      startTyping();
     });
     skillWin.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       e.preventDefault();
+      if (phase === 'idle-0') { startFirstSkill(); return; }
       if (phase === 'applied') { bringToFront(skillWin, docWin); return; }
-      startTyping();
     });
     docWin.addEventListener('click', () => {
-      if (phase === 'ready') { applyResult(); return; }
+      if (phase === 'ready-doc') { applyResult(); return; }
       if (phase === 'applied') { bringToFront(docWin, skillWin); return; }
     });
     docWin.addEventListener('keydown', (e) => {
       if (e.key !== 'Enter' && e.key !== ' ') return;
       e.preventDefault();
-      if (phase === 'ready') { applyResult(); return; }
+      if (phase === 'ready-doc') { applyResult(); return; }
       if (phase === 'applied') { bringToFront(docWin, skillWin); return; }
     });
-    setCaption('idle');
-    if (hintSkill) hintSkill.classList.add('is-shown');
+    if (bubble) {
+      bubble.addEventListener('click', (e) => {
+        e.stopPropagation();
+        if (phase === 'idle-0') { startFirstSkill(); return; }
+        if (phase === 'ready-1') { startSecondSkill(); return; }
+        if (phase === 'ready-doc') { applyResult(); return; }
+      });
+      showBubbleOn(tabs[0], 1);
+    }
   } else {
-    setCaption('idle');
-    let skillSeen = false;
-    let docSeen = false;
+    let seenSkill = false;
+    let seenDoc = false;
     const io = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (!entry.isIntersecting || entry.intersectionRatio < 0.55) return;
-        if (entry.target === skillWin && !skillSeen) { skillSeen = true; startTyping(); }
-        if (entry.target === docWin && !docSeen) { docSeen = true; applyResult(); }
+        if (entry.target === skillWin && !seenSkill) { seenSkill = true; startFirstSkill(); }
+        if (entry.target === docWin && !seenDoc) {
+          seenDoc = true;
+          const waitApply = setInterval(() => {
+            if (phase === 'ready-doc') { clearInterval(waitApply); applyResult(); }
+            if (phase === 'applied') clearInterval(waitApply);
+          }, 200);
+        }
       });
     }, { threshold: [0.55] });
     io.observe(skillWin);

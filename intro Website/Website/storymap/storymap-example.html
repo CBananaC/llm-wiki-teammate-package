@@ -16,7 +16,7 @@
   <script src="part-1-interface-data.js?v=20260812-chat-source-01" defer></script>
     <script src="part-1-interface.js?v=20260812-skill-bundle-picker-02" defer></script>
   <!-- 第二部分「總結文書」互動示範：VS Code 風格 Skill 視窗＋文書面板複本。 -->
-  <script src="part2-summary-visual.js?v=20260812-01" defer></script>
+  <script src="part2-summary-visual.js?v=20260812-quest-bubble-02" defer></script>
   <!-- 第三部分「適合的研究問題」互動圖庫：同樣先載資料，再載行為。 -->
   <script src="part-3-question-gallery-data.js" defer></script>
   <script src="part-3-question-gallery.js" defer></script>
@@ -940,9 +940,10 @@
                         </div>
                         <p class="part2-summary-doc-body">福建臺灣鎮總兵奴才柴大紀、福建臺灣兵備道奴才永福謹奏，為奸民猝起，劫縣傷官，恭摺奏聞事。竊照彰化縣屬大里杙等莊，有奸民林爽文、王芬等聚匪截路，攻劫營盤，謀為不軌。奴才等聞信，親率官兵於十二月初二日起程，飛馳剿捕，業經奏聞在案。臺灣府孫景燧現在諸羅督緝逸匪張烈等要犯，先已就近赴彰協同查辦。奴才等於初三日途次，據跟隨遊擊耿世文往大墩緝賊之兵丁楊勝官面稟：上月之二十七日夜，賊匪眾多，攻劫營盤，赫副將、耿遊擊、俞知縣均被殺害，小的帶傷逃回。同時復據諸羅守備郝輝龍、署諸羅縣俸滿同知董啟埏稟稱：初二日酉刻，據差往彰化投文兵丁賴得林逃回稟稱：小的蒙差赴彰投文，在彰城中住宿，有賊匪數千圍攻城池，於二十八夜下雨時分，將縣城攻破。王都司被害，其餘各官因在愴惶之際，不能深悉。小的亦被獲去，惟假裝火頭，始得免害。至次日開城時混出，連夜逃回，恐賊匪來攻諸羅，伏乞迅賜發兵，星夜馳救。又據署鹿仔港守備事千總陳邦光稟稱：十一月二十八日，有鹿港民人自彰逃回，俱說二十八日賊匪數千攻破縣城，即要來搶鹿港、笨港一路，直攻府城，請撥救護。等情。此等匪徒，實屬罪大惡極，奴才等不勝憤恨，亟欲滅此朝食。隨嚴飭本標遊擊李中揚，帶兵四百名，千總蘇明耀、魏大鵬等帶兵二百名，飛馳諸羅剿捕。又東邊有山路，可由羅漢門通府城，亦即飭該汛守備李步雲嚴加防範。並撥臺協水師兵丁一百名，協力截拿。查鐵線橋地方，係諸城、笨港兩路通府總口，實係緊要處所。奴才等本標兵三百名，督同臺協遊擊林光玉，帶兵三百名，前赴鐵線橋一帶駐紮，以便應援兩路。又飛調臺協遊擊楊起麟，帶兵三百名，趕赴前來，以為後應。查賊匪係漳州人，諸、彰二邑漳人甚多，到處附從，勢甚猖獗。奴才等惟有竭盡駑驗，奮不顧身，殲滅匪徒，力圖恢復。但臺灣地方遼闊，各營汛兵，處處均關緊要，實難抽調。雖經檄調澎湖協兵丁八百名，恐不敷用，已咯請水陸提督迅速帶兵赴臺應接。所有被害文武官兵，俯俟查明另奏。府城為全臺根本，亦經飭在城文武嚴守，並飭臺協右營遊擊鄭嵩移駐彈壓。除報督、撫、提督外，合將奸民猝起，劫縣傷官情形，具摺由驛六百里馳奏。伏乞皇上容鑒。謹奏。乾隆五十一年十二月初四日　乾隆五十二年正月初二日奉硃批：已有旨了。欽此。〔本文原收錄於軍錄〕</p>
                       </div>
-                      <span class="part2-summary-hint part2-summary-hint-apply">② 點擊文書套用結果</span>
                       <span class="part2-summary-resize-handle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="21" y1="10" x2="10" y2="21"/><line x1="21" y1="16" x2="16" y2="21"/></svg></span>
                     </div>
+
+                    <span class="part2-summary-bubble" aria-hidden="true"><span class="part2-summary-bubble-ring"></span><span class="part2-summary-bubble-num">1</span></span>
 
                   </div>
                 </div>
@@ -962,10 +963,17 @@
           </section>
         </section>
         <section class="story surface-a part2-topic-content" id="part-2-yu-response" data-tab="part-2" data-nav="#part-2-yu-response">
+          <div class="part2-substage-cover">
+            <div class="part2-substage-num">2-1<small>之一</small></div>
+            <div class="part2-substage-divider"></div>
+            <div class="part2-substage-copy">
+              <p class="part2-substage-crumb">重建通信關係</p>
+              <h2>辨識奏摺所回應的上諭</h2>
+            </div>
+          </div>
           <div class="story-inner"><div class="part2-yu-response-layout">
             <div class="part2-yu-response-copy"><div class="part2-card-stack">
-              <article class="copybox blk part2-text-card part2-numbered-card"><div class="title-row"><span class="option-number">1</span><h2>辨識奏摺所回應的上諭</h2></div><div class="body"><p>「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：</p></div></article>
-              <article class="copybox blk part2-text-card part2-yu-response-card part2-yu-response-card-markers"><div class="body"><p>首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。</p></div></article>
+              <article class="copybox blk part2-text-card part2-yu-response-card part2-yu-response-card-markers"><div class="body"><p>「上諭—回應配對」Skill 會根據以下線索，辨識一份奏摺所回應的上諭：首先，官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記，並在標記前寫明上諭的發出日期，再引用上諭的內容，部分也會使用「接奉」、「接准」或「敬奉」等的標記，注明自己收到上諭的日期。因此，平台會先利用 Python 從原始文書中擷取這些標記、引文和日期，再與較早的上諭內容作出比較。</p></div></article>
               <article class="copybox blk part2-text-card part2-yu-response-card"><div class="body"><p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p></div></article>
               <article class="copybox blk part2-text-card part2-yu-response-card"><div class="body"><p>AI 會輸出結構化的結果，列出相配的上諭和奏摺，並提供兩份文書中的引文和關鍵日期，包括上諭的發佈日期、官員的收到日期和回覆日期，供研究者查核。研究者確認無誤後，便可以把通信關係加入到圖表中。</p></div></article>
             </div></div>
