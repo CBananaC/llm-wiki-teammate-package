@@ -8299,3 +8299,62 @@ Verified:
 
 Remaining:
 - Existing concurrent Part 1 edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:18 HKT — Codex — Fixed Part 2 Step 1/2 redirects and header overlap
+
+Summary:
+- Routed the Part 2 flow's Step 1 link to Part 3's `適合的研究問題` card instead of keeping the Part 2 panel active.
+- Routed Step 2 to the complete `步驟二／OCR 並結構化原始史料` stage cover.
+- Added a sticky-header offset to nested StoryMap redirects so the selected target begins below the navigation bar rather than being covered by it.
+- Bumped the StoryMap script version query so the updated redirect behavior loads in the browser.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- `node --check "intro Website/Website/storymap/storymap.js"` and `git diff --check` passed.
+- Browser verification at 1280px and 390px confirmed Step 1 and Step 2 activate Part 3, show the requested headings, and place the target at or below the 62px header boundary.
+- Browser console reported no warnings or errors.
+
+Remaining:
+- Existing concurrent Part 1 edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:24 HKT — Codex — Updated the Step 3 structured-data introduction
+
+Summary:
+- Replaced the opening sentence under `輸入結構化資料` with the requested wording about converting selected research materials into structured JSON, loading it into the platform, creating document nodes, and displaying the original text.
+- Kept the `此` link pointing to `#part-3-ocr-definition` for the OCR-method explanation.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed the sentence renders directly below the `輸入結構化資料` title in 步驟三.
+- `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, StoryMap routing, and log edits remain untouched; nothing was pushed.
+
+### 2026-08-12 13:28 HKT — Codex — Moved the structured-data introduction to the cover tab
+
+Summary:
+- Added the requested structured-data introduction beneath the cover title.
+- Removed the duplicate paragraph from `輸入結構化資料` so the sentence appears only on the cover tab.
+- Kept the `此` link pointing to `#part-3-ocr-definition` for the OCR-method explanation.
+
+Files changed:
+- `Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview confirmed the paragraph renders below the cover title and the Step 3 duplicate is absent.
+- Browser console reported no warnings or errors; `node --check "Website/storymap/storymap.js"` and `git diff --check` passed.
+
+Remaining:
+- Existing concurrent Part 1, StoryMap routing, and log edits remain untouched; nothing was pushed.

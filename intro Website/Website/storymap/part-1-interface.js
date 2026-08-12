@@ -32,7 +32,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const replica = root.querySelector('[data-part1-replica]');
   const mode = root.dataset.part1Mode || 'all';
   if (!replica) return;
-  const progressText = root.querySelector('[data-part1-progress]');
 
   const escapeHtml = (value) => String(value == null ? '' : value)
     .replace(/[&<>"']/g, (char) => ({
@@ -107,9 +106,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   replica.dataset.part1Mode = mode;
   replica.innerHTML = `
     <div class="part1-region part1-toolbar" data-region="nav">
-      <button class="part1-hotspot" type="button" data-hotspot="nav">
-        <span class="part1-hotspot-num">1</span>導覽列
-      </button>
       <div class="part1-toolbar-start">
         <div class="part1-menu">
           <button class="part1-pill part1-pill-button" type="button" data-type-toggle><span class="part1-pl">點線類型</span><span aria-hidden="true">⌄</span></button>
@@ -164,21 +160,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         </div>
       </span>
       <span class="part1-count">236/363</span>
-      <div class="part1-callout" data-callout="nav-io" hidden>
-        <h5>輸入與輸出資料</h5>
-        <p>從本機輸入結構化的原始文本和 AI 分析結果，完成檢視後亦可輸出，供後續研究使用。</p>
-      </div>
-      <div class="part1-callout" data-callout="nav-areas" hidden>
-        <h5>切換介面區域</h5>
-        <p>開啟或收合筆記、AI 分析區與事件鏈，沿事件的時間順序追蹤資訊如何傳遞。</p>
-      </div>
     </div>
 
     <div class="part1-stage">
       <div class="part1-region part1-chart" data-region="chart">
-        <button class="part1-hotspot" type="button" data-hotspot="chart">
-          <span class="part1-hotspot-num">2</span>時間與關係圖表
-        </button>
         <div class="part1-chart-scroll" data-chart-scroll aria-label="可移動及縮放的四線時間與關係圖表">
           <div class="part1-chart-zoomspace" data-chart-zoomspace>
             <div class="part1-lanes" data-lanes>
@@ -202,9 +187,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
       <aside class="part1-dock">
         <div class="part1-region part1-ai part1-linked-panel part1-tool-box" data-region="ai">
-          <button class="part1-hotspot" type="button" data-hotspot="ai">
-            <span class="part1-hotspot-num">4</span>AI 分析區
-          </button>
           <div class="part1-linked-head tool-box-head">
             <span class="part1-chat-head-actions">
               <button class="part1-chat-icon-btn" type="button" data-ai-pop="toc" aria-expanded="false" aria-label="對話目錄"><span aria-hidden="true">${PART1_CHAT_ICONS.list}</span></button>
@@ -246,9 +228,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         </div>
 
         <div class="part1-region part1-doc part1-ip" data-region="doc">
-          <button class="part1-hotspot" type="button" data-hotspot="doc">
-            <span class="part1-hotspot-num">3</span>原始史料區
-          </button>
           <div class="part1-doc-head ip-head">
             <div class="part1-doc-window-controls">
               <button class="part1-doc-window-btn" type="button" aria-label="移動文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
@@ -291,11 +270,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         </div>
       </aside>
     </div>
-
-    <div class="part1-progress">
-      <span class="part1-progress-text" data-part1-progress>點擊複本上任何一個編號標籤，或點開右側的說明卡片，開始試用四個介面區域。</span>
-      <button class="part1-progress-reset" type="button" data-part1-reset>重設示範</button>
-    </div>
   `;
 
   const lanesEl = replica.querySelector('[data-lanes]');
@@ -317,13 +291,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const divisionsToggle = replica.querySelector('[data-view-divisions]');
   const aiBody = replica.querySelector('[data-ai-body]');
   const eventLineBody = replica.querySelector('[data-eventline-body]');
-  const progress = replica.querySelector('[data-part1-progress]');
   let renderedEventItems = [];
   let activeFilter = 'all';
   let showSummary = false;
   let showDivisions = false;
 
-  const setProgress = (message) => { if (progress) progress.textContent = message; };
+  // The explanatory progress strip belongs to the introduction layer, not the
+  // tool recreation. Keep the existing action flow quiet after removing it.
+  const setProgress = () => {};
 
   /* ------------------------------------------------------------ 圖表圓點 */
 
@@ -420,19 +395,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   const chartHeight = () => Math.max(360, Math.round(CHART_BASE_HEIGHT * (daySpacing / REPLICA_DEFAULTS.daySpacing)));
 
-  const syncChartHeaders = () => {
-    const heads = replica.querySelector('.part1-lane-heads');
-    if (!heads || !lanesEl) return;
-    const headsRect = heads.getBoundingClientRect();
-    const canvasRect = lanesEl.getBoundingClientRect();
-    const headElements = heads.querySelectorAll('span');
-    data.lanes.forEach((lane, index) => {
-      const head = headElements[index];
-      if (!head) return;
-      head.style.left = `${canvasRect.left - headsRect.left + chartLaneX(lane.key, CHART_BASE_WIDTH) * chartScale}px`;
-    });
-  };
-
   const applyChartScale = () => {
     if (!lanesEl || !chartZoomspace) return;
     lanesEl.style.width = `${CHART_BASE_WIDTH}px`;
@@ -441,7 +403,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     chartZoomspace.style.width = `${CHART_BASE_WIDTH * chartScale}px`;
     chartZoomspace.style.height = `${chartHeight() * chartScale}px`;
     syncChartRuler();
-    syncChartHeaders();
   };
 
   /* ------------------------------------------------------ 工具設定與資料 */
@@ -664,7 +625,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     const after = chartScrollOffset();
     chartScroll.scrollLeft = after.x + chartX * chartScale - px;
     chartScroll.scrollTop = after.y + chartY * chartScale - py;
-    syncChartHeaders();
   };
 
   applyChartScale();
@@ -710,7 +670,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     });
     chartScroll.addEventListener('scroll', () => {
       syncChartRuler();
-      syncChartHeaders();
     }, { passive: true });
   }
 
@@ -910,7 +869,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       chartNodeElements.set(node.id, circle);
     });
 
-    syncChartHeaders();
   };
 
   /* ------------------------------------------------ 節點 → AI 輸出卡片 */
@@ -1257,8 +1215,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const highlightImportButton = () => {
     const ioGroup = replica.querySelector('[data-toolgroup="io"]');
     ioGroup?.classList.add('is-pointed');
-    const callout = replica.querySelector('[data-callout="nav-io"]');
-    if (callout) callout.hidden = false;
     setProgress('本機執行完成。研究者接著按導覽列的「輸入資料」，把審閱包上載到平台。');
     aiBody.insertAdjacentHTML('beforeend',
       '<div class="part1-step"><span class="part1-step-num">2</span>按導覽列的「輸入資料」上載審閱包，AI 結果會以卡片形式顯示。</div>'
@@ -1267,7 +1223,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   };
 
   const renderCandidates = () => {
-    replica.querySelector('[data-callout="nav-io"]').hidden = true;
     renderedEventItems = [
       { ...data.dots.events, __confirmed: true, resultLabel: '林方事件', sourceRole: '林方報告' },
       ...data.aiCandidates.map((item) => ({ ...item, resultLabel: '清方行動', sourceRole: '清方軍事行動' }))
@@ -1412,37 +1367,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     window.setTimeout(() => button?.classList.remove('is-new'), 700);
   };
 
-  /* ---------------------------------------------------------- 區域切換 */
-
-  const REGION_LABEL = {
-    nav: '導覽列', chart: '時間與關係圖表', doc: '原始史料區', ai: 'AI 分析區', eventline: '事件鏈'
-  };
-
-  const REGION_HINT = {
-    nav: '導覽列負責輸入與輸出資料，以及切換介面區域。兩個標籤分別指向這兩組控制項。',
-    chart: '圖表由四條線組成。點擊任何一個圓點，AI 分析區會以對應的輸出卡片顯示節點資訊。',
-    doc: '原始史料區顯示文書的基本資料與完整原文。點擊上方的 AI Skill 標籤，標示該項結果在原文中的位置。',
-    ai: '研究者在本機執行 AI Skills，再把結果上載平台逐項核對。跟著步驟試一次完整流程。',
-    eventline: '從選取的文書或事件，沿著報告、批覆與回應順序查看整條事件鏈。'
-  };
-
-  let activeRegion = '';
-
   function setRegion(region, options = {}) {
-    activeRegion = region;
-    replica.dataset.activeRegion = region;
     replica.dataset.eventlineOpen = region === 'eventline' ? 'true' : 'false';
     if (region === 'eventline') renderEventLine();
-    replica.querySelectorAll('.part1-region').forEach((element) => {
-      element.classList.toggle('is-active', element.dataset.region === region);
-    });
-    replica.querySelectorAll('.part1-callout').forEach((callout) => {
-      const belongs = callout.dataset.callout.startsWith(region);
-      /* 導覽列的兩個標籤一起出現；其他區域的標籤由各自的互動控制。 */
-      if (region === 'nav') callout.hidden = !belongs;
-      else if (belongs) callout.hidden = true;
-    });
-    if (!options.silent) setProgress(`${REGION_LABEL[region]}：${REGION_HINT[region]}`);
   }
 
   /* 導覽列的下拉選單是展示用互動，但保留真正樣本工具的控制層級：
@@ -1567,8 +1494,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       if (typePop) typePop.hidden = true;
       if (toolsPop) toolsPop.hidden = true;
     }
-    const hotspot = event.target.closest('[data-hotspot]');
-    if (hotspot) setRegion(hotspot.dataset.hotspot);
   });
 
   /* -------------------------------------------------------------- 重設 */
@@ -1607,7 +1532,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     renderFilterChips();
     renderDocView();
     syncToolControls();
-    replica.querySelectorAll('.part1-callout').forEach((callout) => { callout.hidden = true; });
     renderAiIdle();
     drawLinks();
     setProgress('已重設示範。點擊複本上任何一個編號標籤，重新開始。');
@@ -1629,7 +1553,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   window.addEventListener('resize', () => {
     drawLinks();
-    syncChartHeaders();
   });
   if ('ResizeObserver' in window) new ResizeObserver(drawLinks).observe(lanesEl);
 });

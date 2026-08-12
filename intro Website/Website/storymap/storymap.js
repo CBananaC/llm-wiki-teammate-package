@@ -155,6 +155,16 @@ const panelForHash = (hash) => {
   if (hash === '#part-3' || hash.startsWith('#part-3-')) return 'part-3';
   return 'cover';
 };
+const scrollToNestedTarget = (target) => {
+  const element = document.querySelector(target);
+  if (!element) return;
+  const header = document.querySelector('.topbar');
+  const headerHeight = header?.getBoundingClientRect().height
+    || parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--bar-h'))
+    || 0;
+  const top = element.getBoundingClientRect().top + window.scrollY - headerHeight;
+  window.scrollTo({ top: Math.max(0, top), behavior: 'auto' });
+};
 const setActiveTab = (tabName, { updateHash = true, scrollTarget = null } = {}) => {
   const panel = tabPanels.find((item) => item.dataset.tabPanel === tabName);
   if (!panel) return;
@@ -165,7 +175,7 @@ const setActiveTab = (tabName, { updateHash = true, scrollTarget = null } = {}) 
   setCompactMenuOpen(false);
   if (updateHash) history.pushState(null, '', scrollTarget || `#${tabName}`);
   if (scrollTarget) {
-    window.requestAnimationFrame(() => document.querySelector(scrollTarget)?.scrollIntoView({ block: 'start' }));
+    window.requestAnimationFrame(() => scrollToNestedTarget(scrollTarget));
   } else {
     window.scrollTo(0, 0);
   }
@@ -193,7 +203,7 @@ part2FlowNodes.forEach((node) => {
   node.addEventListener('click', (event) => {
     event.preventDefault();
     const target = node.getAttribute('href');
-    if (target) setActiveTab('part-2', { scrollTarget: target });
+    if (target) setActiveTab(panelForHash(target), { scrollTarget: target });
   });
 });
 workflowNodes.forEach((node) => {
