@@ -14034,3 +14034,54 @@ Verified:
 
 Remaining:
 - Same as previous entries — user review, then decide on integration into the live page once the shared files are free to edit safely.
+
+### 2026-08-12 19:24 HKT — Codex — Restored saved per-document AI chat cards
+
+Summary:
+- Projected the saved `chat` histories from `/Users/creamybanana/Downloads/sample_all-2.data` for all 239 chart documents with stored AI output.
+- Preserved the saved card fields and card types, including document pairs, extract results, official responses, source traces, and emperor actions.
+- Clicking a document dot now opens that document’s saved AI cards in the AI panel; documents without saved output remain empty.
+- Kept saved pair evidence and source-chain quotations available in their cards, and updated both replica HTML cache versions.
+
+Files changed:
+- `intro Website/tool/scripts py/build_part1_interface_data.py`
+- `intro Website/Website/storymap/part-1-interface-data.js`
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- 硃42 opened 151 saved AI cards across 133 output turns, including extract, official-response, and document-pair card types with quotations.
+- 硃65, which has no saved chat history in the input data, kept an empty AI panel while its document panel opened normally.
+- An event square still rendered its content in 節點資訊區.
+- The preview rendered 513 document circles and 210 event squares; browser warnings/errors were empty.
+- JavaScript syntax checks, Python compilation, and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+## 2026-08-12 19:30 HKT — Claude — 諭43／硃160 evidence draft: same-size side-by-side panels, right-to-left expand, added context card
+
+Summary:
+- Reworked the reveal geometry in `storymap-yu-zhu-evidence-visual-draft.html` (still standalone/unlinked) again per feedback:
+  - 諭43 and 硃160 are now the same fixed size (430×560px each) and sit on the same horizontal line, 諭43 to the left of 硃160, instead of 諭43 being a smaller panel floating diagonally over 硃160's corner.
+  - Implemented via absolute positioning inside a fixed-width `.evidence-stage`: 硃160 is pinned `right: 0`; 諭43 is pinned `right: calc(panel width + gap)` (i.e. its right edge is permanently glued to 硃160's left edge) with `width: 0` at rest. Because the right edge is anchored by `right`, growing `width` only ever extends the box leftward — so revealing it now visibly "expands from its right border to the left border" as requested, rather than growing top-to-bottom.
+  - The reveal-once-then-type behaviour, unified highlight colours, border-free hover/click shading, and hint bubble from the previous pass are all unchanged — only the yu panel's size/position/expand-direction changed.
+  - Added a `.demo-row` two-column wrapper with the actual card-3 sentence ("系統會根據三項條件篩選候選文書…") as a `.context-card` to the left of the whole figure, so the draft now previews the intended real-page placement (text card left, visual right) rather than showing the visual in isolation.
+  - Added a `900px` breakpoint to stack the context card above the visual, and adjusted the existing `720px` breakpoint so both doc panels fall back to static full-width stacking (since the absolute/anchored-width technique only makes sense at a fixed pixel size).
+- Re-verified after the rewrite: both full document bodies still match `stage1_original_text.json` exactly (this pass touched only layout/CSS/JS, no quoted text), tag-balance check clean, and a manual `<div>` open/close count on the file matches (11/11).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-yu-zhu-evidence-visual-draft.html` (standalone, still not linked from the live site)
+- `PROJECT_LOG.md`
+
+Verified:
+- Python reconstruction/diff of both full document bodies against canonical source — exact match.
+- `html.parser` tag-balance check — clean; `<div>`/`</div>` count balanced (11/11).
+- Not yet opened in an actual browser to confirm the horizontal expand/type/highlight interaction visually.
+- Checked `PROJECT_LOG.md`'s tail before appending (line count had grown from the last checkpoint due to concurrent Codex activity); only this draft file and the log were touched again, per the same collision-avoidance approach as the prior two entries.
+
+Remaining:
+- Same as previous entries — user review, then decide on integration into the live page once the shared files (`storymap-example.html`, `storymap-cards.css`) are free to edit safely.

@@ -20,11 +20,15 @@
       （doc_id: 諭43、doc_id: 硃160），兩側均為「全文」，未新增、未
       改寫任何字句；已用程式逐字核對兩側重組後的文字與來源 JSON 的
       body 欄位完全一致（本次僅調整版面／互動，未再更動文字內容）。
-    - 互動：預設只顯示右側硃160（較寬），左側諭43以較窄的浮動小窗
-      藏在硃160左上角。第一次點擊任何硃160標色文字時，諭43才會從
-      硃160左上角疊出（由上而下展開＋逐字打出），此展開動畫只播放
-      一次；之後再點其他標色文字，只切換諭43內已打好文字中的亮點，
-      不會重播動畫。重新整理頁面會重置成初始狀態。
+    - 互動：預設只顯示硃160（在右）。諭43是與硃160「同尺寸、同高度」
+      的面板，固定疊在硃160左側同一水平線上，初始寬度為 0（右邊界
+      固定貼齊硃160左邊，完全不可見）。第一次點擊硃160任一標色文字
+      時，諭43才會從右邊界往左邊界展開（寬度 0 → 與硃160相同），
+      展開後逐字打出內文；此展開＋打字動畫只播放一次，之後再點其他
+      標色文字，只切換諭43內已打好文字中的亮點，不會重播動畫。重新
+      整理頁面會重置成初始狀態。
+    - 版面：整組（文字卡＋雙面板）比照正式頁面「文字卡在左、視覺在
+      右」的排法，此檔內附上第三張卡片原句作對照，方便確認位置。
   */
   :root {
     --ink: #163d3f; --text: #3c5754;
@@ -33,20 +37,38 @@
     --yellow: #f3c967;
     --hl-a: 58, 122, 122;   /* 標記＋日期／目標A：藍綠色系，同一對用同一色 */
     --hl-b: 196, 93, 56;    /* 引文／目標B：磚橘色系，同一對用同一色 */
+    --panel-w: 430px;
+    --panel-gap: 22px;
     --serif: "Noto Serif TC", "Source Han Serif TC", "PMingLiU", Georgia, serif;
     --sans: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang TC", sans-serif;
   }
   * { box-sizing: border-box; }
   body { margin: 0; padding: 36px 20px 70px; background: var(--paper); font-family: var(--sans); color: var(--ink); }
-  .wrap { max-width: 1000px; margin: 0 auto; }
+  .wrap { max-width: 1320px; margin: 0 auto; }
+
+  .demo-row {
+    display: grid;
+    grid-template-columns: minmax(240px, 320px) 1fr;
+    gap: 28px; align-items: start;
+  }
+  .context-card {
+    margin: 0; padding: 18px 20px;
+    background: var(--card); border: 1px solid var(--line); border-radius: 4px;
+  }
+  .context-card p { margin: 0; color: var(--text); font: 500 15.5px/1.85 var(--serif); }
 
   .evidence-visual {
     margin: 0; padding: 44px 20px 20px;
     background: #e8dfd1; border: 1px solid var(--line); border-radius: 4px;
+    overflow-x: auto;
   }
-  .evidence-stage { position: relative; }
+  .evidence-stage {
+    position: relative;
+    width: calc(var(--panel-w) * 2 + var(--panel-gap));
+    height: 560px;
+  }
 
-  /* -------- .part1-doc 風格文書面板（縮窄、放大字級） -------- */
+  /* -------- .part1-doc 風格文書面板（同尺寸、同高度，左右並排） -------- */
   .part1-doc {
     display: flex; flex-direction: column; min-width: 0;
     background: var(--card);
@@ -54,18 +76,14 @@
     box-shadow: 0 10px 22px rgba(47, 57, 52, .16);
     overflow: hidden;
   }
-  #panelZhu { width: min(100%, 560px); }
+  #panelZhu { position: absolute; top: 0; right: 0; width: var(--panel-w); height: 100%; }
   #panelYu {
-    position: absolute; top: -30px; left: -22px; z-index: 6;
-    width: min(78vw, 330px);
-    max-height: 480px;
-    box-shadow: 0 20px 40px rgba(30, 24, 12, .32);
-    opacity: 0; pointer-events: none;
-    transform: translateY(-8px) scaleY(.82);
-    transform-origin: top;
-    transition: opacity .4s ease, transform .5s cubic-bezier(.22, 1, .36, 1);
+    position: absolute; top: 0; right: calc(var(--panel-w) + var(--panel-gap)); z-index: 4;
+    width: 0; height: 100%;
+    box-shadow: 0 14px 28px rgba(47, 57, 52, .18);
+    transition: width .5s cubic-bezier(.22, 1, .36, 1);
   }
-  #panelYu.is-shown { opacity: 1; pointer-events: auto; transform: none; }
+  #panelYu.is-shown { width: var(--panel-w); }
 
   .part1-doc-head {
     position: relative;
@@ -94,13 +112,11 @@
   }
   .part1-doc-meta { margin: 0; color: #7a6f63; font: 500 12.5px/1.65 var(--sans); }
 
-  .part1-doc-scroll { flex: 1 1 auto; min-height: 0; max-height: 640px; overflow-y: auto; padding: 14px 16px 20px; }
-  #panelYu .part1-doc-scroll { max-height: 400px; padding: 12px 14px 16px; }
+  .part1-doc-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 14px 16px 20px; }
   .part1-doc-body {
     margin: 0; color: var(--text); text-align: justify;
     font: 500 16.5px/2.05 var(--serif);
   }
-  #panelYu .part1-doc-body { font-size: 15.5px; }
 
   /* -------- mark 標記：無邊框，僅用深淺度區分狀態，同一對配色一致 -------- */
   .part1-doc-body mark {
@@ -159,15 +175,26 @@
     100% { opacity: 0; transform: scale(1.5); }
   }
 
+  @media (max-width: 900px) {
+    .demo-row { grid-template-columns: 1fr; }
+  }
   @media (max-width: 720px) {
-    #panelZhu { width: 100%; }
-    #panelYu { position: static; width: 100%; max-height: none; opacity: 1; pointer-events: auto; transform: none; margin-bottom: 16px; box-shadow: 0 10px 22px rgba(47, 57, 52, .16); }
+    .evidence-stage { width: 100%; height: auto; }
+    #panelZhu, #panelYu {
+      position: static; width: 100%; height: auto; max-height: 480px;
+      box-shadow: 0 10px 22px rgba(47, 57, 52, .16);
+    }
+    #panelYu { margin-top: 16px; }
     .hint-bubble { display: none; }
   }
 </style>
 </head>
 <body>
 <div class="wrap">
+  <div class="demo-row">
+    <article class="context-card">
+      <p>系統會根據三項條件篩選候選文書。第一，上諭的發佈日期必須和「奉上諭」標記前的日期相符；第二，奏摺作者應為上諭的受文官員之一；第三，奏摺中的上諭引文必須與候選上諭的內容完全或大致相同。</p>
+    </article>
   <figure class="evidence-visual" aria-label="以諭43／硃160為例，示範三項篩選條件如何在原文中互相對應">
     <div class="evidence-stage" id="stage">
 
@@ -187,7 +214,7 @@
         </div>
       </div>
 
-      <!-- 左：諭43（上諭，浮在硃160左上角，初始隱藏） -->
+      <!-- 左：諭43（上諭，與硃160同尺寸同高度，初始寬度 0，右邊界固定貼齊硃160左邊） -->
       <div class="part1-doc" id="panelYu">
         <div class="part1-doc-head">
           <div class="part1-doc-window-controls">
@@ -207,6 +234,7 @@
 
     </div>
   </figure>
+  </div>
 </div>
 <script>
   (function () {
