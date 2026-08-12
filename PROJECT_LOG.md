@@ -13650,3 +13650,26 @@ Remaining:
 - Manual browser QA of the new bubble-guided flow (desktop drag/resize + mobile auto-play) is still outstanding.
 - The stray `.git/index.lock`-style files (this session's `.git/stale-lock-*.bak*`, and older `.git/index.lock.bak5`, `.git/index.lock.bak6`, `.git/next-index-9.lock` from prior sessions) remain in `.git/` and could not be deleted from this sandbox; harmless to git operation but worth a human cleaning them up from the actual machine if they accumulate.
 - Local commit only (`119ec09`); not pushed.
+
+## 2026-08-12 16:56 HKT — Claude — 總結文書 step 3: cards now expand and fast-type their text on apply
+
+Summary:
+- Step 3 (clicking the document panel to apply the摘要／分段 result) no longer just fades the 摘要 card and the five numbered segment cards (1.起因與前情 … 5.結語與馳奏) into place. Each card now expands open (`max-height`/opacity/scale transition, `.is-revealed` class) one at a time, and once expanded, its body text (the 摘要 paragraph, and each segment's `part-summary`/`part-excerpt`) is typed out with a fast typewriter effect — card titles/labels are untouched, only the descriptive text types in.
+- Implemented via a `revealCards()` queue in `part2-summary-visual.js`: original text is cached to `dataset.fullText` and cleared before any card is shown, then each card is revealed and typed in sequence (summary card first, then parts 1–5), each field typed before moving to the next.
+- Typing speed is faster than the Skill-window typing in steps 1–2 (5 chars / 10ms tick vs. 2 chars / 34ms), matching the "fast" requirement.
+- CSS: replaced the old fade+`nth-child` stagger-delay rules for `.part2-summary-doc-summary`/`.part2-summary-doc-part` with `max-height`-based expand rules keyed off the new per-element `.is-revealed` class (previously keyed off a blanket `.is-applied-visible` ancestor class, which is no longer used by these two selectors). Added a light-background typing caret (`.part2-summary-doc-caret`).
+
+Files changed:
+- `intro Website/Website/storymap/part2-summary-visual.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html` (script cache-busting query bump only)
+
+Verified:
+- `node --check` passed on the updated JS.
+- Python brace-count check on `storymap-cards.css` (623 open / 623 close) confirms no unbalanced rule from the edit.
+- `git status` before commit showed only these three files as modified (no unrelated concurrent-session changes swept in this time); committed cleanly as `91b9fd1` on `codex/current-project-update`, local-only, on top of the two-commit checkpoint from the previous entry.
+- Not yet verified in an actual browser.
+
+Remaining:
+- Manual browser QA of the step-3 card expand + fast-typing sequence (timing/legibility, and that `max-height: 600px` is enough headroom for the longest excerpt at default and resized window widths).
+- Same outstanding items as the previous entry (bubble-flow QA, stray `.git/*.bak` lock files, not pushed).
