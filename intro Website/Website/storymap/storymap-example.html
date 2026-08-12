@@ -9,12 +9,14 @@
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="storymap.css?v=20260811-codex-responsive-02">
   <link rel="stylesheet" href="storymap-cards.css?v=20260812-part2-card-width-01">
-  <link rel="stylesheet" href="part-1-interface.css?v=20260812-panel-controls-08">
+    <link rel="stylesheet" href="part-1-interface.css?v=20260812-lane-tabs-11">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js?v=20260812-part2-flow-02" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
   <script src="part-1-interface-data.js?v=20260812-chat-source-01" defer></script>
-  <script src="part-1-interface.js?v=20260812-panel-controls-08" defer></script>
+    <script src="part-1-interface.js?v=20260812-lane-tabs-11" defer></script>
+  <!-- 第二部分「總結文書」互動示範：VS Code 風格 Skill 視窗＋文書面板複本。 -->
+  <script src="part2-summary-visual.js?v=20260812-01" defer></script>
   <!-- 第三部分「適合的研究問題」互動圖庫：同樣先載資料，再載行為。 -->
   <script src="part-3-question-gallery-data.js" defer></script>
   <script src="part-3-question-gallery.js" defer></script>
@@ -861,9 +863,93 @@
             <div class="section-hero-content"><p class="eyebrow">分析階段一</p><h1 id="part-2-summary-title">總結文書</h1></div>
           </section>
           <section class="story surface-b part2-topic-content" id="part-2-summary-content" data-tab="part-2">
-            <div class="story-inner"><div class="part2-card-stack">
-              <article class="copybox blk part2-text-card part2-summary-card"><div class="body"><p>第一組 AI Skills 負責總結文書。AI 會先將整份文書概括為一段摘要，再按照內容和功能將原文劃分成不同部分，並為每一部分提供簡短的標題和摘要。</p><p>摘要和分段結果會顯示在原始文書區中，供研究者在完整閱讀原文前快速瀏覽，掌握文書的主要內容和結構。</p></div></article>
-            </div></div>
+            <div class="story-inner">
+              <div class="part2-summary-layout">
+                <div class="part2-card-stack">
+                  <article class="copybox blk part2-text-card part2-summary-card"><div class="body"><p>第一組 AI Skills 負責總結文書。AI 會先將整份文書概括為一段摘要，再按照內容和功能將原文劃分成不同部分，並為每一部分提供簡短的標題和摘要。</p><p>摘要和分段結果會顯示在原始文書區中，供研究者在完整閱讀原文前快速瀏覽，掌握文書的主要內容和結構。</p></div></article>
+                </div>
+
+                <div class="part2-summary-visual" data-part2-summary-visual role="group" aria-label="總結文書 AI Skills 互動示範">
+                  <p class="part2-summary-caption" aria-live="polite"></p>
+                  <div class="part2-summary-stage">
+
+                    <div class="part2-summary-skill-win" role="button" tabindex="0" aria-label="AI Skills 指令視窗">
+                      <div class="part2-summary-skill-bar">
+                        <span class="part2-summary-move" role="button" tabindex="0" aria-label="拖曳移動視窗">
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+                        </span>
+                        <span class="dot red"></span><span class="dot yellow"></span><span class="dot green"></span>
+                        <span class="part2-summary-ttl">AI Skills · 總結文書</span>
+                        <span class="part2-summary-done">✓ 已載入</span>
+                      </div>
+                      <div class="part2-summary-tabs">
+                        <span class="part2-summary-tab" data-tab="0"><span class="part2-summary-tab-dot"></span>quick-summary.md</span>
+                        <span class="part2-summary-tab" data-tab="1"><span class="part2-summary-tab-dot"></span>divide-into-parts.md</span>
+                      </div>
+                      <div class="part2-summary-skill-body"></div>
+                      <span class="part2-summary-hint part2-summary-hint-skill">① 點擊查看 AI Skills 指令</span>
+                      <span class="part2-summary-resize-handle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="21" y1="10" x2="10" y2="21"/><line x1="21" y1="16" x2="16" y2="21"/></svg></span>
+                    </div>
+
+                    <div class="part2-summary-doc-win" role="button" tabindex="0" aria-label="文書面板">
+                      <div class="part2-summary-doc-head">
+                        <div class="part2-summary-doc-window-controls">
+                          <span class="part2-summary-move" role="button" tabindex="0" aria-label="拖曳移動視窗">
+                            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg>
+                          </span>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg>
+                        </div>
+                        <p class="part2-summary-doc-title"><span class="part2-summary-badge">硃</span>為奏聞林爽文攻陷彰化情形事</p>
+                        <p class="part2-summary-doc-meta">柴大紀（等）<br>1786/12/4–1/2（29 日）<br>明清台檔30, 108, 硃40</p>
+                      </div>
+                      <div class="part2-summary-doc-filterdock">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="21 4 3 4 10 12.5 10 19 14 21 14 12.5 21 4"/></svg>
+                        <svg class="part2-summary-fgear" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 0 15 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15z"/></svg>
+                      </div>
+                      <div class="part2-summary-doc-scroll">
+                        <div class="part2-summary-doc-summary">
+                          <h3>摘要</h3>
+                          <p>乾隆五十一年十一月底，彰化大里杙民變首領林爽文等人聚眾起事，接連攻劫大墩營盤並攻陷彰化縣城，致使副將赫生額、知縣俞峻等文武官員殉難。臺灣鎮總兵柴大紀與兵備道永福於十二月初四日具摺上奏，報告已緊急調兵分防諸羅、鐵線橋等要隘以護衛府城，並檄調澎湖兵力及懇請閩省水陸提督速派大軍渡臺馳援。乾隆皇帝於五十二年正月初二日對此摺批覆「已有旨了」。</p>
+                        </div>
+                        <p class="part2-summary-section-label">原文</p>
+                        <div class="part2-summary-doc-divisions">
+                          <article class="part2-summary-doc-part">
+                            <h4><span>1.</span>起因與前情</h4>
+                            <p class="part2-summary-doc-part-summary">奏報林爽文等聚眾謀反，柴大紀等已率兵剿捕，孫景燧亦前往協辦。</p>
+                            <p class="part2-summary-doc-part-excerpt">福建臺灣鎮總兵奴才柴大紀、福建臺灣兵備道奴才永福謹奏，為奸民猝起，劫縣傷官，恭摺奏聞事。竊照彰化縣屬大里杙等莊，有奸民林爽文、王芬等聚匪截路，攻劫營盤，謀為不軌。奴才等聞信，親率官兵於十二月初二日起程，飛馳剿捕，業經奏聞在案。臺灣府孫景燧現在諸羅督緝逸匪張烈等要犯，先已就近赴彰協同查辦。</p>
+                          </article>
+                          <article class="part2-summary-doc-part">
+                            <h4><span>2.</span>災情與情報</h4>
+                            <p class="part2-summary-doc-part-summary">陸續接獲逃回兵丁與地方官員稟報，彰化縣城已被攻破，多位文武官員遇害，賊兵意圖進攻諸羅、鹿港及府城。</p>
+                            <p class="part2-summary-doc-part-excerpt">奴才等於初三日途次，據跟隨遊擊耿世文往大墩緝賊之兵丁楊勝官面稟：上月之二十七日夜，賊匪眾多，攻劫營盤，赫副將、耿遊擊、俞知縣均被殺害，小的帶傷逃回……伏乞迅賜發兵，星夜馳救。又據署鹿仔港守備事千總陳邦光稟稱：十一月二十八日，有鹿港民人自彰逃回，俱說二十八日賊匪數千攻破縣城，即要來搶鹿港、笨港一路，直攻府城，請撥救護。</p>
+                          </article>
+                          <article class="part2-summary-doc-part">
+                            <h4><span>3.</span>軍事部署</h4>
+                            <p class="part2-summary-doc-part-summary">派兵分赴諸羅剿捕、防守羅漢門要道，並親率兵力駐紮鐵線橋以應援各路。</p>
+                            <p class="part2-summary-doc-part-excerpt">此等匪徒，實屬罪大惡極，奴才等不勝憤恨，亟欲滅此朝食。隨嚴飭本標遊擊李中揚，帶兵四百名……查鐵線橋地方，係諸城、笨港兩路通府總口，實係緊要處所。奴才等本標兵三百名，督同臺協遊擊林光玉，帶兵三百名，前赴鐵線橋一帶駐紮，以便應援兩路。</p>
+                          </article>
+                          <article class="part2-summary-doc-part">
+                            <h4><span>4.</span>局勢分析與增援</h4>
+                            <p class="part2-summary-doc-part-summary">分析賊勢猖獗且兵力不足，已調澎湖兵並請水陸提督派兵赴臺，同時加強府城防守。</p>
+                            <p class="part2-summary-doc-part-excerpt">查賊匪係漳州人，諸、彰二邑漳人甚多，到處附從，勢甚猖獗……雖經檄調澎湖協兵丁八百名，恐不敷用，已咯請水陸提督迅速帶兵赴臺應接。府城為全臺根本，亦經飭在城文武嚴守，並飭臺協右營遊擊鄭嵩移駐彈壓。</p>
+                          </article>
+                          <article class="part2-summary-doc-part">
+                            <h4><span>5.</span>結語與馳奏</h4>
+                            <p class="part2-summary-doc-part-summary">將奸民起事、攻陷縣城及傷亡情形，以六百里加急具摺馳奏御覽。</p>
+                            <p class="part2-summary-doc-part-excerpt">除報督、撫、提督外，合將奸民猝起，劫縣傷官情形，具摺由驛六百里馳奏。伏乞皇上容鑒。謹奏。</p>
+                          </article>
+                        </div>
+                        <p class="part2-summary-doc-body">福建臺灣鎮總兵奴才柴大紀、福建臺灣兵備道奴才永福謹奏，為奸民猝起，劫縣傷官，恭摺奏聞事。竊照彰化縣屬大里杙等莊，有奸民林爽文、王芬等聚匪截路，攻劫營盤，謀為不軌。奴才等聞信，親率官兵於十二月初二日起程，飛馳剿捕，業經奏聞在案。臺灣府孫景燧現在諸羅督緝逸匪張烈等要犯，先已就近赴彰協同查辦。奴才等於初三日途次，據跟隨遊擊耿世文往大墩緝賊之兵丁楊勝官面稟：上月之二十七日夜，賊匪眾多，攻劫營盤，赫副將、耿遊擊、俞知縣均被殺害，小的帶傷逃回。同時復據諸羅守備郝輝龍、署諸羅縣俸滿同知董啟埏稟稱：初二日酉刻，據差往彰化投文兵丁賴得林逃回稟稱：小的蒙差赴彰投文，在彰城中住宿，有賊匪數千圍攻城池，於二十八夜下雨時分，將縣城攻破。王都司被害，其餘各官因在愴惶之際，不能深悉。小的亦被獲去，惟假裝火頭，始得免害。至次日開城時混出，連夜逃回，恐賊匪來攻諸羅，伏乞迅賜發兵，星夜馳救。又據署鹿仔港守備事千總陳邦光稟稱：十一月二十八日，有鹿港民人自彰逃回，俱說二十八日賊匪數千攻破縣城，即要來搶鹿港、笨港一路，直攻府城，請撥救護。等情。此等匪徒，實屬罪大惡極，奴才等不勝憤恨，亟欲滅此朝食。隨嚴飭本標遊擊李中揚，帶兵四百名，千總蘇明耀、魏大鵬等帶兵二百名，飛馳諸羅剿捕。又東邊有山路，可由羅漢門通府城，亦即飭該汛守備李步雲嚴加防範。並撥臺協水師兵丁一百名，協力截拿。查鐵線橋地方，係諸城、笨港兩路通府總口，實係緊要處所。奴才等本標兵三百名，督同臺協遊擊林光玉，帶兵三百名，前赴鐵線橋一帶駐紮，以便應援兩路。又飛調臺協遊擊楊起麟，帶兵三百名，趕赴前來，以為後應。查賊匪係漳州人，諸、彰二邑漳人甚多，到處附從，勢甚猖獗。奴才等惟有竭盡駑驗，奮不顧身，殲滅匪徒，力圖恢復。但臺灣地方遼闊，各營汛兵，處處均關緊要，實難抽調。雖經檄調澎湖協兵丁八百名，恐不敷用，已咯請水陸提督迅速帶兵赴臺應接。所有被害文武官兵，俯俟查明另奏。府城為全臺根本，亦經飭在城文武嚴守，並飭臺協右營遊擊鄭嵩移駐彈壓。除報督、撫、提督外，合將奸民猝起，劫縣傷官情形，具摺由驛六百里馳奏。伏乞皇上容鑒。謹奏。乾隆五十一年十二月初四日　乾隆五十二年正月初二日奉硃批：已有旨了。欽此。〔本文原收錄於軍錄〕</p>
+                      </div>
+                      <span class="part2-summary-hint part2-summary-hint-apply">② 點擊文書套用結果</span>
+                      <span class="part2-summary-resize-handle" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="21" y1="10" x2="10" y2="21"/><line x1="21" y1="16" x2="16" y2="21"/></svg></span>
+                    </div>
+
+                  </div>
+                </div>
+              </div>
+            </div>
           </section>
         </section>
         <section class="part2-stage" id="part-2-communication" data-tab="part-2" data-nav="#part-2-communication">
