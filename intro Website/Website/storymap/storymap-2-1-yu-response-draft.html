@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>草稿：2-1 辨識奏摺所回應的上諭（內嵌真實平台複本）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --font-scale: 1;
+  --ink: #163d3f; --text: #3c5754; --paper: #efe8d9; --card: #fffaf2; --line: rgba(22,61,63,.18);
+  --accent: #c45d38;
+  --hl-marker: 58,122,122; --hl-date: 181,131,42; --hl-quote: 196,93,56; --hl-author: 122,84,150;
+  --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang TC", sans-serif;
+  --body-weight: 500;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+button { font: inherit; }
+.draft-header { padding: clamp(26px,5vw,56px) clamp(16px,4vw,56px) clamp(20px,3vw,34px); color: #f7f3ea; background: #12363a; border-bottom: 1px solid rgba(255,255,255,.14); }
+.draft-header-inner, .draft-main { width: min(1500px, calc(100% - 32px)); margin: 0 auto; }
+.draft-kicker { margin: 0 0 10px; color: rgba(247,243,234,.68); font: 700 11px/1.4 var(--sans); letter-spacing: .14em; }
+.draft-header h1 { max-width: 34ch; margin: 0; font: 700 clamp(24px,3.4vw,38px)/1.3 var(--serif); letter-spacing: .04em; }
+.draft-header p:last-child { max-width: 84ch; margin: 14px 0 0; color: rgba(247,243,234,.82); font: 500 clamp(13.5px,1.5vw,15.5px)/1.8 var(--serif); }
+.draft-note { margin: 18px 0 0; padding: 12px 16px; color: rgba(247,243,234,.88); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 4px; font: 500 12.5px/1.7 var(--sans); }
+.draft-note code { color: #ffd9a8; }
+.draft-note strong { color: #ffd9a8; }
+.draft-main { padding: clamp(26px,5vw,48px) 0 90px; }
+
+.part2-substage-cover { display: flex; align-items: center; gap: 16px; margin: 0 0 22px; }
+.part2-substage-num { color: var(--accent); font: 800 26px/1 var(--serif); }
+.part2-substage-num small { display: block; margin-top: 2px; color: #8a7c66; font: 700 11px/1 var(--sans); letter-spacing: .1em; }
+.part2-substage-divider { flex: none; width: 1px; align-self: stretch; background: var(--line); }
+.part2-substage-copy h2 { margin: 0; color: var(--ink); font: 700 clamp(20px,2.4vw,28px)/1.4 var(--serif); }
+.part2-substage-copy p { margin: 6px 0 0; color: #6d756f; font: 500 12.5px/1.6 var(--sans); }
+
+/* ---- description panel (always expanded, no fold/bar accordion, no skill window) ---- */
+.req-desc { margin: 0 0 18px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 20px rgba(22,61,63,.08); overflow: hidden; }
+.req-desc-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 16px 20px 14px; border-bottom: 1px solid var(--line); }
+.req-desc-index { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fffaf2; background: var(--accent); border-radius: 50%; font: 800 13px/1 var(--sans); }
+.req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 calc(18px * var(--font-scale))/1.35 var(--serif); transition: opacity .15s ease; }
+.req-desc-body { padding: 18px 22px; }
+.req-wordcard { margin: 0; }
+.req-wordcard p { margin: 0; color: var(--text); font: var(--body-weight) calc(14.5px * var(--font-scale))/1.85 var(--serif); transition: opacity .15s ease; }
+
+/* ---- prev/next nav beside a small "current step" bubble cluster ---- */
+.req-nav { display: flex; align-items: center; gap: 8px; margin-left: auto; }
+.req-nav-arrow { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 26px; height: 26px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; transition: background .15s ease, color .15s ease; }
+.req-nav-arrow:hover { color: #fffaf2; background: var(--accent); border-color: var(--accent); }
+.req-nav-steps { display: flex; gap: 5px; }
+.req-nav-step { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; font: 700 11px/1 var(--sans); cursor: pointer; transition: background .15s ease, color .15s ease, transform .15s ease; }
+.req-nav-step:hover { transform: scale(1.1); }
+.req-nav-step.is-active { color: #fffaf2; background: var(--accent); border-color: var(--accent); }
+
+/* ---- real tool embed ---- */
+.req-iframe-wrap { position: relative; height: 900px; background: var(--card); border: 1px solid var(--line); border-radius: 8px; box-shadow: 0 8px 20px rgba(22,61,63,.08); overflow: hidden; }
+.req-iframe-wrap iframe { display: block; width: 100%; height: 100%; border: 0; }
+.req-iframe-tag { position: absolute; top: 10px; right: 12px; z-index: 2; padding: 4px 10px; color: #fffaf2; background: rgba(22,61,63,.82); border-radius: 999px; font: 700 10.5px/1.6 var(--sans); letter-spacing: .04em; pointer-events: none; }
+
+.req-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 0 0 18px; padding: 0 2px; }
+.req-legend-item { display: flex; align-items: center; gap: 7px; color: var(--text); font: 600 12px/1 var(--sans); }
+.req-legend-swatch { width: 12px; height: 12px; border-radius: 50%; }
+.req-legend-swatch.marker { background: rgb(var(--hl-marker)); } .req-legend-swatch.date { background: rgb(var(--hl-date)); }
+.req-legend-swatch.quote { background: rgb(var(--hl-quote)); } .req-legend-swatch.author { background: rgb(var(--hl-author)); }
+</style>
+</head>
+<body>
+<header class="draft-header">
+  <div class="draft-header-inner">
+    <p class="draft-kicker">清代奏摺與上諭分析平台・2-1 辨識奏摺所回應的上諭・草稿修訂版</p>
+    <h1>說明卡改為純文字＋步進導覽，圖表與文書面板改為內嵌真實平台複本</h1>
+    <p>依兩項回饋修改上一版草稿：（1）說明卡移除 VS Code 風格的 Skill 視窗，只保留標題與摘要文字；（2）不再用簡化版的自製圖表／文書面板，改為直接以 <code>&lt;iframe&gt;</code> 內嵌真正的 <code>platform-interface-replica.html</code>（真實工具列、真實四線圖表引擎、真實文書與 AI 分析區）。</p>
+    <div class="draft-note">
+      <strong>取捨說明：</strong>內嵌的是平台介面複本「原樣」——它目前載入的示範文書是硃42（徐嗣曾，為彰化諸羅俱失及撥兵等緣由事），並非上一版草稿使用的孫士毅奏摺／上諭配對。因為硃42 沒有對應「奉上諭標記／日期／引文／作者」這四項辨識線索的標記，所以本頁的編號導覽（下方說明卡）目前只獨立示範「逐項切換說明文字」的步進互動，尚未連動到內嵌工具內部的圖表節點或文書標色——這點與圖表／文書面板皆為即時渲染的真實引擎有關，兩者資料結構不同，無法直接套用舊版的標色點擊邏輯。若要讓編號真正對應到內嵌工具裡的圖表節點與文書標色，需要另外準備一份以孫士毅奏摺／上諭為主角、且格式與 <code>part-1-interface-data.js</code> 相符的示範資料，我可以在確認方向後再處理。
+      <br><br>
+      四項線索文字逐字取自現有 <code>part2-yu-response-bars.js</code>（與前一版草稿相同，已用 SHA-256 核對，未新增、未改寫文字）。內嵌的平台介面複本則直接使用真實檔案 <code>platform-interface-replica.html</code>／<code>part-1-interface.css</code>／<code>part-1-interface.js</code>／<code>part-1-interface-data.js</code>，未作任何修改。
+    </div>
+  </div>
+</header>
+
+<main class="draft-main">
+  <section>
+    <div class="part2-substage-cover">
+      <div class="part2-substage-num">2-1<small>之一</small></div>
+      <div class="part2-substage-divider"></div>
+      <div class="part2-substage-copy">
+        <h2>辨識奏摺所回應的上諭</h2>
+        <p>草稿修訂版：說明卡（無 Skill 視窗）＋內嵌真實平台介面複本</p>
+      </div>
+    </div>
+
+    <div class="req-legend">
+      <span class="req-legend-item"><span class="req-legend-swatch marker"></span>① 「奉上諭」等引述標記</span>
+      <span class="req-legend-item"><span class="req-legend-swatch date"></span>② 上諭的發出日期</span>
+      <span class="req-legend-item"><span class="req-legend-swatch quote"></span>③ 上諭引文</span>
+      <span class="req-legend-item"><span class="req-legend-swatch author"></span>④ 奏摺作者</span>
+    </div>
+
+    <div class="req-desc" data-req-desc><div class="req-desc-head"><span class="req-desc-index" data-req-desc-index>01</span><h3 data-req-desc-title></h3><div class="req-nav" data-req-nav><button class="req-nav-arrow" type="button" data-nav-prev aria-label="上一項線索">&#8592;</button><div class="req-nav-steps"><button class="req-nav-step" type="button" data-nav-step="marker" aria-label="第 1 項：「奉上諭」等引述標記"><span>1</span></button><button class="req-nav-step" type="button" data-nav-step="date" aria-label="第 2 項：上諭的發出日期"><span>2</span></button><button class="req-nav-step" type="button" data-nav-step="quote" aria-label="第 3 項：上諭引文"><span>3</span></button><button class="req-nav-step" type="button" data-nav-step="author" aria-label="第 4 項：奏摺作者"><span>4</span></button></div><button class="req-nav-arrow" type="button" data-nav-next aria-label="下一項線索">&#8594;</button></div></div><div class="req-desc-body"><div class="req-wordcard"><p data-req-desc-summary></p></div></div></div>
+
+    <div class="req-iframe-wrap">
+      <span class="req-iframe-tag">真實平台介面複本（原樣內嵌，非模擬）</span>
+      <iframe src="platform-interface-replica.html" title="清代奏摺與上諭分析平台・平台介面複本" loading="lazy"></iframe>
+    </div>
+  </section>
+</main>
+
+<script data-nav-data>
+window.__DRAFT7_DATA__ = {"requirements": [{"id": "marker", "n": 1, "title": "「奉上諭」等引述標記", "summary": "官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記；部分回覆也會先用「接奉」、「接准」或「敬奉」等標記，注明自己收到上諭的日期。平台會先利用 Python 從原始文書中擷取這些標記，作為辨識奏摺是否回應上諭的第一項線索。"}, {"id": "date", "n": 2, "title": "上諭的發出日期", "summary": "系統篩選候選文書的第一項條件：上諭的發佈日期，必須和奏摺中「奉上諭」標記前所寫明的日期相符。"}, {"id": "quote", "n": 3, "title": "上諭引文", "summary": "系統篩選候選文書的第三項條件：奏摺中引用的上諭內容，必須與候選上諭的內容完全或大致相同。"}, {"id": "author", "n": 4, "title": "奏摺作者", "summary": "系統篩選候選文書的第二項條件：奏摺作者，應為上諭的受文官員之一。"}]};
+</script>
+<script>
+(function () {
+  'use strict';
+  var DATA = window.__DRAFT7_DATA__;
+  var REQUIREMENTS = DATA.requirements;
+  var GROUP_ORDER = REQUIREMENTS.map(function (r) { return r.id; });
+
+  var descIndex = document.querySelector('[data-req-desc-index]');
+  var descTitle = document.querySelector('[data-req-desc-title]');
+  var descSummary = document.querySelector('[data-req-desc-summary]');
+  var navSteps = Array.prototype.slice.call(document.querySelectorAll('[data-nav-step]'));
+  var navPrev = document.querySelector('[data-nav-prev]');
+  var navNext = document.querySelector('[data-nav-next]');
+
+  var activeId = GROUP_ORDER[0];
+
+  function setActive(groupId) {
+    activeId = groupId;
+    var req = REQUIREMENTS.filter(function (r) { return r.id === groupId; })[0];
+    if (!req) return;
+
+    descIndex.textContent = String(req.n).padStart(2, '0');
+    descTitle.textContent = req.title;
+    descSummary.textContent = req.summary;
+
+    navSteps.forEach(function (b) {
+      b.classList.toggle('is-active', b.getAttribute('data-nav-step') === groupId);
+    });
+  }
+
+  document.addEventListener('click', function (e) {
+    var step = e.target.closest('[data-nav-step]');
+    if (step) { setActive(step.getAttribute('data-nav-step')); return; }
+  });
+
+  navPrev.addEventListener('click', function () {
+    var i = GROUP_ORDER.indexOf(activeId);
+    setActive(GROUP_ORDER[(i - 1 + GROUP_ORDER.length) % GROUP_ORDER.length]);
+  });
+  navNext.addEventListener('click', function () {
+    var i = GROUP_ORDER.indexOf(activeId);
+    setActive(GROUP_ORDER[(i + 1) % GROUP_ORDER.length]);
+  });
+
+  setActive(GROUP_ORDER[0]);
+})();
+</script>
+</body>
+</html>
