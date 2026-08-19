@@ -13,7 +13,7 @@
 
   var entries = [
     {
-      id: 'markerA', index: '01', title: '「據常青等奏」引述標記',
+      id: 'markerA', index: '01', title: '「據⋯⋯奏」引述標記',
       summary: '在評論官員奏報和下達命令前，上諭通常會先使用「據某人奏」、「據某人馳奏」或「據某人奏稱」等引述標記，交代皇帝所收到的官員奏報。<br><br>此外，同一項資訊可能由多位官員奏報，而上諭卻大多只會使用「據某人等奏稱」或「據奏」的標記，不會列出所有的奏報官員。因此，不能只用 Python 擷取人名或標記，來確定上諭所回應的奏摺。',
       skill: '<div class="skill-row skill-heading"><span class="md-kw">## 3. Citation (來源標記)</span></div>' +
         '<div class="skill-row skill-lead">辨識上諭開頭引述之奏報來源標記：</div>' +
@@ -22,7 +22,7 @@
         '<div class="skill-row skill-bullet"><span class="md-bullet">•</span> <span class="md-kw">多源歸納</span>：比對候選奏摺池中各督撫作者與事件內容，建立多對一依據鏈。</div>'
     },
     {
-      id: 'dateA', index: '02', title: '收發日期・常青等',
+      id: 'dateA', index: '02', title: '收發日期',
       summary: '然而，與回應上諭的奏摺不同，上諭通常不會註明皇帝何時收到相關奏摺，以及相關奏摺的發送日期。<br><br>儘管如此，上諭通常會回應最新收到的奏報，平台會先利用 Python搜尋上諭發布當日，以及發布前5日內收到的奏摺，作為後續分析的候選文本。',
       skill: '<div class="skill-row skill-heading"><span class="md-kw">## 2. Date (日期窗口篩選)</span></div>' +
         '<div class="skill-row skill-lead">比對上諭發布前之候選奏摺收訖時間：</div>' +
@@ -184,8 +184,8 @@
     '#part-2-yu-source .req-desc { display: flex; flex-direction: column; margin: 18px 0 0; background: var(--card); border: 1px solid #d8cdbb; border-radius: 6px; box-shadow: 0 8px 24px rgba(47,57,52,.1); overflow: hidden; }',
     '#part-2-yu-source .req-desc-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 13px 20px 11px; border-bottom: 1px solid var(--line); background: rgba(244,239,230,.4); }',
     '#part-2-yu-source .req-desc .req-desc-index { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fffaf2; background: #8a7c66; border-radius: 50%; font: 800 13px/1 var(--sans); }',
-    '#part-2-yu-source .req-desc[data-active-req="markerA"] .req-desc-index { background: rgb(var(--hl-marker)) !important; }',
-    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-desc-index { background: rgb(var(--hl-date)) !important; }',
+    '#part-2-yu-source .req-desc[data-active-req="markerA"] .req-desc-index { background: rgb(var(--yu-source-marker)) !important; }',
+    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-desc-index { background: rgb(var(--yu-source-date)) !important; }',
     '#part-2-yu-source .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 18px/1.35 var(--serif); }',
     '#part-2-yu-source .req-desc-body { padding: 16px 20px 18px; }',
 
@@ -221,8 +221,8 @@
 
     /* Highlight in skill window */
     '#part-2-yu-source .req-skill-body mark.code-mark { display: inline-block; padding: 2px 7px; border-radius: 4px; color: #ffffff !important; font-weight: 600; line-height: 1.45; box-decoration-break: clone; -webkit-box-decoration-break: clone; }',
-    '#part-2-yu-source .req-desc[data-active-req="markerA"] .req-skill-body mark.code-mark[data-group="markerA"] { background: rgba(var(--hl-marker), .85) !important; box-shadow: 0 0 0 1px rgba(var(--hl-marker), 1); }',
-    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-skill-body mark.code-mark[data-group="dateA"] { background: rgba(var(--hl-date), .9) !important; box-shadow: 0 0 0 1px rgba(var(--hl-date), 1); }',
+    '#part-2-yu-source .req-desc[data-active-req="markerA"] .req-skill-body mark.code-mark[data-group="markerA"] { background: rgba(var(--yu-source-marker), .85) !important; box-shadow: 0 0 0 1px rgba(var(--yu-source-marker), 1); }',
+    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-skill-body mark.code-mark[data-group="dateA"] { background: rgba(var(--yu-source-date), .9) !important; box-shadow: 0 0 0 1px rgba(var(--yu-source-date), 1); }',
 
     '#part-2-yu-source .req-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }',
     '#part-2-yu-source .req-nav-arrow { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; transition: background .15s ease, color .15s ease; }',
@@ -249,16 +249,16 @@
 
     /* floating clue bubble on the 1st (上諭) panel */
     '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-pair-doc { position: relative; }',
-    '#part-2-yu-source .req-float-bubble { position: absolute; left: 0; top: 0; z-index: 30; display: flex; align-items: center; gap: 8px; height: 38px; max-width: calc(100% - 16px); padding: 5px 12px 5px 6px; color: #241d12; background: #fffdf8; border: 2px solid rgb(var(--bc, var(--hl-marker))); border-radius: 999px; box-shadow: 0 8px 18px rgba(30,22,10,.22); font: 700 10px/1 var(--sans); white-space: nowrap; transition: opacity .15s ease, left .12s ease, top .12s ease; }',
-    '#part-2-yu-source .req-float-bubble[data-bubble-group="markerA"] { --bc: var(--hl-marker); }',
-    '#part-2-yu-source .req-float-bubble[data-bubble-group="dateA"] { --bc: var(--hl-date); }',
+    '#part-2-yu-source .req-float-bubble { position: absolute; left: 0; top: 0; z-index: 30; display: flex; align-items: center; gap: 8px; height: 38px; max-width: calc(100% - 16px); padding: 5px 12px 5px 6px; color: #241d12; background: #fffdf8; border: 2px solid rgb(var(--bc, var(--yu-source-marker))); border-radius: 999px; box-shadow: 0 8px 18px rgba(30,22,10,.22); font: 700 10px/1 var(--sans); white-space: nowrap; transition: opacity .15s ease, left .12s ease, top .12s ease; }',
+    '#part-2-yu-source .req-float-bubble[data-bubble-group="markerA"] { --bc: var(--yu-source-marker); }',
+    '#part-2-yu-source .req-float-bubble[data-bubble-group="dateA"] { --bc: var(--yu-source-date); }',
     '#part-2-yu-source .req-float-bubble.req-float-hidden { opacity: 0; pointer-events: none; }',
     '#part-2-yu-source .req-float-num { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px; color: #fffdf8; background: rgb(var(--bc)); border-radius: 50%; font: 800 13px/1 var(--sans); }',
     '#part-2-yu-source .req-float-title { flex: 1 1 auto; min-width: 0; padding: 0 4px; overflow: hidden; text-overflow: ellipsis; color: #241d12; font: 800 calc(14px * var(--font-scale, 1))/1.35 var(--serif); }',
     '#part-2-yu-source .req-float-arrow { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; color: rgb(var(--bc)); background: transparent; border: 1.5px solid rgba(var(--bc),.5); border-radius: 50%; cursor: pointer; font: 700 13px/1 var(--sans); transition: background .15s ease; }',
     '#part-2-yu-source .req-float-arrow:hover { background: rgba(var(--bc),.16); }',
-    '#part-2-yu-source .req-float-tail { position: absolute; left: 50%; bottom: -7px; width: 13px; height: 13px; background: #fffdf8; border-right: 2px solid rgb(var(--bc, var(--hl-marker))); border-bottom: 2px solid rgb(var(--bc, var(--hl-marker))); transform: translateX(-50%) rotate(45deg); border-radius: 0 0 3px 0; }',
-    '#part-2-yu-source .req-float-bubble.req-float-flip .req-float-tail { bottom: auto; top: -7px; border-right: 0; border-bottom: 0; border-left: 2px solid rgb(var(--bc, var(--hl-marker))); border-top: 2px solid rgb(var(--bc, var(--hl-marker))); border-radius: 3px 0 0 0; }',
+    '#part-2-yu-source .req-float-tail { position: absolute; left: 50%; bottom: -7px; width: 13px; height: 13px; background: #fffdf8; border-right: 2px solid rgb(var(--bc, var(--yu-source-marker))); border-bottom: 2px solid rgb(var(--bc, var(--yu-source-marker))); transform: translateX(-50%) rotate(45deg); border-radius: 0 0 3px 0; }',
+    '#part-2-yu-source .req-float-bubble.req-float-flip .req-float-tail { bottom: auto; top: -7px; border-right: 0; border-bottom: 0; border-left: 2px solid rgb(var(--bc, var(--yu-source-marker))); border-top: 2px solid rgb(var(--bc, var(--yu-source-marker))); border-radius: 3px 0 0 0; }',
 
     /* highlight marks */
     '#part-2-yu-source .part1-pair-doc .part1-doc-body mark[data-group] { padding: 2px 4px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; color: inherit !important; background: transparent !important; cursor: pointer; transition: background-color .15s ease, color .15s ease; opacity: 1 !important; }',
