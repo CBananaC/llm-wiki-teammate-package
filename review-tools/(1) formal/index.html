@@ -7315,7 +7315,7 @@
       };
       const repeatRunRefs=item=>[item&&item.same_as_event_id,item&&item.same_as].concat(Array.isArray(item&&item.same_as_event_ids)?item.same_as_event_ids:[])
         .map(v=>String(v||'')).filter(Boolean);
-      const repeatTargetForItem=(item,sourceDoc,actor)=>{
+      const repeatTargetForItem=(item,sourceDoc,actor,canonicalRefsArg)=>{
         const ids=repeatRunRefs(item);
         const targetMeta=(docId)=>{
           const embedded=typeof recByAnyDocId==='function'?(recByAnyDocId(docId)||{}):(recByDocId2(docId)||{});
@@ -7393,7 +7393,7 @@
           if(sameDoc(run.doc_id,sourceDoc)) continue;
           const existing=existingEventForDoc(run.doc_id,item&&item.repeat_of_title||'');
           if(existing) return liveTarget(existing,run.doc_id);
-          const options=canonicalRefs.filter(ref=>ref.turn&&ref.turn.kind==='extract'&&ref.turn.actor===actor);
+          const options=(canonicalRefsArg||[]).filter(ref=>ref.turn&&ref.turn.kind==='extract'&&ref.turn.actor===actor);
           for(const ref of options){
             const list=Array.isArray(ref.turn.items)?ref.turn.items:[];
             const indexed=list[run.index];
@@ -7428,7 +7428,7 @@
         refs.slice().filter(ref=>isDedupBundleTurn(ref.turn)).forEach(ref=>{
           const items=Array.isArray(ref.turn.items)?ref.turn.items:[], sourceDoc=chatTurnDocId(ref.turn,ref.docId);
           items.forEach(item=>{
-            const repeatTarget=repeatTargetForItem(item,sourceDoc,ref.turn.actor);
+            const repeatTarget=repeatTargetForItem(item,sourceDoc,ref.turn.actor,canonicalRefs);
             if(repeatTarget) setRepeatTarget(item,repeatTarget);
           });
         });
