@@ -3427,7 +3427,6 @@
     setLatestReviewDot(rid, side||preferredReviewSide(rec, 'open'), 'open', {silent:true});
     selRid=Number(rid);
     hlDocRid=Number(rid); hlDocSide=side||preferredReviewSide(rec, 'open'); hlEventId=null;   // clicking a doc dot also shows its event/official/emperor chain
-    render();
     const card=openCard(rec, count>=3?3:count===2?2:1);
     if(card && window.__scopeAIto) window.__scopeAIto([card]);
     requestAnimationFrame(()=>{ if(window.__focusDot) window.__focusDot(rid); });
@@ -6230,7 +6229,7 @@
     function addButton(parent,label,fn,opts){ const b=document.createElement('button'); b.type='button'; b.setAttribute('role','menuitem'); b.textContent=label; if(opts&&opts.disabled){ b.disabled=true; b.title=opts.title||''; } if(opts&&opts.danger)b.classList.add('tcm-danger'); b.onclick=e=>{e.preventDefault();e.stopPropagation();fn();}; parent.appendChild(b); return b; }
     function clickControl(id){ const b=document.getElementById(id); if(b){ closeMenu(); b.click(); } }
     function labelOf(id,fallback){ const b=document.getElementById(id); return b&&b.tagName!=='INPUT'?(b.textContent||'').trim()||fallback:fallback; }
-    function openDoc(rid,side){ const rec=recByRid(rid); if(!rec)return; const key=/^\d+$/.test(String(rid))?Number(rid):String(rid); selRid=key; hlDocRid=key; hlDocSide=side||preferredReviewSide(rec,'open'); hlEventId=null; render(); openCard(rec,1); requestAnimationFrame(()=>{if(window.__focusDot)window.__focusDot(rid);}); }
+    function openDoc(rid,side){ const rec=recByRid(rid); if(!rec)return; const key=/^\d+$/.test(String(rid))?Number(rid):String(rid); selRid=key; hlDocRid=key; hlDocSide=side||preferredReviewSide(rec,'open'); hlEventId=null; openCard(rec,1); requestAnimationFrame(()=>{if(window.__focusDot)window.__focusDot(rid);}); }
     function openMenu(e){
       e.preventDefault(); e.stopPropagation(); closeMenu(); closeDotPop();
       const dot=e.target.closest&&e.target.closest('.ddot,.edot'), rid=dot&&dot.dataset.rid, eid=dot&&dot.dataset.evid;
@@ -10887,9 +10886,28 @@
       rebuildDividers(); normalizeToEqual(); setBtnActive();
     }
     tools.querySelectorAll('button[data-tool]').forEach(btn=>{
-      let ct=null;
-      btn.addEventListener('click',()=>{ if(ct) return; ct=setTimeout(()=>{ ct=null; showTool(btn.dataset.tool); }, 240); });
-      btn.addEventListener('dblclick',()=>{ if(ct){ clearTimeout(ct); ct=null; } spawnTool(btn.dataset.tool); });
+      btn.addEventListener('click',e=>{
+        const kind=btn.dataset.tool;
+        // The first click is intentionally immediate. On a real double-click,
+        // the second click is followed by dblclick and must not toggle the tool.
+        if(e.detail===2) return;
+        const primary=primaryToolsCol();
+        const current=primary.querySelector('.tool-box');
+        btn.__beforeDoubleTool=current&&current.dataset.kind||'';
+        showTool(kind);
+      });
+      btn.addEventListener('dblclick',e=>{
+        e.preventDefault(); e.stopPropagation();
+        // Restore the primary tool that was present before the first click,
+        // then preserve the old double-click behavior in a new column.
+        const kind=btn.dataset.tool, before=btn.__beforeDoubleTool||'';
+        const primary=primaryToolsCol();
+        const current=primary.querySelector('.tool-box');
+        const currentKind=current&&current.dataset.kind||'';
+        if(before){ if(currentKind!==before) showTool(before); }
+        else if(currentKind) showTool(currentKind);
+        spawnTool(kind); btn.__beforeDoubleTool='';
+      });
     });
 
     // pet drag (grab the buttons themselves)
