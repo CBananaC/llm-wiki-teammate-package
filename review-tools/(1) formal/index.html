@@ -8512,18 +8512,19 @@
       function respDocInfo(it){
         const rec=(typeof recByDocId2==='function'?recByDocId2(it.doc_id):null)||{};
         const title=rec.title||'';
-        const sendAr=rec.sendAr||it.response_date||'';
-        let recvTxt='';
-        if(it.receive_date){
-          const rd=(typeof convertWhenCh==='function')?convertWhenCh(it.receive_date, sendAr||rec.recvAr||''):null;
-          recvTxt=(rd&&typeof fmt==='function')?fmt(rd):it.receive_date;
-        }
+        // Keep the two date meanings separate. The canonical Zhu receive date is the
+        // document's third-line chart date; the AI pairing receive_date is when the
+        // official says he received the upstream 上諭.
+        const sendAr=rec.sendAr||resolveResponseDateAr(it.response_date, rec.recvAr||rec.sendAr||'')||it.response_date||'';
+        const docReceiveAr=rec.recvAr||'';
+        const upstreamReceiveAr=resolveResponseDateAr(it.receive_date, sendAr||docReceiveAr||'')||it.receive_date||'';
         let h='<dl class="em-srcinfo">';
         if(title) h+=`<dt>文書</dt><dd>${esc(title)}${it.doc_id?`（${esc(it.doc_id)}）`:''}</dd>`;
         else if(it.doc_id) h+=`<dt>文書</dt><dd>${esc(it.doc_id)}</dd>`;
         if(rec.author_name) h+=`<dt>具奏</dt><dd>${esc(rec.author_name)}</dd>`;
         if(sendAr) h+=`<dt>日期</dt><dd>${esc(sendAr)}</dd>`;
-        if(recvTxt) h+=`<dt>↩ 收到日期</dt><dd>${esc(recvTxt)}</dd>`;
+        if(docReceiveAr) h+=`<dt>↩ 收到日期</dt><dd>${esc(docReceiveAr)}</dd>`;
+        if(upstreamReceiveAr) h+=`<dt>↩ 接奉上諭日期</dt><dd>${esc(upstreamReceiveAr)}</dd>`;
         return h+'</dl>';
       }
       // Once committed, show whether the resulting event actually landed on the 4th (emperor-action)
