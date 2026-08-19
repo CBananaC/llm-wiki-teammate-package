@@ -5934,6 +5934,15 @@
   }
   function repeatPointerForItem(item){
     if(!item) return null;
+    // The January sample view can attach the 7/27 dedup result to the
+    // canonical 7/27 candidate without persisting a second copy of that card.
+    // Resolve the overlay against the same live-pointer path as a saved item.
+    const sampleDedup=item.__sampleJuly27Dedup;
+    if(sampleDedup){
+      const merged=Object.assign({},item,sampleDedup), target=sampleDedup.__repeatTarget;
+      if(target)try{Object.defineProperty(merged,'__repeatTarget',{value:target,enumerable:false,configurable:true});}catch(e){merged.__repeatTarget=target;}
+      return repeatPointerForItem(merged);
+    }
     // A dedup bundle is loaded as an annotation over the canonical extract card.
     // When the loader resolves its run:<doc>:<index> reference, keep the live
     // target here so the repeat note and merge controls use the real prior item
@@ -7404,6 +7413,8 @@
         });
         if(source&&source.__qcat) target.__qcat=source.__qcat;
       };
+      const setSampleTransient=(item,key,value)=>{ try{Object.defineProperty(item,key,{value,enumerable:false,configurable:true,writable:true});}catch(e){item[key]=value;} };
+      const clearSampleTransient=(item,key)=>{ try{delete item[key];}catch(e){} };
       const viewChatArray=()=>{
         const refs=[], seen=new Set();
         const addStore=(store, kind, docId)=>{ const arr=readChatArr(store); arr.forEach((turn,index)=>{ if(!turn||seen.has(turn)||!chatTurnVisible(turn)) return; seen.add(turn); refs.push({turn,store,index,kind,docId:String(docId||'')}); }); };
@@ -7422,6 +7433,52 @@
             if(repeatTarget) setRepeatTarget(item,repeatTarget);
           });
         });
+        // The January 1787 sample has several historical reruns saved on 7/27.
+        // For this panel, show only the canonical official loop and use the
+        // adjacent 7/27 dedup run as review metadata on the matching candidate.
+        // This keeps source quotes, repeat notes, emperor actions, and official
+        // responses in one deterministic conversation instead of duplicating
+        // whole runs below it.
+        const january1787Panel=panelDocIds.length===1&&/^1787\/0?1(?:\/|$)/.test(String(docBestAr((typeof recByDocId2==='function'&&recByDocId2(panelDocIds[0]))||{} )||''));
+        if(january1787Panel){
+          refs.forEach(ref=>{ (Array.isArray(ref.turn&&ref.turn.items)?ref.turn.items:[]).forEach(item=>{
+            clearSampleTransient(item,'__sampleJuly27Dedup');
+            clearSampleTransient(item,'__sampleJuly27TraceChains');
+          }); });
+          const july27=turn=>/^2026-07-27(?:\s|$)/.test(String(turn&&turn.at||''));
+          const belongsToPanel=ref=>panelDocSet.has(chatTurnDocId(ref.turn,ref.docId));
+          const mainRefs=refs.filter(ref=>belongsToPanel(ref)&&!isDedupBundleTurn(ref.turn)&&july27(ref.turn)&&ref.turn.__skillBundleName==='zhu-january-official-loop');
+          const dedupRefs=refs.filter(ref=>belongsToPanel(ref)&&isDedupBundleTurn(ref.turn)&&july27(ref.turn)&&ref.turn.__skillBundleName==='zhu-january-dedup');
+          if(mainRefs.length){
+            const dedupByKey=new Map();
+            dedupRefs.forEach(ref=>{
+              const actor=String(ref.turn.actor||'');
+              (Array.isArray(ref.turn.items)?ref.turn.items:[]).forEach(item=>{
+                const key=actor+'|'+chatItemKey(item), list=dedupByKey.get(key)||[];
+                list.push(item); dedupByKey.set(key,list);
+              });
+            });
+            mainRefs.forEach(ref=>{
+              (Array.isArray(ref.turn.items)?ref.turn.items:[]).forEach(item=>{
+                const traceChains=Array.isArray(item.__traceChains)&&item.__traceChains.length?item.__traceChains:null;
+                if(traceChains&&!item.__added) setSampleTransient(item,'__sampleJuly27TraceChains',traceChains);
+                const key=String(ref.turn.actor||'')+'|'+chatItemKey(item), match=(dedupByKey.get(key)||[])[0];
+                if(!match) return;
+                const overlay={};
+                ['same_as','same_as_event_id','same_as_event_ids','repeat_of_title','repeat_report_bundle','repeat_report_doc_id','repeat_report_author','repeat_report_doc_title','repeat_report_date','repeat_verdict','repeat_reason','repeat_candidates','earliest_report'].forEach(field=>{
+                  const value=match[field];
+                  if(value==null || (Array.isArray(value)?!value.length:!String(value).trim())) return;
+                  overlay[field]=Array.isArray(value)?value.slice():value;
+                });
+                if(match.__qcat) overlay.__qcat=match.__qcat;
+                if(match.__repeatTarget) setSampleTransient(overlay,'__repeatTarget',match.__repeatTarget);
+                if(Object.keys(overlay).length||match.__repeatTarget) setSampleTransient(item,'__sampleJuly27Dedup',overlay);
+              });
+            });
+            const visibleMain=mainRefs.filter(ref=>['extract','edictmatch','officialresponse'].includes(ref.turn.kind)||(ref.turn.kind==='trace'&&Array.isArray(ref.turn.items)&&ref.turn.items.length));
+            refs.splice(0,refs.length,...visibleMain);
+          }
+        }
         refs.forEach((ref,order)=>{ ref.order=order; });
         const bundleOrder=new Map();
         refs.forEach(ref=>{ const id=bundleTurnId(ref.turn); if(id&&!bundleOrder.has(id)) bundleOrder.set(id,ref.order); });
@@ -7839,7 +7896,16 @@
         return null;
       }
       function matchNoteHtml(it){
-        const mr=repeatPointerForItem(it); if(!mr) return '';
+        const mr=repeatPointerForItem(it);
+        if(!mr){
+          const sampleDedup=it&&it.__sampleJuly27Dedup||{};
+          const sampleTitle=sampleDedup.repeat_of_title||sampleDedup.repeat_report_doc_title||'';
+          const sampleRef=sampleDedup.same_as_event_id||sampleDedup.same_as||'';
+          if(sampleTitle||sampleRef){
+            return `<div class="cx-matchnote sample-dedup-note" data-verdict="same" title="7/27 AI 去重結果：此候選已標記為較早結果的重複回報"><b>AI 去重：${sampleTitle?`與「${esc(sampleTitle)}」重複`:'已標記為較早結果的重複回報'}</b>${sampleRef&&!sampleTitle?`<span class="cx-matchreason">（${esc(sampleRef)}）</span>`:''}</div>`;
+          }
+          return '';
+        }
         if(invalidMatchRegForCandidate(it, mr)) return '';
         const verdict=String(mr.verdict||it.repeat_verdict||'same').toLowerCase()==='similar'?'similar':'same';
         const reporter=mr.reporter||(!mr.sourceId&&it.who&&it.who.length?it.who[0]:'');
@@ -8121,6 +8187,13 @@
       function extractHtml(m,i){ const items=m.actor==='qing'?sortQingItems(m.items||[]):(m.items||[]); const pend=items.filter(it=>!it.__added&&!it.__skip).length;
         function srcSendDate(it){ const s=(it.sources||[])[0]||{}; const r=recByDocId2&&recByDocId2(s.doc_id); return r&&(r.sendAr||r.recvAr||r.annAr)||''; }
         function sendDateBtn(it,j){ const ar=srcSendDate(it); return ar?`<button class="cx-senddate" data-i="${i}" data-j="${j}" type="button">用文書發送日 ${esc(ar)}</button>`:''; }
+        function sampleSourceChainPreviewHtml(chains){
+          return (chains||[]).map((ch,k)=>`<div class="cx-ev sample-source-preview" style="border-left:3px solid ${PROV_HEX};padding-left:8px">
+            <div class="cx-sub"><span class="pv-chainl">來源鏈 ${k+1}</span></div>
+            <div class="pv-wrap">${provTableHtml(ch.hops||[])}</div>
+            ${chainQuoteBoxesHtml(ch.hops||[],ch.events||[])||''}
+          </div>`).join('');
+        }
         // A candidate's source chain(s) were already fetched up front (see runExtract's eager,
         // one-scan-per-document trace pass) and travel with it as it.__traceChains, but only ever
         // surface once the event is actually added -- committed onto the resulting event as
@@ -8149,6 +8222,7 @@
                 : (it.sources||[]).map(s=>s.quote?`<div class="cx-q" data-doc="${esc(s.doc_id||'')}" title="點按在原文中顯示">「${esc(s.quote)}」<span class="cx-src">—${esc(s.doc_id)}${s.howKnown?'／'+esc(s.howKnown):''}</span></div>`:'').join('')}
               <dl class="cx-meta cx-facts"><dt>地點</dt><dd class="loc"><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="where">${esc(it.where||'？')}</span></dd>${(it.who&&it.who.length)?`<dt>人物</dt><dd class="who">${esc(it.who.join('、'))}</dd>`:''}<dt>發生日期</dt><dd><span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenCh">${esc(it.whenCh||'')}</span>（<span class="ed" contenteditable="true" data-i="${i}" data-j="${j}" data-f="whenAr">${esc(it.whenAr||'')}</span>）${(!dateArIsFull(it.whenAr)&&repeatPointerForItem(it)&&repeatPointerForItem(it).verdict!=='similar')?(()=>{ const fd=firstReportDate(it); return fd?` <button class="cx-usefirstdate" data-i="${i}" data-j="${j}" type="button" title="此回報日期不完整，套用首次回報「${esc(fd.title||'')}」的事件日期">用首次回報日期 ${esc(fd.dateAr)}</button>`:''; })():''}</dd></dl>
               <div class="cx-acts">${it.__added?(it.__mergedInto?'<span class="cx-done">✓ 已加入並併入來源</span>':(()=>{ const mid=matchedEarlierEventId(it); const mev=mid&&eventById(mid); return '<span class="cx-done">✓ 已加入</span>'+(mev?`<button class="cx-mergesrc" data-i="${i}" data-j="${j}" type="button" title="此事件其實是「${esc(evTitle(mev))}」的重複回報，將此文書的引文／資訊加入該事件的回報記錄">＋加入來源到「${esc(evTitle(mev))}」</button>`:''); })())+sendDateBtn(it,j):(repeatPointerForItem(it)?`${repeatActionButtons(it,i,j)}${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`:`<button class="cx-add" data-i="${i}" data-j="${j}" type="button">加入</button>${sendDateBtn(it,j)}<button class="cx-skip" data-i="${i}" data-j="${j}" type="button">略過</button>`)}</div>
+              ${it.__sampleJuly27TraceChains?sampleSourceChainPreviewHtml(it.__sampleJuly27TraceChains):''}
               ${it.__added&&it.__evId?yuUpstreamSourcesHtml(eventById(it.__evId)):''}
               ${it.__added&&it.__evId&&!isAuthorSelfReportCandidate(it,recByDocId2(it.doc_id))?suggestedChainsHtml(eventById(it.__evId)):''}
             </div>`).join('') : '<div class="record-empty">沒有擷取到事件。</div>')
