@@ -238,6 +238,24 @@ const measureTextColumns = () => {
 };
 measureTextColumns();
 
+/* 硃113示意視覺原本放在「辨識奏摺所回應的硃批」段落，
+   但它示範的是奏摺引用多道上諭，應與「上諭—回應配對」卡片並列。
+   保留 HTML 的單一來源，初始化時把同一個節點移到 2-1 的右側，避免重複維護。 */
+const moveZhu113VisualToYuResponse = () => {
+  const visual = document.querySelector('#part-2-zhu-response .part2-source-visual');
+  const targetLayout = document.querySelector('#part-2-yu-response .part2-yu-response-layout');
+  const sourceLayout = document.querySelector('#part-2-zhu-response .part2-zhu-response-layout');
+  if (!visual || !targetLayout || visual.parentElement === targetLayout) return;
+
+  visual.classList.remove('part2-part-visual-second');
+  visual.classList.add('part2-part-visual-first');
+  targetLayout.appendChild(visual);
+  targetLayout.classList.remove('part2-no-visual');
+  targetLayout.classList.add('part2-has-visual');
+  sourceLayout?.classList.add('part2-no-visual');
+};
+moveZhu113VisualToYuResponse();
+
 /* 硃119消息來源標註：外置來源框跟隨原文引文位置，並在文件內捲動或
    視窗尺寸改變時重畫連線。這組標註是教學網站新增的視覺層，不修改審閱工具。 */
 let sourceFlowRefreshFrame = 0;

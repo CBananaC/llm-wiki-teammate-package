@@ -2326,12 +2326,12 @@
 #part-2-content .part2-substage-cover {
   position: relative;
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   gap: 22px;
   width: min(980px, 68vw);
   min-width: 420px;
-  margin: 0 0 34px calc(-1 * var(--part-pad-x));
-  padding: 32px 38px 32px calc(var(--part-pad-x) + 4px);
+  margin: calc(-1 * var(--part-pad-y)) 0 34px calc(-1 * var(--part-pad-x));
+  padding: 38px 38px 42px calc(var(--part-pad-x) + 4px);
   color: #f7f3ea;
   background: linear-gradient(120deg, #173b3f 5%, #456e69 50%, #b36f58 145%);
   -webkit-mask-image: linear-gradient(to right,
@@ -2398,7 +2398,10 @@
   align-self: stretch;
   background: rgba(247, 243, 234, .28);
 }
-#part-2-content .part2-substage-copy { min-width: 0; }
+#part-2-content .part2-substage-copy {
+  min-width: 0;
+  padding-top: 1px;
+}
 #part-2-content .part2-substage-crumb {
   margin: 0 0 5px;
   font: 700 10px/1 var(--sans);
@@ -2411,14 +2414,66 @@
   letter-spacing: -.035em;
   color: #f7f3ea;
 }
+#part-2-content .part2-substage-copy > .part2-substage-description {
+  max-width: 70ch;
+  margin-top: 19px;
+}
+#part-2-content .part2-substage-copy > .part2-substage-description p {
+  margin: 0;
+  color: rgba(247, 243, 234, .9);
+  font: 500 clamp(17px, 1.45vw, 23px)/1.65 var(--serif);
+  letter-spacing: .008em;
+}
+/* Each substage cover sits flush against the border-bottom of whatever
+   section immediately precedes it (pulled up via the negative --part-pad-y
+   margin above), so those seam lines are now redundant right where a cover
+   starts — hide them without touching border-bottom elsewhere (width/layout
+   unchanged, only the section directly before each cover is affected):
+   通信關係 2-1 上諭配對 → 2-2 硃批配對 → 2-3 上諭來源配對；
+   抽取奏摺的資訊 3-1 事件抽取 → 3-2 來源鏈追溯。 */
+#part-2-content #part-2-communication-content {
+  border-bottom-color: transparent;
+}
+#part-2-content #part-2-yu-response,
+#part-2-content #part-2-zhu-response,
+#part-2-content #part-2-yu-source,
+#part-2-content #part-2-events,
+#part-2-content #part-2-sources {
+  padding-top: 0;
+  padding-bottom: 0;
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
+#part-2-content #part-2-yu-response > .part2-substage-cover,
+#part-2-content #part-2-zhu-response > .part2-substage-cover,
+#part-2-content #part-2-yu-source > .part2-substage-cover,
+#part-2-content #part-2-events > .part2-substage-cover,
+#part-2-content #part-2-sources > .part2-substage-cover {
+  margin: 0 0 0 calc(-1 * var(--part-pad-x));
+}
+#part-2-content #part-2-yu-response .part2-card-part::before,
+#part-2-content #part-2-zhu-response .part2-card-part::before,
+#part-2-content #part-2-yu-source .part2-card-part::before,
+#part-2-content #part-2-events .part2-card-part::before,
+#part-2-content #part-2-sources .part2-card-part::before {
+  border-top-color: transparent;
+  border-bottom-color: transparent;
+}
 @media (max-width: 720px) {
   #part-2-content .part2-substage-cover {
     width: calc(100% + var(--part-pad-x));
-    padding: 24px 20px 24px calc(var(--part-pad-x) + 2px);
+    padding: 28px 20px 32px calc(var(--part-pad-x) + 2px);
     gap: 14px;
   }
   #part-2-content .part2-substage-num { font-size: 34px; }
   #part-2-content .part2-substage-copy h2 { font-size: clamp(22px, 6.4vw, 30px); }
+  #part-2-content .part2-substage-copy > .part2-substage-description {
+    margin-top: 14px;
+  }
+  #part-2-content .part2-substage-copy > .part2-substage-description p {
+    font-size: clamp(16px, 4.4vw, 19px);
+    line-height: 1.7;
+  }
 }
 
 /* Part 2.4 — 辨識奏摺所回應的上諭：文字卡左、通信關係視覺右。 */
@@ -2435,8 +2490,7 @@
 #part-2-content #part-2-yu-response .part2-yu-response-copy .part2-card-stack {
   align-items: stretch;
 }
-#part-2-content #part-2-yu-response .part2-yu-response-card,
-#part-2-content #part-2-yu-response .part2-yu-response-copy .part2-numbered-card {
+#part-2-content #part-2-yu-response .part2-yu-response-card {
   width: 100%;
 }
 #part-2-content #part-2-yu-response .part2-communication-visual {
@@ -2574,8 +2628,7 @@
 #part-2-content #part-2-zhu-response .part2-zhu-response-copy .part2-card-stack {
   align-items: stretch;
 }
-#part-2-content #part-2-zhu-response .part2-zhu-response-card,
-#part-2-content #part-2-zhu-response .part2-zhu-response-copy .part2-numbered-card {
+#part-2-content #part-2-zhu-response .part2-zhu-response-card {
   width: 100%;
 }
 #part-2-content #part-2-zhu-response .part2-source-visual {
@@ -2642,6 +2695,423 @@
   }
 }
 
+/* Part 2 card parts — each part is a viewport-width backdrop containing one
+   text card. A visual can share that same backdrop row without becoming a
+   second text card. */
+#part-2-content .part2-card-part {
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+  min-width: 0;
+  --part2-edge-offset: max(var(--part-pad-x), calc((100vw - var(--wrap)) / 2));
+  width: 100vw;
+  margin-left: calc(-1 * var(--part2-edge-offset));
+  padding: var(--part-pad-y) var(--part2-edge-offset);
+  position: relative;
+  align-self: stretch;
+  z-index: 0;
+  background: var(--part2-part-bg, #f6f1e8);
+}
+#part-2-content .part2-card-part::before {
+  content: none;
+}
+#part-2-content .part2-card-part > * {
+  position: relative;
+  z-index: 1;
+}
+#part-2-content .part2-card-part-first { --part2-part-bg: #f6f1e8; }
+#part-2-content .part2-card-part-second { --part2-part-bg: #efe8dc; }
+#part-2-content .part2-card-part-third { --part2-part-bg: #e8dfd1; }
+#part-2-content .part2-card-part-fourth { --part2-part-bg: #f6f1e8; }
+#part-2-content .part2-card-part-fifth { --part2-part-bg: #efe8dc; }
+#part-2-content .part2-card-part + .part2-card-part { margin-top: 0; }
+#part-2-content .part2-grouped-card-stack { gap: 0; }
+#part-2-content .part2-grouped-layout {
+  column-gap: var(--col-gap);
+  row-gap: 0;
+}
+#part-2-content #part-2-yu-response .part2-yu-response-layout,
+#part-2-content #part-2-zhu-response .part2-zhu-response-layout {
+  row-gap: 0;
+}
+#part-2-content #part-2-yu-response .part2-yu-response-layout.part2-no-visual {
+  grid-template-columns: minmax(0, 1fr);
+}
+#part-2-content #part-2-yu-response .part2-yu-response-layout.part2-has-visual {
+  grid-template-columns: minmax(0, 45vw) minmax(460px, 1fr);
+}
+#part-2-content #part-2-zhu-response .part2-zhu-response-layout.part2-no-visual {
+  grid-template-columns: minmax(0, 1fr);
+}
+#part-2-content #part-2-yu-response .part2-card-part .part2-text-card {
+  width: min(100%, 45vw);
+  margin-right: auto;
+  margin-left: 0;
+  align-self: flex-start;
+}
+#part-2-content .part2-card-part .part2-text-card {
+  width: min(100%, var(--part2-text-card-width, 78ch));
+}
+#part-2-content #part-2-zhu-response .part2-source-visual,
+#part-2-content #part-2-yu-response .part2-source-visual {
+  position: relative;
+  top: auto;
+  align-self: start;
+  z-index: 2;
+}
+#part-2-content #part-2-yu-response .part2-source-visual {
+  width: 100%;
+  height: clamp(360px, 27vw, 560px);
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  overflow: visible;
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  --source-panel-width: 100%;
+  --source-panel-height: 100%;
+  --source-panel-margin-top: 0px;
+  --source-panel-margin-right: 0px;
+  --source-panel-margin-bottom: 0px;
+  --source-panel-margin-left: 0px;
+  --source-panel-source-space: clamp(78px, 15%, 132px);
+  --source-flow-top-gap: 0px;
+}
+#part-2-content #part-2-yu-response .part2-source-flow-visual {
+  height: 100%;
+  padding-top: 0;
+  --source-flow-top-gap: 0px;
+}
+#part-2-content #part-2-yu-response .part2-source-flow-visual .source-flow-document {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+#part-2-content #part-2-yu-response .part2-source-flow-visual .source-callouts {
+  width: clamp(92px, 17%, 148px);
+}
+#part-2-content #part-2-yu-response .part2-source-flow-visual .source-callout-detail {
+  display: none;
+}
+#part-2-content #part-2-yu-response .part2-source-flow-visual .source-callout {
+  top: var(--source-bubble-top, auto) !important;
+}
+#part-2-content .part2-grouped-layout .part2-yu-response-copy,
+#part-2-content .part2-grouped-layout .part2-zhu-response-copy,
+#part-2-content .part2-grouped-layout .part2-skill-copy {
+  display: contents;
+}
+#part-2-content .part2-grouped-layout .part2-card-stack {
+  display: contents;
+}
+#part-2-content .part2-grouped-layout .part2-card-part {
+  grid-column: 1;
+}
+#part-2-content .part2-grouped-layout .part2-card-part-first {
+  grid-row: 1;
+  margin-top: 0;
+}
+#part-2-content .part2-grouped-layout .part2-card-part-second { grid-row: 2; }
+#part-2-content .part2-grouped-layout .part2-card-part-third { grid-row: 3; }
+#part-2-content .part2-grouped-layout .part2-card-part-fourth { grid-row: 4; }
+#part-2-content .part2-grouped-layout .part2-card-part-fifth { grid-row: 5; }
+#part-2-content .part2-grouped-layout .part2-part-visual-first {
+  grid-column: 2;
+  grid-row: 1;
+  position: relative;
+  top: auto;
+  z-index: 2;
+}
+#part-2-content .part2-grouped-layout .part2-part-visual-second {
+  grid-column: 2;
+  grid-row: 2;
+  position: relative;
+  top: auto;
+  z-index: 2;
+}
+#part-2-content .part2-grouped-layout .part2-part-visual-third {
+  grid-column: 2;
+  grid-row: 3;
+  position: relative;
+  top: auto;
+  z-index: 2;
+}
+#part-2-content .part2-grouped-layout .part2-part-visual-third-fourth {
+  grid-column: 2;
+  grid-row: 3 / span 2;
+  position: relative;
+  top: auto;
+  z-index: 2;
+}
+#part-2-content .part2-card-title-row {
+  align-items: flex-start;
+  margin-bottom: 14px;
+}
+#part-2-content .part2-card-title-row h2 {
+  margin: 0;
+  color: var(--ink);
+  font: 500 clamp(22px, 2.35vw, 34px)/1.2 var(--serif);
+  letter-spacing: -.025em;
+  overflow-wrap: anywhere;
+}
+#part-2-content .part2-substage-note {
+  max-width: 54ch;
+  margin: 13px 0 0;
+  color: rgba(247, 243, 234, .82);
+  font: 500 clamp(13px, 1.15vw, 16px)/1.65 var(--sans);
+  letter-spacing: .015em;
+}
+
+@media (max-width: 1040px) {
+  #part-2-content .part2-grouped-layout {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #part-2-content .part2-grouped-layout .part2-card-part,
+  #part-2-content .part2-grouped-layout .part2-part-visual-first,
+  #part-2-content .part2-grouped-layout .part2-part-visual-second,
+  #part-2-content .part2-grouped-layout .part2-part-visual-third,
+  #part-2-content .part2-grouped-layout .part2-part-visual-third-fourth {
+    grid-column: 1;
+    grid-row: auto;
+  }
+  #part-2-content .part2-grouped-layout .part2-part-visual-first,
+  #part-2-content .part2-grouped-layout .part2-part-visual-second,
+  #part-2-content .part2-grouped-layout .part2-card-part-first { order: 1; }
+  #part-2-content .part2-grouped-layout .part2-part-visual-first { order: 2; }
+  #part-2-content .part2-grouped-layout .part2-card-part-second { order: 3; }
+  #part-2-content .part2-grouped-layout .part2-part-visual-second { order: 4; }
+  #part-2-content .part2-grouped-layout .part2-card-part-third { order: 5; }
+  #part-2-content .part2-grouped-layout .part2-part-visual-third,
+  #part-2-content .part2-grouped-layout .part2-part-visual-third-fourth { order: 6; }
+  #part-2-content .part2-grouped-layout .part2-card-part-fourth { order: 7; }
+  #part-2-content .part2-grouped-layout .part2-card-part-fifth { order: 9; }
+}
+
+@media (max-width: 720px) {
+  #part-2-content .part2-substage-cover {
+    box-sizing: border-box;
+    width: 100vw;
+    max-width: 100vw;
+    min-width: 0;
+  }
+  #part-2-content .part2-substage-note {
+    max-width: 42ch;
+    font-size: 13px;
+  }
+}
+
+/* Part 2.4b — 系統會根據三項條件篩選候選文書：諭43／硃160 對照視覺，
+   固定在 part2-card-part-second（該句所在卡片）右側的
+   part2-part-visual-second 欄位。兩份文書面板同尺寸、同高度、左右
+   並排；預設只顯示硃160（較寬，單獨佔滿版位）。第一次點擊硃160任一
+   標色文字時，諭43從硃160左邊界向左展開（寬度 0 → 與硃160相同，
+   硃160同時收縮至相同寬度，變成 50:50），並逐字打出內文；此展開＋
+   打字動畫只播放一次，之後只切換已打好文字中的亮點。行為在
+   part2-evidence-visual.js，這裡只放外觀。 */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-visual {
+  --p2ev-panel-w: 280px;
+  --p2ev-panel-gap: 18px;
+  margin: 0;
+  padding: 40px 18px 18px;
+  background: #e8dfd1;
+  border: 1px solid rgba(22, 61, 63, .18);
+  border-radius: 4px;
+  overflow-x: auto;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-stage {
+  position: relative;
+  width: calc(var(--p2ev-panel-w) * 2 + var(--p2ev-panel-gap));
+  height: 560px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-doc {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--card);
+  border: 1px solid #e3d9c7;
+  border-radius: 6px;
+  box-shadow: 0 10px 22px rgba(47, 57, 52, .16);
+  overflow: hidden;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-zhu {
+  position: absolute;
+  top: 0; right: 0;
+  width: 100%; height: 100%;
+  transition: width .5s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-zhu.is-shown { width: var(--p2ev-panel-w); }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-yu {
+  position: absolute;
+  top: 0; right: calc(var(--p2ev-panel-w) + var(--p2ev-panel-gap));
+  z-index: 4;
+  width: 0; height: 100%;
+  box-shadow: 0 14px 28px rgba(47, 57, 52, .18);
+  transition: width .5s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-yu.is-shown { width: var(--p2ev-panel-w); }
+
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-doc-head {
+  position: relative;
+  padding: 11px 12px 9px;
+  background: linear-gradient(#fffdf8, #f2ebdf);
+  border-bottom: 1px solid #e1d8c9;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-window-controls {
+  position: absolute; top: 9px; right: 8px;
+  display: flex; gap: 6px; color: #a99d8b;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-window-btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 27px; height: 27px; padding: 2px;
+  color: #a39785; background: transparent; border: 0; border-radius: 5px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-window-btn svg { display: block; width: 20px; height: 20px; }
+
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-title {
+  margin: 0 0 5px; padding-right: 90px;
+  color: var(--ink); font: 700 calc(16.5px * var(--font-scale))/1.4 var(--serif);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-badge {
+  display: inline-flex; align-items: center; justify-content: center;
+  width: 27px; height: 27px; margin-right: 7px;
+  color: #fffaf2; background: #c86138;
+  border-radius: 5px; vertical-align: -6px; font: 800 calc(14.5px * var(--font-scale))/1 var(--serif);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-meta {
+  margin: 0; color: #7a6f63; font: 500 calc(12.5px * var(--font-scale))/1.65 var(--sans);
+}
+
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-scroll { flex: 1 1 auto; min-height: 0; overflow-y: auto; padding: 14px 16px 20px; }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body {
+  margin: 0; color: var(--text); text-align: justify;
+  font: 500 calc(16.5px * var(--font-scale))/2.05 var(--serif);
+}
+
+/* -------- mark 標記：無邊框，僅用深淺度區分狀態，同一對配色一致 -------- */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark {
+  padding: 0 1px; color: inherit; background: transparent; border-radius: 3px;
+  box-decoration-break: clone; -webkit-box-decoration-break: clone;
+  transition: background-color .2s ease;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="marker"],
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="date"] { background: rgba(58, 122, 122, .22); cursor: pointer; }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="marker"]:hover,
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="date"]:hover { background: rgba(58, 122, 122, .38); }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="marker"].is-picked,
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="date"].is-picked { background: rgba(58, 122, 122, .6); }
+
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="quote"] { background: rgba(196, 93, 56, .2); cursor: pointer; }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="quote"]:hover { background: rgba(196, 93, 56, .36); }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-hl="quote"].is-picked { background: rgba(196, 93, 56, .58); }
+
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-target] { background: transparent; }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-target="a"].is-active { background: rgba(58, 122, 122, .55); animation: part2-evidence-flash-a .55s ease-out; }
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-body mark[data-target="b"].is-active { background: rgba(196, 93, 56, .52); animation: part2-evidence-flash-b .55s ease-out; }
+@keyframes part2-evidence-flash-a { 0% { background: rgba(58, 122, 122, .9); } 100% { background: rgba(58, 122, 122, .55); } }
+@keyframes part2-evidence-flash-b { 0% { background: rgba(196, 93, 56, .85); } 100% { background: rgba(196, 93, 56, .52); } }
+
+/* -------- 提示泡泡：指向第一個可點的標色文字 -------- */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-hint {
+  position: absolute; z-index: 20;
+  display: flex; align-items: center; justify-content: center;
+  width: 26px; height: 26px;
+  color: #4a2c12; background: var(--yellow);
+  border-radius: 50%;
+  font: 800 13px/1 var(--sans);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, .28);
+  cursor: pointer;
+  opacity: 0; transform: translate(-50%, -50%) scale(.4);
+  pointer-events: none;
+  transition: opacity .22s, transform .22s;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-hint.is-shown {
+  opacity: 1; pointer-events: auto;
+  animation: part2-evidence-hint-bounce 1.1s ease-in-out infinite;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-hint-ring {
+  position: absolute; inset: -7px; border-radius: 50%;
+  border: 2px solid var(--yellow); opacity: 0;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-hint.is-shown .part2-evidence-hint-ring { animation: part2-evidence-hint-ping 1.6s ease-out infinite; }
+@keyframes part2-evidence-hint-bounce {
+  0%, 100% { transform: translate(-50%, -50%) scale(1) translateY(0); }
+  50% { transform: translate(-50%, -50%) scale(1) translateY(-6px); }
+}
+@keyframes part2-evidence-hint-ping {
+  0% { opacity: .6; transform: scale(.75); }
+  100% { opacity: 0; transform: scale(1.5); }
+}
+
+/* Part 2.4c — 諭43／硃160 對照視覺的桌面版比例調整：讓第二張
+   說明卡收窄，將釋出的欄寬交給右側文書視覺；外層保持透明，只保留
+   兩個文書面板本身。收合中的諭43不保留邊框，避免 0px 寬面板在
+   視覺中央留下直線。 */
+#part-2-content #part-2-yu-response .part2-yu-response-layout.part2-has-visual {
+  --part2-yu-response-text-col: clamp(320px, 35vw, 620px);
+  grid-template-columns: minmax(0, var(--part2-yu-response-text-col)) minmax(0, 1fr);
+}
+#part-2-content #part-2-yu-response .part2-card-part .part2-text-card {
+  width: min(100%, var(--part2-yu-response-text-col));
+}
+#part-2-content #part-2-yu-response .part2-evidence-visual {
+  --p2ev-panel-w: calc((100% - var(--p2ev-panel-gap)) / 2);
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+#part-2-content #part-2-yu-response .part2-evidence-stage {
+  width: 100%;
+  height: clamp(680px, 42vw, 840px);
+}
+#part-2-content #part-2-yu-response .part2-evidence-yu {
+  border: 0;
+}
+
+@media (max-width: 720px) {
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-stage { width: 100%; height: auto; }
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-zhu,
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-yu {
+    position: static; width: 100%; height: auto; max-height: 480px;
+    box-shadow: 0 10px 22px rgba(47, 57, 52, .16);
+  }
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-yu { margin-top: 16px; }
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .part2-evidence-hint { display: none; }
+}
+
+/* The copied evidence visual in 2-2 uses the same transparent outer frame and
+   enlarged document stage as the 2-1 source, while keeping the 2-2 grid's own
+   text/visual column proportions. */
+#part-2-content #part-2-zhu-response .part2-evidence-visual {
+  --p2ev-panel-w: calc((100% - var(--p2ev-panel-gap)) / 2);
+  margin: 0;
+  padding: 0;
+  background: transparent;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  overflow: visible;
+}
+#part-2-content #part-2-zhu-response .part2-evidence-stage {
+  width: 100%;
+  height: clamp(680px, 42vw, 840px);
+}
+#part-2-content #part-2-zhu-response .part2-evidence-single-stage {
+  width: 100%;
+  height: clamp(680px, 42vw, 840px);
+}
+#part-2-content #part-2-zhu-response .part2-evidence-zhu-copy {
+  top: 0;
+  right: 0;
+  width: 100%;
+  height: 100%;
+}
+#part-2-content #part-2-zhu-response .part2-evidence-yu { border: 0; }
+
 /* JSON 的互動視覺已移到 Part 2；Part 3 保留文字說明及錨點。 */
 #part-3-content #part-3-json .lay-split {
   grid-template-columns: minmax(0, 1fr);
@@ -2686,6 +3156,16 @@
   #part-2-content .part2-input-visual { order: 2; }
   #part-2-content #part-2-yu-response .part2-yu-response-layout { grid-template-columns: minmax(0, 1fr); }
   #part-2-content #part-2-yu-response .part2-communication-visual { position: static; }
+  #part-2-content #part-2-yu-response .part2-yu-response-layout.part2-has-visual {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  #part-2-content #part-2-yu-response .part2-source-visual {
+    position: static;
+    height: clamp(600px, 95vw, 820px);
+  }
+  #part-2-content #part-2-yu-response .part2-card-part .part2-text-card {
+    width: min(100%, var(--part2-text-card-width, 78ch));
+  }
 }
 
 /* Part 2.2 — 運作流程圖：標題與說明沿用 Part 3 的滿版文字排版，不使用卡片背景。 */
@@ -3914,4 +4394,1002 @@
    layout above places it at a negative top, but .agentic-scene clips overflow. */
 @media (min-width: 1041px) {
   #part-3-agentic-ocr-chart { --agentic-codex-top: 4px; }
+}
+
+/* Part 2.7 — doc_panel_sample：總結文書及候選文書視覺沿用硃113面板。
+   兩個互動視覺保留自己的內容、標色和展開動畫；面板外觀共用
+   storymap.css 的 .source-flow-document／.ip 結構。 */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-window-btn {
+  display: none;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .ip-btns > button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  padding: 3px;
+  color: #a3937d;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  font: 700 18px/1 var(--sans);
+  cursor: pointer;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .ip-btns > button:hover { color: #2d261d; }
+
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-doc-head {
+  padding: 12px 84px 10px 14px;
+  background: linear-gradient(#fffdf8, #f3eada);
+  border-bottom: 1px solid #e6dccb;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-title {
+  margin: 0 0 5px;
+  padding-right: 4px;
+  color: #2d261d;
+  font: 600 calc(18px * var(--font-scale))/1.35 var(--serif);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-badge {
+  display: inline-block;
+  width: auto;
+  height: auto;
+  margin-right: 5px;
+  padding: 2px 7px;
+  color: #fff;
+  background: #c46a2b;
+  border-radius: 6px;
+  font: 800 calc(13px * var(--font-scale))/1.1 var(--sans);
+  vertical-align: 1px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-meta {
+  margin: 0;
+  color: #7a6f63;
+  font: calc(13.5px * var(--font-scale))/1.5 var(--sans);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-scroll {
+  padding: 0 12px 18px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response) .doc-panel-sample .part2-evidence-body {
+  margin: 0;
+  color: #2d261d;
+  text-align: left;
+  font: var(--body-weight) calc(19px * var(--font-scale))/2.1 var(--serif);
+}
+
+#part-2-content .doc-panel-sample.part2-summary-doc-win {
+  border-radius: 0;
+  box-shadow: 0 12px 28px rgba(60, 44, 20, .12);
+}
+#part-2-content .doc-panel-sample .part2-summary-doc-filterdock {
+  min-height: 48px;
+  padding: 7px 16px;
+  background: #f6efe1;
+  border-bottom: 1px solid #e5dacb;
+}
+#part-2-content .doc-panel-sample .part2-summary-doc-scroll {
+  padding: 0 12px 18px;
+}
+#part-2-content .doc-panel-sample.is-folded .ip-filterdock,
+#part-2-content .doc-panel-sample.is-folded .ip-scroll {
+  display: none;
+}
+
+/* Part 2.8 — 辨識奏摺所回應的上諭：四項線索逐列展開示範。
+   The bars, text cards, VS Code window, document windows, and reveal effects
+   are kept together so this subsection can reproduce final_out_v2.html. */
+#part-2-yu-response {
+  --ink: #163d3f;
+  --text: #3c5754;
+  --card: #fffaf2;
+  --line: rgba(22, 61, 63, .18);
+  --accent: #c45d38;
+  --hl-marker: 58, 122, 122;
+  --hl-date: 181, 131, 42;
+  --hl-quote: 196, 93, 56;
+  --hl-author: 122, 84, 150;
+  --chip-w: 300px;
+}
+#part-2-content #part-2-yu-response > .part2-yu-response-story-inner {
+  display: block;
+  width: 100%;
+}
+#part-2-yu-response .req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 26px;
+  width: 100%;
+}
+#part-2-yu-response .req-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+#part-2-yu-response .req-card {
+  width: var(--chip-w);
+  max-width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: width .36s cubic-bezier(.22, 1, .36, 1), box-shadow .22s ease, border-color .22s ease;
+}
+#part-2-yu-response .req-card.is-open {
+  width: 100%;
+  border-color: rgba(22, 61, 63, .34);
+  box-shadow: 0 8px 20px rgba(22, 61, 63, .1);
+}
+#part-2-yu-response .req-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 18px;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+#part-2-yu-response .req-bar:hover,
+#part-2-yu-response .req-bar:focus-visible { color: var(--accent); }
+#part-2-yu-response .req-bar:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+#part-2-yu-response .req-index {
+  color: var(--accent);
+  font: 800 calc(11px * var(--font-scale))/1 var(--sans);
+  letter-spacing: .14em;
+}
+#part-2-yu-response .req-bar strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: 600 calc(17px * var(--font-scale))/1.3 var(--serif);
+}
+#part-2-yu-response .req-arrow {
+  margin-left: auto;
+  flex: none;
+  color: var(--accent);
+  font: 600 calc(16px * var(--font-scale))/1 var(--sans);
+  transition: transform .22s ease;
+}
+#part-2-yu-response .req-card.is-open .req-arrow { transform: rotate(180deg); }
+#part-2-yu-response .req-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .38s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-yu-response .req-panel.is-open { grid-template-rows: 1fr; }
+#part-2-yu-response .req-panel-inner { min-height: 0; overflow: hidden; }
+#part-2-yu-response .req-wordcard {
+  margin: 0 18px 16px;
+  padding: 14px 0 0;
+  background: transparent;
+  border-top: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .32s ease, transform .32s ease;
+}
+#part-2-yu-response .req-wordcard.is-shown { opacity: 1; transform: none; }
+#part-2-yu-response .req-wordcard p {
+  margin: 0;
+  color: var(--text);
+  font: var(--body-weight, 500) calc(15px * var(--font-scale))/1.85 var(--serif);
+}
+#part-2-yu-response .req-stage-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  transition: grid-template-rows .4s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-yu-response .req-stage-wrap.is-open { grid-template-rows: 1fr; }
+#part-2-yu-response .req-stage-wrap-inner { min-height: 0; overflow: hidden; }
+#part-2-yu-response .req-visual { padding: 14px 2px 4px; }
+#part-2-yu-response .req-stage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 8px;
+  align-items: stretch;
+  height: clamp(360px, 44vh, 460px);
+}
+#part-2-yu-response .req-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  color: var(--accent);
+  font: 700 20px/1 var(--sans);
+  opacity: 0;
+  transition: opacity .3s ease .05s;
+}
+#part-2-yu-response .req-connector.is-shown { opacity: 1; }
+#part-2-yu-response .req-win {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 28px rgba(22, 61, 63, .18);
+  opacity: 0;
+  transform-origin: top left;
+}
+#part-2-yu-response .req-win-skill {
+  background: #1e1e1e;
+  transform: scale(.05);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-yu-response .req-win-skill.is-shown { opacity: 1; transform: scale(1); }
+#part-2-yu-response .req-win-doc {
+  background: var(--card);
+  border: 1px solid #e3d9c7;
+  clip-path: inset(0 100% 0 0);
+  transition: opacity .4s ease, clip-path .42s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-yu-response .req-win-doc.is-shown { opacity: 1; clip-path: inset(0 0 0 0); }
+
+/* VS Code-style Skill window. */
+#part-2-yu-response .agentic-mac-titlebar { display: flex; align-items: center; gap: 7px; flex: none; padding: 8px 10px; background: #252526; border-bottom: 1px solid #3b3b3b; }
+#part-2-yu-response .agentic-mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+#part-2-yu-response .agentic-mac-dot.red { background: #ff5f57; }
+#part-2-yu-response .agentic-mac-dot.yellow { background: #febc2e; }
+#part-2-yu-response .agentic-mac-dot.green { background: #28c840; }
+#part-2-yu-response .agentic-window-title { margin-left: 8px; color: #bdbdbd; font: 600 11px/1 var(--sans); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#part-2-yu-response .req-vscode-shell { display: grid; grid-template-columns: 27px minmax(0, 1fr); flex: 1; min-height: 0; background: #1e1e1e; }
+#part-2-yu-response .req-vscode-activitybar { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 11px 0; color: #858585; background: #333; font: 12px/1 var(--sans); border-right: 1px solid #424242; }
+#part-2-yu-response .req-vscode-activitybar span:last-child { margin-top: auto; }
+#part-2-yu-response .req-vscode-editor { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+#part-2-yu-response .req-vscode-tabs { display: flex; flex: none; min-height: 27px; align-items: stretch; background: #252526; border-bottom: 1px solid #333; }
+#part-2-yu-response .req-vscode-tab { display: flex; align-items: center; max-width: 100%; padding: 0 10px; color: #d4d4d4; background: #1e1e1e; border-top: 2px solid #e6b86a; font: 10.5px/1.2 "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#part-2-yu-response .req-vscode-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 13px 15px; color: #d4d4d4; background: #1e1e1e; font: 11.5px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-width: none; }
+#part-2-yu-response .req-vscode-body::-webkit-scrollbar { display: none; }
+#part-2-yu-response .req-vscode-body .hd { color: #4fc1ff; font-weight: 700; }
+#part-2-yu-response .req-vscode-body .kw { color: #c586c0; }
+#part-2-yu-response .req-vscode-body .ellipsis { color: #6a9955; }
+
+/* Document windows. */
+#part-2-yu-response .req-doc-head { position: relative; flex: none; padding: 12px 40px 10px 14px; background: linear-gradient(#fffdf8, #f2ebdf); border-bottom: 1px solid #e1d8c9; }
+#part-2-yu-response .req-doc-controls { position: absolute; top: 13px; right: 12px; display: flex; gap: 5px; }
+#part-2-yu-response .req-doc-dot { width: 8px; height: 8px; border-radius: 50%; background: #d8cdb8; }
+#part-2-yu-response .req-doc-title { margin: 0 0 5px; color: var(--ink); font: 700 calc(15px * var(--font-scale))/1.4 var(--serif); }
+#part-2-yu-response .req-badge { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px; margin-right: 6px; color: #fffaf2; border-radius: 5px; vertical-align: -5px; font: 800 12.5px/1 var(--serif); }
+#part-2-yu-response .req-badge.b-zhu { background: #c86138; }
+#part-2-yu-response .req-badge.b-yu { background: #315d5d; }
+#part-2-yu-response .req-doc-meta { margin: 0; color: #7a6f63; font: 500 11.5px/1.65 var(--sans); }
+#part-2-yu-response .req-doc-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 12px 14px 18px; }
+#part-2-yu-response .req-doc-label { display: inline-block; margin-bottom: 6px; padding: 2px 7px; color: #8a7c66; background: rgba(22, 61, 63, .07); border-radius: 3px; font: 700 10px/1 var(--sans); letter-spacing: .08em; }
+#part-2-yu-response .req-doc-body { margin: 8px 0 0; color: var(--text); text-align: justify; white-space: pre-wrap; font: 500 calc(13.5px * var(--font-scale))/1.95 var(--serif); }
+
+/* Typing cursor and clue highlighting. */
+#part-2-yu-response .req-caret { display: inline-block; width: 1px; height: 1em; margin-left: 1px; background: currentColor; vertical-align: -2px; animation: req-caret-blink 1s steps(1) infinite; }
+@keyframes req-caret-blink { 50% { opacity: 0; } }
+#part-2-yu-response .req-doc-body mark,
+#part-2-yu-response .req-vscode-body mark.code-mark { padding: 0 1px; border-radius: 3px; color: inherit; background: transparent; cursor: default; box-decoration-break: clone; -webkit-box-decoration-break: clone; transition: background-color .2s ease, filter .2s ease; }
+#part-2-yu-response .req-entry[data-req-item="marker"] mark[data-group="marker"] { background: rgba(var(--hl-marker), .24); cursor: pointer; }
+#part-2-yu-response .req-entry[data-req-item="date"] mark[data-group="date"] { background: rgba(var(--hl-date), .26); cursor: pointer; }
+#part-2-yu-response .req-entry[data-req-item="quote"] mark[data-group="quote"] { background: rgba(var(--hl-quote), .2); cursor: pointer; }
+#part-2-yu-response .req-entry[data-req-item="author"] mark[data-group="author"] { background: rgba(var(--hl-author), .24); cursor: pointer; }
+#part-2-yu-response mark[data-group]:hover { filter: brightness(.94); }
+#part-2-yu-response mark[data-group].is-active { animation: req-hl-flash .6s ease-out; }
+@keyframes req-hl-flash { 0% { filter: brightness(1.6) saturate(1.3); } 100% { filter: brightness(1); } }
+#part-2-yu-response .req-entry[data-req-item="marker"] .req-vscode-body mark.code-mark[data-group="marker"] { background: rgba(var(--hl-marker), .38); }
+#part-2-yu-response .req-entry[data-req-item="date"] .req-vscode-body mark.code-mark[data-group="date"] { background: rgba(var(--hl-date), .4); }
+#part-2-yu-response .req-entry[data-req-item="quote"] .req-vscode-body mark.code-mark[data-group="quote"] { background: rgba(var(--hl-quote), .34); }
+#part-2-yu-response .req-entry[data-req-item="author"] .req-vscode-body mark.code-mark[data-group="author"] { background: rgba(var(--hl-author), .4); }
+
+/* Legend. */
+#part-2-yu-response .req-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 26px; padding: 0 2px; }
+#part-2-yu-response .req-legend-item { display: flex; align-items: center; gap: 7px; color: var(--text); font: 600 12.5px/1 var(--sans); }
+#part-2-yu-response .req-legend-swatch { width: 12px; height: 12px; border-radius: 3px; }
+#part-2-yu-response .req-legend-swatch.marker { background: rgba(var(--hl-marker), .6); }
+#part-2-yu-response .req-legend-swatch.date { background: rgba(var(--hl-date), .6); }
+#part-2-yu-response .req-legend-swatch.quote { background: rgba(var(--hl-quote), .6); }
+#part-2-yu-response .req-legend-swatch.author { background: rgba(var(--hl-author), .6); }
+
+@media (max-width: 860px) {
+  #part-2-yu-response .req-stage { grid-template-columns: 1fr; height: auto; gap: 14px; }
+  #part-2-yu-response .req-connector { display: none; }
+  #part-2-yu-response .req-win { height: 300px; }
+  #part-2-yu-response .req-win-doc { clip-path: none !important; opacity: 0; transform: translateY(10px); transition: opacity .4s ease, transform .4s ease; }
+  #part-2-yu-response .req-win-doc.is-shown { opacity: 1; transform: none; }
+}
+/* Part 2.9 — 辨識奏摺所回應的硃批：三項線索逐列展開示範。
+   The bars, text cards, VS Code window, document windows, and reveal effects
+   are kept together so this subsection can reproduce final_out_1.html. */
+#part-2-zhu-response {
+  --ink: #163d3f;
+  --text: #3c5754;
+  --card: #fffaf2;
+  --line: rgba(22, 61, 63, .18);
+  --accent: #c45d38;
+  --hl-marker: 58, 122, 122;
+  --hl-date: 181, 131, 42;
+  --hl-quote: 196, 93, 56;
+  --hl-author: 122, 84, 150;
+  --hl-identity: 122, 84, 150;
+  --chip-w: 300px;
+}
+#part-2-content #part-2-zhu-response > .part2-zhu-response-story-inner {
+  display: block;
+  width: 100%;
+}
+#part-2-zhu-response .req-list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  width: 100%;
+  padding-bottom: clamp(72px, 8vw, 132px);
+}
+#part-2-zhu-response .req-entry {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  width: 100%;
+}
+#part-2-zhu-response .req-card {
+  width: var(--chip-w);
+  max-width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  overflow: hidden;
+  transition: width .36s cubic-bezier(.22, 1, .36, 1), box-shadow .22s ease, border-color .22s ease;
+}
+#part-2-zhu-response .req-card.is-open {
+  width: 100%;
+  border-color: rgba(22, 61, 63, .34);
+  box-shadow: 0 8px 20px rgba(22, 61, 63, .1);
+}
+#part-2-zhu-response .req-bar {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 14px 18px;
+  color: inherit;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+#part-2-zhu-response .req-bar:hover,
+#part-2-zhu-response .req-bar:focus-visible { color: var(--accent); }
+#part-2-zhu-response .req-bar:focus-visible { outline: 2px solid var(--accent); outline-offset: -5px; }
+#part-2-zhu-response .req-index {
+  color: var(--accent);
+  font: 800 calc(11px * var(--font-scale))/1 var(--sans);
+  letter-spacing: .14em;
+}
+#part-2-zhu-response .req-bar strong {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  font: 600 calc(17px * var(--font-scale))/1.3 var(--serif);
+}
+#part-2-zhu-response .req-arrow {
+  margin-left: auto;
+  flex: none;
+  color: var(--accent);
+  font: 600 calc(16px * var(--font-scale))/1 var(--sans);
+  transition: transform .22s ease;
+}
+#part-2-zhu-response .req-card.is-open .req-arrow { transform: rotate(180deg); }
+#part-2-zhu-response .req-panel {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition: grid-template-rows .38s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-zhu-response .req-panel.is-open { grid-template-rows: 1fr; }
+#part-2-zhu-response .req-panel-inner { min-height: 0; overflow: hidden; }
+#part-2-zhu-response .req-wordcard {
+  margin: 0 18px 16px;
+  padding: 14px 0 0;
+  background: transparent;
+  border-top: 1px solid var(--line);
+  opacity: 0;
+  transform: translateY(-8px);
+  transition: opacity .32s ease, transform .32s ease;
+}
+#part-2-zhu-response .req-wordcard.is-shown { opacity: 1; transform: none; }
+#part-2-zhu-response .req-wordcard p {
+  margin: 0;
+  color: var(--text);
+  font: var(--body-weight, 500) calc(15px * var(--font-scale))/1.85 var(--serif);
+}
+#part-2-zhu-response .req-stage-wrap {
+  display: grid;
+  grid-template-rows: 0fr;
+  width: 100%;
+  transition: grid-template-rows .4s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-zhu-response .req-stage-wrap.is-open { grid-template-rows: 1fr; }
+#part-2-zhu-response .req-stage-wrap-inner { min-height: 0; overflow: hidden; }
+#part-2-zhu-response .req-visual { padding: 14px 2px 4px; }
+#part-2-zhu-response .req-stage {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr auto 1fr;
+  gap: 8px;
+  align-items: stretch;
+  height: clamp(480px, 52vh, 620px);
+}
+#part-2-zhu-response .req-connector {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 22px;
+  color: var(--accent);
+  font: 700 20px/1 var(--sans);
+  opacity: 0;
+  transition: opacity .3s ease .05s;
+}
+#part-2-zhu-response .req-connector.is-shown { opacity: 1; }
+#part-2-zhu-response .req-win {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: 0;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 16px 28px rgba(22, 61, 63, .18);
+  opacity: 0;
+  transform-origin: top left;
+}
+#part-2-zhu-response .req-win-skill {
+  background: #1e1e1e;
+  transform: scale(.05);
+  transition: opacity .4s ease, transform .4s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-zhu-response .req-win-skill.is-shown { opacity: 1; transform: scale(1); }
+#part-2-zhu-response .req-win-doc {
+  background: var(--card);
+  border: 1px solid #e3d9c7;
+  clip-path: inset(0 100% 0 0);
+  transition: opacity .4s ease, clip-path .42s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-zhu-response .req-win-doc.is-shown { opacity: 1; clip-path: inset(0 0 0 0); }
+
+/* VS Code-style Skill window. */
+#part-2-zhu-response .agentic-mac-titlebar { display: flex; align-items: center; gap: 7px; flex: none; padding: 8px 10px; background: #252526; border-bottom: 1px solid #3b3b3b; }
+#part-2-zhu-response .agentic-mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+#part-2-zhu-response .agentic-mac-dot.red { background: #ff5f57; }
+#part-2-zhu-response .agentic-mac-dot.yellow { background: #febc2e; }
+#part-2-zhu-response .agentic-mac-dot.green { background: #28c840; }
+#part-2-zhu-response .agentic-window-title { margin-left: 8px; color: #bdbdbd; font: 600 11px/1 var(--sans); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#part-2-zhu-response .req-vscode-shell { display: grid; grid-template-columns: 27px minmax(0, 1fr); flex: 1; min-height: 0; background: #1e1e1e; }
+#part-2-zhu-response .req-vscode-activitybar { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 11px 0; color: #858585; background: #333; font: 12px/1 var(--sans); border-right: 1px solid #424242; }
+#part-2-zhu-response .req-vscode-activitybar span:last-child { margin-top: auto; }
+#part-2-zhu-response .req-vscode-editor { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+#part-2-zhu-response .req-vscode-tabs { display: flex; flex: none; min-height: 27px; align-items: stretch; background: #252526; border-bottom: 1px solid #333; }
+#part-2-zhu-response .req-vscode-tab { display: flex; align-items: center; max-width: 100%; padding: 0 10px; color: #d4d4d4; background: #1e1e1e; border-top: 2px solid #e6b86a; font: 10.5px/1.2 "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#part-2-zhu-response .req-vscode-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 16px 18px; color: #d4d4d4; background: #1e1e1e; font: calc(14px * var(--font-scale))/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-width: none; }
+#part-2-zhu-response .req-vscode-body::-webkit-scrollbar { display: none; }
+#part-2-zhu-response .req-vscode-body .hd { color: #4fc1ff; font-weight: 700; }
+#part-2-zhu-response .req-vscode-body .kw { color: #c586c0; }
+#part-2-zhu-response .req-vscode-body .ellipsis { color: #6a9955; }
+
+/* Document windows. */
+#part-2-zhu-response .req-doc-head { position: relative; flex: none; padding: 12px 40px 10px 14px; background: linear-gradient(#fffdf8, #f2ebdf); border-bottom: 1px solid #e1d8c9; }
+#part-2-zhu-response .req-doc-controls { position: absolute; top: 13px; right: 12px; display: flex; gap: 5px; }
+#part-2-zhu-response .req-doc-dot { width: 8px; height: 8px; border-radius: 50%; background: #d8cdb8; }
+#part-2-zhu-response .req-doc-title { margin: 0 0 6px; color: var(--ink); font: 700 calc(17px * var(--font-scale))/1.4 var(--serif); }
+#part-2-zhu-response .req-badge { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px; margin-right: 6px; color: #fffaf2; border-radius: 5px; vertical-align: -5px; font: 800 12.5px/1 var(--serif); }
+#part-2-zhu-response .req-badge.b-zhu { background: #c86138; }
+#part-2-zhu-response .req-badge.b-yu { background: #315d5d; }
+#part-2-zhu-response .req-doc-meta { margin: 0; color: #7a6f63; font: 500 calc(13px * var(--font-scale))/1.65 var(--sans); }
+#part-2-zhu-response .req-doc-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 12px 14px 18px; }
+#part-2-zhu-response .req-doc-label { display: inline-block; margin-bottom: 6px; padding: 2px 7px; color: #8a7c66; background: rgba(22, 61, 63, .07); border-radius: 3px; font: 700 10px/1 var(--sans); letter-spacing: .08em; }
+#part-2-zhu-response .req-doc-body { margin: 10px 0 0; color: var(--text); text-align: justify; white-space: pre-wrap; font: 500 calc(16px * var(--font-scale))/1.95 var(--serif); }
+
+/* Typing cursor and clue highlighting. */
+#part-2-zhu-response .req-caret { display: inline-block; width: 1px; height: 1em; margin-left: 1px; background: currentColor; vertical-align: -2px; animation: req-caret-blink 1s steps(1) infinite; }
+@keyframes req-caret-blink { 50% { opacity: 0; } }
+#part-2-zhu-response .req-doc-body mark,
+#part-2-zhu-response .req-vscode-body mark.code-mark { padding: 0 1px; border-radius: 3px; color: inherit; background: transparent; cursor: default; box-decoration-break: clone; -webkit-box-decoration-break: clone; transition: background-color .2s ease, filter .2s ease; }
+#part-2-zhu-response .req-entry[data-req-item="marker"] mark[data-group="marker"] { background: rgba(var(--hl-marker), .24); cursor: pointer; }
+#part-2-zhu-response .req-entry[data-req-item="date"] mark[data-group="date"] { background: rgba(var(--hl-date), .26); cursor: pointer; }
+#part-2-zhu-response .req-entry[data-req-item="quote"] mark[data-group="quote"] { background: rgba(var(--hl-quote), .2); cursor: pointer; }
+#part-2-zhu-response .req-entry[data-req-item="author"] mark[data-group="author"] { background: rgba(var(--hl-author), .24); cursor: pointer; }
+#part-2-zhu-response mark[data-group]:hover { filter: brightness(.94); }
+#part-2-zhu-response mark[data-group].is-active { animation: req-hl-flash .6s ease-out; }
+@keyframes req-hl-flash { 0% { filter: brightness(1.6) saturate(1.3); } 100% { filter: brightness(1); } }
+#part-2-zhu-response .req-entry[data-req-item="marker"] .req-vscode-body mark.code-mark[data-group="marker"] { background: rgba(var(--hl-marker), .38); }
+#part-2-zhu-response .req-entry[data-req-item="date"] .req-vscode-body mark.code-mark[data-group="date"] { background: rgba(var(--hl-date), .4); }
+#part-2-zhu-response .req-entry[data-req-item="quote"] .req-vscode-body mark.code-mark[data-group="quote"] { background: rgba(var(--hl-quote), .34); }
+#part-2-zhu-response .req-entry[data-req-item="author"] .req-vscode-body mark.code-mark[data-group="author"] { background: rgba(var(--hl-author), .4); }
+
+/* Legend. */
+#part-2-zhu-response .req-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 26px; padding: 0 2px; }
+#part-2-zhu-response .req-legend-item { display: flex; align-items: center; gap: 7px; color: var(--text); font: 600 12.5px/1 var(--sans); }
+#part-2-zhu-response .req-legend-swatch { width: 12px; height: 12px; border-radius: 3px; }
+#part-2-zhu-response .req-legend-swatch.marker { background: rgba(var(--hl-marker), .6); }
+#part-2-zhu-response .req-legend-swatch.date { background: rgba(var(--hl-date), .6); }
+#part-2-zhu-response .req-legend-swatch.quote { background: rgba(var(--hl-quote), .6); }
+#part-2-zhu-response .req-legend-swatch.author { background: rgba(var(--hl-author), .6); }
+
+@media (max-width: 860px) {
+  #part-2-zhu-response .req-stage { grid-template-columns: 1fr; height: auto; gap: 14px; }
+  #part-2-zhu-response .req-connector { display: none; }
+  #part-2-zhu-response .req-win { height: 360px; }
+  #part-2-zhu-response .req-win-doc { clip-path: none !important; opacity: 0; transform: translateY(10px); transition: opacity .4s ease, transform .4s ease; }
+  #part-2-zhu-response .req-win-doc.is-shown { opacity: 1; transform: none; }
+}
+
+/* 硃批版三項線索的紫色標色。 */
+#part-2-zhu-response .req-entry[data-req-item="identity"] mark[data-group="identity"] { background: rgba(var(--hl-identity), .24); cursor: pointer; }
+#part-2-zhu-response .req-entry[data-req-item="identity"] .req-vscode-body mark.code-mark[data-group="identity"] { background: rgba(var(--hl-identity), .4); }
+#part-2-zhu-response .req-legend-swatch.identity { background: rgba(var(--hl-identity), .6); }
+
+/* Part 2.10 — 辨識上諭所回應的奏摺：final_out_2.html 的常青等兩項線索。 */
+#part-2-yu-source {
+  --yu-source-ink: #163d3f;
+  --yu-source-text: #3c5754;
+  --yu-source-card: #fffaf2;
+  --yu-source-line: rgba(22, 61, 63, .18);
+  --yu-source-accent: #c45d38;
+  --yu-source-marker: 58, 122, 122;
+  --yu-source-date: 58, 100, 172;
+  --yu-source-chip-w: 300px;
+}
+#part-2-content #part-2-yu-source > .part2-yu-source-story-inner { display: block; width: 100%; }
+#part-2-yu-source .req-list { display: flex; flex-direction: column; gap: 26px; width: 100%; }
+#part-2-yu-source .req-entry { display: flex; flex-direction: column; align-items: flex-start; width: 100%; }
+#part-2-yu-source .req-card { width: var(--yu-source-chip-w); max-width: 100%; background: var(--yu-source-card); border: 1px solid var(--yu-source-line); border-radius: 4px; overflow: hidden; transition: width .36s cubic-bezier(.22, 1, .36, 1), box-shadow .22s ease, border-color .22s ease; }
+#part-2-yu-source .req-card.is-open { width: 100%; border-color: rgba(22, 61, 63, .34); box-shadow: 0 8px 20px rgba(22, 61, 63, .1); }
+#part-2-yu-source .req-bar { display: flex; align-items: center; gap: 10px; width: 100%; padding: 14px 18px; color: inherit; background: none; border: 0; cursor: pointer; text-align: left; white-space: nowrap; }
+#part-2-yu-source .req-bar:hover, #part-2-yu-source .req-bar:focus-visible { color: var(--yu-source-accent); }
+#part-2-yu-source .req-bar:focus-visible { outline: 2px solid var(--yu-source-accent); outline-offset: -5px; }
+#part-2-yu-source .req-index { color: var(--yu-source-accent); font: 800 calc(11px * var(--font-scale))/1 var(--sans); letter-spacing: .14em; }
+#part-2-yu-source .req-bar strong { min-width: 0; overflow: hidden; text-overflow: ellipsis; font: 600 calc(17px * var(--font-scale))/1.3 var(--serif); }
+#part-2-yu-source .req-arrow { margin-left: auto; flex: none; color: var(--yu-source-accent); font: 600 calc(16px * var(--font-scale))/1 var(--sans); transition: transform .22s ease; }
+#part-2-yu-source .req-card.is-open .req-arrow { transform: rotate(180deg); }
+#part-2-yu-source .req-panel { display: grid; grid-template-rows: 0fr; transition: grid-template-rows .38s cubic-bezier(.22, 1, .36, 1); }
+#part-2-yu-source .req-panel.is-open { grid-template-rows: 1fr; }
+#part-2-yu-source .req-panel-inner { min-height: 0; overflow: hidden; }
+#part-2-yu-source .req-wordcard { margin: 0 18px 16px; padding: 14px 0 0; background: transparent; border-top: 1px solid var(--yu-source-line); opacity: 0; transform: translateY(-8px); transition: opacity .32s ease, transform .32s ease; }
+#part-2-yu-source .req-wordcard.is-shown { opacity: 1; transform: none; }
+#part-2-yu-source .req-wordcard p { margin: 0; color: var(--yu-source-text); font: var(--body-weight, 500) calc(15px * var(--font-scale))/1.85 var(--serif); }
+#part-2-yu-source .req-stage-wrap { display: grid; grid-template-rows: 0fr; width: 100%; transition: grid-template-rows .4s cubic-bezier(.22, 1, .36, 1); }
+#part-2-yu-source .req-stage-wrap.is-open { grid-template-rows: 1fr; }
+#part-2-yu-source .req-stage-wrap-inner { min-height: 0; overflow: hidden; }
+#part-2-yu-source .req-visual { padding: 14px 2px 4px; }
+#part-2-yu-source .req-stage { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 8px; align-items: stretch; height: clamp(360px, 44vh, 460px); }
+#part-2-yu-source .req-connector { display: flex; align-items: center; justify-content: center; width: 22px; color: var(--yu-source-accent); font: 700 20px/1 var(--sans); opacity: 0; transition: opacity .3s ease .05s; }
+#part-2-yu-source .req-connector.is-shown { opacity: 1; }
+#part-2-yu-source .req-win { display: flex; flex-direction: column; min-width: 0; min-height: 0; border-radius: 8px; overflow: hidden; box-shadow: 0 16px 28px rgba(22, 61, 63, .18); opacity: 0; transform-origin: top left; }
+#part-2-yu-source .req-win-skill { background: #1e1e1e; transform: scale(.05); transition: opacity .4s ease, transform .4s cubic-bezier(.22, 1, .36, 1); }
+#part-2-yu-source .req-win-skill.is-shown { opacity: 1; transform: scale(1); }
+#part-2-yu-source .req-win-doc { background: var(--yu-source-card); border: 1px solid #e3d9c7; clip-path: inset(0 100% 0 0); transition: opacity .4s ease, clip-path .42s cubic-bezier(.22, 1, .36, 1); }
+#part-2-yu-source .req-win-doc.is-shown { opacity: 1; clip-path: inset(0 0 0 0); }
+#part-2-yu-source .req-win-docstack { display: flex; gap: 10px; background: transparent; box-shadow: none; overflow: visible; clip-path: inset(0 100% 0 0); transition: opacity .4s ease, clip-path .42s cubic-bezier(.22, 1, .36, 1); }
+#part-2-yu-source .req-win-docstack.is-shown { opacity: 1; clip-path: inset(0 0 0 0); }
+#part-2-yu-source .req-doc-mini { flex: 1 1 0; min-width: 0; display: flex; flex-direction: column; background: var(--yu-source-card); border: 1px solid #e3d9c7; border-radius: 8px; overflow: hidden; box-shadow: 0 16px 28px rgba(22, 61, 63, .1); }
+#part-2-yu-source .agentic-mac-titlebar { display: flex; align-items: center; gap: 7px; flex: none; padding: 8px 10px; background: #252526; border-bottom: 1px solid #3b3b3b; }
+#part-2-yu-source .agentic-mac-dot { width: 10px; height: 10px; border-radius: 50%; }
+#part-2-yu-source .agentic-mac-dot.red { background: #ff5f57; } #part-2-yu-source .agentic-mac-dot.yellow { background: #febc2e; } #part-2-yu-source .agentic-mac-dot.green { background: #28c840; }
+#part-2-yu-source .agentic-window-title { margin-left: 8px; color: #bdbdbd; font: 600 11px/1 var(--sans); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#part-2-yu-source .req-vscode-shell { display: grid; grid-template-columns: 27px minmax(0, 1fr); flex: 1; min-height: 0; background: #1e1e1e; }
+#part-2-yu-source .req-vscode-activitybar { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 11px 0; color: #858585; background: #333; font: 12px/1 var(--sans); border-right: 1px solid #424242; }
+#part-2-yu-source .req-vscode-editor { display: flex; flex-direction: column; min-width: 0; min-height: 0; }
+#part-2-yu-source .req-vscode-tabs { display: flex; flex: none; min-height: 27px; align-items: stretch; background: #252526; border-bottom: 1px solid #333; }
+#part-2-yu-source .req-vscode-tab { display: flex; align-items: center; max-width: 100%; padding: 0 10px; color: #d4d4d4; background: #1e1e1e; border-top: 2px solid #e6b86a; font: 10.5px/1.2 "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+#part-2-yu-source .req-vscode-body { flex: 1; min-height: 0; overflow-y: auto; overflow-x: hidden; padding: 13px 15px; color: #d4d4d4; background: #1e1e1e; font: 11.5px/1.7 "SF Mono", ui-monospace, Menlo, Consolas, monospace; white-space: pre-wrap; overflow-wrap: anywhere; scrollbar-width: none; }
+#part-2-yu-source .req-vscode-body::-webkit-scrollbar { display: none; }
+#part-2-yu-source .req-vscode-body mark.code-mark { padding: 0 1px; border-radius: 3px; color: inherit; background: rgba(var(--yu-source-marker), .38); box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+#part-2-yu-source .req-doc-head { position: relative; flex: none; padding: 12px 40px 10px 14px; background: linear-gradient(#fffdf8, #f2ebdf); border-bottom: 1px solid #e1d8c9; }
+#part-2-yu-source .req-doc-controls { position: absolute; top: 13px; right: 12px; display: flex; gap: 5px; }
+#part-2-yu-source .req-doc-dot { width: 8px; height: 8px; border-radius: 50%; background: #d8cdb8; }
+#part-2-yu-source .req-doc-title { margin: 0 0 5px; color: var(--yu-source-ink); font: 700 calc(15px * var(--font-scale))/1.4 var(--serif); }
+#part-2-yu-source .req-badge { display: inline-flex; align-items: center; justify-content: center; width: 23px; height: 23px; margin-right: 6px; color: #fffaf2; border-radius: 5px; vertical-align: -5px; font: 800 12.5px/1 var(--serif); }
+#part-2-yu-source .req-badge.b-zhu { background: #c86138; } #part-2-yu-source .req-badge.b-yu { background: #315d5d; }
+#part-2-yu-source .req-doc-meta { margin: 0; color: #7a6f63; font: 500 11.5px/1.65 var(--sans); }
+#part-2-yu-source .req-doc-scroll { flex: 1; min-height: 0; overflow-y: auto; padding: 12px 14px 18px; }
+#part-2-yu-source .req-doc-label { display: inline-block; margin-bottom: 6px; padding: 2px 7px; color: #8a7c66; background: rgba(22, 61, 63, .07); border-radius: 3px; font: 700 10px/1 var(--sans); letter-spacing: .08em; }
+#part-2-yu-source .req-doc-body { margin: 8px 0 0; color: var(--yu-source-text); text-align: justify; white-space: pre-wrap; font: 500 calc(13.5px * var(--font-scale))/1.95 var(--serif); }
+#part-2-yu-source .req-doc-mini .req-doc-head { padding: 10px 30px 8px 12px; } #part-2-yu-source .req-doc-mini .req-doc-title { font-size: calc(12.5px * var(--font-scale)); } #part-2-yu-source .req-doc-mini .req-badge { width: 19px; height: 19px; font-size: 10.5px; } #part-2-yu-source .req-doc-mini .req-doc-meta { font-size: 10px; } #part-2-yu-source .req-doc-mini .req-doc-scroll { padding: 9px 11px 12px; } #part-2-yu-source .req-doc-mini .req-doc-body { font-size: calc(11.5px * var(--font-scale)); line-height: 1.85; }
+#part-2-yu-source .req-doc-body mark, #part-2-yu-source .req-doc-meta mark { padding: 0 1px; border-radius: 3px; color: inherit; background: transparent; box-decoration-break: clone; -webkit-box-decoration-break: clone; transition: background-color .2s ease, filter .2s ease; }
+#part-2-yu-source .req-entry[data-req-item="markerA"] mark[data-group~="markerA"] { background: rgba(var(--yu-source-marker), .24); cursor: pointer; } #part-2-yu-source .req-entry[data-req-item="dateA"] mark[data-group~="dateA"] { background: rgba(var(--yu-source-date), .22); cursor: pointer; }
+#part-2-yu-source .req-entry[data-req-item="markerA"] .req-vscode-body mark[data-group~="markerA"] { background: rgba(var(--yu-source-marker), .38); } #part-2-yu-source .req-entry[data-req-item="dateA"] .req-vscode-body mark[data-group~="dateA"] { background: rgba(var(--yu-source-date), .34); }
+#part-2-yu-source .req-caret { display: inline-block; width: 1px; height: 1em; margin-left: 1px; background: currentColor; vertical-align: -2px; animation: part2-yu-source-caret 1s steps(1) infinite; }
+@keyframes part2-yu-source-caret { 50% { opacity: 0; } }
+#part-2-yu-source .req-legend { display: flex; flex-wrap: wrap; gap: 8px 18px; margin: 18px 0 26px; padding: 0 2px; } #part-2-yu-source .req-legend-item { display: flex; align-items: center; gap: 7px; color: var(--yu-source-text); font: 600 12.5px/1 var(--sans); } #part-2-yu-source .req-legend-swatch { width: 12px; height: 12px; border-radius: 3px; } #part-2-yu-source .req-legend-swatch.marker { background: rgba(var(--yu-source-marker), .6); } #part-2-yu-source .req-legend-swatch.date { background: rgba(var(--yu-source-date), .6); }
+
+@media (max-width: 860px) {
+  #part-2-yu-source .req-stage { grid-template-columns: 1fr !important; height: auto; gap: 14px; }
+  #part-2-yu-source .req-connector { display: none; }
+  #part-2-yu-source .req-win, #part-2-yu-source .req-doc-mini { height: 300px; }
+  #part-2-yu-source .req-win-doc, #part-2-yu-source .req-win-docstack { clip-path: none !important; opacity: 0; transform: translateY(10px); transition: opacity .4s ease, transform .4s ease; }
+  #part-2-yu-source .req-win-doc.is-shown, #part-2-yu-source .req-win-docstack.is-shown { opacity: 1; transform: none; }
+  #part-2-yu-source .req-win-docstack { flex-direction: column; height: auto; }
+}
+
+/* Part 2 shared UI style — match final_out_4.html across 2-1 to 2-3.
+   The 2-2 bar gap and enlarged window typography remain intentionally scoped
+   above because they are an explicit readability choice for that subsection. */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) {
+  --part2-req-chip-w: var(--chip-w, var(--yu-source-chip-w, 300px));
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card {
+  overflow: visible;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card:not(.is-open) {
+  overflow: hidden;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-visual {
+  padding: 16px 18px 20px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-stage-wrap {
+  border-top: 1px solid transparent;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-stage-wrap.is-open {
+  border-top-color: var(--line, var(--yu-source-line));
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win-skill {
+  transform: scale(1.28);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win-skill.is-shown {
+  transform: scale(1);
+}
+
+/* Waiting state: the bars stay on the left while the full Skill preview sits
+   on the right, then fades back when every bar is closed. */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-wrap {
+  position: relative;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-skill {
+  position: absolute;
+  top: 0;
+  left: calc(var(--part2-req-chip-w) + 22px);
+  right: 0;
+  height: clamp(380px, 56vh, 560px);
+  display: flex;
+  flex-direction: column;
+  border-radius: 8px;
+  overflow: hidden;
+  background: #1e1e1e;
+  box-shadow: 0 16px 28px rgba(22, 61, 63, .18);
+  opacity: 1;
+  transform: scale(1);
+  transform-origin: top left;
+  z-index: 1;
+  transition: opacity .38s ease, transform .38s cubic-bezier(.22, 1, .36, 1);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-wrap.has-open .req-idle-skill {
+  opacity: 0;
+  transform: scale(.92);
+  pointer-events: none;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-vscode-body {
+  font-size: 13px;
+  line-height: 1.75;
+}
+
+@media (max-width: 860px) {
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-skill {
+    display: none;
+  }
+}
+
+/* Part 2 request-card sizing controls.
+   These variables are intentionally kept together so the folded bars, the
+   expanded card windows, and the idle Skill preview can be tuned manually
+   without hunting through the three subsection blocks above. */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) {
+  --part2-req-folded-card-width: var(--part2-req-chip-w);
+  --part2-req-expanded-card-width: 100%;
+  --part2-req-folded-window-width: min(72%, 900px);
+  --part2-req-folded-window-height: clamp(320px, 44vh, 440px);
+  --part2-req-expanded-window-height: clamp(480px, 52vh, 620px);
+  --part2-req-expanded-stage-columns: 1fr auto 1fr auto 1fr;
+  --part2-req-vscode-font-size: calc(14px * var(--font-scale));
+  --part2-req-idle-vscode-font-size: calc(13px * var(--font-scale));
+  --part2-req-window-title-size: calc(13px * var(--font-scale));
+  --part2-req-window-dot-size: 12px;
+  --part2-req-activitybar-width: 38px;
+  --part2-req-activitybar-font-size: calc(16px * var(--font-scale));
+  --part2-req-window-tab-size: calc(12px * var(--font-scale));
+  --part2-req-doc-title-size: calc(17px * var(--font-scale));
+  --part2-req-doc-meta-size: calc(13px * var(--font-scale));
+  --part2-req-doc-body-size: calc(16px * var(--font-scale));
+  --part2-req-mini-title-size: calc(14px * var(--font-scale));
+  --part2-req-mini-meta-size: calc(11.5px * var(--font-scale));
+  --part2-req-mini-body-size: calc(13.5px * var(--font-scale));
+  --part2-req-section-top-space: clamp(26px, 3vw, 46px);
+  --part2-req-section-bottom-space: clamp(52px, 5vw, 84px);
+}
+#part-2-content #part-2-yu-source {
+  --part2-req-expanded-stage-columns: minmax(0, 1fr) auto minmax(0, 1fr) auto minmax(0, 1fr);
+  --part2-req-expanded-window-height: clamp(600px, 68vh, 820px);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) > .story-inner {
+  padding-top: var(--part2-req-section-top-space);
+  padding-bottom: var(--part2-req-section-bottom-space);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-wrap {
+  min-height: var(--part2-req-folded-window-height);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card {
+  width: var(--part2-req-folded-card-width);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card.is-open {
+  width: var(--part2-req-expanded-card-width);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card:not(.is-open) {
+  width: max-content;
+  max-width: 100%;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card:not(.is-open) .req-bar {
+  width: max-content;
+  max-width: 100%;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card:not(.is-open) .req-bar strong {
+  flex: 0 0 auto;
+  min-width: max-content;
+  overflow: visible;
+  text-overflow: clip;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-card:not(.is-open) :is(.req-panel, .req-stage-wrap) {
+  width: 0;
+  overflow: hidden;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-skill {
+  height: var(--part2-req-folded-window-height);
+  left: auto;
+  right: 0;
+  width: var(--part2-req-folded-window-width);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-skill.is-content-fit {
+  height: auto;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-vscode-body.is-content-fit {
+  flex: none;
+  height: auto;
+  overflow: visible;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-stage {
+  height: var(--part2-req-expanded-window-height);
+  grid-template-columns: var(--part2-req-expanded-stage-columns) !important;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-vscode-body {
+  padding: 16px 18px;
+  font-size: var(--part2-req-vscode-font-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-idle-vscode-body {
+  font-size: var(--part2-req-idle-vscode-font-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .agentic-mac-titlebar {
+  gap: 9px;
+  padding: 11px 14px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .agentic-mac-dot {
+  width: var(--part2-req-window-dot-size);
+  height: var(--part2-req-window-dot-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .agentic-window-title {
+  margin-left: 10px;
+  font-size: var(--part2-req-window-title-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-vscode-shell {
+  grid-template-columns: var(--part2-req-activitybar-width) minmax(0, 1fr);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-vscode-activitybar {
+  gap: 15px;
+  padding: 14px 0;
+  font-size: var(--part2-req-activitybar-font-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-vscode-tabs {
+  min-height: 34px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-vscode-tab {
+  padding: 0 12px;
+  font-size: var(--part2-req-window-tab-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-title {
+  margin-bottom: 6px;
+  font-size: var(--part2-req-doc-title-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-meta {
+  font-size: var(--part2-req-doc-meta-size);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-body {
+  margin-top: 10px;
+  font-size: var(--part2-req-doc-body-size);
+}
+#part-2-content #part-2-yu-source .req-doc-mini .req-doc-title {
+  font-size: var(--part2-req-mini-title-size);
+}
+#part-2-content #part-2-yu-source .req-doc-mini .req-doc-meta {
+  font-size: var(--part2-req-mini-meta-size);
+}
+#part-2-content #part-2-yu-source .req-doc-mini .req-doc-scroll {
+  padding: 11px 13px 16px;
+}
+#part-2-content #part-2-yu-source .req-doc-mini .req-doc-body {
+  font-size: var(--part2-req-mini-body-size);
+  line-height: 1.9;
+}
+
+@media (min-width: 861px) {
+  /* Use almost all of the text-card width and vertically center the shorter
+     Skill / 上諭 windows against the taller candidate-document group. */
+  #part-2-content #part-2-yu-source .req-stage {
+    width: 100%;
+    margin-inline: auto;
+    align-items: center;
+    height: max-content;
+    min-height: var(--part2-req-expanded-window-height);
+  }
+  #part-2-content #part-2-yu-source .req-win-skill,
+  #part-2-content #part-2-yu-source .req-win-doc {
+    height: var(--part2-req-expanded-window-height) !important;
+  }
+  #part-2-content #part-2-yu-source .req-win-docstack {
+    align-self: center;
+    height: max-content;
+    min-height: 0;
+  }
+  #part-2-content #part-2-yu-source .req-doc-mini {
+    flex: none;
+    height: max-content;
+  }
+  #part-2-content #part-2-yu-source .req-doc-mini .req-doc-scroll {
+    flex: none;
+    overflow: visible;
+  }
+}
+
+@media (max-width: 860px) {
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) > .story-inner {
+    padding-top: 24px;
+    padding-bottom: 48px;
+  }
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-stage {
+    grid-template-columns: 1fr !important;
+    height: auto;
+  }
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win {
+    height: 360px;
+  }
+  #part-2-content #part-2-yu-source .req-doc-mini {
+    height: 360px;
+  }
+  #part-2-content #part-2-yu-source .req-win-docstack {
+    height: auto;
+  }
+}
+
+/* Part 2 document windows now use the complete doc_panel_sample.html anatomy.
+   The request-card animation classes remain on the outer element, while the
+   inner head/filter/text regions inherit the sample's document-panel UI. */
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  border-radius: 0;
+  background: #fffdf8;
+  border: 1px solid #e5dacb;
+  box-shadow: 0 12px 28px rgba(60, 44, 20, .12);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document .m1 {
+  font-size: calc(17px * var(--font-scale));
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document .meta-table {
+  font-size: calc(12px * var(--font-scale));
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document .ip-scroll {
+  scroll-behavior: auto;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document .ix-text {
+  font-size: calc(17px * var(--font-scale));
+  line-height: 1.95;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group] {
+  padding: 2px 4px;
+  border-radius: 4px;
+  color: inherit !important;
+  background: transparent !important;
+  box-shadow: none;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: filter .2s ease, box-shadow .2s ease, background-color .2s ease;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="marker"].is-active,
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="markerA"].is-active,
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="markerB"].is-active {
+  color: #73382b !important;
+  background: #f3b9aa !important;
+  box-shadow: 0 0 0 1px rgba(201, 95, 72, .22);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="date"].is-active,
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="dateA"].is-active,
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="dateB"].is-active {
+  color: #684716 !important;
+  background: #f4d58d !important;
+  box-shadow: 0 0 0 1px rgba(194, 139, 55, .24);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="quote"].is-active {
+  color: #2d526c !important;
+  background: #b9d9ee !important;
+  box-shadow: 0 0 0 1px rgba(92, 137, 170, .24);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="author"].is-active {
+  color: #5d4667 !important;
+  background: #dcc6e8 !important;
+  box-shadow: 0 0 0 1px rgba(130, 100, 143, .24);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group~="identity"].is-active {
+  color: #3b5c35 !important;
+  background: #cce5c1 !important;
+  box-shadow: 0 0 0 1px rgba(111, 155, 96, .24);
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group].is-active {
+  filter: saturate(1.18) brightness(1.04);
+  box-shadow: 0 0 0 2px rgba(196, 106, 43, .48), 0 3px 8px rgba(60, 44, 20, .16);
+  animation: part2-doc-panel-highlight .48s ease both;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document mark[data-group].is-active {
+  box-shadow: none !important;
+  outline: 0 !important;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document {
+  flex: 1 1 0;
+  min-width: 0;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document .m1 {
+  font-size: calc(13px * var(--font-scale));
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document .meta-table {
+  font-size: calc(10px * var(--font-scale));
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document .ip-head {
+  padding: 10px 60px 8px 12px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document .ip-filterdock {
+  min-height: 36px;
+  padding: 4px 10px;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document .ix-text {
+  padding: 11px 7px 16px;
+  font-size: calc(12px * var(--font-scale));
+  line-height: 1.8;
+}
+#part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-doc-mini.source-flow-document .blk-label {
+  margin-bottom: 8px;
+  font-size: calc(11px * var(--font-scale));
+}
+
+@media (min-width: 861px) {
+  /* The source visual's third window is a vertical stack of three document
+     panels. Let each panel size itself to its complete excerpt. */
+  #part-2-content #part-2-yu-source .req-doc-mini.source-flow-document {
+    flex: none;
+    height: max-content !important;
+  }
+  #part-2-content #part-2-yu-source .req-doc-mini.source-flow-document .ip-body,
+  #part-2-content #part-2-yu-source .req-doc-mini.source-flow-document .ip-scroll {
+    flex: none;
+    height: max-content;
+    min-height: 0;
+    overflow: visible;
+  }
+  #part-2-content #part-2-yu-source .req-doc-mini.source-flow-document .ix-text {
+    font-size: calc(15px * var(--font-scale));
+    line-height: 1.9;
+  }
+}
+@keyframes part2-doc-panel-highlight {
+  0% { transform: translateY(2px); }
+  100% { transform: translateY(0); }
+}
+
+@media (max-width: 860px) {
+  #part-2-content :is(#part-2-yu-response, #part-2-zhu-response, #part-2-yu-source) .req-win.source-flow-document {
+    height: 360px;
+  }
+  #part-2-content #part-2-yu-source .req-doc-mini.source-flow-document {
+    height: 360px;
+  }
+  #part-2-content #part-2-yu-source .req-win-docstack .req-doc-mini.source-flow-document {
+    flex: 0 0 360px;
+  }
 }

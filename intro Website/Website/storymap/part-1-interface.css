@@ -1652,10 +1652,6 @@
 .part1-chat-source-btn:hover,
 .part1-chat-source-btn:focus-visible { color: #2f5c8a; border-color: #7d9ab6; }
 .part1-chat-source-view { padding-bottom: 10px; }
-.part1-chat-output-turn { margin-top: 7px; border: 1px solid #e2d8c4; border-radius: 6px; background: #fffdf8; }
-.part1-chat-output-turn:not([open]) > :not(summary) { display: none !important; }
-.part1-chat-output-turn summary { padding: 7px; color: #5c4a2c; cursor: pointer; font: 700 calc(10px * var(--font-scale))/1.35 var(--sans); }
-.part1-chat-output-turn-meta { padding: 0 7px 6px; color: #8a7a68; font: 500 calc(8.5px * var(--font-scale))/1.4 var(--sans); overflow-wrap: anywhere; }
 .part1-chat-output-item { margin: 0 7px 7px; padding: 7px; border: 1px solid #e2d8c4; border-left: 3px solid #8a765a; border-radius: 6px; background: #fff; }
 .part1-chat-output-item.is-compact { margin: 7px 0; background: #fffdf8; }
 .part1-chat-output-title { margin: 4px 0; color: #3c3526; font: 700 calc(10px * var(--font-scale))/1.4 var(--sans); }
@@ -1780,9 +1776,6 @@
 /* In the dedicated AI section, give the cards the reading scale of the
    sample tool instead of retaining the compressed three-column dock scale. */
 .part1-replica[data-part1-mode="ai"] .part1-ai-body { padding: 18px 24px 30px; }
-.part1-replica[data-part1-mode="ai"] .part1-chat-output-turn { margin-top: 12px; border-radius: 10px; }
-.part1-replica[data-part1-mode="ai"] .part1-chat-output-turn summary { padding: 12px 14px; font-size: clamp(14px, 1.5vw, 20px); }
-.part1-replica[data-part1-mode="ai"] .part1-chat-output-turn-meta { padding: 0 14px 10px; font-size: clamp(11px, 1.1vw, 15px); }
 .part1-replica[data-part1-mode="ai"] .part1-chat-skill-card { margin: 0 12px 12px; padding: 16px 18px; border-radius: 10px; }
 .part1-replica[data-part1-mode="ai"] .part1-chat-skill-subtitle,
 .part1-replica[data-part1-mode="ai"] .part1-chat-skill-numbered-title,
@@ -2545,6 +2538,33 @@
   font-weight: 500;
 }
 .part1-ai-memory-row input { width: 16px; height: 16px; margin: 0; accent-color: #2f8066; }
+.part1-ai-settings-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  margin-top: 2px;
+  color: #8a7a68;
+  font: 500 calc(10px * var(--font-scale))/1.35 var(--sans);
+}
+.part1-ai-settings-actions button {
+  flex: 0 0 auto;
+  padding: 4px 8px;
+  color: #5c5142;
+  background: #fffaf1;
+  border: 1px solid #cbbba5;
+  border-radius: 6px;
+  cursor: pointer;
+  font: 600 calc(10px * var(--font-scale))/1.2 var(--sans);
+}
+.part1-ai-settings-actions button:hover,
+.part1-ai-settings-actions button:focus-visible { color: #2f8066; border-color: #2f8066; outline: 0; }
+.part1-chat-action-source {
+  margin: 0;
+  color: #5c5142;
+  white-space: pre-wrap;
+  font: 500 calc(10.5px * var(--font-scale))/1.65 var(--serif);
+}
 
 @media (max-width: 560px) {
   .part1-ai-popover { border-radius: 8px; }
@@ -2566,6 +2586,9 @@
 }
 .part1-lane { display: none; }
 .part1-chart-links { z-index: 2; }
+.part1-preview-link { vector-effect: non-scaling-stroke; }
+.part1-bg-link { pointer-events: none !important; opacity: 0.22; }
+.part1-example-link { cursor: pointer; pointer-events: stroke; }
 .part1-preview-axis { stroke: #c6b699; stroke-width: 1.2; }
 .part1-preview-grid { stroke: #ece2d0; stroke-width: 1; }
 .part1-preview-month-grid { stroke: #e1d4be; stroke-width: 1.2; }
@@ -2712,8 +2735,60 @@
   padding: 0;
   overflow: auto;
 }
-.part1-dock[data-node-closed="false"] {
-  grid-template-columns:
+
+/* Spawned double-click columns -------------------------------------------
+   Double-clicking a chart dot opens the dot's output card in its own new
+   dock column (no drag). Each spawned panel is a peer of the node/AI/doc
+   panels; its position in the dock grid is managed by JS while it exists. */
+.part1-spawned-panel {
+  display: grid;
+  grid-template-rows: auto minmax(0, 1fr);
+  min-width: 0;
+  min-height: 0;
+  margin: 8px 5px;
+  border: 1px solid #cdbfa9;
+  border-radius: 10px;
+  background: #fffdf8;
+  box-shadow: 0 3px 12px rgba(60, 44, 20, .13);
+  overflow: hidden;
+}
+.part1-spawned-head {
+  min-height: 44px;
+  padding: 6px 10px;
+  box-sizing: border-box;
+  gap: 6px;
+  background: linear-gradient(#fbf4e6, #f3eada);
+  border-bottom: 1px solid #e6dccb;
+  font-size: calc(11.5px * var(--font-scale));
+}
+.part1-spawned-title {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  color: #3c342b;
+  font: 700 calc(12px * var(--font-scale))/1.35 var(--serif);
+}
+.part1-spawned-lane {
+  flex: none;
+  color: #a19278;
+  font: 600 calc(10px * var(--font-scale))/1 var(--sans);
+  letter-spacing: .03em;
+}
+.part1-spawned-head .part1-chat-window-actions { margin-left: auto; }
+.part1-spawned-body {
+  min-height: 0;
+  padding: 0;
+  overflow: auto;
+}
+.part1-spawned-panel.is-spawned-flash {
+  box-shadow: 0 0 0 2px #c79a52, 0 3px 12px rgba(60, 44, 20, .13);
+}
+.part1-spawned-panel.is-spawned-flash .part1-spawned-head {
+  background: linear-gradient(#fbf4e6, #f4e3c0);
+}
+
+.part1-dock[data-node-closed="false"] {  grid-template-columns:
     var(--part1-node-width, 236px)
     var(--part1-ai-width, minmax(0, calc(46% - 5px)))
     var(--part1-doc-width, minmax(0, calc(54% - 5px)));
@@ -3082,4 +3157,88 @@
 .part1-ai :is(.part1-card, .part1-chat-output-item, .part1-chat-skill-card, .part1-event-card, .part1-node-document-card),
 .part1-node-panel :is(.part1-card, .part1-chat-output-item, .part1-chat-skill-card, .part1-event-card, .part1-node-document-card) {
   border-left: 1px solid #e2d8c4 !important;
+}
+
+/* Teaching pair mode (data.pairDoc): the dock shows two real document
+   panels side by side (奏摺 left, 上諭 right) and hides the AI/eventline/
+   node panels, mirroring the sample tool's stacked document panels. */
+.part1-replica[data-pair-doc="true"] .part1-ai,
+.part1-replica[data-pair-doc="true"] .part1-eventline,
+.part1-replica[data-pair-doc="true"] .part1-node-panel,
+.part1-replica[data-pair-doc="true"] .part1-panel-resizer { display: none !important; }
+
+.part1-replica[data-pair-doc="true"] .part1-stage {
+  grid-template-columns: minmax(0, calc(100% - var(--stage-dock-pct, 50%))) minmax(0, var(--stage-dock-pct, 50%)) !important;
+  position: relative;
+}
+.part1-replica[data-pair-doc="true"] .part1-dock {
+  position: relative;
+  grid-template-columns: 1fr !important;
+  width: 100% !important;
+  justify-self: stretch;
+  overflow: hidden;
+  padding: 0 !important;
+  gap: 0 !important;
+}
+.part1-stage-resize {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 10px;
+  z-index: 10;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.part1-stage-resize::before {
+  content: "";
+  position: absolute;
+  top: 38%;
+  bottom: 38%;
+  left: 4px;
+  width: 2px;
+  border-radius: 2px;
+  background: #d1c2ad;
+  opacity: .7;
+  transition: background .15s ease, opacity .15s ease, transform .15s ease;
+}
+.part1-stage-resize:hover::before,
+.part1-stage-resize:focus-visible::before,
+.part1-stage-resize.is-dragging::before {
+  background: #a67d4f;
+  opacity: 1;
+  transform: scaleX(1.8);
+}
+.part1-stage-resize:focus-visible { outline: 2px solid rgba(166,125,79,.45); outline-offset: -1px; }
+.part1-replica[data-pair-doc="true"] .part1-doc-stack {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+}
+.part1-replica[data-pair-doc="true"] .part1-pair-doc {
+  height: 100%;
+  min-width: 0;
+  min-height: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+.part1-replica[data-pair-doc="true"] .part1-pair-doc .part1-doc-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow: auto;
+}
+.part1-replica[data-pair-doc="true"] .part1-pair-doc.part1-pair-flash {
+  box-shadow: 0 0 0 3px #c79a52, 0 3px 12px rgba(60, 44, 20, .13);
+}
+@media (max-width: 900px) {
+  .part1-replica[data-pair-doc="true"] .part1-stage,
+  .part1-replica[data-pair-doc="true"] .part1-dock,
+  .part1-replica[data-pair-doc="true"] .part1-doc-stack { grid-template-columns: 1fr !important; }
+  .part1-replica[data-pair-doc="true"] .part1-pair-doc { min-height: 360px; }
 }

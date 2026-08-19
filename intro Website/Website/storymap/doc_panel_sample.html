@@ -1,0 +1,157 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="storymap.css?v=20260813-doc-panel-sample-01">
+  <title>doc_panel_sample｜文書面板複本</title>
+  <style>
+    :root { --font-scale: 1; }
+    html, body { min-height: 100%; }
+    body {
+      margin: 0;
+      color: #2d261d;
+      background: #eee7dc;
+      font-family: var(--sans, Inter, sans-serif);
+    }
+    .doc-panel-sample-page {
+      box-sizing: border-box;
+      min-height: 100vh;
+      padding: clamp(28px, 5vw, 72px) clamp(18px, 5vw, 80px);
+    }
+    .doc-panel-sample-intro {
+      width: min(900px, 100%);
+      margin: 0 auto 24px;
+    }
+    .doc-panel-sample-intro h1 {
+      margin: 0 0 8px;
+      color: #163d3f;
+      font: 600 clamp(28px, 4vw, 46px)/1.15 var(--serif, Georgia, serif);
+    }
+    .doc-panel-sample-intro p {
+      margin: 0;
+      color: #5d554b;
+      font: 500 16px/1.8 var(--serif, Georgia, serif);
+    }
+    .doc-panel-sample-stage {
+      width: min(900px, 100%);
+      height: min(760px, 72vh);
+      min-height: 520px;
+      margin: 0 auto;
+    }
+    .doc-panel-sample-stage .source-flow-document {
+      --source-panel-width: 100%;
+      --source-panel-height: 100%;
+      --source-panel-source-space: 0px;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+    .doc-panel-sample-tools {
+      display: flex;
+      justify-content: flex-end;
+      width: min(900px, 100%);
+      margin: 14px auto 0;
+    }
+    .doc-panel-sample-tools button {
+      padding: 8px 14px;
+      color: #fffaf2;
+      background: #285b5d;
+      border: 0;
+      border-radius: 4px;
+      font: 600 14px/1.2 var(--sans, Inter, sans-serif);
+      cursor: pointer;
+    }
+    .doc-panel-sample-tools button:hover { background: #163d3f; }
+    @media (max-width: 620px) {
+      .doc-panel-sample-page { padding: 24px 12px; }
+      .doc-panel-sample-stage { height: 72vh; min-height: 460px; }
+    }
+  </style>
+</head>
+<body>
+  <main class="doc-panel-sample-page">
+    <div class="doc-panel-sample-intro">
+      <h1>doc_panel_sample</h1>
+      <p>以平台運作流程中的硃113為例，保留原始文書面板的標題列、文書資料、控制按鈕、篩選列和可捲動原文區，供其他視覺複本沿用。</p>
+    </div>
+
+    <div class="doc-panel-sample-stage">
+      <div class="source-flow-document doc-panel-sample ip" aria-label="硃113原文文件面板">
+        <div class="ip-head">
+          <div class="ip-titles">
+            <div class="m1"><span class="badge b-zhu">硃</span> <b>為奏聞提臣等赴臺並飭沿海官員嚴密巡查事</b></div>
+            <table class="meta-table">
+              <tbody>
+                <tr><td>福建巡撫徐嗣曾</td></tr>
+                <tr><td>乾隆52年1月14日發出、乾隆52年1月27日硃批。</td></tr>
+                <tr><td>明清台檔30, 244, 硃113</td></tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="ip-btns">
+            <button class="ip-move" type="button" title="按住拖曳：移動" aria-label="移動"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="5 9 2 12 5 15"/><polyline points="9 5 12 2 15 5"/><polyline points="15 19 12 22 9 19"/><polyline points="19 9 22 12 19 15"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="12" y1="2" x2="12" y2="22"/></svg></button>
+            <button class="ip-min" type="button" title="收合 / 展開" aria-label="收合 / 展開" aria-expanded="true"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></button>
+            <button class="ip-close" type="button" title="關閉" aria-label="關閉"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="6" y1="6" x2="18" y2="18"/><line x1="18" y1="6" x2="6" y2="18"/></svg></button>
+          </div>
+          <div class="ip-head-resize" title="拖曳調整標頭高度"></div>
+        </div>
+        <div class="ip-body">
+          <div class="ip-filterdock">
+            <button class="ip-filterbtn" type="button" title="篩選" aria-label="篩選" aria-pressed="false"><span class="filter-icon" aria-hidden="true"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="21 4 3 4 10 12.5 10 19 14 21 14 12.5 21 4"/></svg></span></button>
+            <button class="ip-settingsbtn" type="button" title="顯示設定" aria-label="顯示設定" aria-pressed="false"><svg class="svgic" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 1 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 1 1-2.83-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82V9a1.65 1.65 0 0 0-1.51-1H3a2 2 0 1 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 1-.33-1.82l-.06-.06a2 2 0 1 1 2.83-2.83l.06.06a1.65 1.65 0 0 1 1.82.33H9a2 2 0 0 1 1.51-1V3a2 2 0 0 1 4 0v.09A1.65 1.65 0 0 1 15.4 4.6a1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 1 1 2.83 2.83l-.06.06a1.65 1.65 0 0 1 .33 1.82V9a1.65 1.65 0 0 1 1.51 1H21a2 2 0 1 1 0 4h-.09A1.65 1.65 0 0 0 19.4 15z"/></svg></button>
+          </div>
+          <div class="ip-scroll">
+            <div class="ip-pane ix active">
+              <div class="ix-cols">
+                <div class="ix-text">
+                  <div class="blk">
+                    <span class="blk-label">原文</span>
+                    <div class="source-flow-body-text">
+                      福建巡撫臣徐嗣曾跪奏，為欽奉諭旨，恭摺覆奏事。<mark class="source-highlight source-highlight-2">正月十一日承准廷寄，十二月二十九日奉上諭</mark>：「著傳諭徐嗣曾，務宜不動聲色，彈壓坐鎮，並飭沿海口岸文武員弁，嚴密巡查。遇有竄逸偷渡匪犯，即擒拿究辦。」等因。欽此。正在繕摺覆奏，<mark class="source-highlight source-highlight-3">又於十三日亥刻，承准廷寄，正月初二日奉上諭</mark>：「常青摺內稱：逆首林爽文係漳州人，其附從之徒率皆籍隸漳屬，其中難保無內外勾連情事。」等因。欽此。<mark class="source-highlight source-highlight-4">又於十四日子刻承准廷寄，正月初三日奉上諭</mark>：「從前康熙年間奸民朱一貴聚眾滋事，至於全臺失陷。官兵剿捕不及一月，即已收復葳功。今此等么麼賊匪，不過佔據縣城，較之從前更易辦理。」等因。欽此。⋯⋯<br><br><mark class="source-highlight source-highlight-1">乾隆五十二年正月十四日</mark><br><mark class="source-highlight source-highlight-1">乾隆五十二年正月二十七日奉硃批</mark>：爾等未免過於張皇矣。欽此。【本文原收錄於軍錄】
+                    </div>
+                  </div>
+                </div>
+                <div class="ix-margin" aria-hidden="true"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="doc-panel-sample-tools">
+      <button type="button" data-show-panel hidden>重新顯示面板</button>
+    </div>
+  </main>
+
+  <script>
+    (() => {
+      const panel = document.querySelector('.doc-panel-sample');
+      const showButton = document.querySelector('[data-show-panel]');
+      if (!panel) return;
+
+      panel.querySelector('.ip-min')?.addEventListener('click', () => {
+        panel.classList.toggle('is-folded');
+        panel.querySelector('.ip-min')?.setAttribute('aria-expanded', String(!panel.classList.contains('is-folded')));
+      });
+      ['.ip-filterbtn', '.ip-settingsbtn'].forEach((selector) => {
+        panel.querySelector(selector)?.addEventListener('click', (event) => {
+          const button = event.currentTarget;
+          button.classList.toggle('is-active');
+          button.setAttribute('aria-pressed', String(button.classList.contains('is-active')));
+        });
+      });
+      panel.querySelector('.ip-close')?.addEventListener('click', () => {
+        panel.hidden = true;
+        if (showButton) showButton.hidden = false;
+      });
+      showButton?.addEventListener('click', () => {
+        panel.hidden = false;
+        panel.classList.remove('is-folded');
+        showButton.hidden = true;
+      });
+    })();
+  </script>
+</body>
+</html>

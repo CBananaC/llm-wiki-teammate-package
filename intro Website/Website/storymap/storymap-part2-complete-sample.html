@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>完整示範：Part 2 通信關係重建（2.1 奏摺回應上諭、2.2 奏摺回應硃批、2.3 上諭來源 3 面板 2 連結）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="part-1-interface.css">
+<style>
+:root {
+  --font-scale: 1;
+  --ink: #163d3f; --text: #3c5754; --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+  --accent: #c45d38;
+  --hl-marker: 58,122,122; --hl-date: 181,131,42; --hl-quote: 196,93,56; --hl-author: 122,84,150;
+  --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang TC", sans-serif;
+  --mono: "Fira Code", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --body-weight: 500;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+button { font: inherit; }
+
+.draft-header { padding: clamp(26px,5vw,48px) clamp(16px,4vw,56px) clamp(20px,3vw,30px); color: #f7f3ea; background: #12363a; border-bottom: 1px solid rgba(255,255,255,.14); }
+.draft-header-inner, .draft-main { width: min(1560px, calc(100% - 32px)); margin: 0 auto; }
+.draft-kicker { margin: 0 0 10px; color: rgba(247,243,234,.68); font: 700 11px/1.4 var(--sans); letter-spacing: .14em; }
+.draft-header h1 { max-width: 50ch; margin: 0; font: 700 clamp(22px,3vw,34px)/1.3 var(--serif); letter-spacing: .04em; }
+.draft-header p:last-child { max-width: 90ch; margin: 12px 0 0; color: rgba(247,243,234,.85); font: 500 clamp(13.5px,1.4vw,15px)/1.75 var(--serif); }
+.draft-note { margin: 16px 0 0; padding: 12px 16px; color: rgba(247,243,234,.9); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 6px; font: 500 13px/1.7 var(--sans); }
+.draft-note strong { color: #ffd9a8; }
+.draft-main { padding: clamp(24px,4vw,40px) 0 90px; }
+
+.section-divider { margin: 56px 0 40px; border: 0; border-top: 2px dashed rgba(22,61,63,.15); }
+
+.part2-substage-cover { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; }
+.part2-substage-num { color: var(--accent); font: 800 28px/1 var(--serif); }
+.part2-substage-num small { display: block; margin-top: 2px; color: #8a7c66; font: 700 11px/1 var(--sans); letter-spacing: .1em; }
+.part2-substage-divider { flex: none; width: 1px; align-self: stretch; background: var(--line); }
+.part2-substage-copy h2 { margin: 0; color: var(--ink); font: 700 clamp(20px,2.4vw,28px)/1.4 var(--serif); }
+.part2-substage-copy p { margin: 6px 0 0; color: #6d756f; font: 500 13px/1.6 var(--sans); }
+
+.story-inner { width: 100%; margin: 0 auto; }
+</style>
+<script src="part-1-interface-data.js"></script>
+<script src="part-1-interface.js"></script>
+<script src="part2-doc-panel.js"></script>
+<script src="part2-yu-response-bars.js" defer></script>
+<script src="part2-zhu-response-bars.js" defer></script>
+<script src="part2-yu-source-bars.js" defer></script>
+</head>
+<body>
+
+<header class="draft-header">
+  <div class="draft-header-inner">
+    <p class="draft-kicker">清代奏摺與上諭分析平台・Part 2 深度通信關係重建示範</p>
+    <h1>2.1、2.2、2.3 全套介面升級整合示範</h1>
+    <p>包含 2.1「辨識奏摺所回應的上諭」、2.2「辨識奏摺所回應的硃批」以及 2.3「辨識上諭所依據的奏摺（3 文書面板 ＋ 1 上諭連 2 奏摺）」。每階段視覺下方均配置 50% 說明文字 ＋ 50% Skill 視窗（等高對齊、免捲動、對應規則高亮），並實現全域即時切換與關鍵引文突顯。</p>
+    <div class="draft-note">
+      <strong>✨ 階段亮點展示：</strong><br>
+      • <strong>2.1 奏摺回應上諭：</strong> 硃160（孫士毅）與 諭43 並排，下方 50%/50% 展示 <code>yu-response-pairing.md</code>。<br>
+      • <strong>2.2 奏摺回應硃批：</strong> 硃297（黃仕簡覆奏）與 硃155（原奏）並排，下方 50%/50% 展示 <code>zhu-response-pairing.md</code>。<br>
+      • <strong>2.3 辨識上諭來源：</strong> <strong>3 份文書面板並排（諭13 ＋ 硃21 常青 ＋ 硃22 任承恩）</strong>，圖表上 <strong>1 顆上諭圓點同時連接 2 顆奏摺圓點</strong>，下方 50%/50% 展示 <code>yu-source.md</code>。
+    </div>
+  </div>
+</header>
+
+<main class="draft-main">
+  <!-- 2.1 辨識奏摺所回應的上諭 -->
+  <section id="part-2-yu-response">
+    <div class="part2-substage-cover">
+      <div class="part2-substage-num">2.1</div>
+      <div class="part2-substage-divider"></div>
+      <div class="part2-substage-copy">
+        <h2>辨識奏摺所回應的上諭</h2>
+        <div class="part2-substage-description"><p>一種深層的通信關係是：有些奏摺會回應官員收到的上諭。平台會使用「上諭—回應配對」Skill，根據引述標記、日期、引文及奏摺作者等線索，辨識這段通信關係。</p></div>
+      </div>
+    </div>
+    <div class="story-inner part2-yu-response-story-inner">
+      <div class="req-list" data-req-list></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 2.2 辨識奏摺所回應的硃批 -->
+  <section id="part-2-zhu-response">
+    <div class="part2-substage-cover">
+      <div class="part2-substage-num">2.2</div>
+      <div class="part2-substage-divider"></div>
+      <div class="part2-substage-copy">
+        <h2>辨識奏摺所回應的硃批</h2>
+        <div class="part2-substage-description"><p>另一種深層的通信關係是：有些奏摺會回應較早奏摺上的硃批。平台會使用「硃批—回應配對」Skill，根據同一官員、日期及硃批引文等線索，辨識這段通信關係。</p></div>
+      </div>
+    </div>
+    <div class="story-inner part2-zhu-response-story-inner">
+      <div class="req-list" data-req-list></div>
+    </div>
+  </section>
+
+  <hr class="section-divider">
+
+  <!-- 2.3 辨識上諭所依據的奏摺（3 文書面板 ＋ 1 上諭連 2 奏摺） -->
+  <section id="part-2-yu-source">
+    <div class="part2-substage-cover">
+      <div class="part2-substage-num">2.3</div>
+      <div class="part2-substage-divider"></div>
+      <div class="part2-substage-copy">
+        <h2>辨識上諭所依據的奏摺</h2>
+        <div class="part2-substage-description"><p>第三種深層的通信關係是：上諭會回應皇帝先前收到的奏摺。平台會使用「上諭來源配對」Skill，根據來源標記、收發日期及奏報內容等線索，找出上諭所依據的奏摺。</p></div>
+      </div>
+    </div>
+    <div class="story-inner part2-yu-source-story-inner">
+      <div class="req-list" data-req-list></div>
+    </div>
+  </section>
+</main>
+
+</body>
+</html>

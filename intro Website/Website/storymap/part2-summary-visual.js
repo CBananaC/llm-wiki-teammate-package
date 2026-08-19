@@ -371,7 +371,8 @@
       if (phase === 'idle-0') { startFirstSkill(); return; }
       if (phase === 'applied') { bringToFront(skillWin, docWin); return; }
     });
-    docWin.addEventListener('click', () => {
+    docWin.addEventListener('click', (e) => {
+      if (e.target.closest('button, .ip-filterbtn, .ip-settingsbtn')) return;
       if (phase === 'ready-doc') { applyResult(); return; }
       if (phase === 'applied') { bringToFront(docWin, skillWin); return; }
     });

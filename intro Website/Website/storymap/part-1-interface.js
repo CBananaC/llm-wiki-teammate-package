@@ -6,7 +6,7 @@
 
    四個可點區域：
      1 導覽列          兩個浮動標籤：輸入與輸出資料、切換介面區域
-     2 時間與關係圖表  四條線各有一個固定圓點，點擊在 AI 分析區開啟對應輸出卡片
+     2 時間與關係圖表  依 sample 的來源日期繪製四線節點，點擊在對應面板開啟輸出卡片
      3 原始史料區      示範 AI Skills 篩選標示
      4 AI 分析區       四個步驟：本機執行 → 候選卡片 → 加入圖表 → 引文定位
    ========================================================================== */
@@ -23,10 +23,15 @@ const PART1_CHAT_ICONS = {
 
 const PART1_CHAT_EYE_ICON = '<svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-6 10-6 10 6 10 6-3.5 6-10 6S2 12 2 12z"/><circle cx="12" cy="12" r="2.5"/></svg>';
 
-document.querySelectorAll('[data-part1]').forEach((root) => {
+function part1InitRoot(root) {
   'use strict';
 
-  const data = window.PART1_INTERFACE_DATA;
+  /* A root can opt into its own data object via data-part1-data="GLOBAL_NAME"
+     (used by teaching pair-mode mounts added after page load, so they don't
+     share/overwrite the single window.PART1_INTERFACE_DATA object that the
+     other [data-part1] mounts on this page render from). Falls back to the
+     shared global exactly as before when the attribute isn't set. */
+  const data = (root.dataset.part1Data && window[root.dataset.part1Data]) || window.PART1_INTERFACE_DATA;
   if (!data) return;
 
   const replica = root.querySelector('[data-part1-replica]');
@@ -76,34 +81,84 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   /* ------------------------------------------------------------ 版面組裝 */
 
   const doc = data.document;
+  const documentRecords = [
+    doc,
+    ...(Array.isArray(data.documents) ? data.documents : [])
+  ].filter((record) => record && record.docId);
+  const documentRecordById = new Map(documentRecords.map((record) => [String(record.docId), record]));
+  let displayedDocument = doc;
+  /* Teaching pair mode: the dock shows one real doc panel per document
+     (奏摺 left, 上諭 right) instead of a single swappable panel, and a
+     document dot click flashes the matching panel. Guarded by data.pairDoc
+     so the real replica (data without pairDoc) is unaffected. */
+  const pairDoc = data.pairDoc === true && Array.isArray(data.documents) && data.documents.length >= 1;
+  const pairDocRecords = pairDoc ? [doc, ...data.documents].filter((r) => r && r.docId) : [];
+  const pairDocShell = (record, index) => `
+    <div class="part1-region part1-doc part1-ip part1-pair-doc" data-region="doc" data-doc-panel-doc="${escapeHtml(record.docId)}" data-doc-panel-index="${index}">
+      <div class="part1-doc-head ip-head">
+        <div class="part1-doc-window-controls">
+          <button class="part1-doc-window-btn" type="button" aria-label="移動文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.move}</span></button>
+          <button class="part1-doc-window-btn" type="button" aria-label="收合文書面板"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+          <button class="part1-doc-window-btn" type="button" data-panel-close="doc" aria-label="關閉文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+        </div>
+        <p class="part1-doc-title"><span class="badge" data-doc-panel-badge></span><span data-doc-panel-title></span></p>
+        <p class="part1-doc-meta" data-doc-panel-meta></p>
+      </div>
+      <div class="part1-filterdock ip-filterdock" data-filterdock>
+        <button class="part1-filterbtn part1-filter-trigger" type="button" data-filter-toggle aria-expanded="false" aria-controls="part1-filter-popover-${index}">
+          <span class="part1-filter-icon" aria-hidden="true">${PART1_CHAT_ICONS.filter}</span>
+        </button>
+        <button class="part1-filter-gear" type="button" data-view-toggle aria-expanded="false" aria-label="顯示設定"><span aria-hidden="true">${PART1_CHAT_ICONS.gear}</span></button>
+        <div class="part1-filter-popover" data-filter-popover hidden>
+          <div class="part1-filter-chipbar" data-filter-chipbar></div>
+        </div>
+        <div class="part1-view-popover" data-view-popover hidden>
+          <label><input type="checkbox" data-view-summary> 顯示摘要</label>
+          <label><input type="checkbox" data-view-divisions> 顯示分段</label>
+        </div>
+      </div>
+      <div class="part1-doc-scroll ip-scroll" data-doc-scroll>
+        <div class="part1-doc-summary" data-doc-summary hidden></div>
+        <p class="part1-doc-section-label">原文</p>
+        <div class="part1-doc-divisions" data-doc-divisions hidden></div>
+        <div class="part1-doc-body ip-body" data-doc-body></div>
+      </div>
+    </div>`;
+  const docRegionMarkup = pairDoc
+    ? `<div class="part1-panel-resize-left part1-stage-resize" data-stage-dock-resize role="separator" aria-orientation="vertical" tabindex="0" aria-label="調整圖表與文書面板區寬度"></div><div class="part1-doc-stack" data-doc-stack>${pairDocRecords.map((r, i) => pairDocShell(r, i)).join('')}</div>`
+    : '';
   const docDivisionSpecs = [
     ['奏題開端', '飛飭各路'],
     ['軍情來源', '是彰化、諸羅俱已失陷'],
     ['兵力調度', '至官兵裏帶口糧'],
     ['結尾與硃批', '乾隆五十一年十二月十八日']
   ];
+  const docBodyText = doc && doc.body ? doc.body : '';
   const docDivisions = docDivisionSpecs.map(([label, marker], index) => {
-    const start = index === 0 ? 0 : Math.max(0, doc.body.indexOf(docDivisionSpecs[index - 1][1]));
-    const end = index === docDivisionSpecs.length - 1 ? doc.body.length : Math.max(start, doc.body.indexOf(marker));
-    const text = doc.body.slice(start, end).trim();
+    const start = index === 0 ? 0 : Math.max(0, docBodyText.indexOf(docDivisionSpecs[index - 1][1]));
+    const end = index === docDivisionSpecs.length - 1 ? docBodyText.length : Math.max(start, docBodyText.indexOf(marker));
+    const text = docBodyText.slice(start, end).trim();
     return { label, start, end, summary: text.split('。')[0] ? `${text.split('。')[0]}。` : '' };
   });
-  const docSummary = doc.body.split('。').slice(0, 4).join('。') + '。';
-  const authorLine = doc.author.name;
-  const sourceLine = `明清台檔${doc.compiledIn.book}, ${doc.compiledIn.page}, ${doc.docId}`;
+  const docSummary = docBodyText.split('。').slice(0, 4).join('。') + '。';
+  const authorLine = doc && doc.author ? (doc.author.name || '') : '';
+  const sourceLine = doc && doc.compiledIn ? `${doc.compiledIn.book || ''}, ${doc.compiledIn.page || ''}, ${doc.docId || ''}` : (doc ? doc.docId : '');
   const compactDate = (value) => String(value || '').replace(/^(\d{4})\/(\d{1,2})\/(\d{1,2})$/, (_, year, month, day) => `${year}/${Number(month)}/${Number(day)}`);
-  const dateLine = `${compactDate(doc.sendDate[1])}-${compactDate(doc.receiveDate[1]).replace(/^\d{4}\//, '')}（15 日）`;
+  const sDate = doc && doc.sendDate ? compactDate(doc.sendDate[1]) : (doc && doc.issueDate ? compactDate(doc.issueDate[1]) : '');
+  const rDate = doc && doc.receiveDate ? compactDate(doc.receiveDate[1]).replace(/^\d{4}\//, '') : '';
+  const dateLine = sDate && rDate ? `${sDate}-${rDate}` : (sDate || rDate || '');
 
   /* 四條線的固定圓點。圓點的水平位置由 dateAr 計算，
      保持與真正樣本工具的橫向時間軸閱讀方式一致。 */
   const laneDots = [
-    { lane: 'events', actor: 'lin', dot: data.dots.events, label: data.dots.events.whenCh },
-    { lane: 'official', actor: 'official', dot: data.dots.official, label: '十二月十八日' },
-    { lane: 'imperial', actor: 'imperial', dot: data.dots.imperial, label: '正月初二日' },
-    { lane: 'emperor', actor: 'emperor', dot: data.dots.emperor, label: '正月初二日' }
+    { lane: 'events', actor: 'lin', dot: (data.dots && data.dots.events) || { whenCh: '' }, label: (data.dots && data.dots.events && data.dots.events.whenCh) || '' },
+    { lane: 'official', actor: 'official', dot: (data.dots && data.dots.official) || {}, label: '十二月十八日' },
+    { lane: 'imperial', actor: 'imperial', dot: (data.dots && data.dots.imperial) || {}, label: '正月初二日' },
+    { lane: 'emperor', actor: 'emperor', dot: (data.dots && data.dots.emperor) || {}, label: '正月初二日' }
   ];
 
   replica.dataset.part1Mode = mode;
+  if (pairDoc) replica.dataset.pairDoc = 'true';
   replica.innerHTML = `
     <div class="part1-region part1-toolbar" data-region="nav">
       <div class="part1-toolbar-start">
@@ -209,28 +264,35 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
           <div class="part1-ai-popover part1-ai-actions" data-ai-popover="act" hidden></div>
           <div class="part1-ai-popover part1-ai-settings" data-ai-popover="cfg" hidden>
             <div class="part1-ai-settings-row">
-              <label>AI 服務<select aria-label="AI 服務"><option>Gemini / Google Cloud</option><option>OpenAI GPT</option><option>ChatGPT via TokenRouter</option><option>Anthropic Claude</option><option>DeepSeek</option><option>第三方 API</option></select></label>
+              <label>AI 服務<select aria-label="AI 服務" data-ai-setting="provider"><option>Gemini / Google Cloud</option><option>OpenAI GPT</option><option>ChatGPT via TokenRouter</option><option>Anthropic Claude</option><option>DeepSeek</option><option>第三方 API</option></select></label>
             </div>
             <div class="part1-ai-settings-row">
-              <label>模型<input type="text" value="deepseek-v3.2-maas" aria-label="模型"></label>
+              <label>模型<input type="text" value="deepseek-v3.2-maas" aria-label="模型" data-ai-setting="model"></label>
             </div>
             <div class="part1-ai-settings-row">
-              <label>API Base<input type="text" value="https://generativelanguage.googleapis.com/v1beta" aria-label="API Base"></label>
+              <label>API Base<input type="text" value="https://generativelanguage.googleapis.com/v1beta" aria-label="API Base" data-ai-setting="base"></label>
             </div>
             <div class="part1-ai-settings-row">
               <label>API Key
-                <span class="part1-ai-input-with-action"><input type="password" placeholder="API key（只保留至此分頁關閉）" aria-label="API Key"><button type="button" class="part1-ai-key-toggle" data-ai-key-toggle aria-label="顯示或隱藏 API key">${PART1_CHAT_EYE_ICON}</button></span>
+                <span class="part1-ai-input-with-action"><input type="password" placeholder="API key（只保留至此分頁關閉）" aria-label="API Key" data-ai-setting="api-key"><button type="button" class="part1-ai-key-toggle" data-ai-key-toggle aria-label="顯示或隱藏 API key">${PART1_CHAT_EYE_ICON}</button></span>
               </label>
             </div>
             <div class="part1-ai-settings-row part1-ai-memory-row">
-              <label><input type="checkbox"> 記憶對話（跨訊息記住脈絡）</label>
+              <label><input type="checkbox" data-ai-setting="memory"> 記憶對話（跨訊息記住脈絡）</label>
             </div>
             <div class="part1-ai-settings-row">
-              <label>代理網址<input type="text" value="http://127.0.0.1:8766/api/ai" aria-label="代理網址"></label>
+              <label>代理網址<input type="text" value="http://127.0.0.1:8766/api/ai" aria-label="代理網址" data-ai-setting="proxy"></label>
+            </div>
+            <div class="part1-ai-settings-actions">
+              <span data-ai-settings-status role="status">設定會保存至此複本。</span>
+              <button type="button" data-ai-settings-reset>重設</button>
             </div>
           </div>
         </div>
 
+        ${pairDoc
+          ? docRegionMarkup
+          : `
         <div class="part1-region part1-doc part1-ip" data-region="doc">
           <div class="part1-panel-resize-left" data-panel-resize-left="doc" role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="75" aria-valuenow="46" tabindex="0" aria-label="調整文書面板寬度"></div>
           <div class="part1-doc-head ip-head">
@@ -239,8 +301,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
               <button class="part1-doc-window-btn" type="button" aria-label="收合文書面板"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
               <button class="part1-doc-window-btn" type="button" data-panel-close="doc" aria-label="關閉文書面板"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
             </div>
-            <p class="part1-doc-title"><span class="badge">${escapeHtml(doc.docType.slice(0, 1))}</span>${escapeHtml(doc.title)}</p>
-            <p class="part1-doc-meta">${escapeHtml(authorLine)}<br>${escapeHtml(dateLine)}<br>${escapeHtml(sourceLine)}</p>
+            <p class="part1-doc-title"><span class="badge" data-doc-panel-badge>${escapeHtml(doc.docType.slice(0, 1))}</span><span data-doc-panel-title>${escapeHtml(doc.title)}</span></p>
+            <p class="part1-doc-meta" data-doc-panel-meta>${escapeHtml(authorLine)}<br>${escapeHtml(dateLine)}<br>${escapeHtml(sourceLine)}</p>
           </div>
           <div class="part1-filterdock ip-filterdock" data-filterdock>
             <button class="part1-filterbtn part1-filter-trigger" type="button" data-filter-toggle aria-expanded="false" aria-controls="part1-filter-popover">
@@ -272,7 +334,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
             </div>
             <div class="part1-doc-body ip-body" data-doc-body>${buildDocumentBody()}</div>
           </div>
-        </div>
+        </div>`}
 
         <section class="part1-region part1-eventline part1-linked-panel part1-tool-box" data-region="eventline" aria-label="事件鏈">
           <div class="part1-panel-resize-left" data-panel-resize-left="eventline" role="separator" aria-orientation="vertical" aria-valuemin="25" aria-valuemax="100" aria-valuenow="100" tabindex="0" aria-label="調整事件鏈面板寬度"></div>
@@ -296,10 +358,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const chartLaneTabElements = new Map([...replica.querySelectorAll('[data-chart-lane-tab]')].map((tab) => [tab.dataset.chartLaneTab, tab]));
   const chartRuler = replica.querySelector('[data-chart-ruler]');
   const linksSvg = replica.querySelector('[data-chart-links]');
+  const chartCountEl = replica.querySelector('.part1-count');
   const docBody = replica.querySelector('[data-doc-body]');
   const docSummaryEl = replica.querySelector('[data-doc-summary]');
   const docDivisionsEl = replica.querySelector('[data-doc-divisions]');
   const docScroll = replica.querySelector('[data-doc-scroll]');
+  const docPanelBadge = replica.querySelector('[data-doc-panel-badge]');
+  const docPanelTitle = replica.querySelector('[data-doc-panel-title]');
+  const docPanelMeta = replica.querySelector('[data-doc-panel-meta]');
   const filterDock = replica.querySelector('[data-filterdock]');
   const filterTrigger = replica.querySelector('[data-filter-toggle]');
   const filterPopover = replica.querySelector('[data-filter-popover]');
@@ -338,6 +404,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const chartPreview = data.chartPreview || {};
   const fallbackChartNodes = laneDots.map(({ lane, actor, dot, label }) => ({
     id: `${lane}-${dot.id || dot.docId || 'node'}`,
+    kind: lane === 'official' || lane === 'imperial' ? 'document' : 'event',
     lane,
     actor,
     dateAr: dot.dateAr,
@@ -359,6 +426,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       payload
     };
   });
+  if (chartCountEl) {
+    const totalDocuments = Number(chartPreview.documentCount) || baseChartNodes.filter((node) => node.kind === 'document').length;
+    chartCountEl.textContent = `${totalDocuments}/${totalDocuments}`;
+    chartCountEl.title = `${totalDocuments} 份文書；${Number(chartPreview.eventCount) || 0} 個有日期的事件圓點`;
+  }
+  if (chartRuler && Array.isArray(chartPreview.rulerLabels) && chartPreview.rulerLabels.length) {
+    chartRuler.innerHTML = chartPreview.rulerLabels.map((label) => `<span>${escapeHtml(label)}</span>`).join('');
+  }
   const chartDateValues = baseChartNodes.map((node) => parseDate(node.dateAr)).filter(Boolean);
   const fallbackStart = chartDateValues.length ? Math.min(...chartDateValues) : parseDate('1786/11/01');
   const fallbackEnd = chartDateValues.length ? Math.max(...chartDateValues) : parseDate('1787/02/01');
@@ -366,6 +441,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   const defaultChartEnd = parseDate('1787/02/01');
   const chartStart = parseDate(chartPreview.startAr) || defaultChartStart || fallbackStart;
   const chartEnd = parseDate(chartPreview.endAr) || defaultChartEnd || (fallbackEnd > chartStart ? fallbackEnd : chartStart + 86400000);
+  const DAY_MS = 86400000;
+  const chartDaySpan = Math.max(1, Number(chartPreview.daySpan) || Math.round((chartEnd - chartStart) / DAY_MS) || 1);
   const CHART_BASE_WIDTH = 1080;
   const CHART_MIN_WIDTH = 360;
   const CHART_BASE_HEIGHT = 620;
@@ -436,11 +513,15 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     });
   };
 
-  const chartHeight = () => Math.max(360, Math.round(CHART_BASE_HEIGHT * (daySpacing / REPLICA_DEFAULTS.daySpacing)));
+  // Match the sample's vertical domain: 30px top + one configurable pitch per
+  // actual day + 40px bottom. The old fixed 620px canvas compressed the full
+  // corpus into four teaching dots and made source dates indistinguishable.
+  const chartHeight = () => Math.max(360, Math.round(70 + chartDaySpan * daySpacing));
 
   const chartViewportWidth = () => Math.max(
     CHART_MIN_WIDTH,
-    Math.min(CHART_BASE_WIDTH, chartScroll?.clientWidth || CHART_BASE_WIDTH)
+    CHART_BASE_WIDTH,
+    chartScroll?.clientWidth || CHART_BASE_WIDTH
   );
 
   const applyChartScale = () => {
@@ -511,12 +592,16 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   const serialiseChartNode = (node) => ({
     id: node.id,
+    kind: node.kind,
+    recordType: node.recordType,
     lane: node.lane,
+    side: node.side,
     actor: node.actor,
     dateAr: node.dateAr,
     label: node.label,
     color: node.color,
     radius: node.radius,
+    shape: node.shape,
     payload: node.payload
   });
 
@@ -592,7 +677,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     return {
       ...node,
       id: String(node.id || payload.id || `imported-${index}`),
+      kind: node.kind || (payload.docId ? 'document' : 'event'),
+      recordType: node.recordType || payload.type || (payload.docId ? 'document' : 'event'),
       lane,
+      side: node.side || (lane === 'official' ? 'L' : lane === 'imperial' || lane === 'emperor' ? 'R' : 'L'),
       actor: node.actor || payload.actor || (lane === 'emperor' ? 'emperor' : 'qing'),
       dateAr,
       label: node.label || payload.whenCh || payload.title || payload.subtitle || dateAr,
@@ -728,7 +816,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   }
 
   const eventOffsetLabel = (dateAr) => {
-    const start = parseDate(doc.sendDate[1]);
+    const startVal = doc && doc.sendDate ? doc.sendDate[1] : (doc && doc.issueDate ? doc.issueDate[1] : (doc && doc.announceDate ? doc.announceDate[1] : null));
+    const start = parseDate(startVal);
     const date = parseDate(dateAr);
     if (!start || !date) return '';
     const days = Math.round((date - start) / 86400000);
@@ -794,6 +883,150 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (node?.lane === 'imperial') return '#c46a2b';
     if (node?.lane === 'emperor') return '#7d4ab8';
     return chartNodePayload(node).actor === 'qing' ? '#3f6f8f' : '#b5462e';
+  };
+  const panelDateParts = (value) => {
+    if (Array.isArray(value)) return { ch: String(value[0] || ''), ar: String(value[1] || '') };
+    if (value && typeof value === 'object') return {
+      ch: String(value.chinese || value.ch || ''),
+      ar: String(value.arabic || value.ar || '')
+    };
+    return { ch: '', ar: String(value || '') };
+  };
+  const panelDocumentDateLine = (record) => {
+    const send = panelDateParts(record.sendDate);
+    const receive = panelDateParts(record.receiveDate);
+    const announce = panelDateParts(record.announceDate);
+    const issue = panelDateParts(record.issueDate);
+    if (send.ch && receive.ch) return `${send.ch} → ${receive.ch}`;
+    return [send.ch, receive.ch, announce.ch, issue.ch, send.ar, receive.ar, announce.ar, issue.ar]
+      .find((value) => value) || '日期未明';
+  };
+  const panelDocumentSourceLine = (record) => {
+    const compiledIn = record.compiledIn || {};
+    const archive = record.archiveReference || compiledIn.book || compiledIn.volume || '';
+    const page = compiledIn.page ? `, ${compiledIn.page}` : '';
+    const series = record.series || '原始史料';
+    return `${series}${archive ? ` ${archive}${page}` : ''}, ${record.docId}`;
+  };
+  const panelDocumentSummary = (record) => {
+    const text = String(record.body || '').replace(/\s+/g, ' ').trim();
+    if (!text) return '原文未提供摘要。';
+    const summary = text.split('。').slice(0, 4).join('。').trim();
+    return summary ? `${summary}${summary.endsWith('。') ? '' : '。'}` : '原文未提供摘要。';
+  };
+  const panelDocumentSections = (record) => {
+    if (String(record.docId) === String(doc.docId)) return docDivisions;
+    const body = String(record.body || '');
+    if (!body) return [{ label: '原文', start: 0, end: 0, summary: '' }];
+    const sectionCount = Math.min(4, Math.max(1, Math.ceil(body.length / 520)));
+    const chunkSize = Math.ceil(body.length / sectionCount);
+    return Array.from({ length: sectionCount }, (_, index) => {
+      const start = index * chunkSize;
+      const end = Math.min(body.length, start + chunkSize);
+      const text = body.slice(start, end).trim();
+      const firstSentence = text.split('。')[0] || text.slice(0, 80);
+      return {
+        label: `原文第 ${index + 1} 段`,
+        start,
+        end,
+        summary: firstSentence ? `${firstSentence}${firstSentence.endsWith('。') ? '' : '。'}` : ''
+      };
+    });
+  };
+  const panelDocumentBodyMarkup = (record) => {
+    if (String(record.docId) === String(doc.docId)) return buildDocumentBody();
+    return escapeHtml(String(record.body || '')).replace(/\n/g, '<br>');
+  };
+  const documentRecordForNode = (node) => {
+    const payload = chartNodePayload(node);
+    return documentRecordById.get(String(payload.docId || '')) || doc;
+  };
+  const renderDocumentPanel = (record) => {
+    const selected = record && record.docId ? record : doc;
+    displayedDocument = selected;
+    const author = typeof selected.author === 'string'
+      ? selected.author
+      : selected.author?.name || selected.authorName || '作者未明';
+    if (docPanelBadge) docPanelBadge.textContent = String(selected.docType || '文書').slice(0, 1);
+    if (docPanelTitle) docPanelTitle.textContent = selected.title || selected.docId || '未命名文書';
+    if (docPanelMeta) {
+      docPanelMeta.innerHTML = escapeHtml(`${author}\n${panelDocumentDateLine(selected)}\n${panelDocumentSourceLine(selected)}`).replace(/\n/g, '<br>');
+    }
+    if (docSummaryEl) {
+      docSummaryEl.innerHTML = `<h3>摘要</h3><p>${escapeHtml(panelDocumentSummary(selected))}</p>`;
+    }
+    const sections = panelDocumentSections(selected);
+    if (docDivisionsEl) {
+      docDivisionsEl.innerHTML = sections.map((part, index) => `
+        <article class="part1-doc-part">
+          <h3><span>${index + 1}.</span> ${escapeHtml(part.label)}</h3>
+          <p class="part1-doc-part-summary">${escapeHtml(part.summary)}</p>
+          <div class="part1-doc-part-body">${String(selected.docId) === String(doc.docId)
+            ? buildDocumentBody(part.start, part.end)
+            : escapeHtml(String(selected.body || '').slice(part.start, part.end)).replace(/\n/g, '<br>')}</div>
+        </article>`).join('');
+    }
+    if (docBody) docBody.innerHTML = panelDocumentBodyMarkup(selected);
+    if (docScroll) docScroll.scrollTop = 0;
+    renderDocView();
+  };
+
+  /* Teaching pair mode: fill each real doc panel once from its own record.
+     The dock shows 奏摺 (left) and 上諭 (right) simultaneously, exactly like
+     the sample tool's stacked document panels. */
+  const pairPanelElements = pairDoc
+    ? [...replica.querySelectorAll('[data-doc-panel-doc]')]
+    : [];
+  const pairPanelByDoc = new Map(pairPanelElements.map((el) => [String(el.dataset.docPanelDoc), el]));
+  const renderPairDocPanel = (record) => {
+    const panelEl = pairPanelByDoc.get(String(record?.docId || ''));
+    if (!panelEl) return;
+    const scope = (attr) => panelEl.querySelector(`[${attr}]`);
+    const badge = scope('data-doc-panel-badge');
+    const title = scope('data-doc-panel-title');
+    const meta = scope('data-doc-panel-meta');
+    const summaryEl = scope('data-doc-summary');
+    const divisionsEl = scope('data-doc-divisions');
+    const bodyEl = scope('data-doc-body');
+    const scrollEl = scope('data-doc-scroll');
+    if (badge) {
+      const isYu = record.docType === '上諭' || String(record.docId).startsWith('諭');
+      badge.textContent = isYu ? '諭' : String(record.docType || '文書').slice(0, 1);
+      if (isYu) {
+        badge.style.setProperty('background', '#7d4ab8', 'important');
+      } else {
+        badge.style.setProperty('background', '#c46a2b', 'important');
+      }
+    }
+    if (title) title.textContent = record.title || record.docId || '未命名文書';
+    if (meta) {
+      const author = typeof record.author === 'string'
+        ? record.author
+        : record.author?.name || record.authorName || '作者未明';
+      meta.innerHTML = escapeHtml(`${author}\n${panelDocumentDateLine(record)}\n${panelDocumentSourceLine(record)}`).replace(/\n/g, '<br>');
+    }
+    if (summaryEl) {
+      summaryEl.innerHTML = `<h3>摘要</h3><p>${escapeHtml(panelDocumentSummary(record))}</p>`;
+    }
+    if (divisionsEl) {
+      divisionsEl.innerHTML = panelDocumentSections(record).map((part, index) => `
+        <article class="part1-doc-part">
+          <h3><span>${index + 1}.</span> ${escapeHtml(part.label)}</h3>
+          <p class="part1-doc-part-summary">${escapeHtml(part.summary)}</p>
+          <div class="part1-doc-part-body">${panelDocumentBodyMarkup(record)}</div>
+        </article>`).join('');
+    }
+    if (bodyEl) bodyEl.innerHTML = panelDocumentBodyMarkup(record);
+    if (scrollEl) scrollEl.scrollTop = 0;
+    panelEl.hidden = false;
+  };
+  const flashPairDocPanel = (docId) => {
+    const panelEl = pairPanelByDoc.get(String(docId || ''));
+    if (!panelEl) return;
+    panelEl.classList.add('part1-pair-flash');
+    window.setTimeout(() => panelEl.classList.remove('part1-pair-flash'), 900);
+    const scrollEl = panelEl.querySelector('[data-doc-scroll]');
+    if (scrollEl) scrollEl.scrollTo({ top: 0, behavior: 'smooth' });
   };
   const allChartNodes = () => {
     const byId = new Map();
@@ -867,7 +1100,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       sourceDescription: sourceDocId === doc.docId ? docSummary : '此節點保存的來源文書尚未載入完整文書面板。',
       sourceQuote: officialNode ? chartNodeQuote(officialNode) : '',
       sourceAuthor: sourceDocId === doc.docId ? authorLine : '',
-      sourceDate: officialNode ? chartNodeDateLabel(officialNode) : (sourceDocId === doc.docId ? doc.sendDate[1] : '')
+      sourceDate: officialNode ? chartNodeDateLabel(officialNode) : (sourceDocId === doc.docId ? (doc && doc.sendDate ? doc.sendDate[1] : (doc && doc.issueDate ? doc.issueDate[1] : '')) : '')
     };
   };
 
@@ -949,10 +1182,10 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
     const NS = 'http://www.w3.org/2000/svg';
     const plot = chartPlot(width);
-    const daySpan = chartEnd - chartStart || 1;
     const yFor = (dateAr) => {
       const date = parseDate(dateAr);
-      return Math.max(6, Math.min(height - 6, ((date - chartStart) / daySpan) * height));
+      if (!date) return null;
+      return Math.max(30, Math.min(height - 40, 30 + ((date - chartStart) / DAY_MS) * daySpacing));
     };
     const xFor = (lane, offset = 0) => chartLaneX(lane, width) + offset;
     const makeSvg = (tag, attributes, className) => {
@@ -965,7 +1198,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     // Four fixed vertical axes and the same light month/day grid rhythm as the sample.
     ['events', 'official', 'imperial', 'emperor'].forEach((lane) => {
       const x = xFor(lane);
-      makeSvg('line', { x1: x.toFixed(1), y1: 0, x2: x.toFixed(1), y2: height, opacity: solidOpacity }, 'part1-preview-axis');
+      makeSvg('line', { x1: x.toFixed(1), y1: 20, x2: x.toFixed(1), y2: Math.max(20, height - 30), opacity: solidOpacity }, 'part1-preview-axis');
     });
     const gridDate = new Date(chartStart);
     for (let i = 0; i < 130 && gridDate.getTime() <= chartEnd; i += 1) {
@@ -978,25 +1211,42 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       gridDate.setUTCDate(gridDate.getUTCDate() + 1);
     }
 
-    // Keep one readable, source-backed chain in the replica. The preview model
-    // supplies the four teaching nodes; these three segments show how the
-    // selected event moves through the official, imperial, and emperor lanes.
+    // Match the sample's spread rules. Documents use a side/date bucket: L
+    // grows left from the official line and R grows right from the imperial
+    // line. Field events grow left from the event line; emperor actions grow
+    // right from the emperor line. This prevents unrelated dots from stacking
+    // on top of one another or being invented merely to fill the chart.
     const nodes = [...baseChartNodes, ...chartExtraNodes];
     const points = new Map();
     const pointsByLane = new Map();
-    const nodesByLane = new Map();
-    nodes.forEach((node) => {
-      if (!nodesByLane.has(node.lane)) nodesByLane.set(node.lane, []);
-      nodesByLane.get(node.lane).push(node);
-    });
+    const buckets = new Map();
+    const placementFor = (node) => {
+      const kind = node.kind || (node.payload?.docId ? 'document' : 'event');
+      const side = node.side || (node.lane === 'official' ? 'L' : node.lane === 'imperial' || node.lane === 'emperor' ? 'R' : 'L');
+      return { kind, side };
+    };
+    const bucketFor = (node) => {
+      const { kind, side } = placementFor(node);
+      const key = kind === 'document'
+        ? `document|${side}|${node.dateAr}`
+        : `event|${node.lane}|${node.dateAr}`;
+      if (!buckets.has(key)) buckets.set(key, []);
+      buckets.get(key).push(node);
+    };
     nodes.forEach((node) => {
       if (!node.dateAr || !parseDate(node.dateAr)) return;
-      const laneNodes = nodesByLane.get(node.lane) || [];
-      const nodeIndex = laneNodes.indexOf(node);
-      const horizontalOffset = (nodeIndex - (laneNodes.length - 1) / 2) * dotGap;
-      const point = { x: xFor(node.lane, horizontalOffset), y: yFor(node.dateAr), node };
-      points.set(node.id, point);
-      if (!pointsByLane.has(node.lane)) pointsByLane.set(node.lane, point);
+      bucketFor(node);
+    });
+    buckets.forEach((bucket) => {
+      bucket.forEach((node, index) => {
+        const { kind, side } = placementFor(node);
+        const offset = index * dotGap * dotSizeScale;
+        const growsRight = side === 'R';
+        const x = xFor(node.lane) + (growsRight ? offset : -offset);
+        const point = { x, y: yFor(node.dateAr), node, kind, side };
+        points.set(node.id, point);
+        if (!pointsByLane.has(node.lane)) pointsByLane.set(node.lane, point);
+      });
     });
     const defaultLinks = [
       { from: 'events', to: 'official', color: '#b5462e' },
@@ -1011,24 +1261,69 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       const from = resolvePoint(link.from || link.source);
       const to = resolvePoint(link.to || link.target);
       if (!from || !to) return;
-      makeSvg('line', {
+      const isBackgroundLink = link.background === true;
+      const linkClasses = [
+        'part1-preview-link',
+        isBackgroundLink ? 'part1-bg-link' : 'part1-example-link',
+        link.className || `part1-preview-link-${index}`
+      ].filter(Boolean).join(' ');
+      const linkOpacity = isBackgroundLink
+        ? (link.opacity != null ? link.opacity : 0.22)
+        : (link.opacity != null ? link.opacity : solidOpacity);
+      const linkElement = makeSvg('line', {
         x1: from.x.toFixed(1), y1: from.y.toFixed(1),
         x2: to.x.toFixed(1), y2: to.y.toFixed(1),
         stroke: link.color || '#c46a2b',
         'stroke-width': link.width || 1.8,
         'stroke-linecap': 'round',
-        opacity: solidOpacity
-      }, link.className || `part1-preview-link part1-preview-link-${index}`);
+        ...(link.dash ? { 'stroke-dasharray': link.dash } : {}),
+        opacity: linkOpacity
+      }, linkClasses);
+      if (isBackgroundLink) {
+        linkElement.style.opacity = String(linkOpacity);
+        linkElement.style.pointerEvents = 'none';
+        linkElement.setAttribute('aria-hidden', 'true');
+      } else {
+        linkElement._part1Link = link;
+        linkElement.style.pointerEvents = 'stroke';
+        linkElement.style.cursor = 'pointer';
+        if (link.title || link.label) {
+          linkElement.setAttribute('aria-label', link.title || link.label);
+          const titleEl = document.createElementNS(NS, 'title');
+          titleEl.textContent = link.title || link.label;
+          linkElement.appendChild(titleEl);
+        }
+        linkElement.addEventListener('click', (ev) => {
+          if (typeof window.__part1OnLinkSelect === 'function') {
+            window.__part1OnLinkSelect(link, linkElement, ev);
+          }
+        });
+      }
     });
 
     nodes.forEach((node) => {
       const point = points.get(node.id);
       if (!point) return;
       const label = `${node.payload.subtitle || node.payload.title || '圖表節點'}（${node.label || node.dateAr}）`;
-      const circle = makeSvg('circle', {
+      const isEvent = point.kind === 'event';
+      const nodeElement = makeSvg(isEvent ? 'rect' : 'circle', isEvent ? {
+        x: (point.x - (node.radius || 5.2) * dotSizeScale).toFixed(1),
+        y: (point.y - (node.radius || 5.2) * dotSizeScale).toFixed(1),
+        width: ((node.radius || 5.2) * 2 * dotSizeScale).toFixed(1),
+        height: ((node.radius || 5.2) * 2 * dotSizeScale).toFixed(1),
+        style: `width:${((node.radius || 5.2) * 2 * dotSizeScale).toFixed(1)}px;height:${((node.radius || 5.2) * 2 * dotSizeScale).toFixed(1)}px`,
+        rx: (1.8 * dotSizeScale).toFixed(1),
+        fill: nodeColor(node),
+        stroke: '#fffaf2',
+        'stroke-width': 1.8,
+        tabindex: 0,
+        role: 'button',
+        'aria-label': label,
+        'data-chart-node-id': node.id
+      } : {
         cx: point.x.toFixed(1),
         cy: point.y.toFixed(1),
-        r: (node.radius || 6.5) * dotSizeScale,
+        r: (node.radius || 5.4) * dotSizeScale,
         fill: nodeColor(node),
         stroke: '#fffaf2',
         'stroke-width': 2,
@@ -1036,20 +1331,40 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
         role: 'button',
         'aria-label': label,
         'data-chart-node-id': node.id
-      }, `part1-dot part1-svg-dot${selectedChartNodeId === node.id ? ' is-selected' : ''}`);
-      circle.dataset.actor = node.actor;
-      circle._part1 = node;
-      circle.addEventListener('click', () => selectDot(circle));
-      circle.addEventListener('keydown', (event) => {
+      }, `part1-dot part1-svg-dot${isEvent ? ' part1-event-square' : ''}${selectedChartNodeId === node.id ? ' is-selected' : ''}`);
+      nodeElement.dataset.actor = node.actor;
+      nodeElement.dataset.nodeKind = point.kind;
+      nodeElement.dataset.chartLane = node.lane;
+      nodeElement.dataset.chartSide = point.side;
+      const isBackgroundNode = node.background === true || node.payload?.background === true;
+      if (isBackgroundNode) {
+        // Background dots (teaching draft): rendered, but transparent and never
+        // clickable/selectable. Guarded by the node flag so real data is unaffected.
+        nodeElement.classList.add('part1-bg-node');
+        nodeElement.style.opacity = '0.28';
+        nodeElement.style.pointerEvents = 'none';
+        nodeElement.style.cursor = 'default';
+        nodeElement.setAttribute('aria-hidden', 'true');
+        nodeElement.removeAttribute('tabindex');
+        nodeElement.removeAttribute('role');
+        const titleBg = document.createElementNS(NS, 'title');
+        titleBg.textContent = label;
+        nodeElement.appendChild(titleBg);
+        return;
+      }
+      nodeElement._part1 = node;
+      nodeElement.addEventListener('click', () => selectDot(nodeElement));
+      nodeElement.addEventListener('dblclick', () => createSpawnedPanel(node));
+      nodeElement.addEventListener('keydown', (event) => {
         if (event.key === 'Enter' || event.key === ' ') {
           event.preventDefault();
-          selectDot(circle);
+          selectDot(nodeElement);
         }
       });
       const title = document.createElementNS(NS, 'title');
       title.textContent = label;
-      circle.appendChild(title);
-      chartNodeElements.set(node.id, circle);
+      nodeElement.appendChild(title);
+      chartNodeElements.set(node.id, nodeElement);
     });
 
     syncChartLaneTabs();
@@ -1092,7 +1407,6 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     }
     return null;
   };
-  const sourceRoleLabel = (source) => source?.role === 'event_source' ? '事件圓點來源' : source?.role === 'emperor_action_source' ? '皇帝行動圓點來源' : 'AI 輸出來源';
   const chatOutputDocId = (item, context = {}) => String(
     item.sourceDocId || item.source_doc_id || item.quoteDocId || item.quote_doc_id || item.doc_id || item.responseDocId || context.source?.docId || ''
   );
@@ -1185,18 +1499,21 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   };
   const chatPairCard = (item, compact, context) => {
     const pair = item.pair || item;
+    const evidence = pair.evidence || {};
+    const segments = Array.isArray(evidence.segments) ? evidence.segments : [];
     const yuId = String(pair.yu_doc_id || pair.zhu_doc_id || pair.action_doc_id || '');
     const replyId = String(pair.reply_doc_id || pair.responseDocId || pair.doc_id || '');
-    const yuQuote = pair.matched_yu_span || pair.matched_zhu_span || pair.action_quote || pair.yu_quote || '';
-    const replyQuote = pair.quote_in_reply || pair.response_quote || pair.reply_quote || pair.quote || '';
-    const yuTitle = pair.yu_title || pair.zhu_title || pair.action_title || yuId || '上諭／硃批';
-    const replyTitle = pair.reply_title || pair.response_title || replyId || '官員回應';
+    const yuQuote = pair.matched_yu_span || pair.matched_zhu_span || pair.action_quote || pair.yu_quote || evidence.matched_yu_span || segments.map((segment) => segment.yu || '').filter(Boolean).join('／');
+    const replyQuote = pair.quote_in_reply || pair.response_quote || pair.reply_quote || pair.quote || evidence.quote_in_reply || segments.map((segment) => segment.reply || '').filter(Boolean).join('／');
+    const yuTitle = pair.yu_title || pair.zhu_title || pair.action_title || pair.yu?.title || pair.source?.title || yuId || '上諭／硃批';
+    const replyTitle = pair.reply_title || pair.response_title || pair.reply?.title || pair.source?.title || replyId || '官員回應';
     return chatSkillCard(item, compact, 'is-document-pair', `
       <div class="part1-chat-pair-flow">
         <div class="part1-chat-pair-node"><span class="part1-chat-pair-dot is-emperor"></span><div class="part1-chat-pair-label">${escapeHtml(yuTitle)}</div>${chatQuoteMarkup(yuQuote, yuId, '上諭／硃批', 'is-emperor-quote')}</div>
         <div class="part1-chat-pair-connector">↩ 回應${pair.interval ? `（${escapeHtml(pair.interval)}）` : ''}</div>
         <div class="part1-chat-pair-node"><span class="part1-chat-pair-dot is-official"></span><div class="part1-chat-pair-label">${escapeHtml(replyTitle)}</div>${chatQuoteMarkup(replyQuote, replyId, '官員回應', 'is-official-quote')}</div>
       </div>
+      ${item.description || evidence.relation_note ? `<p class="part1-chat-skill-desc">${escapeHtml(item.description || evidence.relation_note)}</p>` : ''}
       ${chatFactsMarkup(item, [['上諭文書', yuId], ['回應文書', replyId]])}
       ${chatSkillActions(item, context)}`, context);
   };
@@ -1226,26 +1543,12 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       ${chatQuoteMarkup(item.quote, chatOutputDocId(item, context))}
       ${chatSkillActions(item, context)}`, context);
   };
-  const chatSourceButton = (source) => `<button class="part1-chat-source-btn" type="button" data-chat-source-doc="${escapeHtml(source.docId)}">載入 ${escapeHtml(source.aiOutputPath || `${source.docId}.chat`)}（${escapeHtml(source.outputItemCount)} 項輸出）</button>`;
-  const chatSourceLauncher = () => aiChatSources.length ? `
-    <section class="part1-chat-source-box">
-      <div class="part1-chat-source-head"><strong>目前 sample 的 AI 對話輸出</strong><span>已保存</span></div>
-      <p>這些是形成示範圓點的原始 AI 輸出：${aiChatSources.map((source) => `${escapeHtml(source.docId)} → ${escapeHtml(source.aiOutputPath)}`).join('；')}。</p>
-      <div class="part1-chat-source-actions">${aiChatSources.map(chatSourceButton).join('')}</div>
-    </section>` : '';
   const loadChatSource = (docId, focusEventId = '') => {
     const source = aiChatSources.find((item) => item.docId === docId);
     if (!source) return;
     aiBody.innerHTML = `
       <div class="part1-chat-source-view">
-        <div class="part1-node-result-head"><strong>${escapeHtml(sourceRoleLabel(source))}</strong><span>${escapeHtml(source.docId)}.chat</span></div>
-        <p class="part1-chat-source-summary">${escapeHtml(source.docId)} 的保存輸出共有 ${escapeHtml(source.turnCount)} 個對話回合、${escapeHtml(source.outputItemCount)} 項輸出；下列每項都保留其回合、技能組包與事件圓點對應。</p>
-        ${(source.turns || []).map((turn) => `<details class="part1-chat-output-turn"${!focusEventId || turn.outputItems?.some((item) => (item.eventIds || []).includes(focusEventId)) ? ' open' : ''}>
-          <summary>第 ${escapeHtml(Number(turn.turnIndex) + 1)} 回　${escapeHtml(chatKindLabel(turn.kind, { turn }))}　${escapeHtml(turn.outputItems?.length || 0)} 項</summary>
-          <div class="part1-chat-output-turn-meta">${escapeHtml(turn.bundleName || '未標示技能組包')} ${turn.runId ? `／${escapeHtml(turn.runId)}` : ''}${turn.prompt ? `<br>提示：${escapeHtml(turn.prompt)}` : ''}</div>
-          ${(turn.outputItems || []).map((item, itemIndex) => chatItemMarkup(item, false, { turn, source, itemIndex })).join('') || '<p class="part1-chat-output-empty">此回合沒有可顯示的輸出卡。</p>'}
-        </details>`).join('')}
-        <div class="part1-chat-source-actions">${chatSourceButton(source)}${chatSourceLauncher()}</div>
+        ${(source.turns || []).map((turn) => (turn.outputItems || []).map((item, itemIndex) => chatItemMarkup(item, false, { turn, source, itemIndex })).join('')).join('') || '<p class="part1-chat-output-empty">此文書沒有可顯示的保存輸出卡。</p>'}
       </div>`;
     aiBody.querySelectorAll('[data-quote]').forEach((button) => button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc)));
     const focus = focusEventId && aiBody.querySelector(`[data-chat-event-id="${CSS.escape(focusEventId)}"]`);
@@ -1253,13 +1556,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     setRegion('ai', { silent: true });
     setProgress(`已載入 ${source.aiOutputPath || `${source.docId}.chat`}；這裡就是示範圓點所依據的保存 AI 輸出。`);
   };
-  const matchedChatSourceMarkup = (match) => match ? `
-    <section class="part1-chat-source-box is-matched">
-      <div class="part1-chat-source-head"><strong>此圓點的 AI 對話輸出來源</strong><span>${escapeHtml(match.source.docId)}.chat</span></div>
-      <p>此圓點由保存的 ${escapeHtml(match.source.docId)} AI 輸出形成；以下是對應回合中的原始結果卡。</p>
-      ${chatItemMarkup(match.item, true, { turn: match.turn, source: match.source, itemIndex: (match.turn.outputItems || []).indexOf(match.item) })}
-      <button class="part1-chat-source-btn" type="button" data-chat-source-doc="${escapeHtml(match.source.docId)}" data-chat-focus-event="${escapeHtml(match.item.eventIds?.[0] || '')}">載入完整 ${escapeHtml(match.source.aiOutputPath || `${match.source.docId}.chat`)}</button>
-    </section>` : chatSourceLauncher();
+  const matchedChatSourceMarkup = (match) => match
+    ? chatItemMarkup(match.item, true, { turn: match.turn, source: match.source, itemIndex: (match.turn.outputItems || []).indexOf(match.item) })
+    : '';
 
   /* ------------------------------------------------------ 技能組包載入
      The sample review tool loads a saved review-bundle by choosing its manifest
@@ -1532,7 +1831,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     renderSkillBundlePicker(bundles, (bundleName) => applyLocalSkillBundle(bundleName, bundles));
   };
 
-  const renderNodePanel = (payload, laneKey, label, target = 'ai') => {
+  const buildNodePanelMarkup = (payload, laneKey, label) => {
     const laneLabels = {
       events: '戰場事件',
       official: '官員上奏',
@@ -1541,6 +1840,12 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     };
     const laneLabel = laneLabels[laneKey] || '圖表節點';
     const title = payload.subtitle || payload.title || '未命名結果';
+    const payloadAuthor = typeof payload.author === 'string'
+      ? payload.author
+      : payload.authorName || payload.author?.name || authorLine;
+    const payloadDocSummary = payload.docId === doc.docId
+      ? docSummary
+      : '此節點保存該文書的日期與來源位置；完整原文可由 review tool 的文書面板開啟。';
     const quote = payload.quote || (laneKey === 'imperial' ? payload.rescriptText : '');
     const quoteDocId = payload.quoteDocId || payload.docId || doc.docId;
     const matchedChat = chatSourceByEventId(payload.id);
@@ -1578,7 +1883,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       const skillLabel = isImperial ? '硃批' : '官文優先審閱迴圈';
       const documentFacts = [
         ['文書', `${payload.docId || doc.docId}　${payload.title || doc.title}`],
-        ['作者', authorLine],
+        ['作者', payloadAuthor],
         ['日期', payload.whenCh || label || payload.dateAr]
       ].map(([term, value]) => `<dt>${escapeHtml(term)}</dt><dd>${escapeHtml(value)}</dd>`).join('');
       cardMarkup = `
@@ -1588,14 +1893,18 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
             <span class="part1-card-skill">${escapeHtml(skillLabel)}</span>
           </div>
           <p class="part1-card-title">${escapeHtml(payload.title || doc.title)}</p>
-          <p class="part1-card-desc">${escapeHtml(isImperial ? '皇帝硃批回應此份奏摺，形成後續上諭與行動的依據。' : docSummary)}</p>
+          <p class="part1-card-desc">${escapeHtml(isImperial ? '皇帝硃批回應此份奏摺，形成後續上諭與行動的依據。' : payloadDocSummary)}</p>
           <dl class="part1-event-facts">${documentFacts}</dl>
           ${quoteCard}
           <p class="part1-card-status">由圖表節點開啟；此卡保留文書與批覆的來源脈絡。</p>
         </article>`;
     }
 
-    const outputMarkup = `${cardMarkup}${matchedChatSourceMarkup(matchedChat)}`;
+    return `${cardMarkup}${matchedChatSourceMarkup(matchedChat)}`;
+  };
+
+  const renderNodePanel = (payload, laneKey, label, target = 'ai') => {
+    const outputMarkup = buildNodePanelMarkup(payload, laneKey, label);
     const targetBody = target === 'node' && nodePanelBody ? nodePanelBody : aiBody;
     if (target === 'node' && nodePanelBody) {
       if (nodePanelLane) nodePanelLane.textContent = data.lanes.find((item) => item.key === laneKey)?.label || '節點';
@@ -1612,6 +1921,82 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     });
   };
 
+  /* ---------------------------------------------------- 雙擊圓點 → 新欄面板
+     The real sample tool opens a clicked dot's card in its own dock column.
+     The replica mirrors that by spawning a dedicated panel for the dot on
+     double-click. No drag is needed: each spawned panel is an extra column
+     in the dock grid, and a close button removes it. */
+  const spawnedPanels = new Map();
+  let spawnedWidth = 236;
+
+  const renderSpawnedPanel = (node, element) => {
+    const payload = node?.payload || node;
+    const laneKey = node?.lane || 'events';
+    const label = node?.label || payload?.whenCh || payload?.title || '';
+    const laneLabel = data.lanes.find((item) => item.key === laneKey)?.label || '節點';
+    const title = (payload.subtitle || payload.title || payload.what || label || '未命名節點');
+
+    const titleEl = element.querySelector('[data-spawned-title]');
+    const laneEl = element.querySelector('[data-spawned-lane]');
+    const body = element.querySelector('[data-spawned-body]');
+    if (titleEl) titleEl.textContent = title;
+    if (laneEl) laneEl.textContent = laneLabel;
+    if (body) body.innerHTML = buildNodePanelMarkup(payload, laneKey, label);
+    element.querySelectorAll('[data-quote]').forEach((button) => {
+      button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc));
+    });
+  };
+
+  const syncSpawnedColumns = () => {
+    if (!dock) return;
+    spawnedPanels.forEach((panelEl) => dock.appendChild(panelEl));
+    const count = spawnedPanels.size;
+    spawnedWidth = 236;
+    dock.style.setProperty('--part1-spawned-count', String(count));
+    dock.style.setProperty('--part1-spawned-width', `${spawnedWidth * count}px`);
+    syncDockWidth();
+  };
+
+  const createSpawnedPanel = (node) => {
+    const nodeId = String(node?.id || node?.payload?.id || '');
+    if (!nodeId) return;
+    if (spawnedPanels.has(nodeId)) {
+      const existing = spawnedPanels.get(nodeId);
+      existing.classList.add('is-spawned-flash');
+      window.setTimeout(() => existing.classList.remove('is-spawned-flash'), 600);
+      return;
+    }
+    const element = document.createElement('section');
+    element.className = 'part1-region part1-spawned-panel part1-linked-panel part1-tool-box';
+    element.dataset.spawnedNodeId = nodeId;
+    element.innerHTML = `
+      <div class="part1-linked-head part1-spawned-head">
+        <strong class="part1-spawned-title" data-spawned-title></strong>
+        <span class="part1-spawned-lane" data-spawned-lane></span>
+        <span class="part1-chat-window-actions">
+          <button class="part1-chat-icon-btn" type="button" data-spawned-close aria-label="關閉此欄"><span aria-hidden="true">${PART1_CHAT_ICONS.close}</span></button>
+        </span>
+      </div>
+      <div class="part1-node-panel-body tool-box-body part1-spawned-body" data-spawned-body></div>`;
+    element.querySelector('[data-spawned-close]').addEventListener('click', () => {
+      removeSpawnedPanel(nodeId);
+    });
+    dock.appendChild(element);
+    spawnedPanels.set(nodeId, element);
+    renderSpawnedPanel(node, element);
+    syncSpawnedColumns();
+    setProgress('已在新的一欄開啟此圓點的輸出卡片；點擊「✕」關閉該欄。');
+  };
+
+  const removeSpawnedPanel = (nodeId) => {
+    const panelEl = spawnedPanels.get(nodeId);
+    if (panelEl) {
+      panelEl.remove();
+      spawnedPanels.delete(nodeId);
+      syncSpawnedColumns();
+    }
+  };
+
   const selectDot = (button) => {
     const node = button?._part1;
     if (!node) return;
@@ -1619,7 +2004,41 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     selectedChartNodeId = node.id;
     chartNodeElements.forEach((element) => element.classList.toggle('is-selected', element === button));
     const isOuterLane = node.lane === 'events' || node.lane === 'emperor';
-    renderNodePanel(node.payload, node.lane, node.label, isOuterLane ? 'node' : 'ai');
+    const isDocumentNode = node.kind === 'document' || (node.recordType !== 'event' && Boolean(node.payload?.docId));
+    if (isDocumentNode) {
+      const selectedDocument = documentRecordForNode(node);
+      if (pairDoc) {
+        // In pair mode the document panels stay open for both documents;
+        // a dot click flashes the matching panel instead of swapping panels.
+        flashPairDocPanel(selectedDocument.docId);
+        if (typeof data.onDocSelect === 'function') {
+          data.onDocSelect(selectedDocument, node);
+        } else if (typeof window.__part1OnDocSelect === 'function') {
+          window.__part1OnDocSelect(selectedDocument, node);
+        }
+      } else {
+        renderDocumentPanel(selectedDocument);
+        renderSelectedDocumentAi(selectedDocument);
+        // Teaching-draft hook: a page that shows its own real tool doc panels
+        // can react to an example dot click without editing the engine. Guarded;
+        // the real replica never defines this hook.
+        if (typeof window.__part1OnDocSelect === 'function') {
+          window.__part1OnDocSelect(selectedDocument, node);
+        }
+      }
+    } else {
+      renderNodePanel(node.payload, node.lane, node.label, isOuterLane ? 'node' : 'ai');
+    }
+    if (pairDoc) {
+      // Pair mode: only the two real doc panels are relevant; keep the AI
+      // panel closed so a dot click never jumps to the AI/eventline area.
+      setPanelOpen('ai', false);
+      setPanelOpen('doc', true);
+      setNodePanelOpen(false);
+      setRegion('chart', { silent: true });
+      setProgress(`已開啟「${chartNodeTitle(node)}」的${data.lanes.find((item) => item.key === node.lane)?.label || '節點'}輸出卡片；文書面板會同步閃示對應文書。`);
+      return;
+    }
     setPanelOpen('ai', true);
     setPanelOpen('doc', true);
     setNodePanelOpen(isOuterLane);
@@ -1636,8 +2055,9 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   /* -------------------------------------------------------- 引文定位 */
 
   const locateQuote = (quote, quoteDocId) => {
-    if (quoteDocId && quoteDocId !== doc.docId) {
-      setProgress(`此引文出自 ${quoteDocId}，不在目前開啟的 ${doc.docId} 原文之內。在真正的工具中，平台會另外開啟 ${quoteDocId} 的文書面板。`);
+    const activeDocId = displayedDocument?.docId || doc.docId;
+    if (quoteDocId && quoteDocId !== activeDocId) {
+      setProgress(`此引文出自 ${quoteDocId}，不在目前開啟的 ${activeDocId} 原文之內。在真正的工具中，平台會另外開啟 ${quoteDocId} 的文書面板。`);
       return;
     }
     const marks = [...replica.querySelectorAll('.part1-doc mark')];
@@ -1758,6 +2178,31 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     ['管理提示']
   ];
 
+  const AI_REPLICA_SETTINGS_KEY = 'introWebsite.part1Replica.aiSettings.v1';
+  const AI_REPLICA_DEFAULTS = Object.freeze({
+    provider: 'Gemini / Google Cloud',
+    model: 'deepseek-v3.2-maas',
+    base: 'https://generativelanguage.googleapis.com/v1beta',
+    proxy: 'http://127.0.0.1:8766/api/ai',
+    memory: false
+  });
+  const readAiReplicaSettings = () => {
+    let stored = {};
+    try { stored = JSON.parse(localStorage.getItem(AI_REPLICA_SETTINGS_KEY) || '{}'); } catch (error) { /* current page still works */ }
+    let apiKey = '';
+    try { apiKey = sessionStorage.getItem(`${AI_REPLICA_SETTINGS_KEY}.apiKey`) || ''; } catch (error) { /* key is optional */ }
+    return { ...AI_REPLICA_DEFAULTS, ...stored, apiKey };
+  };
+  let aiReplicaSettings = readAiReplicaSettings();
+  const persistAiReplicaSettings = () => {
+    const { apiKey, ...safeSettings } = aiReplicaSettings;
+    try { localStorage.setItem(AI_REPLICA_SETTINGS_KEY, JSON.stringify(safeSettings)); } catch (error) { /* current page still works */ }
+    try {
+      if (apiKey) sessionStorage.setItem(`${AI_REPLICA_SETTINGS_KEY}.apiKey`, apiKey);
+      else sessionStorage.removeItem(`${AI_REPLICA_SETTINGS_KEY}.apiKey`);
+    } catch (error) { /* API key is optional */ }
+  };
+
   const aiPopovers = [...replica.querySelectorAll('[data-ai-popover]')];
   aiPopovers.forEach((popover) => document.body.appendChild(popover));
   const getAiPopover = (name) => aiPopovers.find((popover) => popover.dataset.aiPopover === name);
@@ -1786,15 +2231,93 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     popover.querySelectorAll('[data-ai-menu-item]').forEach((item) => item.addEventListener('click', closeAiPopovers));
   };
 
+  const bindAiQuotes = () => {
+    aiBody.querySelectorAll('[data-quote]').forEach((button) => {
+      button.addEventListener('click', () => locateQuote(button.dataset.quote, button.dataset.quoteDoc));
+    });
+  };
+
+  const aiActionCard = (title, content, classes = 'is-generic') => `
+    <article class="part1-chat-output-item part1-chat-skill-card ${classes} part1-ai-action-card">
+      <p class="part1-chat-skill-subtitle">${escapeHtml(title)}</p>
+      ${content}
+    </article>`;
+
+  const savedItemsForAiAction = (label) => {
+    const source = aiChatSources.find((item) => item.docId === String(displayedDocument?.docId || doc.docId));
+    if (!source) return [];
+    const matches = {
+      '官文優先審閱迴圈': (kind) => kind === 'officialresponse' || kind === 'docpair',
+      '回應的先前上諭': (kind, item) => kind === 'docpair' && String(item.pair?.relation || '') === 'official_reply_to_yu',
+      '回應的先前上諭（無引文）': (kind, item) => kind === 'docpair' && Boolean(item.pair?.none),
+      '上諭回應的奏折': (kind, item) => kind === 'docpair' && String(item.pair?.relation || '') === 'yu_source',
+      '回應的先前硃批': (kind, item) => kind === 'docpair' && String(item.pair?.relation || '') === 'official_reply_to_emperor_zhu',
+      '林方來源': (kind) => kind === 'trace' && /林|lin/i.test(String(label)),
+      '全文來源鏈': (kind) => kind === 'trace' || kind === 'infosource',
+      '硃批': (kind) => kind === 'emperor_action',
+      '上諭': (kind) => kind === 'edictmatch' || kind === 'shangyuloop',
+      '皇帝行動（奏／諭）': (kind) => kind === 'emperor_action' || kind === 'edictmatch' || kind === 'shangyuloop',
+      '硃批／上諭來源': (kind) => kind === 'trace' || kind === 'infosource' || kind === 'docpair',
+      '官員回應': (kind) => kind === 'officialresponse'
+    }[label];
+    if (!matches) return [];
+    return (source.turns || []).flatMap((turn) => (turn.outputItems || []).map((item, itemIndex) => ({
+      item,
+      turn,
+      itemIndex,
+      kind: item.kind || turn.kind || 'output'
+    })).filter(({ item, kind }) => matches(kind, item)));
+  };
+
+  const renderAiActionResult = (label) => {
+    if (label === '林方事件' || label === '清方行動（三類合一）') {
+      renderCandidates();
+      return;
+    }
+    if (label === '摘要') {
+      const selected = displayedDocument || doc;
+      aiBody.innerHTML = aiActionCard('摘要', `<p class="part1-chat-skill-desc">${escapeHtml(panelDocumentSummary(selected))}</p>
+        ${chatFactsMarkup(selected, [['文書', selected.docId]])}`);
+      bindAiQuotes();
+      setRegion('ai', { silent: true });
+      return;
+    }
+    if (label === '分段') {
+      const selected = displayedDocument || doc;
+      const sections = panelDocumentSections(selected);
+      aiBody.innerHTML = sections.map((section, index) => aiActionCard(`${index + 1}. ${section.label}`, `
+        ${section.summary ? `<p class="part1-chat-skill-desc">${escapeHtml(section.summary)}</p>` : ''}
+        <p class="part1-chat-action-source">${escapeHtml(String(selected.body || '').slice(section.start, section.end).trim())}</p>`, 'is-source-trace')).join('');
+      setRegion('ai', { silent: true });
+      return;
+    }
+    const matches = savedItemsForAiAction(label);
+    if (matches.length) {
+      aiBody.innerHTML = matches.map(({ item, turn, source, itemIndex }) => chatItemMarkup(item, false, {
+        turn,
+        source: { docId: displayedDocument?.docId || doc.docId },
+        itemIndex
+      })).join('');
+      bindAiQuotes();
+      setRegion('ai', { silent: true });
+      return;
+    }
+    const selected = displayedDocument || doc;
+    aiBody.innerHTML = aiActionCard(label, `<p class="part1-chat-skill-desc">此複本已切換至「${escapeHtml(label)}」。目前保存資料沒有可直接顯示的同類輸出卡；原始文書仍保留在右側文書面板。</p>
+      ${chatFactsMarkup(selected, [['文書', selected.docId]])}`);
+    setRegion('ai', { silent: true });
+  };
+
   const renderAiActions = () => {
     const popover = getAiPopover('act');
     if (!popover) return;
     popover.innerHTML = AI_ACTION_GROUPS.map((group, groupIndex) => `
       ${groupIndex ? '<div class="part1-ai-menu-divider" role="separator"></div>' : ''}
-      ${group.map((label) => `<button class="part1-ai-menu-item" type="button" data-ai-menu-item${label === '林方事件' || label === '清方行動（三類合一）' ? ' data-ai-action="load-cards"' : ''}>${escapeHtml(label)}</button>`).join('')}
+      ${group.map((label) => `<button class="part1-ai-menu-item" type="button" data-ai-menu-item data-ai-action-label="${escapeHtml(label)}">${escapeHtml(label)}</button>`).join('')}
     `).join('');
-    popover.querySelectorAll('[data-ai-menu-item]').forEach((item) => item.addEventListener('click', () => {
-      if (item.dataset.aiAction === 'load-cards') renderCandidates();
+    popover.querySelectorAll('[data-ai-menu-item]').forEach((item) => item.addEventListener('click', (event) => {
+      event.stopPropagation();
+      renderAiActionResult(item.dataset.aiActionLabel || item.textContent.trim());
       closeAiPopovers();
     }));
   };
@@ -1829,7 +2352,53 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     popover.style.setProperty('top', `${top}px`, 'important');
   };
 
+  const syncAiSettingsFields = () => {
+    const popover = getAiPopover('cfg');
+    if (!popover) return;
+    const provider = popover.querySelector('[data-ai-setting="provider"]');
+    const model = popover.querySelector('[data-ai-setting="model"]');
+    const base = popover.querySelector('[data-ai-setting="base"]');
+    const key = popover.querySelector('[data-ai-setting="api-key"]');
+    const memory = popover.querySelector('[data-ai-setting="memory"]');
+    const proxy = popover.querySelector('[data-ai-setting="proxy"]');
+    if (provider) provider.value = aiReplicaSettings.provider;
+    if (model) model.value = aiReplicaSettings.model;
+    if (base) base.value = aiReplicaSettings.base;
+    if (key) key.value = aiReplicaSettings.apiKey || '';
+    if (memory) memory.checked = Boolean(aiReplicaSettings.memory);
+    if (proxy) proxy.value = aiReplicaSettings.proxy;
+  };
+
+  const updateAiSettingsStatus = (message = '設定已保存至此複本。') => {
+    const status = getAiPopover('cfg')?.querySelector('[data-ai-settings-status]');
+    if (status) status.textContent = message;
+  };
+
+  getAiPopover('cfg')?.querySelectorAll('[data-ai-setting]').forEach((field) => {
+    const eventName = field.type === 'checkbox' || field.tagName === 'SELECT' ? 'change' : 'input';
+    field.addEventListener(eventName, () => {
+      const key = field.dataset.aiSetting;
+      const value = field.type === 'checkbox' ? field.checked : field.value;
+      if (key === 'api-key') aiReplicaSettings.apiKey = value;
+      else if (key) aiReplicaSettings[key] = value;
+      persistAiReplicaSettings();
+      updateAiSettingsStatus();
+    });
+  });
+  getAiPopover('cfg')?.querySelector('[data-ai-settings-reset]')?.addEventListener('click', () => {
+    aiReplicaSettings = { ...AI_REPLICA_DEFAULTS, apiKey: '' };
+    persistAiReplicaSettings();
+    syncAiSettingsFields();
+    updateAiSettingsStatus('已重設此複本的 AI 設定。');
+  });
+  syncAiSettingsFields();
+
+  document.addEventListener('click', (event) => {
+    if (!event.target.closest('[data-ai-popover]') && !event.target.closest('[data-ai-pop]')) closeAiPopovers();
+  });
+
   getAiPopover('cfg')?.querySelector('[data-ai-key-toggle]')?.addEventListener('click', (event) => {
+    event.stopPropagation();
     const keyToggle = event.currentTarget;
     const keyInput = keyToggle.parentElement?.querySelector('input');
     if (!keyInput) return;
@@ -1840,15 +2409,16 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
   const renderAiIdle = () => {
     closeAiPopovers();
+    const rDateVal = doc && doc.receiveDate ? doc.receiveDate[1] : (doc && doc.issueDate ? doc.issueDate[1] : (doc && doc.announceDate ? doc.announceDate[1] : (doc && doc.sendDate ? doc.sendDate[1] : '')));
+    const authorNameVal = doc && doc.author ? (typeof doc.author === 'string' ? doc.author : (doc.author.name || '')) : '';
     aiBody.innerHTML = `
       <div class="part1-linked-source">據奏來源（上諭前 0 日收到）</div>
       <div class="part1-linked-doc">
-        <p class="part1-linked-title">${escapeHtml(doc.title)}<br><span>徐嗣曾</span></p>
-        <p class="part1-linked-date">${escapeHtml(doc.receiveDate[1])}</p>
+        <p class="part1-linked-title">${escapeHtml(doc && doc.title ? doc.title : '')}<br><span>${escapeHtml(authorNameVal)}</span></p>
+        <p class="part1-linked-date">${escapeHtml(rDateVal)}</p>
         <blockquote><b>①</b>「${escapeHtml('提臣黃仕簡已於十五日由廈門出口放洋')}」</blockquote>
         <blockquote><b>②</b>「${escapeHtml('任承恩亦配兵登舟，合之郝壯猷所帶，計共兵六千人')}」</blockquote>
       </div>
-      ${chatSourceLauncher()}
     `;
     const foot = replica.querySelector('.part1-linked-foot');
     if (foot) foot.innerHTML = `
@@ -1856,6 +2426,17 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       <button type="button" data-ai-pop="act" aria-expanded="false">功能⌄</button>
       <button class="part1-chat-settings" type="button" data-ai-pop="cfg" aria-expanded="false" aria-label="AI 設定"><span aria-hidden="true">${PART1_CHAT_ICONS.gear}</span></button>
     `;
+    syncAiSettingsFields();
+  };
+
+  const renderSelectedDocumentAi = (record) => {
+    closeAiPopovers();
+    const source = aiChatSources.find((item) => item.docId === String(record?.docId || ''));
+    if (!source || !Number(source.outputItemCount)) {
+      aiBody.innerHTML = '';
+      return;
+    }
+    loadChatSource(source.docId);
   };
 
   let terminalTimer = 0;
@@ -1900,7 +2481,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
 
     const actorLabel = (actor) => actor === 'lin' ? '林方事件' : '清方行動';
     const actorClass = (actor) => actor === 'lin' ? 'is-lin' : 'is-qing';
-    const sourceDate = (item) => item.quoteDocId === doc.docId ? doc.sendDate[1] : '';
+    const sourceDate = (item) => item.quoteDocId === doc.docId ? (doc && doc.sendDate ? doc.sendDate[1] : (doc && doc.issueDate ? doc.issueDate[1] : '')) : '';
     const sourceTitle = (item) => item.quoteDocId === doc.docId
       ? `${doc.title}（${doc.docId}）`
       : String(item.quoteDocId || '來源文書');
@@ -2049,9 +2630,71 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (!dock) return;
     const nodeWidth = nodePanel && !nodePanel.hidden ? nodePanelWidth : 0;
     const eventlineWidth = replica.matches('[data-eventline-open="true"]') ? eventLinePanelWidth : 0;
-    const width = `${roundTo(aiWidth + docWidth + nodeWidth + eventlineWidth, 2)}px`;
+    const spawnedColumnsWidth = spawnedPanels.size * spawnedWidth;
+    const width = `${roundTo(aiWidth + docWidth + nodeWidth + eventlineWidth + spawnedColumnsWidth, 2)}px`;
     dock.style.setProperty('--part1-dock-width', width);
     stage?.style.setProperty('--part1-dock-width', width);
+    syncSpawnedGrid();
+  };
+
+  /* Spawned double-click columns participate in the same dock grid as the
+     node/eventline/AI/document panels. While any spawned panel exists, JS
+     owns the grid template so every panel lands in its own column; when the
+     last spawned panel closes, the inline rules are cleared and the CSS
+     attribute selectors take over again. */
+  const syncSpawnedGrid = () => {
+    if (!dock) return;
+    const nodeOpen = nodePanel && !nodePanel.hidden;
+    const eventlineOpen = replica.matches('[data-eventline-open="true"]');
+    const aiClosed = aiPanel?.classList.contains('is-panel-closed');
+    const docClosed = docPanel?.classList.contains('is-panel-closed');
+    const spawnedCount = spawnedPanels.size;
+
+    if (!spawnedCount) {
+      dock.style.removeProperty('grid-template-columns');
+      dock.style.removeProperty('overflow-x');
+      dock.style.removeProperty('max-width');
+      [nodePanel, eventLinePanel, aiPanel, docPanel].forEach((panel) => {
+        if (panel) {
+          panel.style.removeProperty('grid-column');
+          panel.style.removeProperty('grid-row');
+        }
+      });
+      return;
+    }
+
+    const cols = [];
+    for (let index = 0; index < spawnedCount; index += 1) cols.push(`${spawnedWidth}px`);
+    if (nodeOpen) cols.push(`${nodePanelWidth}px`);
+    if (eventlineOpen) cols.push(`${eventLinePanelWidth}px`);
+    cols.push(aiClosed ? '0px' : `minmax(0, var(--part1-ai-width, ${aiPanelWidth || 193}px))`);
+    cols.push(docClosed ? '0px' : `minmax(0, var(--part1-doc-width, ${docPanelWidth || 227}px))`);
+    dock.style.gridTemplateColumns = cols.join(' ');
+
+    let column = 1;
+    const assign = (panel) => {
+      if (!panel) return;
+      panel.style.gridColumn = String(column);
+      panel.style.gridRow = '1';
+      column += 1;
+    };
+    spawnedPanels.forEach((panelEl) => {
+      panelEl.style.gridColumn = String(column);
+      panelEl.style.gridRow = '1';
+      column += 1;
+    });
+    if (nodeOpen) assign(nodePanel);
+    if (eventlineOpen) assign(eventLinePanel);
+    assign(aiPanel);
+    assign(docPanel);
+
+    const totalWidth = spawnedCount * spawnedWidth + (nodeOpen ? nodePanelWidth : 0)
+      + (eventlineOpen ? eventLinePanelWidth : 0)
+      + (aiClosed ? 0 : (aiPanelWidth || 193))
+      + (docClosed ? 0 : (docPanelWidth || 227));
+    dock.style.overflowX = totalWidth > 420 ? 'auto' : 'hidden';
+    const stageWidth = stage?.getBoundingClientRect().width || 0;
+    dock.style.maxWidth = stageWidth > 0 ? `${Math.max(360, stageWidth - 80)}px` : 'none';
   };
 
   const applyEventLinePanelWidth = (panelWidth) => {
@@ -2108,6 +2751,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     panel.setAttribute('aria-hidden', String(!open));
     dock?.setAttribute(`data-${kind}-closed`, String(!open));
     if (!open && kind === 'ai') closeAiPopovers();
+    syncSpawnedGrid();
   };
 
   const setNodePanelOpen = (open) => {
@@ -2220,6 +2864,34 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
       });
     });
   });
+
+  const stageDockResize = replica.querySelector('[data-stage-dock-resize]');
+  if (stageDockResize && stage) {
+    stageDockResize.addEventListener('pointerdown', (event) => {
+      if (event.button !== 0) return;
+      const rect = stage.getBoundingClientRect();
+      stageDockResize.setPointerCapture?.(event.pointerId);
+      stageDockResize.classList.add('is-dragging');
+      event.preventDefault();
+
+      const onMove = (ev) => {
+        const pct = ((rect.right - ev.clientX) / rect.width) * 100;
+        const dockPct = clamp(pct, 10, 100);
+        replica.style.setProperty('--stage-dock-pct', `${dockPct.toFixed(2)}%`);
+        stage.style.setProperty('--stage-dock-pct', `${dockPct.toFixed(2)}%`);
+        applyChartScale();
+        drawLinks();
+      };
+      const onUp = (ev) => {
+        stageDockResize.classList.remove('is-dragging');
+        stageDockResize.releasePointerCapture?.(ev.pointerId);
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+      };
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+  }
 
   function setRegion(region, options = {}) {
     replica.dataset.eventlineOpen = region === 'eventline' ? 'true' : 'false';
@@ -2387,6 +3059,8 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     renderedEventItems = [];
     chartExtraNodes.length = 0;
     selectedChartNodeId = '';
+    spawnedPanels.forEach((panelEl) => panelEl.remove());
+    spawnedPanels.clear();
     replica.querySelectorAll('.part1-doc mark').forEach((mark) => {
       mark.classList.remove('is-shown', 'is-located');
     });
@@ -2430,6 +3104,7 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     filterTrigger?.setAttribute('aria-expanded', 'false');
     viewToggle?.setAttribute('aria-expanded', 'false');
     renderFilterChips();
+    renderDocumentPanel(doc);
     renderDocView();
     syncToolControls();
     renderAiIdle();
@@ -2442,6 +3117,14 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
   /* -------------------------------------------------------------- 初始化 */
 
   renderAiIdle();
+  if (pairDoc) {
+    // Fill both real doc panels once; close the AI panel so only the two
+    // document panels and the chart are shown.
+    pairDocRecords.forEach((record) => renderPairDocPanel(record));
+    setPanelOpen('ai', false);
+    setPanelOpen('doc', true);
+    setNodePanelOpen(false);
+  }
   drawLinks();
 
   const initialRegion = mode === 'node' ? 'chart' : mode === 'all' ? '' : mode;
@@ -2451,10 +3134,25 @@ document.querySelectorAll('[data-part1]').forEach((root) => {
     if (firstDot) selectDot(firstDot);
   }
 
+  if (pairDoc) {
+    if (typeof data.onPairInit === 'function') {
+      data.onPairInit(pairDocRecords, root);
+    } else if (typeof window.__part1OnPairInit === 'function') {
+      window.__part1OnPairInit(pairDocRecords);
+    }
+  }
+
   window.addEventListener('resize', () => {
     applyChartScale();
     drawLinks();
     syncChartLaneTabs();
   });
   if ('ResizeObserver' in window) new ResizeObserver(drawLinks).observe(lanesEl);
-});
+}
+
+/* Exposed so mounts added after page load (e.g. the 2-1 desktop teaching
+   tool, injected by part2-yu-response-bars.js) can initialise themselves —
+   this querySelectorAll only sees the [data-part1] elements already in the
+   DOM when this script runs. */
+window.part1InitRoot = part1InitRoot;
+document.querySelectorAll('[data-part1]').forEach(part1InitRoot);

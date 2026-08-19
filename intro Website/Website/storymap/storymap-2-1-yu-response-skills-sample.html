@@ -1,0 +1,899 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>示範：2-1 辨識奏摺所回應的上諭（50% 說明文字＋50% Skill 技能視窗並排）</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="part-1-interface.css">
+<style>
+:root {
+  --font-scale: 1;
+  --ink: #163d3f; --text: #3c5754; --paper: #f4efe6; --card: #fffaf2; --line: rgba(22,61,63,.18);
+  --accent: #c45d38;
+  --hl-marker: 58,122,122; --hl-date: 181,131,42; --hl-quote: 196,93,56; --hl-author: 122,84,150;
+  --serif: "Noto Serif TC","Source Han Serif TC","PMingLiU",Georgia,serif;
+  --sans: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", "PingFang TC", sans-serif;
+  --mono: "Fira Code", "SF Mono", ui-monospace, Menlo, Consolas, monospace;
+  --body-weight: 500;
+}
+* { box-sizing: border-box; }
+body { margin: 0; color: var(--ink); background: var(--paper); font-family: var(--sans); -webkit-font-smoothing: antialiased; }
+button { font: inherit; }
+
+.draft-header { padding: clamp(26px,5vw,48px) clamp(16px,4vw,56px) clamp(20px,3vw,30px); color: #f7f3ea; background: #12363a; border-bottom: 1px solid rgba(255,255,255,.14); }
+.draft-header-inner, .draft-main { width: min(1560px, calc(100% - 32px)); margin: 0 auto; }
+.draft-kicker { margin: 0 0 10px; color: rgba(247,243,234,.68); font: 700 11px/1.4 var(--sans); letter-spacing: .14em; }
+.draft-header h1 { max-width: 48ch; margin: 0; font: 700 clamp(22px,3vw,34px)/1.3 var(--serif); letter-spacing: .04em; }
+.draft-header p:last-child { max-width: 90ch; margin: 12px 0 0; color: rgba(247,243,234,.85); font: 500 clamp(13.5px,1.4vw,15px)/1.75 var(--serif); }
+.draft-note { margin: 16px 0 0; padding: 12px 16px; color: rgba(247,243,234,.9); background: rgba(255,255,255,.08); border: 1px solid rgba(255,255,255,.16); border-radius: 6px; font: 500 13px/1.7 var(--sans); }
+.draft-note code { color: #ffd9a8; }
+.draft-note strong { color: #ffd9a8; }
+.draft-main { padding: clamp(24px,4vw,40px) 0 90px; }
+
+.part2-substage-cover { display: flex; align-items: center; gap: 16px; margin: 0 0 20px; }
+.part2-substage-num { color: var(--accent); font: 800 28px/1 var(--serif); }
+.part2-substage-num small { display: block; margin-top: 2px; color: #8a7c66; font: 700 11px/1 var(--sans); letter-spacing: .1em; }
+.part2-substage-divider { flex: none; width: 1px; align-self: stretch; background: var(--line); }
+.part2-substage-copy h2 { margin: 0; color: var(--ink); font: 700 clamp(20px,2.4vw,28px)/1.4 var(--serif); }
+.part2-substage-copy p { margin: 6px 0 0; color: #6d756f; font: 500 13px/1.6 var(--sans); }
+
+.req-legend { display: flex; flex-wrap: wrap; gap: 8px 14px; margin: 0 0 16px; padding: 0 2px; }
+.req-legend-item { display: inline-flex; align-items: center; gap: 7px; color: var(--text); font: 600 12.5px/1 var(--sans); padding: 5px 10px; border-radius: 999px; background: rgba(22,61,63,.06); cursor: pointer; transition: background .15s ease, transform .15s ease; user-select: none; }
+.req-legend-item:hover { background: rgba(22,61,63,.12); transform: translateY(-1px); }
+.req-legend-item.is-active { background: #163d3f; color: #fffaf2; }
+.req-legend-swatch { width: 10px; height: 10px; border-radius: 50%; }
+.req-legend-swatch.marker { background: rgb(var(--hl-marker)); } .req-legend-swatch.date { background: rgb(var(--hl-date)); }
+.req-legend-swatch.quote { background: rgb(var(--hl-quote)); } .req-legend-swatch.author { background: rgb(var(--hl-author)); }
+
+.replica-shell { background: #f1eadc; border: 1px solid #d8cdbb; border-radius: 8px; box-shadow: 0 13px 30px rgba(47,57,52,.15); overflow: hidden; margin: 0 0 16px; }
+.replica-shell .part1-replica { --font-scale: 1; }
+
+/* ============================================================================
+   Requirement Description Card: 50% Text Panel + 50% Skills Window
+   ========================================================================== */
+.req-desc {
+  display: flex;
+  flex-direction: column;
+  margin: 0;
+  background: var(--card);
+  border: 1px solid #d8cdbb;
+  border-radius: 6px;
+  box-shadow: 0 8px 24px rgba(47,57,52,.1);
+  overflow: hidden;
+}
+
+.req-desc-head {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  padding: 12px 18px 10px;
+  border-bottom: 1px solid var(--line);
+  background: rgba(244,239,230,.45);
+}
+
+.req-desc-index {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: #fffaf2;
+  background: var(--accent);
+  border-radius: 50%;
+  font: 800 13px/1 var(--sans);
+  transition: background .25s ease;
+}
+.req-desc[data-active-req="marker"] .req-desc-index { background: rgb(var(--hl-marker)); }
+.req-desc[data-active-req="date"] .req-desc-index { background: rgb(var(--hl-date)); }
+.req-desc[data-active-req="quote"] .req-desc-index { background: rgb(var(--hl-quote)); }
+.req-desc[data-active-req="author"] .req-desc-index { background: rgb(var(--hl-author)); }
+
+.req-desc-head h3 {
+  flex: 1;
+  min-width: 160px;
+  margin: 0;
+  color: var(--ink);
+  font: 700 calc(17px * var(--font-scale, 1))/1.35 var(--serif);
+}
+
+.req-nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
+.req-nav-arrow {
+  flex: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  color: var(--ink);
+  background: transparent;
+  border: 1px solid var(--line);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease, border-color .15s ease;
+}
+.req-nav-arrow:hover { color: #fffaf2; background: var(--accent); border-color: var(--accent); }
+
+.req-desc-body {
+  padding: 16px 20px 18px;
+}
+
+/* 50% / 50% Split Layout: perfectly equal height */
+.req-desc-split {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  align-items: stretch;
+  width: 100%;
+}
+
+/* Left Text Panel */
+.req-desc-text-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  min-width: 0;
+  padding: 4px 0;
+}
+
+.req-wordcard {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+}
+
+.req-wordcard p {
+  margin: 0;
+  color: var(--text);
+  font: var(--body-weight) calc(15px * var(--font-scale, 1))/1.95 var(--serif);
+  text-align: justify;
+}
+
+/* Right Skills Window Panel (50%) */
+.req-desc-skill-panel {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+/* Skills VS Code Style Window */
+.req-win-skill-box {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  min-height: max-content;
+  background: #1e1e1e;
+  border-radius: 6px;
+  overflow: hidden;
+  box-shadow: 0 4px 14px rgba(0,0,0,.18), 0 0 0 1px rgba(255,255,255,.07) inset;
+}
+
+.req-skill-titlebar {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 12px;
+  background: #252526;
+  border-bottom: 1px solid #333333;
+  flex: none;
+}
+
+.req-mac-dot {
+  width: 8.5px;
+  height: 8.5px;
+  border-radius: 50%;
+  flex: none;
+}
+.req-mac-dot.red { background: #ff5f57; }
+.req-mac-dot.yellow { background: #febc2e; }
+.req-mac-dot.green { background: #28c840; }
+
+.req-skill-title-text {
+  margin-left: 5px;
+  color: #b5b5b5;
+  font: 600 calc(12px * var(--font-scale, 1))/1 var(--mono);
+  letter-spacing: .02em;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  flex: 1;
+}
+
+.req-skill-shell {
+  display: grid;
+  grid-template-columns: 26px 1fr;
+  flex: 1 1 auto;
+  height: 100%;
+  min-height: max-content;
+  background: #1e1e1e;
+}
+
+.req-skill-activitybar {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 16px 0;
+  color: #707070;
+  background: #2b2b2b;
+  font: 10.5px/1 var(--sans);
+  border-right: 1px solid #383838;
+  user-select: none;
+  height: 100%;
+}
+
+.req-skill-editor {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  min-height: max-content;
+  height: 100%;
+}
+
+.req-skill-body {
+  flex: 1 1 auto;
+  height: auto;
+  min-height: max-content;
+  overflow: visible !important;
+  padding: 18px 18px 20px;
+  color: #d4d4d4;
+  font: 500 calc(13px * var(--font-scale, 1))/1.8 var(--mono);
+  word-break: break-word;
+  scrollbar-width: none;
+}
+.req-skill-body::-webkit-scrollbar {
+  display: none;
+}
+
+.req-skill-body .skill-row {
+  margin-bottom: 7px;
+}
+.req-skill-body .skill-row:last-child {
+  margin-bottom: 0;
+}
+.req-skill-body .skill-heading {
+  font-weight: 700;
+  color: #4fc1ff;
+  margin-bottom: 10px;
+  font-size: calc(13.5px * var(--font-scale, 1));
+}
+.req-skill-body .skill-lead {
+  margin-bottom: 6px;
+}
+.req-skill-body .skill-highlight {
+  margin: 8px 0 9px;
+}
+.req-skill-body .skill-bullet {
+  margin-bottom: 7px;
+}
+.req-skill-body .md-kw {
+  color: #4fc1ff;
+  font-weight: 600;
+}
+.req-skill-body .md-bullet {
+  color: #9cdcfe;
+  font-weight: bold;
+  margin-right: 4px;
+}
+
+/* Skill Highlights for each requirement */
+.req-skill-body mark.code-mark {
+  display: inline-block;
+  padding: 2px 7px;
+  border-radius: 4px;
+  color: #ffffff !important;
+  font-weight: 600;
+  line-height: 1.45;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+  transition: all .2s ease;
+}
+
+.req-desc[data-active-req="marker"] .req-skill-body mark.code-mark[data-group="marker"] {
+  background: rgba(var(--hl-marker), .85) !important;
+  box-shadow: 0 0 0 1px rgba(var(--hl-marker), 1);
+}
+.req-desc[data-active-req="date"] .req-skill-body mark.code-mark[data-group="date"] {
+  background: rgba(var(--hl-date), .9) !important;
+  box-shadow: 0 0 0 1px rgba(var(--hl-date), 1);
+}
+.req-desc[data-active-req="quote"] .req-skill-body mark.code-mark[data-group="quote"] {
+  background: rgba(var(--hl-quote), .85) !important;
+  box-shadow: 0 0 0 1px rgba(var(--hl-quote), 1);
+}
+.req-desc[data-active-req="author"] .req-skill-body mark.code-mark[data-group="author"] {
+  background: rgba(var(--hl-author), .88) !important;
+  box-shadow: 0 0 0 1px rgba(var(--hl-author), 1);
+}
+
+/* ============================================================================
+   Platform Replica & Doc Panels Styling
+   ========================================================================== */
+.part1-replica[data-pair-doc="true"] .part1-dock {
+  grid-template-columns: 1fr !important;
+}
+
+.part1-replica[data-pair-doc="true"] .part1-doc-stack {
+  grid-template-columns: calc(var(--pair-left-pct, 50%) - 5px) 10px calc(var(--pair-right-pct, 50%) - 5px) !important;
+  gap: 0 !important;
+}
+
+.req-pair-resize {
+  position: relative;
+  z-index: 6;
+  cursor: ew-resize;
+  touch-action: none;
+  user-select: none;
+}
+.req-pair-resize::before {
+  content: "";
+  position: absolute;
+  top: 38%;
+  bottom: 38%;
+  left: 4px;
+  width: 2px;
+  border-radius: 2px;
+  background: #d1c2ad;
+  opacity: .7;
+  transition: background .15s ease, opacity .15s ease, transform .15s ease;
+}
+.req-pair-resize:hover::before, .req-pair-resize:focus-visible::before, .req-pair-resize.is-dragging::before {
+  background: #a67d4f;
+  opacity: 1;
+  transform: scaleX(1.8);
+}
+.req-pair-resize:focus-visible { outline: 2px solid rgba(166,125,79,.45); outline-offset: -1px; }
+
+/* Floating Clue Bubble */
+.part1-replica[data-pair-doc="true"] .part1-pair-doc { position: relative; }
+.req-float-bubble {
+  position: absolute; left: 0; top: 0; z-index: 30;
+  display: flex; align-items: center; gap: 8px; height: 38px; max-width: calc(100% - 16px);
+  padding: 5px 12px 5px 6px; color: #241d12; background: #fffdf8;
+  border: 2px solid rgb(var(--bc, var(--hl-marker)));
+  border-radius: 999px; box-shadow: 0 8px 18px rgba(30,22,10,.22);
+  font: 700 10px/1 var(--sans); white-space: nowrap;
+  transition: opacity .15s ease, left .12s ease, top .12s ease;
+}
+.req-float-bubble[data-bubble-group="marker"] { --bc: var(--hl-marker); }
+.req-float-bubble[data-bubble-group="date"] { --bc: var(--hl-date); }
+.req-float-bubble[data-bubble-group="quote"] { --bc: var(--hl-quote); }
+.req-float-bubble[data-bubble-group="author"] { --bc: var(--hl-author); }
+.req-float-bubble.req-float-hidden { opacity: 0; pointer-events: none; }
+
+.req-float-num {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 24px; height: 24px;
+  color: #fffdf8; background: rgb(var(--bc)); border-radius: 50%; font: 800 13px/1 var(--sans);
+}
+.req-float-title {
+  flex: 1 1 auto; min-width: 0; padding: 0 4px; overflow: hidden; text-overflow: ellipsis;
+  color: #241d12; font: 800 calc(14.5px * var(--font-scale, 1))/1.35 var(--serif);
+}
+.req-float-arrow {
+  flex: none; display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px;
+  color: rgb(var(--bc)); background: transparent; border: 1.5px solid rgba(var(--bc),.5);
+  border-radius: 50%; cursor: pointer; font: 700 13px/1 var(--sans); transition: background .15s ease;
+}
+.req-float-arrow:hover { background: rgba(var(--bc),.16); }
+.req-float-tail {
+  position: absolute; left: 50%; bottom: -7px; width: 13px; height: 13px;
+  background: #fffdf8; border-right: 2px solid rgb(var(--bc, var(--hl-marker))); border-bottom: 2px solid rgb(var(--bc, var(--hl-marker)));
+  transform: translateX(-50%) rotate(45deg); border-radius: 0 0 3px 0;
+}
+.req-float-bubble.req-float-flip .req-float-tail {
+  bottom: auto; top: -7px; border-right: 0; border-bottom: 0;
+  border-left: 2px solid rgb(var(--bc, var(--hl-marker))); border-top: 2px solid rgb(var(--bc, var(--hl-marker)));
+  border-radius: 3px 0 0 0;
+}
+
+/* Document Body Highlighting */
+.part1-pair-doc .part1-doc-body mark[data-group] {
+  padding: 2px 4px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone;
+  color: inherit !important; background: transparent !important; cursor: pointer; transition: background-color .15s ease, color .15s ease;
+}
+.part1-pair-doc .part1-doc-body mark[data-group]:hover { filter: brightness(.92); }
+
+[data-active-req="marker"] .part1-pair-doc .part1-doc-body mark[data-group="marker"],
+[data-active-req="marker"] .part1-pair-doc .part1-doc-body mark[data-group="marker"].is-active {
+  background: #3ee0cf !important; color: #043834 !important; font-weight: 600; box-shadow: 0 0 0 1px rgba(35, 195, 180, .4);
+}
+[data-active-req="date"] .part1-pair-doc .part1-doc-body mark[data-group="date"],
+[data-active-req="date"] .part1-pair-doc .part1-doc-body mark[data-group="date"].is-active {
+  background: #ffd644 !important; color: #3b2800 !important; font-weight: 600; box-shadow: 0 0 0 1px rgba(220, 165, 20, .4);
+}
+[data-active-req="quote"] .part1-pair-doc .part1-doc-body mark[data-group="quote"],
+[data-active-req="quote"] .part1-pair-doc .part1-doc-body mark[data-group="quote"].is-active {
+  background: #ff9370 !important; color: #3e1204 !important; font-weight: 600; box-shadow: 0 0 0 1px rgba(225, 90, 50, .4);
+}
+[data-active-req="author"] .part1-pair-doc .part1-doc-body mark[data-group="author"],
+[data-active-req="author"] .part1-pair-doc .part1-doc-body mark[data-group="author"].is-active {
+  background: #d896ff !important; color: #23043d !important; font-weight: 600; box-shadow: 0 0 0 1px rgba(170, 80, 225, .4);
+}
+
+.part1-pair-doc .part1-doc-body mark[data-group].is-active { animation: part2-yu-hl-flash .5s ease-out; }
+@keyframes part2-yu-hl-flash { 0% { filter: brightness(1.28) saturate(1.25); } 100% { filter: brightness(1); } }
+
+/* Left Document Panel (硃160 奏摺): Highlight the focal response quotation and make surrounding context text transparent/dimmed */
+[data-doc-panel-doc="硃160"] .doc-dim { opacity: 0.35; transition: opacity .2s ease; }
+[data-doc-panel-doc="硃160"] .doc-dim:hover { opacity: 0.72; }
+[data-doc-panel-doc="硃160"] .doc-focus { opacity: 1; color: #18120b; font-weight: 500; }
+[data-active-req="author"] [data-doc-panel-doc="硃160"] .doc-author-lead { opacity: 1 !important; color: #18120b !important; font-weight: 500; }
+[data-doc-panel-doc="硃160"] .doc-dim mark[data-group],
+.part1-pair-doc .part1-doc-body mark[data-group] { opacity: 1 !important; }
+
+/* Chart linking line */
+.part1-chart-links .req-chart-link { transition: opacity .2s ease, stroke-width .2s ease; }
+.part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 3 !important; }
+
+/* Responsive adjustments */
+@media (max-width: 860px) {
+  .req-desc-split { grid-template-columns: 1fr; gap: 10px; }
+  .req-float-title { display: none; }
+}
+</style>
+</head>
+<body>
+
+<header class="draft-header">
+  <div class="draft-header-inner">
+    <p class="draft-kicker">清代奏摺與上諭分析平台・2-1 辨識奏摺所回應的上諭</p>
+    <h1>2.1 線索說明卡：50% 文字說明 ＋ 50% Skill 技能視窗並排（等高、免捲動）</h1>
+    <p>線索說明卡置於視覺圖表與雙文書面板下方。左側 50% 顯示線索說明文字，右側 50% 顯示 VS Code 風格的精簡 Skill 視窗（等高對齊，去除冗餘標籤與文件標題，文字精簡免捲動），並精確高亮當前線索對應的 Skill 規則。切換線索時即時同步更新。</p>
+  </div>
+</header>
+
+<main class="draft-main">
+  <section>
+    <div class="part2-substage-cover">
+      <div class="part2-substage-num">2.1<small>示範</small></div>
+      <div class="part2-substage-divider"></div>
+      <div class="part2-substage-copy">
+        <h2>辨識奏摺所回應的上諭</h2>
+        <p>一種深層的通信關係是：有些奏摺會回應官員收到的上諭。平台會使用「上諭—回應配對」Skill，根據引述標記、日期、引文及奏摺作者等線索，辨識這段通信關係。</p>
+      </div>
+    </div>
+
+    <!-- 线索快速切换 Pills -->
+    <div class="req-legend" data-req-legend>
+      <span class="req-legend-item is-active" data-req-pill="marker"><span class="req-legend-swatch marker"></span>① 「奉上諭」等引述標記</span>
+      <span class="req-legend-item" data-req-pill="date"><span class="req-legend-swatch date"></span>② 上諭的發出日期</span>
+      <span class="req-legend-item" data-req-pill="quote"><span class="req-legend-swatch quote"></span>③ 上諭引文</span>
+      <span class="req-legend-item" data-req-pill="author"><span class="req-legend-swatch author"></span>④ 奏摺作者</span>
+    </div>
+
+    <div class="replica-shell">
+      <!-- 平台图表与双文书面板 -->
+      <div data-part1>
+        <div class="part1-replica" data-part1-replica></div>
+      </div>
+    </div>
+
+    <!-- 2.1 线索说明卡（置于视觉下方，50% 文字 + 50% Skill 视窗） -->
+    <div class="req-desc" data-req-desc data-active-req="marker">
+      <div class="req-desc-head">
+        <span class="req-desc-index" data-req-desc-index>01</span>
+        <h3 data-req-desc-title>「奉上諭」等引述標記</h3>
+        <div class="req-nav" data-req-nav>
+          <button class="req-nav-arrow" type="button" data-nav-prev aria-label="上一項線索">&#8592;</button>
+          <button class="req-nav-arrow" type="button" data-nav-next aria-label="下一項線索">&#8594;</button>
+        </div>
+      </div>
+      <div class="req-desc-body">
+        <div class="req-desc-split">
+          <!-- 左侧 50% 说明文字面板 -->
+          <div class="req-desc-text-panel">
+            <div class="req-wordcard">
+              <p data-req-desc-summary>官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記；部分回覆也會先用「接奉」、「接准」或「敬奉」等標記，注明自己收到上諭的日期。平台會先利用 Python 從原始文書中擷取這些標記，作為辨識奏摺是否回應上諭的第一項線索。</p>
+            </div>
+          </div>
+
+          <!-- 右侧 50% Skills 视窗（等高对齐、免卷动） -->
+          <div class="req-desc-skill-panel">
+            <div class="req-win-skill-box">
+              <div class="req-skill-titlebar">
+                <span class="req-mac-dot red"></span>
+                <span class="req-mac-dot yellow"></span>
+                <span class="req-mac-dot green"></span>
+                <span class="req-skill-title-text">yu-response-pairing.md</span>
+              </div>
+              <div class="req-skill-shell">
+                <div class="req-skill-activitybar">
+                  <span>▦</span>
+                  <span>⌕</span>
+                  <span>⑂</span>
+                  <span>▣</span>
+                </div>
+                <div class="req-skill-editor">
+                  <div class="req-skill-body" data-req-skill-body>
+                    <!-- 动态填充对应线索的短版 Skill 与高亮 -->
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<script data-draft-data>
+/* ============================================================================
+   2-1 辨識奏摺所回應的上諭 — 示範資料集（短版 Skill 提示與高亮規則）
+   ========================================================================== */
+window.__SKILL_DEMO_DATA__ = {
+  "requirements": [
+    {
+      "id": "marker",
+      "n": 1,
+      "title": "「奉上諭」等引述標記",
+      "summary": "官員在奏摺中回應皇帝的上諭時，通常會使用「奉上諭」、「奉聖諭」、「聖諭」、「奉廷寄」、「欽奉諭旨」或「欽奉上諭」等引述標記；部分回覆也會先用「接奉」、「接准」或「敬奉」等標記，注明自己收到上諭的日期。平台會先利用 Python 從原始文書中擷取這些標記，作為辨識奏摺是否回應上諭的第一項線索。",
+      "skill": "<div class=\"skill-row skill-heading\"><span class=\"md-kw\">## 3. Citation (引述標記)</span></div>" +
+        "<div class=\"skill-row skill-lead\">擷取奏摺中的引述標記：</div>" +
+        "<div class=\"skill-row skill-highlight\"><mark class=\"code-mark\" data-group=\"marker\">「奉上諭」／「奉聖諭」／「奉廷寄」／「欽奉諭旨」</mark></div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet\">•</span> <span class=\"md-kw\">Python 擷取</span>：從原始文書抓取標記及緊鄰的受文日期字串。</div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet">•</span> <span class=\"md-kw\">AI 判斷</span>：比對標記後引用的內容，確認是否正在回應該道上諭。</div>"
+    },
+    {
+      "id": "date",
+      "n": 2,
+      "title": "上諭的發出日期",
+      "summary": "系統篩選候選文書的第一項條件：上諭的發佈日期，必須和奏摺中「奉上諭」標記前所寫明的日期相符。",
+      "skill": "<div class=\"skill-row skill-heading\"><span class=\"md-kw\">## 2. Date (日期比對)</span></div>" +
+        "<div class=\"skill-row skill-lead\">比對上諭發布與收訖時間序：</div>" +
+        "<div class=\"skill-row skill-highlight\"><mark class=\"code-mark\" data-group=\"date\">以「奉上諭」前之日期為發布日，比對發文時間序</mark></div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet\">•</span> <span class=\"md-kw\">傳遞時差</span>：廷寄至外省約需 10–14 天；奏摺發出必在上諭之後。</div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet">•</span> <span class=\"md-kw\">收訖判定</span>：「接奉」前為官員收訖日，與發布日相互驗證。</div>"
+    },
+    {
+      "id": "quote",
+      "n": 3,
+      "title": "上諭引文",
+      "summary": "系統篩選候選文書的第三項條件：奏摺中引用的上諭內容，必須與候選上諭的內容完全或大致相同。",
+      "skill": "<div class=\"skill-row skill-heading\"><span class=\"md-kw\">## 3. Citation (引文比對)</span></div>" +
+        "<div class=\"skill-row skill-lead\">擷取奏摺所引之完整上諭內容：</div>" +
+        "<div class=\"skill-row skill-highlight\"><mark class=\"code-mark\" data-group=\"quote\">擷取奏摺所引完整上諭，比對候選正文（允許節略重寫）</mark></div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet\">•</span> <span class=\"md-kw\">範圍擷取</span>：自官員收訖說明開始，至「欽此」前之完整引文。</div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet\">•</span> <span class=\"md-kw\">寬鬆匹配</span>：清代奏摺轉述常有字句刪節，AI 判斷語意一致性。</div>"
+    },
+    {
+      "id": "author",
+      "n": 4,
+      "title": "奏摺作者",
+      "summary": "系統篩選候選文書的第二項條件：奏摺作者，應為上諭的受文官員之一。",
+      "skill": "<div class=\"skill-row skill-heading\"><span class=\"md-kw\">## 1. Identity (官員身分)</span></div>" +
+        "<div class=\"skill-row skill-lead\">確認奏摺官員與受文者之對應關係：</div>" +
+        "<div class=\"skill-row skill-highlight\"><mark class=\"code-mark\" data-group=\"author\">奏摺具名作者必須為該道上諭之受文官員之一</mark></div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet\">•</span> <span class=\"md-kw\">職權對應</span>：如大學士寄信予兩廣總督孫士毅，回應必由孫發出。</div>" +
+        "<div class=\"skill-row skill-bullet\"><span class=\"md-bullet">•</span> <span class=\"md-kw\">候選篩選</span>：依官員身分與日期窗口建立候選文書配對池。</div>"
+    }
+  ],
+  "bodies": {
+    "zhu": "<span class=\"doc-dim doc-author-lead\">兩廣總督兼署廣東巡撫臣<mark data-group=\"author\">孫士毅</mark>跪奏，為遵旨起程回省，恭摺奏覆事竊臣於上年十二月二十四日具奏，接准閩省咨文，挑備戰兵以資策應一摺，本年正月二十四日敬奉硃批：「另有旨諭。」欽此。</span><span class=\"doc-focus\">同日，<mark data-group=\"marker\">接奉廷寄</mark><mark data-group=\"date\">乾隆五十二年正月十三日</mark><mark data-group=\"marker\">奉上諭</mark>：「<mark data-group=\"quote\">據孫士毅奏，接准閩省咨文，挑備水師戰兵一千名，立即起程前赴南澳，以資策應，並知會署提臣彭承堯先赴潮州稽查彈壓。等語。閩粵境壤毗連，臺匪糾眾滋事，各隘口嚴密盤詰，此係當辦之事。孫士毅止當鎮靜地方，密飭隘口堵拿逸犯，豈得輕離省城，以致內地民人心懷疑惑。著孫士毅如尚未起程，即毋庸前往。若已起程，亦即速回省城。</mark>」等因。欽此。</span><span class=\"doc-dim\">臣跪讀之下，仰見我皇上睿謨廣運，坐照無遺，萬里情形，洞如觀火。臣才庸識淺，不知輕重緩急，惑於漳、潮壤接，民情疑恐，親赴彈壓。一經聖明詳晰指示，臣自知錯謬，不禁慚悚交集（硃批：此時又當前往，爾等總不知機要，奈何）。茲臣雖未得閩省剿滅逆匪之信，但據報水陸兩提臣齊抵臺灣，逆賊漸已逃竄，自可即日蕩平。臣已於正月二十一日起，先將督標官兵陸續撤回歸伍。其先赴閩省之水師一千名，昨准閩浙督臣知會，現在暫駐漳州，用資彈壓。其駐紮黃崗等處水陸兵丁，臣現與署提臣彭承堯商酌，俟再得閩省剿賊確信。察看漳、潮交界處所，民情十分寧貼，亦即分起撤回。惟粵省惠、潮民人入天地會者，諒復不少，此種匪會，現有攻城殺官之事，非別項邪教止圖誆騙錢財者可比，必須徹底查辦，淨絕根株。其從外竄逃入境及內地勾引入會之人，均應一一搜捕，不留餘孽。臬司姚棻現已行調來潮，專司督緝，俟有續獲，另容隨時訊供具奏。一切稽查防範事宜，臣遵旨交與署提臣彭承堯，暫駐潮州督率料理。臣即於正月二十六日起程回省，仍俟續得臺地信息，隨時由驛迅速奏聞。所有臣欽奉諭旨，現在料理撤兵緝匪及起程回省日期，理合由驛四百里覆奏，伏乞皇上睿鑒。謹奏。<br><br>乾隆五十二年正月二十六日<br>乾隆五十二年二月十四日奉硃批：已有旨了。欽此。〔本文原收錄於軍錄〕</span>",
+    "yu": "大學士公阿、大學士和，字寄兩廣總督<mark data-group=\"author\">孫</mark>，<mark data-group=\"date\">乾隆五十二年正月十三日</mark><mark data-group=\"marker\">奉上諭</mark>：<mark data-group=\"quote\">據孫士毅奏，接準閩省諮文，挑備水師戰兵一千名，立即起程，前赴南澳，以資策應。並知會署提臣彭承堯，先赴潮州稽查彈壓</mark>，數日內略爲料理地方事務，即親赴潮州駐紮，以便就近辦理等語，已於折內詳悉批示。<mark data-group=\"quote\">閩粵境壤毗連，臺匪糾衆滋事，孫士毅接準諮文，派兵前往預備策應，及嚴飭各隘口，嚴密盤詰，遇有形跡可疑之人，立即究辦。此係當辦之事。</mark>至林爽文不過一烏合之衆，無難速就撲滅。前因該省水陸兩提督概行渡臺，朕尚以爲過當。<mark data-group=\"quote\">孫士毅系鄰省總督，止當鎮靜地方，密飭各隘口堵拿逸犯，豈得輕離省城，以致粵東內地民人心懷疑惑。</mark>外省各督撫遇有此等事件，每以親身前往，見其急公，而不權事理之輕重緩急。督撫固不可養尊處優，身耽安逸，然當鎮靜辦理之事，亦不可過涉張皇，斷無因一二賊匪騷動各省之理。<mark data-group=\"quote\">著傳諭孫士毅，此時如尚未起程，即毋庸前往。若業已起程，亦即回省城。</mark>潮州現有彭承堯在彼，盡足以資彈壓。若續得閩省臺地信息，即行迅速具奏。將此由六百里加緊諭令知之。欽此。遵旨寄信前來。"
+  }
+};
+</script>
+<script src="part-1-interface-data.js"></script>
+<script>
+/* Connect platform replica with pair-doc background and 2.1 examples */
+(function () {
+  'use strict';
+  var D = window.__SKILL_DEMO_DATA__;
+  var DATA = window.PART1_INTERFACE_DATA;
+  if (!D || !DATA) return;
+
+  var EXAMPLE_NODE_IDS = ['doc-硃160-L', 'doc-諭43-R'];
+  var docMap = new Map(DATA.documents.map(function (rec) { return [rec.docId, rec]; }));
+  var zhuRecord = docMap.get('硃160');
+  var yuRecord = docMap.get('諭43');
+  if (!zhuRecord || !yuRecord) return;
+
+  DATA.document = zhuRecord;
+  DATA.documents = [yuRecord];
+  DATA.pairDoc = true;
+  DATA._draftExample = { docIds: ['硃160', '諭43'], nodeIds: EXAMPLE_NODE_IDS };
+
+  (DATA.chartPreview.nodes || []).forEach(function (node) {
+    node.background = !EXAMPLE_NODE_IDS.includes(node.id);
+  });
+
+  DATA.chartPreview.links = [{
+    from: 'doc-諭43-R',
+    to: 'doc-硃160-L',
+    className: 'part1-preview-link req-chart-link',
+    color: '#c45d38',
+    width: 2.2
+  }];
+})();
+</script>
+<script src="part-1-interface.js"></script>
+<script>
+/* ============================================================================
+   Interactive Logic for 2.1 Clues, 50%/50% Split, & Floating Bubbles
+   ========================================================================== */
+(function () {
+  'use strict';
+
+  var D = window.__SKILL_DEMO_DATA__;
+  if (!D) return;
+
+  var REQUIREMENTS = D.requirements;
+  var GROUP_ORDER = REQUIREMENTS.map(function (r) { return r.id; });
+  var activeId = GROUP_ORDER[0];
+  var floatBubble = null;
+
+  var reqDesc = document.querySelector('[data-req-desc]');
+  var skillBody = document.querySelector('[data-req-skill-body]');
+  var descIndex = document.querySelector('[data-req-desc-index]');
+  var descTitle = document.querySelector('[data-req-desc-title]');
+  var descSummary = document.querySelector('[data-req-desc-summary]');
+  var pillList = document.querySelector('[data-req-legend]');
+
+  function pairDocPanels() {
+    return Array.prototype.slice.call(document.querySelectorAll('[data-part1-replica] [data-doc-panel-doc]'));
+  }
+  function panelBodies() {
+    return Array.prototype.slice.call(document.querySelectorAll('[data-part1-replica] [data-doc-body]'));
+  }
+
+  // Set Active Requirement (01, 02, 03, 04)
+  function setActive(groupId, opts) {
+    opts = opts || {};
+    activeId = groupId;
+    var idx = GROUP_ORDER.indexOf(groupId);
+    if (idx === -1) idx = 0;
+    var req = REQUIREMENTS[idx];
+    if (!req) return;
+
+    // 1. Update text card
+    if (descIndex) descIndex.textContent = String(req.n).padStart(2, '0');
+    if (descTitle) descTitle.textContent = req.title;
+    if (descSummary) descSummary.textContent = req.summary;
+    if (reqDesc) reqDesc.setAttribute('data-active-req', groupId);
+
+    // 2. Update Skill window content
+    if (skillBody) {
+      skillBody.innerHTML = req.skill;
+    }
+
+    // 3. Update Legend Pills
+    if (pillList) {
+      pillList.querySelectorAll('[data-req-pill]').forEach(function (pill) {
+        pill.classList.toggle('is-active', pill.getAttribute('data-req-pill') === groupId);
+      });
+    }
+
+    // 4. Update Floating Clue Bubble
+    if (floatBubble) {
+      floatBubble.setAttribute('data-bubble-group', groupId);
+      var numEl = floatBubble.querySelector('[data-req-float-num]');
+      var titleEl = floatBubble.querySelector('[data-req-float-title]');
+      if (numEl) numEl.textContent = String(req.n);
+      if (titleEl) titleEl.textContent = req.title;
+    }
+
+    // 5. Update chart connector link
+    document.querySelectorAll('.part1-chart-links .req-chart-link').forEach(function (line) {
+      line.classList.toggle('is-active', groupId === 'marker' || groupId === 'quote');
+    });
+
+    // 6. Flash matching marks in documents
+    flashMarks(groupId);
+
+    // 7. Auto scroll to mark in doc panels
+    if (!opts.skipScroll) {
+      panelBodies().forEach(function (body) {
+        var mark = body.querySelector('mark[data-group="' + groupId + '"]');
+        if (!mark) return;
+        var scroll = body.closest('[data-doc-scroll]');
+        if (scroll) {
+          var sr = scroll.getBoundingClientRect();
+          var mr = mark.getBoundingClientRect();
+          scroll.scrollTop = Math.max(0, scroll.scrollTop + mr.top - sr.top - Math.max(18, scroll.clientHeight * 0.18));
+        }
+      });
+    }
+
+    requestAnimationFrame(positionBubble);
+  }
+
+  function goTo(delta) {
+    var i = GROUP_ORDER.indexOf(activeId);
+    var nextIndex = (i + delta + GROUP_ORDER.length) % GROUP_ORDER.length;
+    setActive(GROUP_ORDER[nextIndex]);
+  }
+
+  // Prev / Next arrow buttons
+  var navPrev = document.querySelector('[data-nav-prev]');
+  var navNext = document.querySelector('[data-nav-next]');
+  if (navPrev) navPrev.addEventListener('click', function () { goTo(-1); });
+  if (navNext) navNext.addEventListener('click', function () { goTo(1); });
+
+  // Pill click
+  if (pillList) {
+    pillList.addEventListener('click', function (e) {
+      var pill = e.target.closest('[data-req-pill]');
+      if (pill) setActive(pill.getAttribute('data-req-pill'));
+    });
+  }
+
+  // Floating Bubble Logic
+  function injectFloatBubble() {
+    if (floatBubble && document.contains(floatBubble)) return;
+    var panels = pairDocPanels();
+    var leftPanel = panels[0];
+    if (!leftPanel) return;
+
+    var bubble = document.createElement('div');
+    bubble.className = 'req-float-bubble';
+    bubble.setAttribute('data-req-float-bubble', '');
+    bubble.innerHTML =
+      '<span class="req-float-num" data-req-float-num>1</span>' +
+      '<span class="req-float-title" data-req-float-title></span>' +
+      '<button type="button" class="req-float-arrow" data-bubble-prev aria-label="上一項線索">‹</button>' +
+      '<button type="button" class="req-float-arrow" data-bubble-next aria-label="下一項線索">›</button>' +
+      '<span class="req-float-tail" aria-hidden="true"></span>';
+    leftPanel.appendChild(bubble);
+    floatBubble = bubble;
+
+    var scrollEl = leftPanel.querySelector('[data-doc-scroll]');
+    if (scrollEl) scrollEl.addEventListener('scroll', positionBubble);
+    if ('ResizeObserver' in window) new ResizeObserver(positionBubble).observe(leftPanel);
+
+    bubble.querySelector('[data-bubble-prev]').addEventListener('click', function (e) {
+      e.stopPropagation();
+      goTo(-1);
+    });
+    bubble.querySelector('[data-bubble-next]').addEventListener('click', function (e) {
+      e.stopPropagation();
+      goTo(1);
+    });
+  }
+
+  function positionBubble() {
+    if (!floatBubble) return;
+    var leftPanel = pairDocPanels()[0];
+    var leftBody = leftPanel && leftPanel.querySelector('[data-doc-body]');
+    var markEl = leftBody && leftBody.querySelector('mark[data-group="' + activeId + '"]');
+    if (!leftPanel || !markEl) {
+      floatBubble.classList.add('req-float-hidden');
+      return;
+    }
+
+    var scrollEl = leftPanel.querySelector('[data-doc-scroll]');
+    var markRect = markEl.getBoundingClientRect();
+    if (scrollEl) {
+      var scrollRect = scrollEl.getBoundingClientRect();
+      var inView = markRect.bottom > scrollRect.top + 2 && markRect.top < scrollRect.bottom - 2;
+      if (!inView) { floatBubble.classList.add('req-float-hidden'); return; }
+    }
+    floatBubble.classList.remove('req-float-hidden');
+
+    var panelRect = leftPanel.getBoundingClientRect();
+    var bubbleW = floatBubble.offsetWidth;
+    var bubbleH = floatBubble.offsetHeight;
+    var pad = 8;
+    var centerX = markRect.left + markRect.width / 2 - panelRect.left;
+    var left = centerX - bubbleW / 2;
+    left = Math.max(pad, Math.min(left, panelRect.width - bubbleW - pad));
+    var gap = 12;
+    var topAbove = markRect.top - panelRect.top - bubbleH - gap;
+    var flipped = false;
+    var top;
+    if (topAbove < pad) {
+      flipped = true;
+      top = markRect.bottom - panelRect.top + gap;
+    } else {
+      top = topAbove;
+    }
+    floatBubble.style.left = left + 'px';
+    floatBubble.style.top = top + 'px';
+    floatBubble.classList.toggle('req-float-flip', flipped);
+    var tail = floatBubble.querySelector('.req-float-tail');
+    if (tail) {
+      var tailLeft = Math.max(14, Math.min(centerX - left, bubbleW - 14));
+      tail.style.left = tailLeft + 'px';
+    }
+  }
+
+  function injectPairResizer() {
+    var replica = document.querySelector('[data-part1-replica]');
+    var stack = replica && replica.querySelector('[data-doc-stack]');
+    if (!stack || stack.querySelector('[data-pair-resize]')) return;
+    var panels = stack.querySelectorAll('[data-doc-panel-doc]');
+    if (panels.length < 2) return;
+
+    var handle = document.createElement('div');
+    handle.className = 'req-pair-resize';
+    handle.setAttribute('data-pair-resize', '');
+    handle.setAttribute('role', 'separator');
+    handle.setAttribute('aria-orientation', 'vertical');
+    handle.setAttribute('tabindex', '0');
+    handle.setAttribute('aria-label', '調整兩份文書面板的寬度比例');
+    stack.insertBefore(handle, panels[1]);
+
+    var leftPct = 50;
+    function apply() {
+      stack.style.setProperty('--pair-left-pct', leftPct + '%');
+      stack.style.setProperty('--pair-right-pct', (100 - leftPct) + '%');
+      positionBubble();
+    }
+    handle.addEventListener('pointerdown', function (e) {
+      e.preventDefault();
+      handle.classList.add('is-dragging');
+      if (handle.setPointerCapture) { try { handle.setPointerCapture(e.pointerId); } catch (err) {} }
+      var rect = stack.getBoundingClientRect();
+      function onMove(ev) {
+        var pct = ((ev.clientX - rect.left) / rect.width) * 100;
+        leftPct = Math.max(20, Math.min(80, pct));
+        apply();
+      }
+      function onUp() {
+        handle.classList.remove('is-dragging');
+        document.removeEventListener('pointermove', onMove);
+        document.removeEventListener('pointerup', onUp);
+      }
+      document.addEventListener('pointermove', onMove);
+      document.addEventListener('pointerup', onUp);
+    });
+    apply();
+  }
+
+  function flashMarks(groupId) {
+    panelBodies().forEach(function (body) {
+      body.querySelectorAll('mark[data-group="' + groupId + '"]').forEach(function (mark) {
+        mark.classList.remove('is-active');
+        void mark.offsetWidth;
+        mark.classList.add('is-active');
+      });
+    });
+  }
+
+  // Click on mark directly in text
+  document.addEventListener('click', function (e) {
+    var mark = e.target.closest('.part1-doc-body mark[data-group]');
+    if (mark) {
+      setActive(mark.getAttribute('data-group'));
+    }
+  });
+
+  // Engine pair init callback
+  window.__part1OnPairInit = function (records) {
+    var replica = document.querySelector('[data-part1-replica]');
+    if (!replica) return;
+    var PANEL_BY_DOC = { '硃160': 'zhu', '諭43': 'yu' };
+    records.forEach(function (record) {
+      var panel = replica.querySelector('[data-doc-panel-doc="' + record.docId + '"]');
+      if (!panel) return;
+      var body = panel.querySelector('[data-doc-body]');
+      var bodyText = D.bodies[PANEL_BY_DOC[record.docId]];
+      if (body && bodyText) body.innerHTML = bodyText;
+    });
+    injectFloatBubble();
+    injectPairResizer();
+    setActive(activeId, { skipScroll: true });
+  };
+
+  window.__part1OnDocSelect = function (record) {
+    var panel = document.querySelector('[data-part1-replica] [data-doc-panel-doc="' + record.docId + '"]');
+    if (panel) {
+      panel.classList.remove('is-flash');
+      void panel.offsetWidth;
+      panel.classList.add('is-flash');
+      window.setTimeout(function () { panel.classList.remove('is-flash'); }, 900);
+    }
+  };
+
+  if (document.querySelector('[data-doc-panel-doc]')) {
+    window.__part1OnPairInit([{ docId: '硃160' }, { docId: '諭43' }]);
+  }
+})();
+</script>
+</body>
+</html>

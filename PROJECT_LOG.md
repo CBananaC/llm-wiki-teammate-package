@@ -7,7 +7,7 @@ adjustment, append one entry to the bottom of the change log.
 ## Current state
 
 - Phase: active project; human validation of the formal/sample tools and preparation of the competition hand-in
-- Formal review editor: none (document-click emperor-action origin links added in both renderers; browser validation next)
+- Formal review editor: none (paired review-tool interaction latency optimization added; browser validation complete)
 - Canonical Stage 1 data: `review-tools/shared data/stage1_original_text.json`
 - Formal review tool: `review-tools/(1) formal/index.html`
 - Sample review tool: `review-tools/(2) sample/index.html`
@@ -13986,6 +13986,73 @@ Verified:
 Remaining:
 - Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
 
+### 2026-08-13 11:40 HKT — Codex — Cleaned the 上諭-response visual spacing
+
+Summary:
+- Removed the full-viewport card-part backdrops in `辨識奏摺所回應的上諭`, eliminating the thin dark edge strips at the left and right.
+- Set the section to a clean continuous background.
+- Reduced the moved `為奏聞提臣等赴臺並飭沿海官員嚴密巡查事` visual to a responsive 360–560px height so the first text part extends below the visual, matching the intended visual-to-part relationship.
+- Bumped the StoryMap CSS cache version so the browser receives the correction.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh browser QA at 1280px: the edge backdrop pseudo-elements are `display: none`; the source visual is 360px high while its first text part is taller; the full section remains taller than the visual.
+- The moved source visual remains in grid column 2 / row 1, with its connector line and dot still rendered; the newer evidence visual remains present.
+- Fresh browser diagnostics were empty.
+- JavaScript syntax, CSS brace balance, and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending while concurrent staged/unstaged work is present; nothing was pushed.
+
+### 2026-08-13 11:54 HKT — Codex — Fixed incomplete alternating Part 2 backdrops
+
+Summary:
+- Fixed the shared `.part2-card-part` backdrop stacking so each colored band reaches both viewport edges instead of leaving a narrow strip at the left and right.
+- Kept the existing alternating backdrop colors for each part.
+- Applied the fix consistently to the grouped sections, including `辨識奏摺所回應的硃批` and `辨識奏摺所回應的上諭`.
+- Bumped the StoryMap CSS cache version.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh browser QA at 1280px confirmed full-width backdrop geometry with the expected color sequence `#f6f1e8`, `#efe8dc`, `#e8dfd1`, then `#f6f1e8` in the 硃批 section.
+- Fresh browser QA confirmed the 上諭-response first text part remains taller than its moved visual.
+- No horizontal overflow was introduced; browser diagnostics were empty.
+- JavaScript syntax, CSS brace balance, and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending while the active Git lock/concurrent staged work is present; nothing was pushed.
+
+### 2026-08-12 19:39 HKT — Codex — Moved the 硃113 visual beside the 上諭-response card
+
+Summary:
+- Moved the existing `為奏聞提臣等赴臺並飭沿海官員嚴密巡查事` source-flow visual into `辨識奏摺所回應的上諭`.
+- Positioned it in the right column of the first row, beside the `「上諭—回應配對」Skill 會根據以下線索` card.
+- Kept the single HTML visual instance in the 硃批 section as the maintenance source and relocate the live node at initialization; the now-empty 硃批 visual column collapses.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Wide browser QA at 1280px: the visual is in `#part-2-yu-response`, grid column 2 / row 1, with the first text card in the left column; the 硃批 section has no visual and uses one column.
+- The moved source-flow visual still rendered its connector lines and dots, and retained its callout behavior.
+- JavaScript syntax, CSS brace balance, and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
 Remaining:
 - Same as previous entry — user review, then decide on integration into the live page once the shared files are free to edit safely.
 
@@ -14008,6 +14075,31 @@ Verified:
 - JavaScript syntax validation and `git diff --check` passed; browser diagnostics were empty.
 
 Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+### 2026-08-13 12:06 HKT — Codex — Restored AI chat 功能 and 設定 controls
+
+Summary:
+- Made the AI chat panel’s 功能 menu produce saved-result cards or source-derived summary/section results instead of closing without an action.
+- Made AI 設定 fields editable, persisted for the replica, resettable, and usable after a document dot is selected.
+- Kept the controls available after saved AI cards replace the panel body.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- After selecting 硃42, 功能 → 摘要 rendered a result card and closed the menu.
+- 功能 → 全文來源鏈 rendered saved source-chain output when available.
+- 設定 opened after document selection; provider selection, model editing, and reset worked.
+- `node --check`, `git diff --check`, and browser error/warning checks passed during the focused interaction test.
+
+Remaining:
+- A reload-based persistence probe timed out during chart startup; the visible edit/reset interaction and in-page saved state passed.
 - Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
 
 ## 2026-08-12 19:15 HKT — Claude — 諭43／硃160 evidence draft: overlay reveal animation + colour/typography pass
@@ -14129,3 +14221,1328 @@ Verified:
 
 Remaining:
 - Same as previous entries — user review, then decide on integration into the live page once the shared files (`storymap-example.html`, `storymap-cards.css`) are free to edit safely.
+
+### 2026-08-12 19:43 HKT — Codex — Flattened saved AI output cards
+
+Summary:
+- Removed per-turn headings, bundle/run metadata, prompts, and their backdrop containers from the saved AI panel.
+- Kept each document’s saved output cards, card-level provenance, quotations, and event-node focus behavior.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/platform-interface-replica.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- 硃42 showed 151 saved cards with zero turn wrappers and no `第…回`, bundle, or `本機技能輸出` text in the AI panel.
+- JavaScript syntax checks and `git diff --check` passed.
+- Browser error/warning logs were empty.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+## 2026-08-12 19:47 HKT — Claude — Integrated the 諭43／硃160 evidence visual into the live page (uncommitted, working-tree only)
+
+Summary:
+- Applied the standalone draft (`storymap-yu-zhu-evidence-visual-draft.html`) into the actual site for the first time, positioned to the right of the "系統會根據三項條件篩選候選文書……" card (`part2-card-part-second`) under `#part-2-yu-response`.
+- Reduced the panel size per feedback ("too wide, 65% is ok"): panel width scaled from 430px to 280px each in both the draft and the live version (roughly 65% of the previous size).
+- Discovered that `#part-2-yu-response`'s layout already has a purpose-built per-card visual slot system from a concurrent Codex session: `.part2-grouped-layout` positions each `.part2-card-part-*` as its own grid row, and a sibling `.part2-part-visual-second` (etc.) element docks into `grid-column: 2` at the matching row when the layout carries `.part2-has-visual` instead of `.part2-no-visual`. Used that system directly rather than inventing a new one: switched the layout class to `part2-has-visual` and added the new figure as `class="part2-part-visual-second part2-evidence-visual"`.
+- Did **not** reuse the live `part-1-interface.css` `.part1-doc*` classes directly, even though that stylesheet is already loaded on this page — those classes are unscoped globally and heavily entangled with the Part 1 replica's specific dock/grid layout (multiple conflicting `.part1-doc` redefinitions keyed to ancestor state), so reusing them as-is would have leaked unwanted positioning/margins. Instead defined new scoped classes (`part2-evidence-*`) with the same visual language (badge, gradient header, meta lines, scrollable body), consistent with how every other Part 2 visual in this codebase is namespaced.
+- New file `part2-evidence-visual.js` (loaded via a new `<script>` tag) ports the draft's interaction logic 1:1, scoped to `[data-part2-evidence-visual]` following the existing `part2-summary-visual.js` convention.
+- Added the corresponding CSS block to `storymap-cards.css` (Part 2.4b), and bumped both the CSS and new JS file's cache-busting query strings.
+
+Files changed (working tree, **not committed**):
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-evidence-visual.js` (new)
+- `intro Website/Website/storymap/storymap-yu-zhu-evidence-visual-draft.html` (width reduced to match)
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed on the new JS file.
+- Brace-count check on `storymap-cards.css` (729/729) — balanced.
+- Extracted just the new `<figure data-part2-evidence-visual>…</figure>` block from `storymap-example.html` and ran it through Python's `html.parser` — tag-balance clean.
+- Re-extracted and diffed both embedded document bodies (諭43, 硃160) against the canonical `stage1_original_text.json` — both still match exactly.
+- Not yet opened in an actual browser.
+
+**Important — did not run any git commands this time.** `git status` shows `storymap-example.html`, `storymap-cards.css`, `part-1-interface.js`, `platform-interface-replica.html`, `INTRO_WEBSITE_CHANGE_LOG.md`, and `PROJECT_LOG.md` itself all in `MM` state (a version already staged by the concurrent Codex session, plus further unstaged changes on top — from Codex, from me, or both, indistinguishable from `git status` alone). Given how entangled that is, I deliberately left `git add`/`git commit` alone entirely this time rather than risk folding unrelated in-progress work into a commit, or losing track of whose changes are whose. The working-tree files reflect the intended integration and are functional as-is; committing is left for whenever the two sessions' work can be reconciled (by a human, or once the other session's own commit lands and this can be diffed cleanly against it).
+
+Remaining:
+- Reconcile the concurrent Codex working-tree changes with this one before any commit — recommend checking `git diff` per file first.
+- Browser QA of the live integration (reveal/expand/type/highlight behaviour, and that the `part2-has-visual` grid + `part2-part-visual-second` slot render as expected alongside whatever Codex's session changed in the same files).
+- Consider whether `#part-2-zhu-response` (the sibling "辨識奏摺所回應的硃批" section, which uses the same `.part2-grouped-layout` system) should get an equivalent per-card evidence visual later.
+
+### 2026-08-13 11:41 HKT — Codex — Enlarged and cleaned the 2-1 evidence visual
+
+Summary:
+- Narrowed the text column beside the 諭43／硃160 visual and allowed the visual stage to use the released width.
+- Increased the evidence stage height, removed the visual wrapper's backdrop, border, padding, and shadow, and removed the collapsed 諭43 panel border that appeared as a straight line through the visual.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser desktop check at 1280px: text column 448px, transparent visual 722px wide × 680px high, collapsed 諭43 width 0px with no border.
+- Browser interaction check: expanding 諭43 produced two 352px panels separated by an 18px gap, with no center divider; browser error and warning logs were empty.
+- Browser responsive check at 390px: the two document panels stacked within the 358px visual column; viewport override was reset afterward.
+- `git diff --check` passed for the edited CSS and logs.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+### 2026-08-13 12:06 HKT — Codex — Added shared doc_panel_sample UI to Part 2 replicas
+
+Summary:
+- Added `intro Website/Website/storymap/doc_panel_sample.html` as a standalone 硃113 document-panel reference, including the title metadata, move/minimize/close controls, filter/settings row, highlighted original text, and working sample controls.
+- Applied the same `.source-flow-document`／`.ip` panel structure to the `總結文書` visual and both document panes in the `系統會根據三項條件篩選候選文書` visual, while preserving their existing summary animation and evidence-linking behavior.
+- Added panel-specific styling so the two replicas inherit the 硃113 panel proportions, typography, spacing, controls, and fold behavior without changing their content or highlights.
+
+Files changed:
+- `intro Website/Website/storymap/doc_panel_sample.html`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-summary-visual.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Standalone sample loaded in the local browser; its fold and filter controls toggled correctly.
+- Main-page browser check confirmed the two new document replicas render with the shared panel structure; clicking the first evidence mark still reveals the 諭43 pane and activates its matching target text.
+- HTML parsing, JavaScript syntax checks, and `git diff --check` passed. Browser diagnostics were empty before the final CSS-only fold fallback check.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+- A final browser control recheck after the CSS fallback timed out while the local preview was transitioning; the fallback itself passed static validation.
+
+### 2026-08-13 12:14 HKT — Codex — Removed the remaining Part 2 backdrop strip
+
+Summary:
+- Made the no-visual communication card rows explicitly span the viewport, with a calculated centered-wrapper offset so the card alignment stays unchanged at both standard and wide desktop widths.
+- Kept the existing alternating row colors (`#f6f1e8`, `#efe8dc`, `#e8dfd1`, then repeat) and disabled the old pseudo-backdrop only for this no-visual layout.
+- Bumped the StoryMap stylesheet cache version so the correction is visible after reload.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh local browser preview showed the alternating rows reaching the left and right viewport edges with no vertical strip; the text cards remained aligned.
+- Browser error and warning diagnostics were empty.
+- `git diff --check` passed for the edited files.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was pushed.
+
+### 2026-08-13 14:15 HKT — Codex — Replaced the 上諭-response subsection with the four-bar reference interaction
+
+Summary:
+- Removed the former explanatory-card stack and 諭43／硃160 side visual from `辨識奏摺所回應的上諭`.
+- Added the four reference bars from `final_out_v2.html`: 引述標記, 上諭發出日期, 上諭引文, and 奏摺作者.
+- Preserved the reference content, expanding text cards, Skill typing window, sequential 硃160／諭43 reveals, one-open-bar behavior, responsive stacking, and synchronized clue highlighting.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Four bars are generated in the target subsection and the former cards/visual are absent there.
+- Desktop browser check confirmed the three-window reveal and quote highlighting across all matching marks.
+- Narrow browser check at 390px confirmed stacked bars and stacked Skill/document windows.
+- Switching bars closes and resets the previous bar; browser error/warning diagnostics were empty.
+- JavaScript syntax and `git diff --check` passed; the temporary viewport override was reset.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 13:48 HKT — Codex — Copied the 為奏料理撤兵及回省日期事 panel into 2-2
+
+Summary:
+- Replaced the 2-2 right-side communication visual slot with a copied single-document panel from the 2-1 evidence visual.
+- Copied only the 硃160 panel titled `為奏料理撤兵及回省日期事`; the 諭43 panel and three-condition interaction are not duplicated in 2-2.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/part2-evidence-visual.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser check confirmed the 2-2 visual contains exactly one panel, with title `硃為奏料理撤兵及回省日期事`, and no 諭43 panel.
+- The copied panel renders at 668px wide × 680px high beside the 2-2 card; its outer visual background is transparent.
+- Browser error and warning diagnostics were empty; JavaScript syntax and `git diff --check` checks passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 13:16 HKT — Codex — Fixed narrow document-panel header stacking
+
+Summary:
+- Wrapped the candidate-document title and metadata in the shared `.ip-titles` header container so narrow panels keep the document details below the title instead of placing them in a side column.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- At 390px width, both the 硃160 and 諭43 panels place metadata below their titles with no horizontal overlap.
+- Browser error and warning diagnostics were empty; the temporary viewport override was reset.
+- HTML parsing, JavaScript syntax checks, and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed for this change.
+
+### 2026-08-13 13:13 HKT — Codex — Extended the backdrop fix across all grouped Part 2 sections
+
+Summary:
+- Replaced the centered pseudo-backdrop for every `part2-card-part` with a real viewport-width row surface, using a calculated offset so each row begins at the viewport edge while its text card keeps the established content alignment.
+- Applied the same correction to `辨識奏摺所回應的上諭`, `辨識奏摺所回應的硃批`, `辨識上諭所回應的奏摺`, `抽取官員奏報的事件、官員對事件的回應`, `追溯資訊的來源`, and `收取上諭的資訊`.
+- Kept the per-row alternating colors and preserved the right-side visuals above the row surfaces.
+- Bumped the StoryMap stylesheet cache version.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh browser geometry check: every affected row spans x=0 to the viewport right edge; cards remain inset and visuals remain visible.
+- Verified alternating row colors for all six affected section IDs.
+- Browser error and warning diagnostics were empty.
+- `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was pushed.
+
+### 2026-08-13 14:30 HKT — Codex — Replaced the 硃批-response subsection with the three-bar reference interaction
+
+Summary:
+- Removed the former four explanatory cards and copied communication visual from `辨識奏摺所回應的硃批`.
+- Added the three reference bars from `final_out_1.html`: 「奉硃批」等引述標記、同一官員較早發出、引號中的硃批文字.
+- Preserved the reference content, Skill typing window, sequential 硃297／硃155 reveals, one-open-bar behavior, synchronized clue highlighting, and responsive stacking.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Three bars render in the target subsection; the former cards and copied visual are absent there.
+- Desktop browser check confirmed the Skill → 硃297 → 硃155 reveal and matching-clue highlighting.
+- Narrow browser check at 390px confirmed stacked bars and stacked document windows.
+- Switching bars closes and resets the previous bar; browser error/warning diagnostics were empty.
+- JavaScript syntax and `git diff --check` passed; the temporary viewport override was reset.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 14:39 HKT — Codex — Restored Part 2 subsection boundaries after the 硃批 three-bar edit
+
+Summary:
+- Removed an accidental `</main>` inserted inside the 硃批 subsection, which had closed the Part 2 parent container before 2-3 and made the later cover tabs lose their styling.
+- Restored the individual cover-tab rendering for 2-3「辨識上諭所回應的奏摺」and the later 3-1／3-2 subsections without changing the new 硃批 three-bar content.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop browser check confirmed the affected sections remain direct children of `#part-2-content` and each has a visible `.part2-substage-cover`.
+- Narrow browser check at 390px confirmed visible full-width cover tabs for 2-3, 3-1, and 3-2; the 2-3 deep link positions its cover below the sticky header.
+- Reopened the 硃批 first bar and confirmed its three-bar interaction still opens the Skill window and document panel.
+- Browser error and warning diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was pushed.
+
+### 2026-08-13 15:17 HKT — Codex — Replaced 2-3 cards with the final_out_2 常青等 two-bar interaction
+
+Summary:
+- Removed all explanatory cards from `辨識上諭所回應的奏摺`.
+- Added the requested bars `「據常青等奏」引述標記` and `收發日期・常青等`, using the reference Skill window, 諭13 panel, and three concurrent candidate excerpt panels from `final_out_2.html`.
+- Preserved sequential reveal, typing, clue highlighting, one-open-bar behavior, and responsive stacking.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Two requested bars render and the former 2-3 card stack is absent.
+- Desktop browser check confirmed the Skill → 諭13 → three candidate excerpt reveal and synchronized marker/date highlighting.
+- Narrow browser check at 390px confirmed the cover tab remains below the sticky header, bars stay within the viewport, and the three candidate panels stack vertically without overflow.
+- Browser error and warning diagnostics were empty; JavaScript syntax and `git diff --check` passed; the temporary viewport override was reset.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was pushed.
+
+### 2026-08-13 15:28 HKT — Codex — Removed the communication breadcrumb from Part 2.1–2.3 cover tabs
+
+Summary:
+- Removed the `重建通信關係` breadcrumb above the first bar/title area in 2.1 `辨識奏摺所回應的上諭`, 2.2 `辨識奏摺所回應的硃批`, and 2.3 `辨識上諭所回應的奏摺`.
+- Kept the section numbers, titles, 2.3 explanatory note, bars, and all reveal interactions unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop browser check confirmed no breadcrumb remains in the three requested covers and the first bars remain directly below each cover.
+- Narrow browser check at 390px confirmed full-width covers, no horizontal overflow, and no browser errors or warnings; the temporary viewport override was reset.
+- `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was pushed.
+
+### 2026-08-13 15:32 HKT — Codex — Removed the legend labels above the Part 2.1–2.3 bars
+
+Summary:
+- Removed the legend rows above the first bar in 2.1, 2.2, and 2.3, including `引述標記`, `同一官員較早發出`, and `硃批引文` in the 硃批 subsection.
+- Preserved every numbered bar, document panel, and interaction effect.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop and 390px browser checks confirmed zero legend rows in the three requested subsections and no empty gap before the first bar.
+- Narrow layout retained full-width covers and no horizontal overflow; browser error and warning diagnostics were empty.
+- `git diff --check` passed; the temporary viewport override was reset.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was pushed.
+### 2026-08-13 15:15 HKT — Codex — Removed the four evidence bars from the 上諭-response subsection
+
+Summary:
+- Removed the `引述標記`, `上諭發出日期`, `上諭引文`, and `奏摺作者` accordion bars from `辨識奏摺所回應的上諭`.
+- Restored the subsection's three explanatory text cards and its right-side 諭43／硃160 evidence visual.
+- Left the 硃批-response and 上諭-source subsections unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser DOM check confirmed three text-card parts, zero 2-1 request bars, and one right-side evidence visual titled `為奏料理撤兵及回省日期事`.
+- Browser error and warning diagnostics were empty.
+- JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+### 2026-08-13 15:27 HKT — Codex — Restored the four evidence bars in the 上諭-response subsection
+
+Summary:
+- Restored the four bars `引述標記`, `上諭發出日期`, `上諭引文`, and `奏摺作者` in `辨識奏摺所回應的上諭`.
+- Restored the `part2-yu-response-bars.js` script include and kept the subsection boundary separate from the following sections.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser DOM check confirmed exactly four 2-1 bars and no nested later sections.
+- Browser error and warning diagnostics were empty.
+- JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 15:28 HKT — Codex — Tuned the 2-2 three-window bar layout
+
+Summary:
+- Added breathing room below the final bar in `辨識奏摺所回應的硃批` and reduced the gap between its three bars.
+- Increased the height of the three revealed windows and enlarged their Skill/document text; the mobile window override now uses the larger height as well.
+- Removed the `Visual Studio Code —` prefix from all three 2-2 Skill window titles.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh desktop browser check confirmed 14px bar spacing, 102.4px bottom padding, three 480px-high windows, enlarged computed fonts, and the exact title `zhu-response-pairing.md` in all three windows.
+- Browser error and warning diagnostics were empty; JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because the repository has concurrent staged/unstaged work and an active Git lock; nothing was pushed.
+
+### 2026-08-13 16:01 HKT — Codex — Applied the final_out_4 UI style to Part 2.1–2.3
+
+Summary:
+- Added the shared final_out_4 waiting state: narrow request bars remain on the left while a large Skill preview window sits on the right and fades out when a bar opens.
+- Matched the reference visual treatment for all three subsections with the same card overflow behavior, stage divider, visual padding, Skill-window transition, shadows, and responsive hiding of the idle preview.
+- Removed the `Visual Studio Code —` prefix from the revealed 2-1 and 2-3 Skill window titles so all revealed request windows use the same filename-only treatment; the new idle preview keeps the reference titlebar wording.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/part2-req-ui-style.js`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop browser check confirmed idle Skill previews for 2-1, 2-2, and 2-3; 4, 3, and 2 request bars respectively; matching 16px 18px 20px visual padding; and the preserved 2-2 14px gap, 480px stage, 14px Skill text, and 16px document text.
+- Open/close checks confirmed the idle preview hides while a bar is open, the card expands and stage reveals, then the idle preview returns after closing.
+- Mobile viewport check confirmed the idle preview is hidden and the stacked windows retain their section-specific heights.
+- Browser diagnostics were empty; JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because the repository has concurrent staged/unstaged work and an active Git lock; nothing was staged or pushed.
+
+### 2026-08-13 16:31 HKT — Claude — Merged the 2-1/2-2/2-3 visual stage into the request card and synced the idle-to-active Skill-window handoff with the card-open animation
+
+Summary:
+- Nested `.req-stage-wrap` inside `.req-card` for all request items across `辨識奏摺所回應的上諭` (2-1), `辨識奏摺所回應的硃批` (2-2), and `辨識上諭所回應的奏摺` (2-3), matching CSS rules that were already present in `storymap-cards.css` from a prior pass but had no matching DOM nesting to act on.
+- Synced each section's open animation so the card width-open, the stage-wrap reveal, and the idle-Skill-window → row-Skill-window handoff all start on the same click, instead of the handoff being delayed ~1.4s into a sequential chain.
+- No source document text, citations, dates, or translations were touched — layout/timing only. No CSS changes were needed.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Standalone Playwright harness (sandboxed copy) loading the real CSS/JS confirmed correct bar counts (4/3/2) for 2-1/2-2/2-3, synchronized card-width/Skill-window animation from click time, correct merged-card rendering with no clipping, correct docstack rendering for 2-3, correct narrow-viewport (720px) stacking with idle preview hidden, and zero console/page errors across open/close/switch cycles.
+- `node --check` passed on all three edited `.js` files; a tag-balance check confirmed no new HTML imbalance was introduced in `storymap-example.html` beyond the file's pre-existing (unrelated) signature.
+- Confirmed via `device_list_dir` that none of the four target files changed on disk between staging and write-back; `device_commit_files` wrote all four with none rejected.
+
+Remaining:
+- Did not touch git this run (concurrent unrelated staged/unstaged work and apparent active lock files from another agent session were present at start); the four files are written to disk but not staged/committed. Local `git add`/`git commit` limited to just these files (plus this log entry) is the next step once the concurrent git state clears.
+
+### 2026-08-13 16:40 HKT — Codex — Added vertical section space and manual request-card sizing controls
+
+Summary:
+- Reserved the full height of the idle Skill preview inside each 2-1–2-3 section so it no longer overlaps the following cover tab.
+- Added responsive top and bottom spacing around each section's request-card area, keeping bars and windows separated from adjacent cover tabs.
+- Added grouped CSS variables for folded-card width, expanded-card width, folded Skill-window height, expanded window height, expanded Skill/document grid proportions, and section spacing.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop browser geometry confirmed 38.4px top spacing and 64px bottom spacing for all three sections; idle preview height is reserved in the section flow.
+- Expanded checks confirmed 2-1 uses a 360px stage, 2-2 retains its 480px stage, and 2-3 uses its wider document-stack columns without overlap.
+- Mobile check confirmed 24px/48px section spacing, hidden idle previews, and stacked responsive windows.
+- Browser diagnostics were empty; JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work and an active Git lock are present; nothing was staged or pushed.
+
+### 2026-08-13 17:04 HKT — Codex — Expanded the concise Traditional-Chinese Skills
+
+Summary:
+- Made the shortened Skill descriptions in 2-1, 2-2, and 2-3 slightly longer by restoring the key matching conditions without returning to the original long English wording.
+- Kept the existing Traditional-Chinese labels and evidence-highlight groups intact, including date, quotation, author, source, and same-official clues.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser DOM check confirmed the updated Skill bodies across 2-1, 2-2, and 2-3, with all nine idle previews using the updated Traditional-Chinese text and no browser diagnostics.
+- JavaScript syntax, `git diff --check`, and the existing page structure checks passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work and an active Git lock are present; nothing was staged or pushed.
+
+### 2026-08-13 16:46 HKT — Codex — Enlarged the 2.1–2.3 request-card windows and typography
+
+Summary:
+- Increased the expanded Skill/document stage height to 480px as the shared baseline for 2-1, 2-2, and 2-3.
+- Enlarged the Skill body to 14px, document titles to 17px, metadata to 13px, and document body text to 16px.
+- Enlarged the 2-3 stacked candidate-panel typography and set the mobile revealed windows to 360px while retaining the stacked doc layout.
+- Added the typography values to the existing manual request-card CSS controls.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirmed 480px expanded stages and the requested larger text across 2-1, 2-2, and 2-3.
+- The 2-3 document stack retained its three-panel layout and readable scrollable content after the typography increase.
+- Mobile checks confirmed 360px revealed windows and no console diagnostics.
+- JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work and an active Git lock are present; nothing was staged or pushed.
+
+### 2026-08-13 16:51 HKT — Codex — Reduced the out-of-card VS Code preview
+
+Summary:
+- Reduced only the idle Skill preview that sits outside the expanded text card: its desktop height is now `clamp(320px, 44vh, 440px)` and its width is limited to `min(72%, 900px)`.
+- Kept the expanded in-card windows at the larger 480px height and 14px Skill typography.
+- Exposed the folded preview width beside the existing folded preview height in the manual request-card sizing controls.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry confirmed the out-of-card preview is 320px high and 858.9px wide at the desktop test viewport across 2-1, 2-2, and 2-3.
+- Expanded 2-1 verification confirmed the in-card Skill window remains 480px high with 14px text.
+- Browser diagnostics were empty; JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work and an active Git lock are present; nothing was staged or pushed.
+
+### 2026-08-13 16:59 HKT — Codex — Shortened and translated the 2.1–2.3 Skills
+
+Summary:
+- Replaced the long English Skill snippets in 2-1, 2-2, and 2-3 with concise Traditional Chinese instructions.
+- Preserved each clue's highlighting group so the matching evidence continues to illuminate in the document windows.
+- Changed the generated idle-preview heading to `# AI 技能：` while keeping the filename tabs intact.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/part2-req-ui-style.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser DOM check confirmed all 2-1/2-2/2-3 Skill bodies are concise Traditional Chinese and the three idle previews use the translated heading.
+- JavaScript syntax, `git diff --check`, and browser diagnostics passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work and an active Git lock are present; nothing was staged or pushed.
+
+### 2026-08-13 17:41 HKT — Codex — Refined Layer 2 cover labels and Skill-window UI
+
+Summary:
+- Changed the Layer 2 cover labels to `2.1`, `2.2`, and `2.3`, removing the old `之一`/`之二`/`之三` suffixes.
+- Added full-width Traditional Chinese explanations beneath each Layer 2 cover and before its expandable Skill bars.
+- Made folded bars fit their complete titles, enlarged the VS Code title/activity UI, and made the idle Skill previews fit their text.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-req-ui-style.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks confirmed the new numbering, full-width explanations, title-sized folded bars, content-fit previews, expanded 2.1 window sizing, and no browser warnings or errors.
+- JavaScript syntax checks and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work and an active Git lock are present; nothing was staged or pushed.
+### 2026-08-13 17:48 HKT — Codex — Rebalanced the 2-3 source-matching visual
+
+Summary:
+- Changed the three source-matching windows in `辨識上諭所回應的奏摺` to 25% / 25% / 50% from left to right.
+- Increased the desktop visual stage height and made the three candidate panels in the third window content-fit, so each complete excerpt is visible without an internal text clip.
+- Kept the responsive mobile stacking rules unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry check measured 269.742px / 269.742px / 539.484px at a 1155px visual width, which is exactly 25% / 25% / 50% after the fixed connectors.
+- Both 2-3 bars used the updated layout; all three candidate panels had equal scroll and content heights, so their excerpts were fully visible.
+- Browser error and warning diagnostics were empty.
+- JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 17:49 HKT — Codex — Applied the sample document panel to Layer 2.1–2.3
+
+Summary:
+- Added the shared `doc_panel_sample.html`-based document-panel structure to all document windows in `辨識奏摺所回應的上諭`, `辨識奏摺所回應的硃批`, and `辨識上諭所回應的奏摺`.
+- Standardized the visible metadata dates into compact two-line header rows, including `乾隆52年1月26日發出` and `乾隆52年2月14日硃批` for the requested 2.1 panel.
+- Made each opened panel focus its matching highlighted excerpt in the scrollable text pane and replaced the previous muted highlight treatment with a more colourful, evidence-specific palette.
+- Bound the sample panel controls recursively so the candidate document panels in 2.3 use the same UI and interactions.
+
+Files changed:
+- `intro Website/Website/storymap/part2-doc-panel.js`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- JavaScript syntax checks and `git diff --check` passed.
+- Local browser QA confirmed the sample panel anatomy, metadata rows, colourful marks, and automatic excerpt positioning in 2.1; 2.3 confirmed six candidate mini-panels with the same sample structure and working controls.
+- Browser diagnostics were empty. The narrow DOM pass reported no horizontal overflow.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+### 2026-08-13 17:56 HKT — Codex — Equalized and corrected the 2-3 source-matching highlights
+
+Summary:
+- Changed the three source-matching windows in `辨識上諭所回應的奏摺` to equal 33% / 33% / 33% widths.
+- Increased the excerpt text in the third candidate-document window to 15px with a readable line height.
+- In `02 收發日期・常青等`, added the 硃批 date highlight to all three candidate panels.
+- Removed the highlight marker from `又據徐嗣曾由六百里馳奏`, so neither `「據常青等奏」引述標記` nor `收發日期・常青等` can highlight it.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser geometry check measured equal 359.656px / 359.656px / 359.656px windows after the fixed connectors.
+- The candidate excerpt font computed to 15px.
+- The first bar had no active `又據徐嗣曾由六百里馳奏` mark; the second bar highlighted all three `乾隆51年12月27日` 硃批 dates and no unwanted mark.
+- Browser error and warning diagnostics were empty; JavaScript syntax and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 17:56 HKT — Codex — Enlarged Layer 2 explanations and narrowed requirement highlights
+
+Summary:
+- Increased the full-width explanatory paragraph before each Layer 2 expandable-bar set so the purpose and method of each part are easier to read.
+- Made source-document highlights active-only: the selected bar now highlights only its matching evidence group, while quotation, date, author, and other non-selected groups remain unhighlighted.
+- Narrowed the 2.1 Skill description highlight to `「奉上諭」` rather than the surrounding explanation text.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser QA measured the new Layer 2 explanation paragraph at 20.48px at the test viewport.
+- Browser QA confirmed the 2.1 marker bar highlights marker evidence only; quotation, date, and author marks remain transparent. The same active-only behavior was confirmed in 2.2 and 2.3.
+- Browser diagnostics were empty; JavaScript syntax checks and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 18:08 HKT — Codex — Removed highlight borders from Part 2 document marks
+
+Summary:
+- Removed the colored outline and box-shadow border from all active highlights in the Part 2 document panels.
+- Kept the highlight fill colors and the existing highlight animation.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser checks for both `「據常青等奏」引述標記` and `收發日期・常青等` reported `box-shadow: none` and no visible outline for every active mark.
+- Browser error and warning diagnostics were empty.
+- `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 18:09 HKT — Codex — Moved Layer 2 explanations into the cover tabs
+
+Summary:
+- Moved the explanatory text for 2.1, 2.2, and 2.3 directly beneath each cover-tab subtitle instead of leaving it below the cover.
+- Used the requested 2.1 wording beginning `一種深層的通信關係是：有些奏摺會回應官員收到的上諭。` and kept the corresponding matching explanations for the 硃批 and 上諭來源 stages.
+- Increased the cover-tab vertical padding and enlarged the explanation text so the subtitle area has more height and reads as part of the cover.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser QA confirmed all three descriptions are inside their cover tabs, directly below the titles, at 18.56px on desktop and 17.16px on the 390px narrow viewport.
+- Narrow-layout QA reported no horizontal overflow; browser diagnostics were empty.
+- `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 18:14 HKT — Codex — Centered the 2.3 source flow and removed the duplicate third candidate title
+
+Summary:
+- Removed the `硃 為奏彰化失陷已調兵赴臺事` title row from the third candidate window in 2.3 while retaining its metadata and excerpt.
+- Constrained the desktop 2.3 flow to a centered 1120px composition so the three main windows and their arrows sit centrally within the visual.
+- Bumped the stylesheet cache version for the layout change.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser QA measured the centered 2.3 stage at x=80px, width=1120px, with the three main windows at equal 348px widths and both arrows inside the centered composition.
+- Browser QA confirmed the third candidate `.m1` title row is hidden while the other candidate headers remain visible.
+- Browser diagnostics were empty; JavaScript syntax checks and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 18:23 HKT — Codex — Removed the third 2.3 candidate panel and equalized the three-window flow
+
+Summary:
+- Removed the entire `硃25` candidate panel for `為奏彰化失陷已調兵赴臺事` from 2.3.
+- Kept the three main windows—Skill, 上諭, and the remaining candidate-document group—at equal widths and centered them across a 1120px desktop stage, approximately 94% of the text-card width.
+- Updated the stylesheet cache version.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser QA found two remaining candidate panels, no `硃25` title/panel, three main window widths of 348px, and a centered stage at x=80px with width 1120px.
+- Browser diagnostics were empty; JavaScript syntax checks and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-13 18:28 HKT — Codex — Filled the 2.3 visual width and vertically centered the three windows
+
+Summary:
+- Expanded the 2.3 desktop stage to the full available inner text-card width instead of the earlier fixed 1120px cap.
+- Vertically centered the shorter Skill and 上諭 windows against the taller remaining candidate-document group, so the three main windows share the same y-axis center.
+- Updated the stylesheet cache version.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser QA measured a 1154.97px stage inside a 1192.97px text card (96.8% width), three equal 359.66px windows, and identical vertical centers at y=904.71px.
+- Browser diagnostics were empty; JavaScript syntax checks and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-14 17:50 HKT — opencode — Deployed final_out_7.html draft as a storymap standalone page
+
+Summary:
+- Copied the browser draft `final_out_7.html` (2-1 辨識奏摺所回應的上諭, embedded real platform replica) from `~/Downloads` into the storymap folder as `storymap-2-1-yu-response-draft.html` so its relative iframe src `platform-interface-replica.html` resolves beside the real files.
+- No content changes were made to the draft itself.
+
+Files changed:
+- `intro Website/Website/storymap/storymap-2-1-yu-response-draft.html` (new, copied verbatim)
+- `PROJECT_LOG.md`
+
+Verified:
+- File copied byte-for-byte; confirmed it sits in the same directory as `platform-interface-replica.html`, `part-1-interface.js/.css/.data.js`.
+
+Remaining:
+- Browser check that the embedded replica loads inside the draft page.
+- Local checkpoint commit is pending; existing staged/unstaged concurrent work will not be absorbed.
+
+### 2026-08-14 18:15 HKT — opencode — Replica: double-click any chart dot to open its panel in a new dock column
+
+Summary:
+- Added double-click handling on chart dots in `part-1-interface.js` (`nodeElement.addEventListener('dblclick', () => createSpawnedPanel(node))`).
+- A double-clicked dot now spawns a dedicated `part1-spawned-panel` column in the dock showing that dot's output card (reusing the extracted `buildNodePanelMarkup`), with a close button. No drag behaviour was added, matching the request.
+- The dock grid is now driven by `syncSpawnedGrid()` while spawned panels exist (each gets its own `grid-column`); when the last one closes, inline rules are cleared and the CSS attribute selectors take over. Width accounting (`syncDockWidth`) includes spawned columns.
+- Added `.part1-spawned-*` styles in `part-1-interface.css` and a flash highlight for an already-open panel.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; CSS braces balanced.
+- Headless Chrome test on `platform-interface-replica.html`: single-click still opens the document/node panel (doc title updated, no spawned panel); double-click creates exactly one spawned column, dock grid becomes `236px 180px 182px`, close button present, and the spawned body renders the node card.
+
+Remaining:
+- Visual review in a real browser (panel ordering when several spawned columns are open).
+- Local checkpoint commit is pending: these two files also carry another agent's pre-existing staged edits, so committing whole files would absorb unrelated changes; nothing was staged or pushed.
+
+### 2026-08-14 19:05 HKT — opencode — v7 draft: rebuilt 2-1 on the REAL engine (real chart + real tool doc panels)
+
+Summary:
+- Replaced the hand-drawn chart/panels with the actual `part-1-interface.js` engine, loaded directly in the draft page with a custom data object.
+- Engine additions (guarded, real replica unaffected):
+  - `node.background === true` → dot rendered transparent, `pointer-events:none`, not selectable (`drawLinks`).
+  - `data.pairDoc === true` → dock renders TWO real `.part1-doc` panels (奏摺 left, 上諭 right) from `document` + `documents`; a document-dot click flashes the matching panel instead of swapping; AI/eventline/node panels hidden. Exposed `window.__part1OnPairInit` / `window.__part1OnDocSelect` hooks.
+- New `storymap-2-1-yu-response-draft-v7.html`:
+  - Full-width tool replica (real toolbar + real 4-lane chart with pan/zoom/real dots + two real stacked doc panels).
+  - Description panel ON TOP of the chart (expanded only, no folded tabs).
+  - Number bubbles (1–4) on the real doc-panel highlights; small prev/next arrow bubbles next to each; clicking a bubble shows requirement title, flashes highlights in both panels, activates the linking line on the chart.
+  - Chart data driven by `window.__DRAFT11_DATA__` (backgroundDots / exampleDots / links / meta / bodies), converted into the engine's `PART1_INTERFACE_DATA`.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-draft-v7.html` (new)
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes; CSS braces balanced.
+- Headless Chrome on v7: 2 real doc panels, 8 bubbles (4×2), 14 transparent background dots, 2 clickable example dots, 1 linking line (active on marker/quote), desc panel on chart, example-dot click flashes its panel.
+- Headless Chrome on real `platform-interface-replica.html`: unchanged (no pairDoc attr, AI visible, 723 dots, 1 doc panel, 0 background nodes).
+
+Remaining:
+- Visual review in a real browser; confirm bubble/desc styling and the two-panel dock width.
+- Local checkpoint commit pending: `part-1-interface.js/.css` carry another agent's pre-existing staged edits, so committing whole files would absorb unrelated work; nothing staged or pushed.
+
+### 2026-08-14 19:40 HKT — opencode — v7 draft: 5 UI refinements (desc below+on-click, toolbar disabled, doc panel locked, pair-line centered)
+
+Summary:
+- Description panel moved BELOW the visual and hidden on load; it opens only when a number bubble (or its prev/next arrows) is clicked (`setActive(..., {openDesc:true})`).
+- Top toolbar made non-clickable (`pointer-events:none` on `.part1-toolbar`).
+- Doc panel close button disabled in pair mode (`.part1-doc-window-btn[data-panel-close]` → `pointer-events:none`).
+- Chart auto-centers the linking line of the two example dots after init (`centerPairLine()` scrolls `[data-chart-scroll]` so the midpoint of `doc-硃160-L` and `doc-諭43-R` is centered).
+
+Files changed:
+- `intro Website/Website/storymap/storymap-2-1-yu-response-draft-v7.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Inline scripts pass `node --check`.
+- Headless Chrome: desc hidden at load (`display:none`) and below the visual; opens to `display:flex` on bubble click; toolbar pointer-events `none`; close button pointer-events `none`; chart scrolled to `scrollLeft:184, scrollTop:918` (pair line centered).
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: `part-1-interface.js/.css` carry another agent's staged edits; nothing staged or pushed.
+
+### 2026-08-14 20:10 HKT — opencode — 2-1 production visual (storymap-example.html#part-2): 5 UI refinements
+
+Summary:
+- The 2-1 visual lives in `storymap-example.html#part-2` (desktop mode built by `part2-yu-response-bars.js`), not the standalone draft. Applied the 5 requested changes there:
+  1. Description panel now BELOW the visual and hidden on load; opens only when a clue is clicked (bubble/nav arrows or a highlighted mark) via `setActive(..., {openDesc:true})`.
+  2. Toolbar made non-clickable (`pointer-events:none` on `.part1-toolbar`).
+  3. Doc panel close button disabled in pair mode (`[data-panel-close]` → `pointer-events:none`).
+  4. Chart auto-centers the 硃160↔諭43 linking line after init (`centerPairLine()`).
+- Added CSS for the above to the desktop style block in `part2-yu-response-bars.js`.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check part2-yu-response-bars.js` passes.
+- Headless Chrome on the real page `storymap-example.html#part-2` (1440px desktop): desc hidden (`display:none`) + below visual, toolbar pointer-events none, close button pointer-events none, desc opens to `flex` after clicking a mark, chart scrolled to `scrollLeft:210, scrollTop:908` (pair line centered).
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: `part2-yu-response-bars.js` is a new file staged by another agent (my edit is unstaged on top); committing whole files would absorb unrelated staged work; nothing staged or pushed.
+
+### 2026-08-14 20:40 HKT — opencode — 2-1 production visual: 5 more refinements (buttons, desc text, legend, centering)
+
+Summary:
+- In `part2-yu-response-bars.js` desktop markup/CSS:
+  1. Removed the drag (移動文書面板) and minimise (收合文書面板) buttons from the doc-panel title (close stays disabled from the previous pass).
+  2. Disabled the filter (`.part1-filter-trigger`) and settings (`.part1-filter-gear`) buttons in the doc panel.
+  3. Fixed the description text being invisible: the shared `.req-wordcard` starts `opacity:0` (mobile fold); forced `opacity:1` for the desktop desc panel, so summaries like 上諭引文 now show.
+  4. Robustified pair-line centering: `centerPairLine()` on init + `scheduleCenter()` re-centres after layout/rAF and on window resize.
+  5. Removed the ①「奉上諭」…④ 奏摺作者 legend bar above the visual (and under the 2-1 cover).
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes.
+- Headless Chrome on `storymap-example.html#part-2` (1440px): drag/min display none; filter/settings pointer-events none; desc wordcard opacity 1 with summary text; legend count 0; chart scrolled to `scrollLeft:210, scrollTop:908` (pair line centered).
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: `part2-yu-response-bars.js` is a new file staged by another agent (my edit is unstaged on top); committing whole files would absorb unrelated staged work; nothing staged or pushed.
+
+### 2026-08-14 21:00 HKT — opencode — 2-1 visual: toolbar buttons disabled + default font larger & site-scale aware
+
+Summary:
+- Toolbar buttons now look disabled too: `pointer-events:none` + `cursor:default` + `opacity:.45` on toolbar buttons/selects/inputs, and the toolbar's own popovers are hidden.
+- Made the 2-1 visual's text follow the website's font-size setting: the engine pins `--font-scale:1` on `.part1-replica`, so the shell now defines `--site-font-scale: var(--font-scale,1)` (inherited root value) and `.part1-replica` overrides `--font-scale`/`--body-font-scale` with it (`!important`).
+- Raised default text sizes: doc title 18px, doc meta 13px, section label 17px, doc body 15.5px, desc h3 22px, desc body 16px (all multiplied by `--font-scale`).
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes.
+- Headless Chrome on `storymap-example.html#part-2`: default body 15.5px / desc 16px; at root `--font-scale:1.5` they become 23.25px / 24px (scales with site setting).
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: `part2-yu-response-bars.js` is a new file staged by another agent (my edit is unstaged on top); nothing staged or pushed.
+
+### 2026-08-14 21:30 HKT — opencode — 2-1 production visual: UI polish (spacing, borders, clue circle colors, bubble font, section width)
+
+Summary:
+- Refined the production 2-1 visual in `part2-yu-response-bars.js`:
+  1. Separated the description card (`.req-desc`) below `.replica-shell` with `18px` top margin, giving clear space between visual and text card.
+  2. Removed the shorter second horizontal line inside the text card (`border-top: none !important` on `.req-wordcard`).
+  3. Formatted number circle as `1`, `2`, `3`, `4` (not `01`, `02`) and dynamically matched its background color to the active clue's highlight color (`marker` teal, `date` gold, `quote` terracotta, `author` purple).
+  4. Expanded visual width in `#part-2-yu-response` by reducing section side padding and widening the container.
+  5. Enlarged the floating bubble title font (`14.5px * var(--font-scale)`), number circle (24px), and arrow buttons (22px).
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check part2-yu-response-bars.js` passes.
+- Headless Chrome test on `storymap-example.html#part-2`:
+  - `isDescOutside: true`, `descMarginTop: 18px`
+  - `wcBorderTop: 0px` (shorter divider removed)
+  - Clue 1: number `1`, circle background `rgb(58, 122, 122)`
+  - Clue 2: number `2`, circle background `rgb(181, 131, 42)`
+  - Bubble title font size `14.5px`
+  - Section padding reduced to `25.92px`.
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: `part2-yu-response-bars.js` carries another agent's staged edits; nothing staged or pushed.
+
+### 2026-08-14 21:50 HKT — opencode — 2-1: removed Visual Studio Code — yu-response-pairing.md idle window
+
+Summary:
+- Removed `'part-2-yu-response'` from `configs` in `part2-req-ui-style.js`, completely preventing the generation and injection of the `Visual Studio Code — yu-response-pairing.md` idle Skill window in 2.1 辨識奏摺所回應的上諭.
+
+Files changed:
+- `intro Website/Website/storymap/part2-req-ui-style.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes on all scripts.
+- Headless Chrome test on `storymap-example.html#part-2`: `hasIdleSkill: false`, `hasIdleWrap: false`, `hasVscodeText: false`.
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: concurrent files staged by another agent; nothing staged or pushed.
+
+### 2026-08-14 22:15 HKT — opencode — 2-1: header typography matched to 總結文書 + tighter spacing + brighter highlights
+
+Summary:
+- Applied the exact header typography from 總結文書 (`為奏聞林爽文攻陷彰化情形事`) to the 2.1 doc panel headers in `part2-yu-response-bars.js`:
+  - Title: `font: 700 calc(18px * var(--font-scale))/1.35 var(--serif); color: #2d261d; letter-spacing: .02em;`
+  - Badge: `background: #c46a2b; border-radius: 6px; font: 800 calc(13px * var(--font-scale))/1.1 var(--sans);`
+  - Meta: `color: #7a6f63; font: 500 calc(13px * var(--font-scale))/1.55 var(--sans); line-height: 1.55;`
+- Further reduced surrounding whitespace: section side padding down to `clamp(2px, 0.8vw, 14px)`, tool top margin to `4px`, cover bottom margin to `8px`, stage padding to `6px`, and container width to `100%`.
+- Made document highlight colors significantly brighter and higher-contrast:
+  - `marker` (引述標記): `rgba(var(--hl-marker), .46)` with `#0d3835` deep text
+  - `date` (發出日期): `rgba(var(--hl-date), .48)` with `#3e2b07` deep text
+  - `quote` (上諭引文): `rgba(var(--hl-quote), .42)` with `#4a1c0d` deep text
+  - `author` (奏摺作者): `rgba(var(--hl-author), .44)` with `#2b1340` deep text
+  - Active flash filter increased to `brightness(2.2) saturate(1.8)`.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check part2-yu-response-bars.js` passes.
+- Headless Chrome on `storymap-example.html#part-2`:
+  - `titleFont`: Serif (Noto Serif TC), `titleWeight: 700`, `titleSize: 18px`
+  - `secPadL`: 11.52px, `toolMargin`: 4px (tight surrounding space)
+  - `markBg`: `rgba(58, 122, 122, 0.46)` with `#0d3835` text
+  - `dateBg`: `rgba(181, 131, 42, 0.48)` with `#3e2b07` text
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: concurrent files staged by another agent; nothing staged or pushed.
+
+### 2026-08-15 14:30 HKT — opencode — 2-1: 50% Skill window alongside text panel in description card
+
+Summary:
+- Upgraded the 2.1 (辨識奏摺所回應的上諭) description card below the visual to a side-by-side 50%/50% split layout.
+- Left 50% displays the requirement summary text, and right 50% displays an equal-height VS Code-styled Skill window showing concise `yu-response-pairing.md` rules without vertical scrollbars.
+- Highlighted corresponding rules for each of the four clues (引述標記, 發出日期, 上諭引文, 奏摺作者) matching the active requirement.
+- Synchronized requirement switching across arrows, bubbles, and document mark clicks.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-skills-sample.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for `part2-yu-response-bars.js`.
+- `git diff --check` passed without formatting or syntax errors.
+
+Remaining:
+- Visual review in a real browser.
+
+### 2026-08-14 22:45 HKT — opencode — 2-1: reduced upper margin + persistent bright highlights + purple 諭 badge
+
+Summary:
+- Reduced upper margin above the 2.1 visual:
+  - `.part2-substage-cover` padding reduced to `top: 20px, bottom: 16px`, `margin-bottom: 0px`.
+  - `.story-inner` and `.req-desktop-tool` margins/paddings tightened to `0`.
+- Fixed highlight color turning darker after clicked:
+  - Replaced temporary flash-only brightness with solid, vibrant, luminous steady-state highlight colors (`marker` `#3ee0cf`, `date` `#ffd644`, `quote` `#ff9370`, `author` `#d896ff`) so marks stay brightly illuminated after selection.
+- Updated the badge for `諭兩廣總督孫士毅毋庸親往潮州` (`諭43`):
+  - Changed label text from `上` to `諭`.
+  - Applied purple backdrop (`#7d4ab8`).
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passes on all modified files.
+- Headless Chrome test on `storymap-example.html#part-2`:
+  - `coverPadTop: 20px`, `coverPadBottom: 16px`, `coverMarginBottom: 0px`, `toolMarginTop: 0px`
+  - `yuBadgeText: "諭"`, `yuBadgeBg: rgb(125, 74, 184)` (purple `#7d4ab8`)
+  - `markBgAfter: rgb(62, 224, 207)` (`#3ee0cf`, stays bright after click)
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: concurrent files staged by another agent; nothing staged or pushed.
+
+### 2026-08-14 23:30 HKT — opencode — 2-1: balanced upper margin between cover banner and visual
+
+Summary:
+- Adjusted the upper margin in `part2-yu-response-bars.js`:
+  - Set `.part2-substage-cover` padding to `top: 24px, bottom: 20px`.
+  - Set `.req-desktop-tool` top margin to `12px !important`.
+  - Provides a clean, moderate breathing space between the section header and the visual without looking thick.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check part2-yu-response-bars.js` passes.
+- Headless Chrome test on `storymap-example.html#part-2`: `coverPadTop: 24px`, `coverPadBottom: 20px`, `toolMarginTop: 12px`.
+
+Remaining:
+- Visual review in a real browser.
+- Local checkpoint commit pending: concurrent files staged by another agent; nothing staged or pushed.
+
+### 2026-08-15 14:45 HKT — opencode — 2-1: enlarged Skill window text and added vertical line spacing
+
+Summary:
+- Increased font size in the 2.1 Skill window to `13px` (`13.5px` for headings) with `1.75` line-height.
+- Added structured spacing between rows/sentences and generous top/bottom padding (`13px 15px 14px`).
+- Preserved equal-height stretching between the text explanation card and the Skill window.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-skills-sample.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for `part2-yu-response-bars.js`.
+- `git diff --check` passed cleanly.
+
+Remaining:
+- Visual review in browser.
+
+### 2026-08-15 15:45 HKT — opencode — 2-1 chart: filtered to document-endpoint and event-source lines; removed blue circle dots
+
+Summary:
+- Filtered 2.1 chart background lines in `part2-yu-response-bars.js` (and `storymap-2-1-yu-response-draft-v8.html`) to retain only:
+  - `document-endpoint` (155 zhupi send-to-receive lines)
+  - `event-source` (280 event citation lines)
+  - `example-pair-yu43-zhu160` (foreground clickable example link)
+- Removed all blue circle dots (`shangzou` documents, `#2f75b5`) from the 2.1 chart while preserving all other node kinds (zhupi orange dots, shangyu purple dots, and event squares).
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-draft-v8.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed on `part2-yu-response-bars.js`.
+- Verified in Python that 124 blue circle dots were removed and exactly 435 background links (155 `document-endpoint` + 280 `event-source`) + 1 foreground example link remain.
+
+Remaining:
+- Visual validation in browser.
+
+### 2026-08-19 12:45 HKT — Codex — Reduce review-tool interaction latency
+
+Summary:
+- Removed the duplicate full chart redraw that ran before opening a document card in both review renderers.
+- Made single clicks on `Note`, `AI`, and `事件鏈` open or toggle immediately instead of waiting 240 ms.
+- Preserved the existing double-click behavior by restoring the previous primary tool and creating the additional tool column on `dblclick`.
+
+Files changed:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Both inline HTML script sets parse with `vm.Script`.
+- `git diff --check` passed.
+- Local `/sample` browser validation opened `Note` in about 286 ms with no console warnings or errors; a real double-click produced separate `Note` and `AI` tool columns with both buttons active.
+
+Remaining:
+- The unrelated pre-existing StoryMap and saved-state changes remain unstaged and were not included in this checkpoint.
+- Formal review editor cleared after this paired renderer change.
+
+
+### 2026-08-15 16:00 HKT — opencode — 2-1 chart: hidden emperor-action to official-document links
+
+Summary:
+- Filtered out the 55 purple lines connecting emperor actions on lane 4 to official memorial documents on lane 2 in `part2-yu-response-bars.js` (and `storymap-2-1-yu-response-draft-v8.html`).
+- Retained the remaining 65 emperor-action lines connecting emperor action squares directly to their source `shangyu` decree dots on lane 3.
+- Total background links on 2.1 chart refined to 380 links + 1 foreground example link (`諭43` ↔ `硃160`).
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-draft-v8.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed on `part2-yu-response-bars.js`.
+- Python verification confirmed exactly 55 emperor-to-official links dropped and 380 background links remain.
+
+Remaining:
+- Visual validation in browser.
+
+### 2026-08-15 15:15 HKT — opencode — 2-1: focused key response quotation in left doc panel (硃160)
+
+Summary:
+- Emphasized the core response quotation (`同日，接奉廷寄...欽此。`) in the left document panel with 100% opacity and clear contrast (`.doc-focus`).
+- Dimmed the preceding and following non-key context text on the left panel to `opacity: 0.35` (`.doc-dim`) with hover reveal to make the relevant response text instantly visible.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-skills-sample.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for `part2-yu-response-bars.js`.
+- `git diff --check` passed without formatting errors.
+
+Remaining:
+- Visual validation in browser.
+
+### 2026-08-15 15:30 HKT — opencode — 2-1: made highlighted text normal when active on left panel
+
+Summary:
+- Ensured all highlighted text and active clue marks (including author `孫士毅` and `.doc-author-lead`) switch to normal full opacity (`100%`) when active or highlighted.
+- Retained context dimming (`opacity: 0.35`) for non-active background text while guaranteeing zero transparency on any active clue element.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/storymap-2-1-yu-response-skills-sample.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for `part2-yu-response-bars.js`.
+- `git diff --check` passed without formatting errors.
+
+Remaining:
+- Visual validation in browser.
+
+### 2026-08-15 16:00 HKT — opencode — 2-2 and 2-3: added 3-way width changers in 2.3, chart centering on example chains, and dock edge resizer
+
+Summary:
+- Removed the 50% width limit on document panel docks, allowing dragging up to 100% full visual width (`--stage-dock-pct`).
+- Set default dock widths: 50% for 2.1 and 2.2, and 70% for 2.3 (3 document panels).
+- Added left dock edge resizer handle (`.part1-stage-resize[data-stage-dock-resize]`) allowing smooth dragging between the timeline chart and the document dock.
+- Added 3-way draggable resizers (`inject3WayResizers`) between the 3 document panels in 2.3 (`諭13`, `硃21`, `硃22`).
+- Synchronized background nodes and background links in 2.2 and 2.3 to match 2.1's exact background dataset (filtered non-example blue circles, preserved all background timeline links with `opacity: 0.22`, and overlaid prominent foreground active links).
+- Configured automated chart viewport centering (`centerPairLine()`) across 2.1, 2.2, and 2.3 to focus directly on each stage's active example line chain.
+- Fixed `renderAiIdle` imperial edict date field access in `part-1-interface.js`.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/Website/storymap/storymap-part2-complete-sample.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for `part-1-interface.js`, `part2-yu-response-bars.js`, `part2-zhu-response-bars.js`, and `part2-yu-source-bars.js`.
+- `git diff --check` passed cleanly.
+
+Remaining:
+- Visual validation in browser.
+
+### 2026-08-19 13:35 HKT — Codex — Sample January 1787 AI output scope
+
+Summary:
+- In the sample tool only, scoped a January 1787 document panel to the canonical AI loop generated on 2026-07-27.
+- Kept the requested order: 林方行動, 清廷行動（完成／待辦／非軍事）, 皇帝行動, and 官員回應.
+- Merged the adjacent 2026-07-27 dedup run into the matching 林／清 candidate cards as transient repeat metadata, and exposed saved source chains in those cards without creating duplicate output cards.
+
+Files changed:
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All nine inline script blocks parse with `vm.Script`.
+- `git diff --check` passed for the sample HTML.
+- Saved data inspection found the expected 2026-07-27 canonical and dedup bundles for `硃83`.
+
+Remaining:
+- The existing browser tab is serving a stale pre-edit sample copy; refresh/server-source validation remains to be completed.
+- This is an intentional sample-only exception to the formal/sample paired-edit rule.
+
+### 2026-08-19 13:42 HKT — Codex — Verified sample dedup fallback
+
+Summary:
+- Added a read-only fallback annotation for 7/27 dedup records whose historical target IDs are not loaded as live sample events, so the dedup result remains visible on the canonical candidate card.
+
+Files changed:
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Fresh sample tab showed 15 cards only: 2 林方, 8 清方, 1 皇帝行動, and 4 官員回應 cards.
+- All 15 cards contained source quotes; 2 contained saved source-chain previews; 4 displayed `AI 去重` annotations.
+- Card order was Lin → 清軍事已執行 → 清軍事待執行 → 皇帝行動 → 官員回應.
+
+Remaining:
+- The existing browser tab may still need a cache-busting reload to display the current HTML.
+
+### 2026-08-19 14:02 HKT — Codex — Fixed sample AI renderer scope error
+
+Summary:
+- Fixed the sample AI chat renderer exception that left some selected document panels, including 硃105, with no output cards.
+- Confirmed 硃105 was scanned in the canonical `zhu-january-official-loop` bundle at 2026-07-27 03:37 and the `zhu-january-dedup` bundle at 03:38; the missing cards were a UI failure, not missing AI output.
+- Audited nearby January documents and kept the distinction between documents with saved 2026-07-27 runs, older bundles, and no saved AI bundle.
+
+Files changed:
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Clicking 硃105 in a fresh cache-busted sample tab rendered 19 AI cards, 10 source-chain previews, and 3 dedup annotations.
+- No new browser console error occurred after the fix; the reproduced `ReferenceError: canonicalRefs is not defined` was eliminated.
+- All nine inline sample script blocks parse with `vm.Script`.
+- `git diff --check` passed for the sample HTML.
+
+Remaining:
+- Formal HTML was intentionally left unchanged because this investigation targeted the sample tool.
+- Documents with no matching saved bundle still need a separate AI scan; the renderer now leaves those as genuinely empty rather than failing selected panels globally.
+
+### 2026-08-19 14:12 HKT — Codex — Paired the AI renderer scope fix across formal and sample
+
+Summary:
+- Audited both AI chat renderers after the 硃105 failure and found the same out-of-scope `canonicalRefs` reference in the formal HTML.
+- Passed the canonical reference list explicitly into `repeatTargetForItem`, matching the previously fixed sample renderer so any dedup-linked document dot can render without aborting the panel.
+- Preserved genuinely empty documents: a missing saved bundle is still not treated as an AI output.
+
+Files changed:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Formal and sample inline JavaScript parsed successfully (8 and 9 blocks respectively).
+- `git diff --check` passed for both HTML files and the log.
+- Source audit found no remaining call to `repeatTargetForItem` that omits the canonical reference argument.
+- The earlier fresh-tab sample test for 硃105 rendered 19 cards after the shared renderer fix.
+
+Remaining:
+- A broader live browser sweep exceeded the browser automation timeout before returning results; no code or saved data was changed by that test.
+- Formal and sample visual regression should be rechecked when the local browser tab responds normally.
+
+### 2026-08-19 14:30 HKT — Codex — Preserved ordinal 1787/02/29 chart dates
+
+Summary:
+- Corrected the chart date projection for source dates that are valid project calendar ordinals but invalid Gregorian dates, especially `硃211` at `1787/02/29`.
+- Kept the ordinal day between `1787/02/28` and `1787/03/01`, preserved its raw `1787/02/29` label, and added it to the visible date ruler.
+- Updated source-date lag calculation to use the same preserved date projection.
+
+Files changed:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Canonical Stage 1 and saved response data both report 硃211 as `1787/02/29`; no source data was changed.
+- Both HTML files parsed successfully (8 and 9 inline script blocks) and `git diff --check` passed.
+- Fresh formal and sample tabs placed 硃211 at chart y-position `1630.5`, before the valid `1787/03/01` document at `1636.0`.
+- Clicking 硃110 in sample still showed the 硃211 response card with `日期 1787/02/29`; no browser error was recorded.
+
+Remaining:
+- None for this date mismatch.
+
+### 2026-08-19 14:56 HKT — Codex — Separated Zhu document and 上諭 receipt dates
+
+Summary:
+- Fixed the official-response card date ambiguity exposed by 硃226. The card's `↩ 收到日期` now uses the canonical Zhu document `receive_date`, which is also the third-line chart date (`1787/03/04` for 硃226).
+- Preserved the AI pairing's distinct receipt evidence as `↩ 接奉上諭日期` (`1787/02/13` for 硃226), rather than presenting it as the document's chart receipt date.
+- Applied the same renderer correction to formal and sample; no saved review data was changed.
+
+Files changed:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- Sample browser card for 硃226 shows `日期 1787/02/19`, `↩ 收到日期 1787/03/04`, and `↩ 接奉上諭日期 1787/02/13`; the old ambiguous `收到日期 1787/02/13` is absent.
+- Formal and sample chart dots for 硃226 both rendered at the same second-line/third-line positions; both pages loaded without browser errors.
+- Saved-data audit covered 673 sample and 423 formal Zhu official-response items; the renderer now separates all items that carry the AI pairing receipt field.
+- Both HTML files parsed successfully (8 and 9 inline script blocks) and `git diff --check` passed.
+
+Remaining:
+- Formal's current saved state does not contain the specific 硃226 official-response card, so its card text was verified through the paired renderer and its chart was verified live.
+
+### 2026-08-19 17:50 HKT — Codex — Registered Gemini 3.7 Flash in the proxy
+
+Summary:
+- Added `gemini-3.7-flash` to the Gemini proxy model catalog and assigned it the same 65,536-token output ceiling as the existing 3.6 model path.
+- Kept the deployment opt-in: the proxy remains on its existing default until deployed with `MODEL=gemini-3.7-flash`.
+
+Files changed:
+- `tool/proxy/gemini-proxy/main.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Proxy Python source compiles successfully with `py_compile`.
+- `git diff --check` passes for the proxy edit.
+
+Remaining:
+- The proxy unit suite could not import because this workspace does not have the optional `flask` dependency installed.
+- Cloud Run deployment and a successful Vertex request remain pending; the active account currently lacks `run.services.get` and `aiplatform.endpoints.predict` in the target project.

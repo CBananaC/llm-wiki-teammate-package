@@ -56,6 +56,7 @@ MODEL_MAX_OUT = {
     "gemini-1.5-flash-002": 8192, "gemini-1.5-pro-002": 8192,
     "gemini-2.0-flash-001": 8192,
     "gemini-2.5-flash": 65536, "gemini-2.5-pro": 65536,
+    "gemini-3.7-flash": 65536, "gemini-3.6-flash": 65536,
     "gemini-3.5-flash": 65536, "gemini-3.1-pro-preview": 65536,
     "gpt-4.1": 32768, "gpt-4.1-mini": 32768,
     "gpt-4o": 16384, "gpt-4o-mini": 16384,
@@ -84,7 +85,7 @@ DEFAULT_GEMINI_MODELS = {
     # DeepSeek V3.2 is also available through Google Cloud's managed MaaS
     # endpoint and uses the same ADC/service-account authentication.
     "deepseek-v3.2-maas", "deepseek-ai/deepseek-v3.2-maas",
-    "gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.1-pro-preview",
+    "gemini-3.7-flash", "gemini-3.6-flash", "gemini-3.5-flash", "gemini-3.5-flash-lite", "gemini-3.1-pro-preview",
     "gemini-2.5-flash", "gemini-2.5-pro",
     "gemini-2.0-flash-001", "gemini-1.5-flash-002", "gemini-1.5-pro-002",
 }
