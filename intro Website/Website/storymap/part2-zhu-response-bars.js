@@ -52,8 +52,8 @@
       var body = isReply ? zhuReplyBody : zhuOrigBody;
       var title = isReply ? '為屢接上諭覆奏現在攻戰情形事' : '為奏聞統兵到臺查辦及兵力布置情形事';
       var meta = isReply
-        ? ['黃仕簡（福建水師提督）', '乾隆52年3月7日發出', '乾隆52年4月3日硃批', '明清台檔31，頁64']
-        : ['黃仕簡（福建水師提督）', '乾隆52年1月5日發出', '乾隆52年2月13日硃批', '明清台檔30，頁320'];
+        ? ['黃仕簡（福建水師提督）', '乾隆52年3月7日上奏', '乾隆52年4月3日硃批', '明清台檔31，頁64']
+        : ['黃仕簡（福建水師提督）', '乾隆52年1月5日上奏', '乾隆52年2月13日硃批', '明清台檔30，頁320'];
       var panel = window.part2DocPanel;
       return panel.create({
         outerClass: 'req-win req-win-doc',
@@ -144,7 +144,7 @@
      ========================================================================== */
   var DESKTOP_MARKUP =
     '<div class="replica-shell">' +
-      '<div data-part1 data-part1-data="PART1_INTERFACE_DATA_ZHU_RESPONSE"><div class="part1-replica" data-part1-replica></div></div>' +
+      '<div data-part1 data-part1-data="PART1_INTERFACE_DATA_ZHU_RESPONSE" data-part1-chart-scale="1.25"><div class="part1-replica" data-part1-replica></div></div>' +
     '</div>' +
     '<div class="req-desc is-open" data-req-desc>' +
       '<div class="req-desc-head">' +
@@ -193,14 +193,15 @@
     '#part-2-zhu-response .req-desc[data-active-req="marker"] .req-desc-index { background: rgb(var(--hl-marker)) !important; }',
     '#part-2-zhu-response .req-desc[data-active-req="identity"] .req-desc-index { background: rgb(var(--hl-author)) !important; }',
     '#part-2-zhu-response .req-desc[data-active-req="quote"] .req-desc-index { background: rgb(var(--hl-quote)) !important; }',
-    '#part-2-zhu-response .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 18px/1.35 var(--serif); }',
+    '#part-2-zhu-response .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 calc(18px * var(--font-scale, 1))/1.35 var(--serif); }',
     '#part-2-zhu-response .req-desc-body { padding: 16px 20px 18px; }',
 
     /* 50% / 50% split layout */
     '#part-2-zhu-response .req-desc-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; width: 100%; }',
     '#part-2-zhu-response .req-desc-text-panel { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 4px 0; height: 100%; }',
     '#part-2-zhu-response .req-desc .req-wordcard { display: flex; flex-direction: column; justify-content: center; height: 100%; border-top: none !important; padding-top: 0 !important; margin: 0 !important; opacity: 1 !important; transform: none !important; }',
-    '#part-2-zhu-response .req-desc .req-wordcard p { margin: 0; color: var(--text); font: 500 calc(15px * var(--font-scale, 1))/1.95 var(--serif); text-align: justify; }',
+    '#part-2-zhu-response .req-desc .req-wordcard p { margin: 0; color: var(--text); font: 500 calc(18px * var(--font-scale, 1))/1.85 var(--serif); text-align: justify; }',
+    '#part-2-zhu-response .req-desc-head h3, #part-2-zhu-response .req-desc .req-wordcard p { font-size: calc(18px * var(--font-scale, 1)) !important; }',
 
     /* Right Skills Window: 50% width, matches text card height */
     '#part-2-zhu-response .req-desc-skill-panel { display: flex; flex-direction: column; min-width: 0; height: 100%; }',
@@ -215,7 +216,7 @@
     '#part-2-zhu-response .req-skill-shell { display: grid; grid-template-columns: 26px 1fr; flex: 1 1 auto; height: 100%; min-height: max-content; background: #1e1e1e; }',
     '#part-2-zhu-response .req-skill-activitybar { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0; color: #707070; background: #2b2b2b; font: 10.5px/1 var(--sans); border-right: 1px solid #383838; user-select: none; height: 100%; }',
     '#part-2-zhu-response .req-skill-editor { display: flex; flex-direction: column; min-width: 0; min-height: max-content; height: 100%; }',
-    '#part-2-zhu-response .req-skill-body { flex: 1 1 auto; height: auto; min-height: max-content; overflow: visible !important; padding: 18px 18px 20px; color: #d4d4d4; font: 500 calc(13px * var(--font-scale, 1))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace; word-break: break-word; scrollbar-width: none; }',
+    '#part-2-zhu-response .req-skill-body { flex: 1 1 auto; height: auto; min-height: max-content; overflow: visible !important; padding: 18px 18px 20px; color: #d4d4d4; font: 500 calc(15px * var(--font-scale, 1))/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace; word-break: break-word; scrollbar-width: none; }',
     '#part-2-zhu-response .req-skill-body::-webkit-scrollbar { display: none; }',
     '#part-2-zhu-response .req-skill-body .skill-row { margin-bottom: 7px; }',
     '#part-2-zhu-response .req-skill-body .skill-row:last-child { margin-bottom: 0; }',
@@ -236,6 +237,12 @@
     '#part-2-zhu-response .req-nav-arrow { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; transition: background .15s ease, color .15s ease; }',
     '#part-2-zhu-response .req-nav-arrow:hover { color: #fffaf2; background: var(--accent); border-color: var(--accent); }',
 
+    /* Match 2.1: the replica toolbar is a faded, non-interactive visual header. */
+    '#part-2-zhu-response .replica-shell .part1-toolbar { pointer-events: none !important; background: transparent !important; border-bottom-color: transparent !important; }',
+    '#part-2-zhu-response .replica-shell .part1-toolbar * { pointer-events: none !important; cursor: default !important; }',
+    '#part-2-zhu-response .replica-shell .part1-toolbar button, #part-2-zhu-response .replica-shell .part1-toolbar select, #part-2-zhu-response .replica-shell .part1-toolbar input { opacity: .45; }',
+    '#part-2-zhu-response .replica-shell .part1-toolbar [data-type-pop], #part-2-zhu-response .replica-shell .part1-toolbar [data-tools-pop] { display: none !important; }',
+
     /* doc panels */
     '#part-2-zhu-response .replica-shell { --site-font-scale: var(--font-scale, 1); }',
     '#part-2-zhu-response .part1-replica { --font-scale: var(--site-font-scale) !important; --body-font-scale: var(--site-font-scale) !important; }',
@@ -246,7 +253,9 @@
     '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .badge, #part-2-zhu-response .part1-replica[data-pair-doc="true"] [data-doc-panel-badge] { display: inline-block; width: auto; height: auto; margin-right: 6px; padding: 2px 7px; color: #fffaf2; background: #c46a2b; border-radius: 6px; font: 800 calc(13px * var(--font-scale, 1))/1.1 var(--sans) !important; vertical-align: 1px; }',
     '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .part1-doc-meta { margin: 0; color: #7a6f63; font: 500 calc(13px * var(--font-scale, 1))/1.55 var(--sans); line-height: 1.55; }',
     '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .part1-doc-section-label { font-size: calc(17px * var(--font-scale)); }',
-    '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .part1-doc-body { font-size: calc(15.5px * var(--font-scale)); }',
+    '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .part1-doc-body { font-size: calc(18px * var(--font-scale)); }',
+    '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-controls { display: none !important; }',
+    '#part-2-zhu-response .part1-replica[data-pair-doc="true"] .part1-doc-title { padding-right: 0 !important; }',
 
     '#part-2-zhu-response .req-pair-resize { position: relative; z-index: 6; cursor: ew-resize; touch-action: none; user-select: none; }',
     '#part-2-zhu-response .req-pair-resize::before { content: ""; position: absolute; top: 38%; bottom: 38%; left: 4px; width: 2px; border-radius: 2px; background: #d1c2ad; opacity: .7; transition: background .15s ease, opacity .15s ease, transform .15s ease; }',
@@ -284,7 +293,8 @@
     /* chart links */
     '#part-2-zhu-response .part1-chart-links .part1-bg-link { opacity: 0.22 !important; pointer-events: none !important; }',
     '#part-2-zhu-response .part1-chart-links .req-chart-link, #part-2-zhu-response .part1-chart-links .part1-example-link { transition: opacity .2s ease, stroke-width .2s ease; cursor: pointer; pointer-events: stroke; }',
-    '#part-2-zhu-response .part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 3.2 !important; }',
+    '#part-2-zhu-response .part1-chart-links .req-chart-link { opacity: .88 !important; stroke-width: 4 !important; }',
+    '#part-2-zhu-response .part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 4.8 !important; }',
 
     '@media (max-width: 860px) { #part-2-zhu-response .req-desc-split { grid-template-columns: 1fr; gap: 10px; } }',
     '@media (max-width: 900px) { #part-2-zhu-response .req-float-title { display: none; } }'
@@ -603,7 +613,10 @@
       var n1 = wrap.querySelector('[data-chart-node-id="doc-硃155-L"]');
       var n2 = wrap.querySelector('[data-chart-node-id="doc-硃155-R"]');
       var n3 = wrap.querySelector('[data-chart-node-id="doc-硃297-L"]');
-      var nodes = [n1, n2, n3].filter(Boolean);
+      // Keep the first highlighted relationship pair in view.  The third
+      // node remains in the scrollable chain, but centering all three at once
+      // would leave fewer than two endpoint dots visible at the enlarged scale.
+      var nodes = [n1, n2].filter(Boolean);
       if (!nodes.length) return;
       var sr = scrollEl.getBoundingClientRect();
       var sumX = 0, sumY = 0;

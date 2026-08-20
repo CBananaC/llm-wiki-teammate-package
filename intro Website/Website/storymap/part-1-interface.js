@@ -479,7 +479,12 @@ function part1InitRoot(root) {
   let dotGap = clamp(storedReplicaSettings.dotGap, 4, 36);
   let daySpacing = clamp(storedReplicaSettings.daySpacing, 4, 36);
   let laneSpacing = clamp(storedReplicaSettings.laneSpacing, 1.5, 2.8);
-  let chartScale = 1;
+  // Pair-mode teaching visuals can opt into a closer initial view of the
+  // example chain.  The normal Part 1 replica remains at 1×, while the
+  // 2.1–2.3 teaching mounts use this attribute to make both endpoints of the
+  // highlighted relationship readable on first render.
+  const initialChartScale = clamp(root.dataset.part1ChartScale || 1, 0.5, 3);
+  let chartScale = initialChartScale;
   const chartLaneRatios = Object.freeze({
     events: 0.38,
     official: 0.46,
@@ -892,7 +897,46 @@ function part1InitRoot(root) {
     };
     return { ch: '', ar: String(value || '') };
   };
+  const chineseDateNumber = (value) => {
+    const text = String(value || '').replace(/^初/, '');
+    if (/^\d+$/.test(text)) return Number(text);
+    const digits = { 零: 0, 〇: 0, 一: 1, 二: 2, 三: 3, 四: 4, 五: 5, 六: 6, 七: 7, 八: 8, 九: 9 };
+    let total = 0;
+    let current = 0;
+    Array.from(text).forEach((char) => {
+      if (char === '十') {
+        total += (current || 1) * 10;
+        current = 0;
+      } else if (digits[char] != null) {
+        current = current * 10 + digits[char];
+      }
+    });
+    return total + current;
+  };
+  const compactImperialDate = (value) => {
+    const text = String(value || '');
+    if (/^乾隆\d+年\d+月\d+日$/.test(text)) return text;
+    const match = text.match(/^乾隆([零〇一二三四五六七八九十百]+)年(正|十二|十一|十|九|八|七|六|五|四|三|二|一)月(初?[零〇一二三四五六七八九十百]+)日$/);
+    if (!match) return text;
+    const month = match[2] === '正' ? 1 : chineseDateNumber(match[2]);
+    return `乾隆${chineseDateNumber(match[1])}年${month}月${chineseDateNumber(match[3])}日`;
+  };
   const panelDocumentDateLine = (record) => {
+    if (pairDoc) {
+      const recordType = String(record?.docType || '');
+      const send = panelDateParts(record.sendDate);
+      const receive = panelDateParts(record.receiveDate);
+      const announce = panelDateParts(record.announceDate);
+      const issue = panelDateParts(record.issueDate);
+      if (recordType === '上諭' || String(record?.docId || '').startsWith('諭')) {
+        const date = compactImperialDate(announce.ch || issue.ch || announce.ar || issue.ar);
+        if (date) return `${date}下旨`;
+      }
+      const sendDate = compactImperialDate(send.ch || send.ar);
+      const receiveDate = compactImperialDate(receive.ch || receive.ar);
+      if (sendDate && receiveDate) return `${sendDate}上奏\n${receiveDate}硃批`;
+      if (sendDate) return `${sendDate}上奏`;
+    }
     const send = panelDateParts(record.sendDate);
     const receive = panelDateParts(record.receiveDate);
     const announce = panelDateParts(record.announceDate);
@@ -904,9 +948,11 @@ function part1InitRoot(root) {
   const panelDocumentSourceLine = (record) => {
     const compiledIn = record.compiledIn || {};
     const archive = record.archiveReference || compiledIn.book || compiledIn.volume || '';
+    if (pairDoc && /天地會/.test(`${record.series || ''} ${archive}`)) return '《天地會》';
     const page = compiledIn.page ? `, ${compiledIn.page}` : '';
     const series = record.series || '原始史料';
-    return `${series}${archive ? ` ${archive}${page}` : ''}, ${record.docId}`;
+    const docId = pairDoc ? '' : `, ${record.docId}`;
+    return `${series}${archive ? ` ${archive}${page}` : ''}${docId}`;
   };
   const panelDocumentSummary = (record) => {
     const text = String(record.body || '').replace(/\s+/g, ' ').trim();
@@ -2867,20 +2913,36 @@ function part1InitRoot(root) {
 
   const stageDockResize = replica.querySelector('[data-stage-dock-resize]');
   if (stageDockResize && stage) {
+    const setStageDockPct = (value) => {
+      const dockPct = clamp(value, 0, 100);
+      replica.style.setProperty('--stage-dock-pct', `${dockPct.toFixed(2)}%`);
+      stage.style.setProperty('--stage-dock-pct', `${dockPct.toFixed(2)}%`);
+      stageDockResize.setAttribute('aria-valuemin', '0');
+      stageDockResize.setAttribute('aria-valuemax', '100');
+      stageDockResize.setAttribute('aria-valuenow', String(Math.round(dockPct)));
+      stageDockResize.setAttribute('aria-valuetext', `${Math.round(dockPct)}% 文書面板`);
+      applyChartScale();
+      drawLinks();
+      return dockPct;
+    };
+
+    const currentStageDockPct = () => {
+      const value = parseFloat(getComputedStyle(stage).getPropertyValue('--stage-dock-pct'));
+      return Number.isFinite(value) ? value : 50;
+    };
+
+    setStageDockPct(currentStageDockPct());
     stageDockResize.addEventListener('pointerdown', (event) => {
       if (event.button !== 0) return;
       const rect = stage.getBoundingClientRect();
+      if (!rect.width) return;
       stageDockResize.setPointerCapture?.(event.pointerId);
       stageDockResize.classList.add('is-dragging');
       event.preventDefault();
 
       const onMove = (ev) => {
         const pct = ((rect.right - ev.clientX) / rect.width) * 100;
-        const dockPct = clamp(pct, 10, 100);
-        replica.style.setProperty('--stage-dock-pct', `${dockPct.toFixed(2)}%`);
-        stage.style.setProperty('--stage-dock-pct', `${dockPct.toFixed(2)}%`);
-        applyChartScale();
-        drawLinks();
+        setStageDockPct(pct);
       };
       const onUp = (ev) => {
         stageDockResize.classList.remove('is-dragging');
@@ -2890,6 +2952,19 @@ function part1InitRoot(root) {
       };
       document.addEventListener('pointermove', onMove);
       document.addEventListener('pointerup', onUp);
+    });
+
+    stageDockResize.addEventListener('keydown', (event) => {
+      const key = event.key;
+      if (key !== 'ArrowLeft' && key !== 'ArrowRight' && key !== 'Home' && key !== 'End') return;
+      event.preventDefault();
+      const current = currentStageDockPct();
+      const next = key === 'Home'
+        ? 100
+        : key === 'End'
+          ? 0
+          : current + (key === 'ArrowLeft' ? 2 : -2);
+      setStageDockPct(next);
     });
   }
 
@@ -3094,7 +3169,7 @@ function part1InitRoot(root) {
     setNodePanelOpen(false);
     try { localStorage.removeItem(REPLICA_SETTINGS_KEY); } catch (error) { /* current-page reset still applies */ }
     applyReplicaCssSettings();
-    chartScale = 1;
+    chartScale = initialChartScale;
     applyChartScale();
     chartScroll?.scrollTo({ left: 0, top: 0, behavior: 'auto' });
     if (filterPopover) filterPopover.hidden = true;

@@ -3168,8 +3168,14 @@
 .part1-replica[data-pair-doc="true"] .part1-panel-resizer { display: none !important; }
 
 .part1-replica[data-pair-doc="true"] .part1-stage {
-  grid-template-columns: minmax(0, calc(100% - var(--stage-dock-pct, 50%))) minmax(0, var(--stage-dock-pct, 50%)) !important;
+  /* The document dock may occupy the complete stage.  The chart track is
+     intentionally allowed to collapse to zero so the shared edge remains a
+     true 0–100% control rather than stopping at a hidden 1:1 maximum. */
+  grid-template-columns:
+    minmax(0, calc(100% - clamp(0%, var(--stage-dock-pct, 50%), 100%)))
+    minmax(0, clamp(0%, var(--stage-dock-pct, 50%), 100%)) !important;
   position: relative;
+  background: transparent;
 }
 .part1-replica[data-pair-doc="true"] .part1-dock {
   position: relative;
@@ -3179,6 +3185,9 @@
   overflow: hidden;
   padding: 0 !important;
   gap: 0 !important;
+  /* This backdrop belongs to the dock, not the full replica.  It therefore
+     expands and contracts with the document column. */
+  background: #efe7d9;
 }
 .part1-stage-resize {
   position: absolute;
@@ -3214,10 +3223,13 @@
 .part1-replica[data-pair-doc="true"] .part1-doc-stack {
   display: grid;
   grid-template-columns: 1fr 1fr;
+  width: 100%;
+  max-width: none;
   gap: 10px;
   height: 100%;
   min-width: 0;
   min-height: 0;
+  background: #efe7d9;
 }
 .part1-replica[data-pair-doc="true"] .part1-pair-doc {
   height: 100%;

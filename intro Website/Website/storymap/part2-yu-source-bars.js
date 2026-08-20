@@ -11,6 +11,68 @@
 
   var zhu22Body = String.raw`<span class="doc-focus">福建陸路提督革職留任奴才任承恩跪奏，為奏聞事。……此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前遞……臣除一面將沿海口隘，密飭各營將弁嚴加防守，一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外……奴才挑派備戰兵丁一千名，隨帶軍火器具，於十三日分配登舟，候風放洋。協同黃仕簡戮力剿除，速靖海疆……<br><br>乾隆五十一年十二月初十日<br><mark data-group="dateA">乾隆五十一年十二月二十七日</mark>奉硃批：即有旨諭。欽此。〔本文原收錄於軍錄〕</span>`;
 
+  /* 2.3 shows the full canonical bodies in the desktop pair panels.  Keep
+     the existing source excerpts as markerA fragments inside those bodies,
+     so 「據常青等奏」 still highlights the evidence in both 硃 panels. */
+  var sourceMarkerFragments = {
+    '硃21': [
+      '閩浙總督臣常青跪奏，為飛摺奏聞事。',
+      '十一月二十七夜，彰化俞知縣在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前進，將原文附回。等語。',
+      '卑職等立即督率兵役，扼要堵禦。現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。',
+      '臣一面飛咨水師提臣黃仕簡率領本標兵一千名、金門鎮兵五百名、南澳鎮銅山營兵五百名，由鹿耳門飛渡前進。',
+      '臣即於泉州駐扎，會同陸路提臣任承恩居中調度'
+    ],
+    '硃22': [
+      '福建陸路提督臣任承恩跪奏，為奏聞事。',
+      '此月二十七日夜，本縣俞在大墩地方拿匪遇害。本日早彰城失陷，路途梗塞，不能前遞，將原文附回。',
+      '卑職等立即督率兵役，募集鄉勇、社番，扼要堵御。現在彰化既為匪徒竊踞，通報內地文稟，不能由正口直達。',
+      '臣除一面將沿海口隘，密飭各營將弁嚴加防守，一面派撥官兵，整頓軍火器械，雇備船隻，馳商督臣，聽候調遣外'
+    ]
+  };
+
+  function sourceRecord(docId) {
+    var data = window.PART1_INTERFACE_DATA;
+    var records = data && Array.isArray(data.documents) ? data.documents : [];
+    return records.find(function (record) { return String(record.docId) === String(docId); }) || null;
+  }
+
+  function escapeSourceHtml(value) {
+    return String(value).replace(/[&<>"']/g, function (char) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[char];
+    });
+  }
+
+  function sourceTextHtml(value) {
+    return escapeSourceHtml(value).replace(/\n/g, '<br>');
+  }
+
+  function renderZhuSourceBody(docId) {
+    var record = sourceRecord(docId);
+    var body = record && record.body ? String(record.body) : '';
+    if (!body) return docId === '硃21' ? zhu21Body : zhu22Body;
+
+    var ranges = [];
+    (sourceMarkerFragments[docId] || []).forEach(function (fragment) {
+      var start = body.indexOf(fragment);
+      if (start !== -1) ranges.push({ start: start, end: start + fragment.length, group: 'markerA' });
+    });
+    var dateText = '乾隆五十一年十二月二十七日';
+    var dateStart = body.lastIndexOf(dateText);
+    if (dateStart !== -1) ranges.push({ start: dateStart, end: dateStart + dateText.length, group: 'dateA' });
+    ranges.sort(function (left, right) { return left.start - right.start; });
+
+    var html = '<span class="doc-focus">';
+    var cursor = 0;
+    ranges.forEach(function (range) {
+      if (range.start < cursor) return;
+      html += sourceTextHtml(body.slice(cursor, range.start));
+      html += '<mark data-group="' + range.group + '">' + sourceTextHtml(body.slice(range.start, range.end)) + '</mark>';
+      cursor = range.end;
+    });
+    html += sourceTextHtml(body.slice(cursor)) + '</span>';
+    return html;
+  }
+
   var entries = [
     {
       id: 'markerA', index: '01', title: '「據⋯⋯奏」引述標記',
@@ -49,11 +111,11 @@
         title: candidate.title,
         metaLines: [
           candidate.author + '（' + candidate.role + '）',
-          candidate.id === '硃21' ? '乾隆51年12月12日發出' : '乾隆51年12月10日發出',
+          candidate.id === '硃21' ? '乾隆51年12月12日上奏' : '乾隆51年12月10日上奏',
           '<mark data-group="dateA">乾隆51年12月27日</mark>硃批'
         ],
-        label: candidate.id + '・引文摘錄',
-        body: candidate.body
+        label: '引文摘錄',
+        body: renderZhuSourceBody(candidate.id)
       });
     }
 
@@ -72,8 +134,8 @@
         badge: '諭',
         badgeClass: 'b-yu',
         title: '諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡',
-        metaLines: ['常青（字寄轉發）', '乾隆51年12月27日發佈', '《天地會》1，頁231'],
-        label: '諭13・正文',
+        metaLines: ['常青（字寄轉發）', '乾隆51年12月12日下旨', '《天地會》'],
+        label: '正文',
         body: yuBody
       });
       el.innerHTML = '<div class="req-card" data-req-card>' +
@@ -138,7 +200,7 @@
      ========================================================================== */
   var DESKTOP_MARKUP =
     '<div class="replica-shell">' +
-      '<div data-part1 data-part1-data="PART1_INTERFACE_DATA_YU_SOURCE"><div class="part1-replica" data-part1-replica></div></div>' +
+      '<div data-part1 data-part1-data="PART1_INTERFACE_DATA_YU_SOURCE" data-part1-chart-scale="1.5"><div class="part1-replica" data-part1-replica></div></div>' +
     '</div>' +
     '<div class="req-desc is-open" data-req-desc>' +
       '<div class="req-desc-head">' +
@@ -173,6 +235,7 @@
   var DESKTOP_CSS = [
     '#part-2-content #part-2-yu-source [data-req-idle-wrap], #part-2-content #part-2-yu-source .req-idle-skill { display: none !important; }',
     '#part-2-content #part-2-yu-source { padding-top: 0 !important; padding-left: clamp(2px, 0.8vw, 14px) !important; padding-right: clamp(2px, 0.8vw, 14px) !important; }',
+    '#part-2-yu-source { --yu-source-date: 255, 214, 68; }',
     '#part-2-content #part-2-yu-source > .part2-substage-cover, #part-2-yu-source .part2-substage-cover { padding-top: 24px !important; padding-bottom: 20px !important; margin-top: 0 !important; margin-bottom: 0 !important; }',
     '#part-2-content #part-2-yu-source > .story-inner, #part-2-content #part-2-yu-source > .part2-yu-source-story-inner { width: 100% !important; max-width: 100% !important; margin: 0 !important; padding-top: 0 !important; }',
     '#part-2-yu-source .req-desktop-tool { margin: 12px 0 0 !important; width: 100%; }',
@@ -185,15 +248,17 @@
     '#part-2-yu-source .req-desc-head { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; padding: 13px 20px 11px; border-bottom: 1px solid var(--line); background: rgba(244,239,230,.4); }',
     '#part-2-yu-source .req-desc .req-desc-index { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 30px; height: 30px; color: #fffaf2; background: #8a7c66; border-radius: 50%; font: 800 13px/1 var(--sans); }',
     '#part-2-yu-source .req-desc[data-active-req="markerA"] .req-desc-index { background: rgb(var(--yu-source-marker)) !important; }',
-    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-desc-index { background: rgb(var(--yu-source-date)) !important; }',
-    '#part-2-yu-source .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 18px/1.35 var(--serif); }',
+    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-desc-index { background: rgb(var(--yu-source-date)) !important; color: #3b2800 !important; }',
+    '#part-2-yu-source .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 calc(18px * var(--font-scale, 1))/1.35 var(--serif); }',
+    '#part-2-yu-source .req-desc[data-active-req="dateA"] .req-desc-head h3 { color: rgb(var(--yu-source-date)) !important; }',
     '#part-2-yu-source .req-desc-body { padding: 16px 20px 18px; }',
 
     /* 50% / 50% split layout */
     '#part-2-yu-source .req-desc-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; width: 100%; }',
     '#part-2-yu-source .req-desc-text-panel { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 4px 0; height: 100%; }',
     '#part-2-yu-source .req-desc .req-wordcard { display: flex; flex-direction: column; justify-content: center; height: 100%; border-top: none !important; padding-top: 0 !important; margin: 0 !important; opacity: 1 !important; transform: none !important; }',
-    '#part-2-yu-source .req-desc .req-wordcard p { margin: 0; color: var(--text); font: 500 calc(15px * var(--font-scale, 1))/1.95 var(--serif); text-align: justify; }',
+    '#part-2-yu-source .req-desc .req-wordcard p { margin: 0; color: var(--text); font: 500 calc(18px * var(--font-scale, 1))/1.85 var(--serif); text-align: justify; }',
+    '#part-2-yu-source .req-desc-head h3, #part-2-yu-source .req-desc .req-wordcard p { font-size: calc(18px * var(--font-scale, 1)) !important; }',
 
     /* Right Skills Window: 50% width */
     '#part-2-yu-source .req-desc-skill-panel { display: flex; flex-direction: column; min-width: 0; height: 100%; }',
@@ -208,7 +273,7 @@
     '#part-2-yu-source .req-skill-shell { display: grid; grid-template-columns: 26px 1fr; flex: 1 1 auto; height: 100%; min-height: max-content; background: #1e1e1e; }',
     '#part-2-yu-source .req-skill-activitybar { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0; color: #707070; background: #2b2b2b; font: 10.5px/1 var(--sans); border-right: 1px solid #383838; user-select: none; height: 100%; }',
     '#part-2-yu-source .req-skill-editor { display: flex; flex-direction: column; min-width: 0; min-height: max-content; height: 100%; }',
-    '#part-2-yu-source .req-skill-body { flex: 1 1 auto; height: auto; min-height: max-content; overflow: visible !important; padding: 18px 18px 20px; color: #d4d4d4; font: 500 calc(13px * var(--font-scale, 1))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace; word-break: break-word; scrollbar-width: none; }',
+    '#part-2-yu-source .req-skill-body { flex: 1 1 auto; height: auto; min-height: max-content; overflow: visible !important; padding: 18px 18px 20px; color: #d4d4d4; font: 500 calc(15px * var(--font-scale, 1))/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace; word-break: break-word; scrollbar-width: none; }',
     '#part-2-yu-source .req-skill-body::-webkit-scrollbar { display: none; }',
     '#part-2-yu-source .req-skill-body .skill-row { margin-bottom: 7px; }',
     '#part-2-yu-source .req-skill-body .skill-row:last-child { margin-bottom: 0; }',
@@ -228,6 +293,12 @@
     '#part-2-yu-source .req-nav-arrow { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--ink); background: transparent; border: 1px solid var(--line); border-radius: 50%; cursor: pointer; transition: background .15s ease, color .15s ease; }',
     '#part-2-yu-source .req-nav-arrow:hover { color: #fffaf2; background: var(--accent); border-color: var(--accent); }',
 
+    /* Match 2.1: the replica toolbar is a faded, non-interactive visual header. */
+    '#part-2-yu-source .replica-shell .part1-toolbar { pointer-events: none !important; background: transparent !important; border-bottom-color: transparent !important; }',
+    '#part-2-yu-source .replica-shell .part1-toolbar * { pointer-events: none !important; cursor: default !important; }',
+    '#part-2-yu-source .replica-shell .part1-toolbar button, #part-2-yu-source .replica-shell .part1-toolbar select, #part-2-yu-source .replica-shell .part1-toolbar input { opacity: .45; }',
+    '#part-2-yu-source .replica-shell .part1-toolbar [data-type-pop], #part-2-yu-source .replica-shell .part1-toolbar [data-tools-pop] { display: none !important; }',
+
     /* 3 Document Panels Layout with 3-Way Resizers */
     '#part-2-yu-source .replica-shell { --site-font-scale: var(--font-scale, 1); }',
     '#part-2-yu-source .part1-replica { --font-scale: var(--site-font-scale) !important; --body-font-scale: var(--site-font-scale) !important; }',
@@ -240,7 +311,9 @@
     '#part-2-yu-source .part1-replica[data-pair-doc="true"] [data-doc-panel-doc="諭13"] .badge { background: #315d5d !important; }',
     '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-doc-meta { margin: 0; color: #7a6f63; font: 500 calc(12px * var(--font-scale, 1))/1.5 var(--sans); line-height: 1.5; }',
     '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-doc-section-label { font-size: calc(15px * var(--font-scale)); }',
-    '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-doc-body { font-size: calc(14px * var(--font-scale)); }',
+    '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-doc-body { font-size: calc(17px * var(--font-scale)); }',
+    '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-doc-window-controls { display: none !important; }',
+    '#part-2-yu-source .part1-replica[data-pair-doc="true"] .part1-doc-title { padding-right: 0 !important; }',
 
     '#part-2-yu-source .req-pair-resize { position: relative; z-index: 6; cursor: ew-resize; touch-action: none; user-select: none; }',
     '#part-2-yu-source .req-pair-resize::before { content: ""; position: absolute; top: 38%; bottom: 38%; left: 4px; width: 2px; border-radius: 2px; background: #d1c2ad; opacity: .7; transition: background .15s ease, opacity .15s ease, transform .15s ease; }',
@@ -263,8 +336,8 @@
     /* highlight marks */
     '#part-2-yu-source .part1-pair-doc .part1-doc-body mark[data-group] { padding: 2px 4px; border-radius: 3px; box-decoration-break: clone; -webkit-box-decoration-break: clone; color: inherit !important; background: transparent !important; cursor: pointer; transition: background-color .15s ease, color .15s ease; opacity: 1 !important; }',
     '#part-2-yu-source .part1-pair-doc .part1-doc-body mark[data-group]:hover { filter: brightness(.92); }',
-    '#part-2-yu-source .req-desktop-tool[data-active-req="markerA"] .part1-pair-doc .part1-doc-body mark[data-group*="markerA"], #part-2-yu-source .req-desktop-tool[data-active-req="markerA"] .part1-pair-doc .part1-doc-body mark[data-group*="markerA"].is-active { background: #3ee0cf !important; color: #043834 !important; font-weight: 600; box-shadow: 0 0 0 1px rgba(35, 195, 180, .4); }',
-    '#part-2-yu-source .req-desktop-tool[data-active-req="dateA"] .part1-pair-doc .part1-doc-body mark[data-group*="dateA"], #part-2-yu-source .req-desktop-tool[data-active-req="dateA"] .part1-pair-doc .part1-doc-body mark[data-group*="dateA"].is-active { background: #ffd644 !important; color: #3b2800 !important; font-weight: 600; box-shadow: 0 0 0 1px rgba(220, 165, 20, .4); }',
+    '#part-2-yu-source .req-desktop-tool[data-active-req="markerA"] .part1-pair-doc .part1-doc-body mark[data-group*="markerA"], #part-2-yu-source .req-desktop-tool[data-active-req="markerA"] .part1-pair-doc .part1-doc-body mark[data-group*="markerA"].is-active { background: #3ee0cf !important; color: #043834 !important; font-weight: 600; }',
+    '#part-2-yu-source .req-desktop-tool[data-active-req="dateA"] .part1-pair-doc .part1-doc-body mark[data-group*="dateA"], #part-2-yu-source .req-desktop-tool[data-active-req="dateA"] .part1-pair-doc .part1-doc-body mark[data-group*="dateA"].is-active { background: #ffd644 !important; color: #3b2800 !important; font-weight: 600; }',
     '#part-2-yu-source .part1-pair-doc .part1-doc-body mark[data-group].is-active { animation: part2-yu-response-hl-flash .5s ease-out; }',
 
     /* doc dim and focus */
@@ -276,7 +349,8 @@
     /* chart links: 1 上諭 dot (3rd line) -> 2 奏摺 dots (3rd line) -> 2 奏摺 dots (2nd line) */
     '#part-2-yu-source .part1-chart-links .part1-bg-link { opacity: 0.22 !important; pointer-events: none !important; }',
     '#part-2-yu-source .part1-chart-links .req-chart-link, #part-2-yu-source .part1-chart-links .part1-example-link { transition: opacity .2s ease, stroke-width .2s ease; cursor: pointer; pointer-events: stroke; }',
-    '#part-2-yu-source .part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 3.2 !important; }',
+    '#part-2-yu-source .part1-chart-links .req-chart-link { opacity: .88 !important; stroke-width: 4 !important; }',
+    '#part-2-yu-source .part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 4.8 !important; }',
 
     '@media (max-width: 860px) { #part-2-yu-source .req-desc-split { grid-template-columns: 1fr; gap: 10px; } }',
     '@media (max-width: 900px) { #part-2-yu-source .req-float-title { display: none; } }'
@@ -294,9 +368,12 @@
     var yuDoc = docMap.get('諭13') || {
       docId: '諭13', docType: '上諭', title: '諭閩浙總督常青等嚴行殲戮林爽文等並防餘衆四散內渡',
       author: { position: '軍機處字寄', name: '常青等' },
-      compiledIn: { book: '《天地會》1', volume: '《天地會》1', page: 231 },
-      sendDate: ['乾隆五十一年十二月二十七日', '1786/12/27'], receiveDate: ['乾隆五十一年十二月二十七日', '1786/12/27']
+      compiledIn: { book: '《天地會》', volume: '《天地會》' },
+      sendDate: ['乾隆五十一年十二月十二日', '1786/12/12'], receiveDate: ['乾隆五十一年十二月十二日', '1786/12/12']
     };
+    yuDoc = Object.assign({}, yuDoc, {
+      announceDate: ['乾隆五十一年十二月十二日', '1786/12/12']
+    });
     var zhu21 = docMap.get('硃21') || {
       docId: '硃21', docType: '硃批', title: '為奏林爽文攻陷彰化已星馳調兵赴臺事',
       author: { position: '閩浙總督', name: '常青' },
@@ -693,7 +770,7 @@
     }
 
     function initPair() {
-      var BODIES = { '諭13': yuBody, '硃21': zhu21Body, '硃22': zhu22Body };
+      var BODIES = { '諭13': yuBody, '硃21': renderZhuSourceBody('硃21'), '硃22': renderZhuSourceBody('硃22') };
       ['諭13', '硃21', '硃22'].forEach(function (docId) {
         var panel = wrap.querySelector('[data-doc-panel-doc="' + docId + '"]');
         if (!panel) return;

@@ -73,8 +73,8 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
           badgeClass: isZhu ? 'b-zhu' : 'b-yu',
           title: title,
           metaLines: isZhu
-            ? ['孫士毅（兩廣總督兼署廣東巡撫）', '乾隆52年1月26日發出', '乾隆52年2月14日硃批', '明清台檔30，頁329']
-            : ['大學士公阿桂、大學士和珅 字寄兩廣總督孫（士毅）', '乾隆52年1月13日發佈', '《天地會》1，頁231'],
+            ? ['孫士毅（兩廣總督兼署廣東巡撫）', '乾隆52年1月26日上奏', '乾隆52年2月14日硃批', '明清台檔30，頁329']
+            : ['大學士公阿桂、大學士和珅 字寄兩廣總督孫（士毅）', '乾隆52年1月13日下旨', '《天地會》'],
           label: '原文',
           body: body
         });
@@ -190,7 +190,7 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
 
   var DESKTOP_MARKUP =
     '<div class="replica-shell">' +
-      '<div data-part1 data-part1-data="PART1_INTERFACE_DATA_YU_RESPONSE"><div class="part1-replica" data-part1-replica></div></div>' +
+      '<div data-part1 data-part1-data="PART1_INTERFACE_DATA_YU_RESPONSE" data-part1-chart-scale="1.5"><div class="part1-replica" data-part1-replica></div></div>' +
     '</div>' +
     '<div class="req-desc is-open" data-req-desc>' +
       '<div class="req-desc-head">' +
@@ -247,14 +247,14 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
     '#part-2-yu-response .req-desc[data-active-req="date"] .req-desc-index { background: rgb(var(--hl-date)) !important; }',
     '#part-2-yu-response .req-desc[data-active-req="quote"] .req-desc-index { background: rgb(var(--hl-quote)) !important; }',
     '#part-2-yu-response .req-desc[data-active-req="author"] .req-desc-index { background: rgb(var(--hl-author)) !important; }',
-    '#part-2-yu-response .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 18px/1.35 var(--serif); }',
+    '#part-2-yu-response .req-desc-head h3 { flex: 1; min-width: 160px; margin: 0; color: var(--ink); font: 700 calc(18px * var(--font-scale, 1))/1.35 var(--serif); }',
     '#part-2-yu-response .req-desc-body { padding: 16px 20px 18px; }',
 
     /* 50% / 50% split layout: left text explanation, right skill window with matching height */
     '#part-2-yu-response .req-desc-split { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; align-items: stretch; width: 100%; }',
     '#part-2-yu-response .req-desc-text-panel { display: flex; flex-direction: column; justify-content: center; min-width: 0; padding: 4px 0; height: 100%; }',
     '#part-2-yu-response .req-desc .req-wordcard { display: flex; flex-direction: column; justify-content: center; height: 100%; }',
-    '#part-2-yu-response .req-desc .req-wordcard p { margin: 0; color: var(--text); font: 500 calc(15px * var(--font-scale, 1))/1.95 var(--serif); text-align: justify; }',
+    '#part-2-yu-response .req-desc .req-wordcard p { margin: 0; color: var(--text); font: 500 calc(18px * var(--font-scale, 1))/1.85 var(--serif); text-align: justify; }',
 
     /* Right Skills Window: 50% width, matches text card height, always full height with zero scrolling */
     '#part-2-yu-response .req-desc-skill-panel { display: flex; flex-direction: column; min-width: 0; height: 100%; }',
@@ -269,7 +269,7 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
     '#part-2-yu-response .req-skill-shell { display: grid; grid-template-columns: 26px 1fr; flex: 1 1 auto; height: 100%; min-height: max-content; background: #1e1e1e; }',
     '#part-2-yu-response .req-skill-activitybar { display: flex; flex-direction: column; align-items: center; gap: 12px; padding: 16px 0; color: #707070; background: #2b2b2b; font: 10.5px/1 var(--sans); border-right: 1px solid #383838; user-select: none; height: 100%; }',
     '#part-2-yu-response .req-skill-editor { display: flex; flex-direction: column; min-width: 0; min-height: max-content; height: 100%; }',
-    '#part-2-yu-response .req-skill-body { flex: 1 1 auto; height: auto; min-height: max-content; overflow: visible !important; padding: 18px 18px 20px; color: #d4d4d4; font: 500 calc(13px * var(--font-scale, 1))/1.8 "SF Mono", ui-monospace, Menlo, Consolas, monospace; word-break: break-word; scrollbar-width: none; }',
+    '#part-2-yu-response .req-skill-body { flex: 1 1 auto; height: auto; min-height: max-content; overflow: visible !important; padding: 18px 18px 20px; color: #d4d4d4; font: 500 calc(15px * var(--font-scale, 1))/1.75 "SF Mono", ui-monospace, Menlo, Consolas, monospace; word-break: break-word; scrollbar-width: none; }',
     '#part-2-yu-response .req-skill-body::-webkit-scrollbar { display: none; }',
     '#part-2-yu-response .req-skill-body .skill-row { margin-bottom: 7px; }',
     '#part-2-yu-response .req-skill-body .skill-row:last-child { margin-bottom: 0; }',
@@ -292,16 +292,14 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
     '#part-2-yu-response .req-nav-arrow:hover { color: #fffaf2; background: var(--accent); border-color: var(--accent); }',
 
     /* top toolbar is decorative in this teaching visual: not clickable. */
-    '#part-2-yu-response .replica-shell .part1-toolbar { pointer-events: none !important; }',
+    '#part-2-yu-response .replica-shell .part1-toolbar { pointer-events: none !important; background: transparent !important; border-bottom-color: transparent !important; }',
     '#part-2-yu-response .replica-shell .part1-toolbar * { pointer-events: none !important; cursor: default !important; }',
     '#part-2-yu-response .replica-shell .part1-toolbar button, #part-2-yu-response .replica-shell .part1-toolbar select, #part-2-yu-response .replica-shell .part1-toolbar input { opacity: .45; }',
     '#part-2-yu-response .replica-shell .part1-toolbar [data-type-pop], #part-2-yu-response .replica-shell .part1-toolbar [data-tools-pop] { display: none !important; }',
 
     /* the two real doc panels must stay open: disable the close button. */
-    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-btn[data-panel-close] { pointer-events: none !important; opacity: .35; }',
-    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-btn[data-panel-close] .part1-chat-svg, #part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-btn[data-panel-close] svg { display: none; }',
-    /* remove the drag (move) and minimise buttons from the doc-panel title. */
-    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-btn[aria-label="移動文書面板"], #part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-btn[aria-label="收合文書面板"] { display: none !important; }',
+    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-window-controls { display: none !important; }',
+    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-title { padding-right: 0 !important; }',
     /* disable the filter and settings buttons in the doc panel. */
     '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-filter-trigger, #part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-filter-gear { pointer-events: none !important; opacity: .35; }',
 
@@ -318,9 +316,10 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
     '#part-2-yu-response .part1-replica[data-pair-doc="true"] .badge, #part-2-yu-response .part1-replica[data-pair-doc="true"] [data-doc-panel-badge] { display: inline-block; width: auto; height: auto; margin-right: 6px; padding: 2px 7px; color: #fffaf2; background: #c46a2b; border-radius: 6px; font: 800 calc(13px * var(--font-scale, 1))/1.1 var(--sans) !important; vertical-align: 1px; }',
     '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-meta { margin: 0; color: #7a6f63; font: 500 calc(13px * var(--font-scale, 1))/1.55 var(--sans); line-height: 1.55; }',
     '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-section-label { font-size: calc(17px * var(--font-scale)); }',
-    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-body { font-size: calc(15.5px * var(--font-scale)); }',
-    '#part-2-yu-response .req-desc-head h3 { font-size: calc(22px * var(--font-scale)) !important; }',
-    '#part-2-yu-response .req-desc .req-wordcard p { font-size: calc(16px * var(--font-scale)); }',
+    '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-doc-body { font-size: calc(18px * var(--font-scale)); }',
+    /* Keep the highlight title and its explanation compact and identical to 2.2/2.3. */
+    '#part-2-yu-response .req-desc-head h3 { font-size: calc(18px * var(--font-scale, 1)) !important; }',
+    '#part-2-yu-response .req-desc .req-wordcard p { font-size: calc(18px * var(--font-scale, 1)) !important; }',
 
     /* fix: pair-doc dock must track the two real panels, not a fixed-size reserved 2nd grid column. */
     '#part-2-yu-response .part1-replica[data-pair-doc="true"] .part1-dock { grid-template-columns: 1fr !important; }',
@@ -367,8 +366,9 @@ var yuBody = String.raw`大學士公阿、大學士和，字寄兩廣總督<mark
     /* linking line between the two example dots on the real engine chart */
     '#part-2-yu-response .part1-chart-links .part1-bg-link { opacity: 0.22 !important; pointer-events: none !important; }',
     '#part-2-yu-response .part1-chart-links .req-chart-link, #part-2-yu-response .part1-chart-links .part1-example-link { transition: opacity .2s ease, stroke-width .2s ease; cursor: pointer; pointer-events: stroke; }',
-    '#part-2-yu-response .part1-chart-links .req-chart-link:hover, #part-2-yu-response .part1-chart-links .part1-example-link:hover { stroke-width: 3.4 !important; filter: brightness(1.2); }',
-    '#part-2-yu-response .part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 3.2 !important; }',
+    '#part-2-yu-response .part1-chart-links .req-chart-link { opacity: .88 !important; stroke-width: 4 !important; }',
+    '#part-2-yu-response .part1-chart-links .req-chart-link:hover, #part-2-yu-response .part1-chart-links .part1-example-link:hover { stroke-width: 4.6 !important; filter: brightness(1.2); }',
+    '#part-2-yu-response .part1-chart-links .req-chart-link.is-active { opacity: 1 !important; stroke-width: 4.8 !important; }',
 
     '@media (max-width: 860px) { #part-2-yu-response .req-desc-split { grid-template-columns: 1fr; gap: 10px; } }',
     '@media (max-width: 900px) { #part-2-yu-response .req-float-title { display: none; } }'

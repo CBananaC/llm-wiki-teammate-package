@@ -15546,3 +15546,775 @@ Verified:
 Remaining:
 - The proxy unit suite could not import because this workspace does not have the optional `flask` dependency installed.
 - Cloud Run deployment and a successful Vertex request remain pending; the active account currently lacks `run.services.get` and `aiplatform.endpoints.predict` in the target project.
+
+### 2026-08-19 18:06 HKT — Codex — Deployed and verified Gemini 3.7 Flash
+
+Summary:
+- Deployed the updated Gemini proxy as Cloud Run revision `gemini-proxy-00002-nf6` with `MODEL=gemini-3.7-flash` and `MAX_OUTPUT_TOKENS=65536`.
+- Used the existing project-owner account for deployment because `liukaiwangkelvin@gmail.com` has no access to the target project; no new IAM bindings were added.
+
+Files changed:
+- `tool/proxy/gemini-proxy/main.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- Live `/providers` reports `gemini-3.7-flash` as the enabled default Gemini model.
+- Live `/chat` canary with `model=gemini-3.7-flash` returned `OK`.
+
+Remaining:
+- The requested user account still needs project access if it must deploy independently.
+- The source change remains unstaged because this environment cannot create `.git/index.lock`.
+
+### 2026-08-19 18:18 HKT — Codex — Refined Layer 2 visual scale, typography, and document chrome
+
+Summary:
+- Enlarged the full-width Layer 2 explanations and the 2.1–2.3 visual content typography.
+- Added per-visual chart scaling and thicker relationship lines; the 2.2 first relationship is centered on two endpoints so at least two dots remain visible.
+- Applied the 2.1 transparent, noninteractive toolbar treatment to all three visuals and removed the document-panel `+`, `−`, and `×` controls.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-cards.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- JavaScript syntax checks passed for the interface and all three Layer 2 visual modules.
+- `git diff --check` passed.
+- Browser QA on the cache-busted local 8761 page confirmed the larger description/content type, chart scales of 1.5× / 1.25× / 1.5× for 2.1 / 2.2 / 2.3, thicker visible lines, at least two visible dots in each visual, transparent toolbars, and hidden document controls.
+- Browser QA of 2.2 item 03 confirmed `引號中的硃批文字` uses the enlarged summary, Skill, and highlighted document text.
+
+Remaining:
+- The pre-existing concurrent edits in `PROJECT_LOG.md`, `intro Website/Website/storymap/part-1-interface.css`, and the untracked review bundles remain untouched; no push was performed.
+
+### 2026-08-19 18:14 HKT — Codex — Standardized Layer 2 document metadata
+
+Summary:
+- Read the latest project commit `e78e659` and updated the document-panel metadata used by the 2.1–2.3 workflow visuals.
+- Removed visible document IDs from the workflow pair panels and normalized the 上諭 source to `《天地會》` without the duplicated `天地會` prefix, volume, page, or ID.
+- Changed the 2.3 上諭 date to `乾隆51年12月12日下旨`.
+- Standardized 奏摺 metadata dates to two lines: `乾隆51年12月12日上奏` / `乾隆51年12月27日硃批` (and the corresponding dates for the other panels), removing the arrow format.
+- Removed IDs from the narrow candidate labels, leaving `正文` and `引文摘錄`.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/part2-doc-panel.js`
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser QA on the local 8761 page confirmed the updated metadata across 2.1, 2.2, and 2.3; no old arrows, `諭13`/`硃21`/`硃22` IDs, or duplicated `天地會 《天地會》1` source text remain in the workflow pair panels.
+- The 390px narrow pass confirmed the requested 2.3 metadata and ID-free labels with no horizontal overflow; browser diagnostics were empty.
+- JavaScript syntax checks and `git diff --check` passed.
+
+Remaining:
+- Local checkpoint commit remains pending because concurrent staged/unstaged work is present; nothing was staged or pushed.
+
+### 2026-08-19 18:17 HKT — Codex — Removed the pair-visual 1:1 dock ceiling
+
+Summary:
+- Updated the shared pair-document layout used by the 2.1, 2.2, and 2.3 workflow visuals so the document dock can expand to 100% of the visual width while the chart remains independently resizable.
+- Made the dock backdrop belong to the live document column and its document stack, so it follows the dock width instead of reading as a fixed-width background.
+- Added explicit 0–100% resize semantics and keyboard endpoints to the chart/document separator; refreshed the CSS and JavaScript cache-busters on the StoryMap page.
+
+Files changed:
+- `intro Website/Website/storymap/part-1-interface.css`
+- `intro Website/Website/storymap/part-1-interface.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for the shared interface and all three workflow visual scripts.
+- `git diff --check` passed.
+- Browser QA on the local 8761 page at a 1280px desktop viewport reached an exact `100.00%` document dock in 2.1, 2.2, and 2.3; each dock matched its document-stack width, and 2.3 retained all three document panels inside the expanded dock.
+- Fresh-load checks confirmed the default proportions remain 50% / 50% for 2.1 and 2.2, 30% / 70% for 2.3, and the surrounding stage-3 visual layouts still render without a fixed visual max-width or browser diagnostics.
+
+Remaining:
+- The side-by-side pair resize control intentionally switches to the existing stacked layout at the mobile breakpoint (900px and below).
+
+### 2026-08-19 18:22 HKT — Codex — Aligned 2.3 source-clue labels and numbered highlights
+
+Summary:
+- Read the latest project commit `e78e659` and aligned the 2.3 `平台運作流程` source-clue labels with the 2.1/2 treatment: `「據⋯⋯奏」引述標記` and `收發日期`.
+- Fixed the 2.3 desktop clue index circles, floating clue badge, and Skill highlight colour references to the existing 2.3 source palette, so the numbered labels are visibly rendered and the selected document text/highlight label changes with the active clue.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check` passed for `part2-yu-source-bars.js`, `part2-doc-panel.js`, and `part-1-interface.js`; `git diff --check` passed.
+- Browser QA on local `http://127.0.0.1:8765`: 2.3 clue 1 showed circle `1` and `「據⋯⋯奏」引述標記`; advancing showed circle `2`, `收發日期`, blue date circle/badge, active date marks, and the matching Skill highlight.
+- The 2.1 reference retained its existing numbered treatment; the 390×844 pass showed both exact 2.3 labels without horizontal overflow; browser diagnostics were empty.
+
+Remaining:
+- Local checkpoint commit is isolated to the requested source-clue patch where possible; unrelated concurrent changes remain unstaged and no push was performed.
+
+### 2026-08-19 18:32 HKT — Codex — Expanded the 2.3 硃 source panels to full text
+
+Summary:
+- Replaced the short teaching excerpts in the 2.3 `辨識上諭所回應的奏摺` visual with the full canonical bodies for 硃21 and 硃22.
+- Preserved the existing source excerpts as `markerA` highlights under `「據⋯⋯奏」引述標記`, including the requested `十一月二十七夜……不能前進` passage in the 硃21 panel.
+- Removed highlight box shadows so the fill has no coloured border, and kept the date highlight in each 硃 panel.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/part2-yu-source-bars.js` passed.
+- `git diff --check` passed.
+- Browser QA on local 8761 confirmed full body text in both 硃 panels: 硃21 length 877 with 5 source highlights, and 硃22 length 795 with 4 source highlights; the body client and scroll heights match, and active highlights have no box shadow.
+- Browser diagnostics were empty.
+
+Remaining:
+- No further 2.3 source-panel changes are pending for this request; concurrent work remains unstaged and no push was performed.
+
+### 2026-08-19 18:34 HKT — Codex — Unified highlight-card typography across Layer 2
+
+Summary:
+- Reduced the 2.1 highlight-card title to match its explanation text.
+- Unified the highlight-card title and explanation to 18px in 2.1, 2.2, and 2.3, using the shared site font scale.
+- Refreshed the three Layer 2 visual script cache-busters so the typography change loads on a fresh page.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-response-bars.js`
+- `intro Website/Website/storymap/part2-zhu-response-bars.js`
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- JavaScript syntax checks passed for all three Layer 2 visual modules.
+- `git diff --check` passed.
+- Browser QA on the local 8761 page reported 18px for both the highlight title and explanation in 2.1, 2.2, and 2.3; line height is consistent and browser diagnostics were empty.
+
+Remaining:
+- Existing concurrent edits and untracked review bundles remain untouched; no checkpoint commit or push was performed.
+
+### 2026-08-20 13:53 HKT — Codex — Replaced the standalone OCR redesign with the original StoryMap code
+
+Summary:
+- Replaced the custom standalone OCR implementation with a literal copy of `Website/storymap/storymap-example.html`, preserving the original HTML, CSS, JavaScript, labels, data, and asset references.
+- Added only a standalone wrapper to open at `#part-3-ocr`, hide unrelated StoryMap panels, and restore the original JSON viewer beside `輸出格式：JSON` after the shared script relocates it to Part 2.
+- Removed the custom standalone `ocr.css` and `ocr.js` files so the individual page no longer uses a separate redesign.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/Website/ocr/ocr.css` (removed)
+- `intro Website/Website/ocr/ocr.js` (removed)
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Local browser preview loaded at `http://127.0.0.1:8765/intro%20Website/Website/ocr/#part-3-ocr` with only the original OCR panel visible and no browser diagnostics.
+- The original `輸出格式：JSON` viewer is visible; its `硃批內容` control selected and highlighted the matching JSON line.
+- `git diff --check` passed; unrelated concurrent worktree changes remain untouched.
+
+Remaining:
+- GitHub repository setup and publishing remain pending user review of this corrected literal-copy version.
+
+### 2026-08-20 13:59 HKT — Codex — Rebuilt and verified the literal OCR copy
+
+Summary:
+- Rebuilt `Website/ocr/index.html` from verified smaller chunks of the canonical StoryMap HTML after checking the first extraction for line-offset loss.
+- Confirmed that removing only the standalone wrapper from the rebuilt page produces the original `storymap-example.html` byte content after trailing-whitespace normalization.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The local page opens at `#part-3-ocr`, keeps only the original OCR panel visible, and has no browser diagnostics.
+- `輸出格式：JSON` renders beside its original card; selecting `硃批內容` highlights the corresponding JSON field.
+- `git diff --check` passed; unrelated concurrent worktree changes remain untouched.
+
+Remaining:
+- GitHub repository setup and publishing remain pending user review.
+
+### 2026-08-20 14:09 HKT — Codex — Simplified the OCR header and repaired Step 9 responsiveness
+
+Summary:
+- Hid the shared StoryMap tabs and compact menu in the standalone page, changed the top brand to `OCR 並結構化原始史料`, and removed the visible `步驟二` eyebrow.
+- Enlarged and raised the OCR cover title so the individual page opens with its own teaching cover.
+- Restored the Step 9 card/JSON two-column layout for computer widths and a one-column layout below 980px, preventing the JSON viewer from collapsing into an implicit overflowing column.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- At 1280px, the Step 9 card is 501.9px wide and the JSON viewer is 668.1px wide with no horizontal overflow.
+- At 1024px, the two-column layout remains within the viewport; at 900px, the card and viewer stack with no horizontal overflow.
+- The only visible stage eyebrow is removed from the OCR cover, the top navigation tabs/menu are hidden, the `硃批內容` JSON control still highlights its field, and browser diagnostics are empty.
+
+Remaining:
+- GitHub repository setup and publishing remain pending user review.
+
+### 2026-08-20 14:01 HKT — Codex — Hid later StoryMap stages from the standalone OCR page
+
+Summary:
+- Hid the nested `part-3-ai` stage labelled `步驟三至五` and the later `part-3-wiki` stage from the individual OCR page.
+- Kept the original OCR stage, `輸出格式：JSON` viewer, and `試一試` section unchanged.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser rendering shows only the visible eyebrow `步驟二`; both later stages have `display: none` and zero layout height.
+- The JSON viewer remains inside the original `#part-3-json` visual slot with height 408px at the local preview viewport.
+- Browser diagnostics and `git diff --check` are clean.
+
+Remaining:
+- GitHub repository setup and publishing remain pending user review.
+
+### 2026-08-19 18:46 HKT — Codex — Matched the 2.3 收發日期 label and circle to the yellow highlight
+
+Summary:
+- Changed the 2.3 date colour token to the same yellow used by the active `收發日期` text highlight.
+- Matched the active `收發日期` label and number circle to that yellow, with dark text for contrast; the date Skill mark and floating number now use the same token as well.
+- Refreshed the 2.3 source-visual cache-buster.
+
+Files changed:
+- `intro Website/Website/storymap/part2-yu-source-bars.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/part2-yu-source-bars.js` passed.
+- `git diff --check` passed.
+- Browser QA on local 8761 confirmed the active `收發日期` label, circle, document highlight, Skill mark, and floating number all use `rgb(255, 214, 68)`; browser diagnostics were empty.
+
+Remaining:
+- Existing concurrent edits and untracked review bundles remain untouched; no checkpoint commit or push was performed.
+
+### 2026-08-20 13:31 HKT — Codex — Built the standalone OCR teaching website
+
+Summary:
+- Added an individual OCR teaching page under the introduction website, covering the complete eleven-step route from OCR basics to a guided prompt exercise.
+- Added the current JSON field viewer that is missing from the live StoryMap page, with field navigation, highlighted JSON lines, source/date/硃批 fields, and explicit researcher verification notes.
+- Reused the canonical OCR, scanner, layout-label, and practice-document assets without changing raw source material or review-tool state.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/Website/ocr/ocr.css`
+- `intro Website/Website/ocr/ocr.js`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/ocr/ocr.js` passed.
+- `git diff --check` passed.
+- Local browser preview loaded at 1280px with no console errors or warnings; JSON, Agentic AI, batch-test, guided-exercise, handwritten-mode, and 390×844 responsive checks passed with no horizontal overflow.
+
+Remaining:
+- The standalone local site is ready for user review. GitHub repository setup and publishing remain for the next phase; unrelated existing worktree changes remain untouched.
+
+### 2026-08-20 14:26 HKT — Codex — Matched the 3.1 visual to the 2.1 review-tool UI
+
+Summary:
+- Reworked the 3.1 presentation layer to use the 2.1 compact toolbar, full-width review-tool frame, wide chart, inset rounded panels, and event-card styling from the clicked-dot interface.
+- Kept the existing 3.1 text cards below the visual and preserved the event extraction, quote positioning, add-to-chart, dot selection, and close-panel behavior.
+- Set the visual to 100vw by 95vh on computer widths, with the existing stacked layout retained for narrow screens.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/Website/storymap/part2-events-visual.js`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Local browser preview at `http://127.0.0.1:8455/Website/storymap/storymap-example.html?visual=20260820-ui02#part-2-events` rendered the visual at 1280px wide and 684px high, matching 95vh at the 720px viewport.
+- Default state shows six saved AI candidate cards, the 硃83 summary and five divisions, and no event-detail panel.
+- Quote click located the source highlight; adding a candidate created one event dot; clicking the dot opened the rightmost full event panel; closing it restored the three-panel layout.
+- `node --check` passed for the visual data and behavior files; browser error logs were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:46 HKT — Codex — Added OCR browser-tab favicon
+
+Summary:
+- Added a green square favicon with a white “O” for the standalone OCR browser tab; the tab title remains `OCR原始史料`.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+
+Verified:
+- Local browser preview reports the SVG favicon link loaded successfully and retains the expected document title.
+- `git diff --check` passed.
+
+Remaining:
+- A pre-existing `storymap.js` cache-buster edit in `intro Website/Website/ocr/index.html` was left unstaged and untouched; existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:44 HKT — Codex — Restricted enlarged card text to mobile
+
+Summary:
+- Narrowed the enlarged OCR card supporting text rule to actual mobile input devices or very small screens, so the narrow-computer layout is not changed.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+
+Verified:
+- Browser preview at 390×844 reports 18px card text.
+- Browser preview at 722×1305 reports the original 16px card text, confirming the narrow-computer layout is excluded.
+- Both layouts have zero horizontal overflow; browser diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:42 HKT — Codex — Enlarged mobile OCR card supporting text
+
+Summary:
+- Increased the supporting paragraph text inside every OCR card from 16px to 18px on mobile and narrow layouts, while preserving the existing font-size setting scale.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+
+Verified:
+- Browser preview at 390×844 and 722×1305 reports 18px card text, 34.2px line height, and zero horizontal overflow.
+- Browser preview at 1280×720 remains at the original 16px desktop size.
+- Browser diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:36 HKT — Codex — Enlarged OCR cover copy and menu labels
+
+Summary:
+- Enlarged the orange 「理大人工智能 × 數位人文獎 2026 教學」 kicker and the cover description across desktop, narrow desktop, and mobile layouts.
+- Enlarged the OCR dropdown menu text and spacing.
+- Removed numeric prefixes from the desktop OCR top bar and increased the space between its seven tabs; the mobile dropdown keeps its numbered list.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+
+Verified:
+- Browser preview at 2048×720 shows larger 23px kicker/29px description text, seven label-only top-bar tabs, 19.2px tab text, and expanded tab spacing.
+- Browser preview at 390×844 shows larger cover copy, a larger dropdown list, and zero horizontal overflow; 722×1305 also remains within the viewport.
+- Browser diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:29 HKT — Codex — Removed mobile feature-filter pinning
+
+Summary:
+- Removed the sticky/floating behavior from the 「選擇版面特徵」 filter in steps 7 and 8 on the standalone OCR page, keeping the filter in normal document flow while scrolling.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+
+Verified:
+- Browser preview at 390×844 reports both step 7 and step 8 filters as `position: static` with `z-index: auto`.
+- Browser preview at 1280×720 keeps the filters hidden and the original desktop feature tags absolute/floating.
+- Browser diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 16:30 HKT — Codex — Added extraction-only mass-run switches
+
+Summary:
+- Audited the sample chart and March official-loop bundle for third-line 硃批 dots received in 1787/3.
+- Confirmed `硃237`, `硃250`, and `硃257` have no 林方／清方 extraction cards; `硃250` and `硃257` still have document-pair cards.
+- Added `--skip-dedup` and `--skip-official-response` to the mass prompt runner so a targeted rescan can run extraction and source-chain stages without official-response or repeat-report deduplication.
+
+Files changed:
+- `tool/scripts py/run_mass_prompt_chain_test.py`
+- `PROJECT_LOG.md`
+
+Verified:
+- `python3 -m py_compile "tool/scripts py/run_mass_prompt_chain_test.py"` passed.
+- Runner help exposes both skip flags; `git diff --check` passed.
+- Live sample checks for `硃237`, `硃250`, and `硃257` showed zero extraction cards.
+
+Remaining:
+- User should run the targeted `zhu-march-missing-extract-g37` rescan command; no AI request was launched in this turn.
+
+### 2026-08-20 16:10 HKT — Codex — Repaired review-bundle loading in formal and sample AI panels
+
+Summary:
+- Restored `isAuthorSelfReportCandidate` at script scope in both review tools so the formal bundle linker no longer aborts before refreshing the AI panel.
+- Made bundle linking warning-tolerant and refreshed loaded cards before optional repeat-report enrichment, so unavailable relationship helpers cannot leave the panel blank.
+- Added a clear `file://` message requiring the HTTP review server and skipped the sample repeat-report call when its `callProxy` helper is unavailable.
+
+Files changed:
+- `review-tools/(1) formal/index.html`
+- `review-tools/(2) sample/index.html`
+- `PROJECT_LOG.md`
+
+Verified:
+- All 8 formal and 9 sample inline script blocks parse; `git diff --check` passes.
+- Served formal loading `zhu-march-official-loop-g37` completed with no new errors and rendered seven extraction cards.
+- A clean served sample page loaded the same bundle without errors or repeat-report warnings; selecting `硃218` rendered 63 extraction cards.
+- The loaded March bundle remains persisted in the formal and sample saved states; existing duplicate/user-owned turns were not removed.
+
+Remaining:
+- The tools must be opened through the local HTTP server rather than a `file://` URL. No remote push was performed.
+
+### 2026-08-20 15:58 HKT — Codex — Matched the 3.1 AI panel header and removed the document filter row
+
+Summary:
+- Removed the five document division filter controls while retaining the five boxed document parts and their subtitles.
+- Added the screenshot-matched three-icon AI chat header, leaving out the right-side window actions.
+- Added `擷取` and the source skill (`林方行動` or `清方行動`) to the top of every saved AI candidate card.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual.js`
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop browser preview at 1280×911 shows the 80vh visual, five document-part boxes with subtitles, no division-filter row, and an AI header with exactly three controls and no right-side action group.
+- Six AI cards show the requested mode and skill labels; quote定位, 加入圖表, event-dot selection, and the rightmost event-detail panel still work.
+- 390×844 remains full-width with no horizontal overflow; browser error logs are empty; JavaScript syntax and diff checks pass.
+
+Remaining:
+- Existing unrelated worktree changes, review bundles, and user-owned edits remain untouched; no remote push was performed.
+
+### 2026-08-20 16:10 HKT — Codex — Added 2.3-style width changers to the 3.1 panels
+
+Summary:
+- Added vertical separators between the chart, AI output, and 硃83 source panels, matching the 2.3 resizer treatment.
+- Made the separators draggable with pointer input and keyboard-adjustable with the arrow keys; the third separator appears when the event-detail panel opens.
+- Hid the width changers in the mobile stacked layout so the existing responsive panel flow remains unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual.js`
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Desktop browser preview shows two visible width changers with `role="separator"`; pointer dragging and `ArrowRight`/`ArrowLeft` update adjacent panel percentages.
+- Opening an added event reveals the third width changer and keeps the event detail panel in the rightmost position; closing restores the two-panel separators.
+- 390×844 hides the separators without horizontal overflow; browser error logs are empty; JavaScript syntax and diff checks pass.
+
+Remaining:
+- Existing unrelated worktree changes, review bundles, and user-owned edits remain untouched; no remote push was performed.
+
+### 2026-08-20 16:18 HKT — Codex — Moved event details left and simplified the event panel
+
+Summary:
+- Moved the clicked event-detail panel to the far-left desktop column, with the chart, AI panel, and source panel following it.
+- Removed the relationship list, saved-source block, document identifier, and `done` category pill from the event-detail content.
+- Preserved the width changers by remapping them to the reordered event/chart/AI/source columns.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual.js`
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Clicking the first added dot places the event panel at the far left and keeps `賊匪攻陷鳳山縣城` visible.
+- The event panel no longer contains `關係`, `保存來源`, `zhu-january-official-loop`, `outputs/lin-events.json`, `硃83`, or `done`.
+- The reordered third width changer works with keyboard arrows; closing the event restores the default three-panel layout. Syntax, diff, and browser-error checks pass.
+
+Remaining:
+- Existing unrelated worktree changes, review bundles, and user-owned edits remain untouched; no remote push was performed.
+
+### 2026-08-20 15:45 HKT — Codex — Matched the OCR cover redesign and added section navigation
+
+Summary:
+- Applied the supplied cover sample's dark teal composition to the individual OCR page, including the larger right-side handwritten watermark, raised one-line title, and full-height mobile cover.
+- Added a shortened OCR-only menu using the individual page's sections: `主頁`, `簡介`, `辨識`, `JSON`, and `試一試`, numbered `1` through `5`.
+- Added the mobile hamburger drawer beside the original floating font-size settings control; the menu links stay on the OCR page despite its shared StoryMap asset base URL.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+
+Verified:
+- Browser preview at 1280×720 and 390×844 shows the desktop and mobile cover layouts, the title on one line, centered mobile watermark/frame, full mobile viewport height, and no horizontal overflow.
+- Desktop section navigation is visible below the cover; mobile drawer opens and its JSON link stays at the OCR page's `#part-3-json` anchor.
+- Original font-size settings opened at `100%`; browser console had no warnings or errors; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no deployment or GitHub push was performed.
+
+### 2026-08-20 18:05 HKT — Codex — Restyled the references as bottom additional information
+
+Summary:
+- Changed the bottom `參考資料` block from a large white card to the website's existing compact `.aside` additional-information treatment.
+- Preserved all three references and the embedded `《清代檔案檢索系統》` link text.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 1280×720 shows the references in the compact muted bordered panel at the page bottom.
+- The section contains three references and no visible full URL.
+- `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no deployment or GitHub push was performed.
+
+### 2026-08-20 15:42 HKT — Codex — Refined the 3.1 shared toolbar, date placement, and document sections
+
+Summary:
+- Kept the 2.1 toolbar visible but disabled, moved it above the chart, AI panel, and document panel, and removed document-panel filter controls.
+- Corrected the chart dates so `十二月十三日` uses `1786/12/13` and `十二月二十八日` uses `1786/12/28`.
+- Restored the document division buttons and boxed part subtitles, removed the AI-card colour rail, enlarged AI/source text, and reduced the desktop visual to 80vh.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual-data.js`
+- `intro Website/Website/storymap/part2-events-visual.js`
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/Website/storymap/storymap-example.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Local preview shows the disabled shared toolbar spanning all three default columns; the document panel has no inputs/filter controls and contains five division buttons plus five boxed parts with subtitles.
+- The first candidate renders at chart date `1786/12/13`, reveals only after `加入圖表`, and opens the rightmost event panel when clicked.
+- Desktop visual height is 80vh; 390×844 remains full-width with no horizontal overflow. Quote定位, division navigation, event detail, syntax checks, diff checks, and browser console checks pass.
+
+Remaining:
+- Existing unrelated worktree changes, review bundles, and user-owned edits remain untouched; no remote push was performed.
+
+### 2026-08-20 15:23 HKT — Codex — Reused the 2.1 chart engine and background data in 3.1
+
+Summary:
+- Replaced the custom 3.1 chart drawing with the shared `part1-interface.js` chart engine and `part-1-interface.css` four-lane styling used by 2.1.
+- Projected the same background chart data into 3.1, selected the real `doc-硃83-L` background node as the 硃83 document dot, and kept the six saved AI candidates hidden until confirmation.
+- Preserved quote定位, 加入圖表, event-dot selection, rightmost event-detail, and the four explanatory text cards below the visual.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual.js`
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Local preview at `http://127.0.0.1:8455/Website/storymap/storymap-example.html?visual=20260820-final#part-2-events` shows the shared chart at 1280×720 with a 1280px-wide, 684px-high visual; 390×844 shows the full-width stacked layout.
+- Default state contains 604 shared chart dots, 603 background dots, the foreground `doc-硃83-L` node, six hidden candidate nodes, and six hidden candidate links.
+- Quote click locates the source highlight; adding a candidate reveals its chart dot/link and disables its card action; clicking the dot opens `賊匪攻陷鳳山縣城`; closing restores the default panels.
+- Browser error logs are empty; `node --check intro Website/Website/storymap/part2-events-visual.js` and `git diff --check` pass.
+
+Remaining:
+- Existing unrelated worktree changes, review bundles, and user-owned edits remain untouched; no remote push was performed.
+
+### 2026-08-20 14:28 HKT — Codex — Added a standalone OCR cover design draft
+
+Summary:
+- Added a separate cover-only HTML draft for user review; the existing standalone OCR page remains unchanged.
+- Replaced the printed-page watermark concept with the local handwritten PDF page 1 asset from `試一試/手寫字/page1.png`.
+- Added a browser-side luminance extraction layer so paper colour, folds, and scan background are transparent while the handwritten strokes remain as a soft white overlay with fine guide lines.
+
+Files changed:
+- `intro Website/Website/ocr/cover-draft.html`
+
+Verified:
+- Local browser preview at 1280×800 and 390×844 shows only the handwritten text layer on the right and keeps the title clear.
+- Narrow preview has no horizontal overflow; the floating settings button remains available and opens its `介面字級` control beside the button.
+- `git diff --check` passed; the existing OCR page and unrelated worktree changes were not modified.
+
+Remaining:
+- User review of the cover draft; no deployment or GitHub push was performed.
+
+### 2026-08-20 14:48 HKT — Codex — Applied the OCR cover design to the individual website
+
+Summary:
+- Replaced the standalone OCR cover copy with the requested title `OCR原始史料` and description: `以清代奏摺為例，介紹如何OCR和結構化手寫本和印刷本的原始史料。`
+- Removed the draft eyebrow, source metadata, date, and `查看史料` action from the live cover.
+- Reused the original website font-size settings UI (`字體 − 100% ＋`) and kept the floating square settings button in the top-right corner.
+- Applied the text-only handwritten PDF watermark and masked the first upper-right `奏` character.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 1280×800 and 390×844 shows the requested cover, no horizontal overflow, no removed draft copy, and a clear title.
+- The original font-size control opened with `字體 − 100% ＋`; clicking `＋` changed `--font-scale` to `1.05`, then the preview was restored to 100%.
+- The OCR definition, JSON viewer, and `試一試` sections remain rendered below the cover.
+
+Remaining:
+- User review of the integrated individual website; no deployment or GitHub push was performed.
+
+### 2026-08-20 15:01 HKT — Codex — Simplified the 3.1 visual chrome and enlarged panel text
+
+Summary:
+- Hid the internal visual toolbar and repeated chart, AI, document, summary, division, part-heading, footer, and saved-bundle labels requested for the 3.1 presentation.
+- Enlarged the AI candidate and 硃83 source text while keeping quotation location, add-event, event-dot, and rightmost event-detail interactions intact.
+- Kept the original four explanatory text cards below the visual unchanged.
+
+Files changed:
+- `intro Website/Website/storymap/part2-events-visual.css`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Local browser preview at `http://127.0.0.1:8455/Website/storymap/storymap-example.html?visual=20260820-final#part-2-events` rendered the visual at 1280px wide and 684px high at a 1280×720 viewport; the normal preview viewport was restored afterward.
+- Default state has six candidate cards, five source-document parts, zero event dots, a hidden event-detail panel, and four original explanatory text cards.
+- Quotation click located three source highlights; adding the first candidate created one dot and disabled its action; clicking the dot opened `賊匪攻陷鳳山縣城` in the rightmost panel; closing restored the default panel state.
+- Browser error logs were empty, `node --check Website/storymap/part2-events-visual.js` passed, and `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 16:28 HKT — Codex — Refined the standalone OCR cover and workflow menu
+
+Summary:
+- Added the orange `理大人工智能 × 數位人文獎 2026 教學` kicker, enlarged the cover description, and restored the sample scan sweep over the text-only handwritten watermark.
+- Kept the watermark at its intrinsic width while scaling and centering the complete layer for desktop, narrow-computer, and phone layouts; narrow screens now use the mobile cover composition and keep the watermark inside its frame.
+- Replaced repeated workflow labels in both navigation surfaces with seven unique tabs, each with one number: `1 OCR`, `2 PaddleOCR`, `3 準備OCR`, `4 辨識印刷字`, `5 辨識手寫字`, `6 輸出格式`, and `7 試一試`.
+- Moved the original settings control into the sticky OCR menu on wide screens while retaining the floating control for the cover and mobile layouts.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview checked at 1280×720, 722×1305, and 390×844; the cover remains full-height on narrow layouts, the title stays on one line, the watermark/frame is centered, the scan effect is present, and horizontal overflow is zero.
+- Both the desktop bar and mobile drawer expose the same seven unique numbered tabs; the original settings panel opens and the sticky menu placement is active when the bar reaches the top.
+- Browser diagnostics were empty and `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 16:41 HKT — Codex — Enlarged and centered the OCR watermark
+
+Summary:
+- Cropped the transparent handwriting canvas to the visible ink after removing the isolated first `奏`, so the large blank right side of the source PDF no longer shrinks or offsets the watermark.
+- Removed the responsive watermark downscaling and kept the extracted text layer centered inside the scan frame at full-computer, narrow-computer, and mobile widths.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 1280×720, 722×1305, and 390×844 shows the handwriting enlarged, centered inside the frame, and without horizontal overflow.
+- Browser diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:19 HKT — Codex — Rebalanced OCR navigation and responsive cover spacing
+
+Summary:
+- Centered the seven desktop OCR tabs as a group, increased their label size, and placed each tab title before its number so the number sits on the right.
+- Returned the settings button to the original right-side horizontal position in the top menu while keeping it inside the menu bar when that bar is sticky.
+- Enlarged the orange teaching kicker and moved the narrow/mobile scan frame into the blank area below the description, centered with its watermark.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 2048×720 confirms the tab group is centered at the viewport midpoint, tab text is 15.2px, titles precede right-side numbers, and the settings button remains at the original right offset.
+- Browser preview at 722×1305 and 390×844 confirms the larger kicker, description-first cover order, centered scan frame/watermark, one-line title, and zero horizontal overflow.
+- Browser diagnostics were empty; `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:48 HKT — Codex — Added approved references to clicked OCR images
+
+Summary:
+- Replaced the outdated handwritten lightbox citation with the approved `故宮075669號` reference, linked only on `《清代檔案檢索系統》` and without a browsing date.
+- Added publisher details `（臺北：遠流，2006）` to the printed citations for the main OCR example and the printed `試一試` example.
+- Applied the same source-reference treatment to the Part 3 printed/handwritten feature galleries and both `試一試` modes; 硃 identifiers are not displayed.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed.
+- `git diff --check` passed.
+- Browser-tested the main handwritten and printed OCR images, printed and handwritten `試一試`, and the printed/handwritten feature galleries. Captions showed the approved references, the handwritten system title contained the embedded link, no full URL or browsing date was visible, and no 硃 ID was shown.
+- Visual overlay checked at 1280×720.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:53 HKT — Codex — Limited expanded image panels to references only
+
+Summary:
+- Removed page labels, feature descriptions, and generic scan-page text from the clicked-image overlay.
+- The expanded info panel now shows only the applicable approved reference; the handwritten archive title remains the only embedded link.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- `node --check intro Website/Website/storymap/storymap.js` passed.
+- `git diff --check` passed.
+- Browser-tested the main OCR images, both `試一試` modes, and the printed/handwritten feature galleries. Each expanded caption contained only its reference; no full URL, browsing date, or 硃 identifier was visible.
+- Visual expanded overlay checked at 1280×720.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:58 HKT — Codex — Added a references section to the OCR page
+
+Summary:
+- Added a `參考資料` section at the bottom of the standalone OCR website.
+- Listed the two printed `明清臺灣檔案彙編` references and the handwritten archive reference, with only `《清代檔案檢索系統》` shown as the embedded link text.
+
+Files changed:
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- Browser preview found one bottom reference section with three entries and one embedded archive link; the full URL is not visible.
+- Scrolled to the page bottom at 1280×720 and visually confirmed the section layout and link styling.
+- `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
+
+### 2026-08-20 17:49 HKT — Codex — Made the former 150% OCR font size the default 100% baseline
+
+Summary:
+- Made the former 150% reading view the effective 100% baseline for the shared introduction-website font-scale control.
+- Kept the displayed percentage relative to that new baseline, so `100%` now renders the requested larger OCR text while `＋` and `−` remain usable.
+- Bumped the OCR stylesheet/script cache versions for the typography change.
+
+Files changed:
+- `intro Website/Website/storymap/storymap.css`
+- `intro Website/Website/storymap/storymap.js`
+- `intro Website/Website/ocr/index.html`
+- `intro Website/INTRO_WEBSITE_CHANGE_LOG.md`
+- `PROJECT_LOG.md`
+
+Verified:
+- The requested URL reloads with displayed `100%` and effective `--font-scale: 1.5`.
+- The representative `試一試` filename text is `18.75px` at the new `100%`, matching its earlier `150%` measurement; one increase reports `105%` and scales it to `19.6875px`, then restores to `100%`.
+- Browser warning/error logs were empty; `node --check intro Website/Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no deployment or GitHub push was performed.

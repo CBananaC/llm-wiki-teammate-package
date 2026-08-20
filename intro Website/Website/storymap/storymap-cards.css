@@ -2421,7 +2421,7 @@
 #part-2-content .part2-substage-copy > .part2-substage-description p {
   margin: 0;
   color: rgba(247, 243, 234, .9);
-  font: 500 clamp(17px, 1.45vw, 23px)/1.65 var(--serif);
+  font: 500 clamp(20px, 1.75vw, 28px)/1.7 var(--serif);
   letter-spacing: .008em;
 }
 /* Each substage cover sits flush against the border-bottom of whatever
@@ -2471,7 +2471,7 @@
     margin-top: 14px;
   }
   #part-2-content .part2-substage-copy > .part2-substage-description p {
-    font-size: clamp(16px, 4.4vw, 19px);
+    font-size: clamp(18px, 4.8vw, 22px);
     line-height: 1.7;
   }
 }

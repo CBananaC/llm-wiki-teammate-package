@@ -778,6 +778,24 @@ const photoLightbox = (() => {
   return { open, openGallery, close };
 })();
 
+/* OCR source references shown in the image lightbox.  Keep the compact
+   明清台檔 labels out of the full citation, and omit the 硃 identifiers from
+   the presentation-facing references. */
+const OCR_LIGHTBOX_REFERENCES = {
+  printed: {
+    text: '黃仕簡，〈為奏彰化失陷已調兵赴臺事〉，《明清臺灣檔案彙編》，第30冊（臺北：遠流，2006），頁80。',
+    html: '黃仕簡，〈為奏彰化失陷已調兵赴臺事〉，《明清臺灣檔案彙編》，第30冊（臺北：遠流，2006），頁80。'
+  },
+  tryPrinted: {
+    text: '常青，〈為請酌籌加調官兵協力進剿事〉，《明清臺灣檔案彙編》，第30冊（臺北：遠流，2006），頁136。',
+    html: '常青，〈為請酌籌加調官兵協力進剿事〉，《明清臺灣檔案彙編》，第30冊（臺北：遠流，2006），頁136。'
+  },
+  handwritten: {
+    text: '常青，〈奏為酌籌加調官兵協力進剿彰化縣逆匪期望速殲事〉，《宮中檔奏摺—乾隆朝》，乾隆51年12月20日，故宮075669號，件1。國立故宮博物院，《清代檔案檢索系統》。',
+    html: '常青，〈奏為酌籌加調官兵協力進剿彰化縣逆匪期望速殲事〉，《宮中檔奏摺—乾隆朝》，乾隆51年12月20日，故宮075669號，件1。國立故宮博物院，<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8763805JOl8j2C#6eF" target="_blank" rel="noopener noreferrer">《清代檔案檢索系統》</a>。'
+  }
+};
+
 /* 圖片畫廊：左右翻頁、乾淨圖片、下方說明（預設只顯示標題，滑鼠移入展開）。
    每個 [data-photo-gallery] 讀取自己的 <script type="application/json"
    data-photo-gallery-data> 作為圖片與說明來源。若只有來源而沒有段落，直接顯示完整引註；
@@ -1027,11 +1045,13 @@ document.addEventListener('click', (event) => {
   const documentMeta = fileStack.classList.contains('handwritten')
     ? {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
-        descriptionHtml: '黃仕簡，〈為奏彰化失陷已調兵赴臺事〉（1786/12/10），〈奏聞臺灣彰化縣賊匪殺官陷城及奴才辦理赴剿緣由事〉，《宮中檔奏摺—乾隆朝》，乾隆51年12月10日，故宮075543號，件1。國立故宮博物院，<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw#08l" target="_blank" rel="noopener noreferrer">《清代檔案檢索系統》</a>（<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8760364P-6I=Vw/pdf#08l" target="_blank" rel="noopener noreferrer">PDF影像</a>），瀏覽日期：2026/08/04。'
+        description: OCR_LIGHTBOX_REFERENCES.handwritten.text,
+        descriptionHtml: OCR_LIGHTBOX_REFERENCES.handwritten.html
       }
     : {
         title: '為奏彰化失陷已調兵赴臺事｜黃仕簡｜1786/12/10 sent',
-        description: '黃仕簡，〈為奏彰化失陷已調兵赴臺事〉（1786/12/10），《明清台灣檔案匯編》，第30冊，頁80，硃25。'
+        description: OCR_LIGHTBOX_REFERENCES.printed.text,
+        descriptionHtml: OCR_LIGHTBOX_REFERENCES.printed.html
       };
   photoLightbox.openGallery(pages, currentIndex < 0 ? 0 : currentIndex, {
     title: fileStack.getAttribute('data-ocr-document-title') || documentMeta.title,
@@ -2067,15 +2087,13 @@ const initPart3FeatureExplorers = () => {
 
       const openPrintedGallery = (triggerEl) => {
         const feature = features[cur];
+        const reference = OCR_LIGHTBOX_REFERENCES.printed;
         const galleryPages = pages.map((src, i) => {
           const annotated = feature && (feature.page || 0) === i && feature.image;
           return {
             src: annotated ? feature.image : src,
             alt: annotated ? `${feature.title}：人工標示頁面` : `印刷本奏摺第 ${i + 1} 頁`,
-            title: annotated ? feature.title : `印刷本奏摺第 ${i + 1} 頁`,
-            description: annotated
-              ? feature.desc
-              : '《明清臺灣檔案彙編》的印刷本奏摺頁面，可使用左右按鈕查看前後頁。'
+            description: reference.text
           };
         });
         photoLightbox.openGallery(galleryPages, page, {
@@ -2157,15 +2175,14 @@ const initPart3FeatureExplorers = () => {
       const openHandwrittenGallery = (sheetIndex, triggerEl) => {
         const feature = features[cur];
         const selectedSheet = feature && feature.image ? Math.floor((feature.panel || 0) / 3) : -1;
+        const reference = OCR_LIGHTBOX_REFERENCES.handwritten;
         const galleryPages = sheets.map((src, i) => {
           const annotated = i === selectedSheet;
           return {
             src: annotated ? feature.image : src,
             alt: annotated ? `${feature.title}：人工標示頁面` : `手寫奏摺第 ${i + 1} 張掃描頁面`,
-            title: annotated ? feature.title : `手寫奏摺第 ${i + 1} 張掃描頁面`,
-            description: annotated
-              ? feature.desc
-              : '手寫奏摺原件掃描頁面，可使用左右按鈕查看前後頁。'
+            description: reference.text,
+            descriptionHtml: reference.html
           };
         });
         photoLightbox.openGallery(galleryPages, sheetIndex, {
@@ -3346,15 +3363,16 @@ const initPart3TryIt = () => {
     const featurePage = feature && Number.isFinite(feature.page) ? feature.page : pageIdx;
     const modeTitle = mode === 'handwritten' ? '手寫字' : '印刷字';
     const featureTitle = (feature && feature.title) || (step && step.k) || `${modeTitle}史料頁面`;
-    const featureDescription = (feature && feature.desc) || (step && step.guide)
-      || `${modeTitle}奏摺原件掃描頁面，可使用左右按鈕查看前後頁。`;
+    const reference = mode === 'handwritten'
+      ? OCR_LIGHTBOX_REFERENCES.handwritten
+      : OCR_LIGHTBOX_REFERENCES.tryPrinted;
     const galleryPages = set.pages.map((src, i) => {
       const annotated = feature && feature.page === i && feature.image;
       return {
         src: assetDir + (annotated ? feature.image : src),
         alt: annotated ? `${featureTitle}：人工標示頁面` : `${modeTitle}奏摺第 ${i + 1} 頁`,
-        title: annotated ? featureTitle : `${modeTitle}奏摺第 ${i + 1} 頁`,
-        description: annotated ? featureDescription : `${modeTitle}奏摺原件掃描頁面。`
+        description: reference.text,
+        descriptionHtml: reference.html
       };
     });
     photoLightbox.openGallery(galleryPages, featurePage, {

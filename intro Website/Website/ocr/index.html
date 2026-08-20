@@ -1147,6 +1147,27 @@
         line-height: 1.9;
       }
     }
+
+    html.ocr-standalone .ocr-reference-section .ocr-reference-additional {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+    html.ocr-standalone .ocr-reference-list {
+      margin: 0;
+      padding-left: 1.7em;
+      color: var(--text);
+      font: var(--body-weight) calc(13.5px * var(--font-scale))/1.85 var(--sans);
+    }
+    html.ocr-standalone .ocr-reference-list li {
+      margin: 0 0 1em;
+      padding-left: .35em;
+    }
+    html.ocr-standalone .ocr-reference-list li:last-child { margin-bottom: 0; }
+    html.ocr-standalone .ocr-reference-list a {
+      color: var(--accent);
+      text-decoration: underline;
+      text-underline-offset: 3px;
+    }
   </style>
 </head>
 <body>
@@ -3609,6 +3630,19 @@
                   </script>
                 </div>
               </div>
+            </div>
+          </section>
+
+          <section class="story surface-b ocr-reference-section" id="ocr-references" aria-labelledby="ocr-references-title">
+            <div class="story-inner">
+              <aside class="ocr-reference-additional aside" aria-labelledby="ocr-references-title">
+                <b id="ocr-references-title">參考資料</b>
+                <ol class="ocr-reference-list">
+                  <li>黃仕簡，〈為奏彰化失陷已調兵赴臺事〉，《明清臺灣檔案彙編》，第30冊（臺北：遠流，2006），頁80。</li>
+                  <li>常青，〈為請酌籌加調官兵協力進剿事〉，《明清臺灣檔案彙編》，第30冊（臺北：遠流，2006），頁136。</li>
+                  <li>常青，〈奏為酌籌加調官兵協力進剿彰化縣逆匪期望速殲事〉，《宮中檔奏摺—乾隆朝》，乾隆51年12月20日，故宮075669號，件1。國立故宮博物院，<a href="https://qingarchives.npm.edu.tw/index.php?act=Display/image/8763805JOl8j2C#6eF" target="_blank" rel="noopener noreferrer">《清代檔案檢索系統》</a>。</li>
+                </ol>
+              </aside>
             </div>
           </section>
 
