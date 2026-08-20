@@ -1127,6 +1127,17 @@
       }
       html.ocr-standalone .ocr-cover-source-ghost { transform: rotate(1deg); }
     }
+
+    /* In the standalone mobile workflow, keep the step 7/8 feature filter in
+       the document flow instead of pinning it to the viewport while scrolling. */
+    @media (pointer: coarse) and (hover: none), (max-width: 1040px) {
+      html.ocr-standalone #part-3-printed-explorer .mfilter,
+      html.ocr-standalone #part-3-handwritten-explorer .mfilter {
+        position: static;
+        top: auto;
+        z-index: auto;
+      }
+    }
   </style>
 </head>
 <body>
