@@ -117,6 +117,10 @@
       const ocrDrawerBackdrop = document.querySelector('#ocr-drawer-backdrop');
       const ocrDrawerClose = document.querySelector('#ocr-drawer-close');
       const ocrNavLinks = [...document.querySelectorAll('[data-ocr-nav-target]')];
+      const ocrTopbar = document.querySelector('.topbar');
+      const ocrSectionNav = document.querySelector('.ocr-section-nav');
+      const ocrSectionNavSettings = document.querySelector('.ocr-section-nav-settings');
+      const ocrSettingsWrap = document.querySelector('.settings-wrap');
       if (!ocrMenuToggle || !ocrDrawer || !ocrDrawerBackdrop || !ocrDrawerClose) return;
 
       const setOcrDrawerOpen = (isOpen) => {
@@ -140,6 +144,29 @@
             else link.removeAttribute('aria-current');
           }
         });
+      };
+
+      const setOcrSettingsLocation = (insideSectionNav) => {
+        if (!ocrTopbar || !ocrSectionNavSettings || !ocrSettingsWrap) return;
+        if (insideSectionNav) {
+          if (!ocrSectionNavSettings.contains(ocrSettingsWrap)) {
+            ocrSectionNavSettings.appendChild(ocrSettingsWrap);
+          }
+          ocrSectionNavSettings.classList.add('is-active');
+          ocrSettingsWrap.classList.add('ocr-settings-in-nav');
+        } else {
+          if (!ocrTopbar.contains(ocrSettingsWrap)) {
+            ocrTopbar.appendChild(ocrSettingsWrap);
+          }
+          ocrSectionNavSettings.classList.remove('is-active');
+          ocrSettingsWrap.classList.remove('ocr-settings-in-nav');
+        }
+      };
+
+      const updateOcrSettingsLocation = () => {
+        const isDesktop = window.matchMedia('(min-width: 981px)').matches;
+        const navIsStuck = ocrSectionNav && ocrSectionNav.getBoundingClientRect().top <= 1;
+        setOcrSettingsLocation(Boolean(isDesktop && navIsStuck));
       };
 
       ocrMenuToggle.addEventListener('click', () => {
@@ -167,6 +194,11 @@
           setOcrDrawerOpen(false);
         }
       });
+      window.addEventListener('scroll', updateOcrSettingsLocation, { passive: true });
+      window.addEventListener('resize', updateOcrSettingsLocation);
+      updateOcrSettingsLocation();
+      const initialOcrTarget = ocrNavLinks.find((link) => link.dataset.ocrNavTarget === window.location.hash);
+      if (initialOcrTarget) setOcrNavActive(initialOcrTarget.dataset.ocrNavTarget);
     });
   </script>
   <title>OCR原始史料</title>
@@ -839,6 +871,211 @@
         height: min(43svh, 340px);
       }
       html.ocr-standalone .ocr-cover-source-ghost { transform: rotate(1deg) scale(.92); }
+    }
+
+    /* Final OCR cover/menu refinements: keep the watermark's intrinsic width,
+       scale the whole layer with the viewport, and restore the sample's scan
+       sweep without bringing back the paper background. */
+    html.ocr-standalone .ocr-cover-kicker {
+      margin: 0 0 clamp(12px, 1.4vw, 20px);
+      color: #d6a66a;
+      font: 700 clamp(11px, .9vw, 15px)/1.35 var(--sans);
+      letter-spacing: .12em;
+    }
+    html.ocr-standalone .ocr-cover-kicker span,
+    html.ocr-standalone .ocr-cover-kicker em { color: inherit; }
+    html.ocr-standalone .ocr-cover-kicker em { font-style: normal; }
+    html.ocr-standalone .ocr-cover-description {
+      max-width: 35em;
+      margin-top: clamp(20px, 2.2vw, 34px);
+      font-size: clamp(17px, 1.5vw, 23px);
+      line-height: 1.78;
+    }
+    html.ocr-standalone .ocr-cover-source-ghost {
+      overflow: visible;
+      transform: translateY(-50%) rotate(1.6deg) scale(1.06);
+    }
+    html.ocr-standalone .ocr-cover-source-page {
+      width: 100%;
+      max-width: 100%;
+      object-fit: contain;
+      object-position: center;
+    }
+    html.ocr-standalone .ocr-cover-frame { inset: 0; }
+    html.ocr-standalone .ocr-drawer {
+      overflow-y: auto;
+      overscroll-behavior: contain;
+    }
+    html.ocr-standalone .ocr-cover-scan-line {
+      position: absolute;
+      z-index: 4;
+      top: 4%;
+      right: 4%;
+      left: 4%;
+      height: 1px;
+      pointer-events: none;
+      background: linear-gradient(90deg, transparent, #d6a66a 18%, #d6a66a 82%, transparent);
+      box-shadow: 0 0 14px 1px rgba(214, 166, 106, .6);
+      animation: ocr-cover-scanmove 4.6s cubic-bezier(.4, 0, .2, 1) infinite;
+    }
+    @keyframes ocr-cover-scanmove {
+      0% { top: 4%; opacity: 0; }
+      8% { opacity: 1; }
+      50% { top: 94%; opacity: 1; }
+      58% { opacity: 0; }
+      100% { top: 4%; opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      html.ocr-standalone .ocr-cover-scan-line { display: none; }
+    }
+
+    html.ocr-standalone .ocr-section-nav-inner {
+      justify-content: flex-start;
+    }
+    html.ocr-standalone .ocr-section-nav a {
+      padding: .95rem .65rem .8rem;
+      gap: .34rem;
+      font-size: .75rem;
+      letter-spacing: .035em;
+    }
+    html.ocr-standalone .ocr-section-nav-settings {
+      display: none;
+      position: sticky;
+      right: 0;
+      min-width: 54px;
+      margin-left: auto;
+      padding-left: 8px;
+      align-items: center;
+      justify-content: center;
+      background: rgba(16, 47, 50, .98);
+      border-left: 1px solid rgba(236, 240, 232, .18);
+      box-shadow: -10px 0 18px rgba(16, 47, 50, .4);
+    }
+    html.ocr-standalone .ocr-section-nav-settings.is-active { display: flex; }
+    html.ocr-standalone .ocr-section-nav-settings .settings-wrap {
+      position: static;
+      top: auto;
+      right: auto;
+      display: block;
+      pointer-events: auto;
+    }
+    html.ocr-standalone .ocr-section-nav-settings .settings-button {
+      width: 42px;
+      height: 42px;
+      background: transparent;
+      border: 1px solid rgba(236, 240, 232, .36);
+      box-shadow: none;
+    }
+    html.ocr-standalone .ocr-section-nav-settings .settings-panel {
+      top: calc(100% + 8px);
+      right: 0;
+    }
+
+    @media (max-width: 980px) {
+      html.ocr-standalone .ocr-section-nav { display: none; }
+      html.ocr-standalone .settings-wrap {
+        right: calc(clamp(18px, 3vw, 42px) + 60px);
+      }
+      html.ocr-standalone .ocr-menu-toggle {
+        display: grid;
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      html.ocr-standalone #part-3-ocr-bar {
+        display: block;
+        height: 100svh;
+        min-height: 100svh;
+        max-height: 100svh;
+        padding: clamp(92px, 12vh, 116px) clamp(24px, 5vw, 56px) 34px;
+        overflow: hidden;
+      }
+      html.ocr-standalone #part-3-ocr-bar::before { inset: 82px 16px 16px; }
+      html.ocr-standalone #part-3-ocr-bar > .section-hero-content {
+        position: static;
+        width: 100%;
+        padding: 0;
+        transform: none;
+      }
+      html.ocr-standalone #part-3-ocr-title {
+        max-width: none;
+        font-size: clamp(42px, 7.8vw, 68px);
+        line-height: 1;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+      html.ocr-standalone .ocr-cover-kicker {
+        margin-bottom: 14px;
+        font-size: clamp(11px, 1.5vw, 14px);
+      }
+      html.ocr-standalone .ocr-cover-description {
+        position: static;
+        max-width: 35em;
+        margin: clamp(24px, 4vh, 42px) 0 0;
+        font-size: clamp(20px, 3.6vw, 28px);
+        line-height: 1.75;
+      }
+      html.ocr-standalone .ocr-cover-watermark {
+        position: absolute;
+        top: 74%;
+        right: auto;
+        bottom: auto;
+        left: 50%;
+        width: min(88vw, 640px);
+        height: min(52svh, 600px);
+        min-height: 0;
+        margin: 0;
+        opacity: .64;
+        transform: translate(-50%, -50%);
+      }
+      html.ocr-standalone .ocr-cover-source-ghost {
+        top: 0;
+        right: auto;
+        width: 100%;
+        height: 100%;
+        transform: rotate(1deg) scale(.92);
+      }
+      html.ocr-standalone .ocr-cover-source-page {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+      }
+      html.ocr-standalone .ocr-cover-word-lines { inset: 7% 7%; }
+      html.ocr-standalone .ocr-cover-frame { inset: 0; }
+    }
+
+    @media (max-width: 470px) {
+      html.ocr-standalone .settings-wrap {
+        right: calc(24px + 52px);
+      }
+      html.ocr-standalone .ocr-menu-toggle {
+        top: 18px;
+        right: 24px;
+        width: 46px;
+        height: 46px;
+      }
+      html.ocr-standalone #part-3-ocr-bar { padding-right: 24px; padding-left: 24px; }
+      html.ocr-standalone #part-3-ocr-title { font-size: clamp(38px, 10.5vw, 52px); }
+      html.ocr-standalone .ocr-cover-kicker {
+        margin-bottom: 12px;
+        font-size: 11px;
+        letter-spacing: .08em;
+      }
+      html.ocr-standalone .ocr-cover-description {
+        position: absolute;
+        right: 24px;
+        bottom: clamp(28px, 5vh, 48px);
+        left: 24px;
+        max-width: none;
+        margin: 0;
+        font-size: clamp(16px, 4.6vw, 19px);
+      }
+      html.ocr-standalone .ocr-cover-watermark {
+        top: 52%;
+        width: min(88vw, 370px);
+        height: min(43svh, 340px);
+      }
+      html.ocr-standalone .ocr-cover-source-ghost { transform: rotate(1deg) scale(.88); }
     }
   </style>
 </head>
@@ -2558,6 +2795,7 @@
         <section class="part3-stage" id="part-3-ocr" data-tab="part-3" data-nav="#part-3-ocr">
           <section class="section-hero section-hero-part-3 part3-stage-bar" id="part-3-ocr-bar" aria-labelledby="part-3-ocr-title">
             <div class="section-hero-content">
+              <p class="ocr-cover-kicker"><span>理大人工智能</span> × <span>數位人文獎 2026</span> <em>教學</em></p>
               <h1 id="part-3-ocr-title">OCR原始史料</h1>
               <p class="ocr-cover-description">以清代奏摺為例，介紹如何OCR和結構化手寫本和印刷本的原始史料。</p>
             </div>
@@ -2567,6 +2805,7 @@
                 <canvas class="ocr-cover-source-page" data-ocr-cover-ink></canvas>
                 <canvas class="ocr-cover-source-page edge" data-ocr-cover-ink></canvas>
                 <div class="ocr-cover-word-lines"></div>
+                <span class="ocr-cover-scan-line" aria-hidden="true"></span>
                 <div class="ocr-cover-frame"></div>
               </div>
             </figure>
@@ -2574,11 +2813,14 @@
 
           <nav class="ocr-section-nav" aria-label="OCR教學章節">
             <div class="ocr-section-nav-inner">
-              <a class="is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar" aria-current="page"><span class="nav-index">1</span><span>主頁</span></a>
-              <a href="#part-3-ocr-definition" data-ocr-nav-target="#part-3-ocr-definition"><span class="nav-index">2</span><span>簡介</span></a>
-              <a href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span class="nav-index">3</span><span>辨識</span></a>
-              <a href="#part-3-json" data-ocr-nav-target="#part-3-json"><span class="nav-index">4</span><span>JSON</span></a>
-              <a href="#part-3-try" data-ocr-nav-target="#part-3-try"><span class="nav-index">5</span><span>試一試</span></a>
+              <a class="is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar" aria-current="page"><span class="nav-index">1</span><span>OCR</span></a>
+              <a href="#part-3-paddleocr" data-ocr-nav-target="#part-3-paddleocr"><span class="nav-index">2</span><span>PaddleOCR</span></a>
+              <a href="#part-3-material" data-ocr-nav-target="#part-3-material"><span class="nav-index">3</span><span>準備OCR</span></a>
+              <a href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span class="nav-index">4</span><span>辨識印刷字</span></a>
+              <a href="#part-3-handwritten" data-ocr-nav-target="#part-3-handwritten"><span class="nav-index">5</span><span>辨識手寫字</span></a>
+              <a href="#part-3-json" data-ocr-nav-target="#part-3-json"><span class="nav-index">6</span><span>輸出格式</span></a>
+              <a href="#part-3-try" data-ocr-nav-target="#part-3-try"><span class="nav-index">7</span><span>試一試</span></a>
+              <div class="ocr-section-nav-settings" aria-label="網站設定"></div>
             </div>
           </nav>
           <div class="ocr-drawer-backdrop" id="ocr-drawer-backdrop" aria-hidden="true"></div>
@@ -2587,11 +2829,13 @@
               <button class="ocr-drawer-close" id="ocr-drawer-close" type="button" aria-label="關閉 OCR 章節選單">×</button>
             </div>
             <nav class="ocr-drawer-links" aria-label="OCR教學章節">
-              <a class="ocr-drawer-link is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar"><span>主頁</span><span class="nav-index">1</span></a>
-              <a class="ocr-drawer-link" href="#part-3-ocr-definition" data-ocr-nav-target="#part-3-ocr-definition"><span>簡介</span><span class="nav-index">2</span></a>
-              <a class="ocr-drawer-link" href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span>辨識</span><span class="nav-index">3</span></a>
-              <a class="ocr-drawer-link" href="#part-3-json" data-ocr-nav-target="#part-3-json"><span>JSON</span><span class="nav-index">4</span></a>
-              <a class="ocr-drawer-link" href="#part-3-try" data-ocr-nav-target="#part-3-try"><span>試一試</span><span class="nav-index">5</span></a>
+              <a class="ocr-drawer-link is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar"><span class="nav-index">1</span><span>OCR</span></a>
+              <a class="ocr-drawer-link" href="#part-3-paddleocr" data-ocr-nav-target="#part-3-paddleocr"><span class="nav-index">2</span><span>PaddleOCR</span></a>
+              <a class="ocr-drawer-link" href="#part-3-material" data-ocr-nav-target="#part-3-material"><span class="nav-index">3</span><span>準備OCR</span></a>
+              <a class="ocr-drawer-link" href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span class="nav-index">4</span><span>辨識印刷字</span></a>
+              <a class="ocr-drawer-link" href="#part-3-handwritten" data-ocr-nav-target="#part-3-handwritten"><span class="nav-index">5</span><span>辨識手寫字</span></a>
+              <a class="ocr-drawer-link" href="#part-3-json" data-ocr-nav-target="#part-3-json"><span class="nav-index">6</span><span>輸出格式</span></a>
+              <a class="ocr-drawer-link" href="#part-3-try" data-ocr-nav-target="#part-3-try"><span class="nav-index">7</span><span>試一試</span></a>
             </nav>
           </aside>
 
