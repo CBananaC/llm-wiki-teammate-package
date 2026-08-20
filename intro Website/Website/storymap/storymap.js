@@ -27,10 +27,12 @@ const fontSizeDecrease = document.getElementById('font-size-decrease');
 const fontSizeIncrease = document.getElementById('font-size-increase');
 const fontSizeValue = document.getElementById('font-size-value');
 const IS_OCR_STANDALONE = document.documentElement.classList.contains('ocr-standalone');
+const IS_OCR_MOBILE = IS_OCR_STANDALONE
+  && window.matchMedia('(max-width: 820px)').matches;
 const FONT_SCALE_KEY = IS_OCR_STANDALONE
-  ? 'intro-website-ocr-font-scale'
+  ? (IS_OCR_MOBILE ? 'intro-website-ocr-mobile-font-scale' : 'intro-website-ocr-font-scale')
   : 'intro-website-font-scale';
-const FONT_SCALE_DEFAULT = IS_OCR_STANDALONE ? 0.8 : 1;
+const FONT_SCALE_DEFAULT = IS_OCR_MOBILE ? 0.55 : (IS_OCR_STANDALONE ? 0.8 : 1);
 const FONT_SCALE_BASE = 1.5;
 const FONT_SCALE_MIN = 0.55;
 const FONT_SCALE_MAX = 2.2;

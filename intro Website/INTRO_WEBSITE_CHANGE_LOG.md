@@ -10519,6 +10519,28 @@ Verified:
 Remaining:
 - The new source changes are local only; no GitHub push or live-page verification was performed for this edit.
 
+### 2026-08-20 19:07 HKT — Codex — Set the mobile OCR default font to 55%
+
+Summary:
+- Set the standalone OCR page to use `55%` as its mobile default while keeping `80%` as the desktop default.
+- Stored mobile and desktop OCR font preferences under separate keys so viewport-specific settings do not overwrite each other.
+- Bumped the standalone script cache version.
+
+Files changed:
+- `Website/ocr/index.html`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Browser preview at 390×844 reports `55%`, effective `--font-scale: 0.825`, and the cover at `scrollY: 0`.
+- The mobile settings control changes `55%` to `60%` and restores it to `55%`.
+- Browser preview at 1280×720 still reports `80%`; browser warning/error logs were empty.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- No GitHub push was executed; the exact push command will be handed off after the local checkpoint.
+
 ### 2026-08-20 17:46 HKT — Codex — Added OCR browser-tab favicon
 
 Summary:
