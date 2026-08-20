@@ -10894,6 +10894,23 @@ Verified:
 Remaining:
 - Existing unrelated worktree changes and review bundles remain untouched; no deployment or GitHub push was performed.
 
+### 2026-08-20 18:23 HKT — Codex — Published the individual OCR site with GitHub Pages
+
+Summary:
+- Confirmed the current branch `codex/current-project-update` was already pushed to `CBananaC/llm-wiki-teammate-package`.
+- Changed the repository's GitHub Pages source from `gh-pages` to `codex/current-project-update` at `/ (root)` and waited for `pages-build-deployment #3` to complete.
+
+Files changed:
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Live individual OCR site: `https://cbananac.github.io/llm-wiki-teammate-package/intro%20Website/Website/ocr/`
+- Live page loads `OCR原始史料`, the cover text, watermark asset, favicon, and scripts; browser diagnostics were empty and horizontal overflow was 0.
+
+Remaining:
+- Existing unrelated worktree changes and review bundles remain untouched; no local `git push` was executed because the branch already matched its remote.
+
 ### 2026-08-20 18:05 HKT — Codex — Restyled the references as bottom additional information
 
 Summary:
