@@ -1485,23 +1485,35 @@
 .part2-events-visual-stage > .part2-events-doc-panel { grid-column: 5; }
 
 .part2-events-visual-stage.has-event-detail {
-  --panel-1-pct: 44%;
-  --panel-2-pct: 18%;
-  --panel-3-pct: 17%;
-  --panel-4-pct: 21%;
+  --panel-1-pct: 21%;
+  --panel-2-pct: 44%;
+  --panel-3-pct: 18%;
+  --panel-4-pct: 17%;
   grid-template-columns: calc(var(--panel-1-pct) - 9px) var(--panel-handle-width) calc(var(--panel-2-pct) - 9px) var(--panel-handle-width) calc(var(--panel-3-pct) - 9px) var(--panel-handle-width) calc(var(--panel-4-pct) - 9px);
 }
 
-.part2-events-visual-stage.has-event-detail > [data-panel-resize="3"] { grid-column: 6; }
-.part2-events-visual-stage.has-event-detail > .part2-events-event-panel { grid-column: 7; }
+.part2-events-visual-stage.has-event-detail > [data-panel-resize="3"] { grid-column: 2; }
+.part2-events-visual-stage.has-event-detail .part2-events-chart-replica-shell .part1-stage { grid-column: 3; }
+.part2-events-visual-stage.has-event-detail > [data-panel-resize="1"] { grid-column: 4; }
+.part2-events-visual-stage.has-event-detail > .part2-events-ai-panel { grid-column: 5; }
+.part2-events-visual-stage.has-event-detail > [data-panel-resize="2"] { grid-column: 6; }
+.part2-events-visual-stage.has-event-detail > .part2-events-doc-panel { grid-column: 7; }
+.part2-events-visual-stage.has-event-detail > .part2-events-event-panel { grid-column: 1; }
 
 @media (max-width: 1180px) {
   .part2-events-visual-stage.has-event-detail {
+    --panel-1-pct: 44%;
+    --panel-2-pct: 18%;
     --panel-3-pct: 38%;
     grid-template-columns: calc(var(--panel-1-pct) - 8px) var(--panel-handle-width) calc(var(--panel-2-pct) - 8px) var(--panel-handle-width) calc(var(--panel-3-pct) - 8px);
   }
 
   .part2-events-visual-stage.has-event-detail > [data-panel-resize="3"] { display: none; }
+  .part2-events-visual-stage.has-event-detail .part2-events-chart-replica-shell .part1-stage { grid-column: 1; }
+  .part2-events-visual-stage.has-event-detail > [data-panel-resize="1"] { grid-column: 2; }
+  .part2-events-visual-stage.has-event-detail > .part2-events-ai-panel { grid-column: 3; }
+  .part2-events-visual-stage.has-event-detail > [data-panel-resize="2"] { grid-column: 4; }
+  .part2-events-visual-stage.has-event-detail > .part2-events-doc-panel { grid-column: 5; }
   .part2-events-visual-stage.has-event-detail > .part2-events-event-panel {
     grid-column: 1 / -1;
     grid-row: 3;

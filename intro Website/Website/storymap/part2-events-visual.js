@@ -164,7 +164,7 @@
           </div>
         </aside>
 
-        <div class="part2-events-panel-resizer" data-panel-resize="3" role="separator" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="62" tabindex="0" aria-label="調整原文與事件面板的寬度比例" hidden></div>
+        <div class="part2-events-panel-resizer" data-panel-resize="3" role="separator" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="21" tabindex="0" aria-label="調整事件面板與圖表的寬度比例" hidden></div>
 
         <aside class="part2-events-event-panel" data-events-event-panel hidden aria-label="事件圓點完整資料">
           <div class="part2-events-panel-head">
@@ -182,11 +182,19 @@
     var panelResizeState = {
       mode: 'default',
       widths: [50, 24, 26],
-      eventWidths: [44, 18, 17, 21]
+      eventWidths: [21, 44, 18, 17]
     };
 
     function activePanelWidths() {
       return panelResizeState.mode === 'event' ? panelResizeState.eventWidths : panelResizeState.widths;
+    }
+
+    function resizePairIndex(handle) {
+      var handleId = handle.getAttribute('data-panel-resize');
+      if (panelResizeState.mode === 'event') {
+        return handleId === '3' ? 0 : handleId === '1' ? 1 : 2;
+      }
+      return Number(handleId) - 1;
     }
 
     function applyPanelResizeLayout() {
@@ -195,9 +203,10 @@
         stage.style.setProperty('--panel-' + (index + 1) + '-pct', width.toFixed(2) + '%');
       });
       var boundary = 0;
-      panelResizeHandles.forEach(function (handle, index) {
+      panelResizeHandles.forEach(function (handle) {
+        var index = resizePairIndex(handle);
         if (index >= widths.length - 1) return;
-        boundary += widths[index];
+        boundary = widths.slice(0, index + 1).reduce(function (sum, width) { return sum + width; }, 0);
         handle.setAttribute('aria-valuenow', boundary.toFixed(0));
         handle.setAttribute('aria-valuetext', boundary.toFixed(0) + '% 左側面板');
       });
@@ -213,9 +222,10 @@
       applyPanelResizeLayout();
     }
 
-    function setupPanelResizeHandle(handle, index) {
+    function setupPanelResizeHandle(handle) {
       handle.addEventListener('pointerdown', function (event) {
         var widths = activePanelWidths();
+        var index = resizePairIndex(handle);
         if (index >= widths.length - 1) return;
         event.preventDefault();
         handle.classList.add('is-dragging');
@@ -245,6 +255,7 @@
 
       handle.addEventListener('keydown', function (event) {
         var widths = activePanelWidths();
+        var index = resizePairIndex(handle);
         if (index >= widths.length - 1) return;
         var step = event.shiftKey ? 5 : 1;
         if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
@@ -517,13 +528,6 @@
       renderChart();
     }
 
-    function relationMarkup(event) {
-      if (!event.relations || !event.relations.length) return '<p class="part2-events-event-empty">本筆輸出未提供關係欄位。</p>';
-      return '<ul class="part2-events-event-relations">' + event.relations.map(function (relation) {
-        return '<li><span>' + escapeHtml(relation.source || '') + '</span><b>' + escapeHtml(relation.relation || '') + '</b><span>' + escapeHtml(relation.target || '') + '</span><small>' + escapeHtml(relation.evidence || '') + '</small></li>';
-      }).join('') + '</ul>';
-    }
-
     function openEvent(eventId) {
       var event = eventById(eventId);
       if (!event) return;
@@ -536,7 +540,7 @@
       eventPanel.hidden = false;
       eventHeading.textContent = event.subtitle;
       eventBody.innerHTML =
-        '<div class="part2-events-event-badges"><span class="part2-events-skill-badge ' + (event.actor === 'lin' ? 'is-lin' : 'is-qing') + '">' + escapeHtml(event.skill) + '</span><span class="part2-events-event-category">' + escapeHtml(event.category || '事件') + '</span></div>' +
+        '<div class="part2-events-event-badges"><span class="part2-events-skill-badge ' + (event.actor === 'lin' ? 'is-lin' : 'is-qing') + '">' + escapeHtml(event.skill) + '</span></div>' +
         '<p class="part2-events-event-description">' + escapeHtml(event.description) + '</p>' +
         '<dl class="part2-events-event-facts">' +
           '<dt>地點</dt><dd>' + escapeHtml(event.where || '未提供') + '</dd>' +
@@ -545,9 +549,7 @@
           '<dt>圖表日期</dt><dd>' + escapeHtml(event.whenAr ? event.whenAr : '文書發送日 ' + data.document.sendDate[1] + '（事件日期未明）') + '</dd>' +
           '<dt>知悉方式</dt><dd>' + escapeHtml(event.howKnown || '未提供') + '</dd>' +
         '</dl>' +
-        '<button class="part2-events-event-quote" type="button" data-event-detail-quote>「' + escapeHtml(event.quote) + '」<span>點按定位原文</span></button>' +
-        '<h4 class="part2-events-event-section-title">關係</h4>' + relationMarkup(event) +
-        '<div class="part2-events-event-source"><b>保存來源</b><br>' + escapeHtml(data.bundleName) + '<br>' + escapeHtml(event.sourceFile) + '<br>硃83</div>';
+        '<button class="part2-events-event-quote" type="button" data-event-detail-quote>「' + escapeHtml(event.quote) + '」<span>點按定位原文</span></button>';
       var detailQuote = eventBody.querySelector('[data-event-detail-quote]');
       if (detailQuote) detailQuote.addEventListener('click', function () { highlightQuote(event.id); });
       updateActiveCard();
