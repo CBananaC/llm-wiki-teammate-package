@@ -26,7 +26,11 @@ const settingsControl = document.querySelector('.site-settings-control');
 const fontSizeDecrease = document.getElementById('font-size-decrease');
 const fontSizeIncrease = document.getElementById('font-size-increase');
 const fontSizeValue = document.getElementById('font-size-value');
-const FONT_SCALE_KEY = 'intro-website-font-scale';
+const IS_OCR_STANDALONE = document.documentElement.classList.contains('ocr-standalone');
+const FONT_SCALE_KEY = IS_OCR_STANDALONE
+  ? 'intro-website-ocr-font-scale'
+  : 'intro-website-font-scale';
+const FONT_SCALE_DEFAULT = IS_OCR_STANDALONE ? 0.8 : 1;
 const FONT_SCALE_BASE = 1.5;
 const FONT_SCALE_MIN = 0.55;
 const FONT_SCALE_MAX = 2.2;
@@ -35,9 +39,9 @@ const clampFontScale = (value) => Math.min(FONT_SCALE_MAX, Math.max(FONT_SCALE_M
 const readFontScale = () => {
   try {
     const saved = Number.parseFloat(localStorage.getItem(FONT_SCALE_KEY));
-    return Number.isFinite(saved) ? clampFontScale(saved) : 1;
+    return Number.isFinite(saved) ? clampFontScale(saved) : FONT_SCALE_DEFAULT;
   } catch (error) {
-    return 1;
+    return FONT_SCALE_DEFAULT;
   }
 };
 const applyFontScale = (value) => {

@@ -10496,6 +10496,29 @@ Verified:
 Remaining:
 - Existing unrelated worktree changes and review bundles remain untouched; no remote push was performed.
 
+### 2026-08-20 18:38 HKT — Codex — Set the standalone OCR default font and cover entry point
+
+Summary:
+- Set the standalone OCR page's own font-scale preference to start at `80%`, while keeping the existing settings control and preserving the main website's separate preference.
+- Changed clean and legacy `#part-3-ocr` entry links to open at the beginning cover target `#part-3-ocr-bar`.
+- Added a dedicated green-square, white-`O` favicon for the OCR browser tab and bumped the standalone script cache version.
+
+Files changed:
+- `Website/ocr/index.html`
+- `Website/ocr/favicon.svg`
+- `Website/storymap/storymap.js`
+- `INTRO_WEBSITE_CHANGE_LOG.md`
+- `../PROJECT_LOG.md`
+
+Verified:
+- Local browser preview opened both the clean URL and the legacy `#part-3-ocr` URL at `scrollY: 0`, with the cover at the viewport top and the displayed font setting at `80%`.
+- Clicking the existing settings control's `＋` changed the setting to `85%`; `−` restored it to `80%`.
+- Browser favicon links resolve to the standalone `favicon.svg`; browser warning/error logs were empty.
+- `node --check Website/storymap/storymap.js` and `git diff --check` passed.
+
+Remaining:
+- The new source changes are local only; no GitHub push or live-page verification was performed for this edit.
+
 ### 2026-08-20 17:46 HKT — Codex — Added OCR browser-tab favicon
 
 Summary:
