@@ -1407,6 +1407,8 @@ def main() -> None:
     ap.add_argument("--bundle", default="", help="Short semantic review-bundle name")
     ap.add_argument("--dedup-bundle", default="", help="Separate bundle for 林／清 cross-document dedup output")
     ap.add_argument("--dedup-only", action="store_true", help="Re-run dedup only from an existing official-loop bundle")
+    ap.add_argument("--skip-dedup", action="store_true", help="Skip the global 林／清 repeat-report dedup stage")
+    ap.add_argument("--skip-official-response", action="store_true", help="Skip the official-response stage")
     ap.add_argument("--timeout", type=int, default=240)
     ap.add_argument("--retries", type=int, default=4)
     ap.add_argument("--retry-sleep", type=int, default=15)
@@ -1424,6 +1426,8 @@ def main() -> None:
     args = ap.parse_args()
     if not 2 <= args.dedup_workers <= 8:
         raise SystemExit("--dedup-workers must be between 2 and 8.")
+    if args.dedup_only and args.skip_dedup:
+        raise SystemExit("--dedup-only cannot be combined with --skip-dedup.")
 
     records = json.loads(SOURCE.read_text(encoding="utf-8"))
     by_id = {doc_id_of(record): record for record in records}
@@ -1453,15 +1457,21 @@ def main() -> None:
     (out_root / "human-edits").mkdir(parents=True, exist_ok=True)
     dedup_root = BUNDLES_DIR / dedup_bundle_name
     dedup_dir = dedup_root / "outputs"
-    dedup_dir.mkdir(parents=True, exist_ok=True)
-    (dedup_root / "human-edits").mkdir(parents=True, exist_ok=True)
+    if not args.skip_dedup:
+        dedup_dir.mkdir(parents=True, exist_ok=True)
+        (dedup_root / "human-edits").mkdir(parents=True, exist_ok=True)
 
     if args.dry_run:
         print(f"DRY RUN -- bundle: {out_root.relative_to(ROOT)}")
         print(f"model: {args.model}")
         print(f"existing pair rows: {len(pairs)}")
-        print(f"dedup comparison bundles: {', '.join(dedup_compare_bundles) or 'none'}")
-        print(f"dedup output bundle: {dedup_bundle_name}")
+        if args.skip_dedup:
+            print("dedup: skipped")
+        else:
+            print(f"dedup comparison bundles: {', '.join(dedup_compare_bundles) or 'none'}")
+            print(f"dedup output bundle: {dedup_bundle_name}")
+        if args.skip_official_response:
+            print("official-response: skipped")
         for doc in docs:
             did = doc_id_of(doc)
             print(f"\n[{did}] {doc.get('doc_type')} {doc.get('title')}")
@@ -1634,7 +1644,9 @@ def main() -> None:
     # Repeat-report dedup has its own bundle and status. The current extracted
     # rows are compared with both the configured prior bundles and the previous
     # output of this dedup bundle (when it exists).
-    if not dedup_done():
+    if args.skip_dedup:
+        print("- 重複回報檢查：略過（--skip-dedup）")
+    elif not dedup_done():
         print("- 重複回報檢查（獨立 bundle；全域，所有文書擷取完畢後執行）")
         print(f"  dedup comparison bundles: {', '.join(dedup_compare_bundles) or 'none'}")
         print(f"  dedup workers: {args.dedup_workers}")
@@ -1684,7 +1696,11 @@ def main() -> None:
     # Official response runs after the combined-emperor-actions output for each
     # document, with a per-document status. An old global completion marker must
     # not suppress newly added documents in --skip-done mode.
-    print(f"- official-response per document (existing pairs only; parallel {args.workers}, incremental save)")
+    official_docs = [] if args.skip_official_response else docs
+    if args.skip_official_response:
+        print("- official-response：略過（--skip-official-response）")
+    else:
+        print(f"- official-response per document (existing pairs only; parallel {args.workers}, incremental save)")
     existing_keys = {(str(row.get("doc_id") or ""), str(row.get("evTitle") or ""), tuple(row.get("source_doc_ids") or [])) for row in official_rows}
 
     def _save_official(row):
@@ -1694,7 +1710,7 @@ def main() -> None:
         existing_keys.add((str(row.get("doc_id") or ""), str(row.get("evTitle") or ""), tuple(row.get("source_doc_ids") or [])))
         write_json(files["official"], official_rows)
 
-    for doc in docs:
+    for doc in official_docs:
         did = doc_id_of(doc)
         if done(did, "official-response"):
             continue
@@ -1731,6 +1747,8 @@ def main() -> None:
         "pair_files": [str(YU_SOURCE_PATH.relative_to(ROOT)), str(CONFIRMED_PAIRS_PATH.relative_to(ROOT))],
             "deduplication": f"separate bundle {dedup_bundle_name}; LLM cross-document comparison with configured prior bundles; same-document links excluded",
         "excluded_stages": ["edict-match", "info-source", "situfit", "date-window official-response search"],
+        "skipped_stages": (["repeat-report-dedup (global, post-loop)"] if args.skip_dedup else [])
+            + (["official-response"] if args.skip_official_response else []),
     }
     write_json(out_root / "manifest.json", manifest)
     if not (out_root / "human-edits" / "notes.json").exists():
