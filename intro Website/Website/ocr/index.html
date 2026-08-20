@@ -110,6 +110,65 @@
       else sourceInput.addEventListener('load', renderInkOnly, { once: true });
     });
   </script>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const ocrMenuToggle = document.querySelector('#ocr-menu-toggle');
+      const ocrDrawer = document.querySelector('#ocr-drawer');
+      const ocrDrawerBackdrop = document.querySelector('#ocr-drawer-backdrop');
+      const ocrDrawerClose = document.querySelector('#ocr-drawer-close');
+      const ocrNavLinks = [...document.querySelectorAll('[data-ocr-nav-target]')];
+      if (!ocrMenuToggle || !ocrDrawer || !ocrDrawerBackdrop || !ocrDrawerClose) return;
+
+      const setOcrDrawerOpen = (isOpen) => {
+        const wasOpen = ocrDrawer.classList.contains('is-open');
+        ocrMenuToggle.setAttribute('aria-expanded', String(isOpen));
+        ocrDrawer.setAttribute('aria-hidden', String(!isOpen));
+        ocrDrawerBackdrop.setAttribute('aria-hidden', String(!isOpen));
+        ocrDrawer.classList.toggle('is-open', isOpen);
+        ocrDrawerBackdrop.classList.toggle('is-open', isOpen);
+        document.documentElement.classList.toggle('ocr-drawer-open', isOpen);
+        if (isOpen) ocrDrawerClose.focus();
+        else if (wasOpen) ocrMenuToggle.focus();
+      };
+
+      const setOcrNavActive = (target) => {
+        ocrNavLinks.forEach((link) => {
+          const isActive = link.dataset.ocrNavTarget === target;
+          link.classList.toggle('is-active', isActive);
+          if (link.closest('.ocr-section-nav')) {
+            if (isActive) link.setAttribute('aria-current', 'page');
+            else link.removeAttribute('aria-current');
+          }
+        });
+      };
+
+      ocrMenuToggle.addEventListener('click', () => {
+        setOcrDrawerOpen(ocrMenuToggle.getAttribute('aria-expanded') !== 'true');
+      });
+      ocrDrawerClose.addEventListener('click', () => setOcrDrawerOpen(false));
+      ocrDrawerBackdrop.addEventListener('click', () => setOcrDrawerOpen(false));
+      ocrNavLinks.forEach((link) => {
+        link.addEventListener('click', (event) => {
+          const target = link.dataset.ocrNavTarget;
+          const targetElement = document.querySelector(target);
+          if (targetElement) {
+            // The shared page keeps a StoryMap asset base URL, so a bare
+            // hash would otherwise navigate away from this individual page.
+            event.preventDefault();
+            window.history.pushState({}, '', `${window.location.pathname}${window.location.search}${target}`);
+            targetElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+          setOcrNavActive(target);
+          setOcrDrawerOpen(false);
+        });
+      });
+      document.addEventListener('keydown', (event) => {
+        if (event.key === 'Escape' && ocrDrawer.classList.contains('is-open')) {
+          setOcrDrawerOpen(false);
+        }
+      });
+    });
+  </script>
   <title>OCR原始史料</title>
   <style id="ocr-standalone-shell">
     html.ocr-standalone .tab-panel:not(#part-3-panel) {
@@ -462,6 +521,325 @@
       html.ocr-standalone .ocr-cover-watermark { right: 0; left: 5%; bottom: 42px; height: 45vh; }
       html.ocr-standalone .ocr-cover-source-ghost { right: 2%; width: 98%; }
     }
+
+    /* The standalone page uses a short menu for its own OCR teaching route.
+       The full StoryMap navigation remains in the shared markup for its
+       scripts, but is not part of this page's visual interface. */
+    html.ocr-standalone .ocr-menu-toggle {
+      position: fixed;
+      top: clamp(18px, 3vw, 34px);
+      right: clamp(18px, 3vw, 42px);
+      z-index: 102;
+      display: none;
+      width: 52px;
+      height: 52px;
+      padding: 0;
+      place-items: center;
+      color: rgba(236, 240, 232, .9);
+      background: rgba(16, 47, 50, .72);
+      border: 1px solid rgba(236, 240, 232, .44);
+      border-radius: 3px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+      cursor: pointer;
+    }
+    html.ocr-standalone .ocr-menu-toggle:hover,
+    html.ocr-standalone .ocr-menu-toggle[aria-expanded="true"] {
+      color: #fff;
+      background: rgba(44, 84, 83, .88);
+    }
+    html.ocr-standalone .ocr-menu-icon,
+    html.ocr-standalone .ocr-menu-icon::before,
+    html.ocr-standalone .ocr-menu-icon::after {
+      display: block;
+      width: 28px;
+      height: 2px;
+      background: currentColor;
+      content: "";
+    }
+    html.ocr-standalone .ocr-menu-icon {
+      position: relative;
+    }
+    html.ocr-standalone .ocr-menu-icon::before,
+    html.ocr-standalone .ocr-menu-icon::after {
+      position: absolute;
+      left: 0;
+    }
+    html.ocr-standalone .ocr-menu-icon::before { top: -9px; }
+    html.ocr-standalone .ocr-menu-icon::after { top: 9px; }
+
+    html.ocr-standalone .ocr-section-nav {
+      position: sticky;
+      top: 0;
+      z-index: 90;
+      color: #ecf0e8;
+      background: rgba(16, 47, 50, .97);
+      border-top: 1px solid rgba(236, 240, 232, .08);
+      border-bottom: 1px solid rgba(236, 240, 232, .18);
+      box-shadow: 0 12px 28px rgba(0, 0, 0, .12);
+      backdrop-filter: blur(14px);
+    }
+    html.ocr-standalone .ocr-section-nav-inner {
+      display: flex;
+      width: min(100%, 1180px);
+      min-height: 64px;
+      margin: 0 auto;
+      padding: 0 clamp(16px, 3vw, 42px);
+      align-items: stretch;
+      justify-content: center;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    html.ocr-standalone .ocr-section-nav-inner::-webkit-scrollbar { display: none; }
+    html.ocr-standalone .ocr-section-nav a {
+      display: inline-flex;
+      min-width: max-content;
+      padding: 1rem clamp(14px, 2vw, 25px) .85rem;
+      align-items: center;
+      gap: .6rem;
+      color: rgba(236, 240, 232, .72);
+      font: 600 .9rem/1 var(--sans);
+      letter-spacing: .08em;
+      text-decoration: none;
+      border-bottom: 2px solid transparent;
+      transition: color .2s ease, background .2s ease, border-color .2s ease;
+    }
+    html.ocr-standalone .ocr-section-nav a:hover,
+    html.ocr-standalone .ocr-section-nav a.is-active {
+      color: #f5f0e6;
+      background: rgba(255, 255, 255, .055);
+      border-bottom-color: rgba(214, 166, 106, .9);
+    }
+    html.ocr-standalone .ocr-section-nav .nav-index,
+    html.ocr-standalone .ocr-drawer .nav-index {
+      color: rgba(214, 166, 106, .86);
+      font: 700 .72rem/1 var(--sans);
+      letter-spacing: .04em;
+    }
+    html.ocr-standalone .ocr-menu-toggle,
+    html.ocr-standalone .ocr-drawer-backdrop,
+    html.ocr-standalone .ocr-drawer {
+      visibility: hidden;
+      opacity: 0;
+      pointer-events: none;
+    }
+    html.ocr-standalone .ocr-drawer-backdrop {
+      position: fixed;
+      inset: 0;
+      z-index: 210;
+      background: rgba(6, 22, 24, .58);
+      transition: opacity .24s ease, visibility .24s ease;
+    }
+    html.ocr-standalone .ocr-drawer {
+      position: fixed;
+      inset: 0 0 0 auto;
+      z-index: 220;
+      display: flex;
+      width: min(340px, 86vw);
+      padding: 28px 24px 36px;
+      flex-direction: column;
+      color: #ecf0e8;
+      background: #102f32;
+      border-left: 1px solid rgba(236, 240, 232, .2);
+      box-shadow: -20px 0 50px rgba(0, 0, 0, .2);
+      transform: translateX(100%);
+      transition: transform .28s ease, opacity .24s ease, visibility .24s ease;
+    }
+    html.ocr-standalone .ocr-drawer-head {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 34px;
+    }
+    html.ocr-standalone .ocr-drawer-close {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+      color: rgba(236, 240, 232, .9);
+      font: 300 30px/1 var(--sans);
+      background: transparent;
+      border: 1px solid rgba(236, 240, 232, .35);
+      border-radius: 3px;
+      cursor: pointer;
+    }
+    html.ocr-standalone .ocr-drawer-close:hover { background: rgba(255, 255, 255, .08); }
+    html.ocr-standalone .ocr-drawer-links {
+      display: grid;
+      gap: 6px;
+    }
+    html.ocr-standalone .ocr-drawer-link {
+      display: flex;
+      padding: 16px 12px;
+      align-items: center;
+      justify-content: space-between;
+      color: rgba(236, 240, 232, .78);
+      font: 600 1rem/1.3 var(--serif);
+      letter-spacing: .08em;
+      text-decoration: none;
+      border-bottom: 1px solid rgba(236, 240, 232, .12);
+    }
+    html.ocr-standalone .ocr-drawer-link:hover,
+    html.ocr-standalone .ocr-drawer-link.is-active {
+      color: #f5f0e6;
+      background: rgba(255, 255, 255, .055);
+    }
+    html.ocr-standalone .ocr-drawer-backdrop.is-open,
+    html.ocr-standalone .ocr-drawer.is-open {
+      visibility: visible;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    html.ocr-standalone .ocr-drawer.is-open { transform: translateX(0); }
+    html.ocr-standalone #part-3-ocr > section:not(#part-3-ocr-bar) {
+      scroll-margin-top: 72px;
+    }
+    @media (min-width: 721px) {
+      html.ocr-standalone #part-3-ocr-bar > .section-hero-content {
+        transform: translateY(clamp(-84px, -8vh, -44px));
+      }
+    }
+
+    /* Match the supplied wide cover: a compact left copy column and a large,
+       cropped handwritten layer occupying the right side. */
+    html.ocr-standalone #part-3-ocr-bar {
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 52vw);
+      padding-right: clamp(28px, 4.2vw, 56px);
+      padding-left: clamp(28px, 4.2vw, 56px);
+    }
+    html.ocr-standalone #part-3-ocr-title {
+      font-size: clamp(44px, 4.8vw, 76px);
+      letter-spacing: 0;
+    }
+    html.ocr-standalone .ocr-cover-watermark {
+      min-height: min(86vh, 820px);
+    }
+    html.ocr-standalone .ocr-cover-source-ghost {
+      top: 50%;
+      right: -2%;
+      width: 100%;
+      height: min(90vh, 860px);
+      transform: translateY(-50%) rotate(1.6deg) scale(1.06);
+      overflow: hidden;
+    }
+    html.ocr-standalone .ocr-cover-source-page {
+      width: 125%;
+      max-width: none;
+      object-fit: fill;
+      object-position: left center;
+    }
+    html.ocr-standalone .ocr-cover-frame { inset: 4% 2% 4% 2%; }
+
+    @media (max-width: 940px) {
+      html.ocr-standalone #part-3-ocr-bar {
+        grid-template-columns: minmax(0, 1fr) minmax(300px, 46vw);
+        padding-right: 5vw;
+        padding-left: 5vw;
+      }
+      html.ocr-standalone #part-3-ocr-title { font-size: clamp(42px, 5.8vw, 66px); }
+      html.ocr-standalone .ocr-cover-source-ghost {
+        right: -4%;
+        height: min(88vh, 760px);
+      }
+    }
+
+    @media (max-width: 900px) {
+      html.ocr-standalone .ocr-section-nav { display: none; }
+      html.ocr-standalone .settings-wrap {
+        right: calc(clamp(18px, 3vw, 42px) + 60px);
+      }
+      html.ocr-standalone .ocr-menu-toggle {
+        display: grid;
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+      }
+      html.ocr-standalone .ocr-drawer-backdrop,
+      html.ocr-standalone .ocr-drawer {
+        visibility: hidden;
+        opacity: 0;
+        pointer-events: none;
+      }
+      html.ocr-standalone .ocr-drawer.is-open,
+      html.ocr-standalone .ocr-drawer-backdrop.is-open {
+        visibility: visible;
+        opacity: 1;
+        pointer-events: auto;
+      }
+    }
+
+    @media (max-width: 720px) {
+      html.ocr-standalone #part-3-ocr-bar {
+        display: block;
+        height: 100svh;
+        min-height: 100svh;
+        max-height: 100svh;
+        padding: clamp(92px, 12vh, 110px) 24px 32px;
+        overflow: hidden;
+      }
+      html.ocr-standalone #part-3-ocr-bar::before { inset: 82px 16px 16px; }
+      html.ocr-standalone #part-3-ocr-bar > .section-hero-content {
+        position: static;
+        width: 100%;
+        padding: 0;
+      }
+      html.ocr-standalone #part-3-ocr-title {
+        max-width: none;
+        font-size: clamp(38px, 10.5vw, 58px);
+        line-height: 1;
+        letter-spacing: 0;
+        white-space: nowrap;
+      }
+      html.ocr-standalone .ocr-cover-description {
+        position: absolute;
+        right: 24px;
+        bottom: clamp(28px, 5vh, 48px);
+        left: 24px;
+        max-width: none;
+        margin: 0;
+        font-size: clamp(13px, 3.8vw, 16px);
+        line-height: 1.75;
+      }
+      html.ocr-standalone .ocr-cover-watermark {
+        position: absolute;
+        top: 52%;
+        right: auto;
+        bottom: auto;
+        left: 50%;
+        width: min(88vw, 430px);
+        height: min(45svh, 370px);
+        min-height: 0;
+        margin: 0;
+        opacity: .64;
+        transform: translate(-50%, -50%);
+      }
+      html.ocr-standalone .ocr-cover-source-ghost {
+        top: 0;
+        right: auto;
+        width: 100%;
+        height: 100%;
+        transform: rotate(1deg) scale(.94);
+      }
+      html.ocr-standalone .ocr-cover-word-lines { inset: 10% 11%; }
+      html.ocr-standalone .ocr-cover-frame { inset: 5% 4%; }
+    }
+
+    @media (max-width: 470px) {
+      html.ocr-standalone .settings-wrap {
+        right: calc(24px + 52px);
+      }
+      html.ocr-standalone .ocr-menu-toggle {
+        top: 18px;
+        right: 24px;
+        width: 46px;
+        height: 46px;
+      }
+      html.ocr-standalone #part-3-ocr-bar { padding-right: 24px; padding-left: 24px; }
+      html.ocr-standalone #part-3-ocr-title { font-size: clamp(38px, 10.5vw, 52px); }
+      html.ocr-standalone .ocr-cover-description { font-size: 14px; }
+      html.ocr-standalone .ocr-cover-watermark {
+        width: min(88vw, 370px);
+        height: min(43svh, 340px);
+      }
+      html.ocr-standalone .ocr-cover-source-ghost { transform: rotate(1deg) scale(.92); }
+    }
   </style>
 </head>
 <body>
@@ -527,6 +905,9 @@
       <a class="compact-menu-link" href="#part-3" data-nav-target="part-3">運用平台研究其他問題</a>
     </nav>
   </aside>
+  <button class="ocr-menu-toggle" id="ocr-menu-toggle" type="button" aria-expanded="false" aria-controls="ocr-drawer" aria-label="開啟 OCR 章節選單" title="OCR 章節選單">
+    <span class="ocr-menu-icon" aria-hidden="true"></span>
+  </button>
 
   <main>
     <section class="tab-panel" id="cover-panel" data-tab-panel="cover" aria-labelledby="cover-title">
@@ -2190,6 +2571,29 @@
               </div>
             </figure>
           </section>
+
+          <nav class="ocr-section-nav" aria-label="OCR教學章節">
+            <div class="ocr-section-nav-inner">
+              <a class="is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar" aria-current="page"><span class="nav-index">1</span><span>主頁</span></a>
+              <a href="#part-3-ocr-definition" data-ocr-nav-target="#part-3-ocr-definition"><span class="nav-index">2</span><span>簡介</span></a>
+              <a href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span class="nav-index">3</span><span>辨識</span></a>
+              <a href="#part-3-json" data-ocr-nav-target="#part-3-json"><span class="nav-index">4</span><span>JSON</span></a>
+              <a href="#part-3-try" data-ocr-nav-target="#part-3-try"><span class="nav-index">5</span><span>試一試</span></a>
+            </div>
+          </nav>
+          <div class="ocr-drawer-backdrop" id="ocr-drawer-backdrop" aria-hidden="true"></div>
+          <aside class="ocr-drawer" id="ocr-drawer" role="dialog" aria-label="OCR教學章節選單" aria-hidden="true">
+            <div class="ocr-drawer-head">
+              <button class="ocr-drawer-close" id="ocr-drawer-close" type="button" aria-label="關閉 OCR 章節選單">×</button>
+            </div>
+            <nav class="ocr-drawer-links" aria-label="OCR教學章節">
+              <a class="ocr-drawer-link is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar"><span>主頁</span><span class="nav-index">1</span></a>
+              <a class="ocr-drawer-link" href="#part-3-ocr-definition" data-ocr-nav-target="#part-3-ocr-definition"><span>簡介</span><span class="nav-index">2</span></a>
+              <a class="ocr-drawer-link" href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span>辨識</span><span class="nav-index">3</span></a>
+              <a class="ocr-drawer-link" href="#part-3-json" data-ocr-nav-target="#part-3-json"><span>JSON</span><span class="nav-index">4</span></a>
+              <a class="ocr-drawer-link" href="#part-3-try" data-ocr-nav-target="#part-3-try"><span>試一試</span><span class="nav-index">5</span></a>
+            </nav>
+          </aside>
 
           <section class="story surface-a" id="part-3-ocr-definition" data-tab="part-3" data-nav="#part-3-ocr-definition">
             <div class="story-inner">
