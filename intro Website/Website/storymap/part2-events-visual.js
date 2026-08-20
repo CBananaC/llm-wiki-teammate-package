@@ -123,6 +123,8 @@
           </div>
         </section>
 
+        <div class="part2-events-panel-resizer" data-panel-resize="1" role="separator" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="50" tabindex="0" aria-label="調整圖表與 AI 面板的寬度比例"></div>
+
         <aside class="part2-events-ai-panel" aria-label="AI 輸出面板">
           <div class="part1-linked-head part2-events-ai-chat-head" aria-label="AI 對話面板工具列">
             <span class="part1-chat-head-actions">
@@ -143,6 +145,8 @@
           <div class="part2-events-ai-list" data-events-ai-list></div>
         </aside>
 
+        <div class="part2-events-panel-resizer" data-panel-resize="2" role="separator" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="74" tabindex="0" aria-label="調整 AI 與原文面板的寬度比例"></div>
+
         <aside class="part2-events-doc-panel" aria-label="硃83原文面板">
           <div class="part2-events-doc-head">
             <div class="part2-events-doc-title"><span class="part2-events-doc-badge">硃</span><span>${escapeHtml(data.document.title)}</span></div>
@@ -160,6 +164,8 @@
           </div>
         </aside>
 
+        <div class="part2-events-panel-resizer" data-panel-resize="3" role="separator" aria-orientation="vertical" aria-valuemin="15" aria-valuemax="85" aria-valuenow="62" tabindex="0" aria-label="調整原文與事件面板的寬度比例" hidden></div>
+
         <aside class="part2-events-event-panel" data-events-event-panel hidden aria-label="事件圓點完整資料">
           <div class="part2-events-panel-head">
             <div><span class="part2-events-panel-kicker">事件圓點</span><strong data-events-event-heading>完整資料</strong></div>
@@ -172,6 +178,94 @@
     `;
 
     var stage = root.querySelector('[data-events-stage]');
+    var panelResizeHandles = Array.prototype.slice.call(stage.querySelectorAll('[data-panel-resize]'));
+    var panelResizeState = {
+      mode: 'default',
+      widths: [50, 24, 26],
+      eventWidths: [44, 18, 17, 21]
+    };
+
+    function activePanelWidths() {
+      return panelResizeState.mode === 'event' ? panelResizeState.eventWidths : panelResizeState.widths;
+    }
+
+    function applyPanelResizeLayout() {
+      var widths = activePanelWidths();
+      widths.forEach(function (width, index) {
+        stage.style.setProperty('--panel-' + (index + 1) + '-pct', width.toFixed(2) + '%');
+      });
+      var boundary = 0;
+      panelResizeHandles.forEach(function (handle, index) {
+        if (index >= widths.length - 1) return;
+        boundary += widths[index];
+        handle.setAttribute('aria-valuenow', boundary.toFixed(0));
+        handle.setAttribute('aria-valuetext', boundary.toFixed(0) + '% 左側面板');
+      });
+    }
+
+    function updateAdjacentPanelWidths(index, nextLeftWidth) {
+      var widths = activePanelWidths();
+      var minWidth = 15;
+      var pairTotal = widths[index] + widths[index + 1];
+      var leftWidth = Math.max(minWidth, Math.min(pairTotal - minWidth, nextLeftWidth));
+      widths[index] = leftWidth;
+      widths[index + 1] = pairTotal - leftWidth;
+      applyPanelResizeLayout();
+    }
+
+    function setupPanelResizeHandle(handle, index) {
+      handle.addEventListener('pointerdown', function (event) {
+        var widths = activePanelWidths();
+        if (index >= widths.length - 1) return;
+        event.preventDefault();
+        handle.classList.add('is-dragging');
+        if (handle.setPointerCapture) {
+          try { handle.setPointerCapture(event.pointerId); } catch (error) {}
+        }
+        var initial = widths.slice();
+        var rect = stage.getBoundingClientRect();
+        var before = initial.slice(0, index).reduce(function (sum, width) { return sum + width; }, 0);
+
+        function onMove(moveEvent) {
+          var target = ((moveEvent.clientX - rect.left) / rect.width) * 100;
+          updateAdjacentPanelWidths(index, target - before);
+        }
+
+        function onUp() {
+          handle.classList.remove('is-dragging');
+          document.removeEventListener('pointermove', onMove);
+          document.removeEventListener('pointerup', onUp);
+          document.removeEventListener('pointercancel', onUp);
+        }
+
+        document.addEventListener('pointermove', onMove);
+        document.addEventListener('pointerup', onUp);
+        document.addEventListener('pointercancel', onUp);
+      });
+
+      handle.addEventListener('keydown', function (event) {
+        var widths = activePanelWidths();
+        if (index >= widths.length - 1) return;
+        var step = event.shiftKey ? 5 : 1;
+        if (event.key !== 'ArrowLeft' && event.key !== 'ArrowRight') return;
+        event.preventDefault();
+        updateAdjacentPanelWidths(index, widths[index] + (event.key === 'ArrowRight' ? step : -step));
+      });
+    }
+
+    function setPanelResizeMode(mode) {
+      panelResizeState.mode = mode;
+      var eventHandle = stage.querySelector('[data-panel-resize="3"]');
+      if (eventHandle) {
+        if (mode === 'event') eventHandle.removeAttribute('hidden');
+        else eventHandle.setAttribute('hidden', '');
+      }
+      applyPanelResizeLayout();
+    }
+
+    panelResizeHandles.forEach(setupPanelResizeHandle);
+    applyPanelResizeLayout();
+
     var chartPartRoot = root.querySelector('[data-part1]');
     window.part1InitRoot(chartPartRoot);
     var chartReplica = chartPartRoot.querySelector('[data-part1-replica]');
@@ -437,8 +531,9 @@
       chartReplica.querySelectorAll('.part2-events-candidate-node').forEach(function (dot) {
         dot.classList.toggle('is-selected', dot.getAttribute('data-part2-event-id') === event.id);
       });
-      eventPanel.hidden = false;
       stage.classList.add('has-event-detail');
+      setPanelResizeMode('event');
+      eventPanel.hidden = false;
       eventHeading.textContent = event.subtitle;
       eventBody.innerHTML =
         '<div class="part2-events-event-badges"><span class="part2-events-skill-badge ' + (event.actor === 'lin' ? 'is-lin' : 'is-qing') + '">' + escapeHtml(event.skill) + '</span><span class="part2-events-event-category">' + escapeHtml(event.category || '事件') + '</span></div>' +
@@ -461,6 +556,7 @@
     root.querySelector('[data-events-event-close]').addEventListener('click', function () {
       eventPanel.hidden = true;
       stage.classList.remove('has-event-detail');
+      setPanelResizeMode('default');
       state.selectedEventId = '';
       chartReplica.querySelectorAll('.part2-events-candidate-node').forEach(function (dot) { dot.classList.remove('is-selected'); });
       updateActiveCard();
