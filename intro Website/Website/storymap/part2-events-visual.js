@@ -169,6 +169,19 @@
     var chartPartRoot = root.querySelector('[data-part1]');
     window.part1InitRoot(chartPartRoot);
     var chartReplica = chartPartRoot.querySelector('[data-part1-replica]');
+
+    function disableChartToolbar() {
+      var toolbar = chartReplica ? chartReplica.querySelector('.part1-toolbar') : null;
+      if (!toolbar) return;
+      toolbar.classList.add('is-disabled');
+      toolbar.setAttribute('aria-disabled', 'true');
+      toolbar.querySelectorAll('button, input, select').forEach(function (control) {
+        control.setAttribute('aria-disabled', 'true');
+        if ('disabled' in control) control.disabled = true;
+      });
+    }
+
+    disableChartToolbar();
     var aiList = root.querySelector('[data-events-ai-list]');
     var docBody = root.querySelector('[data-events-doc-body]');
     var docScroll = root.querySelector('[data-events-doc-scroll]');

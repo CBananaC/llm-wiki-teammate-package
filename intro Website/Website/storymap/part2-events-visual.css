@@ -1139,7 +1139,14 @@
 }
 
 .part2-events-chart-replica-shell .part1-toolbar {
-  display: none;
+  display: flex;
+  pointer-events: none;
+  cursor: default;
+  opacity: .74;
+}
+
+.part2-events-chart-replica-shell .part1-toolbar.is-disabled {
+  filter: saturate(.7);
 }
 
 .part2-events-chart-replica-shell .part1-stage {
@@ -1170,4 +1177,218 @@
 .part2-events-chart-replica-shell .part2-events-candidate-node.is-added:focus-visible {
   stroke: #2d261d;
   stroke-width: 3;
+}
+
+/* Requested refinements: retain disabled chrome, restore divisions, and give
+   the source/review panels enough type and scroll room at the shorter height. */
+.part2-events-visual {
+  height: 80vh;
+  min-height: 480px;
+}
+
+.part2-events-ai-card,
+.part2-events-ai-card.is-lin,
+.part2-events-ai-card.is-qing {
+  border-left: 1px solid #cdbfa9;
+}
+
+.part2-events-ai-list,
+.part2-events-doc-scroll {
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.part2-events-doc-divisions {
+  display: flex !important;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0 0 14px;
+  padding-bottom: 11px;
+  border-bottom: 1px solid #e2d7c7;
+}
+
+.part2-events-division-button {
+  padding: 5px 7px;
+  font-size: 11px;
+  line-height: 1.35;
+}
+
+.part2-events-division-button span {
+  width: 18px;
+  height: 18px;
+  font-size: 10px;
+}
+
+.part2-events-ai-card h4 {
+  font-size: 18px;
+  line-height: 1.5;
+}
+
+.part2-events-ai-description,
+.part2-events-ai-quote {
+  font-size: 15px;
+  line-height: 1.85;
+}
+
+.part2-events-ai-quote span {
+  font-size: 11px;
+}
+
+.part2-events-ai-facts dt,
+.part2-events-event-facts dt {
+  font-size: 11px;
+}
+
+.part2-events-ai-facts dd,
+.part2-events-event-facts dd {
+  font-size: 12px;
+  line-height: 1.7;
+}
+
+.part2-events-add {
+  font-size: 11px;
+}
+
+.part2-events-doc-title {
+  font-size: 18px;
+}
+
+.part2-events-doc-meta {
+  font-size: 13px;
+  line-height: 1.7;
+}
+
+.part2-events-doc-part p {
+  font-size: 17px;
+  line-height: 2.05;
+}
+
+@media (max-width: 820px) {
+  .part2-events-visual {
+    height: auto;
+    min-height: 0;
+  }
+
+  .part2-events-ai-description,
+  .part2-events-ai-quote {
+    font-size: 15px;
+  }
+
+  .part2-events-doc-part p {
+    font-size: 17px;
+  }
+}
+
+/* Let the shared 2.1 toolbar sit above all three 3.1 columns. */
+.part2-events-visual-stage {
+  grid-template-rows: auto minmax(0, 1fr);
+}
+
+.part2-events-chart-panel,
+.part2-events-chart-replica-shell,
+.part2-events-chart-replica-shell > [data-part1],
+.part2-events-chart-replica-shell .part1-replica {
+  display: contents;
+}
+
+.part2-events-chart-replica-shell .part1-toolbar {
+  grid-column: 1 / -1;
+  grid-row: 1;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.part2-events-chart-replica-shell .part1-stage {
+  grid-column: 1;
+  grid-row: 2;
+  height: 100%;
+}
+
+.part2-events-visual-stage > .part2-events-ai-panel {
+  grid-column: 2;
+  grid-row: 2;
+}
+
+.part2-events-visual-stage > .part2-events-doc-panel {
+  grid-column: 3;
+  grid-row: 2;
+}
+
+.part2-events-visual-stage.has-event-detail > .part2-events-event-panel {
+  grid-column: 4;
+  grid-row: 2;
+}
+
+/* Restore the boxed part sections and their subtitles, not just the index row. */
+.part2-events-doc-part {
+  margin: 0 0 12px;
+  padding: 0 12px 13px;
+  background: #fffdf8;
+  border: 1px solid #e2d7c7;
+  border-radius: 8px;
+  overflow: hidden;
+}
+
+.part2-events-doc-part + .part2-events-doc-part {
+  padding-top: 0;
+}
+
+.part2-events-doc-part h4 {
+  display: flex;
+  align-items: center;
+  margin: 0 -12px 9px;
+  padding: 9px 12px;
+  color: #2e261d;
+  background: #f5efe4;
+  border-bottom: 1px solid #d8cdbb;
+  font-size: 16px;
+  line-height: 1.4;
+}
+
+.part2-events-doc-part h4 span {
+  width: auto;
+  height: auto;
+  margin-right: 6px;
+  padding: 3px 6px;
+  color: #786d61;
+  background: #eee6d8;
+  border-radius: 4px;
+  font-size: 11px;
+}
+
+@media (max-width: 1180px) {
+  .part2-events-visual-stage.has-event-detail {
+    grid-template-rows: auto minmax(0, 1fr) auto;
+  }
+
+  .part2-events-visual-stage.has-event-detail > .part2-events-event-panel {
+    grid-column: 1 / -1;
+    grid-row: 3;
+  }
+}
+
+@media (max-width: 820px) {
+  .part2-events-visual-stage,
+  .part2-events-visual-stage.has-event-detail {
+    display: block;
+    height: auto;
+  }
+
+  .part2-events-chart-replica-shell .part1-toolbar {
+    display: flex;
+    width: 100%;
+  }
+
+  .part2-events-chart-replica-shell .part1-stage {
+    display: grid;
+    width: 100%;
+    height: 390px;
+  }
+}
+
+@media (max-width: 560px) {
+  .part2-events-chart-replica-shell .part1-stage {
+    height: 360px;
+  }
 }
