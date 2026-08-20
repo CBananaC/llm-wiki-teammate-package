@@ -53,7 +53,64 @@
       }
     });
   </script>
-  <title>清代奏摺與上諭分析平台</title>
+  <script>
+    window.addEventListener('DOMContentLoaded', () => {
+      const sourceInput = document.querySelector('[data-ocr-cover-source]');
+      const inkCanvases = [...document.querySelectorAll('[data-ocr-cover-ink]')];
+      if (!sourceInput || !inkCanvases.length) return;
+
+      // Keep only dark ink from the supplied handwritten PDF page. The paper,
+      // folds, watermark, and scan background become transparent; the ink is
+      // recoloured as a soft white cover layer.
+      const renderInkOnly = () => {
+        if (!sourceInput.naturalWidth || !sourceInput.naturalHeight) return;
+
+        const width = sourceInput.naturalWidth;
+        const height = sourceInput.naturalHeight;
+        const scratch = document.createElement('canvas');
+        scratch.width = width;
+        scratch.height = height;
+        const context = scratch.getContext('2d', { willReadFrequently: true });
+        context.drawImage(sourceInput, 0, 0, width, height);
+
+        const pixels = context.getImageData(0, 0, width, height);
+        for (let index = 0; index < pixels.data.length; index += 4) {
+          const luminance = (pixels.data[index] * .299)
+            + (pixels.data[index + 1] * .587)
+            + (pixels.data[index + 2] * .114);
+          const darkness = 255 - luminance;
+          const strength = Math.max(0, Math.min(1, (darkness - 88) / 88));
+          const alpha = Math.round(Math.pow(strength, 1.35) * 255);
+
+          pixels.data[index] = 255;
+          pixels.data[index + 1] = 255;
+          pixels.data[index + 2] = 255;
+          pixels.data[index + 3] = alpha;
+        }
+
+        // The requested cover watermark omits the first large 「奏」 at the
+        // upper-right of the handwritten PDF page.
+        const omitFirst奏 = {
+          left: Math.round(width * .79),
+          top: Math.round(height * .02),
+          width: Math.round(width * .21),
+          height: Math.round(height * .19)
+        };
+
+        inkCanvases.forEach((canvas) => {
+          canvas.width = width;
+          canvas.height = height;
+          const target = canvas.getContext('2d');
+          target.putImageData(pixels, 0, 0);
+          target.clearRect(omitFirst奏.left, omitFirst奏.top, omitFirst奏.width, omitFirst奏.height);
+        });
+      };
+
+      if (sourceInput.complete) renderInkOnly();
+      else sourceInput.addEventListener('load', renderInkOnly, { once: true });
+    });
+  </script>
+  <title>OCR原始史料</title>
   <style id="ocr-standalone-shell">
     html.ocr-standalone .tab-panel:not(#part-3-panel) {
       display: none !important;
@@ -145,11 +202,271 @@
       font-size: clamp(42px, 5.8vw, 78px);
       line-height: 1.05;
     }
+
+    /* The individual OCR page uses the approved cover composition while the
+       original StoryMap settings control remains the only top-corner control. */
+    html.ocr-standalone {
+      --bar-h: 0px;
+      overflow-x: clip;
+    }
+    html.ocr-standalone body {
+      overflow-x: clip;
+    }
+    html.ocr-standalone .topbar {
+      position: fixed;
+      inset: 0 0 auto;
+      z-index: 100;
+      display: block;
+      width: 100%;
+      height: 0;
+      min-height: 0;
+      padding: 0;
+      pointer-events: none;
+      background: transparent;
+      border: 0;
+      box-shadow: none;
+    }
+    html.ocr-standalone .brand,
+    html.ocr-standalone .tabs {
+      display: none !important;
+    }
+    html.ocr-standalone .settings-wrap {
+      position: fixed;
+      top: clamp(18px, 3vw, 34px);
+      right: clamp(18px, 3vw, 42px);
+      z-index: 101;
+      display: block;
+      pointer-events: auto;
+    }
+    html.ocr-standalone .settings-button {
+      width: 52px;
+      height: 52px;
+      color: rgba(236, 240, 232, .9);
+      background: rgba(16, 47, 50, .7);
+      border: 1px solid rgba(236, 240, 232, .44);
+      border-radius: 3px;
+      box-shadow: 0 12px 30px rgba(0, 0, 0, .18);
+    }
+    html.ocr-standalone .settings-button:hover,
+    html.ocr-standalone .settings-button[aria-expanded="true"] {
+      color: #fff;
+      background: rgba(44, 84, 83, .88);
+    }
+    html.ocr-standalone .settings-icon {
+      width: 22px;
+      height: 22px;
+    }
+    html.ocr-standalone .settings-panel {
+      color: #163d3f;
+      background: rgba(245, 240, 230, .97);
+      border-color: rgba(16, 47, 50, .18);
+      box-shadow: 0 18px 45px rgba(0, 0, 0, .26);
+    }
+
+    html.ocr-standalone #part-3-ocr {
+      border-top: 0;
+      background: #102f32;
+    }
+    html.ocr-standalone #part-3-ocr-bar {
+      position: relative;
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) minmax(360px, 47vw);
+      align-items: center;
+      min-height: 100svh;
+      margin: 0;
+      padding: clamp(48px, 8vh, 104px) clamp(28px, 7vw, 112px) clamp(38px, 6vh, 72px);
+      color: #ecf0e8;
+      background:
+        radial-gradient(circle at 77% 48%, rgba(92, 145, 133, .23), transparent 29rem),
+        linear-gradient(119deg, #102f32 0%, #12383a 48%, #183d3f 100%);
+      border: 0;
+      isolation: isolate;
+      overflow: clip;
+      scroll-margin-top: 0;
+    }
+    html.ocr-standalone #part-3-ocr-bar::after {
+      position: absolute;
+      inset: 0;
+      z-index: -1;
+      background:
+        radial-gradient(circle at 77% 48%, rgba(92, 145, 133, .23), transparent 29rem),
+        linear-gradient(119deg, #102f32 0%, #12383a 48%, #183d3f 100%);
+      content: "";
+    }
+    html.ocr-standalone #part-3-ocr-bar::before {
+      position: absolute;
+      inset: 6vh 4vw;
+      z-index: 0;
+      height: auto;
+      pointer-events: none;
+      border: 1px solid rgba(236, 240, 232, .12);
+      content: "";
+      opacity: .32;
+      background-image:
+        linear-gradient(rgba(255, 255, 255, .025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, .02) 1px, transparent 1px);
+      background-size: 56px 56px;
+      mask-image: linear-gradient(90deg, black, transparent 80%);
+    }
+    html.ocr-standalone #part-3-ocr-bar > .section-hero-content {
+      position: relative;
+      z-index: 5;
+      width: min(100%, 650px);
+      margin: 0;
+      padding: clamp(18px, 2vw, 28px) clamp(20px, 3vw, 42px) clamp(28px, 4vw, 50px) 0;
+    }
+    html.ocr-standalone #part-3-ocr-title {
+      max-width: none;
+      margin: 0;
+      color: #f5f0e6;
+      font: 700 clamp(48px, 5vw, 78px)/1.1 var(--serif);
+      letter-spacing: .025em;
+      white-space: nowrap;
+      text-shadow: 0 4px 26px rgba(0, 0, 0, .18);
+    }
+    html.ocr-standalone .ocr-cover-description {
+      max-width: 31em;
+      margin: 30px 0 0;
+      color: rgba(236, 240, 232, .72);
+      font: 400 clamp(15px, 1.25vw, 18px)/1.9 var(--serif);
+      letter-spacing: .04em;
+    }
+    html.ocr-standalone .ocr-cover-watermark {
+      position: relative;
+      z-index: 2;
+      align-self: stretch;
+      display: grid;
+      min-height: min(81vh, 780px);
+      margin: 0;
+      place-items: center;
+    }
+    html.ocr-standalone .ocr-cover-source-ghost {
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: min(100%, 585px);
+      height: min(85vh, 800px);
+      transform: translateY(-50%) rotate(2.5deg);
+      filter: drop-shadow(0 18px 35px rgba(0, 0, 0, .11));
+    }
+    html.ocr-standalone .ocr-cover-source-input {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+      pointer-events: none;
+    }
+    html.ocr-standalone .ocr-cover-source-page {
+      position: absolute;
+      inset: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+      opacity: .34;
+    }
+    html.ocr-standalone .ocr-cover-source-page.edge {
+      transform: translate(1px, 1px);
+      opacity: .12;
+      filter: blur(.25px);
+    }
+    html.ocr-standalone .ocr-cover-word-lines {
+      position: absolute;
+      inset: 6% 4%;
+      pointer-events: none;
+      opacity: .24;
+      background-image:
+        repeating-linear-gradient(90deg, transparent 0 31px, rgba(255, 255, 255, .55) 31px 32px, transparent 32px 65px),
+        repeating-linear-gradient(0deg, transparent 0 29px, rgba(255, 255, 255, .28) 29px 30px, transparent 30px 59px);
+      mix-blend-mode: screen;
+      mask-image: linear-gradient(90deg, transparent, black 17%, black 82%, transparent);
+    }
+    html.ocr-standalone .ocr-cover-frame {
+      position: absolute;
+      inset: 4% 2% 4% 13%;
+      border: 1px solid rgba(236, 240, 232, .22);
+      pointer-events: none;
+    }
+    html.ocr-standalone .ocr-cover-frame::before,
+    html.ocr-standalone .ocr-cover-frame::after {
+      position: absolute;
+      width: 17px;
+      height: 17px;
+      border-color: rgba(236, 240, 232, .7);
+      content: "";
+    }
+    html.ocr-standalone .ocr-cover-frame::before {
+      top: -1px;
+      left: -1px;
+      border-top: 1px solid;
+      border-left: 1px solid;
+    }
+    html.ocr-standalone .ocr-cover-frame::after {
+      right: -1px;
+      bottom: -1px;
+      border-right: 1px solid;
+      border-bottom: 1px solid;
+    }
+    @media (max-width: 940px) {
+      html.ocr-standalone #part-3-ocr-bar {
+        grid-template-columns: minmax(0, 1fr) minmax(270px, 43vw);
+        padding-right: 5vw;
+        padding-left: 5vw;
+      }
+      html.ocr-standalone #part-3-ocr-title { font-size: clamp(46px, 6.6vw, 72px); }
+      html.ocr-standalone .ocr-cover-source-ghost { right: -7%; }
+    }
+    @media (max-width: 720px) {
+      html.ocr-standalone #part-3-ocr-bar {
+        display: block;
+        min-height: 100svh;
+        padding: 100px 28px 100px;
+      }
+      html.ocr-standalone #part-3-ocr-bar::before { inset: 82px 16px 58px; }
+      html.ocr-standalone #part-3-ocr-bar > .section-hero-content {
+        width: min(100%, 550px);
+        padding: 0;
+      }
+      html.ocr-standalone #part-3-ocr-title {
+        max-width: 8em;
+        font-size: clamp(45px, 14vw, 70px);
+        white-space: normal;
+      }
+      html.ocr-standalone .ocr-cover-description {
+        max-width: 26em;
+        margin-top: 24px;
+      }
+      html.ocr-standalone .ocr-cover-watermark {
+        position: absolute;
+        right: 0;
+        bottom: 35px;
+        left: 12%;
+        min-height: 0;
+        height: 52vh;
+        opacity: .64;
+        pointer-events: none;
+      }
+      html.ocr-standalone .ocr-cover-source-ghost {
+        top: 50%;
+        right: 2%;
+        width: 98%;
+        height: 100%;
+        transform: translateY(-50%) rotate(1deg);
+      }
+    }
+    @media (max-width: 470px) {
+      html.ocr-standalone .settings-button { width: 46px; height: 46px; }
+      html.ocr-standalone #part-3-ocr-bar { padding-right: 24px; padding-left: 24px; }
+      html.ocr-standalone #part-3-ocr-title { font-size: clamp(43px, 15vw, 62px); }
+      html.ocr-standalone .ocr-cover-description { font-size: 14px; }
+      html.ocr-standalone .ocr-cover-watermark { right: 0; left: 5%; bottom: 42px; height: 45vh; }
+      html.ocr-standalone .ocr-cover-source-ghost { right: 2%; width: 98%; }
+    }
   </style>
 </head>
 <body>
   <header class="topbar">
-    <a class="brand" href="#part-3-ocr">OCR 並結構化原始史料</a>
+    <a class="brand" href="#part-3-ocr">OCR原始史料</a>
     <nav class="tabs" aria-label="網站章節">
       <a class="main-nav-link" href="#cover" data-nav-target="cover">主頁</a>
       <div class="nav-dropdown">
@@ -1859,7 +2176,19 @@
 
         <section class="part3-stage" id="part-3-ocr" data-tab="part-3" data-nav="#part-3-ocr">
           <section class="section-hero section-hero-part-3 part3-stage-bar" id="part-3-ocr-bar" aria-labelledby="part-3-ocr-title">
-            <div class="section-hero-content"><h1 id="part-3-ocr-title">OCR 並結構化原始史料</h1></div>
+            <div class="section-hero-content">
+              <h1 id="part-3-ocr-title">OCR原始史料</h1>
+              <p class="ocr-cover-description">以清代奏摺為例，介紹如何OCR和結構化手寫本和印刷本的原始史料。</p>
+            </div>
+            <figure class="ocr-cover-watermark" aria-hidden="true">
+              <div class="ocr-cover-source-ghost">
+                <img class="ocr-cover-source-input" src="試一試/手寫字/page1.png" alt="" data-ocr-cover-source>
+                <canvas class="ocr-cover-source-page" data-ocr-cover-ink></canvas>
+                <canvas class="ocr-cover-source-page edge" data-ocr-cover-ink></canvas>
+                <div class="ocr-cover-word-lines"></div>
+                <div class="ocr-cover-frame"></div>
+              </div>
+            </figure>
           </section>
 
           <section class="story surface-a" id="part-3-ocr-definition" data-tab="part-3" data-nav="#part-3-ocr-definition">
