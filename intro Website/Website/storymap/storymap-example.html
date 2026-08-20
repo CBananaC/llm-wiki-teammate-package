@@ -10,6 +10,7 @@
   <link rel="stylesheet" href="storymap.css?v=20260811-codex-responsive-02">
   <link rel="stylesheet" href="storymap-cards.css?v=20260813-part2-source-y-center-01">
   <link rel="stylesheet" href="part-1-interface.css?v=20260813-ai-controls-01">
+  <link rel="stylesheet" href="part2-events-visual.css?v=20260820-3-1-ui-01">
   <link rel="stylesheet" href="part-3-question-gallery.css">
   <script src="storymap.js?v=20260812-part2-flow-02" defer></script>
   <!-- 第一部分的介面複本：資料模組先載入，行為模組再依它組裝畫面。 -->
@@ -29,6 +30,9 @@
   <script src="part2-yu-source-bars.js?v=20260815-part2-fix-01" defer></script>
   <!-- 第二部分 2-1 至 2-3 共用 final_out_4.html 的待機 Skill 視窗與展開樣式。 -->
   <script src="part2-req-ui-style.js?v=20260813-part2-ui-02" defer></script>
+  <!-- 3.1 事件抽取示範：硃83 保存 AI 輸出、事件圓點與原文定位。 -->
+  <script src="part2-events-visual-data.js?v=20260819-3-1-events-01" defer></script>
+  <script src="part2-events-visual.js?v=20260820-3-1-ui-01" defer></script>
   <!-- 第三部分「適合的研究問題」互動圖庫：同樣先載資料，再載行為。 -->
   <script src="part-3-question-gallery-data.js" defer></script>
   <script src="part-3-question-gallery.js" defer></script>
@@ -1034,6 +1038,9 @@
               <p class="part2-substage-crumb">抽取奏摺的資訊</p>
               <h2>抽取官員奏報的事件、官員對事件的回應</h2>
             </div>
+          </div>
+          <div class="story-inner part2-events-visual-story-inner">
+            <div class="part2-events-visual-mount part2-events-visual" data-part2-events-visual></div>
           </div>
           <div class="story-inner"><div class="part2-skill-layout part2-grouped-layout">
             <div class="part2-skill-copy"><div class="part2-card-stack">
