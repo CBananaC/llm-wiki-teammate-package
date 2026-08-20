@@ -1179,6 +1179,47 @@
   stroke-width: 3;
 }
 
+/* Match the saved AI chat header while leaving its right-side window actions out. */
+.part2-events-ai-chat-head {
+  flex: 0 0 auto;
+  min-height: 52px;
+  padding: 8px 12px;
+  background: #fffdf8;
+  border-bottom: 1px solid #e6dccb;
+}
+
+.part2-events-ai-chat-head .part1-chat-icon-btn:disabled {
+  color: #a19278;
+  opacity: 1;
+  cursor: default;
+}
+
+.part2-events-ai-card-top {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  margin: 0 0 5px;
+}
+
+.part2-events-ai-card-mode {
+  padding: 4px 8px;
+  color: #2e6b52;
+  background: #e5f1ea;
+  border-radius: 5px;
+  font: 800 11px/1.2 var(--sans);
+}
+
+.part2-events-ai-card-top .part2-events-skill-badge {
+  padding: 0;
+  color: #30291f;
+  background: transparent;
+  font: 700 14px/1.25 var(--serif);
+}
+
+.part2-events-ai-card-top .part2-events-card-state {
+  margin-left: auto;
+}
+
 /* Requested refinements: retain disabled chrome, restore divisions, and give
    the source/review panels enough type and scroll room at the shorter height. */
 .part2-events-visual {

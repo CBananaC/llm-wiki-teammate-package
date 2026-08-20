@@ -124,6 +124,13 @@
         </section>
 
         <aside class="part2-events-ai-panel" aria-label="AI 輸出面板">
+          <div class="part1-linked-head part2-events-ai-chat-head" aria-label="AI 對話面板工具列">
+            <span class="part1-chat-head-actions">
+              <button class="part1-chat-icon-btn" type="button" disabled aria-label="對話目錄"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="8" y1="6" x2="20" y2="6"/><line x1="8" y1="12" x2="20" y2="12"/><line x1="8" y1="18" x2="20" y2="18"/><line x1="3.5" y1="6" x2="3.51" y2="6"/><line x1="3.5" y1="12" x2="3.51" y2="12"/><line x1="3.5" y1="18" x2="3.51" y2="18"/></svg></span></button>
+              <button class="part1-chat-icon-btn" type="button" disabled aria-label="收合輸入面板"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg></span></button>
+              <button class="part1-chat-icon-btn" type="button" disabled aria-label="跳到最近的 AI 結果"><span aria-hidden="true"><svg class="part1-chat-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 14 20 9 15 4"/><path d="M4 20v-7a4 4 0 0 1 4-4h12"/></svg></span></button>
+            </span>
+          </div>
           <div class="part2-events-panel-head">
             <div><span class="part2-events-panel-kicker">AI</span><strong>事件候選輸出</strong></div>
             <span class="part2-events-panel-status">未加入的候選</span>
@@ -149,7 +156,6 @@
               <h4>摘要</h4>
               <p>${escapeHtml(data.summary)}</p>
             </section>
-            <nav class="part2-events-doc-divisions" aria-label="文書分段" data-events-doc-divisions></nav>
             <div class="part2-events-doc-body" data-events-doc-body></div>
           </div>
         </aside>
@@ -185,7 +191,6 @@
     var aiList = root.querySelector('[data-events-ai-list]');
     var docBody = root.querySelector('[data-events-doc-body]');
     var docScroll = root.querySelector('[data-events-doc-scroll]');
-    var divisionsNav = root.querySelector('[data-events-doc-divisions]');
     var eventPanel = root.querySelector('[data-events-event-panel]');
     var eventHeading = root.querySelector('[data-events-event-heading]');
     var eventBody = root.querySelector('[data-events-event-body]');
@@ -240,9 +245,6 @@
     }
 
     function renderDocument() {
-      divisionsNav.innerHTML = data.divisions.map(function (part, index) {
-        return '<button type="button" class="part2-events-division-button" data-division-index="' + index + '"><span>' + (index + 1) + '</span>' + escapeHtml(part.label) + '</button>';
-      }).join('');
       docBody.innerHTML = divisionRanges.map(function (range, index) {
         var text = data.document.body.slice(range.start, range.end);
         return '<section class="part2-events-doc-part" id="part2-events-doc-part-' + index + '">' +
@@ -284,7 +286,7 @@
     function cardMarkup(event) {
       var colourClass = event.actor === 'lin' ? 'is-lin' : 'is-qing';
       return '<article class="part2-events-ai-card ' + colourClass + '" data-ai-card="' + escapeHtml(event.id) + '">' +
-        '<div class="part2-events-ai-card-top"><span class="part2-events-skill-badge">' + escapeHtml(event.skill) + '</span><span class="part2-events-card-state" data-card-state>未加入</span></div>' +
+        '<div class="part2-events-ai-card-top"><span class="part2-events-ai-card-mode">擷取</span><span class="part2-events-skill-badge">' + escapeHtml(event.skill) + '</span><span class="part2-events-card-state" data-card-state>未加入</span></div>' +
         '<h4>' + escapeHtml(event.subtitle) + '</h4>' +
         '<p class="part2-events-ai-description">' + escapeHtml(event.description) + '</p>' +
         '<button class="part2-events-ai-quote" type="button" data-quote-event="' + escapeHtml(event.id) + '">「' + escapeHtml(event.quote) + '」<span>—硃83　點按定位</span></button>' +
@@ -462,13 +464,6 @@
       state.selectedEventId = '';
       chartReplica.querySelectorAll('.part2-events-candidate-node').forEach(function (dot) { dot.classList.remove('is-selected'); });
       updateActiveCard();
-    });
-
-    divisionsNav.addEventListener('click', function (event) {
-      var button = event.target.closest('[data-division-index]');
-      if (!button) return;
-      var part = root.querySelector('#part2-events-doc-part-' + button.getAttribute('data-division-index'));
-      if (part) part.scrollIntoView({ block: 'start', behavior: 'smooth' });
     });
 
     window.addEventListener('resize', function () { window.requestAnimationFrame(renderChart); });
