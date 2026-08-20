@@ -96,13 +96,55 @@
           width: Math.round(width * .21),
           height: Math.round(height * .19)
         };
+        for (let y = omitFirst奏.top; y < Math.min(height, omitFirst奏.top + omitFirst奏.height); y += 1) {
+          for (let x = omitFirst奏.left; x < Math.min(width, omitFirst奏.left + omitFirst奏.width); x += 1) {
+            pixels.data[((y * width) + x) * 4 + 3] = 0;
+          }
+        }
+
+        // Crop the transparent canvas to the visible handwriting after the
+        // omitted character has been cleared. The source page is landscape
+        // with a large blank area on the right; keeping that blank page would
+        // make the extracted writing look too small and left-heavy in the
+        // responsive scan frame.
+        const inkThreshold = 140;
+        let minInkX = width;
+        let minInkY = height;
+        let maxInkX = -1;
+        let maxInkY = -1;
+        for (let y = 0; y < height; y += 2) {
+          for (let x = 0; x < width; x += 2) {
+            if (pixels.data[((y * width) + x) * 4 + 3] > inkThreshold) {
+              minInkX = Math.min(minInkX, x);
+              minInkY = Math.min(minInkY, y);
+              maxInkX = Math.max(maxInkX, x);
+              maxInkY = Math.max(maxInkY, y);
+            }
+          }
+        }
 
         inkCanvases.forEach((canvas) => {
-          canvas.width = width;
-          canvas.height = height;
           const target = canvas.getContext('2d');
-          target.putImageData(pixels, 0, 0);
-          target.clearRect(omitFirst奏.left, omitFirst奏.top, omitFirst奏.width, omitFirst奏.height);
+          target.clearRect(0, 0, canvas.width, canvas.height);
+          if (maxInkX < minInkX || maxInkY < minInkY) {
+            canvas.width = width;
+            canvas.height = height;
+            canvas.getContext('2d').putImageData(pixels, 0, 0);
+            canvas.getContext('2d').clearRect(omitFirst奏.left, omitFirst奏.top, omitFirst奏.width, omitFirst奏.height);
+            return;
+          }
+
+          const inkWidth = maxInkX - minInkX + 1;
+          const inkHeight = maxInkY - minInkY + 1;
+          const padX = Math.round(inkWidth * .04);
+          const padY = Math.round(inkHeight * .04);
+          const cropLeft = Math.max(0, minInkX - padX);
+          const cropTop = Math.max(0, minInkY - padY);
+          const cropRight = Math.min(width, maxInkX + padX + 1);
+          const cropBottom = Math.min(height, maxInkY + padY + 1);
+          canvas.width = cropRight - cropLeft;
+          canvas.height = cropBottom - cropTop;
+          canvas.getContext('2d').putImageData(pixels, -cropLeft, -cropTop);
         });
       };
 
@@ -893,7 +935,7 @@
     }
     html.ocr-standalone .ocr-cover-source-ghost {
       overflow: visible;
-      transform: translateY(-50%) rotate(1.6deg) scale(1.06);
+      transform: translateY(-50%) rotate(1.6deg);
     }
     html.ocr-standalone .ocr-cover-source-page {
       width: 100%;
@@ -1033,7 +1075,7 @@
         right: auto;
         width: 100%;
         height: 100%;
-        transform: rotate(1deg) scale(.92);
+        transform: rotate(1deg);
       }
       html.ocr-standalone .ocr-cover-source-page {
         width: 100%;
@@ -1075,7 +1117,7 @@
         width: min(88vw, 370px);
         height: min(43svh, 340px);
       }
-      html.ocr-standalone .ocr-cover-source-ghost { transform: rotate(1deg) scale(.88); }
+      html.ocr-standalone .ocr-cover-source-ghost { transform: rotate(1deg); }
     }
   </style>
 </head>
