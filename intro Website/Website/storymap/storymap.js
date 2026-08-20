@@ -27,6 +27,7 @@ const fontSizeDecrease = document.getElementById('font-size-decrease');
 const fontSizeIncrease = document.getElementById('font-size-increase');
 const fontSizeValue = document.getElementById('font-size-value');
 const FONT_SCALE_KEY = 'intro-website-font-scale';
+const FONT_SCALE_BASE = 1.5;
 const FONT_SCALE_MIN = 0.55;
 const FONT_SCALE_MAX = 2.2;
 const FONT_SCALE_STEP = 0.05;
@@ -41,7 +42,9 @@ const readFontScale = () => {
 };
 const applyFontScale = (value) => {
   const scale = clampFontScale(value);
-  document.documentElement.style.setProperty('--font-scale', String(scale));
+  // Keep the displayed percentage relative to the new baseline while using
+  // the former 150% presentation as the effective 100% font size.
+  document.documentElement.style.setProperty('--font-scale', String(scale * FONT_SCALE_BASE));
   fontSizeValue.value = `${Math.round(scale * 100)}%`;
   fontSizeValue.textContent = fontSizeValue.value;
   fontSizeDecrease.disabled = scale <= FONT_SCALE_MIN;

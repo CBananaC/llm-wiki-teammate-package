@@ -14,7 +14,8 @@
    ========================================================================== */
 
 :root {
-  --font-scale: 1;
+  /* The former 150% reading view is now the default 100% baseline. */
+  --font-scale: 1.5;
 
   /* 顏色 */
   --ink: #163d3f;
