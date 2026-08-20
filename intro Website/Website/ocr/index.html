@@ -1,0 +1,346 @@
+<!doctype html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="以清代奏摺為例，學習如何準備史料、使用 OCR、保留版面資訊，並輸出可供研究者核驗的 JSON。">
+  <title>OCR 並結構化原始史料｜清代奏摺與上諭分析平台</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500;600&family=Inter:wght@400;500;600;700;800&family=Noto+Serif+TC:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="ocr.css?v=20260820-ocr-standalone-01">
+  <script src="ocr.js?v=20260820-ocr-standalone-01" defer></script>
+</head>
+<body>
+  <header class="ocr-topbar">
+    <a class="ocr-brand" href="../storymap/storymap-example.html?preview=ocr#part-3" aria-label="返回清代奏摺與上諭分析平台">
+      <span class="ocr-brand-mark" aria-hidden="true">↗</span>
+      <span>清代奏摺與上諭分析平台</span>
+    </a>
+    <nav class="ocr-topnav" aria-label="頁面導航">
+      <a href="#top">教學首頁</a>
+      <a href="#json">JSON 示範</a>
+      <a href="#try">試一試</a>
+    </nav>
+    <div class="ocr-settings" aria-label="介面字級">
+      <span class="ocr-settings-label">介面字級</span>
+      <button type="button" data-font="decrease" aria-label="縮小介面字級">−</button>
+      <output data-font-value>100%</output>
+      <button type="button" data-font="increase" aria-label="放大介面字級">＋</button>
+    </div>
+  </header>
+
+  <main>
+    <section class="ocr-hero" id="top" aria-labelledby="page-title">
+      <div class="ocr-hero-grid">
+        <div>
+          <p class="eyebrow">獨立教學頁 · 步驟二</p>
+          <h1 id="page-title">OCR 並結構化<br><em>原始史料</em></h1>
+          <p class="hero-lead">把掃描影像轉成可搜尋、可核驗、可供 AI 讀取的資料。這一頁以清代奏摺為例，帶你從材料準備一路走到 JSON 輸出。</p>
+          <div class="hero-actions">
+            <a class="button button-dark" href="#definition">從流程開始 <span aria-hidden="true">↓</span></a>
+            <a class="button button-quiet" href="../storymap/storymap-example.html?preview=ocr#part-3-ocr">查看原 StoryMap <span aria-hidden="true">↗</span></a>
+          </div>
+        </div>
+        <div class="hero-diagram" aria-label="影像、OCR、JSON、研究者核驗四個步驟">
+          <div class="hero-diagram-line" aria-hidden="true"></div>
+          <div class="hero-node node-image"><span class="node-icon">▧</span><strong>影像</strong><small>原始史料</small></div>
+          <div class="hero-node node-ocr"><span class="node-icon">⌁</span><strong>OCR</strong><small>辨識文字</small></div>
+          <div class="hero-node node-json"><span class="node-icon">{ }</span><strong>JSON</strong><small>整理欄位</small></div>
+          <div class="hero-node node-review"><span class="node-icon">✓</span><strong>核驗</strong><small>研究者覆核</small></div>
+          <div class="hero-diagram-caption">每一步都要保留來源與不確定性</div>
+        </div>
+      </div>
+      <div class="hero-note"><span class="note-dot"></span>AI 輸出是候選結果；史料證據仍需由研究者逐頁檢查。</div>
+    </section>
+
+    <div class="ocr-page-layout">
+      <aside class="ocr-rail" aria-label="教學進度">
+        <div class="rail-title">本頁路線</div>
+        <ol class="rail-list">
+          <li><a href="#definition" data-nav-target="definition"><span>01</span>甚麼是 OCR？</a></li>
+          <li><a href="#definition" data-nav-target="definition"><span>02</span>為甚麼要 OCR？</a></li>
+          <li><a href="#paddleocr" data-nav-target="paddleocr"><span>03</span>PaddleOCR</a></li>
+          <li><a href="#agentic" data-nav-target="agentic"><span>04</span>運用 Agentic AI</a></li>
+          <li><a href="#materials" data-nav-target="materials"><span>05</span>OCR 前的材料準備</a></li>
+          <li><a href="#layout" data-nav-target="layout"><span>06</span>檢視版面及格式</a></li>
+          <li><a href="#printed" data-nav-target="printed"><span>07</span>辨識印刷字</a></li>
+          <li><a href="#handwritten" data-nav-target="handwritten"><span>08</span>辨識手寫字</a></li>
+          <li><a href="#json" data-nav-target="json"><span>09</span>輸出格式：JSON</a></li>
+          <li><a href="#test" data-nav-target="test"><span>10</span>OCR 測試</a></li>
+          <li><a href="#try" data-nav-target="try"><span>11</span>試一試</a></li>
+        </ol>
+        <div class="rail-tip"><span>↳</span> 滑到下一段，或直接點選步驟。</div>
+      </aside>
+
+      <div class="ocr-content">
+        <section class="lesson-section section-cream" id="definition" data-lesson-section="definition">
+          <div class="section-kicker">01—02 · 先建立共同語言</div>
+          <div class="section-intro two-col-intro">
+            <div>
+              <h2>先把影像變成可讀的文字</h2>
+              <p>OCR 不是把史料「變得正確」，而是把影像中的字元轉成可以搜尋、編輯和再處理的候選文本。接下來的結構化，才會讓每份文書的來源、欄位與正文有清楚的位置。</p>
+            </div>
+            <div class="principle-card"><span class="principle-number">0</span><strong>原始影像不被覆蓋</strong><p>OCR 產物是 derived data，必須與原始掃描檔分開保存。</p></div>
+          </div>
+          <div class="definition-grid">
+            <article class="lesson-card" id="ocr-definition-card-1">
+              <div class="card-number">1</div>
+              <h3>甚麼是 OCR？</h3>
+              <p>OCR（Optical Character Recognition，光學字元辨識）是一種將影像中的文字辨識並轉換為機器可讀文本的技術。</p>
+              <div class="card-foot">影像 → 機器可讀文本</div>
+            </article>
+            <article class="lesson-card" id="ocr-definition-card-2">
+              <div class="card-number">2</div>
+              <h3>使用 OCR 的原因</h3>
+              <p>由於 AI 無法直接讀取掃描影像形式的歷史材料，研究者因此需要先利用 OCR 將史料轉換為可編輯及可搜尋的文本，再整理成結構化資料，後續才能用 AI 進行資訊提取和分析。</p>
+              <div class="card-foot">可搜尋 · 可編輯 · 可追溯</div>
+            </article>
+          </div>
+
+          <div class="scan-visual" data-scan-visual aria-label="硃25 的手寫與印刷影像經 OCR 轉成 JSON 的示範">
+            <div class="visual-heading"><span class="visual-label">實際資料流</span><button type="button" class="text-button" data-scan-play>重新播放動畫 ↻</button></div>
+            <div class="scan-grid">
+              <div class="scan-source-column">
+                <div class="scan-source-card handwritten">
+                  <div class="window-label"><span class="window-dots"><i></i><i></i><i></i></span>硃25 · 手寫影像</div>
+                  <div class="scan-image-wrap"><img src="../storymap/ocr-zhu25-handwritten-1-enhanced.png" alt="硃25 手寫奏摺影像" data-scan-image="handwritten"><span class="scan-beam" aria-hidden="true"></span></div>
+                </div>
+                <div class="scan-source-card printed">
+                  <div class="window-label"><span class="window-dots"><i></i><i></i><i></i></span>硃25 · 印刷影像</div>
+                  <div class="scan-image-wrap"><img src="../storymap/ocr-zhu25-printed-1-enhanced.png" alt="硃25 印刷奏摺影像" data-scan-image="printed"><span class="scan-beam" aria-hidden="true"></span></div>
+                </div>
+              </div>
+              <div class="scan-arrow" aria-hidden="true">→</div>
+              <div class="json-window scan-output">
+                <div class="window-label"><span class="window-dots"><i></i><i></i><i></i></span><span>硃25.ocr.json</span><span class="live-badge">LIVE</span></div>
+                <pre data-scan-output><code>{
+  <span class="code-key">"doc_id"</span>: <span class="code-string">"硃25"</span>,
+  <span class="code-key">"title"</span>: <span class="code-string">"為奏彰化失陷已調兵赴臺事"</span>,
+  <span class="code-key">"body"</span>: <span class="code-string">"福建水師提督一等海澄公…"</span>
+}</code></pre>
+                <div class="json-window-foot">候選文字 · 待研究者核驗</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-section section-blue" id="paddleocr" data-lesson-section="paddleocr">
+          <div class="section-kicker">03 · 選擇 OCR 工具</div>
+          <div class="split-layout">
+            <article class="lesson-card plain-card">
+              <div class="card-number">3</div>
+              <h2>PaddleOCR</h2>
+              <p>研究者可使用 PaddleOCR 作為 OCR 的工具。PaddleOCR 是由百度開發，具有以下優點：</p>
+              <ul class="check-list">
+                <li>能夠辨識掃描影像或 PDF 中的中文文字，並支援版面分析。</li>
+                <li>中文辨識準確率高，而且辨識速度快。</li>
+                <li>開源且免費，支援本地部署，可離線運行。</li>
+              </ul>
+              <a class="inline-link" href="https://github.com/PaddlePaddle/PaddleOCR" target="_blank" rel="noopener">PaddleOCR GitHub ↗</a>
+            </article>
+            <figure class="evidence-figure">
+              <img src="../Visual Material/PaddleOCR.png" alt="PaddlePaddle/PaddleOCR GitHub Repository 頁面截圖" loading="lazy">
+              <figcaption>工具本身也是研究流程的一部分：記錄版本、安裝方式與執行環境。</figcaption>
+            </figure>
+          </div>
+        </section>
+
+        <section class="lesson-section section-ink" id="agentic" data-lesson-section="agentic">
+          <div class="section-kicker light">04 · 讓工具可被說明</div>
+          <div class="split-layout agentic-layout">
+            <article class="lesson-card dark-card">
+              <div class="card-number">4</div>
+              <h2>運用 Agentic AI 使用 PaddleOCR</h2>
+              <p>PaddleOCR 通常透過 Python 在本機安裝和運行。然而，研究者即使不具備編程能力，亦可透過自然語言指示 Agentic AI 安裝 PaddleOCR，以及撰寫執行 OCR 的 Python 代碼。</p>
+              <p class="small-note">以下為流程示意，不代表本頁正在替你安裝軟件。</p>
+            </article>
+            <div class="agentic-demo" data-agentic-demo aria-label="運用 Agentic AI 使用 PaddleOCR 示範動畫">
+              <div class="demo-window-bar"><span class="window-dots"><i></i><i></i><i></i></span><span>Agentic AI · OCR setup</span><span class="demo-mode">示範</span></div>
+              <div class="demo-chat">
+                <div class="demo-user">set up PaddleOCR on my computer</div>
+                <div class="demo-status" data-agentic-status>等待開始…</div>
+                <div class="demo-stream" data-agentic-output>我會先檢查 Python 版本與作業系統，再建立隔離環境。完成後以一頁史料做快速測試。</div>
+              </div>
+              <button type="button" class="demo-run" data-agentic-run>播放示範 <span aria-hidden="true">▶</span></button>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-section section-cream" id="materials" data-lesson-section="materials">
+          <div class="section-kicker">05 · OCR 前先準備好材料</div>
+          <div class="split-layout material-layout">
+            <article class="lesson-card plain-card">
+              <div class="card-number">5</div>
+              <h2>OCR 前的材料準備</h2>
+              <p>OCR 所處理的材料通常為 PDF 或 JPG、PNG、TIFF 等影像檔案。因此，如果史料為紙本書籍，研究者可先查找是否已有可合法使用的電子版本，若沒有，則需以掃描器或相機把書頁數位化，轉換為 PDF 等形式的影像檔案。</p>
+              <div class="rights-note"><strong>先確認使用權</strong><span>研究者應遵守所在地的版權法規及資料庫使用條款，優先使用公有領域、已獲授權或依法可供研究使用的材料。</span></div>
+            </article>
+            <figure class="evidence-figure scanner-figure">
+              <img src="../Visual Material/book_scanner_202401.png" alt="理大數碼創意空間的書籍掃描器" loading="lazy">
+              <figcaption><strong>理大圖書館中的掃描器</strong>具備半自動掃描、影像校正及手指影像自動移除等功能，可協助同學掃描古籍和檔案史料。</figcaption>
+              <a class="inline-link" href="https://www.lib.polyu.edu.hk/makerspace/book-scanner" target="_blank" rel="noopener">詳見理大圖書館〈書籍掃描器〉網頁 ↗</a>
+            </figure>
+          </div>
+        </section>
+
+        <section class="lesson-section section-white" id="layout" data-lesson-section="layout">
+          <div class="section-kicker">06 · 先看懂版面，再寫規則</div>
+          <div class="section-intro two-col-intro">
+            <div>
+              <div class="card-number">6</div>
+              <h2>檢視史料的版面及格式</h2>
+              <p>要使用 PaddleOCR，研究者首先需要檢視史料的版面及格式，以便要求 Agentic AI 撰寫合適的 Python OCR 規則。</p>
+            </div>
+            <div class="layout-checklist">
+              <div><span>01</span>字體類型：印刷或手寫</div>
+              <div><span>02</span>文字方向：橫排或直排</div>
+              <div><span>03</span>文書結構：標題、正文、批註、硃批、頁碼</div>
+            </div>
+          </div>
+          <div class="layout-rule-banner">不要先問「AI 能不能讀」；先問「研究者要保留哪些結構」。</div>
+        </section>
+
+        <section class="lesson-section section-lavender" id="printed" data-lesson-section="printed">
+          <div class="section-kicker">07 · 版面特徵探索器</div>
+          <div class="section-intro">
+            <div class="card-number">7</div>
+            <h2>辨識印刷字</h2>
+            <p>印刷字的字形較為統一，因此較容易進行 OCR。然而，研究者仍需檢視史料的版面和格式，確認需要保留的結構，再要求 Agentic AI 撰寫相應的 Python OCR 規則。</p>
+          </div>
+          <div class="feature-explorer" data-explorer="printed" aria-label="辨識印刷字版面特徵">
+            <div class="feature-sidebar">
+              <div class="feature-sidebar-title">點選特徵</div>
+              <div class="feature-tabs" data-explorer-tabs></div>
+              <div class="feature-index" data-explorer-index></div>
+            </div>
+            <div class="feature-source">
+              <div class="feature-source-bar"><span>人工標示頁面</span><span data-explorer-title></span></div>
+              <div class="feature-source-stage"><img data-explorer-base alt="印刷史料原件" loading="lazy"><img data-explorer-overlay alt="人工標示的印刷史料版面特徵" data-explorer-image loading="lazy"></div>
+            </div>
+            <div class="feature-output">
+              <div class="feature-output-heading"><span>AI 規則草稿</span><span class="output-state">可修改</span></div>
+              <p class="feature-description" data-explorer-description></p>
+              <div class="feature-window"><div class="feature-window-title">AI Prompt</div><pre data-explorer-prompt></pre></div>
+              <div class="feature-window"><div class="feature-window-title">AI 生成的 Python 代碼</div><pre data-explorer-code></pre></div>
+              <div class="feature-window json-mini"><div class="feature-window-title">OCR 的輸出結果</div><pre data-explorer-json></pre></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-section section-sage" id="handwritten" data-lesson-section="handwritten">
+          <div class="section-kicker">08 · 手寫史料需要更多核驗</div>
+          <div class="section-intro">
+            <div class="card-number">8</div>
+            <h2>辨識手寫字</h2>
+            <p>和印刷文本相比，手寫史料的 OCR 辨識難度較高，但並非完全無法辨識。把版面規則拆開，逐項測試，能讓研究者更容易找到錯誤。</p>
+          </div>
+          <div class="feature-explorer" data-explorer="handwritten" aria-label="辨識手寫字版面特徵">
+            <div class="feature-sidebar">
+              <div class="feature-sidebar-title">點選特徵</div>
+              <div class="feature-tabs" data-explorer-tabs></div>
+              <div class="feature-index" data-explorer-index></div>
+            </div>
+            <div class="feature-source">
+              <div class="feature-source-bar"><span>人工標示頁面</span><span data-explorer-title></span></div>
+              <div class="feature-source-stage"><img data-explorer-base alt="手寫奏摺原件" loading="lazy"><img data-explorer-overlay alt="人工標示的手寫奏摺版面特徵" data-explorer-image loading="lazy"></div>
+            </div>
+            <div class="feature-output">
+              <div class="feature-output-heading"><span>AI 規則草稿</span><span class="output-state">可修改</span></div>
+              <p class="feature-description" data-explorer-description></p>
+              <div class="feature-window"><div class="feature-window-title">AI Prompt</div><pre data-explorer-prompt></pre></div>
+              <div class="feature-window"><div class="feature-window-title">AI 生成的 Python 代碼</div><pre data-explorer-code></pre></div>
+              <div class="feature-window json-mini"><div class="feature-window-title">OCR 的輸出結果</div><pre data-explorer-json></pre></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-section section-blue json-section" id="json" data-lesson-section="json">
+          <div class="section-kicker">09 · 把 OCR 結果放進欄位</div>
+          <div class="split-layout json-layout">
+            <article class="lesson-card plain-card">
+              <div class="card-number">9</div>
+              <h2>輸出格式：JSON</h2>
+              <p>除了設定版面辨識的規則外，研究者亦應要求 Agentic AI 把 OCR 結果輸出為 JSON 的格式。</p>
+              <p>JSON 是一種常用的結構化資料格式，能以「欄位－內容」的方式儲存資料，方便 Python、AI 及網站讀取和處理資料，亦有利於後續的搜尋、分析和視覺化。</p>
+              <div class="json-principles"><span>欄位</span><span>內容</span><span>來源</span><span>待查</span></div>
+              <p class="small-note">點擊右側欄位，查看它在 OCR JSON 中的位置。這正是目前舊版頁面缺少的視覺。</p>
+            </article>
+            <div class="json-viewer" data-json-viewer role="group" aria-label="輸出格式：JSON——硃25 OCR JSON 欄位導覽">
+              <div class="json-viewer-head"><span class="window-dots"><i></i><i></i><i></i></span><strong>硃25.ocr.json</strong><span class="viewer-help">點選欄位導覽</span></div>
+              <div class="json-field-nav"><button type="button" data-json-nav="prev" aria-label="上一個 JSON 欄位">‹</button><div data-json-fields></div><button type="button" data-json-nav="next" aria-label="下一個 JSON 欄位">›</button></div>
+              <pre class="json-code" data-json-code><code>{
+  <span class="json-line" data-json-line="source">"source": <span class="code-string">"《明清臺灣檔案彙編》第30冊"</span>,</span>
+  <span class="json-line" data-json-line="title">"title": <span class="code-string">"為奏彰化失陷已調兵赴臺事"</span>,</span>
+  <span class="json-line" data-json-line="official_post">"official_post": <span class="code-string">"福建水師提督"</span>,</span>
+  <span class="json-line" data-json-line="author">"author": <span class="code-string">"黃仕簡"</span>,</span>
+  <span class="json-line" data-json-line="sent_date">"sent_date": <span class="code-string">"乾隆五十一年十二月初十日"</span>,</span>
+  <span class="json-line" data-json-line="zhu_date">"zhu_date": <span class="code-string">"乾隆五十一年十二月二十七日"</span>,</span>
+  <span class="json-line" data-json-line="zhu_text">"zhu_text": <span class="code-string">"已有旨了。欽此。"</span>,</span>
+  <span class="json-line" data-json-line="page_numbers">"page_numbers": [<span class="code-string">"80"</span>, <span class="code-string">"81"</span>],</span>
+  <span class="json-line">"paragraphs": [</span>
+  <span class="json-line" data-json-line="paragraphs">  <span class="code-string">"福建水師提督一等海澄公奴才黃仕簡謹奏，為奏聞事。"</span>,</span>
+  <span class="json-line" data-json-line="paragraphs-2">  <span class="code-string">"竊照臺灣近來屢有匪徒滋事，奴才時刻留心察查，不敢稍有懈忽。"</span></span>
+  <span class="json-line">]</span>
+}</span></code></pre>
+              <div class="json-explain" data-json-explain>來源：這份資料從哪裡來？</div>
+              <div class="json-viewer-footer"><span>候選 OCR 結果 · 需逐頁核驗</span><button type="button" data-json-expand>展開較長段落</button></div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-section section-cream" id="test" data-lesson-section="test">
+          <div class="section-kicker">10 · 小量測試，再批次處理</div>
+          <div class="split-layout test-layout">
+            <article class="lesson-card plain-card">
+              <div class="card-number">10</div>
+              <h2>OCR 測試</h2>
+              <p>完成 Python OCR 程式後，研究者可注意 Agentic AI 執行 OCR，但建議先以 1 至 5 頁史料作為測試。</p>
+              <p>研究者應檢查 OCR 能否正確辨識文字和格式，並根據測試結果修正 Python 規則。若沒有明顯錯誤，便可開始進行完整史料的 OCR。</p>
+              <p>為避免程式中斷和方便檢查，建議把大型史料分批處理，例如每次處理 50 頁，完成一批後先檢查結果，再繼續處理下一批。</p>
+              <button type="button" class="button button-dark" data-run-batch>開始模擬測試</button>
+            </article>
+            <div class="batch-board" data-batch-board aria-label="五頁 OCR 測試進度">
+              <div class="batch-board-head"><span>test-run · zhu25</span><span data-batch-status>尚未開始</span></div>
+              <div class="batch-pages">
+                <div class="batch-page" data-batch-page="1"><span>01</span><strong>原文影像</strong><em>待測</em></div>
+                <div class="batch-page" data-batch-page="2"><span>02</span><strong>版面順序</strong><em>待測</em></div>
+                <div class="batch-page" data-batch-page="3"><span>03</span><strong>正文辨識</strong><em>待測</em></div>
+                <div class="batch-page" data-batch-page="4"><span>04</span><strong>欄位輸出</strong><em>待測</em></div>
+                <div class="batch-page" data-batch-page="5"><span>05</span><strong>不確定標記</strong><em>待測</em></div>
+              </div>
+              <div class="batch-board-foot">模擬測試完成後仍要人工閱讀原圖與輸出。</div>
+            </div>
+          </div>
+        </section>
+
+        <section class="lesson-section section-lavender try-section" id="try" data-lesson-section="try">
+          <div class="section-kicker">11 · 把規則說給 AI 聽</div>
+          <div class="section-intro try-intro">
+            <div><div class="card-number">11</div><h2>試一試</h2></div>
+            <p>選擇印刷字或手寫字，依序完成下載、版面判讀與 JSON 輸出。這個小練習不會真的上傳檔案，目的是幫你把 prompt 拆成可檢查的步驟。</p>
+            <div class="mode-switch" data-try-mode-switch role="group" aria-label="切換印刷字或手寫字"><button type="button" data-try-mode="printed" class="is-on">印刷字</button><button type="button" data-try-mode="handwritten">手寫字</button></div>
+          </div>
+          <div class="try-lab" data-try-lab>
+            <div class="try-document">
+              <div class="try-document-bar"><span>教學史料頁面</span><span data-try-mode-label>印刷字</span></div>
+              <div class="try-image-stage"><img data-try-image alt="試一試史料頁面"><div data-try-hotspots></div></div>
+              <div class="try-document-nav"><button type="button" data-try-prev aria-label="上一頁">←</button><span data-try-page>頁 1 / 2</span><button type="button" data-try-next aria-label="下一頁">→</button></div>
+            </div>
+            <div class="try-panel">
+              <div class="try-progress" data-try-progress></div>
+              <div class="try-stage" data-try-stage></div>
+              <div class="try-feedback" data-try-feedback aria-live="polite"></div>
+            </div>
+          </div>
+        </section>
+
+        <footer class="ocr-footer">
+          <div><strong>研究者的最低核驗線</strong><p>保留原始影像、記錄 OCR 版本、標示不確定文字，並把 AI 候選與已確認證據分開。</p></div>
+          <a href="#top" class="back-top">回到頁首 ↑</a>
+        </footer>
+      </div>
+    </div>
+  </main>
+</body>
+</html>
