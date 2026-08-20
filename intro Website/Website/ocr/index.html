@@ -921,8 +921,9 @@
     html.ocr-standalone .ocr-cover-kicker {
       margin: 0 0 clamp(12px, 1.4vw, 20px);
       color: #d6a66a;
-      font: 700 clamp(11px, .9vw, 15px)/1.35 var(--sans);
+      font: 700 clamp(13px, 1.1vw, 17px)/1.35 var(--sans);
       letter-spacing: .12em;
+      white-space: nowrap;
     }
     html.ocr-standalone .ocr-cover-kicker span,
     html.ocr-standalone .ocr-cover-kicker em { color: inherit; }
@@ -972,26 +973,33 @@
     }
 
     html.ocr-standalone .ocr-section-nav-inner {
-      justify-content: flex-start;
+      justify-content: center;
+      overflow: visible;
     }
     html.ocr-standalone .ocr-section-nav a {
-      padding: .95rem .65rem .8rem;
-      gap: .34rem;
-      font-size: .75rem;
-      letter-spacing: .035em;
+      padding: .95rem .75rem .8rem;
+      gap: .45rem;
+      font-size: .95rem;
+      letter-spacing: .04em;
+    }
+    html.ocr-standalone .ocr-section-nav .nav-index {
+      font-size: .8rem;
     }
     html.ocr-standalone .ocr-section-nav-settings {
       display: none;
-      position: sticky;
-      right: 0;
-      min-width: 54px;
-      margin-left: auto;
-      padding-left: 8px;
+      position: absolute;
+      top: 0;
+      right: clamp(18px, 3vw, 42px);
+      bottom: 0;
+      z-index: 2;
+      min-width: 52px;
+      margin: 0;
+      padding: 0;
       align-items: center;
       justify-content: center;
       background: rgba(16, 47, 50, .98);
-      border-left: 1px solid rgba(236, 240, 232, .18);
-      box-shadow: -10px 0 18px rgba(16, 47, 50, .4);
+      border-left: 1px solid rgba(236, 240, 232, .14);
+      box-shadow: -10px 0 18px rgba(16, 47, 50, .28);
     }
     html.ocr-standalone .ocr-section-nav-settings.is-active { display: flex; }
     html.ocr-standalone .ocr-section-nav-settings .settings-wrap {
@@ -1002,8 +1010,8 @@
       pointer-events: auto;
     }
     html.ocr-standalone .ocr-section-nav-settings .settings-button {
-      width: 42px;
-      height: 42px;
+      width: 52px;
+      height: 52px;
       background: transparent;
       border: 1px solid rgba(236, 240, 232, .36);
       box-shadow: none;
@@ -1048,7 +1056,7 @@
       }
       html.ocr-standalone .ocr-cover-kicker {
         margin-bottom: 14px;
-        font-size: clamp(11px, 1.5vw, 14px);
+        font-size: clamp(13px, 1.8vw, 17px);
       }
       html.ocr-standalone .ocr-cover-description {
         position: static;
@@ -1059,7 +1067,7 @@
       }
       html.ocr-standalone .ocr-cover-watermark {
         position: absolute;
-        top: 74%;
+        top: 64%;
         right: auto;
         bottom: auto;
         left: 50%;
@@ -1100,20 +1108,20 @@
       html.ocr-standalone #part-3-ocr-title { font-size: clamp(38px, 10.5vw, 52px); }
       html.ocr-standalone .ocr-cover-kicker {
         margin-bottom: 12px;
-        font-size: 11px;
-        letter-spacing: .08em;
+        font-size: clamp(13px, 3.4vw, 16px);
+        letter-spacing: .06em;
       }
       html.ocr-standalone .ocr-cover-description {
-        position: absolute;
-        right: 24px;
-        bottom: clamp(28px, 5vh, 48px);
-        left: 24px;
+        position: static;
+        right: auto;
+        bottom: auto;
+        left: auto;
         max-width: none;
-        margin: 0;
+        margin: clamp(24px, 4vh, 36px) 0 0;
         font-size: clamp(16px, 4.6vw, 19px);
       }
       html.ocr-standalone .ocr-cover-watermark {
-        top: 52%;
+        top: 64%;
         width: min(88vw, 370px);
         height: min(43svh, 340px);
       }
@@ -2855,13 +2863,13 @@
 
           <nav class="ocr-section-nav" aria-label="OCR教學章節">
             <div class="ocr-section-nav-inner">
-              <a class="is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar" aria-current="page"><span class="nav-index">1</span><span>OCR</span></a>
-              <a href="#part-3-paddleocr" data-ocr-nav-target="#part-3-paddleocr"><span class="nav-index">2</span><span>PaddleOCR</span></a>
-              <a href="#part-3-material" data-ocr-nav-target="#part-3-material"><span class="nav-index">3</span><span>準備OCR</span></a>
-              <a href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span class="nav-index">4</span><span>辨識印刷字</span></a>
-              <a href="#part-3-handwritten" data-ocr-nav-target="#part-3-handwritten"><span class="nav-index">5</span><span>辨識手寫字</span></a>
-              <a href="#part-3-json" data-ocr-nav-target="#part-3-json"><span class="nav-index">6</span><span>輸出格式</span></a>
-              <a href="#part-3-try" data-ocr-nav-target="#part-3-try"><span class="nav-index">7</span><span>試一試</span></a>
+              <a class="is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar" aria-current="page"><span>OCR</span><span class="nav-index">1</span></a>
+              <a href="#part-3-paddleocr" data-ocr-nav-target="#part-3-paddleocr"><span>PaddleOCR</span><span class="nav-index">2</span></a>
+              <a href="#part-3-material" data-ocr-nav-target="#part-3-material"><span>準備OCR</span><span class="nav-index">3</span></a>
+              <a href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span>辨識印刷字</span><span class="nav-index">4</span></a>
+              <a href="#part-3-handwritten" data-ocr-nav-target="#part-3-handwritten"><span>辨識手寫字</span><span class="nav-index">5</span></a>
+              <a href="#part-3-json" data-ocr-nav-target="#part-3-json"><span>輸出格式</span><span class="nav-index">6</span></a>
+              <a href="#part-3-try" data-ocr-nav-target="#part-3-try"><span>試一試</span><span class="nav-index">7</span></a>
               <div class="ocr-section-nav-settings" aria-label="網站設定"></div>
             </div>
           </nav>
@@ -2871,13 +2879,13 @@
               <button class="ocr-drawer-close" id="ocr-drawer-close" type="button" aria-label="關閉 OCR 章節選單">×</button>
             </div>
             <nav class="ocr-drawer-links" aria-label="OCR教學章節">
-              <a class="ocr-drawer-link is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar"><span class="nav-index">1</span><span>OCR</span></a>
-              <a class="ocr-drawer-link" href="#part-3-paddleocr" data-ocr-nav-target="#part-3-paddleocr"><span class="nav-index">2</span><span>PaddleOCR</span></a>
-              <a class="ocr-drawer-link" href="#part-3-material" data-ocr-nav-target="#part-3-material"><span class="nav-index">3</span><span>準備OCR</span></a>
-              <a class="ocr-drawer-link" href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span class="nav-index">4</span><span>辨識印刷字</span></a>
-              <a class="ocr-drawer-link" href="#part-3-handwritten" data-ocr-nav-target="#part-3-handwritten"><span class="nav-index">5</span><span>辨識手寫字</span></a>
-              <a class="ocr-drawer-link" href="#part-3-json" data-ocr-nav-target="#part-3-json"><span class="nav-index">6</span><span>輸出格式</span></a>
-              <a class="ocr-drawer-link" href="#part-3-try" data-ocr-nav-target="#part-3-try"><span class="nav-index">7</span><span>試一試</span></a>
+              <a class="ocr-drawer-link is-active" href="#part-3-ocr-bar" data-ocr-nav-target="#part-3-ocr-bar"><span>OCR</span><span class="nav-index">1</span></a>
+              <a class="ocr-drawer-link" href="#part-3-paddleocr" data-ocr-nav-target="#part-3-paddleocr"><span>PaddleOCR</span><span class="nav-index">2</span></a>
+              <a class="ocr-drawer-link" href="#part-3-material" data-ocr-nav-target="#part-3-material"><span>準備OCR</span><span class="nav-index">3</span></a>
+              <a class="ocr-drawer-link" href="#part-3-printed" data-ocr-nav-target="#part-3-printed"><span>辨識印刷字</span><span class="nav-index">4</span></a>
+              <a class="ocr-drawer-link" href="#part-3-handwritten" data-ocr-nav-target="#part-3-handwritten"><span>辨識手寫字</span><span class="nav-index">5</span></a>
+              <a class="ocr-drawer-link" href="#part-3-json" data-ocr-nav-target="#part-3-json"><span>輸出格式</span><span class="nav-index">6</span></a>
+              <a class="ocr-drawer-link" href="#part-3-try" data-ocr-nav-target="#part-3-try"><span>試一試</span><span class="nav-index">7</span></a>
             </nav>
           </aside>
 
