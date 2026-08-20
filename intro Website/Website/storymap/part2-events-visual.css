@@ -1016,3 +1016,101 @@
   .part2-events-ai-panel { height: 660px; }
   .part2-events-doc-panel { height: 760px; }
 }
+
+/* 3.1 visual cleanup: keep the review interactions, reduce repeated chrome. */
+.part2-events-visual-head,
+.part2-events-chart-panel .part2-events-panel-head,
+.part2-events-chart-toolbar,
+.part2-events-chart-labels,
+.part2-events-chart-hint,
+.part2-events-ai-panel .part2-events-panel-head,
+.part2-events-ai-run,
+.part2-events-ai-instruction,
+.part2-events-doc-tools,
+.part2-events-doc-summary,
+.part2-events-doc-divisions,
+.part2-events-doc-part h4,
+.part2-events-visual-footnote {
+  display: none;
+}
+
+.part2-events-ai-card-top,
+.part2-events-ai-provenance {
+  display: none;
+}
+
+.part2-events-ai-card-bottom {
+  justify-content: flex-end;
+}
+
+.part2-events-ai-card h4 {
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.part2-events-ai-description,
+.part2-events-ai-quote {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+.part2-events-ai-quote span {
+  font-size: 10px;
+}
+
+.part2-events-ai-facts dd,
+.part2-events-event-facts dd {
+  font-size: 11px;
+  line-height: 1.6;
+}
+
+.part2-events-doc-title {
+  font-size: 17px;
+}
+
+.part2-events-doc-meta {
+  font-size: 12px;
+  line-height: 1.6;
+}
+
+.part2-events-doc-part {
+  padding: 0 0 16px;
+  border: 0;
+  border-bottom: 1px solid #e2d7c7;
+  border-radius: 0;
+  background: transparent;
+}
+
+.part2-events-doc-part + .part2-events-doc-part {
+  padding-top: 16px;
+}
+
+.part2-events-doc-part:last-child {
+  border-bottom: 0;
+}
+
+.part2-events-doc-part p {
+  font-size: 15px;
+  line-height: 2.05;
+}
+
+.part2-events-event-description {
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+.part2-events-event-quote {
+  font-size: 13px;
+  line-height: 1.8;
+}
+
+@media (max-width: 820px) {
+  .part2-events-ai-description,
+  .part2-events-ai-quote {
+    font-size: 13px;
+  }
+
+  .part2-events-doc-part p {
+    font-size: 15px;
+  }
+}
