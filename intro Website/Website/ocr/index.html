@@ -1139,6 +1139,14 @@
         z-index: auto;
       }
     }
+
+    /* Mobile OCR cards: the supporting paragraph is the card subtitle. */
+    @media (max-width: 980px) {
+      html.ocr-standalone #part-3-content .blk .body > p {
+        font-size: calc(18px * var(--font-scale));
+        line-height: 1.9;
+      }
+    }
   </style>
 </head>
 <body>
