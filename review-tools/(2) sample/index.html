@@ -5665,6 +5665,23 @@
     let match=0; ab.forEach(x=>{ const c=bcount.get(x)||0; if(c>0){ match++; bcount.set(x,c-1); } });
     return (2*match)/(ab.length+bb.length) >= 0.5;
   }
+  // Keep this at script scope because bundle linkers run before renderAI creates its local helpers.
+  function isAuthorSelfReportCandidate(p, rec){
+    p=p||{}; rec=rec||{};
+    const known=String(p.howKnown||p.how_known||'').trim();
+    if(['親歷','第一手','本官親歷','作者親歷','自報','本官自報'].includes(known)||/(親歷|第一手|自報)/.test(known)) return true;
+    let author=rec.author_name||rec.authorName||rec.author||'';
+    if(author&&typeof author==='object') author=author.name||author.full_name||'';
+    const compact=v=>String(v||'').replace(/[\s　（）()、，,。；：:等]/g,'');
+    const same=(a,b)=>{ a=compact(a); b=compact(b); return !!(a&&b&&Math.min(a.length,b.length)>=2&&(a.indexOf(b)>=0||b.indexOf(a)>=0)); };
+    const reporters=[];
+    ['reporter','reported_by','source_actor','source_author','source_official'].forEach(k=>{ const v=p[k]; if(Array.isArray(v)) reporters.push(...v); else if(v) reporters.push(v); });
+    (p.relations||[]).forEach(r=>{ if(r&&r.source) reporters.push(r.source); });
+    if(reporters.some(r=>same(author,r))) return true;
+    let quote=String(p.quote||'');
+    (p.sources||[]).forEach(s=>{ if(s) quote+='\n'+String(s.quote||''); });
+    return !!author && /(奴才|臣|本官)/.test(quote) && same(author,quote);
+  }
   // ===== cross-document repeat registry (林／清／皇帝; semantic LLM judgement) =====
   // Keep this registry separate from the legacy lexical matcher above. Repeat detection compares
   // every unverified AI card already loaded plus every visible verified chart dot through the
@@ -5708,7 +5725,7 @@
   function registryEntryAllowedForCandidate(c,e){ if(!c||!e||e.item===c)return false; const currentDoc=repeatReportDocForCandidate(c),priorDoc=String(e.report_doc_id||e.doc_id||''); return !(repeatSameDoc(currentDoc,priorDoc)||(c.__evId&&e.evId&&String(c.__evId)===String(e.evId))); }
   function attachRepeatPointer(cand,hit,verdict,reason,actor){ if(!cand||!hit)return null; const ptr={kind:hit.kind||'unverified',bucketKey:hit.bucketKey||'',turnIndex:hit.turnIndex==null?-1:hit.turnIndex,itemIndex:hit.itemIndex==null?-1:hit.itemIndex,pointIndex:hit.pointIndex==null?null:hit.pointIndex,title:hit.title||'',reporter:hit.reporter||'',doc_id:hit.report_doc_id||hit.doc_id||'',report_doc_id:hit.report_doc_id||hit.doc_id||'',whenAr:hit.report_date||hit.whenAr||'',whenCh:hit.whenCh||'',report_date:hit.report_date||hit.whenAr||'',committed:!!hit.committed,evId:hit.evId||null,verdict:verdict||'same',reason:reason||''}; if(hit.item)try{Object.defineProperty(ptr,'__item',{value:hit.item,enumerable:false,configurable:true});}catch(e){} if(hit.parentItem)try{Object.defineProperty(ptr,'__parentItem',{value:hit.parentItem,enumerable:false,configurable:true});}catch(e){} if(hit.turn)try{Object.defineProperty(ptr,'__turn',{value:hit.turn,enumerable:false,configurable:true});}catch(e){} cand.__matchReg=ptr;cand.repeat_verdict=ptr.verdict;cand.repeat_reason=ptr.reason;cand.earliest_report={id:hit.id||'',doc_id:ptr.doc_id,date:ptr.report_date,title:ptr.title||''};cand.repeat_candidates=[hit.id||'']; if(ptr.verdict==='same'){cand.same_as=hit.id||'';if(actor==='emperor'&&ptr.evId)cand.same_as_event_id=ptr.evId;} return ptr; }
   function clearRepeatAnnotation(cand){ if(!cand)return; ['__matchReg','same_as','earliest_report','repeat_candidates','repeat_verdict','repeat_reason'].forEach(k=>{if(k in cand)delete cand[k];}); }
-  async function repeatReportMatchesLLM(actor,cand,registry){ if(!getAIProxyUrl())return []; const current=repeatCandidateView(cand,actor),eligible=registry.filter(e=>registryEntryAllowedForCandidate(cand,e)); if(!eligible.length)return []; const matches=[],batchSize=48; for(let start=0;start<eligible.length;start+=batchSize){ const chunk=eligible.slice(start,start+batchSize); try{ const data=await callProxy({mode:'repeat_report',model:getGeminiModel(),actor,card:{title:current.title,description:current.description,quote:current.quote,doc_id:current.report_doc_id,date:current.date},candidates:chunk.map(e=>({id:e.id,title:e.title,description:e.description,quote:e.quote,doc_id:e.report_doc_id||e.doc_id,date:e.report_date||e.whenAr||''})),question:skillPromptFor('repeat-report')||''}),allowed=new Set(chunk.map(e=>String(e.id))),raw=Array.isArray(data&&data.matches)?data.matches:[]; if(raw.length)raw.forEach(m=>{const id=String(m&&m.id||''),v=String(m&&m.verdict||'').toLowerCase();if(allowed.has(id)&&(v==='same'||v==='similar'))matches.push({id,verdict:v,reason:String(m.reason||'')});}); else if(data&&Array.isArray(data.same_ids))data.same_ids.forEach(id=>{id=String(id||'');if(allowed.has(id))matches.push({id,verdict:'same',reason:''});}); }catch(e){console.warn('repeat_report failed',e);} } const seen=new Set(); return matches.filter(m=>{if(seen.has(m.id))return false;seen.add(m.id);return true;}); }
+  async function repeatReportMatchesLLM(actor,cand,registry){ if(!getAIProxyUrl()||typeof callProxy!=='function')return []; const current=repeatCandidateView(cand,actor),eligible=registry.filter(e=>registryEntryAllowedForCandidate(cand,e)); if(!eligible.length)return []; const matches=[],batchSize=48; for(let start=0;start<eligible.length;start+=batchSize){ const chunk=eligible.slice(start,start+batchSize); try{ const data=await callProxy({mode:'repeat_report',model:getGeminiModel(),actor,card:{title:current.title,description:current.description,quote:current.quote,doc_id:current.report_doc_id,date:current.date},candidates:chunk.map(e=>({id:e.id,title:e.title,description:e.description,quote:e.quote,doc_id:e.report_doc_id||e.doc_id,date:e.report_date||e.whenAr||''})),question:skillPromptFor('repeat-report')||''}),allowed=new Set(chunk.map(e=>String(e.id))),raw=Array.isArray(data&&data.matches)?data.matches:[]; if(raw.length)raw.forEach(m=>{const id=String(m&&m.id||''),v=String(m&&m.verdict||'').toLowerCase();if(allowed.has(id)&&(v==='same'||v==='similar'))matches.push({id,verdict:v,reason:String(m.reason||'')});}); else if(data&&Array.isArray(data.same_ids))data.same_ids.forEach(id=>{id=String(id||'');if(allowed.has(id))matches.push({id,verdict:'same',reason:''});}); }catch(e){console.warn('repeat_report failed',e);} } const seen=new Set(); return matches.filter(m=>{if(seen.has(m.id))return false;seen.add(m.id);return true;}); }
   async function annotateRepeatCandidate(cand,actor,registry){ clearRepeatAnnotation(cand); const current=repeatCandidateView(cand,actor),matches=await repeatReportMatchesLLM(actor,cand,registry),byId=new Map(registry.map(e=>[String(e.id),e])),same=matches.filter(m=>m.verdict==='same'&&byId.has(m.id)),similar=matches.filter(m=>m.verdict==='similar'&&byId.has(m.id)),chosen=same.length?same:similar; if(!chosen.length)return false; const entries=chosen.map(m=>byId.get(m.id)),all=[Object.assign({},current,{report_date:current.date}),...entries]; all.sort((a,b)=>repeatReportRank(a)-repeatReportRank(b)||String(a.id).localeCompare(String(b.id))); const earliest=all[0]; if(String(earliest.id)===String(current.id))return false; const reason=chosen.map(m=>m.reason).filter(Boolean).filter((x,i,a)=>a.indexOf(x)===i).join('；'); return !!attachRepeatPointer(cand,earliest,same.length?'same':'similar',reason,actor); }
   function applyStoredRepeatAnnotation(cand,actor,registry){ const er=cand&&cand.earliest_report,storedSame=String(cand&&cand.same_as||''),rawVerdict=String(cand&&cand.repeat_verdict||'').toLowerCase(),verdict=rawVerdict||(storedSame?'same':''); if(!er||!er.doc_id||(verdict!=='same'&&verdict!=='similar'))return false; const current=repeatCandidateView(cand,actor),erDate=er.date||repeatReportDateForDoc(er.doc_id),pointerId=storedSame||er.id||''; if(parseD(erDate)&&parseD(current.date)&&parseD(erDate)>=parseD(current.date))return false; const ev=pointerId&&eventById(pointerId),hit=registry.find(e=>String(e.id)===String(pointerId))||{kind:'stored',id:pointerId,title:er.title||'',report_doc_id:er.doc_id,report_date:erDate,committed:!!ev,evId:ev?ev.id:null}; if(invalidMatchRegForCandidate(cand,hit))return false; return !!attachRepeatPointer(cand,hit,verdict,String(cand.repeat_reason||''),actor); }
   function candDateKey(c){ const d=parseD(c.whenAr); return d? fmt(d) : (c.whenCh||'').trim(); }
@@ -6421,7 +6438,10 @@
     return {doc_id:api.rec.id, doc_type:api.rec.doc_type, title:api.rec.title, body:recordBody(api.rec),
       rescript:api.rec.rescript||'', summary:getSummary(api.rec), notes:docEditsRead(api.rec.id).notes||''};
   }
-  function localReviewApi(path, opts){ return fetch(path, opts).then(r=>r.json().then(d=>{ if(!r.ok||d.error) throw new Error(d.error||r.statusText); return d; })); }
+  function localReviewApi(path, opts){
+    if(location.protocol==='file:') return Promise.reject(new Error('請透過 review-tools/server.py 的 HTTP 頁面開啟此工具；file:// 無法載入本機 review-bundle。'));
+    return fetch(path, opts).then(r=>r.json().then(d=>{ if(!r.ok||d.error) throw new Error(d.error||r.statusText); return d; }));
+  }
   function arrify(v){ if(!v) return []; if(Array.isArray(v)) return v; if(typeof v==='object'){
     if(v.doc_id||v.id||v.document_id||v.source_id||v.source_record) return [v];
     for(const k of ['documents','records','results','items','events','parts','summaries','chains','outputs']) if(Array.isArray(v[k])) return v[k];
@@ -6976,12 +6996,23 @@
       __activeSkillBundleRunId=prevRunId;
       __activeSkillBundleName=prevBundleName; __activeSkillBundleDocs=prevBundleDocs;
     }
-    linkBundleChains(linkCollector);
-    linkOfficialResponses(linkCollector);
-    await linkBundleReports(linkCollector);
-    saveEdits(); refreshOpenDocPanels();
-    if(window.__renderOpenAITools) window.__renderOpenAITools();
-    alert('已載入本機技能輸出：'+pick+'\n總摘要 '+stats.summary+' 份；分段 '+stats.divisions+' 份；AI 聊天審閱項 '+stats.chat+' 份。');
+    const linkWarnings=[];
+    const runLink=async(label, fn)=>{
+      try{ await fn(); }
+      catch(e){ const msg=String(e&&e.message||e); console.warn('bundle '+label+' failed',e); linkWarnings.push(label+': '+msg); }
+    };
+    const refreshBundleView=()=>{
+      saveEdits(); refreshOpenDocPanels();
+      if(window.__renderOpenAITools) window.__renderOpenAITools();
+    };
+    await runLink('source-chain',()=>linkBundleChains(linkCollector));
+    await runLink('official-response',()=>linkOfficialResponses(linkCollector));
+    // Show the loaded cards before optional cross-document enrichment can fail or take time.
+    refreshBundleView();
+    await runLink('repeat-report',()=>linkBundleReports(linkCollector));
+    refreshBundleView();
+    const warningText=linkWarnings.filter(Boolean);
+    alert('已載入本機技能輸出：'+pick+'\n總摘要 '+stats.summary+' 份；分段 '+stats.divisions+' 份；AI 聊天審閱項 '+stats.chat+' 份。'+(warningText.length?'\n關係連結警告：'+warningText.join('；'):''));
   }
   // Loading used to force typing the exact bundle name into a native prompt() box against a raw
   // list -- painful once there are more than a couple of saved attempts (review-bundles accumulate
