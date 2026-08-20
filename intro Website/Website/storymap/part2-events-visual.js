@@ -18,69 +18,109 @@
     return match ? Date.UTC(Number(match[1]), Number(match[2]) - 1, Number(match[3])) : 0;
   }
 
+  function buildPart2ChartData(data) {
+    var base = window.PART1_INTERFACE_DATA;
+    if (!base || !base.chartPreview || !Array.isArray(base.chartPreview.nodes)) return null;
+
+    var documentRecord = (base.documents || []).find(function (record) {
+      return record && record.docId === data.document.docId;
+    });
+    if (!documentRecord) return null;
+
+    var documentNodeId = 'doc-' + data.document.docId + '-L';
+    var removedDocumentNodeId = 'doc-' + data.document.docId + '-R';
+    var exampleNodeIds = [documentNodeId];
+    var nodes = base.chartPreview.nodes.filter(function (node) {
+      if (node.id === removedDocumentNodeId) return false;
+      var isBlueDocument = node.kind === 'document'
+        && (node.recordType === 'shangzou' || node.color === '#2f75b5');
+      return !isBlueDocument || exampleNodeIds.indexOf(node.id) !== -1;
+    }).map(function (node) {
+      var copy = Object.assign({}, node);
+      copy.background = exampleNodeIds.indexOf(node.id) === -1;
+      return copy;
+    });
+
+    var candidateNodes = data.events.map(function (event) {
+      return {
+        id: event.id,
+        kind: 'event',
+        recordType: 'event',
+        lane: 'events',
+        side: 'L',
+        actor: event.actor === 'lin' ? 'lin' : 'qing',
+        dateAr: event.whenAr || data.document.sendDate[1],
+        label: event.whenCh || event.whenAr || '日期未明',
+        color: event.actor === 'lin' ? '#b5462e' : '#3f6f8f',
+        radius: 5.2,
+        background: true,
+        payload: event
+      };
+    });
+
+    var nodeIds = new Set(nodes.concat(candidateNodes).map(function (node) { return node.id; }));
+    var nodeById = new Map(base.chartPreview.nodes.map(function (node) { return [node.id, node]; }));
+    var backgroundLinks = (base.chartPreview.links || []).map(function (link) {
+      if (['document-endpoint', 'event-source'].indexOf(link.kind) === -1) return null;
+      if (!nodeIds.has(link.from) || !nodeIds.has(link.to)) return null;
+      var fromNode = nodeById.get(link.from);
+      var toNode = nodeById.get(link.to);
+      var fromLane = fromNode ? fromNode.lane : '';
+      var toLane = toNode ? toNode.lane : '';
+      if ((fromLane === 'emperor' && toLane === 'official') || (fromLane === 'official' && toLane === 'emperor')) return null;
+      return Object.assign({}, link, { background: true, opacity: 0.22 });
+    }).filter(Boolean);
+
+    var candidateLinks = data.events.map(function (event) {
+      return {
+        from: event.id,
+        to: documentNodeId,
+        className: 'part2-events-link-' + event.id,
+        color: event.actor === 'lin' ? '#b5462e' : '#3f6f8f',
+        width: 1.8,
+        kind: 'event-source',
+        dash: '4 4',
+        background: true,
+        opacity: 0
+      };
+    });
+
+    var clone = Object.assign({}, base, {
+      document: documentRecord,
+      documents: base.documents
+    });
+    clone.chartPreview = Object.assign({}, base.chartPreview, {
+      nodes: nodes.concat(candidateNodes),
+      links: backgroundLinks.concat(candidateLinks)
+    });
+    window.PART1_INTERFACE_DATA_EVENTS = clone;
+    return 'PART1_INTERFACE_DATA_EVENTS';
+  }
+
   function init() {
     var root = document.querySelector('[data-part2-events-visual]');
     var data = window.PART2_EVENTS_VISUAL_DATA;
     if (!root || !data || !data.document) return;
+
+    var chartDataName = buildPart2ChartData(data);
+    if (!chartDataName || typeof window.part1InitRoot !== 'function') {
+      console.warn('3.1 visual: shared 2.1 chart data or part1InitRoot() is unavailable.');
+      return;
+    }
 
     var state = {
       addedIds: new Set(),
       activeQuote: '',
       selectedEventId: ''
     };
-    var chartStart = parseDate('1786/12/01');
-    var chartEnd = parseDate('1787/02/28');
-    var chartSpan = chartEnd - chartStart;
-
     root.innerHTML = `
-      <div class="part1-region part1-toolbar part2-events-visual-head" data-region="nav" aria-label="3.1 圖表工具列">
-        <div class="part1-toolbar-start">
-          <div class="part1-menu">
-            <button class="part1-pill part1-pill-button" type="button" tabindex="-1" aria-disabled="true"><span class="part1-pl">點線類型</span><span aria-hidden="true">⌄</span></button>
-          </div>
-          <div class="part1-people-control"><span class="part1-pl">人物</span><select aria-label="選擇人物" tabindex="-1"><option>— 選擇人物 —</option></select><button type="button" tabindex="-1" aria-label="新增人物" aria-disabled="true">＋</button></div>
-          <label class="part1-search"><span aria-hidden="true">⌕</span><input type="search" placeholder="搜尋原文 / 所有欄位…" aria-label="搜尋原文或所有欄位" readonly></label>
-        </div>
-        <span class="part1-toolgroup" data-toolgroup="areas">
-          <button class="part1-toolbtn" type="button" tabindex="-1" aria-disabled="true">Note</button>
-          <button class="part1-toolbtn is-emphasis" type="button" tabindex="-1" aria-disabled="true">AI</button>
-          <button class="part1-toolbtn" type="button" tabindex="-1" aria-disabled="true">事件鏈</button>
-        </span>
-        <span class="part1-toolgroup" data-toolgroup="io">
-          <button class="part1-toolbtn part1-gear-btn" type="button" tabindex="-1" aria-label="工具" aria-disabled="true">⚙</button>
-          <span class="part1-count" title="硃83・保存的 AI 候選">硃83</span>
-        </span>
-      </div>
       <div class="part2-events-visual-stage" data-events-stage>
         <section class="part2-events-chart-panel" aria-label="事件時間線圖表">
-          <div class="part2-events-panel-head">
-            <div><span class="part2-events-panel-kicker">圖表</span><strong>戰場事件</strong></div>
-            <span class="part2-events-count" data-events-count>文書 1 · 事件 0</span>
-          </div>
-          <div class="part2-events-chart-toolbar">
-            <span class="part2-events-chart-legend"><i class="is-doc"></i>文書圓點</span>
-            <span class="part2-events-chart-legend"><i class="is-lin"></i>林方行動</span>
-            <span class="part2-events-chart-legend"><i class="is-qing"></i>清方行動</span>
-          </div>
-          <div class="part2-events-chart-labels" aria-hidden="true">
-            <span>戰場事件</span><span>官員上奏</span><span>皇帝硃批下旨</span><span>皇帝行動</span>
-          </div>
-          <div class="part2-events-chart-plot" data-events-chart-plot>
-            <div class="part2-events-chart-ruler" aria-hidden="true">
-              <span style="top:2%">1786/12</span>
-              <span style="top:38%">1787/1</span>
-              <span style="top:73%">1787/2</span>
-              <span style="top:98%">28</span>
-            </div>
-            <div class="part2-events-chart-canvas" data-events-chart-canvas>
-              <svg class="part2-events-chart-links" data-events-chart-links aria-hidden="true"></svg>
-              <div class="part2-events-chart-lane" data-events-lane="events"><span class="part2-events-lane-axis"></span></div>
-              <div class="part2-events-chart-lane" data-events-lane="official"><span class="part2-events-lane-axis"></span></div>
-              <div class="part2-events-chart-lane" data-events-lane="imperial"><span class="part2-events-lane-axis"></span></div>
-              <div class="part2-events-chart-lane" data-events-lane="emperor"><span class="part2-events-lane-axis"></span></div>
+          <div class="part2-events-chart-replica-shell" data-events-chart-replica>
+            <div data-part1 data-part1-data="${chartDataName}" data-part1-mode="chart" data-part1-chart-scale="1" role="group" aria-label="沿用 2.1 的時間與關係圖表">
+              <div class="part1-replica" data-part1-replica aria-live="polite"></div>
             </div>
           </div>
-          <p class="part2-events-chart-hint">先點選 AI 引文定位原文，再按「加入圖表」建立事件圓點；點擊圓點可查看完整事件資料。</p>
         </section>
 
         <aside class="part2-events-ai-panel" aria-label="AI 輸出面板">
@@ -126,9 +166,9 @@
     `;
 
     var stage = root.querySelector('[data-events-stage]');
-    var chartCanvas = root.querySelector('[data-events-chart-canvas]');
-    var chartLinks = root.querySelector('[data-events-chart-links]');
-    var countEl = root.querySelector('[data-events-count]');
+    var chartPartRoot = root.querySelector('[data-part1]');
+    window.part1InitRoot(chartPartRoot);
+    var chartReplica = chartPartRoot.querySelector('[data-part1-replica]');
     var aiList = root.querySelector('[data-events-ai-list]');
     var docBody = root.querySelector('[data-events-doc-body]');
     var docScroll = root.querySelector('[data-events-doc-scroll]');
@@ -150,21 +190,11 @@
       return data.events.find(function (event) { return event.id === id; }) || null;
     }
 
-    function chartDate(event) {
-      return parseDate(event.whenAr) || parseDate(data.document.sendDate[1]);
-    }
-
     function chartDateLabel(event) {
       if (event.whenCh && event.whenAr) return event.whenCh + ' · ' + event.whenAr;
       if (event.whenCh) return event.whenCh;
       if (event.whenAr) return event.whenAr;
       return '用文書發送日 ' + data.document.sendDate[1] + '（事件日期未明）';
-    }
-
-    function percentForDate(value) {
-      var date = parseDate(value);
-      if (!date) return 0;
-      return Math.max(2, Math.min(98, ((date - chartStart) / chartSpan) * 100));
     }
 
     function renderTextWithHighlight(text, quote) {
@@ -262,66 +292,99 @@
       });
     }
 
-    function nodePosition(node) {
-      var canvasRect = chartCanvas.getBoundingClientRect();
-      var rect = node.getBoundingClientRect();
-      return {
-        x: rect.left - canvasRect.left + rect.width / 2,
-        y: rect.top - canvasRect.top + rect.height / 2
-      };
+    function chartNodeForId(id) {
+      if (!chartReplica) return null;
+      return Array.prototype.slice.call(chartReplica.querySelectorAll('[data-chart-node-id]')).find(function (node) {
+        return node.getAttribute('data-chart-node-id') === id;
+      }) || null;
     }
 
-    function drawLinks() {
-      if (!chartLinks) return;
-      var width = chartCanvas.clientWidth;
-      var height = chartCanvas.clientHeight;
-      chartLinks.setAttribute('viewBox', '0 0 ' + width + ' ' + height);
-      chartLinks.setAttribute('width', width);
-      chartLinks.setAttribute('height', height);
-      var docDot = chartCanvas.querySelector('[data-document-dot]');
-      var source = docDot ? nodePosition(docDot) : null;
-      chartLinks.innerHTML = source ? Array.from(chartCanvas.querySelectorAll('[data-event-dot]')).map(function (dot) {
-        var target = nodePosition(dot);
-        return '<line x1="' + source.x.toFixed(1) + '" y1="' + source.y.toFixed(1) + '" x2="' + target.x.toFixed(1) + '" y2="' + target.y.toFixed(1) + '"></line>';
-      }).join('') : '';
+    function chartLinkForEvent(eventId) {
+      return chartReplica ? chartReplica.querySelector('.part2-events-link-' + eventId) : null;
     }
 
-    function docDotMarkup() {
-      var top = percentForDate(data.document.sendDate[1]);
-      return '<button class="part2-events-chart-dot is-document" type="button" data-document-dot style="top:' + top + '%" aria-label="硃83・官員上奏・' + escapeHtml(data.document.title) + '"><span class="part2-events-dot-label">硃83</span></button>';
+    function setCandidateNodeState(event, isAdded) {
+      var node = chartNodeForId(event.id);
+      var link = chartLinkForEvent(event.id);
+      if (node) {
+        node.classList.toggle('is-added', isAdded);
+        node.style.opacity = isAdded ? '1' : '0';
+        node.style.pointerEvents = isAdded ? 'auto' : 'none';
+        if (isAdded) {
+          node.removeAttribute('aria-hidden');
+          node.setAttribute('role', 'button');
+          node.setAttribute('tabindex', '0');
+          node.setAttribute('aria-label', event.subtitle + '・' + chartDateLabel(event));
+        } else {
+          node.setAttribute('aria-hidden', 'true');
+          node.removeAttribute('role');
+          node.removeAttribute('tabindex');
+        }
+      }
+      if (link) link.style.opacity = isAdded ? '0.88' : '0';
     }
 
-    function eventDotMarkup(event) {
-      var top = percentForDate(event.whenAr || data.document.sendDate[1]);
-      var colour = event.actor === 'lin' ? 'is-lin' : 'is-qing';
-      var dateNote = event.whenAr ? chartDateLabel(event) : chartDateLabel(event);
-      return '<button class="part2-events-chart-dot is-event ' + colour + '" type="button" data-event-dot="' + escapeHtml(event.id) + '" style="top:' + top + '%" aria-label="' + escapeHtml(event.subtitle + '・' + dateNote) + '"><span class="part2-events-dot-label">' + escapeHtml(event.subtitle) + '</span></button>';
+    function bindChartNodes() {
+      data.events.forEach(function (event) {
+        var node = chartNodeForId(event.id);
+        if (!node) return;
+        node.classList.add('part2-events-candidate-node');
+        node.setAttribute('data-part2-event-id', event.id);
+        if (node.dataset.part2EventsBound !== 'true') {
+          node.dataset.part2EventsBound = 'true';
+          node.addEventListener('click', function () {
+            if (state.addedIds.has(event.id)) openEvent(event.id);
+          });
+          node.addEventListener('keydown', function (keyboardEvent) {
+            if ((keyboardEvent.key === 'Enter' || keyboardEvent.key === ' ') && state.addedIds.has(event.id)) {
+              keyboardEvent.preventDefault();
+              openEvent(event.id);
+            }
+          });
+        }
+      });
+
+      var documentNode = chartNodeForId('doc-' + data.document.docId + '-L');
+      if (documentNode) {
+        documentNode.classList.add('part2-events-document-node');
+        if (documentNode.dataset.part2EventsBound !== 'true') {
+          documentNode.dataset.part2EventsBound = 'true';
+          documentNode.addEventListener('click', function () {
+            state.selectedEventId = '';
+            state.activeQuote = '';
+            renderDocument();
+            updateActiveCard();
+            docScroll.scrollTop = 0;
+          });
+        }
+      }
+    }
+
+    function bindChartNodesWhenReady() {
+      bindChartNodes();
+      renderChart();
+      if (!chartReplica || typeof MutationObserver !== 'function') return;
+
+      var observer = new MutationObserver(function () {
+        bindChartNodes();
+        renderChart();
+      });
+      observer.observe(chartReplica, { childList: true, subtree: true });
+
+      window.requestAnimationFrame(function () {
+        bindChartNodes();
+        renderChart();
+      });
+      window.setTimeout(function () {
+        bindChartNodes();
+        renderChart();
+      }, 80);
     }
 
     function renderChart() {
-      var officialLane = chartCanvas.querySelector('[data-events-lane="official"]');
-      var eventsLane = chartCanvas.querySelector('[data-events-lane="events"]');
-      officialLane.querySelectorAll('[data-document-dot]').forEach(function (dot) { dot.remove(); });
-      eventsLane.querySelectorAll('[data-event-dot]').forEach(function (dot) { dot.remove(); });
-      officialLane.insertAdjacentHTML('beforeend', docDotMarkup());
-      state.addedIds.forEach(function (id) {
-        var event = eventById(id);
-        if (event) eventsLane.insertAdjacentHTML('beforeend', eventDotMarkup(event));
+      data.events.forEach(function (event) {
+        setCandidateNodeState(event, state.addedIds.has(event.id));
       });
-      countEl.textContent = '文書 1 · 事件 ' + state.addedIds.size;
-      chartCanvas.querySelectorAll('[data-document-dot]').forEach(function (dot) {
-        dot.addEventListener('click', function () {
-          state.selectedEventId = '';
-          state.activeQuote = '';
-          renderDocument();
-          updateActiveCard();
-          docScroll.scrollTop = 0;
-        });
-      });
-      chartCanvas.querySelectorAll('[data-event-dot]').forEach(function (dot) {
-        dot.addEventListener('click', function () { openEvent(dot.getAttribute('data-event-dot')); });
-      });
-      window.requestAnimationFrame(drawLinks);
     }
 
     function syncAddedCard(eventId) {
@@ -356,8 +419,8 @@
       var event = eventById(eventId);
       if (!event) return;
       state.selectedEventId = event.id;
-      chartCanvas.querySelectorAll('[data-event-dot]').forEach(function (dot) {
-        dot.classList.toggle('is-selected', dot.getAttribute('data-event-dot') === event.id);
+      chartReplica.querySelectorAll('.part2-events-candidate-node').forEach(function (dot) {
+        dot.classList.toggle('is-selected', dot.getAttribute('data-part2-event-id') === event.id);
       });
       eventPanel.hidden = false;
       stage.classList.add('has-event-detail');
@@ -384,7 +447,7 @@
       eventPanel.hidden = true;
       stage.classList.remove('has-event-detail');
       state.selectedEventId = '';
-      chartCanvas.querySelectorAll('[data-event-dot]').forEach(function (dot) { dot.classList.remove('is-selected'); });
+      chartReplica.querySelectorAll('.part2-events-candidate-node').forEach(function (dot) { dot.classList.remove('is-selected'); });
       updateActiveCard();
     });
 
@@ -395,11 +458,17 @@
       if (part) part.scrollIntoView({ block: 'start', behavior: 'smooth' });
     });
 
-    window.addEventListener('resize', function () { window.requestAnimationFrame(drawLinks); });
+    window.addEventListener('resize', function () { window.requestAnimationFrame(renderChart); });
 
     renderDocument();
     renderAi();
-    renderChart();
+    bindChartNodesWhenReady();
+    if ('ResizeObserver' in window) {
+      new ResizeObserver(function () {
+        bindChartNodes();
+        renderChart();
+      }).observe(chartReplica);
+    }
   }
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', init);

@@ -1114,3 +1114,60 @@
     font-size: 15px;
   }
 }
+
+/* 3.1 chart: use the real 2.1 replica engine and its four-lane styling. */
+.part2-events-chart-panel {
+  min-width: 0;
+  min-height: 0;
+  padding: 0;
+  overflow: hidden;
+  background: #efe7d9;
+}
+
+.part2-events-chart-replica-shell,
+.part2-events-chart-replica-shell > [data-part1],
+.part2-events-chart-replica-shell .part1-replica {
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.part2-events-chart-replica-shell .part1-replica {
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+}
+
+.part2-events-chart-replica-shell .part1-toolbar {
+  display: none;
+}
+
+.part2-events-chart-replica-shell .part1-stage {
+  height: 100%;
+  min-height: 0;
+  grid-template-columns: 1fr;
+}
+
+.part2-events-chart-replica-shell .part1-chart {
+  min-height: 0;
+  border-right: 0;
+}
+
+.part2-events-chart-replica-shell .part1-dock {
+  display: none;
+}
+
+.part2-events-chart-replica-shell .part2-events-candidate-node {
+  transition: opacity .18s ease, stroke-width .18s ease;
+}
+
+.part2-events-chart-replica-shell .part2-events-candidate-node.is-added {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.part2-events-chart-replica-shell .part2-events-candidate-node.is-added:hover,
+.part2-events-chart-replica-shell .part2-events-candidate-node.is-added:focus-visible {
+  stroke: #2d261d;
+  stroke-width: 3;
+}
